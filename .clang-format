@@ -1,0 +1,11 @@
+---
+AccessModifierOffset: '0'
+AlwaysBreakAfterReturnType : All
+AlwaysBreakTemplateDeclarations: 'true'
+BreakBeforeBraces: Linux
+Language: Cpp
+NamespaceIndentation: All
+SpaceBeforeParens: Always
+Standard: Cpp11
+TabWidth: 2
+UseTab: Never
