@@ -21,13 +21,12 @@ find_package(ClangFormat)
 # search for version number in clang-format without version number
 if(${CLANG_FORMAT_FOUND})
   if(${CLANG_FORMAT_VERSION} VERSION_LESS "6.0.0")
-    message(WARNING "No suitable clang-format (version >= 6.0) found")
-  else()
-    set(CLANG_FORMAT_FOUND_VERSION TRUE)
+    else()
+      set(CLANG_FORMAT_FOUND_VERSION TRUE)
   endif()
 endif()
 
-if(CLANG_FORMAT_FOUND_VERSION)
+if(${CLANG_FORMAT_FOUND_VERSION})
   message(STATUS "Using ${CLANG_FORMAT_EXECUTABLE} for target 'format'")
   add_custom_target(
   format
@@ -36,4 +35,6 @@ if(CLANG_FORMAT_FOUND_VERSION)
     -style=file
     ${ALL_CXX_SOURCE_FILES}
   )
+  else()
+  message(WARNING "No suitable clang-format (version >= 6.0) found")
 endif()
