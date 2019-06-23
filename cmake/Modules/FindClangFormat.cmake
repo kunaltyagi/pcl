@@ -22,7 +22,7 @@
 # ${CLANG_FORMAT_VERSION}") endif()
 
 find_program(CLANG_FORMAT_EXECUTABLE
-             NAMES clang-format
+             NAMES
                    clang-format-9
                    clang-format-9.0
                    clang-format-8
@@ -39,11 +39,14 @@ find_program(CLANG_FORMAT_EXECUTABLE
                    clang-format-3.5
                    clang-format-3.4
                    clang-format-3.3
+                   clang-format  # least priority
              DOC "clang-format executable")
 mark_as_advanced(CLANG_FORMAT_EXECUTABLE)
 
+set(CLANG_FORMAT_FOUND $<BOOL:${CLANG_FORMAT_EXECUTABLE}>)
+
 # Extract version from command "clang-format -version"
-if(CLANG_FORMAT_EXECUTABLE)
+if(${CLANG_FORMAT_FOUND})
   execute_process(COMMAND ${CLANG_FORMAT_EXECUTABLE} -version
                   OUTPUT_VARIABLE clang_format_version
                   ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -82,10 +85,4 @@ if(CLANG_FORMAT_EXECUTABLE)
     endif()
   endif()
   unset(clang_format_version)
-endif()
-
-if(CLANG_FORMAT_EXECUTABLE)
-  set(CLANG_FORMAT_FOUND TRUE)
-else()
-  set(CLANG_FORMAT_FOUND FALSE)
 endif()

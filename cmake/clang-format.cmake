@@ -19,7 +19,7 @@ endif()
 
 find_package(ClangFormat)
 # search for version number in clang-format without version number
-if(CLANG_FORMAT_FOUND)
+if(${CLANG_FORMAT_FOUND})
   if(${CLANG_FORMAT_VERSION} VERSION_LESS "6.0.0")
     message(WARNING "No suitable clang-format (version >= 6.0) found")
   else()
