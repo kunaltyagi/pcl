@@ -17,22 +17,15 @@ else()
   list(FILTER ALL_CXX_SOURCE_FILES EXCLUDE REGEX ${EXCLUDE_REGEX})
 endif()
 
-find_package(ClangFormat)
+find_package(ClangFormat 6)
 # search for version number in clang-format without version number
-if(${CLANG_FORMAT_FOUND})
-  if(${CLANG_FORMAT_VERSION} VERSION_LESS "6.0.0")
-    set(CLANG_FORMAT_FOUND_VERSION FALSE)
-  else()
-    set(CLANG_FORMAT_FOUND_VERSION TRUE)
-  endif()
+if(${ClangFormat_FOUND})
+  message(STATUS "Adding target 'format'")
+  add_custom_target(
+  format
+  COMMAND ${ClangFormat_EXECUTABLE}
+    -i
+    -style=file
+    ${ALL_CXX_SOURCE_FILES}
+  )
 endif()
-
-if(NOT ${CLANG_FORMAT_FOUND_VERSION})
-  message(WARNING "No suitable clang-format (version >= 6.0) found")
-  return()
-endif()
-
-message(STATUS "Using ${CLANG_FORMAT_EXECUTABLE} for target 'format'")
-add_custom_target(format
-  COMMAND ${CLANG_FORMAT_EXECUTABLE} -i -style=file ${ALL_CXX_SOURCE_FILES}
-)
