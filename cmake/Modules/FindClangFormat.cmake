@@ -47,6 +47,7 @@ if(CLANG_FORMAT_EXECUTABLE)
   set(CLANG_FORMAT_FOUND TRUE)
 else()
   set(CLANG_FORMAT_FOUND FALSE)
+  return()
 endif()
 
 # Extract version from command "clang-format -version"
