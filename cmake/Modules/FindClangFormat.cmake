@@ -51,43 +51,44 @@ else()
 endif()
 
 # Extract version from command "clang-format -version"
-if(${CLANG_FORMAT_FOUND})
-  execute_process(COMMAND ${CLANG_FORMAT_EXECUTABLE} -version
-                  OUTPUT_VARIABLE clang_format_version
-                  ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process(COMMAND ${CLANG_FORMAT_EXECUTABLE} -version
+                OUTPUT_VARIABLE clang_format_version
+                ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-  if(clang_format_version MATCHES "^.*clang-format version .*")
-    # clang_format_version samples:
-    # * clang-format version 3.9.1-4ubuntu3~16.04.1 (tags/RELEASE_391/rc2)
-    # * Alpine clang-format version 8.0.0 (tags/RELEASE_800/final) (based on LLVM 8.0.0)
-    string(REGEX
-           REPLACE ".*clang-format version ([.0-9]+).*"
-                   "\\1"
-                   CLANG_FORMAT_VERSION
-                   "${clang_format_version}")
-    # CLANG_FORMAT_VERSION sample: "3.9.1"
-
-    # Extract version components
-    string(REPLACE "."
-                   ";"
-                   clang_format_version
-                   "${CLANG_FORMAT_VERSION}")
-    list(LENGTH clang_format_version CLANG_FORMAT_VERSION_COUNT)
-    if(CLANG_FORMAT_VERSION_COUNT GREATER 0)
-      list(GET clang_format_version 0 CLANG_FORMAT_VERSION_MAJOR)
-    else()
-      set(CLANG_FORMAT_VERSION_MAJOR 0)
-    endif()
-    if(CLANG_FORMAT_VERSION_COUNT GREATER 1)
-      list(GET clang_format_version 1 CLANG_FORMAT_VERSION_MINOR)
-    else()
-      set(CLANG_FORMAT_VERSION_MINOR 0)
-    endif()
-    if(CLANG_FORMAT_VERSION_COUNT GREATER 2)
-      list(GET clang_format_version 2 CLANG_FORMAT_VERSION_PATCH)
-    else()
-      set(CLANG_FORMAT_VERSION_PATCH 0)
-    endif()
-  endif()
+if(NOT clang_format_version MATCHES "^.*clang-format version .*")
+  # clang_format_version samples:
+  # * clang-format version 3.9.1-4ubuntu3~16.04.1 (tags/RELEASE_391/rc2)
+  # * Alpine clang-format version 8.0.0 (tags/RELEASE_800/final) (based on LLVM 8.0.0)
   unset(clang_format_version)
+  return()
 endif()
+string(REGEX
+        REPLACE ".*clang-format version ([.0-9]+).*"
+                "\\1"
+                CLANG_FORMAT_VERSION
+                "${clang_format_version}")
+# CLANG_FORMAT_VERSION sample: "3.9.1"
+
+# Extract version components
+string(REPLACE "."
+                ";"
+                clang_format_version
+                "${CLANG_FORMAT_VERSION}")
+list(LENGTH clang_format_version CLANG_FORMAT_VERSION_COUNT)
+if(CLANG_FORMAT_VERSION_COUNT GREATER 0)
+  list(GET clang_format_version 0 CLANG_FORMAT_VERSION_MAJOR)
+else()
+  set(CLANG_FORMAT_VERSION_MAJOR 0)
+endif()
+if(CLANG_FORMAT_VERSION_COUNT GREATER 1)
+  list(GET clang_format_version 1 CLANG_FORMAT_VERSION_MINOR)
+else()
+  set(CLANG_FORMAT_VERSION_MINOR 0)
+endif()
+if(CLANG_FORMAT_VERSION_COUNT GREATER 2)
+  list(GET clang_format_version 2 CLANG_FORMAT_VERSION_PATCH)
+else()
+  set(CLANG_FORMAT_VERSION_PATCH 0)
+endif()
+
+unset(clang_format_version)
