@@ -6,7 +6,7 @@ file(GLOB_RECURSE
 
 # exclude the docs **for now**
 set(EXCLUDE_REGEX ".*doc[\\|/].*")
-if(${CMAKE_VERSION} VERSION_LESS "3.6.0")
+if(CMAKE_VERSION VERSION_LESS "3.6.0")
   foreach(PROPOSED_FILE ${ALL_CXX_SOURCE_FILES})
     string(REGEX MATCH ${EXCLUDE_REGEX} regex_found ${PROPOSED_FILE})
     if(regex_found)
@@ -19,7 +19,7 @@ endif()
 
 find_package(ClangFormat 6)
 # search for version number in clang-format without version number
-if(${ClangFormat_FOUND})
+if(ClangFormat_FOUND)
   message(STATUS "Adding target 'format'")
   add_custom_target(
   format
