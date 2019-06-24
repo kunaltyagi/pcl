@@ -5,7 +5,7 @@ file(GLOB_RECURSE
 )
 
 # exclude the docs **for now**
-set(EXCLUDE_REGEX ".*doc[\\|/].*")
+set(EXCLUDE_REGEX "${PCL_SOURCE_DIR}[\\|/]doc[\\|/].*")
 if(CMAKE_VERSION VERSION_LESS "3.6.0")
   foreach(PROPOSED_FILE ${ALL_CXX_SOURCE_FILES})
     string(REGEX MATCH ${EXCLUDE_REGEX} regex_found ${PROPOSED_FILE})
