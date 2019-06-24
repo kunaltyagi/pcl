@@ -43,7 +43,11 @@ find_program(CLANG_FORMAT_EXECUTABLE
              DOC "clang-format executable")
 mark_as_advanced(CLANG_FORMAT_EXECUTABLE)
 
-set(CLANG_FORMAT_FOUND $<BOOL:${CLANG_FORMAT_EXECUTABLE}>)
+if(CLANG_FORMAT_EXECUTABLE)
+  set(CLANG_FORMAT_FOUND TRUE)
+else()
+  set(CLANG_FORMAT_FOUND FALSE)
+endif()
 
 # Extract version from command "clang-format -version"
 if(${CLANG_FORMAT_FOUND})
