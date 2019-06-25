@@ -37,10 +37,10 @@
  *
  */
 
-#include <pcl/point_types.h>
-#include <pcl/impl/instantiate.hpp>
-#include <pcl/filters/voxel_grid_occlusion_estimation.h>
 #include <pcl/filters/impl/voxel_grid_occlusion_estimation.hpp>
+#include <pcl/filters/voxel_grid_occlusion_estimation.h>
+#include <pcl/impl/instantiate.hpp>
+#include <pcl/point_types.h>
 
 // Instantiations of specific point types
-PCL_INSTANTIATE(VoxelGridOcclusionEstimation, PCL_XYZ_POINT_TYPES)
+PCL_INSTANTIATE (VoxelGridOcclusionEstimation, PCL_XYZ_POINT_TYPES)

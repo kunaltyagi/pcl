@@ -44,57 +44,63 @@
 #include <pcl/sample_consensus/sac_model_parallel_plane.h>
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::SampleConsensusModelParallelPlane<PointT>::selectWithinDistance (
-      const Eigen::VectorXf &model_coefficients, const double threshold, std::vector<int> &inliers)
+    const Eigen::VectorXf &model_coefficients, const double threshold,
+    std::vector<int> &inliers)
 {
   // Check if the model is valid given the user constraints
-  if (!isModelValid (model_coefficients))
-  {
+  if (!isModelValid (model_coefficients)) {
     inliers.clear ();
     return;
   }
 
-  SampleConsensusModelPlane<PointT>::selectWithinDistance (model_coefficients, threshold, inliers);
+  SampleConsensusModelPlane<PointT>::selectWithinDistance (model_coefficients,
+                                                           threshold, inliers);
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> int
+template <typename PointT>
+int
 pcl::SampleConsensusModelParallelPlane<PointT>::countWithinDistance (
-      const Eigen::VectorXf &model_coefficients, const double threshold) const
+    const Eigen::VectorXf &model_coefficients, const double threshold) const
 {
   // Check if the model is valid given the user constraints
   if (!isModelValid (model_coefficients))
     return (0);
 
-  return (SampleConsensusModelPlane<PointT>::countWithinDistance (model_coefficients, threshold));
+  return (SampleConsensusModelPlane<PointT>::countWithinDistance (model_coefficients,
+                                                                  threshold));
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::SampleConsensusModelParallelPlane<PointT>::getDistancesToModel (
-      const Eigen::VectorXf &model_coefficients, std::vector<double> &distances) const
+    const Eigen::VectorXf &model_coefficients, std::vector<double> &distances) const
 {
   // Check if the model is valid given the user constraints
-  if (!isModelValid (model_coefficients))
-  {
+  if (!isModelValid (model_coefficients)) {
     distances.clear ();
     return;
   }
 
-  SampleConsensusModelPlane<PointT>::getDistancesToModel (model_coefficients, distances);
+  SampleConsensusModelPlane<PointT>::getDistancesToModel (model_coefficients,
+                                                          distances);
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
-pcl::SampleConsensusModelParallelPlane<PointT>::isModelValid (const Eigen::VectorXf &model_coefficients) const
+template <typename PointT>
+bool
+pcl::SampleConsensusModelParallelPlane<PointT>::isModelValid (
+    const Eigen::VectorXf &model_coefficients) const
 {
   if (!SampleConsensusModel<PointT>::isModelValid (model_coefficients))
     return (false);
 
   // Check against template, if given
-  if (eps_angle_ > 0.0)
-  {
+  if (eps_angle_ > 0.0) {
     // Obtain the plane normal
     Eigen::Vector4f coeff = model_coefficients;
     coeff[3] = 0;
@@ -102,13 +108,13 @@ pcl::SampleConsensusModelParallelPlane<PointT>::isModelValid (const Eigen::Vecto
 
     Eigen::Vector4f axis (axis_[0], axis_[1], axis_[2], 0);
     if (fabs (axis.dot (coeff)) > sin_angle_)
-      return  (false);
+      return (false);
   }
 
   return (true);
 }
 
-#define PCL_INSTANTIATE_SampleConsensusModelParallelPlane(T) template class PCL_EXPORTS pcl::SampleConsensusModelParallelPlane<T>;
+#define PCL_INSTANTIATE_SampleConsensusModelParallelPlane(T)                           \
+  template class PCL_EXPORTS pcl::SampleConsensusModelParallelPlane<T>;
 
-#endif    // PCL_SAMPLE_CONSENSUS_IMPL_SAC_MODEL_PARALLEL_PLANE_H_
-
+#endif // PCL_SAMPLE_CONSENSUS_IMPL_SAC_MODEL_PARALLEL_PLANE_H_

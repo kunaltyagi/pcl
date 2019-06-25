@@ -47,9 +47,9 @@
 #include <iostream>
 
 // PCL
+#include <pcl/common/io.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
-#include <pcl/common/io.h>
 
 static void
 sameType ();
@@ -64,8 +64,8 @@ differenceType ();
 int
 main ()
 {
-  sameType();
-  differenceType();
+  sameType ();
+  differenceType ();
   // badConversion();
   return 0;
 }
@@ -77,15 +77,18 @@ sameType ()
   CloudType::Ptr cloud (new CloudType);
 
   CloudType::PointType p;
-  p.x = 1; p.y = 2; p.z = 3;
-  cloud->push_back(p);
+  p.x = 1;
+  p.y = 2;
+  p.z = 3;
+  cloud->push_back (p);
   std::cout << p.x << " " << p.y << " " << p.z << std::endl;
 
-  CloudType::Ptr cloud2(new CloudType);
-  copyPointCloud(*cloud, *cloud2);
+  CloudType::Ptr cloud2 (new CloudType);
+  copyPointCloud (*cloud, *cloud2);
 
   CloudType::PointType p_retrieved = cloud2->points[0];
-  std::cout << p_retrieved.x << " " << p_retrieved.y << " " << p_retrieved.z << std::endl;
+  std::cout << p_retrieved.x << " " << p_retrieved.y << " " << p_retrieved.z
+            << std::endl;
 }
 
 void
@@ -95,16 +98,19 @@ differenceType ()
   CloudType::Ptr cloud (new CloudType);
 
   CloudType::PointType p;
-  p.x = 1; p.y = 2; p.z = 3;
-  cloud->push_back(p);
+  p.x = 1;
+  p.y = 2;
+  p.z = 3;
+  cloud->push_back (p);
   std::cout << p.x << " " << p.y << " " << p.z << std::endl;
 
   using CloudType2 = pcl::PointCloud<pcl::PointNormal>;
-  CloudType2::Ptr cloud2(new CloudType2);
-  copyPointCloud(*cloud, *cloud2);
+  CloudType2::Ptr cloud2 (new CloudType2);
+  copyPointCloud (*cloud, *cloud2);
 
   CloudType2::PointType p_retrieved = cloud2->points[0];
-  std::cout << p_retrieved.x << " " << p_retrieved.y << " " << p_retrieved.z << std::endl;
+  std::cout << p_retrieved.x << " " << p_retrieved.y << " " << p_retrieved.z
+            << std::endl;
 }
 
 /*
@@ -116,7 +122,7 @@ badConversion ()
 {
   using CloudType = pcl::PointCloud<pcl::PointXYZ>;
   CloudType::Ptr cloud (new CloudType);
-  
+
   CloudType::PointType p;
   p.x = 1; p.y = 2; p.z = 3;
   cloud->push_back(p);
@@ -125,9 +131,10 @@ badConversion ()
   using CloudType2 = pcl::PointCloud<pcl::Normal>;
   CloudType2::Ptr cloud2(new CloudType2);
   copyPointCloud(*cloud, *cloud2);
-  
+
   CloudType2::PointType p_retrieved = cloud2->points[0];
-  std::cout << p_retrieved.x << " " << p_retrieved.y << " " << p_retrieved.z << std::endl;
+  std::cout << p_retrieved.x << " " << p_retrieved.y << " " << p_retrieved.z <<
+std::endl;
 }
 
 */

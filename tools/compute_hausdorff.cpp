@@ -38,11 +38,11 @@
  * $Id$
  */
 
-#include <pcl/point_types.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl/console/print.h>
 #include <pcl/console/parse.h>
+#include <pcl/console/print.h>
 #include <pcl/console/time.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
 #include <pcl/search/kdtree.h>
 
 using namespace std;
@@ -64,13 +64,19 @@ bool
 loadCloud (const std::string &filename, Cloud &cloud)
 {
   TicToc tt;
-  print_highlight ("Loading "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Loading ");
+  print_value ("%s ", filename.c_str ());
 
   tt.tic ();
   if (loadPCDFile (filename, cloud) < 0)
     return (false);
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", cloud.width * cloud.height); print_info (" points]\n");
-  print_info ("Available dimensions: "); print_value ("%s\n", pcl::getFieldsList (cloud).c_str ());
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", cloud.width * cloud.height);
+  print_info (" points]\n");
+  print_info ("Available dimensions: ");
+  print_value ("%s\n", pcl::getFieldsList (cloud).c_str ());
 
   return (true);
 }
@@ -88,8 +94,7 @@ compute (Cloud &cloud_a, Cloud &cloud_b)
   pcl::search::KdTree<PointType> tree_b;
   tree_b.setInputCloud (cloud_b.makeShared ());
   float max_dist_a = -std::numeric_limits<float>::max ();
-  for (const auto &point : cloud_a.points)
-  {
+  for (const auto &point : cloud_a.points) {
     std::vector<int> indices (1);
     std::vector<float> sqr_distances (1);
 
@@ -102,8 +107,7 @@ compute (Cloud &cloud_a, Cloud &cloud_b)
   pcl::search::KdTree<PointType> tree_a;
   tree_a.setInputCloud (cloud_a.makeShared ());
   float max_dist_b = -std::numeric_limits<float>::max ();
-  for (const auto &point : cloud_b.points)
-  {
+  for (const auto &point : cloud_b.points) {
     std::vector<int> indices (1);
     std::vector<float> sqr_distances (1);
 
@@ -117,21 +121,27 @@ compute (Cloud &cloud_a, Cloud &cloud_b)
 
   float dist = std::max (max_dist_a, max_dist_b);
 
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : ");
-  print_info ("A->B: "); print_value ("%f", max_dist_a);
-  print_info (", B->A: "); print_value ("%f", max_dist_b);
-  print_info (", Hausdorff Distance: "); print_value ("%f", dist);
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_info ("A->B: ");
+  print_value ("%f", max_dist_a);
+  print_info (", B->A: ");
+  print_value ("%f", max_dist_b);
+  print_info (", Hausdorff Distance: ");
+  print_value ("%f", dist);
   print_info (" ]\n");
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  print_info ("Compute Hausdorff distance between point clouds. For more information, use: %s -h\n", argv[0]);
+  print_info ("Compute Hausdorff distance between point clouds. For more information, "
+              "use: %s -h\n",
+              argv[0]);
 
-  if (argc < 3)
-  {
+  if (argc < 3) {
     printHelp (argc, argv);
     return (-1);
   }
@@ -139,8 +149,7 @@ main (int argc, char** argv)
   // Parse the command line arguments for .pcd files
   std::vector<int> p_file_indices;
   p_file_indices = parse_file_extension_argument (argc, argv, ".pcd");
-  if (p_file_indices.size () != 2)
-  {
+  if (p_file_indices.size () != 2) {
     print_error ("Need two PCD files to compute Hausdorff distance.\n");
     return (-1);
   }
@@ -158,4 +167,3 @@ main (int argc, char** argv)
   // Compute the Hausdorff distance
   compute (*cloud_a, *cloud_b);
 }
-

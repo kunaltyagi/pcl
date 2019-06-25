@@ -42,84 +42,99 @@
 namespace pcl
 {
   /**
-    * \author Suat Gedikli <gedikli@willowgarage.com>
-    * \brief Implementation of a box clipper in 3D. Actually it allows affine transformations, thus any parallelepiped in general pose.
-    *        The affine transformation is used to transform the point before clipping it using the unit cube centered at origin and with an extend of -1 to +1 in each dimension
-    * \ingroup filters
-    */
-  template<typename PointT>
+   * \author Suat Gedikli <gedikli@willowgarage.com>
+   * \brief Implementation of a box clipper in 3D. Actually it allows affine
+   * transformations, thus any parallelepiped in general pose. The affine transformation
+   * is used to transform the point before clipping it using the unit cube centered at
+   * origin and with an extend of -1 to +1 in each dimension \ingroup filters
+   */
+  template <typename PointT>
   class BoxClipper3D : public Clipper3D<PointT>
   {
     public:
+    using Ptr = boost::shared_ptr<BoxClipper3D<PointT>>;
+    using ConstPtr = boost::shared_ptr<const BoxClipper3D<PointT>>;
 
-      using Ptr = boost::shared_ptr<BoxClipper3D<PointT> >;
-      using ConstPtr = boost::shared_ptr<const BoxClipper3D<PointT> >;
+    /**
+     * \author Suat Gedikli <gedikli@willowgarage.com>
+     * \brief Constructor taking an affine transformation matrix, which allows also
+     * shearing of the clipping area \param[in] transformation the 3x3 affine
+     * transformation matrix that is used to describe the unit cube
+     */
+    BoxClipper3D (const Eigen::Affine3f &transformation);
 
+    /**
+     * \brief creates a BoxClipper object with a scaled box in general pose
+     * \param[in] rodrigues the rotation axis and angle given by the vector direction
+     * and length respectively \param[in] translation the position of the box center
+     * \param[in] box_size the size of the box for each dimension
+     */
+    BoxClipper3D (const Eigen::Vector3f &rodrigues, const Eigen::Vector3f &translation,
+                  const Eigen::Vector3f &box_size);
 
-      /**
-        * \author Suat Gedikli <gedikli@willowgarage.com>
-        * \brief Constructor taking an affine transformation matrix, which allows also shearing of the clipping area
-        * \param[in] transformation the 3x3 affine transformation matrix that is used to describe the unit cube
-        */
-      BoxClipper3D (const Eigen::Affine3f& transformation);
+    /**
+     * \brief Set the affine transformation
+     * \param[in] transformation
+     */
+    void
+    setTransformation (const Eigen::Affine3f &transformation);
 
-      /**
-        * \brief creates a BoxClipper object with a scaled box in general pose
-        * \param[in] rodrigues the rotation axis and angle given by the vector direction and length respectively
-        * \param[in] translation the position of the box center
-        * \param[in] box_size the size of the box for each dimension
-        */
-      BoxClipper3D (const Eigen::Vector3f& rodrigues, const Eigen::Vector3f& translation, const Eigen::Vector3f& box_size);
+    /**
+     * \brief sets the box in general pose given by the orientation position and size
+     * \param[in] rodrigues the rotation axis and angle given by the vector direction
+     * and length respectively \param[in] translation the position of the box center
+     * \param[in] box_size the size of the box for each dimension
+     */
+    void
+    setTransformation (const Eigen::Vector3f &rodrigues,
+                       const Eigen::Vector3f &translation,
+                       const Eigen::Vector3f &box_size);
 
-      /**
-        * \brief Set the affine transformation
-        * \param[in] transformation
-        */
-      void setTransformation (const Eigen::Affine3f& transformation);
+    /**
+     * \brief virtual destructor
+     */
+    ~BoxClipper3D () throw ();
 
-      /**
-        * \brief sets the box in general pose given by the orientation position and size
-        * \param[in] rodrigues the rotation axis and angle given by the vector direction and length respectively
-        * \param[in] translation the position of the box center
-        * \param[in] box_size the size of the box for each dimension
-        */
-      void setTransformation (const Eigen::Vector3f& rodrigues, const Eigen::Vector3f& translation, const Eigen::Vector3f& box_size);
+    bool
+    clipPoint3D (const PointT &point) const override;
 
-      /**
-        * \brief virtual destructor
-        */
-      ~BoxClipper3D () throw ();
+    bool
+    clipLineSegment3D (PointT &from, PointT &to) const override;
 
-      bool
-      clipPoint3D (const PointT& point) const override;
+    void
+    clipPlanarPolygon3D (
+        std::vector<PointT, Eigen::aligned_allocator<PointT>> &polygon) const override;
 
-      bool
-      clipLineSegment3D (PointT& from, PointT& to) const override;
+    void
+    clipPlanarPolygon3D (
+        const std::vector<PointT, Eigen::aligned_allocator<PointT>> &polygon,
+        std::vector<PointT, Eigen::aligned_allocator<PointT>> &clipped_polygon)
+        const override;
 
-      void
-      clipPlanarPolygon3D (std::vector<PointT, Eigen::aligned_allocator<PointT> >& polygon) const override;
+    void
+    clipPointCloud3D (
+        const pcl::PointCloud<PointT> &cloud_in, std::vector<int> &clipped,
+        const std::vector<int> &indices = std::vector<int> ()) const override;
 
-      void
-      clipPlanarPolygon3D (const std::vector<PointT, Eigen::aligned_allocator<PointT> >& polygon, std::vector<PointT, Eigen::aligned_allocator<PointT> >& clipped_polygon) const override;
-
-      void
-      clipPointCloud3D (const pcl::PointCloud<PointT> &cloud_in, std::vector<int>& clipped, const std::vector<int>& indices = std::vector<int> ()) const override;
-
-      Clipper3D<PointT>*
-      clone () const override;
+    Clipper3D<PointT> *
+    clone () const override;
 
     protected:
-      float getDistance (const PointT& point) const;
-      void transformPoint (const PointT& pointIn, PointT& pointOut) const;
+    float
+    getDistance (const PointT &point) const;
+    void
+    transformPoint (const PointT &pointIn, PointT &pointOut) const;
+
     private:
-      /**
-        * \brief the affine transformation that is applied before clipping is done on the unit cube.
-        */
-      Eigen::Affine3f transformation_;
+    /**
+     * \brief the affine transformation that is applied before clipping is done on the
+     * unit cube.
+     */
+    Eigen::Affine3f transformation_;
 
     public:
-      EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   };
-}
+} // namespace pcl
 
 #include <pcl/filters/impl/box_clipper3D.hpp>

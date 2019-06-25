@@ -31,7 +31,7 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *
- * 
+ *
  *
  */
 
@@ -49,18 +49,24 @@ namespace pcl
   namespace on_nurbs
   {
 
-    enum
-    {
-      NORTH = 1, NORTHEAST = 2, EAST = 3, SOUTHEAST = 4, SOUTH = 5, SOUTHWEST = 6, WEST = 7, NORTHWEST = 8
+    enum {
+      NORTH = 1,
+      NORTHEAST = 2,
+      EAST = 3,
+      SOUTHEAST = 4,
+      SOUTH = 5,
+      SOUTHWEST = 6,
+      WEST = 7,
+      NORTHWEST = 8
     };
 
     /** \brief Some useful tools for initialization, point search, ... */
     class NurbsTools
     {
-    public:
-
+      public:
       //      static std::list<unsigned>
-      //      getClosestPoints (const Eigen::Vector2d &p, const vector_vec2d &data, unsigned s);
+      //      getClosestPoints (const Eigen::Vector2d &p, const vector_vec2d &data,
+      //      unsigned s);
 
       /** \brief Get the closest point with respect to 'point'
        *  \param[in] point The point to which the closest point is searched for.
@@ -81,8 +87,8 @@ namespace pcl
        *  \param[in] data Vector containing the set of points for searching.
        *  \param[out] idxcp Closest point with respect to Euclidean metric. */
       static unsigned
-      getClosestPoint (const Eigen::Vector2d &point, const Eigen::Vector2d &dir, const vector_vec2d &data,
-                       unsigned &idxcp);
+      getClosestPoint (const Eigen::Vector2d &point, const Eigen::Vector2d &dir,
+                       const vector_vec2d &data, unsigned &idxcp);
 
       /** \brief Compute the mean of a set of points
        *  \param[in] data Set of points.     */
@@ -104,9 +110,11 @@ namespace pcl
 
       /** compute bounding box of curve control points */
       static void
-      computeBoundingBox (const ON_NurbsCurve &nurbs, Eigen::Vector3d &_min, Eigen::Vector3d &_max);
+      computeBoundingBox (const ON_NurbsCurve &nurbs, Eigen::Vector3d &_min,
+                          Eigen::Vector3d &_max);
       static void
-      computeBoundingBox (const ON_NurbsSurface &nurbs, Eigen::Vector3d &_min, Eigen::Vector3d &_max);
+      computeBoundingBox (const ON_NurbsSurface &nurbs, Eigen::Vector3d &_min,
+                          Eigen::Vector3d &_max);
 
       static double
       computeRScale (const Eigen::Vector3d &_min, const Eigen::Vector3d &_max);
@@ -114,20 +122,22 @@ namespace pcl
       /** \brief PCA - principal-component-analysis
        *  \param[in] data Set of points.
        *  \param[out] mean The mean of the set of points.
-       *  \param[out] eigenvectors Matrix containing column-wise the eigenvectors of the set of points.
-       *  \param[out] eigenvalues The eigenvalues of the set of points with respect to the eigenvectors. */
+       *  \param[out] eigenvectors Matrix containing column-wise the eigenvectors of the
+       * set of points. \param[out] eigenvalues The eigenvalues of the set of points
+       * with respect to the eigenvectors. */
       static void
-      pca (const vector_vec3d &data, Eigen::Vector3d &mean, Eigen::Matrix3d &eigenvectors,
-           Eigen::Vector3d &eigenvalues);
+      pca (const vector_vec3d &data, Eigen::Vector3d &mean,
+           Eigen::Matrix3d &eigenvectors, Eigen::Vector3d &eigenvalues);
 
       /** \brief PCA - principal-component-analysis
        *  \param[in] data Set of points.
        *  \param[out] mean The mean of the set of points.
-       *  \param[out] eigenvectors Matrix containing column-wise the eigenvectors of the set of points.
-       *  \param[out] eigenvalues The eigenvalues of the set of points with respect to the eigenvectors. */
+       *  \param[out] eigenvectors Matrix containing column-wise the eigenvectors of the
+       * set of points. \param[out] eigenvalues The eigenvalues of the set of points
+       * with respect to the eigenvectors. */
       static void
-      pca (const vector_vec2d &data, Eigen::Vector2d &mean, Eigen::Matrix2d &eigenvectors,
-           Eigen::Vector2d &eigenvalues);
+      pca (const vector_vec2d &data, Eigen::Vector2d &mean,
+           Eigen::Matrix2d &eigenvectors, Eigen::Vector2d &eigenvalues);
 
       /** \brief Downsample data points to a certain size.
        *  \param[in] data1 The original set of points.
@@ -141,8 +151,7 @@ namespace pcl
        *  \param[in] size The desired size of the resulting set of points.       */
       static void
       downsample_random (vector_vec3d &data1, unsigned size);
-
     };
 
-  }
-}
+  } // namespace on_nurbs
+} // namespace pcl

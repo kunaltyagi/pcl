@@ -48,55 +48,46 @@
 class Command
 {
   public:
-    /// @brief Destructor
-    virtual ~Command ()
-    {
-    }
+  /// @brief Destructor
+  virtual ~Command () {}
 
   protected:
-    /// Allows command queues to be the only objects which are able to execute
-    /// commands.
-    friend class CommandQueue;
+  /// Allows command queues to be the only objects which are able to execute
+  /// commands.
+  friend class CommandQueue;
 
-    /// @brief The default constructor.
-    /// @details Derived commands are assumed to have undo by default.  Each
-    /// is free to override this.
-    Command () : has_undo_(true)
-    {
-    }
+  /// @brief The default constructor.
+  /// @details Derived commands are assumed to have undo by default.  Each
+  /// is free to override this.
+  Command () : has_undo_ (true) {}
 
-    /// @brief Returns true if the command has an undo function.
-    inline
-    bool
-    hasUndo () const
-    {
-      return (has_undo_);
-    }
+  /// @brief Returns true if the command has an undo function.
+  inline bool
+  hasUndo () const
+  {
+    return (has_undo_);
+  }
 
-    /// @brief Executes the command.
-    virtual
-    void
-    execute () = 0;
+  /// @brief Executes the command.
+  virtual void
+  execute () = 0;
 
-    /// @brief Undos the command.
-    virtual
-    void
-    undo () = 0;
+  /// @brief Undos the command.
+  virtual void
+  undo () = 0;
 
-    /// @brief a flag indicates whether the command has an undo function.
-    bool has_undo_;
+  /// @brief a flag indicates whether the command has an undo function.
+  bool has_undo_;
 
   private:
-    /// @brief Copy Constructor - object is non-copyable
-    Command (const Command&)
-    {
-      assert(false);
-    }
+  /// @brief Copy Constructor - object is non-copyable
+  Command (const Command &) { assert (false); }
 
-    /// @brief Equal Operator - object is non-copyable
-    Command&
-    operator= (const Command&)
-    {
-      assert(false); return (*this);
-    }
+  /// @brief Equal Operator - object is non-copyable
+  Command &
+  operator= (const Command &)
+  {
+    assert (false);
+    return (*this);
+  }
 };

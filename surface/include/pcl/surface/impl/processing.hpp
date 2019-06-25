@@ -37,16 +37,16 @@
  *
  */
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointOutT> void
-pcl::CloudSurfaceProcessing<PointInT, PointOutT>::process (pcl::PointCloud<PointOutT> &output)
+template <typename PointInT, typename PointOutT>
+void
+pcl::CloudSurfaceProcessing<PointInT, PointOutT>::process (
+    pcl::PointCloud<PointOutT> &output)
 {
   // Copy the header
   output.header = input_->header;
 
-  if (!initCompute ())
-  {
+  if (!initCompute ()) {
     output.width = output.height = 0;
     output.points.clear ();
     return;

@@ -35,11 +35,11 @@
  *
  */
 
-#include <pcl/surface/gp3.h>
-#include <pcl/surface/impl/gp3.hpp>
 #include <pcl/impl/instantiate.hpp>
 #include <pcl/point_types.h>
+#include <pcl/surface/gp3.h>
+#include <pcl/surface/impl/gp3.hpp>
 
 // Instantiations of specific point types
-PCL_INSTANTIATE(GreedyProjectionTriangulation, (pcl::PointNormal)(pcl::PointXYZRGBNormal)(pcl::PointXYZINormal))
-
+PCL_INSTANTIATE (GreedyProjectionTriangulation,
+                 (pcl::PointNormal) (pcl::PointXYZRGBNormal) (pcl::PointXYZINormal))

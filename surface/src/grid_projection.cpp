@@ -44,4 +44,3 @@
 template class PCL_EXPORTS pcl::GridProjection<pcl::PointNormal>;
 template class PCL_EXPORTS pcl::GridProjection<pcl::PointXYZRGBNormal>;
 template class PCL_EXPORTS pcl::GridProjection<pcl::PointXYZINormal>;
-

@@ -41,12 +41,13 @@
 namespace pcl
 {
   /** /brief This template class synchronizes two data streams of different types.
-   *         The data can be added using add0 and add1 methods which expects also a timestamp of type unsigned long.
-   *         If two matching data objects are found, registered callback functions are invoked with the objects and the time stamps.
-   *         The only assumption of the timestamp is, that they are in the same unit, linear and strictly monotonic increasing.
-   *         If filtering is desired, e.g. thresholding of time differences, the user can do that in the callback method.
-   *         This class is thread safe.
-   * /ingroup common
+   *         The data can be added using add0 and add1 methods which expects also a
+   * timestamp of type unsigned long. If two matching data objects are found, registered
+   * callback functions are invoked with the objects and the time stamps. The only
+   * assumption of the timestamp is, that they are in the same unit, linear and strictly
+   * monotonic increasing. If filtering is desired, e.g. thresholding of time
+   * differences, the user can do that in the callback method. This class is thread
+   * safe. /ingroup common
    */
   template <typename T1, typename T2>
   class Synchronizer
@@ -63,12 +64,12 @@ namespace pcl
 
     std::map<int, CallbackFunction> cb_;
     int callback_counter;
-  public:
 
-    Synchronizer () : queueT1 (), queueT2 (), cb_ (), callback_counter (0) { };
+    public:
+    Synchronizer () : queueT1 (), queueT2 (), cb_ (), callback_counter (0){};
 
     int
-    addCallback (const CallbackFunction& callback)
+    addCallback (const CallbackFunction &callback)
     {
       std::unique_lock<std::mutex> publish_lock (publish_mutex_);
       cb_[callback_counter] = callback;
@@ -83,7 +84,7 @@ namespace pcl
     }
 
     void
-    add0 (const T1& t, unsigned long time)
+    add0 (const T1 &t, unsigned long time)
     {
       mutex1_.lock ();
       queueT1.push_back (T1Stamped (time, t));
@@ -92,7 +93,7 @@ namespace pcl
     }
 
     void
-    add1 (const T2& t, unsigned long time)
+    add1 (const T2 &t, unsigned long time)
     {
       mutex2_.lock ();
       queueT2.push_back (T2Stamped (time, t));
@@ -100,19 +101,18 @@ namespace pcl
       publish ();
     }
 
-  private:
-
+    private:
     void
     publishData ()
     {
       std::unique_lock<std::mutex> lock1 (mutex1_);
       std::unique_lock<std::mutex> lock2 (mutex2_);
 
-      for (typename std::map<int, CallbackFunction>::iterator cb = cb_.begin (); cb != cb_.end (); ++cb)
-      {
-        if (cb->second)
-        {
-          cb->second.operator()(queueT1.front ().second, queueT2.front ().second, queueT1.front ().first, queueT2.front ().first);
+      for (typename std::map<int, CallbackFunction>::iterator cb = cb_.begin ();
+           cb != cb_.end (); ++cb) {
+        if (cb->second) {
+          cb->second.operator() (queueT1.front ().second, queueT2.front ().second,
+                                 queueT1.front ().first, queueT2.front ().first);
         }
       }
 
@@ -140,30 +140,27 @@ namespace pcl
 
       bool do_publish = false;
 
-      if (t1.first <= t2.first)
-      { // iterate over queue1
+      if (t1.first <= t2.first) { // iterate over queue1
         lock1.lock ();
         while (queueT1.size () > 1 && queueT1[1].first <= t2.first)
           queueT1.pop_front ();
 
-        if (queueT1.size () > 1)
-        { // we have at least 2 measurements; first in past and second in future -> find out closer one!
-          if ( (t2.first << 1) > (queueT1[0].first + queueT1[1].first) )
+        if (queueT1.size () > 1) { // we have at least 2 measurements; first in past and
+                                   // second in future -> find out closer one!
+          if ((t2.first << 1) > (queueT1[0].first + queueT1[1].first))
             queueT1.pop_front ();
 
           do_publish = true;
         }
         lock1.unlock ();
-      }
-      else
-      { // iterate over queue2
+      } else { // iterate over queue2
         lock2.lock ();
-        while (queueT2.size () > 1 && (queueT2[1].first <= t1.first) )
+        while (queueT2.size () > 1 && (queueT2[1].first <= t1.first))
           queueT2.pop_front ();
 
-        if (queueT2.size () > 1)
-        { // we have at least 2 measurements; first in past and second in future -> find out closer one!
-          if ( (t1.first << 1) > queueT2[0].first + queueT2[1].first )
+        if (queueT2.size () > 1) { // we have at least 2 measurements; first in past and
+                                   // second in future -> find out closer one!
+          if ((t1.first << 1) > queueT2[0].first + queueT2[1].first)
             queueT2.pop_front ();
 
           do_publish = true;
@@ -174,5 +171,5 @@ namespace pcl
       if (do_publish)
         publishData ();
     }
-  } ;
-} // namespace
+  };
+} // namespace pcl

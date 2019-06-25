@@ -34,24 +34,24 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *
  */
-#include <pcl/io/ply_io.h>
-#include <pcl/conversions.h>
-#include <pcl/PolygonMesh.h>
+#include <gtest/gtest.h>
 #include <pcl/PCLPointCloud2.h>
+#include <pcl/PolygonMesh.h>
+#include <pcl/conversions.h>
+#include <pcl/io/ply_io.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
-#include <gtest/gtest.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TEST (PCL, PLYReaderWriter)
 {
-  using pcl::PointXYZI;
   using pcl::PointXYZ;
+  using pcl::PointXYZI;
 
   pcl::PCLPointCloud2 cloud_blob, cloud_blob2;
   pcl::PointCloud<PointXYZI> cloud, cloud2;
 
-  cloud.width  = 640;
+  cloud.width = 640;
   cloud.height = 480;
   cloud.resize (cloud.width * cloud.height);
   cloud.is_dense = true;
@@ -59,8 +59,7 @@ TEST (PCL, PLYReaderWriter)
   srand (static_cast<unsigned int> (time (nullptr)));
   size_t nr_p = cloud.size ();
   // Randomly create a new point cloud
-  for (size_t i = 0; i < nr_p; ++i)
-  {
+  for (size_t i = 0; i < nr_p; ++i) {
     cloud[i].x = static_cast<float> (1024 * rand () / (RAND_MAX + 1.0));
     cloud[i].y = static_cast<float> (1024 * rand () / (RAND_MAX + 1.0));
     cloud[i].z = static_cast<float> (1024 * rand () / (RAND_MAX + 1.0));
@@ -70,56 +69,60 @@ TEST (PCL, PLYReaderWriter)
   // Convert from data type to blob
   toPCLPointCloud2 (cloud, cloud_blob);
 
-  EXPECT_EQ (cloud_blob.width, cloud.width);    // test for toPCLPointCloud2 ()
-  EXPECT_EQ (cloud_blob.height, cloud.height);  // test for toPCLPointCloud2 ()
-  EXPECT_EQ (cloud_blob.is_dense, cloud.is_dense);  // test for toPCLPointCloud2 ()
+  EXPECT_EQ (cloud_blob.width, cloud.width);       // test for toPCLPointCloud2 ()
+  EXPECT_EQ (cloud_blob.height, cloud.height);     // test for toPCLPointCloud2 ()
+  EXPECT_EQ (cloud_blob.is_dense, cloud.is_dense); // test for toPCLPointCloud2 ()
   EXPECT_EQ (cloud_blob.data.size (),
              cloud_blob.width * cloud_blob.height * sizeof (PointXYZI));
 
   // test for toPCLPointCloud2 ()
   pcl::PLYWriter writer;
-  writer.write ("test_pcl_io.ply", cloud_blob, Eigen::Vector4f::Zero (), Eigen::Quaternionf::Identity (), true, true);
+  writer.write ("test_pcl_io.ply", cloud_blob, Eigen::Vector4f::Zero (),
+                Eigen::Quaternionf::Identity (), true, true);
 
   pcl::PLYReader reader;
   reader.read ("test_pcl_io.ply", cloud_blob2);
-  //PLY DOES preserve organiziation
-  EXPECT_EQ (cloud_blob.width * cloud_blob.height, cloud_blob2.width * cloud_blob2.height);
+  // PLY DOES preserve organiziation
+  EXPECT_EQ (cloud_blob.width * cloud_blob.height,
+             cloud_blob2.width * cloud_blob2.height);
   EXPECT_EQ (cloud_blob.is_dense, cloud.is_dense);
-  EXPECT_EQ (size_t (cloud_blob2.data.size ()),         // PointXYZI is 16*2 (XYZ+1, Intensity+3)
-             cloud_blob2.width * cloud_blob2.height * sizeof (PointXYZ));  // test for loadPLYFile ()
+  EXPECT_EQ (
+      size_t (cloud_blob2.data.size ()), // PointXYZI is 16*2 (XYZ+1, Intensity+3)
+      cloud_blob2.width * cloud_blob2.height *
+          sizeof (PointXYZ)); // test for loadPLYFile ()
 
   // Convert from blob to data type
   fromPCLPointCloud2 (cloud_blob2, cloud2);
 
   // EXPECT_EQ (cloud.width, cloud2.width);    // test for fromPCLPointCloud2 ()
   // EXPECT_EQ (cloud.height, cloud2.height);  // test for fromPCLPointCloud2 ()
-  EXPECT_EQ (cloud.is_dense, cloud2.is_dense);   // test for fromPCLPointCloud2 ()
-  EXPECT_EQ (cloud.size (), cloud2.size ());         // test for fromPCLPointCloud2 ()
+  EXPECT_EQ (cloud.is_dense, cloud2.is_dense); // test for fromPCLPointCloud2 ()
+  EXPECT_EQ (cloud.size (), cloud2.size ());   // test for fromPCLPointCloud2 ()
 
-  for (size_t counter = 0; counter < cloud.size (); ++counter)
-  {
-    EXPECT_FLOAT_EQ (cloud[counter].x, cloud2[counter].x);     // test for fromPCLPointCloud2 ()
-    EXPECT_FLOAT_EQ (cloud[counter].y, cloud2[counter].y);     // test for fromPCLPointCloud2 ()
-    EXPECT_FLOAT_EQ (cloud[counter].z, cloud2[counter].z);     // test for fromPCLPointCloud2 ()
-    EXPECT_FLOAT_EQ (cloud[counter].intensity, cloud2[counter].intensity);  // test for fromPCLPointCloud2 ()
+  for (size_t counter = 0; counter < cloud.size (); ++counter) {
+    EXPECT_FLOAT_EQ (cloud[counter].x,
+                     cloud2[counter].x); // test for fromPCLPointCloud2 ()
+    EXPECT_FLOAT_EQ (cloud[counter].y,
+                     cloud2[counter].y); // test for fromPCLPointCloud2 ()
+    EXPECT_FLOAT_EQ (cloud[counter].z,
+                     cloud2[counter].z); // test for fromPCLPointCloud2 ()
+    EXPECT_FLOAT_EQ (cloud[counter].intensity,
+                     cloud2[counter].intensity); // test for fromPCLPointCloud2 ()
   }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-struct PLYTest : public ::testing::Test
-{
-  PLYTest () : mesh_file_ply_("ply_file.ply")
-  {}
+struct PLYTest : public ::testing::Test {
+  PLYTest () : mesh_file_ply_ ("ply_file.ply") {}
 
-  
   ~PLYTest () { remove (mesh_file_ply_.c_str ()); }
 
   std::string mesh_file_ply_;
 };
 
-struct PLYColorTest : public PLYTest
-{
-  void SetUp () override
+struct PLYColorTest : public PLYTest {
+  void
+  SetUp () override
   {
     // Test colors from ply_benchmark.ply
     clr_1_.r = 255;
@@ -158,25 +161,21 @@ struct PLYColorTest : public PLYTest
           "property list uchar int vertex_indices\n"
           "end_header\n"
           "4.23607 0 1.61803 "
-            << unsigned (clr_1_.r) << ' '
-            << unsigned (clr_1_.g) << ' '
-            << unsigned (clr_1_.b) << ' '
-            << unsigned (clr_1_.a) << "\n"
+       << unsigned(clr_1_.r) << ' ' << unsigned(clr_1_.g) << ' ' << unsigned(clr_1_.b)
+       << ' ' << unsigned(clr_1_.a)
+       << "\n"
           "2.61803 2.61803 2.61803 "
-            << unsigned (clr_2_.r) << ' '
-            << unsigned (clr_2_.g) << ' '
-            << unsigned (clr_2_.b) << ' '
-            << unsigned (clr_2_.a) << "\n"
+       << unsigned(clr_2_.r) << ' ' << unsigned(clr_2_.g) << ' ' << unsigned(clr_2_.b)
+       << ' ' << unsigned(clr_2_.a)
+       << "\n"
           "0 1.61803 4.23607 "
-            << unsigned (clr_3_.r) << ' '
-            << unsigned (clr_3_.g) << ' '
-            << unsigned (clr_3_.b) << ' '
-            << unsigned (clr_3_.a) << "\n"
+       << unsigned(clr_3_.r) << ' ' << unsigned(clr_3_.g) << ' ' << unsigned(clr_3_.b)
+       << ' ' << unsigned(clr_3_.a)
+       << "\n"
           "0 -1.61803 4.23607 "
-            << unsigned (clr_4_.r) << ' '
-            << unsigned (clr_4_.g) << ' '
-            << unsigned (clr_4_.b) << ' '
-            << unsigned (clr_4_.a) << "\n"
+       << unsigned(clr_4_.r) << ' ' << unsigned(clr_4_.g) << ' ' << unsigned(clr_4_.b)
+       << ' ' << unsigned(clr_4_.a)
+       << "\n"
           "3 0 1 2\n"
           "3 1 2 3\n";
     fs.close ();
@@ -205,17 +204,17 @@ TEST_F (PLYColorTest, LoadPLYFileColoredASCIIIntoBlob)
   // blob has proper structure
   EXPECT_EQ (cloud_blob.height, 1);
   EXPECT_EQ (cloud_blob.width, 4);
-  EXPECT_EQ (cloud_blob.fields.size(), 4);
+  EXPECT_EQ (cloud_blob.fields.size (), 4);
   EXPECT_FALSE (cloud_blob.is_bigendian);
   EXPECT_EQ (cloud_blob.point_step, 16);
   EXPECT_EQ (cloud_blob.row_step, 16 * 4);
-  EXPECT_EQ (cloud_blob.data.size(), 16 * 4);
+  EXPECT_EQ (cloud_blob.data.size (), 16 * 4);
   EXPECT_TRUE (cloud_blob.is_dense);
 
   // scope blob data
   ps = cloud_blob.point_step;
   for (const auto &field : cloud_blob.fields)
-    if (field.name == std::string("rgba"))
+    if (field.name == std::string ("rgba"))
       offset = static_cast<int32_t> (field.offset);
 
   ASSERT_GE (offset, 0);
@@ -253,17 +252,17 @@ TEST_F (PLYColorTest, LoadPLYFileColoredASCIIIntoPolygonMesh)
   // blob has proper structure
   EXPECT_EQ (mesh.cloud.height, 1);
   EXPECT_EQ (mesh.cloud.width, 4);
-  EXPECT_EQ (mesh.cloud.fields.size(), 4);
+  EXPECT_EQ (mesh.cloud.fields.size (), 4);
   EXPECT_FALSE (mesh.cloud.is_bigendian);
   EXPECT_EQ (mesh.cloud.point_step, 16);
   EXPECT_EQ (mesh.cloud.row_step, 16 * 4);
-  EXPECT_EQ (mesh.cloud.data.size(), 16 * 4);
+  EXPECT_EQ (mesh.cloud.data.size (), 16 * 4);
   EXPECT_TRUE (mesh.cloud.is_dense);
 
   // scope blob data
   ps = mesh.cloud.point_step;
   for (const auto &field : mesh.cloud.fields)
-    if (field.name == std::string("rgba"))
+    if (field.name == std::string ("rgba"))
       offset = static_cast<int32_t> (field.offset);
 
   ASSERT_GE (offset, 0);
@@ -286,7 +285,10 @@ TEST_F (PLYColorTest, LoadPLYFileColoredASCIIIntoPolygonMesh)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename T> class PLYPointCloudTest : public PLYColorTest { };
+template <typename T>
+class PLYPointCloudTest : public PLYColorTest
+{
+};
 using RGBPointTypes = ::testing::Types<BOOST_PP_SEQ_ENUM (PCL_RGB_POINT_TYPES)>;
 TYPED_TEST_CASE (PLYPointCloudTest, RGBPointTypes);
 TYPED_TEST (PLYPointCloudTest, LoadPLYFileColoredASCIIIntoPointCloud)
@@ -301,7 +303,7 @@ TYPED_TEST (PLYPointCloudTest, LoadPLYFileColoredASCIIIntoPointCloud)
   // cloud has proper structure
   EXPECT_EQ (cloud_rgb.height, 1);
   EXPECT_EQ (cloud_rgb.width, 4);
-  EXPECT_EQ (cloud_rgb.points.size(), 4);
+  EXPECT_EQ (cloud_rgb.points.size (), 4);
   EXPECT_TRUE (cloud_rgb.is_dense);
 
   // scope cloud data
@@ -312,8 +314,9 @@ TYPED_TEST (PLYPointCloudTest, LoadPLYFileColoredASCIIIntoPointCloud)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template<typename T>
-struct PLYCoordinatesIsDenseTest : public PLYTest {};
+template <typename T>
+struct PLYCoordinatesIsDenseTest : public PLYTest {
+};
 
 using XYZPointTypes = ::testing::Types<BOOST_PP_SEQ_ENUM (PCL_XYZ_POINT_TYPES)>;
 TYPED_TEST_CASE (PLYCoordinatesIsDenseTest, XYZPointTypes);
@@ -406,8 +409,9 @@ TYPED_TEST (PLYCoordinatesIsDenseTest, InfInCoordinates)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template<typename T>
-struct PLYNormalsIsDenseTest : public PLYTest {};
+template <typename T>
+struct PLYNormalsIsDenseTest : public PLYTest {
+};
 
 using NormalPointTypes = ::testing::Types<BOOST_PP_SEQ_ENUM (PCL_NORMAL_POINT_TYPES)>;
 TYPED_TEST_CASE (PLYNormalsIsDenseTest, NormalPointTypes);
@@ -474,7 +478,7 @@ TEST_F (PLYTest, NaNInIntensity)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

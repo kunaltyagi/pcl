@@ -44,12 +44,14 @@
 #include <pcl/features/normal_3d_omp.h>
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointOutT> void
-pcl::NormalEstimationOMP<PointInT, PointOutT>::setNumberOfThreads (unsigned int nr_threads)
+template <typename PointInT, typename PointOutT>
+void
+pcl::NormalEstimationOMP<PointInT, PointOutT>::setNumberOfThreads (
+    unsigned int nr_threads)
 {
   if (nr_threads == 0)
 #ifdef _OPENMP
-    threads_ = omp_get_num_procs();
+    threads_ = omp_get_num_procs ();
 #else
     threads_ = 1;
 #endif
@@ -58,7 +60,8 @@ pcl::NormalEstimationOMP<PointInT, PointOutT>::setNumberOfThreads (unsigned int 
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointOutT> void
+template <typename PointInT, typename PointOutT>
+void
 pcl::NormalEstimationOMP<PointInT, PointOutT>::computeFeature (PointCloudOut &output)
 {
   // Allocate enough space to hold the results
@@ -67,20 +70,23 @@ pcl::NormalEstimationOMP<PointInT, PointOutT>::computeFeature (PointCloudOut &ou
   std::vector<float> nn_dists (k_);
 
   output.is_dense = true;
-  // Save a few cycles by not checking every point for NaN/Inf values if the cloud is set to dense
-  if (input_->is_dense)
-  {
+  // Save a few cycles by not checking every point for NaN/Inf values if the cloud is
+  // set to dense
+  if (input_->is_dense) {
 #ifdef _OPENMP
-#pragma omp parallel for shared (output) private (nn_indices, nn_dists) num_threads(threads_)
+#pragma omp parallel for shared(output) private(nn_indices, nn_dists)                  \
+    num_threads(threads_)
 #endif
     // Iterating over the entire index vector
-    for (int idx = 0; idx < static_cast<int> (indices_->size ()); ++idx)
-    {
+    for (int idx = 0; idx < static_cast<int> (indices_->size ()); ++idx) {
       Eigen::Vector4f n;
-      if (this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0 ||
-          !pcl::computePointNormal (*surface_, nn_indices, n, output.points[idx].curvature))
-      {
-        output.points[idx].normal[0] = output.points[idx].normal[1] = output.points[idx].normal[2] = output.points[idx].curvature = std::numeric_limits<float>::quiet_NaN ();
+      if (this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
+                                    nn_dists) == 0 ||
+          !pcl::computePointNormal (*surface_, nn_indices, n,
+                                    output.points[idx].curvature)) {
+        output.points[idx].normal[0] = output.points[idx].normal[1] =
+            output.points[idx].normal[2] = output.points[idx].curvature =
+                std::numeric_limits<float>::quiet_NaN ();
 
         output.is_dense = false;
         continue;
@@ -91,24 +97,26 @@ pcl::NormalEstimationOMP<PointInT, PointOutT>::computeFeature (PointCloudOut &ou
       output.points[idx].normal_z = n[2];
 
       flipNormalTowardsViewpoint (input_->points[(*indices_)[idx]], vpx_, vpy_, vpz_,
-                                  output.points[idx].normal[0], output.points[idx].normal[1], output.points[idx].normal[2]);
-
+                                  output.points[idx].normal[0],
+                                  output.points[idx].normal[1],
+                                  output.points[idx].normal[2]);
     }
-  }
-  else
-  {
+  } else {
 #ifdef _OPENMP
-#pragma omp parallel for shared (output) private (nn_indices, nn_dists) num_threads(threads_)
+#pragma omp parallel for shared(output) private(nn_indices, nn_dists)                  \
+    num_threads(threads_)
 #endif
     // Iterating over the entire index vector
-    for (int idx = 0; idx < static_cast<int> (indices_->size ()); ++idx)
-    {
+    for (int idx = 0; idx < static_cast<int> (indices_->size ()); ++idx) {
       Eigen::Vector4f n;
       if (!isFinite ((*input_)[(*indices_)[idx]]) ||
-          this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0 ||
-          !pcl::computePointNormal (*surface_, nn_indices, n, output.points[idx].curvature))
-      {
-        output.points[idx].normal[0] = output.points[idx].normal[1] = output.points[idx].normal[2] = output.points[idx].curvature = std::numeric_limits<float>::quiet_NaN ();
+          this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
+                                    nn_dists) == 0 ||
+          !pcl::computePointNormal (*surface_, nn_indices, n,
+                                    output.points[idx].curvature)) {
+        output.points[idx].normal[0] = output.points[idx].normal[1] =
+            output.points[idx].normal[2] = output.points[idx].curvature =
+                std::numeric_limits<float>::quiet_NaN ();
 
         output.is_dense = false;
         continue;
@@ -119,13 +127,14 @@ pcl::NormalEstimationOMP<PointInT, PointOutT>::computeFeature (PointCloudOut &ou
       output.points[idx].normal_z = n[2];
 
       flipNormalTowardsViewpoint (input_->points[(*indices_)[idx]], vpx_, vpy_, vpz_,
-                                  output.points[idx].normal[0], output.points[idx].normal[1], output.points[idx].normal[2]);
-
+                                  output.points[idx].normal[0],
+                                  output.points[idx].normal[1],
+                                  output.points[idx].normal[2]);
     }
   }
 }
 
-#define PCL_INSTANTIATE_NormalEstimationOMP(T,NT) template class PCL_EXPORTS pcl::NormalEstimationOMP<T,NT>;
+#define PCL_INSTANTIATE_NormalEstimationOMP(T, NT)                                     \
+  template class PCL_EXPORTS pcl::NormalEstimationOMP<T, NT>;
 
-#endif    // PCL_FEATURES_IMPL_NORMAL_3D_OMP_H_
-
+#endif // PCL_FEATURES_IMPL_NORMAL_3D_OMP_H_

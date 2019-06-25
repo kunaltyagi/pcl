@@ -50,43 +50,47 @@ namespace pcl
       Q_OBJECT
 
       public:
-        AbstractWorker(const QList<CloudMeshItem*>& cloud_mesh_items, QWidget* parent=nullptr);
-        ~AbstractWorker();
+      AbstractWorker (const QList<CloudMeshItem *> &cloud_mesh_items,
+                      QWidget *parent = nullptr);
+      ~AbstractWorker ();
 
-        int
-        exec();
+      int
+      exec ();
 
       public Q_SLOTS:
-        void
-        process();
+      void
+      process ();
 
       Q_SIGNALS:
-        void
-        dataUpdated(CloudMeshItem* cloud_mesh_item);
+      void
+      dataUpdated (CloudMeshItem *cloud_mesh_item);
 
-        void
-        finished();
-
-      protected:
-        void
-        emitDataUpdated(CloudMeshItem* cloud_mesh_item);
-
-        virtual std::string
-        getName () const {return ("");}
-
-        virtual void
-        initParameters(CloudMeshItem* cloud_mesh_item) = 0;
-
-        virtual void
-        setupParameters() = 0;
-
-        virtual void
-        processImpl(CloudMeshItem* cloud_mesh_item) = 0;
+      void
+      finished ();
 
       protected:
-        QList<CloudMeshItem*>       cloud_mesh_items_;
-        ParameterDialog*            parameter_dialog_;
+      void
+      emitDataUpdated (CloudMeshItem *cloud_mesh_item);
+
+      virtual std::string
+      getName () const
+      {
+        return ("");
+      }
+
+      virtual void
+      initParameters (CloudMeshItem *cloud_mesh_item) = 0;
+
+      virtual void
+      setupParameters () = 0;
+
+      virtual void
+      processImpl (CloudMeshItem *cloud_mesh_item) = 0;
+
+      protected:
+      QList<CloudMeshItem *> cloud_mesh_items_;
+      ParameterDialog *parameter_dialog_;
     };
 
-  }
-}
+  } // namespace modeler
+} // namespace pcl

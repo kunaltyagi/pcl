@@ -45,5 +45,5 @@
 // QT4
 #include <QMainWindow>
 #include <QMutex>
-#include <QTimer>
 #include <QObject>
+#include <QTimer>

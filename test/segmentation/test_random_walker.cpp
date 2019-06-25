@@ -35,15 +35,15 @@
  *
  */
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 
+#include <boost/foreach.hpp>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/info_parser.hpp>
-#include <boost/foreach.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 #include <gtest/gtest.h>
 
@@ -53,13 +53,11 @@ std::string TEST_DATA_DIR;
 
 using Weight = float;
 using Color = uint32_t;
-using Graph = boost::adjacency_list
-        <boost::vecS,
-         boost::vecS,
-         boost::undirectedS,
-         boost::property<boost::vertex_color_t, Color,
-         boost::property<boost::vertex_degree_t, Weight> >,
-         boost::property<boost::edge_weight_t, Weight> >;
+using Graph = boost::adjacency_list<
+    boost::vecS, boost::vecS, boost::undirectedS,
+    boost::property<boost::vertex_color_t, Color,
+                    boost::property<boost::vertex_degree_t, Weight>>,
+    boost::property<boost::edge_weight_t, Weight>>;
 using GraphTraits = boost::graph_traits<Graph>;
 using EdgeDescriptor = GraphTraits::edge_descriptor;
 using VertexDescriptor = GraphTraits::vertex_descriptor;
@@ -72,13 +70,12 @@ using Matrix = Eigen::Matrix<Weight, Eigen::Dynamic, Eigen::Dynamic>;
 using Vector = Eigen::Matrix<Weight, Eigen::Dynamic, 1>;
 using VertexDescriptorBimap = boost::bimap<size_t, VertexDescriptor>;
 using ColorBimap = boost::bimap<size_t, Color>;
-using RandomWalker = pcl::segmentation::detail::RandomWalker<Graph, EdgeWeightMap, VertexColorMap>;
+using RandomWalker =
+    pcl::segmentation::detail::RandomWalker<Graph, EdgeWeightMap, VertexColorMap>;
 
+struct GraphInfo {
 
-struct GraphInfo
-{
-
-  GraphInfo (const std::string& filename)
+  GraphInfo (const std::string &filename)
   {
     using boost::property_tree::ptree;
     ptree pt;
@@ -90,8 +87,7 @@ struct GraphInfo
     color_map = boost::get (boost::vertex_color, graph);
 
     // Read graph topology
-    BOOST_FOREACH (ptree::value_type& v, pt.get_child ("Topology"))
-    {
+    BOOST_FOREACH (ptree::value_type &v, pt.get_child ("Topology")) {
       uint32_t source, target;
       float weight;
       std::stringstream (v.second.data ()) >> source >> target >> weight;
@@ -104,8 +100,7 @@ struct GraphInfo
       color_map[*vi] = 0;
 
     // Read seeds
-    BOOST_FOREACH (ptree::value_type& v, pt.get_child ("Seeds"))
-    {
+    BOOST_FOREACH (ptree::value_type &v, pt.get_child ("Seeds")) {
       uint32_t id, color;
       std::stringstream (v.second.data ()) >> id >> color;
       color_map[id] = color;
@@ -121,13 +116,12 @@ struct GraphInfo
     std::stringstream (pt.get<std::string> ("Dimensions")) >> rows >> cols;
 
     // Read expected potentials
-    BOOST_FOREACH (ptree::value_type& v, pt.get_child ("Potentials"))
-    {
+    BOOST_FOREACH (ptree::value_type &v, pt.get_child ("Potentials")) {
       Color color = boost::lexical_cast<uint32_t> (v.first);
       potentials[color] = Vector::Zero (size);
       std::stringstream ss (v.second.data ());
       for (size_t i = 0; i < size; ++i)
-        ss >> potentials[color] (i);
+        ss >> potentials[color](i);
     }
   }
 
@@ -139,27 +133,20 @@ struct GraphInfo
   size_t size; // number of vertices
   size_t rows; // expected number of rows in matrices L and B
   size_t cols; // expected number of cols in matrix B
-
 };
 
-class RandomWalkerTest : public ::testing::TestWithParam<const char*>
+class RandomWalkerTest : public ::testing::TestWithParam<const char *>
 {
 
   public:
+  RandomWalkerTest () : g (TEST_DATA_DIR + "/" + GetParam ()) {}
 
-    RandomWalkerTest ()
-    : g (TEST_DATA_DIR + "/" + GetParam ())
-    {
-    }
-
-    GraphInfo g;
-
+  GraphInfo g;
 };
 
 TEST_P (RandomWalkerTest, BuildLinearSystem)
 {
-  RandomWalker rw (g.graph,
-                   boost::get (boost::edge_weight, g.graph),
+  RandomWalker rw (g.graph, boost::get (boost::edge_weight, g.graph),
                    boost::get (boost::vertex_color, g.graph));
 
   rw.computeVertexDegrees ();
@@ -173,31 +160,23 @@ TEST_P (RandomWalkerTest, BuildLinearSystem)
   std::vector<Weight> degrees (g.rows, 0.0);
   std::vector<Weight> L_sums (g.rows, 0.0);
   std::vector<Weight> B_sums (g.rows, 0.0);
-  for (Eigen::Index k = 0; k < rw.L.outerSize (); ++k)
-  {
-    for (SparseMatrix::InnerIterator it (rw.L, k); it; ++it)
-    {
+  for (Eigen::Index k = 0; k < rw.L.outerSize (); ++k) {
+    for (SparseMatrix::InnerIterator it (rw.L, k); it; ++it) {
       EXPECT_GE (it.row (), it.col ()); // the matrix should be lower triangular
-      if (it.row () == it.col ())
-      {
+      if (it.row () == it.col ()) {
         degrees[it.row ()] = it.value ();
-      }
-      else
-      {
+      } else {
         L_sums[it.row ()] -= it.value ();
         L_sums[it.col ()] -= it.value ();
       }
     }
   }
-  for (Eigen::Index k = 0; k < rw.B.outerSize (); ++k)
-  {
-    for (SparseMatrix::InnerIterator it (rw.B, k); it; ++it)
-    {
+  for (Eigen::Index k = 0; k < rw.B.outerSize (); ++k) {
+    for (SparseMatrix::InnerIterator it (rw.B, k); it; ++it) {
       B_sums[it.row ()] += it.value ();
     }
   }
-  for (size_t i = 0; i < g.rows; ++i)
-  {
+  for (size_t i = 0; i < g.rows; ++i) {
     float sum = L_sums[i] + B_sums[i];
     EXPECT_FLOAT_EQ (degrees[i], sum);
   }
@@ -217,11 +196,8 @@ TEST_P (RandomWalkerTest, GetPotentials)
   Matrix p;
   std::map<Color, size_t> map;
 
-  pcl::segmentation::randomWalker (g.graph,
-                                   boost::get (boost::edge_weight, g.graph),
-                                   boost::get (boost::vertex_color, g.graph),
-                                   p,
-                                   map);
+  pcl::segmentation::randomWalker (g.graph, boost::get (boost::edge_weight, g.graph),
+                                   boost::get (boost::vertex_color, g.graph), p, map);
 
   ASSERT_EQ (g.size, p.rows ());
   ASSERT_EQ (g.colors.size (), p.cols ());
@@ -229,45 +205,34 @@ TEST_P (RandomWalkerTest, GetPotentials)
 
   for (const unsigned int &color : g.colors)
     for (size_t i = 0; i < g.size; ++i)
-      if (g.potentials.count (color))
-      {
-        EXPECT_NEAR (g.potentials[color] (i), p (i, map[color]), 0.01);
+      if (g.potentials.count (color)) {
+        EXPECT_NEAR (g.potentials[color](i), p (i, map[color]), 0.01);
       }
 }
 
-INSTANTIATE_TEST_CASE_P (VariousGraphs,
-                         RandomWalkerTest,
-                         ::testing::Values ("graph0.info",
-                                            "graph1.info",
-                                            "graph2.info",
-                                            "graph3.info",
-                                            "graph4.info",
-                                            "graph5.info",
-                                            "graph6.info",
-                                            "graph7.info",
+INSTANTIATE_TEST_CASE_P (VariousGraphs, RandomWalkerTest,
+                         ::testing::Values ("graph0.info", "graph1.info", "graph2.info",
+                                            "graph3.info", "graph4.info", "graph5.info",
+                                            "graph6.info", "graph7.info",
                                             "graph8.info"));
 
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "Please provide a path to the directory with test graph descriptions." << std::endl;
+  if (argc < 2) {
+    std::cerr << "Please provide a path to the directory with test graph descriptions."
+              << std::endl;
     return (-1);
   }
 
   TEST_DATA_DIR = std::string (argv[1]);
 
-  try
-  {
+  try {
     ::testing::InitGoogleTest (&argc, argv);
     return RUN_ALL_TESTS ();
-  }
-  catch (std::exception& e)
-  {
+  } catch (std::exception &e) {
     std::cerr << "Unhandled exception: " << e.what () << "\n";
   }
 
   return 1;
 }
-

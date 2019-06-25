@@ -34,7 +34,7 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *
  */
-  
+
 #pragma once
 
 #include <pcl/common/common.h>
@@ -49,89 +49,82 @@ namespace pcl
 {
 
   /** \brief Utility class for evaluating a decision tree. */
-  template <
-    class FeatureType,
-    class DataSet,
-    class LabelType,
-    class ExampleIndex,
-    class NodeType >
+  template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+            class NodeType>
   class DecisionTreeEvaluator
   {
-  
-  public:
 
+    public:
     /** \brief Constructor. */
-    DecisionTreeEvaluator();
+    DecisionTreeEvaluator ();
     /** \brief Destructor. */
-    virtual 
-    ~DecisionTreeEvaluator();
+    virtual ~DecisionTreeEvaluator ();
 
-    /** \brief Evaluates the specified examples using the supplied tree. 
-      * \param[in] tree The decision tree.
-      * \param[in] feature_handler The feature handler used to train the tree.
-      * \param[in] stats_estimator The statistics estimation instance used while training the tree.
-      * \param[in] data_set The data set used for evaluation.
-      * \param[in] examples The examples that have to be evaluated.
-      * \param[out] label_data The destination for the resulting label data.
-      */
-    void
-    evaluate (pcl::DecisionTree<NodeType> & tree,
-              pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> & feature_handler,
-              pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex> & stats_estimator,
-              DataSet & data_set,
-              std::vector<ExampleIndex> & examples,
-              std::vector<LabelType> & label_data);
-    
-    /** \brief Evaluates the specified examples using the supplied tree and adds the results to the supplied results array. 
-      * \param[in] tree The decision tree.
-      * \param[in] feature_handler The feature handler used to train the tree.
-      * \param[in] stats_estimator The statistics estimation instance used while training the tree.
-      * \param[in] data_set The data set used for evaluation.
-      * \param[in] examples The examples that have to be evaluated.
-      * \param[out] label_data The destination where the resulting label data is added to.
-      */
-    void
-    evaluateAndAdd (pcl::DecisionTree<NodeType> & tree,
-                    pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> & feature_handler,
-                    pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex> & stats_estimator,
-                    DataSet & data_set,
-                    std::vector<ExampleIndex> & examples,
-                    std::vector<LabelType> & label_data);
-    
     /** \brief Evaluates the specified examples using the supplied tree.
-       * \param[in] tree The decision tree.
-       * \param[in] feature_handler The feature handler used to train the tree.
-       * \param[in] stats_estimator The statistics estimation instance used while training the tree.
-       * \param[in] data_set The data set used for evaluation.
-       * \param[in] example The example that has to be evaluated.
-       * \param[out] leave The leave reached by the examples.
-       */
-      void
-      evaluate(pcl::DecisionTree<NodeType> & tree,
-               pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> & feature_handler,
-               pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex> & stats_estimator,
-               DataSet & data_set,
-               ExampleIndex example,
-               NodeType & leave);
-
-    /** \brief Evaluates the specified examples using the supplied tree. 
-      * \param[in] tree The decision tree.
-      * \param[in] feature_handler The feature handler used to train the tree.
-      * \param[in] stats_estimator The statistics estimation instance used while training the tree.
-      * \param[in] data_set The data set used for evaluation.
-      * \param[in] examples The examples that have to be evaluated.
-      * \param[out] nodes The leaf-nodes reached while evaluation.
-      */
+     * \param[in] tree The decision tree.
+     * \param[in] feature_handler The feature handler used to train the tree.
+     * \param[in] stats_estimator The statistics estimation instance used while training
+     * the tree. \param[in] data_set The data set used for evaluation. \param[in]
+     * examples The examples that have to be evaluated. \param[out] label_data The
+     * destination for the resulting label data.
+     */
     void
-    getNodes (pcl::DecisionTree<NodeType> & tree,
-              pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> & feature_handler,
-              pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex> & stats_estimator,
-              DataSet & data_set,
-              std::vector<ExampleIndex> & examples,
-              std::vector<NodeType*> & nodes);
+    evaluate (pcl::DecisionTree<NodeType> &tree,
+              pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> &feature_handler,
+              pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex>
+                  &stats_estimator,
+              DataSet &data_set, std::vector<ExampleIndex> &examples,
+              std::vector<LabelType> &label_data);
 
+    /** \brief Evaluates the specified examples using the supplied tree and adds the
+     * results to the supplied results array. \param[in] tree The decision tree.
+     * \param[in] feature_handler The feature handler used to train the tree.
+     * \param[in] stats_estimator The statistics estimation instance used while training
+     * the tree. \param[in] data_set The data set used for evaluation. \param[in]
+     * examples The examples that have to be evaluated. \param[out] label_data The
+     * destination where the resulting label data is added to.
+     */
+    void
+    evaluateAndAdd (
+        pcl::DecisionTree<NodeType> &tree,
+        pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> &feature_handler,
+        pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex>
+            &stats_estimator,
+        DataSet &data_set, std::vector<ExampleIndex> &examples,
+        std::vector<LabelType> &label_data);
+
+    /** \brief Evaluates the specified examples using the supplied tree.
+     * \param[in] tree The decision tree.
+     * \param[in] feature_handler The feature handler used to train the tree.
+     * \param[in] stats_estimator The statistics estimation instance used while training
+     * the tree. \param[in] data_set The data set used for evaluation. \param[in]
+     * example The example that has to be evaluated. \param[out] leave The leave reached
+     * by the examples.
+     */
+    void
+    evaluate (pcl::DecisionTree<NodeType> &tree,
+              pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> &feature_handler,
+              pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex>
+                  &stats_estimator,
+              DataSet &data_set, ExampleIndex example, NodeType &leave);
+
+    /** \brief Evaluates the specified examples using the supplied tree.
+     * \param[in] tree The decision tree.
+     * \param[in] feature_handler The feature handler used to train the tree.
+     * \param[in] stats_estimator The statistics estimation instance used while training
+     * the tree. \param[in] data_set The data set used for evaluation. \param[in]
+     * examples The examples that have to be evaluated. \param[out] nodes The leaf-nodes
+     * reached while evaluation.
+     */
+    void
+    getNodes (pcl::DecisionTree<NodeType> &tree,
+              pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> &feature_handler,
+              pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex>
+                  &stats_estimator,
+              DataSet &data_set, std::vector<ExampleIndex> &examples,
+              std::vector<NodeType *> &nodes);
   };
 
-}
+} // namespace pcl
 
 #include <pcl/ml/impl/dt/decision_tree_evaluator.hpp>

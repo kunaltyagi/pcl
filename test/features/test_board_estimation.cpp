@@ -38,11 +38,11 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_cloud.h>
-#include <pcl/pcl_tests.h>
+#include <pcl/features/board.h>
 #include <pcl/features/normal_3d_omp.h>
 #include <pcl/io/pcd_io.h>
-#include <pcl/features/board.h>
+#include <pcl/pcl_tests.h>
+#include <pcl/point_cloud.h>
 
 using namespace pcl;
 using namespace pcl::test;
@@ -94,37 +94,37 @@ TEST (PCL, BOARDLocalReferenceFrameEstimation)
   EXPECT_EQ (indices.size (), bunny_LRF.size ());
 
   EXPECT_FALSE (bunny_LRF.is_dense);
-  //EXPECT_EQ (numeric_limits<float>::max (), bunny_LRF.at (24).confidence);
+  // EXPECT_EQ (numeric_limits<float>::max (), bunny_LRF.at (24).confidence);
   EXPECT_TRUE (std::isnan (bunny_LRF.at (24).x_axis[0]));
 
   // Expected Results
-  //float point_15_conf = -9.06301;
+  // float point_15_conf = -9.06301;
   Eigen::Vector3f point_15_x (-0.784923f, 0.208529f, 0.583448f);
   Eigen::Vector3f point_15_y (0.334206f, -0.650436f, 0.682085f);
   Eigen::Vector3f point_15_z (0.52173f, 0.730376f, 0.440851f);
 
-  //float point_45_conf = -9.55398;
+  // float point_45_conf = -9.55398;
   Eigen::Vector3f point_45_x (0.909111f, 0.30943f, 0.278874f);
   Eigen::Vector3f point_45_y (-0.362239f, 0.917811f, 0.162501f);
   Eigen::Vector3f point_45_z (-0.205671f, -0.248751f, 0.946479f);
 
-  //float point_163_conf = -9.04891;
+  // float point_163_conf = -9.04891;
   Eigen::Vector3f point_163_x (-0.443962f, -0.890073f, -0.103285f);
   Eigen::Vector3f point_163_y (0.746929f, -0.30394f, -0.591369f);
   Eigen::Vector3f point_163_z (0.494969f, -0.339693f, 0.799759f);
 
-  //float point_253_conf = -9.09443;
+  // float point_253_conf = -9.09443;
   Eigen::Vector3f point_253_x (-0.616855f, 0.757286f, -0.214495f);
   Eigen::Vector3f point_253_y (-0.661937f, -0.646584f, -0.379168f);
   Eigen::Vector3f point_253_z (-0.425827f, -0.0919098f, 0.900124f);
 
-  //Test Results
-  //EXPECT_NEAR (point_15_conf,bunny_LRF.at (15).confidence, 1E-3);
-  //EXPECT_NEAR_VECTORS (point_15_x, bunny_LRF.at (15).x_axis.getNormalVector3fMap (), 1E-3);
-  //EXPECT_NEAR_VECTORS (point_15_y, bunny_LRF.at (15).y_axis.getNormalVector3fMap (), 1E-3);
-  //EXPECT_NEAR_VECTORS (point_15_z, bunny_LRF.at (15).z_axis.getNormalVector3fMap (), 1E-3);
-  for (int d = 0; d < 3; ++d)
-  {
+  // Test Results
+  // EXPECT_NEAR (point_15_conf,bunny_LRF.at (15).confidence, 1E-3);
+  // EXPECT_NEAR_VECTORS (point_15_x, bunny_LRF.at (15).x_axis.getNormalVector3fMap (),
+  // 1E-3); EXPECT_NEAR_VECTORS (point_15_y, bunny_LRF.at
+  // (15).y_axis.getNormalVector3fMap (), 1E-3); EXPECT_NEAR_VECTORS (point_15_z,
+  // bunny_LRF.at (15).z_axis.getNormalVector3fMap (), 1E-3);
+  for (int d = 0; d < 3; ++d) {
     EXPECT_NEAR (point_15_x[d], bunny_LRF.at (15).x_axis[d], 1E-3);
     EXPECT_NEAR (point_15_y[d], bunny_LRF.at (15).y_axis[d], 1E-3);
     EXPECT_NEAR (point_15_z[d], bunny_LRF.at (15).z_axis[d], 1E-3);
@@ -145,17 +145,19 @@ TEST (PCL, BOARDLocalReferenceFrameEstimation)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
-  if (loadPCDFile<PointXYZ> (argv[1], cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (loadPCDFile<PointXYZ> (argv[1], cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
 

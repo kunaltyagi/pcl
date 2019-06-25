@@ -40,86 +40,86 @@
 
 #include "pcl/pcl_config.h"
 
-#include <pcl/io/hdl_grabber.h>
-#include <pcl/io/grabber.h>
-#include <pcl/point_types.h>
-#include <pcl/point_cloud.h>
 #include <boost/asio.hpp>
+#include <pcl/io/grabber.h>
+#include <pcl/io/hdl_grabber.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
 #include <string>
 
 namespace pcl
 {
 
-  /** \brief Grabber for the Velodyne LiDAR (VLP), based on the Velodyne High Definition Laser (HDL)
-   * \author Keven Ring <keven@mitre.org>
-   * \ingroup io
+  /** \brief Grabber for the Velodyne LiDAR (VLP), based on the Velodyne High Definition
+   * Laser (HDL) \author Keven Ring <keven@mitre.org> \ingroup io
    */
   class PCL_EXPORTS VLPGrabber : public HDLGrabber
   {
     public:
-      /** \brief Constructor taking an optional path to an vlp corrections file.  The Grabber will listen on the default IP/port for data packets [192.168.3.255/2368]
-       * \param[in] pcapFile Path to a file which contains previously captured data packets.  This parameter is optional
-       */
-      VLPGrabber (const std::string& pcapFile = "");
+    /** \brief Constructor taking an optional path to an vlp corrections file.  The
+     * Grabber will listen on the default IP/port for data packets [192.168.3.255/2368]
+     * \param[in] pcapFile Path to a file which contains previously captured data
+     * packets.  This parameter is optional
+     */
+    VLPGrabber (const std::string &pcapFile = "");
 
-      /** \brief Constructor taking a specified IP/port
-       * \param[in] ipAddress IP Address that should be used to listen for VLP packets
-       * \param[in] port UDP Port that should be used to listen for VLP packets
-       */
-      VLPGrabber (const boost::asio::ip::address& ipAddress,
-                  const uint16_t port);
+    /** \brief Constructor taking a specified IP/port
+     * \param[in] ipAddress IP Address that should be used to listen for VLP packets
+     * \param[in] port UDP Port that should be used to listen for VLP packets
+     */
+    VLPGrabber (const boost::asio::ip::address &ipAddress, const uint16_t port);
 
-      /** \brief virtual Destructor inherited from the Grabber interface. It never throws. */
-      
-      ~VLPGrabber () throw ();
+    /** \brief virtual Destructor inherited from the Grabber interface. It never throws.
+     */
 
-      /** \brief Obtains the name of this I/O Grabber
-       *  \return The name of the grabber
-       */
-      std::string
-      getName () const override;
+    ~VLPGrabber () throw ();
 
-      /** \brief Allows one to customize the colors used by each laser.
-       * \param[in] color RGB color to set
-       * \param[in] laserNumber Number of laser to set color
-       */
-      void
-      setLaserColorRGB (const pcl::RGB& color,
-                        const uint8_t laserNumber);
+    /** \brief Obtains the name of this I/O Grabber
+     *  \return The name of the grabber
+     */
+    std::string
+    getName () const override;
 
-      /** \brief Allows one to customize the colors used for each of the lasers.
-      * \param[in] begin begin iterator of RGB color array
-      * \param[in] end end iterator of RGB color array
-      */
-      template<typename IterT> void
-      setLaserColorRGB (const IterT& begin, const IterT& end)
-      {
-          std::copy (begin, end, laser_rgb_mapping_);
-      }
+    /** \brief Allows one to customize the colors used by each laser.
+     * \param[in] color RGB color to set
+     * \param[in] laserNumber Number of laser to set color
+     */
+    void
+    setLaserColorRGB (const pcl::RGB &color, const uint8_t laserNumber);
 
-      /** \brief Returns the maximum number of lasers
-      */
-      uint8_t
-      getMaximumNumberOfLasers () const override;
+    /** \brief Allows one to customize the colors used for each of the lasers.
+     * \param[in] begin begin iterator of RGB color array
+     * \param[in] end end iterator of RGB color array
+     */
+    template <typename IterT>
+    void
+    setLaserColorRGB (const IterT &begin, const IterT &end)
+    {
+      std::copy (begin, end, laser_rgb_mapping_);
+    }
+
+    /** \brief Returns the maximum number of lasers
+     */
+    uint8_t
+    getMaximumNumberOfLasers () const override;
 
     protected:
-      static const uint8_t VLP_MAX_NUM_LASERS = 16;
-      static const uint8_t VLP_DUAL_MODE = 0x39;
+    static const uint8_t VLP_MAX_NUM_LASERS = 16;
+    static const uint8_t VLP_DUAL_MODE = 0x39;
 
     private:
-      pcl::RGB laser_rgb_mapping_[VLP_MAX_NUM_LASERS];
+    pcl::RGB laser_rgb_mapping_[VLP_MAX_NUM_LASERS];
 
-      void
-      toPointClouds (HDLDataPacket *dataPacket) override;
+    void
+    toPointClouds (HDLDataPacket *dataPacket) override;
 
-      boost::asio::ip::address
-      getDefaultNetworkAddress () override;
+    boost::asio::ip::address
+    getDefaultNetworkAddress () override;
 
-      void
-      initializeLaserMapping ();
+    void
+    initializeLaserMapping ();
 
-      void
-      loadVLP16Corrections ();
-
+    void
+    loadVLP16Corrections ();
   };
-}
+} // namespace pcl

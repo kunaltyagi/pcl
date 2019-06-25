@@ -40,39 +40,40 @@
 #pragma once
 
 #ifdef __GNUC__
-#pragma GCC system_header 
+#pragma GCC system_header
 #endif
 
 #ifndef Q_MOC_RUN
-#include <boost/mpl/is_sequence.hpp>
-#include <boost/mpl/begin_end.hpp>
-#include <boost/mpl/next_prior.hpp>
-#include <boost/mpl/deref.hpp>
 #include <boost/mpl/assert.hpp>
-#include <boost/mpl/remove_if.hpp>
-#include <boost/mpl/contains.hpp>
-#include <boost/mpl/not.hpp>
 #include <boost/mpl/aux_/unwrap.hpp>
+#include <boost/mpl/begin_end.hpp>
+#include <boost/mpl/contains.hpp>
+#include <boost/mpl/deref.hpp>
+#include <boost/mpl/is_sequence.hpp>
+#include <boost/mpl/next_prior.hpp>
+#include <boost/mpl/not.hpp>
+#include <boost/mpl/remove_if.hpp>
 #endif
 
 #include <type_traits>
 
-namespace pcl 
+namespace pcl
 {
   //////////////////////////////////////////////////////////////////////////////////////////////
   template <bool done = true>
-  struct for_each_type_impl
-  {
-    template<typename Iterator, typename LastIterator, typename F>
-    static void execute (F) {}
+  struct for_each_type_impl {
+    template <typename Iterator, typename LastIterator, typename F>
+    static void execute (F)
+    {
+    }
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////////
   template <>
-  struct for_each_type_impl<false>
-  {
-    template<typename Iterator, typename LastIterator, typename F>
-    static void execute (F f)
+  struct for_each_type_impl<false> {
+    template <typename Iterator, typename LastIterator, typename F>
+    static void
+    execute (F f)
     {
       using arg = typename boost::mpl::deref<Iterator>::type;
 
@@ -83,25 +84,28 @@ namespace pcl
 #endif
 
       using iter = typename boost::mpl::next<Iterator>::type;
-      for_each_type_impl<std::is_same<iter, LastIterator>::value>
-        ::template execute<iter, LastIterator, F> (f);
+      for_each_type_impl<std::is_same<iter, LastIterator>::value>::template execute<
+          iter, LastIterator, F> (f);
     }
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////////
-  template<typename Sequence, typename F> inline void 
+  template <typename Sequence, typename F>
+  inline void
   for_each_type (F f)
   {
-    BOOST_MPL_ASSERT (( boost::mpl::is_sequence<Sequence> ));
+    BOOST_MPL_ASSERT ((boost::mpl::is_sequence<Sequence>));
     using first = typename boost::mpl::begin<Sequence>::type;
     using last = typename boost::mpl::end<Sequence>::type;
-    for_each_type_impl<std::is_same<first, last>::value>::template execute<first, last, F> (f);
+    for_each_type_impl<std::is_same<first, last>::value>::template execute<first, last,
+                                                                           F> (f);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////
   template <typename Sequence1, typename Sequence2>
-  struct intersect 
-  { 
-    using type = typename boost::mpl::remove_if<Sequence1, boost::mpl::not_<boost::mpl::contains<Sequence2, boost::mpl::_1> > >::type; 
-  }; 
-}
+  struct intersect {
+    using type = typename boost::mpl::remove_if<
+        Sequence1,
+        boost::mpl::not_<boost::mpl::contains<Sequence2, boost::mpl::_1>>>::type;
+  };
+} // namespace pcl

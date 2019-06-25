@@ -39,15 +39,14 @@
 
 #include <gtest/gtest.h>
 
-#include <pcl/point_types.h>
+#include <pcl/common/common.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/filters/project_inliers.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/vtk_io.h>
-#include <pcl/features/normal_3d.h>
-#include <pcl/surface/concave_hull.h>
-#include <pcl/common/common.h>
+#include <pcl/point_types.h>
 #include <pcl/sample_consensus/sac_model_plane.h>
-#include <pcl/filters/project_inliers.h>
-
+#include <pcl/surface/concave_hull.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -67,13 +66,15 @@ search::KdTree<PointNormal>::Ptr tree4;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TEST (PCL, ConcaveHull_bunny)
 {
-  //construct dataset
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud2D (new pcl::PointCloud<pcl::PointXYZ> (*cloud));
+  // construct dataset
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud2D (
+      new pcl::PointCloud<pcl::PointXYZ> (*cloud));
   for (auto &point : cloud2D->points)
     point.z = 0;
 
   pcl::PointCloud<pcl::PointXYZ> alpha_shape;
-  pcl::PointCloud<pcl::PointXYZ>::Ptr voronoi_centers (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr voronoi_centers (
+      new pcl::PointCloud<pcl::PointXYZ>);
   std::vector<pcl::Vertices> polygons_alpha;
 
   pcl::ConcaveHull<pcl::PointXYZ> concave_hull;
@@ -85,7 +86,8 @@ TEST (PCL, ConcaveHull_bunny)
   EXPECT_EQ (alpha_shape.points.size (), 21);
 
   pcl::PointCloud<pcl::PointXYZ> alpha_shape1;
-  pcl::PointCloud<pcl::PointXYZ>::Ptr voronoi_centers1 (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr voronoi_centers1 (
+      new pcl::PointCloud<pcl::PointXYZ>);
   std::vector<pcl::Vertices> polygons_alpha1;
 
   pcl::ConcaveHull<pcl::PointXYZ> concave_hull1;
@@ -97,7 +99,8 @@ TEST (PCL, ConcaveHull_bunny)
   EXPECT_EQ (alpha_shape1.points.size (), 20);
 
   pcl::PointCloud<pcl::PointXYZ> alpha_shape2;
-  pcl::PointCloud<pcl::PointXYZ>::Ptr voronoi_centers2 (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr voronoi_centers2 (
+      new pcl::PointCloud<pcl::PointXYZ>);
   std::vector<pcl::Vertices> polygons_alpha2;
   pcl::ConcaveHull<pcl::PointXYZ> concave_hull2;
   concave_hull2.setInputCloud (cloud2D);
@@ -107,10 +110,10 @@ TEST (PCL, ConcaveHull_bunny)
 
   EXPECT_EQ (alpha_shape2.points.size (), 81);
 
-  //PolygonMesh concave;
-  //toPCLPointCloud2 (alpha_shape2, concave.cloud);
-  //concave.polygons = polygons_alpha2;
-  //saveVTKFile ("./test/bun0-concave2d.vtk", concave);
+  // PolygonMesh concave;
+  // toPCLPointCloud2 (alpha_shape2, concave.cloud);
+  // concave.polygons = polygons_alpha2;
+  // saveVTKFile ("./test/bun0-concave2d.vtk", concave);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,7 +150,6 @@ TEST (PCL, ConcaveHull_planar_bunny)
 
   EXPECT_EQ (concave_hull_2d.getDimension (), 2);
 }
-
 
 TEST (PCL, ConcaveHull_4points)
 {
@@ -206,28 +208,24 @@ TEST (PCL, ConcaveHull_4points)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TEST (PCL, ConcaveHull_LTable)
 {
-  //construct dataset
+  // construct dataset
   pcl::PointCloud<pcl::PointXYZ> cloud_out_ltable;
   cloud_out_ltable.points.resize (100);
 
   int npoints = 0;
-  for (size_t i = 0; i < 8; i++)
-  {
-    for (size_t j = 0; j <= 2; j++)
-    {
-      cloud_out_ltable.points[npoints].x = float (i) * 0.5f;
-      cloud_out_ltable.points[npoints].y = -float (j) * 0.5f;
+  for (size_t i = 0; i < 8; i++) {
+    for (size_t j = 0; j <= 2; j++) {
+      cloud_out_ltable.points[npoints].x = float(i) * 0.5f;
+      cloud_out_ltable.points[npoints].y = -float(j) * 0.5f;
       cloud_out_ltable.points[npoints].z = 0.f;
       npoints++;
     }
   }
 
-  for (size_t i = 0; i <= 2; i++)
-  {
-    for(size_t j = 3; j < 8; j++)
-    {
-      cloud_out_ltable.points[npoints].x = float (i) * 0.5f;
-      cloud_out_ltable.points[npoints].y = -float (j) * 0.5f;
+  for (size_t i = 0; i <= 2; i++) {
+    for (size_t j = 3; j < 8; j++) {
+      cloud_out_ltable.points[npoints].x = float(i) * 0.5f;
+      cloud_out_ltable.points[npoints].y = -float(j) * 0.5f;
       cloud_out_ltable.points[npoints].z = 0.f;
       npoints++;
     }
@@ -235,10 +233,12 @@ TEST (PCL, ConcaveHull_LTable)
 
   cloud_out_ltable.points.resize (npoints);
 
-  pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloudptr (new pcl::PointCloud<pcl::PointXYZ> (cloud_out_ltable));
+  pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloudptr (
+      new pcl::PointCloud<pcl::PointXYZ> (cloud_out_ltable));
 
   pcl::PointCloud<pcl::PointXYZ> alpha_shape;
-  pcl::PointCloud<pcl::PointXYZ>::Ptr voronoi_centers (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr voronoi_centers (
+      new pcl::PointCloud<pcl::PointXYZ>);
   std::vector<pcl::Vertices> polygons_alpha;
 
   pcl::ConcaveHull<pcl::PointXYZ> concave_hull;
@@ -250,7 +250,8 @@ TEST (PCL, ConcaveHull_LTable)
   EXPECT_EQ (alpha_shape.points.size (), 27);
 
   pcl::PointCloud<pcl::PointXYZ> alpha_shape1;
-  pcl::PointCloud<pcl::PointXYZ>::Ptr voronoi_centers1 (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr voronoi_centers1 (
+      new pcl::PointCloud<pcl::PointXYZ>);
   std::vector<pcl::Vertices> polygons_alpha1;
 
   pcl::ConcaveHull<pcl::PointXYZ> concave_hull1;
@@ -262,7 +263,8 @@ TEST (PCL, ConcaveHull_LTable)
   EXPECT_EQ (alpha_shape1.points.size (), 23);
 
   pcl::PointCloud<pcl::PointXYZ> alpha_shape2;
-  pcl::PointCloud<pcl::PointXYZ>::Ptr voronoi_centers2 (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr voronoi_centers2 (
+      new pcl::PointCloud<pcl::PointXYZ>);
   std::vector<pcl::Vertices> polygons_alpha2;
   pcl::ConcaveHull<pcl::PointXYZ> concave_hull2;
   concave_hull2.setInputCloud (cloudptr);
@@ -275,11 +277,12 @@ TEST (PCL, ConcaveHull_LTable)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
@@ -296,25 +299,24 @@ main (int argc, char** argv)
   NormalEstimation<PointXYZ, Normal> n;
   PointCloud<Normal>::Ptr normals (new PointCloud<Normal> ());
   n.setInputCloud (cloud);
-  //n.setIndices (indices[B);
+  // n.setIndices (indices[B);
   n.setSearchMethod (tree);
   n.setKSearch (20);
   n.compute (*normals);
 
   // Concatenate XYZ and normal information
   pcl::concatenateFields (*cloud, *normals, *cloud_with_normals);
-      
+
   // Create search tree
   tree2.reset (new search::KdTree<PointNormal>);
   tree2->setInputCloud (cloud_with_normals);
 
   // Process for update cloud
-  if (argc == 3)
-  {
+  if (argc == 3) {
     pcl::PCLPointCloud2 cloud_blob1;
     loadPCDFile (argv[2], cloud_blob1);
     fromPCLPointCloud2 (cloud_blob1, *cloud1);
-        // Create search tree
+    // Create search tree
     tree3.reset (new search::KdTree<PointXYZ> (false));
     tree3->setInputCloud (cloud1);
 

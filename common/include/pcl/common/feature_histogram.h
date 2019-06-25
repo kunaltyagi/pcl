@@ -41,83 +41,82 @@
 #include <pcl/pcl_macros.h>
 
 namespace pcl
-{ 
+{
   /** \brief Type for histograms for computing mean and variance of some floats.
-    *
-    * \author Timur Ibadov (ibadov.timur@gmail.com)
-    * \ingroup common
-    */
+   *
+   * \author Timur Ibadov (ibadov.timur@gmail.com)
+   * \ingroup common
+   */
   class PCL_EXPORTS FeatureHistogram
   {
     public:
-      /** \brief Public constructor.
-        * \param[in] number_of_bins number of bins in the histogram.
-        * \param[in] min lower threshold.
-        * \param[in] max upper threshold.
-        */
-      FeatureHistogram (const size_t number_of_bins, const float min,
-          const float max);
+    /** \brief Public constructor.
+     * \param[in] number_of_bins number of bins in the histogram.
+     * \param[in] min lower threshold.
+     * \param[in] max upper threshold.
+     */
+    FeatureHistogram (const size_t number_of_bins, const float min, const float max);
 
-      /** \brief Public destructor. */
-      virtual ~FeatureHistogram ();
+    /** \brief Public destructor. */
+    virtual ~FeatureHistogram ();
 
-      /** \brief Get the lower threshold.
-        * \return lower threshold.
-        */
-      float
-      getThresholdMin () const;
+    /** \brief Get the lower threshold.
+     * \return lower threshold.
+     */
+    float
+    getThresholdMin () const;
 
-      /** \brief Get the upper threshold.
-        * \return upper threshold.
-        */
-      float
-      getThresholdMax () const;
+    /** \brief Get the upper threshold.
+     * \return upper threshold.
+     */
+    float
+    getThresholdMax () const;
 
-      /** \brief Get the number of elements was added to the histogram.
-        * \return number of elements in the histogram.
-        */
-      size_t
-      getNumberOfElements () const;
+    /** \brief Get the number of elements was added to the histogram.
+     * \return number of elements in the histogram.
+     */
+    size_t
+    getNumberOfElements () const;
 
-      /** \brief Get number of bins in the histogram.
-        * \return number of bins in the histogram.
-        */
-      size_t
-      getNumberOfBins () const;
+    /** \brief Get number of bins in the histogram.
+     * \return number of bins in the histogram.
+     */
+    size_t
+    getNumberOfBins () const;
 
-      /** \brief Increase a bin, that corresponds the value.
-        * \param[in] value new value.
-        */
-      void
-      addValue (float value);
+    /** \brief Increase a bin, that corresponds the value.
+     * \param[in] value new value.
+     */
+    void
+    addValue (float value);
 
-      /** \brief Get value, corresponds to the greatest bin.
-        * \return mean value of the greatest bin.
-        */
-      float
-      getMeanValue ();
+    /** \brief Get value, corresponds to the greatest bin.
+     * \return mean value of the greatest bin.
+     */
+    float
+    getMeanValue ();
 
-      /** \brief Get variance of the value.
-        * \return variance of the greatest bin.
-        */
-      float
-      getVariance (float mean);
+    /** \brief Get variance of the value.
+     * \return variance of the greatest bin.
+     */
+    float
+    getVariance (float mean);
 
     protected:
-      /** \brief Vector, that contain the histogram. */
-      std::vector <unsigned> histogram_;
+    /** \brief Vector, that contain the histogram. */
+    std::vector<unsigned> histogram_;
 
-      /** \brief Min threshold. */
-      float threshold_min_;
-      /** \brief Max threshold. */
-      float threshold_max_;
-      /** \brief "Width" of a bin. */
-      float step_;
+    /** \brief Min threshold. */
+    float threshold_min_;
+    /** \brief Max threshold. */
+    float threshold_max_;
+    /** \brief "Width" of a bin. */
+    float step_;
 
-      /** \brief Number of values was added to the histogram. */
-      size_t number_of_elements_;
+    /** \brief Number of values was added to the histogram. */
+    size_t number_of_elements_;
 
-      /** \brief Number of bins. */
-      size_t number_of_bins_;
+    /** \brief Number of bins. */
+    size_t number_of_bins_;
   };
-}
+} // namespace pcl

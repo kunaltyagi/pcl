@@ -48,27 +48,28 @@ namespace pcl
     class PCL_EXPORTS AreaPickingEvent
     {
       public:
-        AreaPickingEvent (int nb_points, const std::vector<int>& indices)
-          : nb_points_ (nb_points)
-          , indices_ (indices)
-        {}
+      AreaPickingEvent (int nb_points, const std::vector<int> &indices)
+          : nb_points_ (nb_points), indices_ (indices)
+      {
+      }
 
-        /** \brief For situations where a whole are is selected, return the points indices.
-          * \param[out] indices indices of the points under the area selected by user.
-          * \return true, if the area selected by the user contains points, false otherwise
-          */
-        inline bool
-        getPointsIndices (std::vector<int>& indices) const
-        {
-          if (nb_points_ <= 0)
-            return (false);
-          indices = indices_;
-          return (true);
-        }
+      /** \brief For situations where a whole are is selected, return the points
+       * indices. \param[out] indices indices of the points under the area selected by
+       * user. \return true, if the area selected by the user contains points, false
+       * otherwise
+       */
+      inline bool
+      getPointsIndices (std::vector<int> &indices) const
+      {
+        if (nb_points_ <= 0)
+          return (false);
+        indices = indices_;
+        return (true);
+      }
 
       private:
-        int nb_points_;
-        std::vector<int> indices_;
+      int nb_points_;
+      std::vector<int> indices_;
     };
-  } //namespace visualization
-} //namespace pcl
+  } // namespace visualization
+} // namespace pcl

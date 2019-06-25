@@ -51,82 +51,91 @@ namespace pcl
    * \author Alexandru-Eugen Ichim
    */
   template <typename PointT, typename PointNT>
-  class SmoothedSurfacesKeypoint : public Keypoint <PointT, PointT>
+  class SmoothedSurfacesKeypoint : public Keypoint<PointT, PointT>
   {
     public:
-      using Ptr = boost::shared_ptr<SmoothedSurfacesKeypoint<PointT, PointNT> >;
-      using ConstPtr = boost::shared_ptr<const SmoothedSurfacesKeypoint<PointT, PointNT> >;
+    using Ptr = boost::shared_ptr<SmoothedSurfacesKeypoint<PointT, PointNT>>;
+    using ConstPtr = boost::shared_ptr<const SmoothedSurfacesKeypoint<PointT, PointNT>>;
 
-      using PCLBase<PointT>::input_;
-      using Keypoint<PointT, PointT>::name_;
-      using Keypoint<PointT, PointT>::tree_;
-      using Keypoint<PointT, PointT>::keypoints_indices_;
-      using Keypoint<PointT, PointT>::initCompute;
+    using PCLBase<PointT>::input_;
+    using Keypoint<PointT, PointT>::name_;
+    using Keypoint<PointT, PointT>::tree_;
+    using Keypoint<PointT, PointT>::keypoints_indices_;
+    using Keypoint<PointT, PointT>::initCompute;
 
-      using PointCloudT = pcl::PointCloud<PointT>;
-      using PointCloudTConstPtr = typename PointCloudT::ConstPtr;
-      using PointCloudNT = pcl::PointCloud<PointNT>;
-      using PointCloudNTConstPtr = typename PointCloudNT::ConstPtr;
-      using PointCloudTPtr = typename PointCloudT::Ptr;
-      using KdTreePtr = typename Keypoint<PointT, PointT>::KdTreePtr;
+    using PointCloudT = pcl::PointCloud<PointT>;
+    using PointCloudTConstPtr = typename PointCloudT::ConstPtr;
+    using PointCloudNT = pcl::PointCloud<PointNT>;
+    using PointCloudNTConstPtr = typename PointCloudNT::ConstPtr;
+    using PointCloudTPtr = typename PointCloudT::Ptr;
+    using KdTreePtr = typename Keypoint<PointT, PointT>::KdTreePtr;
 
-      SmoothedSurfacesKeypoint ()
-        : Keypoint<PointT, PointT> (),
-          neighborhood_constant_ (0.5f),
-          clouds_ (),
-          cloud_normals_ (),
-          cloud_trees_ (),
-          normals_ (),
-          input_scale_ (0.0f),
+    SmoothedSurfacesKeypoint ()
+        : Keypoint<PointT, PointT> (), neighborhood_constant_ (0.5f), clouds_ (),
+          cloud_normals_ (), cloud_trees_ (), normals_ (), input_scale_ (0.0f),
           input_index_ ()
-      {
-        name_ = "SmoothedSurfacesKeypoint";
+    {
+      name_ = "SmoothedSurfacesKeypoint";
 
-        // hack to pass the initCompute () check of Keypoint - although it is never used in SmoothedSurfacesKeypoint
-        Keypoint<PointT, PointT>::search_radius_ = 0.1;
-      }
+      // hack to pass the initCompute () check of Keypoint - although it is never used
+      // in SmoothedSurfacesKeypoint
+      Keypoint<PointT, PointT>::search_radius_ = 0.1;
+    }
 
-      void
-      addSmoothedPointCloud (const PointCloudTConstPtr &cloud,
-                             const PointCloudNTConstPtr &normals,
-                             KdTreePtr &kdtree,
-                             float &scale);
+    void
+    addSmoothedPointCloud (const PointCloudTConstPtr &cloud,
+                           const PointCloudNTConstPtr &normals, KdTreePtr &kdtree,
+                           float &scale);
 
+    void
+    resetClouds ();
 
-      void
-      resetClouds ();
+    inline void
+    setNeighborhoodConstant (float neighborhood_constant)
+    {
+      neighborhood_constant_ = neighborhood_constant;
+    }
 
-      inline void
-      setNeighborhoodConstant (float neighborhood_constant) { neighborhood_constant_ = neighborhood_constant; }
+    inline float
+    getNeighborhoodConstant ()
+    {
+      return neighborhood_constant_;
+    }
 
-      inline float
-      getNeighborhoodConstant () { return neighborhood_constant_; }
+    inline void
+    setInputNormals (const PointCloudNTConstPtr &normals)
+    {
+      normals_ = normals;
+    }
 
-      inline void
-      setInputNormals (const PointCloudNTConstPtr &normals) { normals_ = normals; }
+    inline void
+    setInputScale (float input_scale)
+    {
+      input_scale_ = input_scale;
+    }
 
-      inline void
-      setInputScale (float input_scale) { input_scale_ = input_scale; }
-
-      void
-      detectKeypoints (PointCloudT &output) override;
+    void
+    detectKeypoints (PointCloudT &output) override;
 
     protected:
-      bool
-      initCompute () override;
+    bool
+    initCompute () override;
 
     private:
-      float neighborhood_constant_;
-      std::vector<PointCloudTConstPtr> clouds_;
-      std::vector<PointCloudNTConstPtr> cloud_normals_;
-      std::vector<KdTreePtr> cloud_trees_;
-      PointCloudNTConstPtr normals_;
-      std::vector<std::pair<float, size_t> > scales_;
-      float input_scale_;
-      size_t input_index_;
+    float neighborhood_constant_;
+    std::vector<PointCloudTConstPtr> clouds_;
+    std::vector<PointCloudNTConstPtr> cloud_normals_;
+    std::vector<KdTreePtr> cloud_trees_;
+    PointCloudNTConstPtr normals_;
+    std::vector<std::pair<float, size_t>> scales_;
+    float input_scale_;
+    size_t input_index_;
 
-      static bool
-      compareScalesFunction (const std::pair<float, size_t> &a,
-                             const std::pair<float, size_t> &b) { return a.first < b.first; }
+    static bool
+    compareScalesFunction (const std::pair<float, size_t> &a,
+                           const std::pair<float, size_t> &b)
+    {
+      return a.first < b.first;
+    }
   };
-}
+} // namespace pcl

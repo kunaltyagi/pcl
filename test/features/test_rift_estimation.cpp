@@ -38,8 +38,8 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_cloud.h>
 #include <pcl/features/rift.h>
+#include <pcl/point_cloud.h>
 
 using namespace pcl;
 using namespace std;
@@ -51,16 +51,15 @@ TEST (PCL, RIFTEstimation)
   PointCloud<PointXYZI> cloud_xyzi;
   cloud_xyzi.height = 1;
   cloud_xyzi.is_dense = true;
-  for (float x = -10.0f; x <= 10.0f; x += 1.0f)
-  {
-    for (float y = -10.0f; y <= 10.0f; y += 1.0f)
-    {
+  for (float x = -10.0f; x <= 10.0f; x += 1.0f) {
+    for (float y = -10.0f; y <= 10.0f; y += 1.0f) {
       PointXYZI p;
       p.x = x;
       p.y = y;
       p.z = std::sqrt (400 - x * x - y * y);
-      p.intensity = expf ((-powf (x - 3.0f, 2.0f) + powf (y + 2.0f, 2.0f)) / (2.0f * 25.0f)) + expf ((-powf (x + 5.0f, 2.0f) + powf (y - 5.0f, 2.0f))
-                                                                                 / (2.0f * 4.0f));
+      p.intensity =
+          expf ((-powf (x - 3.0f, 2.0f) + powf (y + 2.0f, 2.0f)) / (2.0f * 25.0f)) +
+          expf ((-powf (x + 5.0f, 2.0f) + powf (y - 5.0f, 2.0f)) / (2.0f * 4.0f));
 
       cloud_xyzi.points.push_back (p);
     }
@@ -73,8 +72,7 @@ TEST (PCL, RIFTEstimation)
   gradient.width = static_cast<uint32_t> (cloud_xyzi.points.size ());
   gradient.is_dense = true;
   gradient.points.resize (gradient.width);
-  for (size_t i = 0; i < cloud_xyzi.points.size (); ++i)
-  {
+  for (size_t i = 0; i < cloud_xyzi.points.size (); ++i) {
     const PointXYZI &p = cloud_xyzi.points[i];
 
     // Compute the surface normal analytically.
@@ -87,10 +85,14 @@ TEST (PCL, RIFTEstimation)
     nz /= magnitude;
 
     // Compute the intensity gradient analytically...
-    float tmpx = -(p.x + 5.0f) / 4.0f / expf ((powf (p.x + 5.0f, 2.0f) + powf (p.y - 5.0f, 2.0f)) / 8.0f) - (p.x - 3.0f) / 25.0f
-        / expf ((powf (p.x - 3.0f, 2.0f) + powf (p.y + 2.0f, 2.0f)) / 50.0f);
-    float tmpy = -(p.y - 5.0f) / 4.0f / expf ((powf (p.x + 5.0f, 2.0f) + powf (p.y - 5.0f, 2.0f)) / 8.0f) - (p.y + 2.0f) / 25.0f
-        / expf ((powf (p.x - 3.0f, 2.0f) + powf (p.y + 2.0f, 2.0f)) / 50.0f);
+    float tmpx = -(p.x + 5.0f) / 4.0f /
+                     expf ((powf (p.x + 5.0f, 2.0f) + powf (p.y - 5.0f, 2.0f)) / 8.0f) -
+                 (p.x - 3.0f) / 25.0f /
+                     expf ((powf (p.x - 3.0f, 2.0f) + powf (p.y + 2.0f, 2.0f)) / 50.0f);
+    float tmpy = -(p.y - 5.0f) / 4.0f /
+                     expf ((powf (p.x + 5.0f, 2.0f) + powf (p.y - 5.0f, 2.0f)) / 8.0f) -
+                 (p.y + 2.0f) / 25.0f /
+                     expf ((powf (p.x - 3.0f, 2.0f) + powf (p.y + 2.0f, 2.0f)) / 50.0f);
     float tmpz = 0.0f;
     // ...and project the 3-D gradient vector onto the surface's tangent plane.
     float gx = (1 - nx * nx) * tmpx + (-nx * ny) * tmpy + (-nx * nz) * tmpz;
@@ -122,20 +124,19 @@ TEST (PCL, RIFTEstimation)
 
   unsigned major, minor, patch;
   std::sscanf (FLANN_VERSION_, "%u.%u.%u", &major, &minor, &patch);
-  if (PCL_VERSION_CALC (major, minor, patch) > PCL_VERSION_CALC (1, 8, 4))
-  {
-    const float data[32] = {0.0052f, 0.0349f, 0.0647f, 0.0881f, 0.0042f, 0.0131f, 0.0346f, 0.0030f,
-                            0.0076f, 0.0218f, 0.0463f, 0.0030f, 0.0087f, 0.0288f, 0.0920f, 0.0472f,
-                            0.0211f, 0.0420f, 0.0726f, 0.0669f, 0.0090f, 0.0901f, 0.1274f, 0.2185f,
-                            0.0147f, 0.1222f, 0.3568f, 0.4348f, 0.0149f, 0.0806f, 0.2787f, 0.6864f};
+  if (PCL_VERSION_CALC (major, minor, patch) > PCL_VERSION_CALC (1, 8, 4)) {
+    const float data[32] = {
+        0.0052f, 0.0349f, 0.0647f, 0.0881f, 0.0042f, 0.0131f, 0.0346f, 0.0030f,
+        0.0076f, 0.0218f, 0.0463f, 0.0030f, 0.0087f, 0.0288f, 0.0920f, 0.0472f,
+        0.0211f, 0.0420f, 0.0726f, 0.0669f, 0.0090f, 0.0901f, 0.1274f, 0.2185f,
+        0.0147f, 0.1222f, 0.3568f, 0.4348f, 0.0149f, 0.0806f, 0.2787f, 0.6864f};
     std::copy (data, data + 32, correct_rift_feature_values);
-  }
-  else
-  {
-    const float data[32] = {0.0187f, 0.0349f, 0.0647f, 0.0881f, 0.0042f, 0.0131f, 0.0346f, 0.0030f,
-                            0.0076f, 0.0218f, 0.0463f, 0.0030f, 0.0087f, 0.0288f, 0.0920f, 0.0472f,
-                            0.0076f, 0.0420f, 0.0726f, 0.0669f, 0.0090f, 0.0901f, 0.1274f, 0.2185f,
-                            0.0147f, 0.1222f, 0.3568f, 0.4348f, 0.0149f, 0.0806f, 0.2787f, 0.6864f};
+  } else {
+    const float data[32] = {
+        0.0187f, 0.0349f, 0.0647f, 0.0881f, 0.0042f, 0.0131f, 0.0346f, 0.0030f,
+        0.0076f, 0.0218f, 0.0463f, 0.0030f, 0.0087f, 0.0288f, 0.0920f, 0.0472f,
+        0.0076f, 0.0420f, 0.0726f, 0.0669f, 0.0090f, 0.0901f, 0.1274f, 0.2185f,
+        0.0147f, 0.1222f, 0.3568f, 0.4348f, 0.0149f, 0.0806f, 0.2787f, 0.6864f};
     std::copy (data, data + 32, correct_rift_feature_values);
   }
   for (int i = 0; i < 32; ++i)
@@ -144,7 +145,7 @@ TEST (PCL, RIFTEstimation)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

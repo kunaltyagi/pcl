@@ -9,8 +9,8 @@
 
 #include <pcl/common/common.h>
 
-#include <vtkSmartPointer.h>
 #include <vtkPolyData.h>
+#include <vtkSmartPointer.h>
 
 #include <functional>
 
@@ -18,17 +18,17 @@ namespace pcl
 {
   namespace apps
   {
-    /** \brief @b Class to render synthetic views of a 3D mesh using a tessellated sphere
-     * NOTE: This class should replace renderViewTesselatedSphere from pcl::visualization.
-     * Some extensions are planned in the near future to this class like removal of duplicated views for
-     * symmetrical objects, generation of RGB synthetic clouds when RGB available on mesh, etc.
-     * \author Aitor Aldoma
-     * \ingroup apps
+    /** \brief @b Class to render synthetic views of a 3D mesh using a tessellated
+     * sphere NOTE: This class should replace renderViewTesselatedSphere from
+     * pcl::visualization. Some extensions are planned in the near future to this class
+     * like removal of duplicated views for symmetrical objects, generation of RGB
+     * synthetic clouds when RGB available on mesh, etc. \author Aitor Aldoma \ingroup
+     * apps
      */
     class PCL_EXPORTS RenderViewsTesselatedSphere
     {
-    private:
-      std::vector<Eigen::Matrix4f, Eigen::aligned_allocator<Eigen::Matrix4f> > poses_;
+      private:
+      std::vector<Eigen::Matrix4f, Eigen::aligned_allocator<Eigen::Matrix4f>> poses_;
       std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> generated_views_;
       std::vector<float> entropies_;
       int resolution_;
@@ -39,20 +39,17 @@ namespace pcl
       bool compute_entropy_;
       vtkSmartPointer<vtkPolyData> polydata_;
       bool gen_organized_;
-      std::function<bool
-      (const Eigen::Vector3f &)> campos_constraints_func_;
+      std::function<bool(const Eigen::Vector3f &)> campos_constraints_func_;
 
-      struct camPosConstraintsAllTrue
-      {
+      struct camPosConstraintsAllTrue {
         bool
         operator() (const Eigen::Vector3f & /*pos*/) const
         {
           return true;
-        }
-        ;
+        };
       };
 
-    public:
+      public:
       RenderViewsTesselatedSphere ()
       {
         resolution_ = 150;
@@ -66,7 +63,7 @@ namespace pcl
       }
 
       void
-      setCamPosConstraints (std::function<bool (const Eigen::Vector3f &)> & bb)
+      setCamPosConstraints (std::function<bool(const Eigen::Vector3f &)> &bb)
       {
         campos_constraints_func_ = bb;
       }
@@ -89,8 +86,8 @@ namespace pcl
         resolution_ = res;
       }
 
-      /* \brief Whether to use the vertices or triangle centers of the tessellated sphere
-       * \param use true indicates to use vertices, false triangle centers
+      /* \brief Whether to use the vertices or triangle centers of the tessellated
+       * sphere \param use true indicates to use vertices, false triangle centers
        */
 
       void
@@ -117,8 +114,8 @@ namespace pcl
         compute_entropy_ = compute;
       }
 
-      /* \brief How many times the icosahedron should be tessellated. Results in more or less camera positions and generated views.
-       * \param level amount of tessellation
+      /* \brief How many times the icosahedron should be tessellated. Results in more or
+       * less camera positions and generated views. \param level amount of tessellation
        */
       void
       setTesselationLevel (int level)
@@ -150,10 +147,12 @@ namespace pcl
       generateViews ();
 
       /* \brief Get the generated poses for the generated views
-       * \param poses 4x4 matrices representing the pose of the cloud relative to the model coordinate system
+       * \param poses 4x4 matrices representing the pose of the cloud relative to the
+       * model coordinate system
        */
       void
-      getPoses (std::vector<Eigen::Matrix4f, Eigen::aligned_allocator<Eigen::Matrix4f> > & poses)
+      getPoses (std::vector<Eigen::Matrix4f, Eigen::aligned_allocator<Eigen::Matrix4f>>
+                    &poses)
       {
         poses = poses_;
       }
@@ -162,7 +161,7 @@ namespace pcl
        * \param views generated pointclouds in camera coordinates
        */
       void
-      getViews (std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> & views)
+      getViews (std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> &views)
       {
         views = generated_views_;
       }
@@ -171,11 +170,11 @@ namespace pcl
        * \param entropies level of occlusions
        */
       void
-      getEntropies (std::vector<float> & entropies)
+      getEntropies (std::vector<float> &entropies)
       {
         entropies = entropies_;
       }
     };
 
-  }
-}
+  } // namespace apps
+} // namespace pcl

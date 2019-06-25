@@ -38,31 +38,30 @@
 #ifndef PCL_SURFACE_IMPL_SURFEL_SMOOTHING_H_
 #define PCL_SURFACE_IMPL_SURFEL_SMOOTHING_H_
 
-#include <pcl/surface/surfel_smoothing.h>
 #include <pcl/common/distances.h>
+#include <pcl/surface/surfel_smoothing.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT, typename PointNT> bool
+template <typename PointT, typename PointNT>
+bool
 pcl::SurfelSmoothing<PointT, PointNT>::initCompute ()
 {
   if (!PCLBase<PointT>::initCompute ())
     return false;
 
-  if (!normals_)
-  {
+  if (!normals_) {
     PCL_ERROR ("SurfelSmoothing: normal cloud not set\n");
     return false;
   }
 
-  if (input_->points.size () != normals_->points.size ())
-  {
-    PCL_ERROR ("SurfelSmoothing: number of input points different from the number of given normals\n");
+  if (input_->points.size () != normals_->points.size ()) {
+    PCL_ERROR ("SurfelSmoothing: number of input points different from the number of "
+               "given normals\n");
     return false;
   }
 
   // Initialize the spatial locator
-  if (!tree_)
-  {
+  if (!tree_) {
     if (input_->isOrganized ())
       tree_.reset (new pcl::search::OrganizedNeighbor<PointT> ());
     else
@@ -76,13 +75,13 @@ pcl::SurfelSmoothing<PointT, PointNT>::initCompute ()
   return (true);
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT, typename PointNT> float
-pcl::SurfelSmoothing<PointT, PointNT>::smoothCloudIteration (PointCloudInPtr &output_positions,
-                                                             NormalCloudPtr &output_normals)
+template <typename PointT, typename PointNT>
+float
+pcl::SurfelSmoothing<PointT, PointNT>::smoothCloudIteration (
+    PointCloudInPtr &output_positions, NormalCloudPtr &output_normals)
 {
-//  PCL_INFO ("SurfelSmoothing: cloud smoothing iteration starting ...\n");
+  //  PCL_INFO ("SurfelSmoothing: cloud smoothing iteration starting ...\n");
 
   output_positions = PointCloudInPtr (new PointCloudIn);
   output_positions->points.resize (interm_cloud_->points.size ());
@@ -95,49 +94,54 @@ pcl::SurfelSmoothing<PointT, PointNT>::smoothCloudIteration (PointCloudInPtr &ou
   std::vector<float> diffs (interm_cloud_->points.size ());
   float total_residual = 0.0f;
 
-  for (size_t i = 0; i < interm_cloud_->points.size (); ++i)
-  {
-    Eigen::Vector4f smoothed_point  = Eigen::Vector4f::Zero ();
-    Eigen::Vector4f smoothed_normal = Eigen::Vector4f::Zero (); 
+  for (size_t i = 0; i < interm_cloud_->points.size (); ++i) {
+    Eigen::Vector4f smoothed_point = Eigen::Vector4f::Zero ();
+    Eigen::Vector4f smoothed_normal = Eigen::Vector4f::Zero ();
 
     // get neighbors
     // @todo using 5x the scale for searching instead of all the points to avoid O(N^2)
-    tree_->radiusSearch (interm_cloud_->points[i], 5*scale_, nn_indices, nn_distances);
+    tree_->radiusSearch (interm_cloud_->points[i], 5 * scale_, nn_indices,
+                         nn_distances);
 
     float theta_normalization_factor = 0.0;
     std::vector<float> theta (nn_indices.size ());
-    for (size_t nn_index_i = 0; nn_index_i < nn_indices.size (); ++nn_index_i)
-    {
-      float dist = pcl::squaredEuclideanDistance (interm_cloud_->points[i], input_->points[nn_indices[nn_index_i]]);//interm_cloud_->points[nn_indices[nn_index_i]]);
-      float theta_i = expf ( (-1) * dist / scale_squared_);
+    for (size_t nn_index_i = 0; nn_index_i < nn_indices.size (); ++nn_index_i) {
+      float dist = pcl::squaredEuclideanDistance (
+          interm_cloud_->points[i],
+          input_->points
+              [nn_indices
+                   [nn_index_i]]); // interm_cloud_->points[nn_indices[nn_index_i]]);
+      float theta_i = expf ((-1) * dist / scale_squared_);
       theta_normalization_factor += theta_i;
 
-      smoothed_normal += theta_i * interm_normals_->points[nn_indices[nn_index_i]].getNormalVector4fMap ();
+      smoothed_normal +=
+          theta_i *
+          interm_normals_->points[nn_indices[nn_index_i]].getNormalVector4fMap ();
 
       theta[nn_index_i] = theta_i;
     }
 
     smoothed_normal /= theta_normalization_factor;
-    smoothed_normal(3) = 0.0f;
+    smoothed_normal (3) = 0.0f;
     smoothed_normal.normalize ();
-
 
     // find minimum along the normal
     float e_residual;
     smoothed_point = interm_cloud_->points[i].getVector4fMap ();
-    while (true)
-    {
+    while (true) {
       e_residual = 0.0f;
-      smoothed_point(3) = 0.0f;
-      for (size_t nn_index_i = 0; nn_index_i < nn_indices.size (); ++nn_index_i)
-      {
-        Eigen::Vector4f neighbor = input_->points[nn_indices[nn_index_i]].getVector4fMap ();//interm_cloud_->points[nn_indices[nn_index_i]].getVector4fMap ();
-        neighbor(3) = 0.0f;
+      smoothed_point (3) = 0.0f;
+      for (size_t nn_index_i = 0; nn_index_i < nn_indices.size (); ++nn_index_i) {
+        Eigen::Vector4f neighbor =
+            input_->points[nn_indices[nn_index_i]].getVector4fMap (); // interm_cloud_->points[nn_indices[nn_index_i]].getVector4fMap
+                                                                      // ();
+        neighbor (3) = 0.0f;
         float dot_product = smoothed_normal.dot (neighbor - smoothed_point);
-        e_residual += theta[nn_index_i] * dot_product;// * dot_product;
+        e_residual += theta[nn_index_i] * dot_product; // * dot_product;
       }
       e_residual /= theta_normalization_factor;
-      if (e_residual < 1e-5) break;
+      if (e_residual < 1e-5)
+        break;
 
       smoothed_point += e_residual * smoothed_normal;
     }
@@ -145,23 +149,24 @@ pcl::SurfelSmoothing<PointT, PointNT>::smoothCloudIteration (PointCloudInPtr &ou
     total_residual += e_residual;
 
     output_positions->points[i].getVector4fMap () = smoothed_point;
-    output_normals->points[i].getNormalVector4fMap () = normals_->points[i].getNormalVector4fMap ();//smoothed_normal;
+    output_normals->points[i].getNormalVector4fMap () =
+        normals_->points[i].getNormalVector4fMap (); // smoothed_normal;
   }
 
-//  std::cerr << "Total residual after iteration: " << total_residual << std::endl;
-//  PCL_INFO("SurfelSmoothing done iteration\n");
+  //  std::cerr << "Total residual after iteration: " << total_residual << std::endl;
+  //  PCL_INFO("SurfelSmoothing done iteration\n");
   return total_residual;
 }
 
-
-template <typename PointT, typename PointNT> void
+template <typename PointT, typename PointNT>
+void
 pcl::SurfelSmoothing<PointT, PointNT>::smoothPoint (size_t &point_index,
                                                     PointT &output_point,
                                                     PointNT &output_normal)
 {
   Eigen::Vector4f average_normal = Eigen::Vector4f::Zero ();
   Eigen::Vector4f result_point = input_->points[point_index].getVector4fMap ();
-  result_point(3) = 0.0f;
+  result_point (3) = 0.0f;
 
   // @todo parameter
   float error_residual_threshold_ = 1e-3f;
@@ -174,79 +179,85 @@ pcl::SurfelSmoothing<PointT, PointNT>::smoothPoint (size_t &point_index,
   int big_iterations = 0;
   int max_big_iterations = 500;
 
-  while (std::fabs (error_residual) < std::fabs (last_error_residual) -error_residual_threshold_ &&
-         big_iterations < max_big_iterations)
-  {
+  while (std::fabs (error_residual) <
+             std::fabs (last_error_residual) - error_residual_threshold_ &&
+         big_iterations < max_big_iterations) {
     average_normal = Eigen::Vector4f::Zero ();
-    big_iterations ++;
-    PointT aux_point; aux_point.x = result_point(0); aux_point.y = result_point(1); aux_point.z = result_point(2);
-    tree_->radiusSearch (aux_point, 5*scale_, nn_indices, nn_distances);
+    big_iterations++;
+    PointT aux_point;
+    aux_point.x = result_point (0);
+    aux_point.y = result_point (1);
+    aux_point.z = result_point (2);
+    tree_->radiusSearch (aux_point, 5 * scale_, nn_indices, nn_distances);
 
     float theta_normalization_factor = 0.0;
     std::vector<float> theta (nn_indices.size ());
-    for (size_t nn_index_i = 0; nn_index_i < nn_indices.size (); ++nn_index_i)
-    {
+    for (size_t nn_index_i = 0; nn_index_i < nn_indices.size (); ++nn_index_i) {
       float dist = nn_distances[nn_index_i];
-      float theta_i = expf ( (-1) * dist / scale_squared_);
+      float theta_i = expf ((-1) * dist / scale_squared_);
       theta_normalization_factor += theta_i;
 
-      average_normal += theta_i * normals_->points[nn_indices[nn_index_i]].getNormalVector4fMap ();
+      average_normal +=
+          theta_i * normals_->points[nn_indices[nn_index_i]].getNormalVector4fMap ();
       theta[nn_index_i] = theta_i;
     }
     average_normal /= theta_normalization_factor;
-    average_normal(3) = 0.0f;
+    average_normal (3) = 0.0f;
     average_normal.normalize ();
 
     // find minimum along the normal
     float e_residual_along_normal = 2, last_e_residual_along_normal = 3;
     int small_iterations = 0;
     int max_small_iterations = 10;
-    while ( std::fabs (e_residual_along_normal) < std::fabs (last_e_residual_along_normal) &&
-        small_iterations < max_small_iterations)
-    {
-      small_iterations ++;
+    while (std::fabs (e_residual_along_normal) <
+               std::fabs (last_e_residual_along_normal) &&
+           small_iterations < max_small_iterations) {
+      small_iterations++;
 
       e_residual_along_normal = 0.0f;
-      for (size_t nn_index_i = 0; nn_index_i < nn_indices.size (); ++nn_index_i)
-      {
-        Eigen::Vector4f neighbor = input_->points[nn_indices[nn_index_i]].getVector4fMap ();
-        neighbor(3) = 0.0f;
+      for (size_t nn_index_i = 0; nn_index_i < nn_indices.size (); ++nn_index_i) {
+        Eigen::Vector4f neighbor =
+            input_->points[nn_indices[nn_index_i]].getVector4fMap ();
+        neighbor (3) = 0.0f;
         float dot_product = average_normal.dot (neighbor - result_point);
         e_residual_along_normal += theta[nn_index_i] * dot_product;
       }
       e_residual_along_normal /= theta_normalization_factor;
-      if (e_residual_along_normal < 1e-3) break;
+      if (e_residual_along_normal < 1e-3)
+        break;
 
       result_point += e_residual_along_normal * average_normal;
     }
 
-//    if (small_iterations == max_small_iterations)
-//      PCL_INFO ("passed the number of small iterations %d\n", small_iterations);
+    //    if (small_iterations == max_small_iterations)
+    //      PCL_INFO ("passed the number of small iterations %d\n", small_iterations);
 
     last_error_residual = error_residual;
     error_residual = e_residual_along_normal;
 
-//    PCL_INFO ("last %f    current %f\n", last_error_residual, error_residual);
+    //    PCL_INFO ("last %f    current %f\n", last_error_residual, error_residual);
   }
 
-  output_point.x = result_point(0);
-  output_point.y = result_point(1);
-  output_point.z = result_point(2);
+  output_point.x = result_point (0);
+  output_point.y = result_point (1);
+  output_point.z = result_point (2);
   output_normal = normals_->points[point_index];
 
   if (big_iterations == max_big_iterations)
-    PCL_DEBUG ("[pcl::SurfelSmoothing::smoothPoint] Passed the number of BIG iterations: %d\n", big_iterations);
+    PCL_DEBUG (
+        "[pcl::SurfelSmoothing::smoothPoint] Passed the number of BIG iterations: %d\n",
+        big_iterations);
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT, typename PointNT> void
-pcl::SurfelSmoothing<PointT, PointNT>::computeSmoothedCloud (PointCloudInPtr &output_positions,
-                                                             NormalCloudPtr &output_normals)
+template <typename PointT, typename PointNT>
+void
+pcl::SurfelSmoothing<PointT, PointNT>::computeSmoothedCloud (
+    PointCloudInPtr &output_positions, NormalCloudPtr &output_normals)
 {
-  if (!initCompute ())
-  {
-    PCL_ERROR ("[pcl::SurfelSmoothing::computeSmoothedCloud]: SurfelSmoothing not initialized properly, skipping computeSmoothedCloud ().\n");
+  if (!initCompute ()) {
+    PCL_ERROR ("[pcl::SurfelSmoothing::computeSmoothedCloud]: SurfelSmoothing not "
+               "initialized properly, skipping computeSmoothedCloud ().\n");
     return;
   }
 
@@ -262,46 +273,46 @@ pcl::SurfelSmoothing<PointT, PointNT>::computeSmoothedCloud (PointCloudInPtr &ou
 
   output_positions->points.resize (input_->points.size ());
   output_normals->points.resize (input_->points.size ());
-  for (size_t i = 0; i < input_->points.size (); ++i)
-  {
+  for (size_t i = 0; i < input_->points.size (); ++i) {
     smoothPoint (i, output_positions->points[i], output_normals->points[i]);
   }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT, typename PointNT> void
-pcl::SurfelSmoothing<PointT, PointNT>::extractSalientFeaturesBetweenScales (PointCloudInPtr &cloud2,
-                                                                            NormalCloudPtr &cloud2_normals,
-                                                                            pcl::IndicesPtr &output_features)
+template <typename PointT, typename PointNT>
+void
+pcl::SurfelSmoothing<PointT, PointNT>::extractSalientFeaturesBetweenScales (
+    PointCloudInPtr &cloud2, NormalCloudPtr &cloud2_normals,
+    pcl::IndicesPtr &output_features)
 {
-  if (interm_cloud_->points.size () != cloud2->points.size () || 
-      cloud2->points.size () != cloud2_normals->points.size ())
-  {
-    PCL_ERROR ("[pcl::SurfelSmoothing::extractSalientFeaturesBetweenScales]: Number of points in the clouds does not match.\n");
+  if (interm_cloud_->points.size () != cloud2->points.size () ||
+      cloud2->points.size () != cloud2_normals->points.size ()) {
+    PCL_ERROR ("[pcl::SurfelSmoothing::extractSalientFeaturesBetweenScales]: Number of "
+               "points in the clouds does not match.\n");
     return;
   }
 
   std::vector<float> diffs (cloud2->points.size ());
   for (size_t i = 0; i < cloud2->points.size (); ++i)
-    diffs[i] = cloud2_normals->points[i].getNormalVector4fMap ().dot (cloud2->points[i].getVector4fMap () - 
-                                                                      interm_cloud_->points[i].getVector4fMap ());
+    diffs[i] = cloud2_normals->points[i].getNormalVector4fMap ().dot (
+        cloud2->points[i].getVector4fMap () -
+        interm_cloud_->points[i].getVector4fMap ());
 
   std::vector<int> nn_indices;
   std::vector<float> nn_distances;
 
   output_features->resize (cloud2->points.size ());
-  for (int point_i = 0; point_i < static_cast<int> (cloud2->points.size ()); ++point_i)
-  {
+  for (int point_i = 0; point_i < static_cast<int> (cloud2->points.size ());
+       ++point_i) {
     // Get neighbors
     tree_->radiusSearch (point_i, scale_, nn_indices, nn_distances);
 
     bool largest = true;
     bool smallest = true;
-    for (const int &nn_index : nn_indices)
-    {
+    for (const int &nn_index : nn_indices) {
       if (diffs[point_i] < diffs[nn_index])
         largest = false;
-      else 
+      else
         smallest = false;
     }
 
@@ -310,8 +321,7 @@ pcl::SurfelSmoothing<PointT, PointNT>::extractSalientFeaturesBetweenScales (Poin
   }
 }
 
-
-
-#define PCL_INSTANTIATE_SurfelSmoothing(PointT,PointNT) template class PCL_EXPORTS pcl::SurfelSmoothing<PointT, PointNT>;
+#define PCL_INSTANTIATE_SurfelSmoothing(PointT, PointNT)                               \
+  template class PCL_EXPORTS pcl::SurfelSmoothing<PointT, PointNT>;
 
 #endif /* PCL_SURFACE_IMPL_SURFEL_SMOOTHING_H_ */

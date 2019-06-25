@@ -41,4 +41,3 @@
 //#include <pcl/features/impl/brisk_2d.hpp>
 
 // Instantiations of specific point types
-

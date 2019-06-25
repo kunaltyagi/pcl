@@ -44,9 +44,9 @@
 #include <pcl/registration/icp_nl.h>
 #include <pcl/registration/incremental_registration.h>
 
-#include <string>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <string>
 #include <vector>
 
 using PointType = pcl::PointXYZ;
@@ -73,13 +73,10 @@ main (int argc, char **argv)
   pcd_indices = pcl::console::parse_file_extension_argument (argc, argv, ".pcd");
 
   pcl::IterativeClosestPoint<PointType, PointType>::Ptr icp;
-  if (nonLinear)
-  {
+  if (nonLinear) {
     std::cout << "Using IterativeClosestPointNonLinear" << std::endl;
     icp.reset (new pcl::IterativeClosestPointNonLinear<PointType, PointType> ());
-  }
-  else
-  {
+  } else {
     std::cout << "Using IterativeClosestPoint" << std::endl;
     icp.reset (new pcl::IterativeClosestPoint<PointType, PointType> ());
   }
@@ -90,17 +87,14 @@ main (int argc, char **argv)
   pcl::registration::IncrementalRegistration<PointType> iicp;
   iicp.setRegistration (icp);
 
-  for (const int &pcd_index : pcd_indices)
-  {
+  for (const int &pcd_index : pcd_indices) {
     CloudPtr data (new Cloud);
-    if (pcl::io::loadPCDFile (argv[pcd_index], *data) == -1)
-    {
+    if (pcl::io::loadPCDFile (argv[pcd_index], *data) == -1) {
       std::cout << "Could not read file" << std::endl;
       return -1;
     }
 
-    if (!iicp.registerCloud (data))
-    {
+    if (!iicp.registerCloud (data)) {
       std::cout << "Registration failed. Resetting transform" << std::endl;
       iicp.reset ();
       iicp.registerCloud (data);

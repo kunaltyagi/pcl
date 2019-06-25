@@ -38,26 +38,28 @@
 
 #include <gtest/gtest.h>
 
-#include <pcl/pcl_tests.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/pcl_tests.h>
 #include <pcl/point_types.h>
 
-#include <pcl/sample_consensus/msac.h>
 #include <pcl/sample_consensus/lmeds.h>
-#include <pcl/sample_consensus/rmsac.h>
 #include <pcl/sample_consensus/mlesac.h>
+#include <pcl/sample_consensus/msac.h>
 #include <pcl/sample_consensus/ransac.h>
+#include <pcl/sample_consensus/rmsac.h>
 #include <pcl/sample_consensus/rransac.h>
-#include <pcl/sample_consensus/sac_model_plane.h>
-#include <pcl/sample_consensus/sac_model_normal_plane.h>
 #include <pcl/sample_consensus/sac_model_normal_parallel_plane.h>
+#include <pcl/sample_consensus/sac_model_normal_plane.h>
+#include <pcl/sample_consensus/sac_model_plane.h>
 
 using namespace pcl;
 using namespace pcl::io;
 
 using SampleConsensusModelPlanePtr = SampleConsensusModelPlane<PointXYZ>::Ptr;
-using SampleConsensusModelNormalPlanePtr = SampleConsensusModelNormalPlane<PointXYZ, Normal>::Ptr;
-using SampleConsensusModelNormalParallelPlanePtr = SampleConsensusModelNormalParallelPlane<PointXYZ, Normal>::Ptr;
+using SampleConsensusModelNormalPlanePtr =
+    SampleConsensusModelNormalPlane<PointXYZ, Normal>::Ptr;
+using SampleConsensusModelNormalParallelPlanePtr =
+    SampleConsensusModelNormalParallelPlane<PointXYZ, Normal>::Ptr;
 
 PointCloud<PointXYZ>::Ptr cloud_ (new PointCloud<PointXYZ> ());
 PointCloud<Normal>::Ptr normals_ (new PointCloud<Normal> ());
@@ -65,12 +67,9 @@ std::vector<int> indices_;
 float plane_coeffs_[] = {-0.8964f, -0.5868f, -1.208f};
 
 template <typename ModelType, typename SacType>
-void verifyPlaneSac (ModelType& model,
-                     SacType& sac,
-                     unsigned int inlier_number = 2000,
-                     float tol = 1e-1f,
-                     float refined_tol = 1e-1f,
-                     float proj_tol = 1e-3f)
+void
+verifyPlaneSac (ModelType &model, SacType &sac, unsigned int inlier_number = 2000,
+                float tol = 1e-1f, float refined_tol = 1e-1f, float proj_tol = 1e-3f)
 {
   // Algorithm tests
   bool result = sac.computeModel ();
@@ -97,16 +96,19 @@ void verifyPlaneSac (ModelType& model,
   EXPECT_NEAR (plane_coeffs_[0], coeff_refined[0] / coeff_refined[3], refined_tol);
   EXPECT_NEAR (plane_coeffs_[1], coeff_refined[1] / coeff_refined[3], refined_tol);
 
-  // This test fails in Windows (VS 2010) -- not sure why yet -- relaxing the constraint from 1e-2 to 1e-1
-  // This test fails in MacOS too -- not sure why yet -- disabling
-  //EXPECT_NEAR (coeff_refined[2] / coeff_refined[3], plane_coeffs_[2], refined_tol);
+  // This test fails in Windows (VS 2010) -- not sure why yet -- relaxing the constraint
+  // from 1e-2 to 1e-1 This test fails in MacOS too -- not sure why yet -- disabling
+  // EXPECT_NEAR (coeff_refined[2] / coeff_refined[3], plane_coeffs_[2], refined_tol);
 
   // Projection tests
   PointCloud<PointXYZ> proj_points;
   model->projectPoints (inliers, coeff_refined, proj_points);
-  EXPECT_XYZ_NEAR (PointXYZ (1.1266,  0.0152, -0.0156), proj_points.points[20], proj_tol);
-  EXPECT_XYZ_NEAR (PointXYZ (1.1843, -0.0635, -0.0201), proj_points.points[30], proj_tol);
-  EXPECT_XYZ_NEAR (PointXYZ (1.0749, -0.0586,  0.0587), proj_points.points[50], proj_tol);
+  EXPECT_XYZ_NEAR (PointXYZ (1.1266, 0.0152, -0.0156), proj_points.points[20],
+                   proj_tol);
+  EXPECT_XYZ_NEAR (PointXYZ (1.1843, -0.0635, -0.0201), proj_points.points[30],
+                   proj_tol);
+  EXPECT_XYZ_NEAR (PointXYZ (1.0749, -0.0586, 0.0587), proj_points.points[50],
+                   proj_tol);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,7 +231,8 @@ TEST (SampleConsensusModelNormalPlane, RANSAC)
   srand (0);
 
   // Create a shared plane model pointer directly
-  SampleConsensusModelNormalPlanePtr model (new SampleConsensusModelNormalPlane<PointXYZ, Normal> (cloud_));
+  SampleConsensusModelNormalPlanePtr model (
+      new SampleConsensusModelNormalPlane<PointXYZ, Normal> (cloud_));
   model->setInputNormals (normals_);
   model->setNormalDistanceWeight (0.01);
 
@@ -250,8 +253,7 @@ TEST (SampleConsensusModelNormalParallelPlane, RANSAC)
   cloud.points.resize (10);
   normals.resize (10);
 
-  for (size_t idx = 0; idx < cloud.size (); ++idx)
-  {
+  for (size_t idx = 0; idx < cloud.size (); ++idx) {
     cloud.points[idx].x = static_cast<float> ((rand () % 200) - 100);
     cloud.points[idx].y = static_cast<float> ((rand () % 200) - 100);
     cloud.points[idx].z = 0.0f;
@@ -262,7 +264,9 @@ TEST (SampleConsensusModelNormalParallelPlane, RANSAC)
   }
 
   // Create a shared plane model pointer directly
-  SampleConsensusModelNormalParallelPlanePtr model (new SampleConsensusModelNormalParallelPlane<PointXYZ, Normal> (cloud.makeShared ()));
+  SampleConsensusModelNormalParallelPlanePtr model (
+      new SampleConsensusModelNormalParallelPlane<PointXYZ, Normal> (
+          cloud.makeShared ()));
   model->setInputNormals (normals.makeShared ());
 
   const float max_angle_rad = 0.01f;
@@ -274,7 +278,7 @@ TEST (SampleConsensusModelNormalParallelPlane, RANSAC)
     model->setAxis (Eigen::Vector3f (0, 0, 1));
 
     RandomSampleConsensus<PointXYZ> sac (model, 0.03);
-    sac.computeModel();
+    sac.computeModel ();
 
     std::vector<int> inliers;
     sac.getInliers (inliers);
@@ -283,7 +287,8 @@ TEST (SampleConsensusModelNormalParallelPlane, RANSAC)
 
   // test axis slightly in valid range
   {
-    model->setAxis (Eigen::Vector3f (0, sin (max_angle_rad * (1 - angle_eps)), cos (max_angle_rad * (1 - angle_eps))));
+    model->setAxis (Eigen::Vector3f (0, sin (max_angle_rad * (1 - angle_eps)),
+                                     cos (max_angle_rad * (1 - angle_eps))));
     RandomSampleConsensus<PointXYZ> sac (model, 0.03);
     sac.computeModel ();
 
@@ -294,7 +299,8 @@ TEST (SampleConsensusModelNormalParallelPlane, RANSAC)
 
   // test axis slightly out of valid range
   {
-    model->setAxis (Eigen::Vector3f (0, sin (max_angle_rad * (1 + angle_eps)), cos (max_angle_rad * (1 + angle_eps))));
+    model->setAxis (Eigen::Vector3f (0, sin (max_angle_rad * (1 + angle_eps)),
+                                     cos (max_angle_rad * (1 + angle_eps))));
     RandomSampleConsensus<PointXYZ> sac (model, 0.03);
     sac.computeModel ();
 
@@ -304,21 +310,22 @@ TEST (SampleConsensusModelNormalParallelPlane, RANSAC)
   }
 }
 
-
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `sac_plane_test.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `sac_plane_test.pcd` and pass "
+                 "its path to the test."
+              << std::endl;
     return (-1);
   }
 
   // Load a standard PCD file from disk
   pcl::PCLPointCloud2 cloud_blob;
-  if (loadPCDFile (argv[1], cloud_blob) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `sac_plane_test.pcd` and pass its path to the test." << std::endl;
+  if (loadPCDFile (argv[1], cloud_blob) < 0) {
+    std::cerr << "Failed to read test file. Please download `sac_plane_test.pcd` and "
+                 "pass its path to the test."
+              << std::endl;
     return (-1);
   }
 
@@ -326,9 +333,10 @@ main (int argc, char** argv)
   fromPCLPointCloud2 (cloud_blob, *normals_);
 
   indices_.resize (cloud_->points.size ());
-  for (size_t i = 0; i < indices_.size (); ++i) { indices_[i] = int (i); }
+  for (size_t i = 0; i < indices_.size (); ++i) {
+    indices_[i] = int(i);
+  }
 
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());
 }
-

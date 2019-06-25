@@ -40,29 +40,24 @@
 
 #include <pcl/apps/point_cloud_editor/denoiseParameterForm.h>
 
-DenoiseParameterForm::DenoiseParameterForm () : ok_(false)
+DenoiseParameterForm::DenoiseParameterForm () : ok_ (false)
 {
   mean_K_line_ = new QLineEdit;
   std_dev_mul_thresh_line_ = new QLineEdit;
   button_box_ = new QDialogButtonBox;
-  button_box_->addButton(tr("Cancel"),
-                         QDialogButtonBox::RejectRole);
-  button_box_->addButton(tr("OK"),
-                         QDialogButtonBox::AcceptRole);
-  connect(button_box_, SIGNAL(accepted()),
-          this, SLOT(accept()));
-  connect(button_box_, SIGNAL(rejected()),
-          this, SLOT(reject()));
+  button_box_->addButton (tr ("Cancel"), QDialogButtonBox::RejectRole);
+  button_box_->addButton (tr ("OK"), QDialogButtonBox::AcceptRole);
+  connect (button_box_, SIGNAL (accepted ()), this, SLOT (accept ()));
+  connect (button_box_, SIGNAL (rejected ()), this, SLOT (reject ()));
   layout_ = new QFormLayout;
-  layout_->addRow(tr("&MeanK:"), mean_K_line_);
-  layout_->addRow(tr("&Standard deviation threshold:"),
-                 std_dev_mul_thresh_line_);
+  layout_->addRow (tr ("&MeanK:"), mean_K_line_);
+  layout_->addRow (tr ("&Standard deviation threshold:"), std_dev_mul_thresh_line_);
 
   main_layout_ = new QVBoxLayout;
-  main_layout_->addLayout(layout_);
-  main_layout_->addWidget(button_box_);
-  setLayout(main_layout_);
-  setWindowTitle(tr("Denoise Filter"));
+  main_layout_->addLayout (layout_);
+  main_layout_->addWidget (button_box_);
+  setLayout (main_layout_);
+  setWindowTitle (tr ("Denoise Filter"));
 }
 
 DenoiseParameterForm::~DenoiseParameterForm ()
@@ -77,23 +72,21 @@ DenoiseParameterForm::~DenoiseParameterForm ()
 void
 DenoiseParameterForm::accept ()
 {
-  QString mean_str = mean_K_line_->text();
+  QString mean_str = mean_K_line_->text ();
   bool ok;
-  mean_k_ = mean_str.toFloat(&ok);
+  mean_k_ = mean_str.toFloat (&ok);
   // validates the input.
-  if (!ok)
-  {
+  if (!ok) {
     ok_ = false;
     return;
   }
-  QString std_dev_str = std_dev_mul_thresh_line_->text();
-  std_dev_thresh_ = std_dev_str.toFloat(&ok);
-  if (!ok)
-  {
+  QString std_dev_str = std_dev_mul_thresh_line_->text ();
+  std_dev_thresh_ = std_dev_str.toFloat (&ok);
+  if (!ok) {
     ok_ = false;
     return;
   }
-  this->done(0);
+  this->done (0);
   ok_ = true;
 }
 
@@ -101,6 +94,5 @@ void
 DenoiseParameterForm::reject ()
 {
   ok_ = false;
-  this->done(0);
+  this->done (0);
 }
-

@@ -34,7 +34,7 @@
 /// @mainpage METSlib
 ///
 /// \image html http://www.coin-or.org/images/logo/COIN-OR_150.png
-/// 
+///
 /// @section Introduction
 ///
 /// This is a library implementing some neighborhood based
@@ -63,7 +63,7 @@
 /// decorators are provided with the library, some problems may need
 /// customary tabu lists, termination criterias, aspiration criteria,
 /// or cooling schedules.
-/// 
+///
 /// The framework you must implement your model into is made of:
 ///
 /// - mets::feasible_solution
@@ -107,32 +107,32 @@
 
 #include "metslib_config.hh"
 
-#include <list>
+#include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <deque>
-#include <limits>
-#include <string>
-#include <vector>
-#include <cassert>
-#include <typeinfo>
 #include <iostream>
+#include <limits>
+#include <list>
 #include <stdexcept>
-#include <algorithm>
+#include <string>
+#include <typeinfo>
+#include <vector>
 
-#if defined (METSLIB_TR1_BOOST)
-#  include <boost/random/uniform_int.hpp>
-#  include <boost/random/uniform_real.hpp>
-#  include <boost/unordered_map.hpp>
-#elif defined (METSLIB_HAVE_UNORDERED_MAP)
-#  include <unordered_map>
-#  include <random>
-#elif defined (METSLIB_HAVE_TR1_UNORDERED_MAP)
-#  include <tr1/unordered_map>
-#  include <tr1/random>
+#if defined(METSLIB_TR1_BOOST)
+#include <boost/random/uniform_int.hpp>
+#include <boost/random/uniform_real.hpp>
+#include <boost/unordered_map.hpp>
+#elif defined(METSLIB_HAVE_UNORDERED_MAP)
+#include <random>
+#include <unordered_map>
+#elif defined(METSLIB_HAVE_TR1_UNORDERED_MAP)
+#include <tr1/random>
+#include <tr1/unordered_map>
 #else
-#  error "Unable to find unordered_map header file. Please use a recent C++ compiler supporting TR1 extension."
+#error                                                                                 \
+    "Unable to find unordered_map header file. Please use a recent C++ compiler supporting TR1 extension."
 #endif
-
 
 ///
 /// @brief METSlib Metaheuristic framework namespace.
@@ -142,20 +142,19 @@
 /// Search).
 ///
 
-#include "observer.hh"
-#include "model.hh"
-#include "termination-criteria.hh"
 #include "abstract-search.hh"
 #include "local-search.hh"
-#include "tabu-search.hh"
+#include "model.hh"
+#include "observer.hh"
 #include "simulated-annealing.hh"
-
+#include "tabu-search.hh"
+#include "termination-criteria.hh"
 
 //________________________________________________________________________
-inline std::ostream& 
-operator<<(std::ostream& os, const mets::printable& p)
+inline std::ostream &
+operator<< (std::ostream &os, const mets::printable &p)
 {
-  p.print(os);
+  p.print (os);
   return os;
 }
 

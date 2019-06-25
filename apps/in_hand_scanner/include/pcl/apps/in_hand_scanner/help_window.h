@@ -56,11 +56,11 @@ namespace pcl
       Q_OBJECT
 
       public:
-        explicit HelpWindow (QWidget* parent = nullptr);
-        ~HelpWindow ();
+      explicit HelpWindow (QWidget *parent = nullptr);
+      ~HelpWindow ();
 
       private:
-        Ui::HelpWindow* ui;
+      Ui::HelpWindow *ui;
     };
   } // End namespace ihs
 } // End namespace pcl

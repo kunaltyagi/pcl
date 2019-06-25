@@ -21,7 +21,7 @@ namespace pcl
   {
     class PCL_EXPORTS Scene
     {
-    public:
+      public:
       using Ptr = boost::shared_ptr<Scene>;
       using ConstPtr = boost::shared_ptr<Scene>;
 
@@ -37,9 +37,9 @@ namespace pcl
       void
       clear ();
 
-    private:
+      private:
       std::vector<Model::Ptr> models_;
     };
-  
-  } // namespace - simulation
-} // namespace - pcl
+
+  } // namespace simulation
+} // namespace pcl

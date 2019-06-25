@@ -46,58 +46,59 @@
 
 namespace pcl
 {
-  /** \brief @b MEstimatorSampleConsensus represents an implementation of the MSAC (M-estimator SAmple Consensus) 
-    * algorithm, as described in: "MLESAC: A new robust estimator with application to estimating image geometry", P.H.S. 
-    * Torr and A. Zisserman, Computer Vision and Image Understanding, vol 78, 2000.
-    * \author Radu B. Rusu
-    * \ingroup sample_consensus
-    */
+  /** \brief @b MEstimatorSampleConsensus represents an implementation of the MSAC
+   * (M-estimator SAmple Consensus) algorithm, as described in: "MLESAC: A new robust
+   * estimator with application to estimating image geometry", P.H.S. Torr and A.
+   * Zisserman, Computer Vision and Image Understanding, vol 78, 2000. \author Radu B.
+   * Rusu \ingroup sample_consensus
+   */
   template <typename PointT>
   class MEstimatorSampleConsensus : public SampleConsensus<PointT>
   {
     using SampleConsensusModelPtr = typename SampleConsensusModel<PointT>::Ptr;
 
     public:
-      using Ptr = boost::shared_ptr<MEstimatorSampleConsensus<PointT> >;
-      using ConstPtr = boost::shared_ptr<const MEstimatorSampleConsensus<PointT> >;
+    using Ptr = boost::shared_ptr<MEstimatorSampleConsensus<PointT>>;
+    using ConstPtr = boost::shared_ptr<const MEstimatorSampleConsensus<PointT>>;
 
-      using SampleConsensus<PointT>::max_iterations_;
-      using SampleConsensus<PointT>::threshold_;
-      using SampleConsensus<PointT>::iterations_;
-      using SampleConsensus<PointT>::sac_model_;
-      using SampleConsensus<PointT>::model_;
-      using SampleConsensus<PointT>::model_coefficients_;
-      using SampleConsensus<PointT>::inliers_;
-      using SampleConsensus<PointT>::probability_;
+    using SampleConsensus<PointT>::max_iterations_;
+    using SampleConsensus<PointT>::threshold_;
+    using SampleConsensus<PointT>::iterations_;
+    using SampleConsensus<PointT>::sac_model_;
+    using SampleConsensus<PointT>::model_;
+    using SampleConsensus<PointT>::model_coefficients_;
+    using SampleConsensus<PointT>::inliers_;
+    using SampleConsensus<PointT>::probability_;
 
-      /** \brief MSAC (M-estimator SAmple Consensus) main constructor
-        * \param[in] model a Sample Consensus model
-        */
-      MEstimatorSampleConsensus (const SampleConsensusModelPtr &model) 
+    /** \brief MSAC (M-estimator SAmple Consensus) main constructor
+     * \param[in] model a Sample Consensus model
+     */
+    MEstimatorSampleConsensus (const SampleConsensusModelPtr &model)
         : SampleConsensus<PointT> (model)
-      {
-        // Maximum number of trials before we give up.
-        max_iterations_ = 10000;
-      }
+    {
+      // Maximum number of trials before we give up.
+      max_iterations_ = 10000;
+    }
 
-      /** \brief MSAC (M-estimator SAmple Consensus) main constructor
-        * \param[in] model a Sample Consensus model
-        * \param[in] threshold distance to model threshold
-        */
-      MEstimatorSampleConsensus (const SampleConsensusModelPtr &model, double threshold) 
+    /** \brief MSAC (M-estimator SAmple Consensus) main constructor
+     * \param[in] model a Sample Consensus model
+     * \param[in] threshold distance to model threshold
+     */
+    MEstimatorSampleConsensus (const SampleConsensusModelPtr &model, double threshold)
         : SampleConsensus<PointT> (model, threshold)
-      {
-        // Maximum number of trials before we give up.
-        max_iterations_ = 10000;
-      }
+    {
+      // Maximum number of trials before we give up.
+      max_iterations_ = 10000;
+    }
 
-      /** \brief Compute the actual model and find the inliers
-        * \param[in] debug_verbosity_level enable/disable on-screen debug information and set the verbosity level
-        */
-      bool 
-      computeModel (int debug_verbosity_level = 0) override;
+    /** \brief Compute the actual model and find the inliers
+     * \param[in] debug_verbosity_level enable/disable on-screen debug information and
+     * set the verbosity level
+     */
+    bool
+    computeModel (int debug_verbosity_level = 0) override;
   };
-}
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/sample_consensus/impl/msac.hpp>

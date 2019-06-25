@@ -31,12 +31,12 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *
- * 
+ *
  *
  */
 
-#include <pcl/surface/on_nurbs/global_optimization_pdm.h>
 #include <pcl/surface/on_nurbs/closing_boundary.h>
+#include <pcl/surface/on_nurbs/global_optimization_pdm.h>
 #include <stdexcept>
 
 #undef DEBUG
@@ -45,11 +45,12 @@ using namespace pcl;
 using namespace on_nurbs;
 using namespace Eigen;
 
-GlobalOptimization::GlobalOptimization (const std::vector<NurbsDataSurface*> &data,
-                                        const std::vector<ON_NurbsSurface*> &nurbs)
+GlobalOptimization::GlobalOptimization (const std::vector<NurbsDataSurface *> &data,
+                                        const std::vector<ON_NurbsSurface *> &nurbs)
 {
   if (data.empty () || data.size () != nurbs.size ())
-    printf ("[GlobalOptimization::GlobalOptimization] Error, data empty or size does not match.\n");
+    printf ("[GlobalOptimization::GlobalOptimization] Error, data empty or size does "
+            "not match.\n");
 
   m_data = data;
   m_nurbs = nurbs;
@@ -61,11 +62,12 @@ GlobalOptimization::GlobalOptimization (const std::vector<NurbsDataSurface*> &da
 }
 
 void
-GlobalOptimization::setCommonBoundary (const vector_vec3d &boundary, const vector_vec2i &nurbs_indices)
+GlobalOptimization::setCommonBoundary (const vector_vec3d &boundary,
+                                       const vector_vec2i &nurbs_indices)
 {
-  if (boundary.empty () || boundary.size () != nurbs_indices.size ())
-  {
-    printf ("[GlobalOptimization::setCommonBoundary] Error, common boundary empty or size does not match.\n");
+  if (boundary.empty () || boundary.size () != nurbs_indices.size ()) {
+    printf ("[GlobalOptimization::setCommonBoundary] Error, common boundary empty or "
+            "size does not match.\n");
     return;
   }
 }
@@ -76,15 +78,16 @@ GlobalOptimization::assemble (Parameter params)
   // determine number of rows of matrix
   m_ncols = 0;
   unsigned nnurbs = static_cast<unsigned> (m_nurbs.size ());
-  unsigned nInt (0), nBnd (0), nCageRegInt (0), nCageRegBnd (0), nCommonBnd (0), nCommonPar (0);
-  for (unsigned i = 0; i < nnurbs; i++)
-  {
+  unsigned nInt (0), nBnd (0), nCageRegInt (0), nCageRegBnd (0), nCommonBnd (0),
+      nCommonPar (0);
+  for (unsigned i = 0; i < nnurbs; i++) {
     nInt += static_cast<unsigned> (m_data[i]->interior.size ());
     nBnd += static_cast<unsigned> (m_data[i]->boundary.size ());
     nCommonBnd += static_cast<unsigned> (m_data[i]->common_boundary_point.size ());
     nCommonPar += static_cast<unsigned> (m_data[i]->common_idx.size ());
     nCageRegInt += (m_nurbs[i]->CVCount (0) - 2) * (m_nurbs[i]->CVCount (1) - 2);
-    nCageRegBnd += 2 * (m_nurbs[i]->CVCount (0) - 1) + 2 * (m_nurbs[i]->CVCount (1) - 1);
+    nCageRegBnd +=
+        2 * (m_nurbs[i]->CVCount (0) - 1) + 2 * (m_nurbs[i]->CVCount (1) - 1);
     m_ncols += m_nurbs[i]->CVCount ();
   }
 
@@ -97,15 +100,13 @@ GlobalOptimization::assemble (Parameter params)
     m_nrows += nCageRegInt;
   if (params.boundary_smoothness > 0.0)
     m_nrows += nCageRegBnd;
-  if (params.closing_weight > 0.0)
-  {
+  if (params.closing_weight > 0.0) {
     if (params.closing_samples > 0)
       m_nrows += (4 * params.closing_samples);
     else
       m_nrows += nBnd;
   }
-  if (params.common_weight > 0.0)
-  {
+  if (params.common_weight > 0.0) {
     m_nrows += nCommonBnd;
     m_nrows += nCommonPar;
   }
@@ -122,8 +123,7 @@ GlobalOptimization::assemble (Parameter params)
   unsigned row (0);
   int ncps (0);
 
-  for (unsigned id = 0; id < nnurbs; id++)
-  {
+  for (unsigned id = 0; id < nnurbs; id++) {
 
     // interior points should lie on surface
     assembleInteriorPoints (id, ncps, params.interior_weight, row);
@@ -132,10 +132,12 @@ GlobalOptimization::assemble (Parameter params)
     assembleBoundaryPoints (id, ncps, params.boundary_weight, row);
 
     // cage regularisation
-    assembleRegularisation (id, ncps, params.interior_smoothness, params.boundary_smoothness, row);
+    assembleRegularisation (id, ncps, params.interior_smoothness,
+                            params.boundary_smoothness, row);
 
     // closing boundaries
-    assembleClosingBoundaries (id, params.closing_samples, params.closing_sigma, params.closing_weight, row);
+    assembleClosingBoundaries (id, params.closing_samples, params.closing_sigma,
+                               params.closing_weight, row);
 
     // common boundaries
     assembleCommonBoundaries (id, params.common_weight, row);
@@ -159,12 +161,10 @@ GlobalOptimization::updateSurf (double damp)
 {
   int ncps (0);
 
-  for (const auto &nurbs : m_nurbs)
-  {
+  for (const auto &nurbs : m_nurbs) {
     int ncp = nurbs->CVCount ();
 
-    for (int A = 0; A < ncp; A++)
-    {
+    for (int A = 0; A < ncp; A++) {
 
       int I = gl2gr (*nurbs, A);
       int J = gl2gc (*nurbs, A);
@@ -200,8 +200,7 @@ GlobalOptimization::refine (unsigned id, int dim)
   for (size_t i = 0; i < elements.size () - 1; i++)
     xi.push_back (elements[i] + 0.5 * (elements[i + 1] - elements[i]));
 
-  for (const double &i : xi)
-  {
+  for (const double &i : xi) {
     m_nurbs[id]->InsertKnot (dim, i, 1);
   }
 }
@@ -215,25 +214,26 @@ GlobalOptimization::assembleCommonParams (unsigned id1, double weight, unsigned 
   NurbsDataSurface *data = m_data[id1];
 
   for (size_t i = 0; i < data->common_idx.size (); i++)
-    addParamConstraint (Eigen::Vector2i (id1, data->common_idx[i]), data->common_param1[i], data->common_param2[i],
-                        weight, row);
+    addParamConstraint (Eigen::Vector2i (id1, data->common_idx[i]),
+                        data->common_param1[i], data->common_param2[i], weight, row);
 }
 
 void
-GlobalOptimization::assembleCommonBoundaries (unsigned id1, double weight, unsigned &row)
+GlobalOptimization::assembleCommonBoundaries (unsigned id1, double weight,
+                                              unsigned &row)
 {
   if (weight <= 0.0)
     return;
 
   //  double ds = 1.0 / (2.0 * sigma * sigma);
   NurbsDataSurface *data1 = m_data[id1];
-  ON_NurbsSurface* nurbs1 = m_nurbs[id1];
+  ON_NurbsSurface *nurbs1 = m_nurbs[id1];
 
   if (nurbs1->Order (0) != nurbs1->Order (1))
-    printf ("[GlobalOptimization::assembleCommonBoundaries] Warning, order in u and v direction differ (nurbs1).\n");
+    printf ("[GlobalOptimization::assembleCommonBoundaries] Warning, order in u and v "
+            "direction differ (nurbs1).\n");
 
-  for (size_t i = 0; i < data1->common_boundary_point.size (); i++)
-  {
+  for (size_t i = 0; i < data1->common_boundary_point.size (); i++) {
     Eigen::Vector3d p1, tu1, tv1, p2, tu2, tv2, t1, t2;
     Eigen::Vector2d params1, params2;
     double error1, error2;
@@ -241,21 +241,21 @@ GlobalOptimization::assembleCommonBoundaries (unsigned id1, double weight, unsig
     Eigen::Vector2i id (id1, data1->common_boundary_idx[i]);
 
     if (id (1) < 0 || id (1) >= m_nurbs.size ())
-      throw std::runtime_error (
-                                "[GlobalOptimization::assembleCommonBoundaries] Error, common boundary index out of bounds.\n");
+      throw std::runtime_error ("[GlobalOptimization::assembleCommonBoundaries] Error, "
+                                "common boundary index out of bounds.\n");
 
-    ON_NurbsSurface* nurbs2 = m_nurbs[id (1)];
+    ON_NurbsSurface *nurbs2 = m_nurbs[id (1)];
     double w (1.0);
 
     if (nurbs2->Order (0) != nurbs2->Order (1))
-      printf ("[GlobalOptimization::assembleCommonBoundaries] Warning, order in u and v direction differ (nurbs2).\n");
+      printf ("[GlobalOptimization::assembleCommonBoundaries] Warning, order in u and "
+              "v direction differ (nurbs2).\n");
 
-    if (nurbs1->Order (0) == nurbs2->Order (0))
-    {
-      params1 = FittingSurface::inverseMappingBoundary (*m_nurbs[id (0)], p0, error1, p1, tu1, tv1, im_max_steps,
-                                                        im_accuracy, true);
-      params2 = FittingSurface::inverseMappingBoundary (*m_nurbs[id (1)], p0, error2, p2, tu2, tv2, im_max_steps,
-                                                        im_accuracy, true);
+    if (nurbs1->Order (0) == nurbs2->Order (0)) {
+      params1 = FittingSurface::inverseMappingBoundary (
+          *m_nurbs[id (0)], p0, error1, p1, tu1, tv1, im_max_steps, im_accuracy, true);
+      params2 = FittingSurface::inverseMappingBoundary (
+          *m_nurbs[id (1)], p0, error2, p2, tu2, tv2, im_max_steps, im_accuracy, true);
 
       if (params1 (0) == 0.0 || params1 (0) == 1.0)
         t1 = tv1;
@@ -273,27 +273,25 @@ GlobalOptimization::assembleCommonBoundaries (unsigned id1, double weight, unsig
       w = t1.dot (t2);
       if (w < 0.0)
         w = -w;
-    }
-    else
-    {
+    } else {
 
-      if (nurbs1->Order (0) < nurbs2->Order (0))
-      {
+      if (nurbs1->Order (0) < nurbs2->Order (0)) {
         params1 = FittingSurface::findClosestElementMidPoint (*m_nurbs[id (0)], p0);
-        params1 = FittingSurface::inverseMapping (*m_nurbs[id (0)], p0, params1, error1, p1, tu1, tv1, im_max_steps,
-                                                  im_accuracy, true);
-        params2 = FittingSurface::inverseMappingBoundary (*m_nurbs[id (1)], p0, error2, p2, tu2, tv2, im_max_steps,
+        params1 =
+            FittingSurface::inverseMapping (*m_nurbs[id (0)], p0, params1, error1, p1,
+                                            tu1, tv1, im_max_steps, im_accuracy, true);
+        params2 = FittingSurface::inverseMappingBoundary (*m_nurbs[id (1)], p0, error2,
+                                                          p2, tu2, tv2, im_max_steps,
                                                           im_accuracy, true);
-      }
-      else
-      {
-        params1 = FittingSurface::inverseMappingBoundary (*m_nurbs[id (0)], p0, error1, p1, tu1, tv1, im_max_steps,
+      } else {
+        params1 = FittingSurface::inverseMappingBoundary (*m_nurbs[id (0)], p0, error1,
+                                                          p1, tu1, tv1, im_max_steps,
                                                           im_accuracy, true);
         params2 = FittingSurface::findClosestElementMidPoint (*m_nurbs[id (1)], p0);
-        params2 = FittingSurface::inverseMapping (*m_nurbs[id (1)], p0, params2, error2, p2, tu2, tv2, im_max_steps,
-                                                  im_accuracy);
+        params2 =
+            FittingSurface::inverseMapping (*m_nurbs[id (1)], p0, params2, error2, p2,
+                                            tu2, tv2, im_max_steps, im_accuracy);
       }
-
     }
 
     m_data[id (0)]->common_boundary_param.push_back (params1);
@@ -302,12 +300,12 @@ GlobalOptimization::assembleCommonBoundaries (unsigned id1, double weight, unsig
     //    double error = (p1-p2).norm();
     //    double w = weight * exp(-(error * error) * ds);
     addParamConstraint (id, params1, params2, weight * w, row);
-
   }
 }
 
 void
-GlobalOptimization::assembleClosingBoundaries (unsigned id, unsigned samples, double sigma, double weight,
+GlobalOptimization::assembleClosingBoundaries (unsigned id, unsigned samples,
+                                               double sigma, double weight,
                                                unsigned &row)
 {
   if (weight <= 0.0 || samples <= 0 || sigma < 0.0)
@@ -323,19 +321,18 @@ GlobalOptimization::assembleClosingBoundaries (unsigned id, unsigned samples, do
   ClosingBoundary::sampleFromBoundary (nurbs1, boundary1, params1, samples);
 
   // for each other nurbs
-  for (size_t n2 = (id + 1); n2 < m_nurbs.size (); n2++)
-  {
+  for (size_t n2 = (id + 1); n2 < m_nurbs.size (); n2++) {
     ON_NurbsSurface *nurbs2 = m_nurbs[n2];
 
     // find closest point to boundary
-    for (size_t i = 0; i < boundary1.size (); i++)
-    {
+    for (size_t i = 0; i < boundary1.size (); i++) {
       double error;
       Eigen::Vector3d p, tu, tv;
       Eigen::Vector2d params;
       Eigen::Vector3d p0 = boundary1[i];
 
-      params = FittingSurface::inverseMappingBoundary (*nurbs2, p0, error, p, tu, tv, im_max_steps, im_accuracy, true);
+      params = FittingSurface::inverseMappingBoundary (*nurbs2, p0, error, p, tu, tv,
+                                                       im_max_steps, im_accuracy, true);
 
       boundary2.push_back (p);
       params2.push_back (params);
@@ -350,7 +347,8 @@ GlobalOptimization::assembleClosingBoundaries (unsigned id, unsigned samples, do
 }
 
 void
-GlobalOptimization::assembleInteriorPoints (unsigned id, int ncps, double weight, unsigned &row)
+GlobalOptimization::assembleInteriorPoints (unsigned id, int ncps, double weight,
+                                            unsigned &row)
 {
   if (weight <= 0.0)
     return;
@@ -366,27 +364,25 @@ GlobalOptimization::assembleInteriorPoints (unsigned id, int ncps, double weight
   data->interior_normals.clear ();
   //  data->interior_param.clear();
 
-  for (size_t p = 0; p < interiorSize; p++)
-  {
+  for (size_t p = 0; p < interiorSize; p++) {
     Vector3d pcp;
-    pcp (0) = data->interior[p] (0);
-    pcp (1) = data->interior[p] (1);
-    pcp (2) = data->interior[p] (2);
+    pcp (0) = data->interior[p](0);
+    pcp (1) = data->interior[p](1);
+    pcp (2) = data->interior[p](2);
 
     // inverse mapping
     Vector2d params;
     Vector3d pt, tu, tv, n;
     double error;
-    if (p < data->interior_param.size ())
-    {
-      params = FittingSurface::inverseMapping (*nurbs, pcp, data->interior_param[p], error, pt, tu, tv, im_max_steps,
-                                               im_accuracy);
+    if (p < data->interior_param.size ()) {
+      params =
+          FittingSurface::inverseMapping (*nurbs, pcp, data->interior_param[p], error,
+                                          pt, tu, tv, im_max_steps, im_accuracy);
       data->interior_param[p] = params;
-    }
-    else
-    {
+    } else {
       params = FittingSurface::findClosestElementMidPoint (*nurbs, pcp);
-      params = FittingSurface::inverseMapping (*nurbs, pcp, params, error, pt, tu, tv, im_max_steps, im_accuracy);
+      params = FittingSurface::inverseMapping (*nurbs, pcp, params, error, pt, tu, tv,
+                                               im_max_steps, im_accuracy);
       data->interior_param.push_back (params);
     }
     data->interior_error.push_back (error);
@@ -403,7 +399,8 @@ GlobalOptimization::assembleInteriorPoints (unsigned id, int ncps, double weight
 }
 
 void
-GlobalOptimization::assembleBoundaryPoints (unsigned id, int ncps, double weight, unsigned &row)
+GlobalOptimization::assembleBoundaryPoints (unsigned id, int ncps, double weight,
+                                            unsigned &row)
 {
   if (weight <= 0.0)
     return;
@@ -419,27 +416,23 @@ GlobalOptimization::assembleBoundaryPoints (unsigned id, int ncps, double weight
   data->boundary_normals.clear ();
   data->boundary_param.clear ();
 
-  for (unsigned p = 0; p < nBnd; p++)
-  {
+  for (unsigned p = 0; p < nBnd; p++) {
     Vector3d pcp;
-    pcp (0) = data->boundary[p] (0);
-    pcp (1) = data->boundary[p] (1);
-    pcp (2) = data->boundary[p] (2);
+    pcp (0) = data->boundary[p](0);
+    pcp (1) = data->boundary[p](1);
+    pcp (2) = data->boundary[p](2);
 
     // inverse mapping
     Vector3d pt, tu, tv, n;
     double error;
 
-    Vector2d params =
-        FittingSurface::inverseMappingBoundary (*nurbs, pcp, error, pt, tu, tv, im_max_steps, im_accuracy);
+    Vector2d params = FittingSurface::inverseMappingBoundary (
+        *nurbs, pcp, error, pt, tu, tv, im_max_steps, im_accuracy);
     data->boundary_error.push_back (error);
 
-    if (p < data->boundary_param.size ())
-    {
+    if (p < data->boundary_param.size ()) {
       data->boundary_param[p] = params;
-    }
-    else
-    {
+    } else {
       data->boundary_param.push_back (params);
     }
 
@@ -455,20 +448,20 @@ GlobalOptimization::assembleBoundaryPoints (unsigned id, int ncps, double weight
 }
 
 void
-GlobalOptimization::assembleRegularisation (unsigned id, int ncps, double wCageRegInt, double wCageRegBnd,
-                                            unsigned &row)
+GlobalOptimization::assembleRegularisation (unsigned id, int ncps, double wCageRegInt,
+                                            double wCageRegBnd, unsigned &row)
 {
-  if (wCageRegBnd <= 0.0 || wCageRegInt <= 0.0)
-  {
-    printf ("[GlobalOptimization::assembleRegularisation] Warning, no regularisation may lead "
-      "to under-determined equation system. Add cage regularisation (smoothing) to avoid.\n");
+  if (wCageRegBnd <= 0.0 || wCageRegInt <= 0.0) {
+    printf ("[GlobalOptimization::assembleRegularisation] Warning, no regularisation "
+            "may lead "
+            "to under-determined equation system. Add cage regularisation (smoothing) "
+            "to avoid.\n");
   }
 
   if (wCageRegInt > 0.0)
     addCageInteriorRegularisation (id, ncps, wCageRegInt, row);
 
-  if (wCageRegBnd > 0.0)
-  {
+  if (wCageRegBnd > 0.0) {
     addCageBoundaryRegularisation (id, ncps, wCageRegBnd, NORTH, row);
     addCageBoundaryRegularisation (id, ncps, wCageRegBnd, SOUTH, row);
     addCageBoundaryRegularisation (id, ncps, wCageRegBnd, WEST, row);
@@ -478,22 +471,25 @@ GlobalOptimization::assembleRegularisation (unsigned id, int ncps, double wCageR
 }
 
 void
-GlobalOptimization::addParamConstraint (const Eigen::Vector2i &id, const Eigen::Vector2d &params1,
-                                        const Eigen::Vector2d &params2, double weight, unsigned &row)
+GlobalOptimization::addParamConstraint (const Eigen::Vector2i &id,
+                                        const Eigen::Vector2d &params1,
+                                        const Eigen::Vector2d &params2, double weight,
+                                        unsigned &row)
 {
   vector_vec2d params;
   params.push_back (params1);
   params.push_back (params2);
 
-  for (unsigned n = 0; n < 2; n++)
-  {
-    ON_NurbsSurface* nurbs = m_nurbs[id (n)];
+  for (unsigned n = 0; n < 2; n++) {
+    ON_NurbsSurface *nurbs = m_nurbs[id (n)];
 
     double *N0 = new double[nurbs->Order (0) * nurbs->Order (0)];
     double *N1 = new double[nurbs->Order (1) * nurbs->Order (1)];
 
-    int E = ON_NurbsSpanIndex (nurbs->Order (0), nurbs->CVCount (0), nurbs->m_knot[0], params[n] (0), 0, 0);
-    int F = ON_NurbsSpanIndex (nurbs->Order (1), nurbs->CVCount (1), nurbs->m_knot[1], params[n] (1), 0, 0);
+    int E = ON_NurbsSpanIndex (nurbs->Order (0), nurbs->CVCount (0), nurbs->m_knot[0],
+                               params[n](0), 0, 0);
+    int F = ON_NurbsSpanIndex (nurbs->Order (1), nurbs->CVCount (1), nurbs->m_knot[1],
+                               params[n](1), 0, 0);
     //    int E = ntools.E(params[n](0));
     //    int F = ntools.F(params[n](1));
 
@@ -505,44 +501,48 @@ GlobalOptimization::addParamConstraint (const Eigen::Vector2i &id, const Eigen::
     for (int i = 0; i < id (n); i++)
       ncps += m_nurbs[i]->CVCount ();
 
-    ON_EvaluateNurbsBasis (nurbs->Order (0), nurbs->m_knot[0] + E, params[n] (0), N0);
-    ON_EvaluateNurbsBasis (nurbs->Order (1), nurbs->m_knot[1] + F, params[n] (1), N1);
+    ON_EvaluateNurbsBasis (nurbs->Order (0), nurbs->m_knot[0] + E, params[n](0), N0);
+    ON_EvaluateNurbsBasis (nurbs->Order (1), nurbs->m_knot[1] + F, params[n](1), N1);
 
     double s (1.0);
     n == 0 ? s = 1.0 : s = -1.0;
 
-    for (int i = 0; i < nurbs->Order (0); i++)
-    {
+    for (int i = 0; i < nurbs->Order (0); i++) {
 
-      for (int j = 0; j < nurbs->Order (1); j++)
-      {
+      for (int j = 0; j < nurbs->Order (1); j++) {
 
-        m_solver.K (row, ncps + lrc2gl (*nurbs, E, F, i, j), weight * N0[i] * N1[j] * s);
+        m_solver.K (row, ncps + lrc2gl (*nurbs, E, F, i, j),
+                    weight * N0[i] * N1[j] * s);
 
       } // j
-    } // i
+    }   // i
 
-    delete [] N1;
-    delete [] N0;
+    delete[] N1;
+    delete[] N0;
   }
 
   row++;
 
-//  if (!m_quiet)
-//    printf ("[GlobalOptimization::addParamConstraint] row: %d / %d\n", row, m_nrows);
+  //  if (!m_quiet)
+  //    printf ("[GlobalOptimization::addParamConstraint] row: %d / %d\n", row,
+  //    m_nrows);
 }
 
 void
-GlobalOptimization::addPointConstraint (unsigned id, int ncps, const Eigen::Vector2d &params,
-                                        const Eigen::Vector3d &point, double weight, unsigned &row)
+GlobalOptimization::addPointConstraint (unsigned id, int ncps,
+                                        const Eigen::Vector2d &params,
+                                        const Eigen::Vector3d &point, double weight,
+                                        unsigned &row)
 {
   ON_NurbsSurface *nurbs = m_nurbs[id];
 
   double *N0 = new double[nurbs->Order (0) * nurbs->Order (0)];
   double *N1 = new double[nurbs->Order (1) * nurbs->Order (1)];
 
-  int E = ON_NurbsSpanIndex (nurbs->Order (0), nurbs->CVCount (0), nurbs->m_knot[0], params (0), 0, 0);
-  int F = ON_NurbsSpanIndex (nurbs->Order (1), nurbs->CVCount (1), nurbs->m_knot[1], params (1), 0, 0);
+  int E = ON_NurbsSpanIndex (nurbs->Order (0), nurbs->CVCount (0), nurbs->m_knot[0],
+                             params (0), 0, 0);
+  int F = ON_NurbsSpanIndex (nurbs->Order (1), nurbs->CVCount (1), nurbs->m_knot[1],
+                             params (1), 0, 0);
 
   ON_EvaluateNurbsBasis (nurbs->Order (0), nurbs->m_knot[0] + E, params (0), N0);
   ON_EvaluateNurbsBasis (nurbs->Order (1), nurbs->m_knot[1] + F, params (1), N1);
@@ -551,11 +551,9 @@ GlobalOptimization::addPointConstraint (unsigned id, int ncps, const Eigen::Vect
   m_solver.f (row, 1, point (1) * weight);
   m_solver.f (row, 2, point (2) * weight);
 
-  for (int i = 0; i < nurbs->Order (0); i++)
-  {
+  for (int i = 0; i < nurbs->Order (0); i++) {
 
-    for (int j = 0; j < nurbs->Order (1); j++)
-    {
+    for (int j = 0; j < nurbs->Order (1); j++) {
 
       m_solver.K (row, ncps + lrc2gl (*nurbs, E, F, i, j), weight * N0[i] * N1[j]);
 
@@ -568,19 +566,18 @@ GlobalOptimization::addPointConstraint (unsigned id, int ncps, const Eigen::Vect
   //  if (!m_quiet && !(row % 100))
   //    printf("[GlobalOptimization::addPointConstraint] row: %d / %d\n", row, m_nrows);
 
-  delete [] N1;
-  delete [] N0;
+  delete[] N1;
+  delete[] N0;
 }
 
 void
-GlobalOptimization::addCageInteriorRegularisation (unsigned id, int ncps, double weight, unsigned &row)
+GlobalOptimization::addCageInteriorRegularisation (unsigned id, int ncps, double weight,
+                                                   unsigned &row)
 {
   ON_NurbsSurface *nurbs = m_nurbs[id];
 
-  for (int i = 1; i < (nurbs->CVCount (0) - 1); i++)
-  {
-    for (int j = 1; j < (nurbs->CVCount (1) - 1); j++)
-    {
+  for (int i = 1; i < (nurbs->CVCount (0) - 1); i++) {
+    for (int j = 1; j < (nurbs->CVCount (1) - 1); j++) {
 
       m_solver.f (row, 0, 0.0);
       m_solver.f (row, 1, 0.0);
@@ -596,61 +593,62 @@ GlobalOptimization::addCageInteriorRegularisation (unsigned id, int ncps, double
     }
   }
   //  if (!m_quiet && !(row % 100))
-  //    printf("[GlobalOptimization::addCageInteriorRegularisation] row: %d / %d\n", row, m_nrows);
+  //    printf("[GlobalOptimization::addCageInteriorRegularisation] row: %d / %d\n",
+  //    row, m_nrows);
 }
 
 void
-GlobalOptimization::addCageBoundaryRegularisation (unsigned id, int ncps, double weight, int side, unsigned &row)
+GlobalOptimization::addCageBoundaryRegularisation (unsigned id, int ncps, double weight,
+                                                   int side, unsigned &row)
 {
   ON_NurbsSurface *nurbs = m_nurbs[id];
 
   int i = 0;
   int j = 0;
 
-  switch (side)
-  {
-    case SOUTH:
-      j = nurbs->CVCount (1) - 1;
-    case NORTH:
-      for (i = 1; i < (nurbs->CVCount (0) - 1); i++)
-      {
+  switch (side) {
+  case SOUTH:
+    j = nurbs->CVCount (1) - 1;
+  case NORTH:
+    for (i = 1; i < (nurbs->CVCount (0) - 1); i++) {
 
-        m_solver.f (row, 0, 0.0);
-        m_solver.f (row, 1, 0.0);
-        m_solver.f (row, 2, 0.0);
+      m_solver.f (row, 0, 0.0);
+      m_solver.f (row, 1, 0.0);
+      m_solver.f (row, 2, 0.0);
 
-        m_solver.K (row, ncps + grc2gl (*nurbs, i + 0, j), -2.0 * weight);
-        m_solver.K (row, ncps + grc2gl (*nurbs, i - 1, j), 1.0 * weight);
-        m_solver.K (row, ncps + grc2gl (*nurbs, i + 1, j), 1.0 * weight);
+      m_solver.K (row, ncps + grc2gl (*nurbs, i + 0, j), -2.0 * weight);
+      m_solver.K (row, ncps + grc2gl (*nurbs, i - 1, j), 1.0 * weight);
+      m_solver.K (row, ncps + grc2gl (*nurbs, i + 1, j), 1.0 * weight);
 
-        row++;
-      }
-      break;
+      row++;
+    }
+    break;
 
-    case EAST:
-      i = nurbs->CVCount (0) - 1;
-    case WEST:
-      for (j = 1; j < (nurbs->CVCount (1) - 1); j++)
-      {
+  case EAST:
+    i = nurbs->CVCount (0) - 1;
+  case WEST:
+    for (j = 1; j < (nurbs->CVCount (1) - 1); j++) {
 
-        m_solver.f (row, 0, 0.0);
-        m_solver.f (row, 1, 0.0);
-        m_solver.f (row, 2, 0.0);
+      m_solver.f (row, 0, 0.0);
+      m_solver.f (row, 1, 0.0);
+      m_solver.f (row, 2, 0.0);
 
-        m_solver.K (row, ncps + grc2gl (*nurbs, i, j + 0), -2.0 * weight);
-        m_solver.K (row, ncps + grc2gl (*nurbs, i, j - 1), 1.0 * weight);
-        m_solver.K (row, ncps + grc2gl (*nurbs, i, j + 1), 1.0 * weight);
+      m_solver.K (row, ncps + grc2gl (*nurbs, i, j + 0), -2.0 * weight);
+      m_solver.K (row, ncps + grc2gl (*nurbs, i, j - 1), 1.0 * weight);
+      m_solver.K (row, ncps + grc2gl (*nurbs, i, j + 1), 1.0 * weight);
 
-        row++;
-      }
-      break;
+      row++;
+    }
+    break;
   }
   //  if (!m_quiet && !(row % 100))
-  //    printf("[GlobalOptimization::addCageBoundaryRegularisation] row: %d / %d\n", row, m_nrows);
+  //    printf("[GlobalOptimization::addCageBoundaryRegularisation] row: %d / %d\n",
+  //    row, m_nrows);
 }
 
 void
-GlobalOptimization::addCageCornerRegularisation (unsigned id, int ncps, double weight, unsigned &row)
+GlobalOptimization::addCageCornerRegularisation (unsigned id, int ncps, double weight,
+                                                 unsigned &row)
 {
   ON_NurbsSurface *nurbs = m_nurbs[id];
 
@@ -715,6 +713,6 @@ GlobalOptimization::addCageCornerRegularisation (unsigned id, int ncps, double w
   }
 
   //  if (!m_quiet && !(row % 100))
-  //    printf("[GlobalOptimization::addCageCornerRegularisation] row: %d / %d\n", row, m_nrows);
+  //    printf("[GlobalOptimization::addCageCornerRegularisation] row: %d / %d\n", row,
+  //    m_nrows);
 }
-

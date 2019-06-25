@@ -32,7 +32,7 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
- *	
+ *
  */
 
 #include <thread>
@@ -40,8 +40,8 @@
 #include <pcl/apps/openni_passthrough.h>
 // QT
 #include <QApplication>
-#include <QMutexLocker>
 #include <QEvent>
+#include <QMutexLocker>
 #include <QObject>
 // PCL
 #include <pcl/console/parse.h>
@@ -51,10 +51,8 @@
 using namespace std::chrono_literals;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-OpenNIPassthrough::OpenNIPassthrough (pcl::OpenNIGrabber& grabber) 
-  : grabber_(grabber)
-  , ui_ (new Ui::MainWindow)
-  , vis_timer_ (new QTimer (this))
+OpenNIPassthrough::OpenNIPassthrough (pcl::OpenNIGrabber &grabber)
+    : grabber_ (grabber), ui_ (new Ui::MainWindow), vis_timer_ (new QTimer (this))
 {
   // Create a timer and fire it up every 5ms
   vis_timer_->start (5);
@@ -66,12 +64,15 @@ OpenNIPassthrough::OpenNIPassthrough (pcl::OpenNIGrabber& grabber)
   this->setWindowTitle ("PCL OpenNI PassThrough Viewer");
   vis_.reset (new pcl::visualization::PCLVisualizer ("", false));
   ui_->qvtk_widget->SetRenderWindow (vis_->getRenderWindow ());
-  vis_->setupInteractor (ui_->qvtk_widget->GetInteractor (), ui_->qvtk_widget->GetRenderWindow ());
-  vis_->getInteractorStyle ()->setKeyboardModifier (pcl::visualization::INTERACTOR_KB_MOD_SHIFT);
-  ui_->qvtk_widget->update (); 
+  vis_->setupInteractor (ui_->qvtk_widget->GetInteractor (),
+                         ui_->qvtk_widget->GetRenderWindow ());
+  vis_->getInteractorStyle ()->setKeyboardModifier (
+      pcl::visualization::INTERACTOR_KB_MOD_SHIFT);
+  ui_->qvtk_widget->update ();
 
   // Start the OpenNI data acquision
-  std::function<void (const CloudConstPtr&)> f = boost::bind (&OpenNIPassthrough::cloud_cb, this, _1);
+  std::function<void(const CloudConstPtr &)> f =
+      boost::bind (&OpenNIPassthrough::cloud_cb, this, _1);
   boost::signals2::connection c = grabber_.registerCallback (f);
 
   grabber_.start ();
@@ -79,17 +80,18 @@ OpenNIPassthrough::OpenNIPassthrough (pcl::OpenNIGrabber& grabber)
   // Set defaults
   pass_.setFilterFieldName ("z");
   pass_.setFilterLimits (0.5, 5.0);
-  
+
   ui_->fieldValueSlider->setRange (5, 50);
   ui_->fieldValueSlider->setValue (50);
-  connect (ui_->fieldValueSlider, SIGNAL (valueChanged (int)), this, SLOT (adjustPassThroughValues (int)));
+  connect (ui_->fieldValueSlider, SIGNAL (valueChanged (int)), this,
+           SLOT (adjustPassThroughValues (int)));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-OpenNIPassthrough::cloud_cb (const CloudConstPtr& cloud)
+OpenNIPassthrough::cloud_cb (const CloudConstPtr &cloud)
 {
-  QMutexLocker locker (&mtx_);  
+  QMutexLocker locker (&mtx_);
   FPS_CALC ("computation");
 
   // Computation goes here
@@ -102,20 +104,18 @@ OpenNIPassthrough::cloud_cb (const CloudConstPtr& cloud)
 void
 OpenNIPassthrough::timeoutSlot ()
 {
-  if (!cloud_pass_)
-  {
-    std::this_thread::sleep_for(1ms);
+  if (!cloud_pass_) {
+    std::this_thread::sleep_for (1ms);
     return;
   }
 
   CloudPtr temp_cloud;
   {
     QMutexLocker locker (&mtx_);
-    temp_cloud.swap (cloud_pass_); 
+    temp_cloud.swap (cloud_pass_);
   }
   // Add to the 3D viewer
-  if (!vis_->updatePointCloud (temp_cloud, "cloud_pass"))
-  {
+  if (!vis_->updatePointCloud (temp_cloud, "cloud_pass")) {
     vis_->addPointCloud (temp_cloud, "cloud_pass");
     vis_->resetCameraViewpoint ("cloud_pass");
   }
@@ -123,17 +123,16 @@ OpenNIPassthrough::timeoutSlot ()
   ui_->qvtk_widget->update ();
 }
 
-int 
-main (int argc, char ** argv)
+int
+main (int argc, char **argv)
 {
   // Initialize QT
-  QApplication app (argc, argv); 
+  QApplication app (argc, argv);
 
   // Open the first available camera
   pcl::OpenNIGrabber grabber ("#1");
   // Check if an RGB stream is provided
-  if (!grabber.providesCallback<pcl::OpenNIGrabber::sig_cb_openni_point_cloud_rgb> ())
-  {
+  if (!grabber.providesCallback<pcl::OpenNIGrabber::sig_cb_openni_point_cloud_rgb> ()) {
     PCL_ERROR ("Device #1 does not provide an RGB stream!\n");
     return (-1);
   }

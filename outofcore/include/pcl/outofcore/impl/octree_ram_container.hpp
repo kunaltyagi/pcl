@@ -50,23 +50,26 @@ namespace pcl
 {
   namespace outofcore
   {
-    template<typename PointT>
+    template <typename PointT>
     std::mutex OutofcoreOctreeRamContainer<PointT>::rng_mutex_;
 
-    template<typename PointT> 
-    std::mt19937 OutofcoreOctreeRamContainer<PointT>::rng_ ([] {std::random_device rd; return rd(); } ());
+    template <typename PointT>
+    std::mt19937 OutofcoreOctreeRamContainer<PointT>::rng_ ([] {
+      std::random_device rd;
+      return rd ();
+    }());
 
-    template<typename PointT> void
-    OutofcoreOctreeRamContainer<PointT>::convertToXYZ (const boost::filesystem::path& path)
+    template <typename PointT>
+    void
+    OutofcoreOctreeRamContainer<PointT>::convertToXYZ (
+        const boost::filesystem::path &path)
     {
-      if (!container_.empty ())
-      {
-        FILE* fxyz = fopen (path.string ().c_str (), "we");
+      if (!container_.empty ()) {
+        FILE *fxyz = fopen (path.string ().c_str (), "we");
 
         boost::uint64_t num = size ();
-        for (boost::uint64_t i = 0; i < num; i++)
-        {
-          const PointT& p = container_[i];
+        for (boost::uint64_t i = 0; i < num; i++) {
+          const PointT &p = container_[i];
 
           std::stringstream ss;
           ss << std::fixed;
@@ -76,27 +79,30 @@ namespace pcl
           fwrite (ss.str ().c_str (), 1, ss.str ().size (), fxyz);
         }
 
-        assert ( fclose (fxyz) == 0 );
+        assert (fclose (fxyz) == 0);
       }
     }
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    template<typename PointT> void
-    OutofcoreOctreeRamContainer<PointT>::insertRange (const PointT* start, const boost::uint64_t count)
+    template <typename PointT>
+    void
+    OutofcoreOctreeRamContainer<PointT>::insertRange (const PointT *start,
+                                                      const boost::uint64_t count)
     {
       container_.insert (container_.end (), start, start + count);
     }
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    template<typename PointT> void
-    OutofcoreOctreeRamContainer<PointT>::insertRange (const PointT* const * start, const boost::uint64_t count)
+    template <typename PointT>
+    void
+    OutofcoreOctreeRamContainer<PointT>::insertRange (const PointT *const *start,
+                                                      const boost::uint64_t count)
     {
       AlignedPointTVector temp;
       temp.resize (count);
-      for (boost::uint64_t i = 0; i < count; i++)
-      {
+      for (boost::uint64_t i = 0; i < count; i++) {
         temp[i] = *start[i];
       }
       container_.insert (container_.end (), temp.begin (), temp.end ());
@@ -104,30 +110,32 @@ namespace pcl
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    template<typename PointT> void
-    OutofcoreOctreeRamContainer<PointT>::readRange (const boost::uint64_t start, const boost::uint64_t count,
-                                             AlignedPointTVector& v)
+    template <typename PointT>
+    void
+    OutofcoreOctreeRamContainer<PointT>::readRange (const boost::uint64_t start,
+                                                    const boost::uint64_t count,
+                                                    AlignedPointTVector &v)
     {
       v.resize (count);
-      memcpy (v.data (), container_.data () + start, count * sizeof(PointT));
+      memcpy (v.data (), container_.data () + start, count * sizeof (PointT));
     }
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    template<typename PointT> void
-    OutofcoreOctreeRamContainer<PointT>::readRangeSubSample (const boost::uint64_t start, 
-                                                      const boost::uint64_t count,
-                                                      const double percent, 
-                                                      AlignedPointTVector& v)
+    template <typename PointT>
+    void
+    OutofcoreOctreeRamContainer<PointT>::readRangeSubSample (
+        const boost::uint64_t start, const boost::uint64_t count, const double percent,
+        AlignedPointTVector &v)
     {
-      uint64_t samplesize = static_cast<uint64_t> (percent * static_cast<double> (count));
+      uint64_t samplesize =
+          static_cast<uint64_t> (percent * static_cast<double> (count));
 
       std::lock_guard<std::mutex> lock (rng_mutex_);
 
-      std::uniform_int_distribution < uint64_t > buffdist (start, start + count);
+      std::uniform_int_distribution<uint64_t> buffdist (start, start + count);
 
-      for (uint64_t i = 0; i < samplesize; i++)
-      {
+      for (uint64_t i = 0; i < samplesize; i++) {
         uint64_t buffstart = buffdist (rng_);
         v.push_back (container_[buffstart]);
       }
@@ -135,7 +143,7 @@ namespace pcl
 
     ////////////////////////////////////////////////////////////////////////////////
 
-  }//namespace outofcore
-}//namespace pcl
+  } // namespace outofcore
+} // namespace pcl
 
-#endif //PCL_OUTOFCORE_RAM_CONTAINER_IMPL_H_
+#endif // PCL_OUTOFCORE_RAM_CONTAINER_IMPL_H_

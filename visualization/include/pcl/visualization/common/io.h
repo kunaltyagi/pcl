@@ -38,8 +38,8 @@
 
 #pragma once
 
-#include <pcl/visualization/common/actor_map.h>
 #include <pcl/console/print.h>
+#include <pcl/visualization/common/actor_map.h>
 
 class vtkPolyData;
 
@@ -47,25 +47,27 @@ namespace pcl
 {
   namespace visualization
   {
-    /** \brief Obtain a list of corresponding indices, for a set of vtk points, 
-      * from a pcl::PointCloud
-      * \param src the set of vtk points
-      * \param tgt the target pcl::PointCloud that we need to obtain indices from
-      * \param indices the resultant list of indices
-      * \ingroup visualization
-      */
-    PCL_EXPORTS void 
-    getCorrespondingPointCloud (vtkPolyData *src, const pcl::PointCloud<pcl::PointXYZ> &tgt, std::vector<int> &indices);
+    /** \brief Obtain a list of corresponding indices, for a set of vtk points,
+     * from a pcl::PointCloud
+     * \param src the set of vtk points
+     * \param tgt the target pcl::PointCloud that we need to obtain indices from
+     * \param indices the resultant list of indices
+     * \ingroup visualization
+     */
+    PCL_EXPORTS void
+    getCorrespondingPointCloud (vtkPolyData *src,
+                                const pcl::PointCloud<pcl::PointXYZ> &tgt,
+                                std::vector<int> &indices);
 
-    /** \brief Saves the vtk-formatted Point Cloud data into a set of files, based on whether
-      * the data comes from previously loaded PCD files. The PCD files are matched using the 
-      * a list of names for the actors on screen.
-      * \param data the vtk data
-      * \param out_file the output file (extra indices will be appended to it)
-      * \param actors the list of actors present on screen
-      * \ingroup visualization
-      */
-    PCL_EXPORTS bool 
-    savePointData (vtkPolyData* data, const std::string &out_file, const boost::shared_ptr<CloudActorMap> &actors);
-  }
-}
+    /** \brief Saves the vtk-formatted Point Cloud data into a set of files, based on
+     * whether the data comes from previously loaded PCD files. The PCD files are
+     * matched using the a list of names for the actors on screen. \param data the vtk
+     * data \param out_file the output file (extra indices will be appended to it)
+     * \param actors the list of actors present on screen
+     * \ingroup visualization
+     */
+    PCL_EXPORTS bool
+    savePointData (vtkPolyData *data, const std::string &out_file,
+                   const boost::shared_ptr<CloudActorMap> &actors);
+  } // namespace visualization
+} // namespace pcl

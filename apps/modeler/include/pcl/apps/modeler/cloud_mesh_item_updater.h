@@ -49,15 +49,15 @@ namespace pcl
       Q_OBJECT
 
       public:
-        CloudMeshItemUpdater (CloudMeshItem* cloud_mesh_item);
-        ~CloudMeshItemUpdater ();
+      CloudMeshItemUpdater (CloudMeshItem *cloud_mesh_item);
+      ~CloudMeshItemUpdater ();
 
       public Q_SLOTS:
-        void
-        updateCloudMeshItem();
+      void
+      updateCloudMeshItem ();
 
       private:
-        CloudMeshItem*      cloud_mesh_item_;
+      CloudMeshItem *cloud_mesh_item_;
     };
-  }
-}
+  } // namespace modeler
+} // namespace pcl

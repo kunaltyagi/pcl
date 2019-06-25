@@ -42,8 +42,11 @@
 double
 pcl::tracking::sampleNormal (double mean, double sigma)
 {
-  static std::mt19937 rng([] { std::random_device rd; return rd(); } ());
+  static std::mt19937 rng ([] {
+    std::random_device rd;
+    return rd ();
+  }());
   std::normal_distribution<> nd (mean, sqrt (sigma));
-  
+
   return (nd (rng));
 }

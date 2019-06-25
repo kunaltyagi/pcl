@@ -45,60 +45,72 @@ namespace pcl
 {
   namespace gpu
   {
-    template<class T>
+    template <class T>
     class AsyncCopy
     {
-    public:
-      AsyncCopy(T* ptr, size_t size) : ptr_(ptr)
+      public:
+      AsyncCopy (T *ptr, size_t size) : ptr_ (ptr)
       {
-        cudaSafeCall( cudaHostRegister(ptr_, size, 0) );        
-        cudaSafeCall( cudaStreamCreate(&stream_) );
+        cudaSafeCall (cudaHostRegister (ptr_, size, 0));
+        cudaSafeCall (cudaStreamCreate (&stream_));
       }
 
-      AsyncCopy(std::vector<T>& data) : ptr_(&data[0])
+      AsyncCopy (std::vector<T> &data) : ptr_ (&data[0])
       {
-        cudaSafeCall( cudaHostRegister(ptr_, data.size(), 0) );        
-        cudaSafeCall( cudaStreamCreate(&stream_) );
+        cudaSafeCall (cudaHostRegister (ptr_, data.size (), 0));
+        cudaSafeCall (cudaStreamCreate (&stream_));
       }
 
-      ~AsyncCopy()
-      {          
-        cudaSafeCall( cudaHostUnregister(ptr_) );
-        cudaSafeCall( cudaStreamDestroy(stream_) );
+      ~AsyncCopy ()
+      {
+        cudaSafeCall (cudaHostUnregister (ptr_));
+        cudaSafeCall (cudaStreamDestroy (stream_));
       }
 
-      void download(const DeviceArray<T>& arr)
+      void
+      download (const DeviceArray<T> &arr)
       {
-        cudaSafeCall( cudaMemcpyAsync(ptr_, arr.ptr(), arr.sizeBytes(), cudaMemcpyDeviceToHost, stream_) );	
+        cudaSafeCall (cudaMemcpyAsync (ptr_, arr.ptr (), arr.sizeBytes (),
+                                       cudaMemcpyDeviceToHost, stream_));
       }
 
-      void download(const DeviceArray2D<T>& arr)
+      void
+      download (const DeviceArray2D<T> &arr)
       {
-        cudaSafeCall( cudaMemcpy2DAsync(ptr_, arr.cols(), arr.ptr(), arr.step(), arr.colsBytes(), arr.rows(), cudaMemcpyDeviceToHost, stream_) );
+        cudaSafeCall (cudaMemcpy2DAsync (ptr_, arr.cols (), arr.ptr (), arr.step (),
+                                         arr.colsBytes (), arr.rows (),
+                                         cudaMemcpyDeviceToHost, stream_));
       }
 
-      void upload(const DeviceArray<T>& arr) const 
+      void
+      upload (const DeviceArray<T> &arr) const
       {
-          cudaSafeCall( cudaMemcpyAsync(arr.ptr(), ptr_, arr.size(), cudaMemcpyHostToDevice, stream_) );	
+        cudaSafeCall (cudaMemcpyAsync (arr.ptr (), ptr_, arr.size (),
+                                       cudaMemcpyHostToDevice, stream_));
       }
 
-      void upload(const DeviceArray2D<T>& arr) const 
+      void
+      upload (const DeviceArray2D<T> &arr) const
       {
-        cudaSafeCall( cudaMemcpy2DAsync(arr.ptr(), arr.step(), ptr_, arr.cols(), arr.colsBytes(), arr.rows(), cudaMemcpyHostToDevice, stream_) );
+        cudaSafeCall (cudaMemcpy2DAsync (arr.ptr (), arr.step (), ptr_, arr.cols (),
+                                         arr.colsBytes (), arr.rows (),
+                                         cudaMemcpyHostToDevice, stream_));
       }
 
-      void waitForCompeltion()
+      void
+      waitForCompeltion ()
       {
-        cudaSafeCall( cudaStreamSynchronize(stream_) );
+        cudaSafeCall (cudaStreamSynchronize (stream_));
       }
-    private:
+
+      private:
       cudaStream_t stream_;
-      T* ptr_   ;
+      T *ptr_;
     };
-  }
+  } // namespace gpu
 
   namespace device
   {
     using pcl::gpu::AsyncCopy;
   }
-}
+} // namespace pcl

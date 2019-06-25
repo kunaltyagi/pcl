@@ -41,14 +41,14 @@
 
 #include <random>
 
-#include <pcl/point_types.h>
+#include <pcl/common/common.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/filters/project_inliers.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/vtk_io.h>
-#include <pcl/features/normal_3d.h>
-#include <pcl/surface/convex_hull.h>
-#include <pcl/common/common.h>
+#include <pcl/point_types.h>
 #include <pcl/sample_consensus/sac_model_plane.h>
-#include <pcl/filters/project_inliers.h>
+#include <pcl/surface/convex_hull.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -75,14 +75,14 @@ TEST (PCL, ConvexHull_bunny)
   chull.setInputCloud (cloud);
   chull.reconstruct (hull, polygons);
 
-  //PolygonMesh convex;
-  //toPCLPointCloud2 (hull, convex.cloud);
-  //convex.polygons = polygons;
-  //saveVTKFile ("./test/bun0-convex.vtk", convex);
+  // PolygonMesh convex;
+  // toPCLPointCloud2 (hull, convex.cloud);
+  // convex.polygons = polygons;
+  // saveVTKFile ("./test/bun0-convex.vtk", convex);
 
   EXPECT_EQ (polygons.size (), 206);
 
-  //check distance between min and max in the hull
+  // check distance between min and max in the hull
   Eigen::Vector4f min_pt_hull, max_pt_hull;
   pcl::getMinMax3D (hull, min_pt_hull, max_pt_hull);
 
@@ -99,19 +99,17 @@ TEST (PCL, ConvexHull_bunny)
   std::vector<pcl::Vertices> polygons2;
   chull.reconstruct (polygons2);
 
-  // compare the face vertices (polygons2) to the output from the original test --- they should be identical
+  // compare the face vertices (polygons2) to the output from the original test --- they
+  // should be identical
   ASSERT_EQ (polygons.size (), polygons2.size ());
-  for (size_t i = 0; i < polygons.size (); ++i)
-  {
-    const pcl::Vertices & face1 = polygons[i];
-    const pcl::Vertices & face2 = polygons2[i];
+  for (size_t i = 0; i < polygons.size (); ++i) {
+    const pcl::Vertices &face1 = polygons[i];
+    const pcl::Vertices &face2 = polygons2[i];
     ASSERT_EQ (face1.vertices.size (), face2.vertices.size ());
-    for (size_t j = 0; j < face1.vertices.size (); ++j)
-    {
+    for (size_t j = 0; j < face1.vertices.size (); ++j) {
       ASSERT_EQ (face1.vertices[j], face2.vertices[j]);
     }
   }
-
 
   //
   // Test the PolygonMesh output variant
@@ -125,29 +123,28 @@ TEST (PCL, ConvexHull_bunny)
   PointCloud<pcl::PointXYZ> hull2;
   pcl::fromPCLPointCloud2 (mesh.cloud, hull2);
 
-  // compare the PointCloud (hull2) to the output from the original test --- they should be identical
+  // compare the PointCloud (hull2) to the output from the original test --- they should
+  // be identical
   ASSERT_EQ (hull.points.size (), hull2.points.size ());
-  for (size_t i = 0; i < hull.points.size (); ++i)
-  {
-    const PointXYZ & p1 = hull.points[i];
-    const PointXYZ & p2 = hull2.points[i];
+  for (size_t i = 0; i < hull.points.size (); ++i) {
+    const PointXYZ &p1 = hull.points[i];
+    const PointXYZ &p2 = hull2.points[i];
     ASSERT_EQ (p1.x, p2.x);
     ASSERT_EQ (p1.y, p2.y);
     ASSERT_EQ (p1.z, p2.z);
   }
 
-  // compare the face vertices (mesh.polygons) to the output from the original test --- they should be identical
+  // compare the face vertices (mesh.polygons) to the output from the original test ---
+  // they should be identical
   ASSERT_EQ (polygons.size (), mesh.polygons.size ());
-  for (size_t i = 0; i < polygons.size (); ++i)
-  {
-    const pcl::Vertices & face1 = polygons[i];
-    const pcl::Vertices & face2 = mesh.polygons[i];
+  for (size_t i = 0; i < polygons.size (); ++i) {
+    const pcl::Vertices &face1 = polygons[i];
+    const pcl::Vertices &face2 = mesh.polygons[i];
     ASSERT_EQ (face1.vertices.size (), face2.vertices.size ());
-    for (size_t j = 0; j < face1.vertices.size (); ++j)
-    {
+    for (size_t j = 0; j < face1.vertices.size (); ++j) {
       ASSERT_EQ (face1.vertices[j], face2.vertices[j]);
     }
-  }    
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,7 +156,6 @@ TEST (PCL, ConvexHull_planar_bunny)
   convex_hull_3d.reconstruct (hull_3d);
 
   EXPECT_EQ (convex_hull_3d.getDimension (), 3);
-
 
   ModelCoefficients::Ptr plane_coefficients (new ModelCoefficients ());
   plane_coefficients->values.resize (4);
@@ -187,28 +183,24 @@ TEST (PCL, ConvexHull_planar_bunny)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TEST (PCL, ConvexHull_LTable)
 {
-  //construct dataset
+  // construct dataset
   pcl::PointCloud<pcl::PointXYZ> cloud_out_ltable;
   cloud_out_ltable.points.resize (100);
 
   int npoints = 0;
-  for (size_t i = 0; i < 8; i++)
-  {
-    for (size_t j = 0; j <= 2; j++)
-    {
-      cloud_out_ltable.points[npoints].x = float (i) * 0.5f;
-      cloud_out_ltable.points[npoints].y = -float (j) * 0.5f;
+  for (size_t i = 0; i < 8; i++) {
+    for (size_t j = 0; j <= 2; j++) {
+      cloud_out_ltable.points[npoints].x = float(i) * 0.5f;
+      cloud_out_ltable.points[npoints].y = -float(j) * 0.5f;
       cloud_out_ltable.points[npoints].z = 0.f;
       npoints++;
     }
   }
 
-  for (size_t i = 0; i <= 2; i++)
-  {
-    for (size_t j = 3; j < 8; j++)
-    {
-      cloud_out_ltable.points[npoints].x = float (i) * 0.5f;
-      cloud_out_ltable.points[npoints].y = -float (j) * 0.5f;
+  for (size_t i = 0; i <= 2; i++) {
+    for (size_t j = 3; j < 8; j++) {
+      cloud_out_ltable.points[npoints].x = float(i) * 0.5f;
+      cloud_out_ltable.points[npoints].y = -float(j) * 0.5f;
       cloud_out_ltable.points[npoints].z = 0.f;
       npoints++;
     }
@@ -244,14 +236,14 @@ TEST (PCL, ConvexHull_LTable)
 
   pcl::PointCloud<pcl::PointXYZ> hull;
   std::vector<pcl::Vertices> polygons;
-  pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloudptr (new pcl::PointCloud<pcl::PointXYZ> (cloud_out_ltable));
+  pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloudptr (
+      new pcl::PointCloud<pcl::PointXYZ> (cloud_out_ltable));
   pcl::ConvexHull<pcl::PointXYZ> chull;
   chull.setInputCloud (cloudptr);
   chull.reconstruct (hull, polygons);
 
   EXPECT_EQ (polygons.size (), 1);
   EXPECT_EQ (hull.points.size (), 5);
-
 
   //
   // Test the face-vertices-only output variant
@@ -261,19 +253,17 @@ TEST (PCL, ConvexHull_LTable)
   std::vector<pcl::Vertices> polygons2;
   chull.reconstruct (polygons2);
 
-  // compare the face vertices (polygons2) to the output from the original test --- they should be identical
+  // compare the face vertices (polygons2) to the output from the original test --- they
+  // should be identical
   ASSERT_EQ (polygons.size (), polygons2.size ());
-  for (size_t i = 0; i < polygons.size (); ++i)
-  {
-    const pcl::Vertices & face1 = polygons[i];
-    const pcl::Vertices & face2 = polygons2[i];
+  for (size_t i = 0; i < polygons.size (); ++i) {
+    const pcl::Vertices &face1 = polygons[i];
+    const pcl::Vertices &face2 = polygons2[i];
     ASSERT_EQ (face1.vertices.size (), face2.vertices.size ());
-    for (size_t j = 0; j < face1.vertices.size (); ++j)
-    {
+    for (size_t j = 0; j < face1.vertices.size (); ++j) {
       ASSERT_EQ (face1.vertices[j], face2.vertices[j]);
     }
   }
-
 
   //
   // Test the PolygonMesh output variant
@@ -287,84 +277,80 @@ TEST (PCL, ConvexHull_LTable)
   PointCloud<pcl::PointXYZ> hull2;
   pcl::fromPCLPointCloud2 (mesh.cloud, hull2);
 
-  // compare the PointCloud (hull2) to the output from the original test --- they should be identical
+  // compare the PointCloud (hull2) to the output from the original test --- they should
+  // be identical
   ASSERT_EQ (hull.points.size (), hull2.points.size ());
-  for (size_t i = 0; i < hull.points.size (); ++i)
-  {
-    const PointXYZ & p1 = hull.points[i];
-    const PointXYZ & p2 = hull2.points[i];
+  for (size_t i = 0; i < hull.points.size (); ++i) {
+    const PointXYZ &p1 = hull.points[i];
+    const PointXYZ &p2 = hull2.points[i];
     ASSERT_EQ (p1.x, p2.x);
     ASSERT_EQ (p1.y, p2.y);
     ASSERT_EQ (p1.z, p2.z);
   }
 
-  // compare the face vertices (mesh.polygons) to the output from the original test --- they should be identical
+  // compare the face vertices (mesh.polygons) to the output from the original test ---
+  // they should be identical
   ASSERT_EQ (polygons.size (), mesh.polygons.size ());
-  for (size_t i = 0; i < polygons.size (); ++i)
-  {
-    const pcl::Vertices & face1 = polygons[i];
-    const pcl::Vertices & face2 = mesh.polygons[i];
+  for (size_t i = 0; i < polygons.size (); ++i) {
+    const pcl::Vertices &face1 = polygons[i];
+    const pcl::Vertices &face2 = mesh.polygons[i];
     ASSERT_EQ (face1.vertices.size (), face2.vertices.size ());
-    for (size_t j = 0; j < face1.vertices.size (); ++j)
-    {
+    for (size_t j = 0; j < face1.vertices.size (); ++j) {
       ASSERT_EQ (face1.vertices[j], face2.vertices[j]);
     }
-  }    
-
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TEST (PCL, ConvexHull_2dsquare)
 {
-  //Generate data
-  pcl::PointCloud<pcl::PointXYZ>::Ptr input_cloud (new pcl::PointCloud<pcl::PointXYZ> ());
+  // Generate data
+  pcl::PointCloud<pcl::PointXYZ>::Ptr input_cloud (
+      new pcl::PointCloud<pcl::PointXYZ> ());
   input_cloud->width = 1000000;
   input_cloud->height = 1;
   input_cloud->points.resize (input_cloud->width * input_cloud->height);
-  
-  //rng
-  std::mt19937 rng(12345u);
+
+  // rng
+  std::mt19937 rng (12345u);
   std::uniform_real_distribution<float> rd (-1.0f, 1.0f);
 
-  for (auto &point : input_cloud->points)
-  {
+  for (auto &point : input_cloud->points) {
     point.x = rd (rng);
     point.y = rd (rng);
     point.z = 1.0f;
   }
 
-  //Set up for creating a hull
+  // Set up for creating a hull
   pcl::PointCloud<pcl::PointXYZ> hull;
   pcl::ConvexHull<pcl::PointXYZ> chull;
   chull.setInputCloud (input_cloud);
-  //chull.setDim (2); //We'll skip this, so we can check auto-detection
+  // chull.setDim (2); //We'll skip this, so we can check auto-detection
   chull.reconstruct (hull);
 
-  //Check that input was correctly detected as 2D input
+  // Check that input was correctly detected as 2D input
   ASSERT_EQ (2, chull.getDimension ());
-  
-  //Verify that all points lie within the plane we generated
-  //This plane has normal equal to the z-axis (parallel to the xy plane, 1m up)
+
+  // Verify that all points lie within the plane we generated
+  // This plane has normal equal to the z-axis (parallel to the xy plane, 1m up)
   Eigen::Vector4f plane_normal (0.0, 0.0, -1.0, 1.0);
 
-  //Make sure they're actually near some edge
-  std::vector<Eigen::Vector4f, Eigen::aligned_allocator<Eigen::Vector4f> > facets;
-  facets.emplace_back(-1.0, 0.0, 0.0, 1.0);
-  facets.emplace_back(-1.0, 0.0, 0.0, -1.0);
-  facets.emplace_back(0.0, -1.0, 0.0, 1.0);
-  facets.emplace_back(0.0, -1.0, 0.0, -1.0);
+  // Make sure they're actually near some edge
+  std::vector<Eigen::Vector4f, Eigen::aligned_allocator<Eigen::Vector4f>> facets;
+  facets.emplace_back (-1.0, 0.0, 0.0, 1.0);
+  facets.emplace_back (-1.0, 0.0, 0.0, -1.0);
+  facets.emplace_back (0.0, -1.0, 0.0, 1.0);
+  facets.emplace_back (0.0, -1.0, 0.0, -1.0);
 
-  //Make sure they're in the plane
-  for (const auto &point : hull.points)
-  {
+  // Make sure they're in the plane
+  for (const auto &point : hull.points) {
     float dist = fabs (point.getVector4fMap ().dot (plane_normal));
     EXPECT_NEAR (dist, 0.0, 1e-2);
 
     float min_dist = std::numeric_limits<float>::infinity ();
-    for (const auto &facet : facets)
-    {
+    for (const auto &facet : facets) {
       float d2 = fabs (point.getVector4fMap ().dot (facet));
-      
+
       if (d2 < min_dist)
         min_dist = d2;
     }
@@ -375,50 +361,48 @@ TEST (PCL, ConvexHull_2dsquare)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TEST (PCL, ConvexHull_3dcube)
 {
-  //Generate data
-  pcl::PointCloud<pcl::PointXYZ>::Ptr input_cloud (new pcl::PointCloud<pcl::PointXYZ> ());
+  // Generate data
+  pcl::PointCloud<pcl::PointXYZ>::Ptr input_cloud (
+      new pcl::PointCloud<pcl::PointXYZ> ());
   input_cloud->width = 10000000;
   input_cloud->height = 1;
   input_cloud->points.resize (input_cloud->width * input_cloud->height);
-  
-  //rd
-  std::mt19937 gen(12345u);
+
+  // rd
+  std::mt19937 gen (12345u);
   std::uniform_real_distribution<float> rd (-1.0f, 1.0f);
 
-  for (auto &point : input_cloud->points)
-  {
+  for (auto &point : input_cloud->points) {
     point.x = rd (gen);
     point.y = rd (gen);
     point.z = rd (gen);
   }
 
-  //Set up for creating a hull
+  // Set up for creating a hull
   pcl::PointCloud<pcl::PointXYZ> hull;
   pcl::ConvexHull<pcl::PointXYZ> chull;
   chull.setInputCloud (input_cloud);
-  //chull.setDim (3); //We'll skip this, so we can check auto-detection
+  // chull.setDim (3); //We'll skip this, so we can check auto-detection
   chull.reconstruct (hull);
 
-  //Check that input was correctly detected as 3D input
+  // Check that input was correctly detected as 3D input
   ASSERT_EQ (3, chull.getDimension ());
-  
-  //Make sure they're actually near some edge
-  std::vector<Eigen::Vector4f, Eigen::aligned_allocator<Eigen::Vector4f> > facets;
-  facets.emplace_back(-1.0f, 0.0f, 0.0f, 1.0f);
-  facets.emplace_back(-1.0f, 0.0f, 0.0f, -1.0f);
-  facets.emplace_back(0.0f, -1.0f, 0.0f, 1.0f);
-  facets.emplace_back(0.0f, -1.0f, 0.0f, -1.0f);
-  facets.emplace_back(0.0f, 0.0f, -1.0f, 1.0f);
-  facets.emplace_back(0.0f, 0.0f, -1.0f, -1.0f);
 
-  //Make sure they're near a facet
-  for (const auto &point : hull.points)
-  {
+  // Make sure they're actually near some edge
+  std::vector<Eigen::Vector4f, Eigen::aligned_allocator<Eigen::Vector4f>> facets;
+  facets.emplace_back (-1.0f, 0.0f, 0.0f, 1.0f);
+  facets.emplace_back (-1.0f, 0.0f, 0.0f, -1.0f);
+  facets.emplace_back (0.0f, -1.0f, 0.0f, 1.0f);
+  facets.emplace_back (0.0f, -1.0f, 0.0f, -1.0f);
+  facets.emplace_back (0.0f, 0.0f, -1.0f, 1.0f);
+  facets.emplace_back (0.0f, 0.0f, -1.0f, -1.0f);
+
+  // Make sure they're near a facet
+  for (const auto &point : hull.points) {
     float min_dist = std::numeric_limits<float>::infinity ();
-    for (const auto &facet : facets)
-    {
+    for (const auto &facet : facets) {
       float dist = fabs (point.getVector4fMap ().dot (facet));
-      
+
       if (dist < min_dist)
         min_dist = dist;
     }
@@ -460,7 +444,7 @@ TEST (PCL, ConvexHull_4points)
   EXPECT_EQ (mesh.polygons.size (), 1);
 
   /// TODO this should be 4, not 5 as it is now - fix that!!!
-   EXPECT_EQ (mesh.polygons[0].vertices.size (), 4);
+  EXPECT_EQ (mesh.polygons[0].vertices.size (), 4);
 
   PointCloud<PointXYZ> mesh_cloud;
   fromPCLPointCloud2 (mesh.cloud, mesh_cloud);
@@ -486,11 +470,12 @@ TEST (PCL, ConvexHull_4points)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
@@ -507,25 +492,24 @@ main (int argc, char** argv)
   NormalEstimation<PointXYZ, Normal> n;
   PointCloud<Normal>::Ptr normals (new PointCloud<Normal> ());
   n.setInputCloud (cloud);
-  //n.setIndices (indices[B);
+  // n.setIndices (indices[B);
   n.setSearchMethod (tree);
   n.setKSearch (20);
   n.compute (*normals);
 
   // Concatenate XYZ and normal information
   pcl::concatenateFields (*cloud, *normals, *cloud_with_normals);
-      
+
   // Create search tree
   tree2.reset (new search::KdTree<PointNormal>);
   tree2->setInputCloud (cloud_with_normals);
 
   // Process for update cloud
-  if (argc == 3)
-  {
+  if (argc == 3) {
     pcl::PCLPointCloud2 cloud_blob1;
     loadPCDFile (argv[2], cloud_blob1);
     fromPCLPointCloud2 (cloud_blob1, *cloud1);
-        // Create search tree
+    // Create search tree
     tree3.reset (new search::KdTree<PointXYZ> (false));
     tree3->setInputCloud (cloud1);
 

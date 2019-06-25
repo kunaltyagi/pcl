@@ -37,10 +37,9 @@
 
 #include <pcl/impl/instantiate.hpp>
 #include <pcl/point_types.h>
-#include <pcl/segmentation/segment_differences.h>
 #include <pcl/segmentation/impl/segment_differences.hpp>
+#include <pcl/segmentation/segment_differences.h>
 
 // Instantiations of specific point types
-PCL_INSTANTIATE(SegmentDifferences, PCL_XYZ_POINT_TYPES)
-PCL_INSTANTIATE(getPointCloudDifference, PCL_XYZ_POINT_TYPES)
-
+PCL_INSTANTIATE (SegmentDifferences, PCL_XYZ_POINT_TYPES)
+PCL_INSTANTIATE (getPointCloudDifference, PCL_XYZ_POINT_TYPES)

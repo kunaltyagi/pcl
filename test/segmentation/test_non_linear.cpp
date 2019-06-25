@@ -38,13 +38,13 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_types.h>
-#include <pcl/point_cloud.h>
-#include <pcl/io/pcd_io.h>
 #include <pcl/ModelCoefficients.h>
 #include <pcl/PointIndices.h>
-#include <pcl/sample_consensus/model_types.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
 #include <pcl/sample_consensus/method_types.h>
+#include <pcl/sample_consensus/model_types.h>
 #include <pcl/segmentation/sac_segmentation.h>
 
 using namespace pcl;
@@ -68,9 +68,9 @@ TEST (SACSegmentation, Segmentation)
   seg.setInputCloud (cloud_);
   seg.segment (*inliers, *sphere_coefficients);
 
-  EXPECT_NEAR (sphere_coefficients->values[0], 0.998776,  1e-2);
-  EXPECT_NEAR (sphere_coefficients->values[1], 0.752023,  1e-2);
-  EXPECT_NEAR (sphere_coefficients->values[2], 1.24558,   1e-2);
+  EXPECT_NEAR (sphere_coefficients->values[0], 0.998776, 1e-2);
+  EXPECT_NEAR (sphere_coefficients->values[1], 0.752023, 1e-2);
+  EXPECT_NEAR (sphere_coefficients->values[2], 1.24558, 1e-2);
   EXPECT_NEAR (sphere_coefficients->values[3], 0.0536238, 1e-2);
 
   EXPECT_NEAR (static_cast<int> (inliers->indices.size ()), 3516, 15);
@@ -78,23 +78,25 @@ TEST (SACSegmentation, Segmentation)
 
 //* ---[ */
 int
-  main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `noisy_slice_displaced.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `noisy_slice_displaced.pcd` and "
+                 "pass its path to the test."
+              << std::endl;
     return (-1);
   }
 
   // Load a standard PCD file from disk
   PointCloud<PointXYZ> cloud;
-  if (loadPCDFile (argv[1], cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `noisy_slice_displaced.pcd` and pass its path to the test." << std::endl;
+  if (loadPCDFile (argv[1], cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download "
+                 "`noisy_slice_displaced.pcd` and pass its path to the test."
+              << std::endl;
     return (-1);
   }
 
-  cloud_   = cloud.makeShared ();
+  cloud_ = cloud.makeShared ();
 
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

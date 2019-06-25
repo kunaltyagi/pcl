@@ -35,10 +35,10 @@
  */
 
 /**
-  * \file test_bearing_angle_image.cpp
-  * \created on: July 07, 2013
-  * \author: Qinghua Li (qinghua__li@163.com)
-  */
+ * \file test_bearing_angle_image.cpp
+ * \created on: July 07, 2013
+ * \author: Qinghua Li (qinghua__li@163.com)
+ */
 
 #include <gtest/gtest.h>
 #include <iostream>
@@ -71,8 +71,7 @@ TEST (BearingAngleImageTest, GenerateBAImage)
   bearing_angle_image.generateBAImage (point_cloud);
 
   uint8_t grays[6];
-  for (int i = 0; i < 3 * 2; ++i)
-  {
+  for (int i = 0; i < 3 * 2; ++i) {
     grays[i] = (bearing_angle_image.points[i].rgba >> 8) & 0xff;
   }
 
@@ -84,10 +83,9 @@ TEST (BearingAngleImageTest, GenerateBAImage)
   EXPECT_EQ (0, grays[5]);
 }
 
-
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

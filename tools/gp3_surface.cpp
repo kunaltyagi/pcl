@@ -3,7 +3,7 @@
  *
  *  Point Cloud Library (PCL) - www.pointclouds.org
  *  Copyright (c) 2010-2011, Willow Garage, Inc.
- *  
+ *
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -37,11 +37,11 @@
  *
  */
 
+#include <pcl/console/parse.h>
+#include <pcl/console/print.h>
+#include <pcl/console/time.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/vtk_io.h>
-#include <pcl/console/print.h>
-#include <pcl/console/parse.h>
-#include <pcl/console/time.h>
 #include <pcl/surface/gp3.h>
 
 using namespace pcl;
@@ -56,35 +56,45 @@ printHelp (int, char **argv)
 {
   print_error ("Syntax is: %s input.pcd output.vtk <options>\n", argv[0]);
   print_info ("  where options are:\n");
-  print_info ("                     -radius X = use a radius of Xm around each point to determine the neighborhood (default: "); 
-  print_value ("%f", default_radius); print_info (")\n");
-  print_info ("                     -mu X     = set the multipler of the nearest neighbor distance to obtain the final search radius (default: "); 
-  print_value ("%f", default_mu); print_info (")\n");
+  print_info ("                     -radius X = use a radius of Xm around each point "
+              "to determine the neighborhood (default: ");
+  print_value ("%f", default_radius);
+  print_info (")\n");
+  print_info ("                     -mu X     = set the multipler of the nearest "
+              "neighbor distance to obtain the final search radius (default: ");
+  print_value ("%f", default_mu);
+  print_info (")\n");
 }
 
 bool
 loadCloud (const std::string &filename, PointCloud<PointNormal> &cloud)
 {
   TicToc tt;
-  print_highlight ("Loading "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Loading ");
+  print_value ("%s ", filename.c_str ());
 
   tt.tic ();
   if (loadPCDFile<PointNormal> (filename, cloud) < 0)
     return (false);
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", cloud.width * cloud.height); print_info (" points]\n");
-  print_info ("Available dimensions: "); print_value ("%s\n", pcl::getFieldsList (cloud).c_str ());
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", cloud.width * cloud.height);
+  print_info (" points]\n");
+  print_info ("Available dimensions: ");
+  print_value ("%s\n", pcl::getFieldsList (cloud).c_str ());
 
   return (true);
 }
 
 void
-compute (const PointCloud<PointNormal>::Ptr &input, pcl::PolygonMesh &output,
-         double mu, double radius)
+compute (const PointCloud<PointNormal>::Ptr &input, pcl::PolygonMesh &output, double mu,
+         double radius)
 {
   // Estimate
   TicToc tt;
   tt.tic ();
-  
+
   print_highlight (stderr, "Computing ");
 
   PointCloud<PointNormal>::Ptr cloud (new PointCloud<PointNormal> ());
@@ -97,14 +107,19 @@ compute (const PointCloud<PointNormal>::Ptr &input, pcl::PolygonMesh &output,
   cloud->is_dense = true;
 
   GreedyProjectionTriangulation<PointNormal> gpt;
-  gpt.setSearchMethod (pcl::search::KdTree<pcl::PointNormal>::Ptr (new pcl::search::KdTree<pcl::PointNormal>));
+  gpt.setSearchMethod (pcl::search::KdTree<pcl::PointNormal>::Ptr (
+      new pcl::search::KdTree<pcl::PointNormal>));
   gpt.setInputCloud (cloud);
   gpt.setSearchRadius (radius);
   gpt.setMu (mu);
 
   gpt.reconstruct (output);
 
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%lu", output.polygons.size ()); print_info (" polygons]\n");
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%lu", output.polygons.size ());
+  print_info (" polygons]\n");
 }
 
 void
@@ -113,34 +128,40 @@ saveCloud (const std::string &filename, const pcl::PolygonMesh &output)
   TicToc tt;
   tt.tic ();
 
-  print_highlight ("Saving "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Saving ");
+  print_value ("%s ", filename.c_str ());
   saveVTKFile (filename, output);
 
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%lu", output.polygons.size ()); print_info (" polygons]\n");
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%lu", output.polygons.size ());
+  print_info (" polygons]\n");
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  print_info ("Perform surface triangulation using pcl::GreedyProjectionTriangulation. For more information, use: %s -h\n", argv[0]);
+  print_info ("Perform surface triangulation using pcl::GreedyProjectionTriangulation. "
+              "For more information, use: %s -h\n",
+              argv[0]);
 
-  if (argc < 3)
-  {
+  if (argc < 3) {
     printHelp (argc, argv);
     return (-1);
   }
 
   // Parse the command line arguments for .pcd files
-  std::vector<int> pcd_file_indices = parse_file_extension_argument (argc, argv, ".pcd");
-  if (pcd_file_indices.size () != 1)
-  {
+  std::vector<int> pcd_file_indices =
+      parse_file_extension_argument (argc, argv, ".pcd");
+  if (pcd_file_indices.size () != 1) {
     print_error ("Need one input PCD file to continue.\n");
     return (-1);
   }
-  std::vector<int> vtk_file_indices = parse_file_extension_argument (argc, argv, ".vtk");
-  if (vtk_file_indices.size () != 1)
-  {
+  std::vector<int> vtk_file_indices =
+      parse_file_extension_argument (argc, argv, ".vtk");
+  if (vtk_file_indices.size () != 1) {
     print_error ("Need one output VTK file to continue.\n");
     return (-1);
   }
@@ -153,7 +174,7 @@ main (int argc, char** argv)
 
   // Load the first file
   PointCloud<PointNormal>::Ptr cloud (new PointCloud<PointNormal>);
-  if (!loadCloud (argv[pcd_file_indices[0]], *cloud)) 
+  if (!loadCloud (argv[pcd_file_indices[0]], *cloud))
     return (-1);
 
   // Perform the surface triangulation
@@ -163,4 +184,3 @@ main (int argc, char** argv)
   // Save into the second file
   saveCloud (argv[vtk_file_indices[0]], output);
 }
-

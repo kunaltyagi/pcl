@@ -38,9 +38,9 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_types.h>
-#include <pcl/point_cloud.h>
 #include <pcl/pcl_tests.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
 
 using namespace pcl;
 using namespace pcl::test;
@@ -48,16 +48,12 @@ using namespace pcl::test;
 PointCloud<PointXYZ> cloud;
 const size_t size = 10 * 480;
 
-TEST (PointCloud, size)
-{
-  EXPECT_EQ(cloud.points.size (), cloud.size ());
-}
+TEST (PointCloud, size) { EXPECT_EQ (cloud.points.size (), cloud.size ()); }
 
 TEST (PointCloud, sq_brackets_wrapper)
 {
   for (uint32_t i = 0; i < size; ++i)
-    EXPECT_EQ_VECTORS (cloud.points[i].getVector3fMap (),
-                       cloud[i].getVector3fMap ());
+    EXPECT_EQ_VECTORS (cloud.points[i].getVector3fMap (), cloud[i].getVector3fMap ());
 }
 
 TEST (PointCloud, at)
@@ -84,7 +80,7 @@ TEST (PointCloud, constructor_with_allocation)
   PointCloud<PointXYZ> cloud2 (5, 80);
   EXPECT_EQ (cloud2.width, 5);
   EXPECT_EQ (cloud2.height, 80);
-  EXPECT_EQ (cloud2.size (), 5*80);
+  EXPECT_EQ (cloud2.size (), 5 * 80);
 }
 
 TEST (PointCloud, constructor_with_allocation_valued)
@@ -93,9 +89,9 @@ TEST (PointCloud, constructor_with_allocation_valued)
   PointCloud<PointXYZ> cloud2 (5, 80, nan_point);
   EXPECT_EQ (cloud2.width, 5);
   EXPECT_EQ (cloud2.height, 80);
-  EXPECT_EQ (cloud2.size (), 5*80);
-  for (PointCloud<PointXYZ>::const_iterator pit = cloud2.begin (); pit != cloud2.end (); ++pit)
-  {
+  EXPECT_EQ (cloud2.size (), 5 * 80);
+  for (PointCloud<PointXYZ>::const_iterator pit = cloud2.begin (); pit != cloud2.end ();
+       ++pit) {
     EXPECT_NEAR (pit->x, 0.1, 1e-3);
     EXPECT_NEAR (pit->y, 0.2, 1e-3);
     EXPECT_NEAR (pit->z, 0.3, 1e-3);
@@ -118,7 +114,9 @@ TEST (PointCloud, insert_range)
 {
   PointCloud<PointXYZ> cloud2 (10, 1);
   for (uint32_t i = 0; i < 10; ++i)
-    cloud2[i] = PointXYZ (5.0f * static_cast<float>(i) + 0, 5.0f * static_cast<float> (i) + 1, 5.0f * static_cast<float> (i) + 2);
+    cloud2[i] =
+        PointXYZ (5.0f * static_cast<float> (i) + 0, 5.0f * static_cast<float> (i) + 1,
+                  5.0f * static_cast<float> (i) + 2);
 
   uint32_t old_size = static_cast<uint32_t> (cloud.size ());
   cloud.insert (cloud.begin (), cloud2.begin (), cloud2.end ());
@@ -132,12 +130,14 @@ TEST (PointCloud, insert_range)
 }
 
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   cloud.width = 10;
   cloud.height = 480;
   for (uint32_t i = 0; i < size; ++i)
-    cloud.points.emplace_back(3.0f * static_cast<float>(i) + 0, 3.0f * static_cast<float> (i) + 1, 3.0f * static_cast<float> (i) + 2);
+    cloud.points.emplace_back (3.0f * static_cast<float> (i) + 0,
+                               3.0f * static_cast<float> (i) + 1,
+                               3.0f * static_cast<float> (i) + 2);
 
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

@@ -39,12 +39,12 @@
 
 #include <iostream>
 
+#include <pcl/features/normal_3d.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
-#include <pcl/features/normal_3d.h>
 
 int
-main (int, char** argv)
+main (int, char **argv)
 {
   std::string filename = argv[1];
   std::cout << "Reading " << filename << std::endl;
@@ -64,7 +64,8 @@ main (int, char** argv)
   normal_estimation.setInputCloud (cloud);
 
   // Create an empty kdtree representation, and pass it to the normal estimation object.
-  // Its content will be filled inside the object, based on the given input dataset (as no other search surface is given).
+  // Its content will be filled inside the object, based on the given input dataset (as
+  // no other search surface is given).
   pcl::search::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZ>);
   normal_estimation.setSearchMethod (tree);
 
@@ -77,7 +78,9 @@ main (int, char** argv)
   // Compute the features
   normal_estimation.compute (*cloud_normals);
 
-  // cloud_normals->points.size () should have the same size as the input cloud->points.size ()
-  std::cout << "cloud_normals->points.size (): " << cloud_normals->points.size () << std::endl;
+  // cloud_normals->points.size () should have the same size as the input
+  // cloud->points.size ()
+  std::cout << "cloud_normals->points.size (): " << cloud_normals->points.size ()
+            << std::endl;
   return 0;
 }

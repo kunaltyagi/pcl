@@ -38,9 +38,9 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_cloud.h>
-#include <pcl/features/normal_3d.h>
 #include <pcl/features/intensity_gradient.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/point_cloud.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -53,15 +53,14 @@ TEST (PCL, IntensityGradientEstimation)
   PointCloud<PointXYZI> cloud_xyzi;
   cloud_xyzi.height = 1;
   cloud_xyzi.is_dense = true;
-  for (float x = -5.0f; x <= 5.0f; x += 0.1f)
-  {
-    for (float y = -5.0f; y <= 5.0f; y += 0.1f)
-    {
+  for (float x = -5.0f; x <= 5.0f; x += 0.1f) {
+    for (float y = -5.0f; y <= 5.0f; y += 0.1f) {
       PointXYZI p;
       p.x = x;
       p.y = y;
       p.z = 0.1f * powf (x, 2.0f) + 0.5f * y + 1.0f;
-      p.intensity = 0.1f * powf (x, 3.0f) + 0.2f * powf (y, 2.0f) + 1.0f * p.z + 20000.0f;
+      p.intensity =
+          0.1f * powf (x, 3.0f) + 0.2f * powf (y, 2.0f) + 1.0f * p.z + 20000.0f;
 
       cloud_xyzi.points.push_back (p);
     }
@@ -89,12 +88,11 @@ TEST (PCL, IntensityGradientEstimation)
   grad_est.compute (gradient);
 
   // Compare to gradient estimates to actual values
-  for (size_t i = 0; i < cloud_ptr->points.size (); ++i)
-  {
+  for (size_t i = 0; i < cloud_ptr->points.size (); ++i) {
     const PointXYZI &p = cloud_ptr->points[i];
 
     // A pointer to the estimated gradient values
-    const float * g_est = gradient.points[i].gradient;
+    const float *g_est = gradient.points[i].gradient;
 
     // Compute the surface normal analytically.
     float nx = -0.2f * p.x;
@@ -124,7 +122,7 @@ TEST (PCL, IntensityGradientEstimation)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

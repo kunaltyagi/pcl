@@ -48,55 +48,65 @@ namespace pcl
     {
       Q_OBJECT
       public:
-        NormalEstimationTool (PropertiesModel* parameter_model, QObject* parent);
-        ~NormalEstimationTool ();
-        
-       QList <CloudComposerItem*>
-        performAction (QList <const CloudComposerItem*> input_data, PointTypeFlags::PointType type = PointTypeFlags::NONE) override;
-      
-        inline QString
-        getToolName () const override { return "Normal Estimation Tool";}
+      NormalEstimationTool (PropertiesModel *parameter_model, QObject *parent);
+      ~NormalEstimationTool ();
+
+      QList<CloudComposerItem *>
+      performAction (QList<const CloudComposerItem *> input_data,
+                     PointTypeFlags::PointType type = PointTypeFlags::NONE) override;
+
+      inline QString
+      getToolName () const override
+      {
+        return "Normal Estimation Tool";
+      }
     };
 
-    
     class NormalEstimationToolFactory : public QObject, public ToolFactory
     {
       Q_OBJECT
       Q_INTERFACES (pcl::cloud_composer::ToolFactory)
-      Q_PLUGIN_METADATA(IID "cloud_composer.ToolFactory/1.0")
+      Q_PLUGIN_METADATA (IID "cloud_composer.ToolFactory/1.0")
       public:
-        NewItemTool*
-        createTool (PropertiesModel* parameter_model, QObject* parent = nullptr) override 
-        {
-            return new NormalEstimationTool(parameter_model, parent);
-        }
-        
-        PropertiesModel*
-        createToolParameterModel (QObject* parent) override;
-        
-        inline QString 
-        getPluginName () const override { return "Normal Estimation";}
-        
-        QString 
-        getToolGroupName () const override { return "Feature Estimation";}
-        
-        QString
-        getIconName () const override { return ":/normal_estimation.png"; }
-        
-        inline CloudComposerItem::ItemType
-        getInputItemType () const override
-        {
-          return CloudComposerItem::CLOUD_ITEM;
-        }
-        
-        inline QList <CloudComposerItem::ItemType>
-        getRequiredInputChildrenTypes () const override 
-        {
-          return QList <CloudComposerItem::ItemType> ();
-        }
+      NewItemTool *
+      createTool (PropertiesModel *parameter_model, QObject *parent = nullptr) override
+      {
+        return new NormalEstimationTool (parameter_model, parent);
+      }
+
+      PropertiesModel *
+      createToolParameterModel (QObject *parent) override;
+
+      inline QString
+      getPluginName () const override
+      {
+        return "Normal Estimation";
+      }
+
+      QString
+      getToolGroupName () const override
+      {
+        return "Feature Estimation";
+      }
+
+      QString
+      getIconName () const override
+      {
+        return ":/normal_estimation.png";
+      }
+
+      inline CloudComposerItem::ItemType
+      getInputItemType () const override
+      {
+        return CloudComposerItem::CLOUD_ITEM;
+      }
+
+      inline QList<CloudComposerItem::ItemType>
+      getRequiredInputChildrenTypes () const override
+      {
+        return QList<CloudComposerItem::ItemType> ();
+      }
     };
 
-
-
-  }
-}
+  } // namespace cloud_composer
+} // namespace pcl

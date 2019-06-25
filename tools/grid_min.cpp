@@ -38,12 +38,12 @@
  * $Id$
  */
 
-#include <pcl/point_types.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl/console/print.h>
 #include <pcl/console/parse.h>
+#include <pcl/console/print.h>
 #include <pcl/console/time.h>
 #include <pcl/filters/grid_minimum.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
 
 using namespace std;
 using namespace pcl;
@@ -61,23 +61,33 @@ printHelp (int, char **argv)
 {
   print_error ("Syntax is: %s input.pcd output.pcd <options>\n", argv[0]);
   print_info ("  where options are:\n");
-  print_info ("                     -resolution X = xy resolution of the grid (default: ");
-  print_value ("%f", default_resolution); print_info (")\n");
-  print_info ("                     -input_dir X  = batch process all PCD files found in input_dir\n");
-  print_info ("                     -output_dir X = save the processed files from input_dir in this directory\n");
+  print_info (
+      "                     -resolution X = xy resolution of the grid (default: ");
+  print_value ("%f", default_resolution);
+  print_info (")\n");
+  print_info ("                     -input_dir X  = batch process all PCD files found "
+              "in input_dir\n");
+  print_info ("                     -output_dir X = save the processed files from "
+              "input_dir in this directory\n");
 }
 
 bool
 loadCloud (const std::string &filename, Cloud &cloud)
 {
   TicToc tt;
-  print_highlight ("Loading "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Loading ");
+  print_value ("%s ", filename.c_str ());
 
   tt.tic ();
   if (loadPCDFile (filename, cloud) < 0)
     return (false);
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", cloud.width * cloud.height); print_info (" points]\n");
-  print_info ("Available dimensions: "); print_value ("%s\n", pcl::getFieldsList (cloud).c_str ());
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", cloud.width * cloud.height);
+  print_info (" points]\n");
+  print_info ("Available dimensions: ");
+  print_value ("%s\n", pcl::getFieldsList (cloud).c_str ());
 
   return (true);
 }
@@ -95,7 +105,11 @@ compute (ConstCloudPtr &input, Cloud &output, float resolution)
   gm.setInputCloud (input);
   gm.filter (output);
 
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", output.width * output.height); print_info (" points]\n");
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", output.width * output.height);
+  print_info (" points]\n");
 }
 
 void
@@ -104,24 +118,27 @@ saveCloud (const std::string &filename, const Cloud &output)
   TicToc tt;
   tt.tic ();
 
-  print_highlight ("Saving "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Saving ");
+  print_value ("%s ", filename.c_str ());
 
   PCDWriter w;
   w.writeBinaryCompressed (filename, output);
 
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", output.width * output.height); print_info (" points]\n");
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", output.width * output.height);
+  print_info (" points]\n");
 }
 
 int
-batchProcess (const vector<string> &pcd_files, string &output_dir,
-              float resolution)
+batchProcess (const vector<string> &pcd_files, string &output_dir, float resolution)
 {
   vector<string> st;
-  for (const auto &pcd_file : pcd_files)
-  {
+  for (const auto &pcd_file : pcd_files) {
     // Load the first file
     Cloud::Ptr cloud (new Cloud);
-    if (!loadCloud (pcd_file, *cloud)) 
+    if (!loadCloud (pcd_file, *cloud))
       return (-1);
 
     // Perform the feature estimation
@@ -132,7 +149,7 @@ batchProcess (const vector<string> &pcd_files, string &output_dir,
     string filename = pcd_file;
     boost::trim (filename);
     boost::split (st, filename, boost::is_any_of ("/\\"), boost::token_compress_on);
-    
+
     // Save into the second file
     stringstream ss;
     ss << output_dir << "/" << st.at (st.size () - 1);
@@ -141,15 +158,15 @@ batchProcess (const vector<string> &pcd_files, string &output_dir,
   return (0);
 }
 
-
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  print_info ("Filter a point cloud using the pcl::GridMinimum filter. For more information, use: %s -h\n", argv[0]);
+  print_info ("Filter a point cloud using the pcl::GridMinimum filter. For more "
+              "information, use: %s -h\n",
+              argv[0]);
 
-  if (argc < 3)
-  {
+  if (argc < 3) {
     printHelp (argc, argv);
     return (-1);
   }
@@ -160,11 +177,10 @@ main (int argc, char** argv)
   float resolution = default_resolution;
   parse_argument (argc, argv, "-resolution", resolution);
   string input_dir, output_dir;
-  if (parse_argument (argc, argv, "-input_dir", input_dir) != -1)
-  {
-    PCL_INFO ("Input directory given as %s. Batch process mode on.\n", input_dir.c_str ());
-    if (parse_argument (argc, argv, "-output_dir", output_dir) == -1)
-    {
+  if (parse_argument (argc, argv, "-input_dir", input_dir) != -1) {
+    PCL_INFO ("Input directory given as %s. Batch process mode on.\n",
+              input_dir.c_str ());
+    if (parse_argument (argc, argv, "-output_dir", output_dir) == -1) {
       PCL_ERROR ("Need an output directory! Please use -output_dir to continue.\n");
       return (-1);
     }
@@ -173,13 +189,11 @@ main (int argc, char** argv)
     batch_mode = true;
   }
 
-  if (!batch_mode)
-  {
+  if (!batch_mode) {
     // Parse the command line arguments for .pcd files
     std::vector<int> p_file_indices;
     p_file_indices = parse_file_extension_argument (argc, argv, ".pcd");
-    if (p_file_indices.size () != 2)
-    {
+    if (p_file_indices.size () != 2) {
       print_error ("Need one input PCD file and one output PCD file to continue.\n");
       return (-1);
     }
@@ -195,27 +209,26 @@ main (int argc, char** argv)
 
     // Save into the second file
     saveCloud (argv[p_file_indices[1]], output);
-  }
-  else
-  {
-    if (!input_dir.empty() && boost::filesystem::exists (input_dir))
-    {
+  } else {
+    if (!input_dir.empty () && boost::filesystem::exists (input_dir)) {
       vector<string> pcd_files;
       boost::filesystem::directory_iterator end_itr;
-      for (boost::filesystem::directory_iterator itr (input_dir); itr != end_itr; ++itr)
-      {
+      for (boost::filesystem::directory_iterator itr (input_dir); itr != end_itr;
+           ++itr) {
         // Only add PCD files
-        if (!is_directory (itr->status ()) && boost::algorithm::to_upper_copy (boost::filesystem::extension (itr->path ())) == ".PCD" )
-        {
+        if (!is_directory (itr->status ()) &&
+            boost::algorithm::to_upper_copy (
+                boost::filesystem::extension (itr->path ())) == ".PCD") {
           pcd_files.push_back (itr->path ().string ());
-          PCL_INFO ("[Batch processing mode] Added %s for processing.\n", itr->path ().string ().c_str ());
+          PCL_INFO ("[Batch processing mode] Added %s for processing.\n",
+                    itr->path ().string ().c_str ());
         }
       }
       batchProcess (pcd_files, output_dir, resolution);
-    }
-    else
-    {
-      PCL_ERROR ("Batch processing mode enabled, but invalid input directory (%s) given!\n", input_dir.c_str ());
+    } else {
+      PCL_ERROR (
+          "Batch processing mode enabled, but invalid input directory (%s) given!\n",
+          input_dir.c_str ());
       return (-1);
     }
   }

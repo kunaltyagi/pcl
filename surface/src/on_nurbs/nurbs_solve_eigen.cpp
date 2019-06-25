@@ -31,7 +31,7 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *
- * 
+ *
  *
  */
 
@@ -94,10 +94,8 @@ NurbsSolve::resize (unsigned rows)
 void
 NurbsSolve::printK ()
 {
-  for (Eigen::Index r = 0; r < m_Keig.rows (); r++)
-  {
-    for (Eigen::Index c = 0; c < m_Keig.cols (); c++)
-    {
+  for (Eigen::Index r = 0; r < m_Keig.rows (); r++) {
+    for (Eigen::Index c = 0; c < m_Keig.cols (); c++) {
       printf (" %f", m_Keig (r, c));
     }
     printf ("\n");
@@ -107,10 +105,8 @@ NurbsSolve::printK ()
 void
 NurbsSolve::printX ()
 {
-  for (Eigen::Index r = 0; r < m_xeig.rows (); r++)
-  {
-    for (Eigen::Index c = 0; c < m_xeig.cols (); c++)
-    {
+  for (Eigen::Index r = 0; r < m_xeig.rows (); r++) {
+    for (Eigen::Index c = 0; c < m_xeig.cols (); c++) {
       printf (" %f", m_xeig (r, c));
     }
     printf ("\n");
@@ -120,10 +116,8 @@ NurbsSolve::printX ()
 void
 NurbsSolve::printF ()
 {
-  for (Eigen::Index r = 0; r < m_feig.rows (); r++)
-  {
-    for (Eigen::Index c = 0; c < m_feig.cols (); c++)
-    {
+  for (Eigen::Index r = 0; r < m_feig.rows (); r++) {
+    for (Eigen::Index c = 0; c < m_feig.cols (); c++) {
       printf (" %f", m_feig (r, c));
     }
     printf ("\n");
@@ -146,4 +140,3 @@ NurbsSolve::diff ()
   Eigen::MatrixXd f (m_Keig * m_xeig);
   return (f - m_feig);
 }
-

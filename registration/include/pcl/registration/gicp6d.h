@@ -38,21 +38,18 @@
 
 #pragma once
 
-#include <pcl/point_types.h>
+#include <pcl/kdtree/impl/kdtree_flann.hpp>
 #include <pcl/point_cloud.h>
 #include <pcl/point_representation.h>
-#include <pcl/kdtree/impl/kdtree_flann.hpp>
+#include <pcl/point_types.h>
 #include <pcl/registration/gicp.h>
 
 namespace pcl
 {
-  struct EIGEN_ALIGN16 _PointXYZLAB
-  {
+  struct EIGEN_ALIGN16 _PointXYZLAB {
     PCL_ADD_POINT4D; // this adds the members x,y,z
-    union
-    {
-      struct
-      {
+    union {
+      struct {
         float L;
         float a;
         float b;
@@ -63,31 +60,27 @@ namespace pcl
   };
 
   /** \brief A custom point type for position and CIELAB color value */
-  struct PointXYZLAB : public _PointXYZLAB
-  {
+  struct PointXYZLAB : public _PointXYZLAB {
     inline PointXYZLAB ()
     {
-      x = y = z = 0.0f; data[3]     = 1.0f;  // important for homogeneous coordinates
-      L = a = b = 0.0f; data_lab[3] = 0.0f;
+      x = y = z = 0.0f;
+      data[3] = 1.0f; // important for homogeneous coordinates
+      L = a = b = 0.0f;
+      data_lab[3] = 0.0f;
     }
   };
-}
+} // namespace pcl
 
 // register the custom point type in PCL
-POINT_CLOUD_REGISTER_POINT_STRUCT(pcl::_PointXYZLAB,
-    (float, x, x)
-    (float, y, y)
-    (float, z, z)
-    (float, L, L)
-    (float, a, a)
-    (float, b, b)
-)
-POINT_CLOUD_REGISTER_POINT_WRAPPER(pcl::PointXYZLAB, pcl::_PointXYZLAB)
+POINT_CLOUD_REGISTER_POINT_STRUCT (
+    pcl::_PointXYZLAB,
+    (float, x, x) (float, y, y) (float, z, z) (float, L, L) (float, a, a) (float, b, b))
+POINT_CLOUD_REGISTER_POINT_WRAPPER (pcl::PointXYZLAB, pcl::_PointXYZLAB)
 
 namespace pcl
 {
-  /** \brief GeneralizedIterativeClosestPoint6D integrates L*a*b* color space information into the
-   * Generalized Iterative Closest Point (GICP) algorithm.
+  /** \brief GeneralizedIterativeClosestPoint6D integrates L*a*b* color space
+   * information into the Generalized Iterative Closest Point (GICP) algorithm.
    *
    * The suggested input is PointXYZRGBA.
    *
@@ -95,113 +88,112 @@ namespace pcl
    *
    * - M. Korn, M. Holzkothen, J. Pauli
    * Color Supported Generalized-ICP.
-   * In Proceedings of VISAPP 2014 - International Conference on Computer Vision Theory and Applications,
-   * Lisbon, Portugal, January 2014.
+   * In Proceedings of VISAPP 2014 - International Conference on Computer Vision Theory
+   * and Applications, Lisbon, Portugal, January 2014.
    *
    * \author Martin Holzkothen, Michael Korn
    * \ingroup registration
    */
-  class PCL_EXPORTS GeneralizedIterativeClosestPoint6D : public GeneralizedIterativeClosestPoint<PointXYZRGBA, PointXYZRGBA>
+  class PCL_EXPORTS GeneralizedIterativeClosestPoint6D
+      : public GeneralizedIterativeClosestPoint<PointXYZRGBA, PointXYZRGBA>
   {
     using PointSource = PointXYZRGBA;
     using PointTarget = PointXYZRGBA;
 
     public:
+    /** \brief constructor.
+     *
+     * \param[in] lab_weight the color weight
+     */
+    GeneralizedIterativeClosestPoint6D (float lab_weight = 0.032f);
 
-      /** \brief constructor.
-       *
-       * \param[in] lab_weight the color weight
-       */
-      GeneralizedIterativeClosestPoint6D (float lab_weight = 0.032f);
+    /** \brief Provide a pointer to the input source
+     * (e.g., the point cloud that we want to align to the target)
+     *
+     * \param[in] cloud the input point cloud source
+     */
+    void
+    setInputSource (const PointCloudSourceConstPtr &cloud) override;
 
-      /** \brief Provide a pointer to the input source
-       * (e.g., the point cloud that we want to align to the target)
-       *
-       * \param[in] cloud the input point cloud source
-       */
-      void
-      setInputSource (const PointCloudSourceConstPtr& cloud) override;
-
-      /** \brief Provide a pointer to the input target
-       * (e.g., the point cloud that we want to align the input source to)
-       *
-       * \param[in] cloud the input point cloud target
-       */
-      void
-      setInputTarget (const PointCloudTargetConstPtr& target) override;
-
-    protected:
-
-      /** \brief Rigid transformation computation method  with initial guess.
-       * \param output the transformed input point cloud dataset using the rigid transformation found
-       * \param guess the initial guess of the transformation to compute
-       */
-      void
-      computeTransformation (PointCloudSource& output,
-          const Eigen::Matrix4f& guess) override;
-
-      /** \brief Search for the closest nearest neighbor of a given point.
-       * \param query the point to search a nearest neighbour for
-       * \param index vector of size 1 to store the index of the nearest neighbour found
-       * \param distance vector of size 1 to store the distance to nearest neighbour found
-       */
-      inline bool
-      searchForNeighbors (const PointXYZLAB& query, std::vector<int>& index, std::vector<float>& distance);
+    /** \brief Provide a pointer to the input target
+     * (e.g., the point cloud that we want to align the input source to)
+     *
+     * \param[in] cloud the input point cloud target
+     */
+    void
+    setInputTarget (const PointCloudTargetConstPtr &target) override;
 
     protected:
-      /** \brief Holds the converted (LAB) data cloud. */
-      pcl::PointCloud<PointXYZLAB>::Ptr cloud_lab_;
+    /** \brief Rigid transformation computation method  with initial guess.
+     * \param output the transformed input point cloud dataset using the rigid
+     * transformation found \param guess the initial guess of the transformation to
+     * compute
+     */
+    void
+    computeTransformation (PointCloudSource &output,
+                           const Eigen::Matrix4f &guess) override;
 
-      /** \brief Holds the converted (LAB) model cloud. */
-      pcl::PointCloud<PointXYZLAB>::Ptr target_lab_;
+    /** \brief Search for the closest nearest neighbor of a given point.
+     * \param query the point to search a nearest neighbour for
+     * \param index vector of size 1 to store the index of the nearest neighbour found
+     * \param distance vector of size 1 to store the distance to nearest neighbour found
+     */
+    inline bool
+    searchForNeighbors (const PointXYZLAB &query, std::vector<int> &index,
+                        std::vector<float> &distance);
 
-      /** \brief 6d-tree to search in model cloud. */
-      KdTreeFLANN<PointXYZLAB> target_tree_lab_;
+    protected:
+    /** \brief Holds the converted (LAB) data cloud. */
+    pcl::PointCloud<PointXYZLAB>::Ptr cloud_lab_;
 
-      /** \brief The color weight. */
-      float lab_weight_;
+    /** \brief Holds the converted (LAB) model cloud. */
+    pcl::PointCloud<PointXYZLAB>::Ptr target_lab_;
 
-      /**  \brief Custom point representation to perform kdtree searches in more than 3 (i.e. in all 6) dimensions. */
-      class MyPointRepresentation : public PointRepresentation<PointXYZLAB>
+    /** \brief 6d-tree to search in model cloud. */
+    KdTreeFLANN<PointXYZLAB> target_tree_lab_;
+
+    /** \brief The color weight. */
+    float lab_weight_;
+
+    /**  \brief Custom point representation to perform kdtree searches in more than 3
+     * (i.e. in all 6) dimensions. */
+    class MyPointRepresentation : public PointRepresentation<PointXYZLAB>
+    {
+      using PointRepresentation<PointXYZLAB>::nr_dimensions_;
+      using PointRepresentation<PointXYZLAB>::trivial_;
+
+      public:
+      using Ptr = boost::shared_ptr<MyPointRepresentation>;
+      using ConstPtr = boost::shared_ptr<const MyPointRepresentation>;
+
+      MyPointRepresentation ()
       {
-          using PointRepresentation<PointXYZLAB>::nr_dimensions_;
-          using PointRepresentation<PointXYZLAB>::trivial_;
+        nr_dimensions_ = 6;
+        trivial_ = false;
+      }
 
-        public:
-          using Ptr = boost::shared_ptr<MyPointRepresentation>;
-          using ConstPtr = boost::shared_ptr<const MyPointRepresentation>;
+      ~MyPointRepresentation () {}
 
-          MyPointRepresentation ()
-          {
-            nr_dimensions_ = 6;
-            trivial_ = false;
-          }
+      inline Ptr
+      makeShared () const
+      {
+        return Ptr (new MyPointRepresentation (*this));
+      }
 
-          
-          ~MyPointRepresentation ()
-          {
-          }
+      void
+      copyToFloatArray (const PointXYZLAB &p, float *out) const override
+      {
+        // copy all of the six values
+        out[0] = p.x;
+        out[1] = p.y;
+        out[2] = p.z;
+        out[3] = p.L;
+        out[4] = p.a;
+        out[5] = p.b;
+      }
+    };
 
-          inline Ptr
-          makeShared () const
-          {
-            return Ptr (new MyPointRepresentation (*this));
-          }
-
-          void
-          copyToFloatArray (const PointXYZLAB &p, float * out) const override
-          {
-            // copy all of the six values
-            out[0] = p.x;
-            out[1] = p.y;
-            out[2] = p.z;
-            out[3] = p.L;
-            out[4] = p.a;
-            out[5] = p.b;
-          }
-      };
-
-      /** \brief Enables 6d searches with kd-tree class using the color weight. */
-      MyPointRepresentation point_rep_;
+    /** \brief Enables 6d searches with kd-tree class using the color weight. */
+    MyPointRepresentation point_rep_;
   };
-}
+} // namespace pcl

@@ -48,59 +48,60 @@ namespace pcl
      *
      *  \ingroup outofcore
      *  \author Justin Rosen (jmylesrosen@gmail.com)
-     *  \note Code adapted from \ref octree_iterator.h in Module \ref pcl::octree written by Julius Kammerl
+     *  \note Code adapted from \ref octree_iterator.h in Module \ref pcl::octree
+     * written by Julius Kammerl
      */
-    template<typename PointT=pcl::PointXYZ, typename ContainerT=OutofcoreOctreeDiskContainer<pcl::PointXYZ> >
-    class OutofcoreBreadthFirstIterator : public OutofcoreIteratorBase<PointT, ContainerT>
+    template <typename PointT = pcl::PointXYZ,
+              typename ContainerT = OutofcoreOctreeDiskContainer<pcl::PointXYZ>>
+    class OutofcoreBreadthFirstIterator
+        : public OutofcoreIteratorBase<PointT, ContainerT>
     {
       public:
-        using OctreeDisk = pcl::outofcore::OutofcoreOctreeBase<ContainerT, PointT>;
-        using OctreeDiskNode = pcl::outofcore::OutofcoreOctreeBaseNode<ContainerT, PointT>;
+      using OctreeDisk = pcl::outofcore::OutofcoreOctreeBase<ContainerT, PointT>;
+      using OctreeDiskNode =
+          pcl::outofcore::OutofcoreOctreeBaseNode<ContainerT, PointT>;
 
-        using LeafNode = pcl::outofcore::OutofcoreOctreeBaseNode<ContainerT, PointT>;
-        using BranchNode = pcl::outofcore::OutofcoreOctreeBaseNode<ContainerT, PointT>;
+      using LeafNode = pcl::outofcore::OutofcoreOctreeBaseNode<ContainerT, PointT>;
+      using BranchNode = pcl::outofcore::OutofcoreOctreeBaseNode<ContainerT, PointT>;
 
+      explicit OutofcoreBreadthFirstIterator (OctreeDisk &octree_arg);
 
-        explicit
-        OutofcoreBreadthFirstIterator (OctreeDisk& octree_arg);
+      ~OutofcoreBreadthFirstIterator ();
 
-        
-        ~OutofcoreBreadthFirstIterator ();
-      
-        OutofcoreBreadthFirstIterator&
-        operator++ ();
-      
-        inline OutofcoreBreadthFirstIterator
-        operator++ (int)
-        {
-          OutofcoreBreadthFirstIterator _Tmp = *this;
-          ++*this;
-          return (_Tmp);
-        }
+      OutofcoreBreadthFirstIterator &
+      operator++ ();
 
-        inline void
-        reset () override
-        {
-          OutofcoreIteratorBase<PointT, ContainerT>::reset();
+      inline OutofcoreBreadthFirstIterator
+      operator++ (int)
+      {
+        OutofcoreBreadthFirstIterator _Tmp = *this;
+        ++*this;
+        return (_Tmp);
+      }
 
-          // Clear the FIFO queue and add the root as the first node
-          FIFO_.clear ();
-          FIFO_.push_back(this->currentNode_);
+      inline void
+      reset () override
+      {
+        OutofcoreIteratorBase<PointT, ContainerT>::reset ();
 
-          // Don't skip children
-          skip_child_voxels_ = false;
-        }
-      
-        void
-        skipChildVoxels ()
-        {
-          skip_child_voxels_ = true;
-        }
-      
+        // Clear the FIFO queue and add the root as the first node
+        FIFO_.clear ();
+        FIFO_.push_back (this->currentNode_);
+
+        // Don't skip children
+        skip_child_voxels_ = false;
+      }
+
+      void
+      skipChildVoxels ()
+      {
+        skip_child_voxels_ = true;
+      }
+
       protected:
-        /** FIFO list */
-        std::deque<OctreeDiskNode*> FIFO_;
-        bool skip_child_voxels_;
+      /** FIFO list */
+      std::deque<OctreeDiskNode *> FIFO_;
+      bool skip_child_voxels_;
     };
-  }
-}
+  } // namespace outofcore
+} // namespace pcl

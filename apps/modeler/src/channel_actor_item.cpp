@@ -36,87 +36,79 @@
 
 #include <pcl/apps/modeler/channel_actor_item.h>
 
-#include <vtkCamera.h>
-#include <vtkPolyData.h>
-#include <vtkRenderer.h>
-#include <vtkMatrix4x4.h>
-#include <vtkRenderWindow.h>
-#include <vtkRendererCollection.h>
-#include <pcl/point_cloud.h>
 #include <pcl/apps/modeler/cloud_mesh.h>
+#include <pcl/point_cloud.h>
+#include <vtkCamera.h>
+#include <vtkMatrix4x4.h>
+#include <vtkPolyData.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderer.h>
+#include <vtkRendererCollection.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::modeler::ChannelActorItem::ChannelActorItem(QTreeWidgetItem* parent,
-  const CloudMesh::Ptr& cloud_mesh,
-  const vtkSmartPointer<vtkRenderWindow>& render_window,
-  const vtkSmartPointer<vtkActor>& actor,
-  const std::string& channel_name)
-  :QTreeWidgetItem(parent),
-  cloud_mesh_(cloud_mesh),
-  poly_data_(vtkSmartPointer<vtkPolyData>::New()),
-  render_window_(render_window),
-  color_scheme_("rgb"),
-  actor_(actor)
+pcl::modeler::ChannelActorItem::ChannelActorItem (
+    QTreeWidgetItem *parent, const CloudMesh::Ptr &cloud_mesh,
+    const vtkSmartPointer<vtkRenderWindow> &render_window,
+    const vtkSmartPointer<vtkActor> &actor, const std::string &channel_name)
+    : QTreeWidgetItem (parent), cloud_mesh_ (cloud_mesh),
+      poly_data_ (vtkSmartPointer<vtkPolyData>::New ()), render_window_ (render_window),
+      color_scheme_ ("rgb"), actor_ (actor)
 {
-  setFlags(flags()&(~Qt::ItemIsDragEnabled));
-  setFlags(flags()&(~Qt::ItemIsDropEnabled));
+  setFlags (flags () & (~Qt::ItemIsDragEnabled));
+  setFlags (flags () & (~Qt::ItemIsDropEnabled));
 
-  setText(0, QString(channel_name.c_str()));
+  setText (0, QString (channel_name.c_str ()));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::modeler::ChannelActorItem::~ChannelActorItem ()
+pcl::modeler::ChannelActorItem::~ChannelActorItem () { detachActor (); }
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+void
+pcl::modeler::ChannelActorItem::init ()
 {
-  detachActor();
+  initImpl ();
+
+  attachActor ();
+  render_window_->Render ();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::ChannelActorItem::init()
+pcl::modeler::ChannelActorItem::update ()
 {
-  initImpl();
+  updateImpl ();
 
-  attachActor();
-  render_window_->Render();
+  render_window_->Render ();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::ChannelActorItem::update()
+pcl::modeler::ChannelActorItem::attachActor ()
 {
-  updateImpl();
-
-  render_window_->Render();
+  render_window_->GetRenderers ()->GetFirstRenderer ()->AddActor (actor_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::ChannelActorItem::attachActor()
+pcl::modeler::ChannelActorItem::detachActor ()
 {
-  render_window_->GetRenderers()->GetFirstRenderer()->AddActor(actor_);
+  render_window_->GetRenderers ()->GetFirstRenderer ()->RemoveActor (actor_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::ChannelActorItem::detachActor()
+pcl::modeler::ChannelActorItem::prepareContextMenu (QMenu *) const
 {
-  render_window_->GetRenderers()->GetFirstRenderer()->RemoveActor(actor_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::ChannelActorItem::prepareContextMenu(QMenu*) const
+pcl::modeler::ChannelActorItem::switchRenderWindow (vtkRenderWindow *render_window)
 {
-
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-void
-pcl::modeler::ChannelActorItem::switchRenderWindow(vtkRenderWindow* render_window)
-{
-  detachActor();
-  render_window_ = vtkSmartPointer<vtkRenderWindow>(render_window);
-  attachActor();
+  detachActor ();
+  render_window_ = vtkSmartPointer<vtkRenderWindow> (render_window);
+  attachActor ();
 
   return;
 }

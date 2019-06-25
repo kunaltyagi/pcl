@@ -40,17 +40,19 @@
 #ifndef PCL_FEATURES_IMPL_SHOT_LRF_OMP_H_
 #define PCL_FEATURES_IMPL_SHOT_LRF_OMP_H_
 
-#include <utility>
-#include <pcl/features/shot_lrf_omp.h>
 #include <pcl/features/shot_lrf.h>
+#include <pcl/features/shot_lrf_omp.h>
+#include <utility>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template<typename PointInT, typename PointOutT> void
-pcl::SHOTLocalReferenceFrameEstimationOMP<PointInT, PointOutT>::setNumberOfThreads (unsigned int nr_threads)
+template <typename PointInT, typename PointOutT>
+void
+pcl::SHOTLocalReferenceFrameEstimationOMP<PointInT, PointOutT>::setNumberOfThreads (
+    unsigned int nr_threads)
 {
   if (nr_threads == 0)
 #ifdef _OPENMP
-    threads_ = omp_get_num_procs();
+    threads_ = omp_get_num_procs ();
 #else
     threads_ = 1;
 #endif
@@ -59,15 +61,16 @@ pcl::SHOTLocalReferenceFrameEstimationOMP<PointInT, PointOutT>::setNumberOfThrea
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template<typename PointInT, typename PointOutT> void
-pcl::SHOTLocalReferenceFrameEstimationOMP<PointInT, PointOutT>::computeFeature (PointCloudOut &output)
+template <typename PointInT, typename PointOutT>
+void
+pcl::SHOTLocalReferenceFrameEstimationOMP<PointInT, PointOutT>::computeFeature (
+    PointCloudOut &output)
 {
-  //check whether used with search radius or search k-neighbors
-  if (this->getKSearch () != 0)
-  {
-    PCL_ERROR(
-        "[pcl::%s::computeFeature] Error! Search method set to k-neighborhood. Call setKSearch(0) and setRadiusSearch( radius ) to use this class.\n",
-        getClassName().c_str ());
+  // check whether used with search radius or search k-neighbors
+  if (this->getKSearch () != 0) {
+    PCL_ERROR ("[pcl::%s::computeFeature] Error! Search method set to k-neighborhood. "
+               "Call setKSearch(0) and setRadiusSearch( radius ) to use this class.\n",
+               getClassName ().c_str ());
     return;
   }
   tree_->setSortedResults (true);
@@ -76,33 +79,31 @@ pcl::SHOTLocalReferenceFrameEstimationOMP<PointInT, PointOutT>::computeFeature (
 #ifdef _OPENMP
 #pragma omp parallel for num_threads(threads_)
 #endif
-  for (int i = 0; i < data_size; ++i)
-  {
+  for (int i = 0; i < data_size; ++i) {
     // point result
     Eigen::Matrix3f rf;
-    PointOutT& output_rf = output[i];
+    PointOutT &output_rf = output[i];
 
-    //output_rf.confidence = getLocalRF ((*indices_)[i], rf);
-    //if (output_rf.confidence == std::numeric_limits<float>::max ())
+    // output_rf.confidence = getLocalRF ((*indices_)[i], rf);
+    // if (output_rf.confidence == std::numeric_limits<float>::max ())
 
     std::vector<int> n_indices;
     std::vector<float> n_sqr_distances;
-    this->searchForNeighbors ((*indices_)[i], search_parameter_, n_indices, n_sqr_distances);
-    if (getLocalRF ((*indices_)[i], rf) == std::numeric_limits<float>::max ())
-    {
+    this->searchForNeighbors ((*indices_)[i], search_parameter_, n_indices,
+                              n_sqr_distances);
+    if (getLocalRF ((*indices_)[i], rf) == std::numeric_limits<float>::max ()) {
       output.is_dense = false;
     }
 
-    for (int d = 0; d < 3; ++d)
-    {
+    for (int d = 0; d < 3; ++d) {
       output_rf.x_axis[d] = rf.row (0)[d];
       output_rf.y_axis[d] = rf.row (1)[d];
       output_rf.z_axis[d] = rf.row (2)[d];
     }
   }
-
 }
 
-#define PCL_INSTANTIATE_SHOTLocalReferenceFrameEstimationOMP(T,OutT) template class PCL_EXPORTS pcl::SHOTLocalReferenceFrameEstimationOMP<T,OutT>;
+#define PCL_INSTANTIATE_SHOTLocalReferenceFrameEstimationOMP(T, OutT)                  \
+  template class PCL_EXPORTS pcl::SHOTLocalReferenceFrameEstimationOMP<T, OutT>;
 
-#endif    // PCL_FEATURES_IMPL_SHOT_LRF_H_
+#endif // PCL_FEATURES_IMPL_SHOT_LRF_H_

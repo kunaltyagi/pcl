@@ -42,15 +42,18 @@
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
 
-#include <pcl/io/openni_camera/openni_device_xtion.h>
 #include <pcl/io/boost.h>
+#include <pcl/io/openni_camera/openni_device_xtion.h>
 
 #include <mutex>
 #include <sstream>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-openni_wrapper::DeviceXtionPro::DeviceXtionPro (xn::Context& context, const xn::NodeInfo& device_node, const xn::NodeInfo& depth_node, const xn::NodeInfo& ir_node)
-: OpenNIDevice (context, device_node, depth_node, ir_node)
+openni_wrapper::DeviceXtionPro::DeviceXtionPro (xn::Context &context,
+                                                const xn::NodeInfo &device_node,
+                                                const xn::NodeInfo &depth_node,
+                                                const xn::NodeInfo &ir_node)
+    : OpenNIDevice (context, device_node, depth_node, ir_node)
 {
   // setup stream modes
   enumAvailableModes ();
@@ -60,7 +63,8 @@ openni_wrapper::DeviceXtionPro::DeviceXtionPro (xn::Context& context, const xn::
   std::lock_guard<std::mutex> depth_lock (depth_mutex_);
   XnStatus status = depth_generator_.SetIntProperty ("RegistrationType", 1);
   if (status != XN_STATUS_OK)
-    THROW_OPENNI_EXCEPTION ("Error setting the registration type. Reason: %s", xnGetStatusString (status));
+    THROW_OPENNI_EXCEPTION ("Error setting the registration type. Reason: %s",
+                            xnGetStatusString (status));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,19 +76,20 @@ openni_wrapper::DeviceXtionPro::~DeviceXtionPro () throw ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool 
-openni_wrapper::DeviceXtionPro::isImageResizeSupported (unsigned, unsigned, unsigned, unsigned) const throw ()
+bool
+openni_wrapper::DeviceXtionPro::isImageResizeSupported (unsigned, unsigned, unsigned,
+                                                        unsigned) const throw ()
 {
   return (false);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void 
+void
 openni_wrapper::DeviceXtionPro::enumAvailableModes () throw ()
 {
   XnMapOutputMode output_mode;
-  available_image_modes_.clear();
-  available_depth_modes_.clear();
+  available_image_modes_.clear ();
+  available_depth_modes_.clear ();
 
   // Depth Modes
   output_mode.nFPS = 30;
@@ -114,18 +119,18 @@ openni_wrapper::DeviceXtionPro::enumAvailableModes () throw ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-boost::shared_ptr<openni_wrapper::Image> 
-openni_wrapper::DeviceXtionPro::getCurrentImage (boost::shared_ptr<xn::ImageMetaData>) const throw ()
+boost::shared_ptr<openni_wrapper::Image>
+    openni_wrapper::DeviceXtionPro::getCurrentImage (
+        boost::shared_ptr<xn::ImageMetaData>) const throw ()
 {
-  return (boost::shared_ptr<Image> (reinterpret_cast<Image*> (0)));
+  return (boost::shared_ptr<Image> (reinterpret_cast<Image *> (0)));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void 
+void
 openni_wrapper::DeviceXtionPro::startDepthStream ()
 {
-  if (isDepthRegistered ())
-  {
+  if (isDepthRegistered ()) {
     // Reset the view point
     setDepthRegistration (false);
 
@@ -134,8 +139,7 @@ openni_wrapper::DeviceXtionPro::startDepthStream ()
 
     // Register the stream
     setDepthRegistration (true);
-  }
-  else
+  } else
     // Start the stream
     OpenNIDevice::startDepthStream ();
 }

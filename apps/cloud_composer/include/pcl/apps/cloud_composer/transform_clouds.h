@@ -47,21 +47,27 @@ namespace pcl
     {
       Q_OBJECT
       public:
-        TransformClouds (QMap <QString, vtkSmartPointer<vtkMatrix4x4> > transform_map, QObject* parent = nullptr);
-        ~TransformClouds ();
-        
-        QList <CloudComposerItem*>
-        performAction (QList <const CloudComposerItem*> input_data, PointTypeFlags::PointType type = PointTypeFlags::NONE) override;
-        
-        inline QString
-        getToolName () const override { return "Transform Clouds Tool";}
-       
-        template <typename PointT> QList <CloudComposerItem*>
-        performTemplatedAction (QList <const CloudComposerItem*> input_data);
-        
+      TransformClouds (QMap<QString, vtkSmartPointer<vtkMatrix4x4>> transform_map,
+                       QObject *parent = nullptr);
+      ~TransformClouds ();
+
+      QList<CloudComposerItem *>
+      performAction (QList<const CloudComposerItem *> input_data,
+                     PointTypeFlags::PointType type = PointTypeFlags::NONE) override;
+
+      inline QString
+      getToolName () const override
+      {
+        return "Transform Clouds Tool";
+      }
+
+      template <typename PointT>
+      QList<CloudComposerItem *>
+      performTemplatedAction (QList<const CloudComposerItem *> input_data);
+
       private:
-        QMap <QString, vtkSmartPointer<vtkMatrix4x4> > transform_map_;
+      QMap<QString, vtkSmartPointer<vtkMatrix4x4>> transform_map_;
     };
 
-  }
-}
+  } // namespace cloud_composer
+} // namespace pcl

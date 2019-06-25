@@ -36,26 +36,25 @@
  *
  */
 
-#include <vtkSmartPointer.h>
-#include <vtkCallbackCommand.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkRenderWindow.h>
-#include <vtkRendererCollection.h>
 #include <pcl/visualization/interactor_style.h>
+#include <vtkCallbackCommand.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkRendererCollection.h>
+#include <vtkSmartPointer.h>
 
-#include <pcl/visualization/window.h>
+#include <pcl/common/time.h>
 #include <pcl/visualization/keyboard_event.h>
 #include <pcl/visualization/mouse_event.h>
-#include <pcl/common/time.h>
+#include <pcl/visualization/window.h>
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-pcl::visualization::Window::Window (const std::string& window_name)
-  : stopped_ ()
-  , timer_id_ ()
-  , mouse_command_ (vtkCallbackCommand::New ())
-  , keyboard_command_ (vtkCallbackCommand::New ())
-  , style_ (vtkSmartPointer<pcl::visualization::PCLVisualizerInteractorStyle>::New ())
-  , rens_ (vtkSmartPointer<vtkRendererCollection>::New ())
+pcl::visualization::Window::Window (const std::string &window_name)
+    : stopped_ (), timer_id_ (), mouse_command_ (vtkCallbackCommand::New ()),
+      keyboard_command_ (vtkCallbackCommand::New ()),
+      style_ (
+          vtkSmartPointer<pcl::visualization::PCLVisualizerInteractorStyle>::New ()),
+      rens_ (vtkSmartPointer<vtkRendererCollection>::New ())
 {
   mouse_command_->SetClientData (this);
   mouse_command_->SetCallback (Window::MouseCallback);
@@ -85,17 +84,17 @@ pcl::visualization::Window::Window (const std::string& window_name)
 
   // Create the interactor
   interactor_ = vtkSmartPointer<vtkRenderWindowInteractor>::New ();
-  //interactor_ = vtkSmartPointer<PCLVisualizerInteractor>::New ();
+  // interactor_ = vtkSmartPointer<PCLVisualizerInteractor>::New ();
 
   interactor_->SetRenderWindow (win_);
   interactor_->SetInteractorStyle (style_);
   interactor_->SetDesiredUpdateRate (30.0);
   // Initialize and create timer
   interactor_->Initialize ();
-  //interactor_->CreateRepeatingTimer (5000L);
+  // interactor_->CreateRepeatingTimer (5000L);
   timer_id_ = interactor_->CreateRepeatingTimer (5000L);
   //  interactor_->timer_id_ = interactor_->CreateRepeatingTimer (5000L);
-  //interactor_->timer_id_ = interactor_->CreateRepeatingTimer (30L);
+  // interactor_->timer_id_ = interactor_->CreateRepeatingTimer (30L);
 
   exit_main_loop_timer_callback_ = vtkSmartPointer<ExitMainLoopTimerCallback>::New ();
   exit_main_loop_timer_callback_->window = this;
@@ -111,29 +110,26 @@ pcl::visualization::Window::Window (const std::string& window_name)
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 pcl::visualization::Window::Window (const pcl::visualization::Window &src)
-  : stopped_ (src.stopped_)
-  , timer_id_ (src.timer_id_)
-  //, mouse_signal_ (src.mouse_signal_)
-  //, keyboard_signal_ (src.keyboard_signal_)
-  , win_ (src.win_)
-  , interactor_ (src.interactor_)
-  , mouse_command_ (src.mouse_command_)
-  , keyboard_command_ (src.keyboard_command_)
-  , style_ (src.style_)
-  , rens_ (src.rens_)
-  , exit_main_loop_timer_callback_ (src.exit_main_loop_timer_callback_)
-  , exit_callback_ (src.exit_callback_)
+    : stopped_ (src.stopped_), timer_id_ (src.timer_id_)
+      //, mouse_signal_ (src.mouse_signal_)
+      //, keyboard_signal_ (src.keyboard_signal_)
+      ,
+      win_ (src.win_), interactor_ (src.interactor_),
+      mouse_command_ (src.mouse_command_), keyboard_command_ (src.keyboard_command_),
+      style_ (src.style_), rens_ (src.rens_),
+      exit_main_loop_timer_callback_ (src.exit_main_loop_timer_callback_),
+      exit_callback_ (src.exit_callback_)
 {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-pcl::visualization::Window&
-pcl::visualization::Window::operator = (const pcl::visualization::Window &src)
+pcl::visualization::Window &
+pcl::visualization::Window::operator= (const pcl::visualization::Window &src)
 {
   stopped_ = src.stopped_;
   timer_id_ = src.timer_id_;
-  //mouse_signal_ = src.mouse_signal_;
-  //keyboard_signal_ = src.keyboard_signal_;
+  // mouse_signal_ = src.mouse_signal_;
+  // keyboard_signal_ = src.keyboard_signal_;
   win_ = src.win_;
   interactor_ = src.interactor_;
   mouse_command_ = src.mouse_command_;
@@ -153,7 +149,7 @@ pcl::visualization::Window::~Window ()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-void 
+void
 pcl::visualization::Window::spin ()
 {
   resetStoppedFlag ();
@@ -171,30 +167,29 @@ pcl::visualization::Window::spinOnce (int time, bool force_redraw)
   if (time <= 0)
     time = 1;
 
-  if (force_redraw)
-  {
+  if (force_redraw) {
     interactor_->Render ();
-    exit_main_loop_timer_callback_->right_timer_id = interactor_->CreateRepeatingTimer (time);
+    exit_main_loop_timer_callback_->right_timer_id =
+        interactor_->CreateRepeatingTimer (time);
     interactor_->Start ();
     interactor_->DestroyTimer (exit_main_loop_timer_callback_->right_timer_id);
     return;
   }
 
-  DO_EVERY(1.0/interactor_->GetDesiredUpdateRate (),
-    interactor_->Render ();
-    exit_main_loop_timer_callback_->right_timer_id = interactor_->CreateRepeatingTimer (time);
-    interactor_->Start ();
-    interactor_->DestroyTimer (exit_main_loop_timer_callback_->right_timer_id);
-  );
+  DO_EVERY (1.0 / interactor_->GetDesiredUpdateRate (), interactor_->Render ();
+            exit_main_loop_timer_callback_->right_timer_id =
+                interactor_->CreateRepeatingTimer (time);
+            interactor_->Start (); interactor_->DestroyTimer (
+                exit_main_loop_timer_callback_->right_timer_id););
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-boost::signals2::connection 
-pcl::visualization::Window::registerMouseCallback (std::function<void (const pcl::visualization::MouseEvent&)> callback)
+boost::signals2::connection
+pcl::visualization::Window::registerMouseCallback (
+    std::function<void(const pcl::visualization::MouseEvent &)> callback)
 {
   // just add observer at first time when a callback is registered
-  if (mouse_signal_.empty ())
-  {
+  if (mouse_signal_.empty ()) {
     interactor_->AddObserver (vtkCommand::MouseMoveEvent, mouse_command_);
     interactor_->AddObserver (vtkCommand::MiddleButtonPressEvent, mouse_command_);
     interactor_->AddObserver (vtkCommand::MiddleButtonReleaseEvent, mouse_command_);
@@ -209,12 +204,12 @@ pcl::visualization::Window::registerMouseCallback (std::function<void (const pcl
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-boost::signals2::connection 
-pcl::visualization::Window::registerKeyboardCallback (std::function<void (const pcl::visualization::KeyboardEvent&)> callback)
+boost::signals2::connection
+pcl::visualization::Window::registerKeyboardCallback (
+    std::function<void(const pcl::visualization::KeyboardEvent &)> callback)
 {
   // just add observer at first time when a callback is registered
-  if (keyboard_signal_.empty ())
-  {
+  if (keyboard_signal_.empty ()) {
     interactor_->AddObserver (vtkCommand::KeyPressEvent, keyboard_command_);
     interactor_->AddObserver (vtkCommand::KeyReleaseEvent, keyboard_command_);
   }
@@ -223,73 +218,74 @@ pcl::visualization::Window::registerKeyboardCallback (std::function<void (const 
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-void 
+void
 pcl::visualization::Window::emitMouseEvent (unsigned long event_id)
 {
-  int x,y;
+  int x, y;
   interactor_->GetMousePosition (&x, &y);
-  MouseEvent event (MouseEvent::MouseMove, MouseEvent::NoButton, x, y, interactor_->GetAltKey (), interactor_->GetControlKey (), interactor_->GetShiftKey ());
+  MouseEvent event (MouseEvent::MouseMove, MouseEvent::NoButton, x, y,
+                    interactor_->GetAltKey (), interactor_->GetControlKey (),
+                    interactor_->GetShiftKey ());
   bool repeat = false;
-  switch (event_id)
-  {
-    case vtkCommand::MouseMoveEvent :
-      event.setType(MouseEvent::MouseMove);
-      break;
-    
-    case vtkCommand::LeftButtonPressEvent :
-      event.setButton(MouseEvent::LeftButton);
-      if (interactor_->GetRepeatCount () == 0)
-        event.setType(MouseEvent::MouseButtonPress);
-      else
-        event.setType(MouseEvent::MouseDblClick);
-      break;
-      
-    case vtkCommand::LeftButtonReleaseEvent :
-      event.setButton(MouseEvent::LeftButton);
-      event.setType(MouseEvent::MouseButtonRelease);
-      break;
-      
-    case vtkCommand::RightButtonPressEvent :
-      event.setButton(MouseEvent::RightButton);
-      if (interactor_->GetRepeatCount () == 0)
-        event.setType(MouseEvent::MouseButtonPress);
-      else
-        event.setType(MouseEvent::MouseDblClick);
-      break;
-      
-    case vtkCommand::RightButtonReleaseEvent :
-      event.setButton(MouseEvent::RightButton);
-      event.setType(MouseEvent::MouseButtonRelease);
-      break;
-      
-    case vtkCommand::MiddleButtonPressEvent :
-      event.setButton(MouseEvent::MiddleButton);
-      if (interactor_->GetRepeatCount () == 0)
-        event.setType(MouseEvent::MouseButtonPress);
-      else
-        event.setType(MouseEvent::MouseDblClick);
-      break;
-      
-    case vtkCommand::MiddleButtonReleaseEvent :
-      event.setButton(MouseEvent::MiddleButton);
-      event.setType(MouseEvent::MouseButtonRelease);
-      break;
-      
-      case vtkCommand::MouseWheelBackwardEvent :
-      event.setButton(MouseEvent::VScroll);
-      event.setType(MouseEvent::MouseScrollDown);
-      if (interactor_->GetRepeatCount () != 0)
-        repeat = true;
-      break;
-      
-    case vtkCommand::MouseWheelForwardEvent :
-      event.setButton(MouseEvent::VScroll);
-      event.setType(MouseEvent::MouseScrollUp);
-      if (interactor_->GetRepeatCount () != 0)
-        repeat = true;
-      break;
-    default:
-      return;
+  switch (event_id) {
+  case vtkCommand::MouseMoveEvent:
+    event.setType (MouseEvent::MouseMove);
+    break;
+
+  case vtkCommand::LeftButtonPressEvent:
+    event.setButton (MouseEvent::LeftButton);
+    if (interactor_->GetRepeatCount () == 0)
+      event.setType (MouseEvent::MouseButtonPress);
+    else
+      event.setType (MouseEvent::MouseDblClick);
+    break;
+
+  case vtkCommand::LeftButtonReleaseEvent:
+    event.setButton (MouseEvent::LeftButton);
+    event.setType (MouseEvent::MouseButtonRelease);
+    break;
+
+  case vtkCommand::RightButtonPressEvent:
+    event.setButton (MouseEvent::RightButton);
+    if (interactor_->GetRepeatCount () == 0)
+      event.setType (MouseEvent::MouseButtonPress);
+    else
+      event.setType (MouseEvent::MouseDblClick);
+    break;
+
+  case vtkCommand::RightButtonReleaseEvent:
+    event.setButton (MouseEvent::RightButton);
+    event.setType (MouseEvent::MouseButtonRelease);
+    break;
+
+  case vtkCommand::MiddleButtonPressEvent:
+    event.setButton (MouseEvent::MiddleButton);
+    if (interactor_->GetRepeatCount () == 0)
+      event.setType (MouseEvent::MouseButtonPress);
+    else
+      event.setType (MouseEvent::MouseDblClick);
+    break;
+
+  case vtkCommand::MiddleButtonReleaseEvent:
+    event.setButton (MouseEvent::MiddleButton);
+    event.setType (MouseEvent::MouseButtonRelease);
+    break;
+
+  case vtkCommand::MouseWheelBackwardEvent:
+    event.setButton (MouseEvent::VScroll);
+    event.setType (MouseEvent::MouseScrollDown);
+    if (interactor_->GetRepeatCount () != 0)
+      repeat = true;
+    break;
+
+  case vtkCommand::MouseWheelForwardEvent:
+    event.setButton (MouseEvent::VScroll);
+    event.setType (MouseEvent::MouseScrollUp);
+    if (interactor_->GetRepeatCount () != 0)
+      repeat = true;
+    break;
+  default:
+    return;
   }
 
   mouse_signal_ (event);
@@ -298,63 +294,65 @@ pcl::visualization::Window::emitMouseEvent (unsigned long event_id)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-void 
+void
 pcl::visualization::Window::emitKeyboardEvent (unsigned long event_id)
 {
-  KeyboardEvent event (bool(event_id == vtkCommand::KeyPressEvent), interactor_->GetKeySym (), interactor_->GetKeyCode (), interactor_->GetAltKey (), interactor_->GetControlKey (), interactor_->GetShiftKey ());
+  KeyboardEvent event (bool(event_id == vtkCommand::KeyPressEvent),
+                       interactor_->GetKeySym (), interactor_->GetKeyCode (),
+                       interactor_->GetAltKey (), interactor_->GetControlKey (),
+                       interactor_->GetShiftKey ());
   keyboard_signal_ (event);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-void 
-pcl::visualization::Window::MouseCallback(vtkObject*, unsigned long eid, void* clientdata, void*)
+void
+pcl::visualization::Window::MouseCallback (vtkObject *, unsigned long eid,
+                                           void *clientdata, void *)
 {
-  Window* window = reinterpret_cast<Window*> (clientdata);
+  Window *window = reinterpret_cast<Window *> (clientdata);
   window->emitMouseEvent (eid);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-void 
-pcl::visualization::Window::KeyboardCallback (vtkObject*, unsigned long eid, void* clientdata, void*)
+void
+pcl::visualization::Window::KeyboardCallback (vtkObject *, unsigned long eid,
+                                              void *clientdata, void *)
 {
-  Window* window = reinterpret_cast<Window*> (clientdata);
+  Window *window = reinterpret_cast<Window *> (clientdata);
   window->emitKeyboardEvent (eid);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-pcl::visualization::Window::ExitMainLoopTimerCallback::ExitMainLoopTimerCallback () 
-  : right_timer_id (-1), window (nullptr) 
+pcl::visualization::Window::ExitMainLoopTimerCallback::ExitMainLoopTimerCallback ()
+    : right_timer_id (-1), window (nullptr)
 {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::Window::ExitMainLoopTimerCallback::Execute (
-    vtkObject*, unsigned long event_id, void* call_data)
+pcl::visualization::Window::ExitMainLoopTimerCallback::Execute (vtkObject *,
+                                                                unsigned long event_id,
+                                                                void *call_data)
 {
   if (event_id != vtkCommand::TimerEvent)
     return;
-  int timer_id = *static_cast<int*> (call_data);
+  int timer_id = *static_cast<int *> (call_data);
   if (timer_id != right_timer_id)
     return;
   window->interactor_->TerminateApp ();
-//            window->interactor_->stopLoop ();
+  //            window->interactor_->stopLoop ();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-pcl::visualization::Window::ExitCallback::ExitCallback () 
-  : window (nullptr)
-{
-}
+pcl::visualization::Window::ExitCallback::ExitCallback () : window (nullptr) {}
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::Window::ExitCallback::Execute (
-    vtkObject*, unsigned long event_id, void*)
+pcl::visualization::Window::ExitCallback::Execute (vtkObject *, unsigned long event_id,
+                                                   void *)
 {
   if (event_id != vtkCommand::ExitEvent)
     return;
   window->interactor_->TerminateApp ();
   window->stopped_ = true;
 }
-

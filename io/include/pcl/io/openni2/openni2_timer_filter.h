@@ -45,27 +45,27 @@ namespace pcl
       class OpenNI2TimerFilter
       {
         public:
-          OpenNI2TimerFilter (std::size_t filter_len);
-          virtual ~OpenNI2TimerFilter ();
+        OpenNI2TimerFilter (std::size_t filter_len);
+        virtual ~OpenNI2TimerFilter ();
 
-          void
-          addSample (double sample);
+        void
+        addSample (double sample);
 
-          double
-          getMedian ();
+        double
+        getMedian ();
 
-          double
-          getMovingAvg ();
+        double
+        getMovingAvg ();
 
-          void
-          clear ();
+        void
+        clear ();
 
         private:
-          std::size_t filter_len_;
+        std::size_t filter_len_;
 
-          std::deque<double> buffer_;
+        std::deque<double> buffer_;
       };
 
-    } // namespace
-  }
-}
+    } // namespace openni2
+  }   // namespace io
+} // namespace pcl

@@ -38,11 +38,11 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_cloud.h>
-#include <pcl/features/normal_3d.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl/features/spin_image.h>
 #include <pcl/features/intensity_spin.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/features/spin_image.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -81,21 +81,20 @@ TEST (PCL, SpinImageEstimation)
   EXPECT_NEAR (normals->points[140].normal_z, -0.87091631, 1e-4);
 
   using SpinImage = Histogram<153>;
-  SpinImageEstimation<PointXYZ, Normal, SpinImage> spin_est(8, 0.5, 16);
+  SpinImageEstimation<PointXYZ, Normal, SpinImage> spin_est (8, 0.5, 16);
   // set parameters
-  //spin_est.setInputWithNormals (cloud.makeShared (), normals);
+  // spin_est.setInputWithNormals (cloud.makeShared (), normals);
   spin_est.setInputCloud (cloud.makeShared ());
   spin_est.setInputNormals (normals);
   spin_est.setIndices (indicesptr);
   spin_est.setSearchMethod (tree);
-  spin_est.setRadiusSearch (40*mr);
+  spin_est.setRadiusSearch (40 * mr);
 
   // Object
   PointCloud<SpinImage>::Ptr spin_images (new PointCloud<SpinImage> ());
 
-
   // radial SI
-  spin_est.setRadialStructure();
+  spin_est.setRadialStructure ();
 
   // estimate
   spin_est.compute (*spin_images);
@@ -240,16 +239,15 @@ TEST (PCL, IntensitySpinEstimation)
   cloud_xyzi.height = 1;
   cloud_xyzi.is_dense = true;
 
-  for (float x = -10.0f; x <= 10.0f; x += 1.0f)
-  {
-    for (float y = -10.0f; y <= 10.0f; y += 1.0f)
-    {
+  for (float x = -10.0f; x <= 10.0f; x += 1.0f) {
+    for (float y = -10.0f; y <= 10.0f; y += 1.0f) {
       PointXYZI p;
       p.x = x;
       p.y = y;
       p.z = std::sqrt (400.0f - x * x - y * y);
-      p.intensity = expf (-(powf (x - 3.0f, 2.0f) + powf (y + 2.0f, 2.0f)) / (2.0f * 25.0f)) + expf (-(powf (x + 5.0f, 2.0f) + powf (y - 5.0f, 2.0f))
-                                                                                 / (2.0f * 4.0f));
+      p.intensity =
+          expf (-(powf (x - 3.0f, 2.0f) + powf (y + 2.0f, 2.0f)) / (2.0f * 25.0f)) +
+          expf (-(powf (x + 5.0f, 2.0f) + powf (y - 5.0f, 2.0f)) / (2.0f * 4.0f));
 
       cloud_xyzi.points.push_back (p);
     }
@@ -271,28 +269,30 @@ TEST (PCL, IntensitySpinEstimation)
 
   // Compare to independently verified values
   const IntensitySpin &ispin = ispin_output.points[220];
-  const float correct_ispin_feature_values[20] = {2.4387f, 9.4737f, 21.3232f, 28.3025f, 22.5639f, 13.2426f, 35.7026f, 60.0755f,
-                                                  66.9240f, 50.4225f, 42.7086f, 83.5818f, 105.4513f, 97.8454f, 67.3801f,
-                                                  75.7127f, 119.4726f, 120.9649f, 93.4829f, 55.4045f};
-  for (int i = 0; i < 20; ++i)
-  {
+  const float correct_ispin_feature_values[20] = {
+      2.4387f,  9.4737f,  21.3232f,  28.3025f,  22.5639f, 13.2426f,  35.7026f,
+      60.0755f, 66.9240f, 50.4225f,  42.7086f,  83.5818f, 105.4513f, 97.8454f,
+      67.3801f, 75.7127f, 119.4726f, 120.9649f, 93.4829f, 55.4045f};
+  for (int i = 0; i < 20; ++i) {
     EXPECT_NEAR (ispin.histogram[i], correct_ispin_feature_values[i], 1e-4);
   }
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
-  if (loadPCDFile<PointXYZ> (argv[1], cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (loadPCDFile<PointXYZ> (argv[1], cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
 

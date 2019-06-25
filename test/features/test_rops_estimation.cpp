@@ -38,13 +38,13 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_cloud.h>
 #include <pcl/features/rops_estimation.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
 
-pcl::PointCloud <pcl::PointXYZ>::Ptr cloud;
+pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
 pcl::PointIndicesPtr indices;
-std::vector <pcl::Vertices> triangles;
+std::vector<pcl::Vertices> triangles;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TEST (ROPSFeature, FeatureExtraction)
@@ -53,10 +53,11 @@ TEST (ROPSFeature, FeatureExtraction)
   unsigned int number_of_partition_bins = 5;
   unsigned int number_of_rotations = 3;
 
-  pcl::search::KdTree<pcl::PointXYZ>::Ptr search_method (new pcl::search::KdTree<pcl::PointXYZ>);
+  pcl::search::KdTree<pcl::PointXYZ>::Ptr search_method (
+      new pcl::search::KdTree<pcl::PointXYZ>);
   search_method->setInputCloud (cloud);
 
-  pcl::ROPSEstimation <pcl::PointXYZ, pcl::Histogram <135> > feature_estimator;
+  pcl::ROPSEstimation<pcl::PointXYZ, pcl::Histogram<135>> feature_estimator;
   feature_estimator.setSearchMethod (search_method);
   feature_estimator.setSearchSurface (cloud);
   feature_estimator.setInputCloud (cloud);
@@ -67,7 +68,8 @@ TEST (ROPSFeature, FeatureExtraction)
   feature_estimator.setNumberOfRotations (number_of_rotations);
   feature_estimator.setSupportRadius (support_radius);
 
-  pcl::PointCloud<pcl::Histogram <135> >::Ptr histograms (new pcl::PointCloud <pcl::Histogram <135> > ());
+  pcl::PointCloud<pcl::Histogram<135>>::Ptr histograms (
+      new pcl::PointCloud<pcl::Histogram<135>> ());
   feature_estimator.compute (*histograms);
 
   EXPECT_NE (0, histograms->points.size ());
@@ -80,10 +82,11 @@ TEST (ROPSFeature, InvalidParameters)
   unsigned int number_of_partition_bins = 5;
   unsigned int number_of_rotations = 3;
 
-  pcl::search::KdTree<pcl::PointXYZ>::Ptr search_method (new pcl::search::KdTree<pcl::PointXYZ>);
+  pcl::search::KdTree<pcl::PointXYZ>::Ptr search_method (
+      new pcl::search::KdTree<pcl::PointXYZ>);
   search_method->setInputCloud (cloud);
 
-  pcl::ROPSEstimation <pcl::PointXYZ, pcl::Histogram <135> > feature_estimator;
+  pcl::ROPSEstimation<pcl::PointXYZ, pcl::Histogram<135>> feature_estimator;
   feature_estimator.setSearchMethod (search_method);
   feature_estimator.setSearchSurface (cloud);
   feature_estimator.setInputCloud (cloud);
@@ -94,7 +97,8 @@ TEST (ROPSFeature, InvalidParameters)
   feature_estimator.setNumberOfRotations (number_of_rotations);
   feature_estimator.setSupportRadius (support_radius);
 
-  pcl::PointCloud<pcl::Histogram <135> >::Ptr histograms (new pcl::PointCloud <pcl::Histogram <135> > ());
+  pcl::PointCloud<pcl::Histogram<135>>::Ptr histograms (
+      new pcl::PointCloud<pcl::Histogram<135>> ());
 
   support_radius = -support_radius;
   feature_estimator.setSupportRadius (support_radius);
@@ -111,7 +115,7 @@ TEST (ROPSFeature, InvalidParameters)
   number_of_rotations = feature_estimator.getNumberOfRotations ();
   EXPECT_LT (0, number_of_rotations);
 
-  std::vector <pcl::Vertices> empty_triangles;
+  std::vector<pcl::Vertices> empty_triangles;
   feature_estimator.setTriangles (empty_triangles);
   feature_estimator.compute (*histograms);
   EXPECT_EQ (0, histograms->points.size ());
@@ -119,27 +123,27 @@ TEST (ROPSFeature, InvalidParameters)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 4)
-  {
-    std::cerr << "No test file given. Please download `rops_cloud.pcd`, `rops_indices.txt` and `rops_triangles.txt`" <<
-                 " and pass their paths to the test." << std::endl;
+  if (argc < 4) {
+    std::cerr << "No test file given. Please download `rops_cloud.pcd`, "
+                 "`rops_indices.txt` and `rops_triangles.txt`"
+              << " and pass their paths to the test." << std::endl;
     return (-1);
   }
 
   cloud = (new pcl::PointCloud<pcl::PointXYZ> ())->makeShared ();
-  if (pcl::io::loadPCDFile (argv[1], *cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `rops_cloud.pcd` and pass its path to the test." << std::endl;
+  if (pcl::io::loadPCDFile (argv[1], *cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `rops_cloud.pcd` and pass "
+                 "its path to the test."
+              << std::endl;
     return (-1);
   }
 
   indices.reset (new pcl::PointIndices);
   std::ifstream indices_file;
   indices_file.open (argv[2], std::ifstream::in);
-  for (std::string line; std::getline (indices_file, line);)
-  {
+  for (std::string line; std::getline (indices_file, line);) {
     std::istringstream in (line);
     unsigned int index = 0;
     in >> index;
@@ -149,8 +153,7 @@ main (int argc, char** argv)
 
   std::ifstream triangles_file;
   triangles_file.open (argv[3], std::ifstream::in);
-  for (std::string line; std::getline (triangles_file, line);)
-  {
+  for (std::string line; std::getline (triangles_file, line);) {
     pcl::Vertices triangle;
     std::istringstream in (line);
     unsigned int vertex = 0;

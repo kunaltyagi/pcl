@@ -39,9 +39,8 @@
 #include <pcl/surface/vtk_smoothing/vtk_mesh_smoothing_laplacian.h>
 #include <pcl/surface/vtk_smoothing/vtk_utils.h>
 
-#include <vtkVersion.h>
 #include <vtkSmoothPolyDataFilter.h>
-
+#include <vtkVersion.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
@@ -51,7 +50,8 @@ pcl::MeshSmoothingLaplacianVTK::performProcessing (pcl::PolygonMesh &output)
   VTKUtils::convertToVTK (*input_mesh_, vtk_polygons_);
 
   // Apply the VTK algorithm
-  vtkSmartPointer<vtkSmoothPolyDataFilter> vtk_smoother = vtkSmartPointer<vtkSmoothPolyDataFilter>::New ();
+  vtkSmartPointer<vtkSmoothPolyDataFilter> vtk_smoother =
+      vtkSmartPointer<vtkSmoothPolyDataFilter>::New ();
   vtk_smoother->SetInputData (vtk_polygons_);
   vtk_smoother->SetNumberOfIterations (num_iter_);
   if (convergence_ != 0.0f)

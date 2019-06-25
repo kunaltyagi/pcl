@@ -43,29 +43,28 @@
 #ifdef HAVE_QHULL
 
 #if defined __GNUC__
-#  pragma GCC system_header 
+#pragma GCC system_header
 #endif
 
-extern "C"
-{
+extern "C" {
 #ifdef HAVE_QHULL_2011
-#  include "libqhull/libqhull.h"
-#  include "libqhull/mem.h"
-#  include "libqhull/qset.h"
-#  include "libqhull/geom.h"
-#  include "libqhull/merge.h"
-#  include "libqhull/poly.h"
-#  include "libqhull/io.h"
-#  include "libqhull/stat.h"
+#include "libqhull/geom.h"
+#include "libqhull/io.h"
+#include "libqhull/libqhull.h"
+#include "libqhull/mem.h"
+#include "libqhull/merge.h"
+#include "libqhull/poly.h"
+#include "libqhull/qset.h"
+#include "libqhull/stat.h"
 #else
-#  include "qhull/qhull.h"
-#  include "qhull/mem.h"
-#  include "qhull/qset.h"
-#  include "qhull/geom.h"
-#  include "qhull/merge.h"
-#  include "qhull/poly.h"
-#  include "qhull/io.h"
-#  include "qhull/stat.h"
+#include "qhull/geom.h"
+#include "qhull/io.h"
+#include "qhull/mem.h"
+#include "qhull/merge.h"
+#include "qhull/poly.h"
+#include "qhull/qhull.h"
+#include "qhull/qset.h"
+#include "qhull/stat.h"
 #endif
 }
 

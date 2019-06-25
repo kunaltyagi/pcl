@@ -31,7 +31,7 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *
- * 
+ *
  *
  */
 
@@ -51,12 +51,9 @@ namespace pcl
      * (can be defined in on_nurbs.cmake)*/
     class NurbsSolve
     {
-    public:
+      public:
       /** \brief Empty constructor */
-      NurbsSolve () :
-        m_quiet (true)
-      {
-      }
+      NurbsSolve () : m_quiet (true) {}
 
       /** \brief Assign size and dimension (2D, 3D) of system of equations. */
       void
@@ -116,21 +113,21 @@ namespace pcl
       inline void
       getSize (unsigned &rows, unsigned &cols, unsigned &dims)
       {
-        rows = static_cast<unsigned>(m_feig.rows());
-        cols = static_cast<unsigned>(m_xeig.rows());
-        dims = static_cast<unsigned>(m_feig.cols());
+        rows = static_cast<unsigned> (m_feig.rows ());
+        cols = static_cast<unsigned> (m_xeig.rows ());
+        dims = static_cast<unsigned> (m_feig.cols ());
       }
 
-    private:
+      private:
       bool m_quiet;
       SparseMat m_Ksparse;
       Eigen::MatrixXd m_Keig;
       Eigen::MatrixXd m_xeig;
       Eigen::MatrixXd m_feig;
 
-    public:
+      public:
       EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     };
 
-  }
-}
+  } // namespace on_nurbs
+} // namespace pcl

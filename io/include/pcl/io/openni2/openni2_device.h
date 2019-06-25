@@ -30,14 +30,14 @@
 
 #pragma once
 
-#include <pcl/pcl_exports.h>
 #include "openni.h"
-#include "pcl/io/openni2/openni2_video_mode.h"
 #include "pcl/io/io_exception.h"
+#include "pcl/io/openni2/openni2_video_mode.h"
+#include <pcl/pcl_exports.h>
 
-#include <boost/shared_ptr.hpp>
-#include <boost/cstdint.hpp>
 #include <boost/bind.hpp>
+#include <boost/cstdint.hpp>
+#include <boost/shared_ptr.hpp>
 #include <functional>
 #include <string>
 #include <vector>
@@ -47,15 +47,13 @@
 #include <pcl/io/image_depth.h>
 #include <pcl/io/image_ir.h>
 
-
-
 namespace openni
 {
   class Device;
   class DeviceInfo;
   class VideoStream;
   class SensorInfo;
-}
+} // namespace openni
 
 namespace pcl
 {
@@ -72,260 +70,267 @@ namespace pcl
       class PCL_EXPORTS OpenNI2Device
       {
         public:
+        using ImageCallbackFunction =
+            std::function<void(boost::shared_ptr<Image>, void *cookie)>;
+        using DepthImageCallbackFunction =
+            std::function<void(boost::shared_ptr<DepthImage>, void *cookie)>;
+        using IRImageCallbackFunction =
+            std::function<void(boost::shared_ptr<IRImage>, void *cookie)>;
+        using CallbackHandle = unsigned;
 
-          using ImageCallbackFunction = std::function<void(boost::shared_ptr<Image>, void* cookie) >;
-          using DepthImageCallbackFunction = std::function<void(boost::shared_ptr<DepthImage>, void* cookie) >;
-          using IRImageCallbackFunction = std::function<void(boost::shared_ptr<IRImage>, void* cookie) >;
-          using CallbackHandle = unsigned;
+        using StreamCallbackFunction = std::function<void(openni::VideoStream &stream)>;
 
-          using StreamCallbackFunction = std::function<void(openni::VideoStream& stream)>;
+        OpenNI2Device (const std::string &device_URI);
+        virtual ~OpenNI2Device ();
 
-          OpenNI2Device (const std::string& device_URI);
-          virtual ~OpenNI2Device ();
+        const std::string
+        getUri () const;
+        const std::string
+        getVendor () const;
+        const std::string
+        getName () const;
+        uint16_t
+        getUsbVendorId () const;
+        uint16_t
+        getUsbProductId () const;
 
-          const std::string
-          getUri () const;
-          const std::string
-          getVendor () const;
-          const std::string
-          getName () const;
-          uint16_t
-          getUsbVendorId () const;
-          uint16_t
-          getUsbProductId () const;
+        const std::string
+        getStringID () const;
 
-          const std::string
-          getStringID () const;
+        bool
+        isValid () const;
 
-          bool
-          isValid () const;
+        bool
+        hasIRSensor () const;
+        bool
+        hasColorSensor () const;
+        bool
+        hasDepthSensor () const;
 
-          bool
-          hasIRSensor () const;
-          bool
-          hasColorSensor () const;
-          bool
-          hasDepthSensor () const;
+        void
+        startIRStream ();
+        void
+        startColorStream ();
+        void
+        startDepthStream ();
 
-          void
-          startIRStream ();
-          void
-          startColorStream ();
-          void
-          startDepthStream ();
+        void
+        stopAllStreams ();
 
-          void
-          stopAllStreams ();
+        void
+        stopIRStream ();
+        void
+        stopColorStream ();
+        void
+        stopDepthStream ();
 
-          void
-          stopIRStream ();
-          void
-          stopColorStream ();
-          void
-          stopDepthStream ();
+        bool
+        isIRStreamStarted ();
+        bool
+        isColorStreamStarted ();
+        bool
+        isDepthStreamStarted ();
 
-          bool
-          isIRStreamStarted ();
-          bool
-          isColorStreamStarted ();
-          bool
-          isDepthStreamStarted ();
+        bool
+        isImageRegistrationModeSupported () const;
+        void
+        setImageRegistrationMode (bool enabled);
+        bool
+        isDepthRegistered () const;
 
-          bool
-          isImageRegistrationModeSupported () const;
-          void
-          setImageRegistrationMode (bool enabled);
-          bool
-          isDepthRegistered () const;
+        const OpenNI2VideoMode
+        getIRVideoMode ();
+        const OpenNI2VideoMode
+        getColorVideoMode ();
+        const OpenNI2VideoMode
+        getDepthVideoMode ();
 
-          const OpenNI2VideoMode
-          getIRVideoMode ();
-          const OpenNI2VideoMode
-          getColorVideoMode ();
-          const OpenNI2VideoMode
-          getDepthVideoMode ();
+        const std::vector<OpenNI2VideoMode> &
+        getSupportedIRVideoModes () const;
+        const std::vector<OpenNI2VideoMode> &
+        getSupportedColorVideoModes () const;
+        const std::vector<OpenNI2VideoMode> &
+        getSupportedDepthVideoModes () const;
 
-          const std::vector<OpenNI2VideoMode>&
-          getSupportedIRVideoModes () const;
-          const std::vector<OpenNI2VideoMode>&
-          getSupportedColorVideoModes () const;
-          const std::vector<OpenNI2VideoMode>&
-          getSupportedDepthVideoModes () const;
+        bool
+        isIRVideoModeSupported (const OpenNI2VideoMode &video_mode) const;
+        bool
+        isColorVideoModeSupported (const OpenNI2VideoMode &video_mode) const;
+        bool
+        isDepthVideoModeSupported (const OpenNI2VideoMode &video_mode) const;
 
-          bool
-          isIRVideoModeSupported (const OpenNI2VideoMode& video_mode) const;
-          bool
-          isColorVideoModeSupported (const OpenNI2VideoMode& video_mode) const;
-          bool
-          isDepthVideoModeSupported (const OpenNI2VideoMode& video_mode) const;
+        bool
+        findCompatibleIRMode (const OpenNI2VideoMode &requested_mode,
+                              OpenNI2VideoMode &actual_mode) const;
+        bool
+        findCompatibleColorMode (const OpenNI2VideoMode &requested_mode,
+                                 OpenNI2VideoMode &actual_mode) const;
+        bool
+        findCompatibleDepthMode (const OpenNI2VideoMode &requested_mode,
+                                 OpenNI2VideoMode &actual_mode) const;
 
-          bool
-          findCompatibleIRMode (const OpenNI2VideoMode& requested_mode, OpenNI2VideoMode& actual_mode) const;
-          bool
-          findCompatibleColorMode (const OpenNI2VideoMode& requested_mode, OpenNI2VideoMode& actual_mode) const;
-          bool
-          findCompatibleDepthMode (const OpenNI2VideoMode& requested_mode, OpenNI2VideoMode& actual_mode) const;
+        void
+        setIRVideoMode (const OpenNI2VideoMode &video_mode);
+        void
+        setColorVideoMode (const OpenNI2VideoMode &video_mode);
+        void
+        setDepthVideoMode (const OpenNI2VideoMode &video_mode);
 
-          void
-          setIRVideoMode (const OpenNI2VideoMode& video_mode);
-          void
-          setColorVideoMode (const OpenNI2VideoMode& video_mode);
-          void
-          setDepthVideoMode (const OpenNI2VideoMode& video_mode);
+        OpenNI2VideoMode
+        getDefaultIRMode () const;
+        OpenNI2VideoMode
+        getDefaultColorMode () const;
+        OpenNI2VideoMode
+        getDefaultDepthMode () const;
 
-          OpenNI2VideoMode
-          getDefaultIRMode () const;
-          OpenNI2VideoMode
-          getDefaultColorMode () const;
-          OpenNI2VideoMode
-          getDefaultDepthMode () const;
+        float
+        getIRFocalLength () const;
+        float
+        getColorFocalLength () const;
+        float
+        getDepthFocalLength () const;
 
-          float
-          getIRFocalLength () const;
-          float
-          getColorFocalLength () const;
-          float
-          getDepthFocalLength () const;
+        // Baseline between sensors. Returns 0 if this value does not exist.
+        float
+        getBaseline ();
 
-          // Baseline between sensors. Returns 0 if this value does not exist.
-          float
-          getBaseline();
+        // Value of pixels in shadow or that have no valid measurement
+        uint64_t
+        getShadowValue ();
 
-          // Value of pixels in shadow or that have no valid measurement
-          uint64_t
-          getShadowValue();
+        void
+        setAutoExposure (bool enable);
+        void
+        setAutoWhiteBalance (bool enable);
 
-          void
-          setAutoExposure (bool enable);
-          void
-          setAutoWhiteBalance (bool enable);
+        inline bool
+        isSynchronized ()
+        {
+          return (openni_device_->getDepthColorSyncEnabled ());
+        }
 
-          inline bool
-          isSynchronized ()
-          {
-            return (openni_device_->getDepthColorSyncEnabled ());
-          }
+        inline bool
+        isSynchronizationSupported ()
+        {
+          return (true); // Not sure how to query this from the hardware
+        }
 
-          inline bool
-          isSynchronizationSupported ()
-          {
-            return (true); // Not sure how to query this from the hardware
-          }
+        inline bool
+        isFile ()
+        {
+          return (openni_device_->isFile ());
+        }
 
-          inline bool
-          isFile()
-          {
-            return (openni_device_->isFile());
-          }
+        void
+        setSynchronization (bool enableSync);
 
-          void
-          setSynchronization (bool enableSync);
+        bool
+        getAutoExposure () const;
+        bool
+        getAutoWhiteBalance () const;
 
-          bool
-          getAutoExposure () const;
-          bool
-          getAutoWhiteBalance () const;
+        void
+        setUseDeviceTimer (bool enable);
 
-          void
-          setUseDeviceTimer (bool enable);
+        /** \brief Get absolute number of depth frames in the current stream.
+         * This function returns 0 if the current device is not a file stream or
+         * if the current mode has no depth stream.
+         */
+        int
+        getDepthFrameCount ();
 
-          /** \brief Get absolute number of depth frames in the current stream.
-          * This function returns 0 if the current device is not a file stream or
-          * if the current mode has no depth stream.
-          */
-          int
-          getDepthFrameCount ();
+        /** \brief Get absolute number of color frames in the current stream.
+         * This function returns 0 if the current device is not a file stream or
+         * if the current mode has no color stream.
+         */
+        int
+        getColorFrameCount ();
 
-          /** \brief Get absolute number of color frames in the current stream.
-          * This function returns 0 if the current device is not a file stream or
-          * if the current mode has no color stream.
-          */
-          int
-          getColorFrameCount ();
+        /** \brief Get absolute number of ir frames in the current stream.
+         * This function returns 0 if the current device is not a file stream or
+         * if the current mode has no ir stream.
+         */
+        int
+        getIRFrameCount ();
 
-          /** \brief Get absolute number of ir frames in the current stream.
-          * This function returns 0 if the current device is not a file stream or
-          * if the current mode has no ir stream.
-          */
-          int
-          getIRFrameCount ();
+        /** \brief Set the playback speed if the device is an recorded stream.
+         * If setting the device playback speed fails, because the device is no recorded
+         * stream or any other reason this function returns false. Otherwise true is
+         * returned. \param[in] speed The playback speed factor 1.0 means the same speed
+         * as recorded, 0.5 half the speed, 2.0 double speed and so on. \return True on
+         * success, false otherwise.
+         */
+        bool
+        setPlaybackSpeed (double speed);
 
-          /** \brief Set the playback speed if the device is an recorded stream.
-          * If setting the device playback speed fails, because the device is no recorded stream or
-          * any other reason this function returns false. Otherwise true is returned.
-          * \param[in] speed The playback speed factor 1.0 means the same speed as recorded,
-          * 0.5 half the speed, 2.0 double speed and so on.
-          * \return True on success, false otherwise.
-          */
-          bool
-          setPlaybackSpeed (double speed);
-
-          /************************************************************************************/
-          // Callbacks from openni::VideoStream to grabber. Internal interface
-          void
-          setColorCallback (StreamCallbackFunction color_callback);
-          void
-          setDepthCallback (StreamCallbackFunction depth_callback);
-          void
-          setIRCallback (StreamCallbackFunction ir_callback);
+        /************************************************************************************/
+        // Callbacks from openni::VideoStream to grabber. Internal interface
+        void
+        setColorCallback (StreamCallbackFunction color_callback);
+        void
+        setDepthCallback (StreamCallbackFunction depth_callback);
+        void
+        setIRCallback (StreamCallbackFunction ir_callback);
 
         protected:
-          void shutdown ();
+        void
+        shutdown ();
 
-          boost::shared_ptr<openni::VideoStream>
-          getIRVideoStream () const;
-          boost::shared_ptr<openni::VideoStream>
-          getColorVideoStream () const;
-          boost::shared_ptr<openni::VideoStream>
-          getDepthVideoStream () const;
+        boost::shared_ptr<openni::VideoStream>
+        getIRVideoStream () const;
+        boost::shared_ptr<openni::VideoStream>
+        getColorVideoStream () const;
+        boost::shared_ptr<openni::VideoStream>
+        getDepthVideoStream () const;
 
+        void
+        processColorFrame (openni::VideoStream &stream);
+        void
+        processDepthFrame (openni::VideoStream &stream);
+        void
+        processIRFrame (openni::VideoStream &stream);
 
-          void
-          processColorFrame (openni::VideoStream& stream);
-          void
-          processDepthFrame (openni::VideoStream& stream);
-          void
-          processIRFrame (openni::VideoStream& stream);
+        bool
+        findCompatibleVideoMode (const std::vector<OpenNI2VideoMode> supportedModes,
+                                 const OpenNI2VideoMode &output_mode,
+                                 OpenNI2VideoMode &mode) const;
 
+        bool
+        resizingSupported (size_t input_width, size_t input_height, size_t output_width,
+                           size_t output_height) const;
 
-          bool
-          findCompatibleVideoMode (const std::vector<OpenNI2VideoMode> supportedModes,
-            const OpenNI2VideoMode& output_mode, OpenNI2VideoMode& mode) const;
+        // Members
 
-          bool
-          resizingSupported (size_t input_width, size_t input_height, size_t output_width, size_t output_height) const;
+        boost::shared_ptr<openni::Device> openni_device_;
+        boost::shared_ptr<openni::DeviceInfo> device_info_;
 
-          // Members
+        boost::shared_ptr<OpenNI2FrameListener> ir_frame_listener;
+        boost::shared_ptr<OpenNI2FrameListener> color_frame_listener;
+        boost::shared_ptr<OpenNI2FrameListener> depth_frame_listener;
 
-          boost::shared_ptr<openni::Device> openni_device_;
-          boost::shared_ptr<openni::DeviceInfo> device_info_;
+        mutable boost::shared_ptr<openni::VideoStream> ir_video_stream_;
+        mutable boost::shared_ptr<openni::VideoStream> color_video_stream_;
+        mutable boost::shared_ptr<openni::VideoStream> depth_video_stream_;
 
-          boost::shared_ptr<OpenNI2FrameListener> ir_frame_listener;
-          boost::shared_ptr<OpenNI2FrameListener> color_frame_listener;
-          boost::shared_ptr<OpenNI2FrameListener> depth_frame_listener;
+        mutable std::vector<OpenNI2VideoMode> ir_video_modes_;
+        mutable std::vector<OpenNI2VideoMode> color_video_modes_;
+        mutable std::vector<OpenNI2VideoMode> depth_video_modes_;
 
-          mutable boost::shared_ptr<openni::VideoStream> ir_video_stream_;
-          mutable boost::shared_ptr<openni::VideoStream> color_video_stream_;
-          mutable boost::shared_ptr<openni::VideoStream> depth_video_stream_;
+        bool ir_video_started_;
+        bool color_video_started_;
+        bool depth_video_started_;
 
-          mutable std::vector<OpenNI2VideoMode> ir_video_modes_;
-          mutable std::vector<OpenNI2VideoMode> color_video_modes_;
-          mutable std::vector<OpenNI2VideoMode> depth_video_modes_;
-
-          bool ir_video_started_;
-          bool color_video_started_;
-          bool depth_video_started_;
-
-          /** \brief distance between the projector and the IR camera in meters*/
-          float baseline_;
-          /** the value for shadow (occluded pixels) */
-          uint64_t shadow_value_;
-          /** the value for pixels without a valid disparity measurement */
-          uint64_t no_sample_value_;
+        /** \brief distance between the projector and the IR camera in meters*/
+        float baseline_;
+        /** the value for shadow (occluded pixels) */
+        uint64_t shadow_value_;
+        /** the value for pixels without a valid disparity measurement */
+        uint64_t no_sample_value_;
       };
 
-      PCL_EXPORTS std::ostream& operator<< (std::ostream& stream, const OpenNI2Device& device);
+      PCL_EXPORTS std::ostream &
+      operator<< (std::ostream &stream, const OpenNI2Device &device);
 
-    } // namespace
-  }
-}
+    } // namespace openni2
+  }   // namespace io
+} // namespace pcl

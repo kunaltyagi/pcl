@@ -48,55 +48,65 @@ namespace pcl
     {
       Q_OBJECT
       public:
-        VoxelGridDownsampleTool (PropertiesModel* parameter_model, QObject* parent);
-        ~VoxelGridDownsampleTool ();
-        
-        QList <CloudComposerItem*>
-        performAction (QList <const CloudComposerItem*> input_data, PointTypeFlags::PointType type = PointTypeFlags::NONE) override;
-      
-        inline QString
-        getToolName () const override { return "Voxel Grid Downsample Tool";}
+      VoxelGridDownsampleTool (PropertiesModel *parameter_model, QObject *parent);
+      ~VoxelGridDownsampleTool ();
+
+      QList<CloudComposerItem *>
+      performAction (QList<const CloudComposerItem *> input_data,
+                     PointTypeFlags::PointType type = PointTypeFlags::NONE) override;
+
+      inline QString
+      getToolName () const override
+      {
+        return "Voxel Grid Downsample Tool";
+      }
     };
 
-    
     class VoxelGridDownsampleToolFactory : public QObject, public ToolFactory
     {
       Q_OBJECT
       Q_INTERFACES (pcl::cloud_composer::ToolFactory)
-      Q_PLUGIN_METADATA(IID "cloud_composer.ToolFactory/1.0")
+      Q_PLUGIN_METADATA (IID "cloud_composer.ToolFactory/1.0")
       public:
-        ModifyItemTool*
-        createTool (PropertiesModel* parameter_model, QObject* parent = nullptr) override 
-        {
-            return new VoxelGridDownsampleTool(parameter_model, parent);
-        }
-        
-        PropertiesModel*
-        createToolParameterModel (QObject* parent) override;
-        
-        inline QString 
-        getPluginName () const override { return "Voxel Grid Downsample";}
-        
-        QString 
-        getToolGroupName () const override { return "Filters";}
-        
-        QString
-        getIconName () const override { return ":/voxel_grid_downsample.png"; }
-        
-        inline CloudComposerItem::ItemType
-        getInputItemType () const override
-        {
-          return CloudComposerItem::CLOUD_ITEM;
-        }
-        
-        inline QList <CloudComposerItem::ItemType>
-        getRequiredInputChildrenTypes () const override 
-        {
-          return QList <CloudComposerItem::ItemType> ();
-        }
+      ModifyItemTool *
+      createTool (PropertiesModel *parameter_model, QObject *parent = nullptr) override
+      {
+        return new VoxelGridDownsampleTool (parameter_model, parent);
+      }
+
+      PropertiesModel *
+      createToolParameterModel (QObject *parent) override;
+
+      inline QString
+      getPluginName () const override
+      {
+        return "Voxel Grid Downsample";
+      }
+
+      QString
+      getToolGroupName () const override
+      {
+        return "Filters";
+      }
+
+      QString
+      getIconName () const override
+      {
+        return ":/voxel_grid_downsample.png";
+      }
+
+      inline CloudComposerItem::ItemType
+      getInputItemType () const override
+      {
+        return CloudComposerItem::CLOUD_ITEM;
+      }
+
+      inline QList<CloudComposerItem::ItemType>
+      getRequiredInputChildrenTypes () const override
+      {
+        return QList<CloudComposerItem::ItemType> ();
+      }
     };
 
-
-
-  }
-}
+  } // namespace cloud_composer
+} // namespace pcl

@@ -38,10 +38,10 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_cloud.h>
 #include <pcl/features/normal_3d.h>
 #include <pcl/features/normal_3d_omp.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -60,34 +60,40 @@ TEST (PCL, computePointNormal)
   float curvature;
 
   PointCloud<PointXYZ> c;
-  
+
   PointXYZ p11 (706952.31f, 4087.6958f, 0.00000000f),
-           p21 (707002.31f, 6037.6958f, 0.00000000f),
-           p31 (706952.31f, 7937.6958f, 0.00000000f);
-  c.push_back (p11); c.push_back (p21); c.push_back (p31);
+      p21 (707002.31f, 6037.6958f, 0.00000000f),
+      p31 (706952.31f, 7937.6958f, 0.00000000f);
+  c.push_back (p11);
+  c.push_back (p21);
+  c.push_back (p31);
 
   computePointNormal (cloud, plane_parameters, curvature);
-//  cerr << plane_parameters << "\n";
-  
+  //  cerr << plane_parameters << "\n";
+
   c.clear ();
   PointXYZ p12 (-439747.72f, -43597.250f, 0.0000000f),
-           p22 (-439847.72f, -41697.250f, 0.0000000f),
-           p32 (-439747.72f, -39797.250f, 0.0000000f);
+      p22 (-439847.72f, -41697.250f, 0.0000000f),
+      p32 (-439747.72f, -39797.250f, 0.0000000f);
 
-  c.push_back (p12); c.push_back (p22); c.push_back (p32);
+  c.push_back (p12);
+  c.push_back (p22);
+  c.push_back (p32);
 
   computePointNormal (cloud, plane_parameters, curvature);
-//  cerr << plane_parameters << "\n";
+  //  cerr << plane_parameters << "\n";
 
   c.clear ();
   PointXYZ p13 (567011.56f, -7741.8179f, 0.00000000f),
-           p23 (567361.56f, -5841.8179f, 0.00000000f),
-           p33 (567011.56f, -3941.8179f, 0.00000000f);
+      p23 (567361.56f, -5841.8179f, 0.00000000f),
+      p33 (567011.56f, -3941.8179f, 0.00000000f);
 
-  c.push_back (p13); c.push_back (p23); c.push_back (p33);
+  c.push_back (p13);
+  c.push_back (p23);
+  c.push_back (p33);
 
   computePointNormal (cloud, plane_parameters, curvature);
-//  cerr << plane_parameters << "\n";
+  //  cerr << plane_parameters << "\n";
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,18 +122,18 @@ TEST (PCL, NormalEstimation)
 
   // computePointNormal (Vector)
   computePointNormal (cloud, plane_parameters, curvature);
-  EXPECT_NEAR (plane_parameters[0],  0.035592,  1e-4);
-  EXPECT_NEAR (plane_parameters[1],  0.369596,  1e-4);
-  EXPECT_NEAR (plane_parameters[2],  0.928511,  1e-4);
+  EXPECT_NEAR (plane_parameters[0], 0.035592, 1e-4);
+  EXPECT_NEAR (plane_parameters[1], 0.369596, 1e-4);
+  EXPECT_NEAR (plane_parameters[2], 0.928511, 1e-4);
   EXPECT_NEAR (plane_parameters[3], -0.0622552, 1e-4);
-  EXPECT_NEAR (curvature,            0.0693136, 1e-4);
+  EXPECT_NEAR (curvature, 0.0693136, 1e-4);
 
   // flipNormalTowardsViewpoint (Vector)
   flipNormalTowardsViewpoint (cloud.points[0], 0, 0, 0, plane_parameters);
-  EXPECT_NEAR (plane_parameters[0], -0.035592,  1e-4);
-  EXPECT_NEAR (plane_parameters[1], -0.369596,  1e-4);
-  EXPECT_NEAR (plane_parameters[2], -0.928511,  1e-4);
-  EXPECT_NEAR (plane_parameters[3],  0.0799743, 1e-4);
+  EXPECT_NEAR (plane_parameters[0], -0.035592, 1e-4);
+  EXPECT_NEAR (plane_parameters[1], -0.369596, 1e-4);
+  EXPECT_NEAR (plane_parameters[2], -0.928511, 1e-4);
+  EXPECT_NEAR (plane_parameters[3], 0.0799743, 1e-4);
 
   // flipNormalTowardsViewpoint
   flipNormalTowardsViewpoint (cloud.points[0], 0, 0, 0, nx, ny, nz);
@@ -153,8 +159,7 @@ TEST (PCL, NormalEstimation)
   n.compute (*normals);
   EXPECT_EQ (normals->points.size (), indices.size ());
 
-  for (const auto &point : normals->points)
-  {
+  for (const auto &point : normals->points) {
     EXPECT_NEAR (point.normal[0], -0.035592, 1e-4);
     EXPECT_NEAR (point.normal[1], -0.369596, 1e-4);
     EXPECT_NEAR (point.normal[2], -0.928511, 1e-4);
@@ -204,8 +209,7 @@ TEST (PCL, NormalEstimationOpenMP)
   n.compute (*normals);
   EXPECT_EQ (normals->points.size (), indices.size ());
 
-  for (const auto &point : normals->points)
-  {
+  for (const auto &point : normals->points) {
     EXPECT_NEAR (point.normal[0], -0.035592, 1e-4);
     EXPECT_NEAR (point.normal[1], -0.369596, 1e-4);
     EXPECT_NEAR (point.normal[2], -0.928511, 1e-4);
@@ -215,17 +219,19 @@ TEST (PCL, NormalEstimationOpenMP)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
-  if (loadPCDFile<PointXYZ> (argv[1], cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (loadPCDFile<PointXYZ> (argv[1], cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
 

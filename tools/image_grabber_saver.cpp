@@ -4,7 +4,7 @@
  *  Point Cloud Library (PCL) - www.pointclouds.org
  *  Copyright (c) 2011, Willow Garage, Inc.
  *  Copyright (c) 2012-, Open Perception, Inc.
- *  
+ *
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -36,19 +36,19 @@
  *
  *
  */
-#include <pcl/io/image_grabber.h>
 #include <pcl/console/parse.h>
 #include <pcl/console/print.h>
+#include <pcl/io/image_grabber.h>
+#include <pcl/io/pcd_io.h>
 #include <pcl/visualization/boost.h>
 #include <pcl/visualization/cloud_viewer.h>
 #include <pcl/visualization/image_viewer.h>
-#include <pcl/io/pcd_io.h>
 
 using pcl::console::print_error;
 using pcl::console::print_info;
 using pcl::console::print_value;
 
-boost::shared_ptr<pcl::ImageGrabber<pcl::PointXYZRGBA> > grabber;
+boost::shared_ptr<pcl::ImageGrabber<pcl::PointXYZRGBA>> grabber;
 pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr cloud_;
 std::string out_folder;
 int counter;
@@ -58,37 +58,36 @@ printHelp (int, char **argv)
 {
   print_error ("Syntax is: %s <options>\n", argv[0]);
   print_info (" where options are:\n");
-  print_info ("\t-rgb_dir   \t<directory_path>    \t= directory path to RGB images to be read from\n");
-  print_info ("\t-depth_dir \t<directory_path>    \t= directory path to Depth images to be read from\n");
-  print_info ("\t-out_dir   \t<directory_path>    \t= directory path to put the pcd files\n");
-  //print_info ("\t-fps frequency           = frames per second\n");
+  print_info ("\t-rgb_dir   \t<directory_path>    \t= directory path to RGB images to "
+              "be read from\n");
+  print_info ("\t-depth_dir \t<directory_path>    \t= directory path to Depth images "
+              "to be read from\n");
+  print_info (
+      "\t-out_dir   \t<directory_path>    \t= directory path to put the pcd files\n");
+  // print_info ("\t-fps frequency           = frames per second\n");
   print_info ("\n");
 }
 
-struct EventHelper
-{
-  void 
-  cloud_cb (const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr & cloud)
+struct EventHelper {
+  void
+  cloud_cb (const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr &cloud)
   {
     std::stringstream ss;
-    ss << out_folder << "/" << grabber->getPrevDepthFileName() << ".pcd";
-    pcl::io::savePCDFileASCII (ss.str(), *cloud);
+    ss << out_folder << "/" << grabber->getPrevDepthFileName () << ".pcd";
+    pcl::io::savePCDFileASCII (ss.str (), *cloud);
   }
 };
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   counter = 0;
-  out_folder.clear();
+  out_folder.clear ();
 
-  if (argc > 1)
-  {
-    for (int i = 1; i < argc; i++)
-    {
-      if (std::string (argv[i]) == "-h")
-      {
+  if (argc > 1) {
+    for (int i = 1; i < argc; i++) {
+      if (std::string (argv[i]) == "-h") {
         printHelp (argc, argv);
         return (-1);
       }
@@ -111,37 +110,34 @@ main (int argc, char** argv)
 
   pcl::console::parse_argument (argc, argv, "-out_dir", out_folder);
 
-  if (out_folder.empty() || !boost::filesystem::exists (out_folder))
-  {
-    PCL_INFO("No correct directory was given with the -out_dir flag. Setting to current dir\n");
+  if (out_folder.empty () || !boost::filesystem::exists (out_folder)) {
+    PCL_INFO ("No correct directory was given with the -out_dir flag. Setting to "
+              "current dir\n");
     out_folder = "./";
-  }
-  else
-    PCL_INFO("Using %s as output dir", out_folder.c_str());
+  } else
+    PCL_INFO ("Using %s as output dir", out_folder.c_str ());
 
-  if (!rgb_path.empty() && !depth_path.empty() && boost::filesystem::exists (rgb_path) && boost::filesystem::exists (depth_path))
-  {
-    grabber.reset (new pcl::ImageGrabber<pcl::PointXYZRGBA> (depth_path, rgb_path, frames_per_second, false));
-  }
-  else
-  {
-    PCL_INFO("No directory was given with the -<rgb/depth>_dir flag.");
+  if (!rgb_path.empty () && !depth_path.empty () &&
+      boost::filesystem::exists (rgb_path) && boost::filesystem::exists (depth_path)) {
+    grabber.reset (new pcl::ImageGrabber<pcl::PointXYZRGBA> (depth_path, rgb_path,
+                                                             frames_per_second, false));
+  } else {
+    PCL_INFO ("No directory was given with the -<rgb/depth>_dir flag.");
     printHelp (argc, argv);
     return (-1);
   }
-  grabber->setDepthImageUnits (float (1E-3));
-  //grabber->setFocalLength(focal_length); // FIXME
+  grabber->setDepthImageUnits (float(1E-3));
+  // grabber->setFocalLength(focal_length); // FIXME
 
   EventHelper h;
-  std::function<void(const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr&) > f = boost::bind (&EventHelper::cloud_cb, &h, _1);
+  std::function<void(const pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr &)> f =
+      boost::bind (&EventHelper::cloud_cb, &h, _1);
   boost::signals2::connection c1 = grabber->registerCallback (f);
 
-  do
-  {
-    grabber->trigger();
-  }
-  while (!grabber->atLastFrame());
-  grabber->trigger(); // Attempt to process the last frame
+  do {
+    grabber->trigger ();
+  } while (!grabber->atLastFrame ());
+  grabber->trigger (); // Attempt to process the last frame
   grabber->stop ();
 }
 /* ]--- */

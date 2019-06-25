@@ -35,75 +35,80 @@
  *
  */
 
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl/io/openni_grabber.h>
 #include <pcl/common/time.h>
 #include <pcl/console/parse.h>
+#include <pcl/io/openni_grabber.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
 
 class SimpleOpenNIProcessor
 {
   public:
-    bool save;
-    openni_wrapper::OpenNIDevice::DepthMode mode;
+  bool save;
+  openni_wrapper::OpenNIDevice::DepthMode mode;
 
-    SimpleOpenNIProcessor (openni_wrapper::OpenNIDevice::DepthMode depth_mode = openni_wrapper::OpenNIDevice::OpenNI_12_bit_depth) : mode (depth_mode) {}
+  SimpleOpenNIProcessor (openni_wrapper::OpenNIDevice::DepthMode depth_mode =
+                             openni_wrapper::OpenNIDevice::OpenNI_12_bit_depth)
+      : mode (depth_mode)
+  {
+  }
 
-    void 
-    imageDepthImageCallback (const openni_wrapper::DepthImage::Ptr& d_img)
-    {
-      static unsigned count = 0;
-      static double last = pcl::getTime ();
-      if (++count == 30)
-      {
-        double now = pcl::getTime ();
-        std::cout << "got depth-image. Average framerate: " << double(count)/double(now - last) << " Hz" <<  std::endl;
-        std::cout << "Depth baseline: " << d_img->getBaseline () << " and focal length: " << d_img->getFocalLength () << std::endl;
-        count = 0;
-        last = now;
+  void
+  imageDepthImageCallback (const openni_wrapper::DepthImage::Ptr &d_img)
+  {
+    static unsigned count = 0;
+    static double last = pcl::getTime ();
+    if (++count == 30) {
+      double now = pcl::getTime ();
+      std::cout << "got depth-image. Average framerate: "
+                << double(count) / double(now - last) << " Hz" << std::endl;
+      std::cout << "Depth baseline: " << d_img->getBaseline ()
+                << " and focal length: " << d_img->getFocalLength () << std::endl;
+      count = 0;
+      last = now;
+    }
+  }
+
+  void
+  run ()
+  {
+    save = false;
+
+    // create a new grabber for OpenNI devices
+    pcl::OpenNIGrabber interface;
+
+    // Set the depth output format
+    interface.getDevice ()->setDepthOutputFormat (mode);
+
+    // make callback function from member function
+    std::function<void(const openni_wrapper::DepthImage::Ptr &)> f2 =
+        boost::bind (&SimpleOpenNIProcessor::imageDepthImageCallback, this, _1);
+
+    // connect callback function for desired signal. In this case its a point cloud with
+    // color values
+    boost::signals2::connection c2 = interface.registerCallback (f2);
+
+    // start receiving point clouds
+    interface.start ();
+
+    std::cout << R"(<Esc>, 'q', 'Q': quit the program)" << std::endl;
+    std::cout << "\' \': pause" << std::endl;
+    char key;
+    do {
+      key = static_cast<char> (getchar ());
+      switch (key) {
+      case ' ':
+        if (interface.isRunning ())
+          interface.stop ();
+        else
+          interface.start ();
       }
-    }
+    } while (key != 27 && key != 'q' && key != 'Q');
 
-    void 
-    run ()
-    {
-      save = false;
-
-      // create a new grabber for OpenNI devices
-      pcl::OpenNIGrabber interface;
-
-      // Set the depth output format
-      interface.getDevice ()->setDepthOutputFormat (mode);
-
-      // make callback function from member function
-      std::function<void (const openni_wrapper::DepthImage::Ptr&)> f2 = boost::bind (&SimpleOpenNIProcessor::imageDepthImageCallback, this, _1);
-
-      // connect callback function for desired signal. In this case its a point cloud with color values
-      boost::signals2::connection c2 = interface.registerCallback (f2);
-
-      // start receiving point clouds
-      interface.start ();
-
-      std::cout << R"(<Esc>, 'q', 'Q': quit the program)" << std::endl;
-      std::cout << "\' \': pause" << std::endl;
-      char key;
-      do
-      {
-        key = static_cast<char> (getchar ());
-        switch (key)
-        {
-          case ' ':
-            if (interface.isRunning ())
-              interface.stop ();
-            else
-              interface.start ();
-        }
-      } while (key != 27 && key != 'q' && key != 'Q');
-
-      // stop the grabber
-      interface.stop ();
-    }
+    // stop the grabber
+    interface.stop ();
+  }
 };
 
 int

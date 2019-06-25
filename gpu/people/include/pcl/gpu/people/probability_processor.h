@@ -36,14 +36,14 @@
 
 #pragma once
 
+#include <fstream>
 #include <iostream>
 #include <sstream>
-#include <fstream>
 
-#include <pcl/point_types.h>
 #include <pcl/console/print.h>
 #include <pcl/gpu/containers/device_array.h>
 #include <pcl/gpu/people/label_common.h>
+#include <pcl/point_types.h>
 
 namespace pcl
 {
@@ -57,55 +57,51 @@ namespace pcl
     namespace people
     {
       class PCL_EXPORTS ProbabilityProcessor
-      {        
+      {
         public:
-          using Ptr = boost::shared_ptr<ProbabilityProcessor>;
-          using Depth = DeviceArray2D<unsigned short>;
-          using Labels = DeviceArray2D<unsigned char>;
+        using Ptr = boost::shared_ptr<ProbabilityProcessor>;
+        using Depth = DeviceArray2D<unsigned short>;
+        using Labels = DeviceArray2D<unsigned char>;
 
-          ProbabilityProcessor();
+        ProbabilityProcessor ();
 
-          /** \brief This will merge the votes from the different trees into one final vote, including probabilistic's **/
-          void
-          SelectLabel (const Depth& depth, Labels& labels, pcl::device::LabelProbability& probabilities);
+        /** \brief This will merge the votes from the different trees into one final
+         * vote, including probabilistic's **/
+        void
+        SelectLabel (const Depth &depth, Labels &labels,
+                     pcl::device::LabelProbability &probabilities);
 
-          /** \brief This will combine two probabilities according their weight **/
-          void
-          CombineProb ( const Depth& depth,
-                        pcl::device::LabelProbability& probIn1,
-                        float weight1,
-                        pcl::device::LabelProbability& probIn2,
-                        float weight2,
-                        pcl::device::LabelProbability& probOut);
+        /** \brief This will combine two probabilities according their weight **/
+        void
+        CombineProb (const Depth &depth, pcl::device::LabelProbability &probIn1,
+                     float weight1, pcl::device::LabelProbability &probIn2,
+                     float weight2, pcl::device::LabelProbability &probOut);
 
-          /** \brief This will sum a probability multiplied with it's weight **/
-          void
-          WeightedSumProb ( const Depth& depth, pcl::device::LabelProbability& probIn, float weight, pcl::device::LabelProbability& probOut);
+        /** \brief This will sum a probability multiplied with it's weight **/
+        void
+        WeightedSumProb (const Depth &depth, pcl::device::LabelProbability &probIn,
+                         float weight, pcl::device::LabelProbability &probOut);
 
-          /** \brief This will create a Gaussian Kernel **/
-          float*
-          CreateGaussianKernel ( float sigma,
-                                 int kernelSize);
+        /** \brief This will create a Gaussian Kernel **/
+        float *
+        CreateGaussianKernel (float sigma, int kernelSize);
 
-          /** \brief This will do a GaussianBlur over the LabelProbability **/
-          int
-          GaussianBlur( const Depth&                    depth,
-                        pcl::device::LabelProbability&  probIn,
-                        DeviceArray<float>&             kernel,
-                        pcl::device::LabelProbability&  probOut);
+        /** \brief This will do a GaussianBlur over the LabelProbability **/
+        int
+        GaussianBlur (const Depth &depth, pcl::device::LabelProbability &probIn,
+                      DeviceArray<float> &kernel,
+                      pcl::device::LabelProbability &probOut);
 
-          /** \brief This will do a GaussianBlur over the LabelProbability **/
-          int
-          GaussianBlur( const Depth&                    depth,
-                        pcl::device::LabelProbability&  probIn,
-                        DeviceArray<float>&             kernel,
-                        pcl::device::LabelProbability&  probTemp,
-                        pcl::device::LabelProbability&  probOut);
+        /** \brief This will do a GaussianBlur over the LabelProbability **/
+        int
+        GaussianBlur (const Depth &depth, pcl::device::LabelProbability &probIn,
+                      DeviceArray<float> &kernel,
+                      pcl::device::LabelProbability &probTemp,
+                      pcl::device::LabelProbability &probOut);
 
         private:
-          boost::shared_ptr<pcl::device::ProbabilityProc> impl_;
-
+        boost::shared_ptr<pcl::device::ProbabilityProc> impl_;
       };
-    }
-  }
-}
+    } // namespace people
+  }   // namespace gpu
+} // namespace pcl

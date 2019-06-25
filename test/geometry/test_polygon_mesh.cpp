@@ -38,8 +38,8 @@
  *
  */
 
-#include <vector>
 #include <typeinfo>
+#include <vector>
 
 #include <gtest/gtest.h>
 
@@ -61,25 +61,24 @@ using HalfEdgeIndices = std::vector<HalfEdgeIndex>;
 using FaceIndices = std::vector<FaceIndex>;
 
 template <bool IsManifoldT>
-struct MeshTraits
-{
-    using VertexData = int;
-    using HalfEdgeData = pcl::geometry::NoData;
-    using EdgeData = pcl::geometry::NoData;
-    using FaceData = pcl::geometry::NoData;
-    using IsManifold = std::integral_constant <bool, IsManifoldT>;
+struct MeshTraits {
+  using VertexData = int;
+  using HalfEdgeData = pcl::geometry::NoData;
+  using EdgeData = pcl::geometry::NoData;
+  using FaceData = pcl::geometry::NoData;
+  using IsManifold = std::integral_constant<bool, IsManifoldT>;
 };
 
-using ManifoldPolygonMesh = pcl::geometry::PolygonMesh<MeshTraits<true> >;
-using NonManifoldPolygonMesh = pcl::geometry::PolygonMesh<MeshTraits<false> >;
+using ManifoldPolygonMesh = pcl::geometry::PolygonMesh<MeshTraits<true>>;
+using NonManifoldPolygonMesh = pcl::geometry::PolygonMesh<MeshTraits<false>>;
 
-using PolygonMeshTypes = testing::Types <ManifoldPolygonMesh, NonManifoldPolygonMesh>;
+using PolygonMeshTypes = testing::Types<ManifoldPolygonMesh, NonManifoldPolygonMesh>;
 
 template <class MeshT>
 class TestPolygonMesh : public testing::Test
 {
   protected:
-    using Mesh = MeshT;
+  using Mesh = MeshT;
 };
 
 TYPED_TEST_CASE (TestPolygonMesh, PolygonMeshTypes);
@@ -96,9 +95,10 @@ TYPED_TEST (TestPolygonMesh, CorrectMeshTag)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// NOTE: It is the responsibility of the user to ensure that all vertex indices are valid.
+// NOTE: It is the responsibility of the user to ensure that all vertex indices are
+// valid.
 
-//TYPED_TEST (TestPolygonMesh, OutOfRange)
+// TYPED_TEST (TestPolygonMesh, OutOfRange)
 //{
 //  using Mesh = typename TestFixture::Mesh;
 
@@ -127,19 +127,19 @@ TYPED_TEST (TestPolygonMesh, CorrectNumberOfVertices)
   // Make sure that only quads can be added
   using Mesh = typename TestFixture::Mesh;
 
-  for (unsigned int n=1; n<=5; ++n)
-  {
+  for (unsigned int n = 1; n <= 5; ++n) {
     Mesh mesh;
     VertexIndices vi;
-    for (unsigned int i=0; i<n; ++i)
-    {
+    for (unsigned int i = 0; i < n; ++i) {
       vi.push_back (VertexIndex (i));
       mesh.addVertex (i);
     }
 
     const FaceIndex index = mesh.addFace (vi);
-    if (n>=3) EXPECT_TRUE  (index.isValid ()) << "Number of vertices in the face: " << n;
-    else      EXPECT_FALSE (index.isValid ()) << "Number of vertices in the face: " << n;
+    if (n >= 3)
+      EXPECT_TRUE (index.isValid ()) << "Number of vertices in the face: " << n;
+    else
+      EXPECT_FALSE (index.isValid ()) << "Number of vertices in the face: " << n;
   }
 }
 
@@ -155,9 +155,10 @@ TYPED_TEST (TestPolygonMesh, ThreePolygons)
   //  \   \ /  //
   //   3 - 4   //
   Mesh mesh;
-  for (unsigned int i=0; i<7; ++i) mesh.addVertex (i);
+  for (unsigned int i = 0; i < 7; ++i)
+    mesh.addVertex (i);
 
-  std::vector <VertexIndices> faces;
+  std::vector<VertexIndices> faces;
   VertexIndices vi;
   vi.push_back (VertexIndex (0));
   vi.push_back (VertexIndex (1));
@@ -180,8 +181,7 @@ TYPED_TEST (TestPolygonMesh, ThreePolygons)
   faces.push_back (vi);
   vi.clear ();
 
-  for (const auto &face : faces)
-  {
+  for (const auto &face : faces) {
     ASSERT_TRUE (mesh.addFace (face).isValid ());
   }
 
@@ -190,8 +190,8 @@ TYPED_TEST (TestPolygonMesh, ThreePolygons)
   mesh.deleteFace (FaceIndex (1));
   mesh.cleanUp ();
 
-  std::vector <std::vector <int> > expected;
-  std::vector <int> tmp;
+  std::vector<std::vector<int>> expected;
+  std::vector<int> tmp;
   tmp.push_back (0);
   tmp.push_back (1);
   tmp.push_back (2);
@@ -207,7 +207,7 @@ TYPED_TEST (TestPolygonMesh, ThreePolygons)
   tmp.clear ();
 
   ASSERT_TRUE (hasFaces (mesh, expected));
-  std::vector <int> expected_boundary;
+  std::vector<int> expected_boundary;
   expected_boundary.push_back (2);
   expected_boundary.push_back (1);
   expected_boundary.push_back (6);
@@ -220,7 +220,7 @@ TYPED_TEST (TestPolygonMesh, ThreePolygons)
 ////////////////////////////////////////////////////////////////////////////////
 
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

@@ -41,28 +41,29 @@
 #include <Eigen/Core>
 
 /** \file pcl_tests.h
-  * Helper macros for testing equality of various data fields in PCL points */
+ * Helper macros for testing equality of various data fields in PCL points */
 
 namespace pcl
 {
 
   /** test_macros.h provide helper macros for testing vectors, matrices etc.
-    * We took some liberty with upcasing names to make them look like googletest
-    * macros names so that reader is not confused.
-    *
-    * This file also provides a family of googletest-style macros for asserting
-    * equality or nearness of xyz, normal, and rgba fields.
-    *
-    * \author Nizar Sallem, Sergey Alexandrov
-    */
+   * We took some liberty with upcasing names to make them look like googletest
+   * macros names so that reader is not confused.
+   *
+   * This file also provides a family of googletest-style macros for asserting
+   * equality or nearness of xyz, normal, and rgba fields.
+   *
+   * \author Nizar Sallem, Sergey Alexandrov
+   */
 
   namespace test
   {
 
     template <typename V1, typename V2>
-    void EXPECT_EQ_VECTORS (const V1& v1, const V2& v2)
+    void
+    EXPECT_EQ_VECTORS (const V1 &v1, const V2 &v2)
     {
-      SCOPED_TRACE("EXPECT_EQ_VECTORS failed");
+      SCOPED_TRACE ("EXPECT_EQ_VECTORS failed");
       EXPECT_EQ (v1.size (), v2.size ());
       size_t length = v1.size ();
       for (size_t i = 0; i < length; ++i)
@@ -70,9 +71,10 @@ namespace pcl
     }
 
     template <typename V1, typename V2, typename Scalar>
-    void EXPECT_NEAR_VECTORS (const V1& v1, const V2& v2, const Scalar& epsilon)
+    void
+    EXPECT_NEAR_VECTORS (const V1 &v1, const V2 &v2, const Scalar &epsilon)
     {
-      SCOPED_TRACE("EXPECT_NEAR_VECTORS failed");
+      SCOPED_TRACE ("EXPECT_NEAR_VECTORS failed");
       EXPECT_EQ (v1.size (), v2.size ());
       size_t length = v1.size ();
       for (size_t i = 0; i < length; ++i)
@@ -83,10 +85,8 @@ namespace pcl
     {
 
       template <typename Point1T, typename Point2T>
-      ::testing::AssertionResult XYZEQ (const char* expr1,
-                                        const char* expr2,
-                                        const Point1T& p1,
-                                        const Point2T& p2)
+      ::testing::AssertionResult
+      XYZEQ (const char *expr1, const char *expr2, const Point1T &p1, const Point2T &p2)
       {
         if ((p1).getVector3fMap ().cwiseEqual ((p2).getVector3fMap ()).all ())
           return ::testing::AssertionSuccess ();
@@ -98,15 +98,12 @@ namespace pcl
       }
 
       template <typename Point1T, typename Point2T>
-      ::testing::AssertionResult XYZNear (const char* expr1,
-                                          const char* expr2,
-                                          const char* abs_error_expr,
-                                          const Point1T& p1,
-                                          const Point2T& p2,
-                                          double abs_error)
+      ::testing::AssertionResult
+      XYZNear (const char *expr1, const char *expr2, const char *abs_error_expr,
+               const Point1T &p1, const Point2T &p2, double abs_error)
       {
-        const Eigen::Vector3f diff = ((p1).getVector3fMap () -
-                                      (p2).getVector3fMap ()).cwiseAbs ();
+        const Eigen::Vector3f diff =
+            ((p1).getVector3fMap () - (p2).getVector3fMap ()).cwiseAbs ();
         if ((diff.array () < abs_error).all ())
           return ::testing::AssertionSuccess ();
         return ::testing::AssertionFailure ()
@@ -120,12 +117,13 @@ namespace pcl
       }
 
       template <typename Point1T, typename Point2T>
-      ::testing::AssertionResult NormalEQ (const char* expr1,
-                                           const char* expr2,
-                                           const Point1T& p1,
-                                           const Point2T& p2)
+      ::testing::AssertionResult
+      NormalEQ (const char *expr1, const char *expr2, const Point1T &p1,
+                const Point2T &p2)
       {
-        if ((p1).getNormalVector3fMap ().cwiseEqual ((p2).getNormalVector3fMap ()).all ())
+        if ((p1).getNormalVector3fMap ()
+                .cwiseEqual ((p2).getNormalVector3fMap ())
+                .all ())
           return ::testing::AssertionSuccess ();
         return ::testing::AssertionFailure ()
                << "Value of: " << expr2 << ".getNormalVector3fMap ()" << std::endl
@@ -135,15 +133,12 @@ namespace pcl
       }
 
       template <typename Point1T, typename Point2T>
-      ::testing::AssertionResult NormalNear (const char* expr1,
-                                             const char* expr2,
-                                             const char* abs_error_expr,
-                                             const Point1T& p1,
-                                             const Point2T& p2,
-                                             double abs_error)
+      ::testing::AssertionResult
+      NormalNear (const char *expr1, const char *expr2, const char *abs_error_expr,
+                  const Point1T &p1, const Point2T &p2, double abs_error)
       {
-        const Eigen::Vector3f diff = ((p1).getNormalVector3fMap () -
-                                      (p2).getNormalVector3fMap ()).cwiseAbs ();
+        const Eigen::Vector3f diff =
+            ((p1).getNormalVector3fMap () - (p2).getNormalVector3fMap ()).cwiseAbs ();
         if ((diff.array () < abs_error).all ())
           return ::testing::AssertionSuccess ();
         return ::testing::AssertionFailure ()
@@ -157,10 +152,8 @@ namespace pcl
       }
 
       template <typename Point1T, typename Point2T>
-      ::testing::AssertionResult RGBEQ (const char* expr1,
-                                         const char* expr2,
-                                         const Point1T& p1,
-                                         const Point2T& p2)
+      ::testing::AssertionResult
+      RGBEQ (const char *expr1, const char *expr2, const Point1T &p1, const Point2T &p2)
       {
         if ((p1).getRGBVector3i ().cwiseEqual ((p2).getRGBVector3i ()).all ())
           return ::testing::AssertionSuccess ();
@@ -172,10 +165,9 @@ namespace pcl
       }
 
       template <typename Point1T, typename Point2T>
-      ::testing::AssertionResult RGBAEQ (const char* expr1,
-                                         const char* expr2,
-                                         const Point1T& p1,
-                                         const Point2T& p2)
+      ::testing::AssertionResult
+      RGBAEQ (const char *expr1, const char *expr2, const Point1T &p1,
+              const Point2T &p2)
       {
         if ((p1).getRGBAVector4i ().cwiseEqual ((p2).getRGBAVector4i ()).all ())
           return ::testing::AssertionSuccess ();
@@ -187,10 +179,9 @@ namespace pcl
       }
 
       template <typename PointCloud1T, typename PointCloud2T>
-      ::testing::AssertionResult MetaDataEQ (const char* expr1,
-                                             const char* expr2,
-                                             const PointCloud1T& p1,
-                                             const PointCloud2T& p2)
+      ::testing::AssertionResult
+      MetaDataEQ (const char *expr1, const char *expr2, const PointCloud1T &p1,
+                  const PointCloud2T &p2)
       {
         if (!(p1.header == p2.header))
           return ::testing::AssertionFailure () << "Headers are different";
@@ -219,96 +210,84 @@ namespace pcl
         return ::testing::AssertionSuccess ();
       }
 
-    }
+    } // namespace internal
 
-  }
+  } // namespace test
 
-}
+} // namespace pcl
 
 /// Expect that each of x, y, and z fields are equal in
 /// two points.
-#define EXPECT_XYZ_EQ(expected, actual)                  \
-  EXPECT_PRED_FORMAT2(::pcl::test::internal::XYZEQ,      \
-                      (expected), (actual))
+#define EXPECT_XYZ_EQ(expected, actual)                                                \
+  EXPECT_PRED_FORMAT2 (::pcl::test::internal::XYZEQ, (expected), (actual))
 
 /// Assert that each of x, y, and z fields are equal in
 /// two points.
-#define ASSERT_XYZ_EQ(expected, actual)                  \
-  ASSERT_PRED_FORMAT2(::pcl::test::internal::XYZEQ,      \
-                      (expected), (actual))
+#define ASSERT_XYZ_EQ(expected, actual)                                                \
+  ASSERT_PRED_FORMAT2 (::pcl::test::internal::XYZEQ, (expected), (actual))
 
 /// Expect that differences between x, y, and z fields in
 /// two points are each within abs_error.
-#define EXPECT_XYZ_NEAR(expected, actual, abs_error)     \
-  EXPECT_PRED_FORMAT3(::pcl::test::internal::XYZNear,    \
-                      (expected), (actual), abs_error)
+#define EXPECT_XYZ_NEAR(expected, actual, abs_error)                                   \
+  EXPECT_PRED_FORMAT3 (::pcl::test::internal::XYZNear, (expected), (actual), abs_error)
 
 /// Assert that differences between x, y, and z fields in
 /// two points are each within abs_error.
-#define ASSERT_XYZ_NEAR(expected, actual, abs_error)     \
-  ASSERT_PRED_FORMAT3(::pcl::test::internal::XYZNear,    \
-                      (expected), (actual), abs_error)
+#define ASSERT_XYZ_NEAR(expected, actual, abs_error)                                   \
+  ASSERT_PRED_FORMAT3 (::pcl::test::internal::XYZNear, (expected), (actual), abs_error)
 
 /// Expect that each of normal_x, normal_y, and normal_z
 /// fields are equal in two points.
-#define EXPECT_NORMAL_EQ(expected, actual)               \
-  EXPECT_PRED_FORMAT2(::pcl::test::internal::NormalEQ,   \
-                      (expected), (actual))
+#define EXPECT_NORMAL_EQ(expected, actual)                                             \
+  EXPECT_PRED_FORMAT2 (::pcl::test::internal::NormalEQ, (expected), (actual))
 
 /// Assert that each of normal_x, normal_y, and normal_z
 /// fields are equal in two points.
-#define ASSERT_NORMAL_EQ(expected, actual)               \
-  ASSERT_PRED_FORMAT2(::pcl::test::internal::NormalEQ,   \
-                      (expected), (actual))
+#define ASSERT_NORMAL_EQ(expected, actual)                                             \
+  ASSERT_PRED_FORMAT2 (::pcl::test::internal::NormalEQ, (expected), (actual))
 
 /// Expect that differences between normal_x, normal_y,
 /// and normal_z fields in two points are each within
 /// abs_error.
-#define EXPECT_NORMAL_NEAR(expected, actual, abs_error)  \
-  EXPECT_PRED_FORMAT3(::pcl::test::internal::NormalNear, \
-                      (expected), (actual), abs_error)
+#define EXPECT_NORMAL_NEAR(expected, actual, abs_error)                                \
+  EXPECT_PRED_FORMAT3 (::pcl::test::internal::NormalNear, (expected), (actual),        \
+                       abs_error)
 
 /// Assert that differences between normal_x, normal_y,
 /// and normal_z fields in two points are each within
 /// abs_error.
-#define ASSERT_NORMAL_NEAR(expected, actual, abs_error)  \
-  ASSERT_PRED_FORMAT3(::pcl::test::internal::NormalNear, \
-                      (expected), (actual), abs_error)
+#define ASSERT_NORMAL_NEAR(expected, actual, abs_error)                                \
+  ASSERT_PRED_FORMAT3 (::pcl::test::internal::NormalNear, (expected), (actual),        \
+                       abs_error)
 
 /// Expect that each of r, g, and b fields are equal in
 /// two points.
-#define EXPECT_RGB_EQ(expected, actual)                  \
-  EXPECT_PRED_FORMAT2(::pcl::test::internal::RGBEQ,      \
-                      (expected), (actual))
+#define EXPECT_RGB_EQ(expected, actual)                                                \
+  EXPECT_PRED_FORMAT2 (::pcl::test::internal::RGBEQ, (expected), (actual))
 
 /// Assert that each of r, g, and b fields are equal in
 /// two points.
-#define ASSERT_RGB_EQ(expected, actual)                  \
-  ASSERT_PRED_FORMAT2(::pcl::test::internal::RGBEQ,      \
-                      (expected), (actual))
+#define ASSERT_RGB_EQ(expected, actual)                                                \
+  ASSERT_PRED_FORMAT2 (::pcl::test::internal::RGBEQ, (expected), (actual))
 
 /// Expect that each of r, g, b, and a fields are equal
 /// in two points.
-#define EXPECT_RGBA_EQ(expected, actual)                 \
-  EXPECT_PRED_FORMAT2(::pcl::test::internal::RGBAEQ,     \
-                      (expected), (actual))
+#define EXPECT_RGBA_EQ(expected, actual)                                               \
+  EXPECT_PRED_FORMAT2 (::pcl::test::internal::RGBAEQ, (expected), (actual))
 
 /// Assert that each of r, g, b, and a fields are equal
 /// in two points.
-#define ASSERT_RGBA_EQ(expected, actual)                 \
-  ASSERT_PRED_FORMAT2(::pcl::test::internal::RGBAEQ,     \
-                      (expected), (actual))
+#define ASSERT_RGBA_EQ(expected, actual)                                               \
+  ASSERT_PRED_FORMAT2 (::pcl::test::internal::RGBAEQ, (expected), (actual))
 
 /// Assert that the metadata (header, width, height,
 /// is_dense, sensor origin and orientation) are equal
 /// in two point clouds.
-#define ASSERT_METADATA_EQ(expected, actual)             \
-  ASSERT_PRED_FORMAT2(::pcl::test::internal::MetaDataEQ, \
-                      expected, actual)
+#define ASSERT_METADATA_EQ(expected, actual)                                           \
+  ASSERT_PRED_FORMAT2 (::pcl::test::internal::MetaDataEQ, expected, actual)
 
 /// Expect that the metadata (header, width, height,
 /// is_dense, sensor origin and orientation) are equal
 /// in two point clouds.
-#define EXPECT_METADATA_EQ(expected, actual)             \
-  EXPECT_PRED_FORMAT2(::pcl::test::internal::MetaDataEQ, \
-                      expected, actual)
+#define EXPECT_METADATA_EQ(expected, actual)                                           \
+  EXPECT_PRED_FORMAT2 (::pcl::test::internal::MetaDataEQ, expected, actual)

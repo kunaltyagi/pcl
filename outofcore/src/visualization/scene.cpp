@@ -4,12 +4,9 @@
 #include <pcl/outofcore/visualization/scene.h>
 #include <pcl/outofcore/visualization/viewport.h>
 
-Scene* Scene::instance_ = nullptr;
+Scene *Scene::instance_ = nullptr;
 
-Scene::Scene ()
-{
-
-}
+Scene::Scene () {}
 
 // Accessors - Cameras
 // -----------------------------------------------------------------------------
@@ -19,19 +16,17 @@ Scene::addCamera (Camera *camera)
   cameras_.push_back (camera);
 }
 
-std::vector<Camera*>
+std::vector<Camera *>
 Scene::getCameras ()
 {
   return cameras_;
 }
 
-Camera*
+Camera *
 Scene::getCamera (vtkCamera *camera)
 {
-  for (const auto &c : cameras_)
-  {
-    if (c->getCamera ().GetPointer () == camera)
-    {
+  for (const auto &c : cameras_) {
+    if (c->getCamera ().GetPointer () == camera) {
       return c;
     }
   }
@@ -39,7 +34,7 @@ Scene::getCamera (vtkCamera *camera)
   return nullptr;
 }
 
-Camera*
+Camera *
 Scene::getCamera (std::string name)
 {
   for (const auto &camera : cameras_)
@@ -57,7 +52,7 @@ Scene::addObject (Object *object)
   objects_.push_back (object);
 }
 
-Object*
+Object *
 Scene::getObjectByName (std::string name)
 {
   for (const auto &object : objects_)
@@ -67,7 +62,7 @@ Scene::getObjectByName (std::string name)
   return nullptr;
 }
 
-std::vector<Object*>
+std::vector<Object *>
 Scene::getObjects ()
 {
   return objects_;
@@ -87,7 +82,7 @@ Scene::addViewport (Viewport *viewport)
   viewports_.push_back (viewport);
 }
 
-std::vector<Viewport*>
+std::vector<Viewport *>
 Scene::getViewports ()
 {
   return viewports_;

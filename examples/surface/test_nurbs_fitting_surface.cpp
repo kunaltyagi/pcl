@@ -1,26 +1,26 @@
+#include <pcl/common/io.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
-#include <pcl/common/io.h>
 
-#include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/surface/on_nurbs/fitting_surface_tdm.h>
 #include <pcl/surface/on_nurbs/triangulation.h>
+#include <pcl/visualization/pcl_visualizer.h>
 
 using Point = pcl::PointXYZ;
 
 void
-CreateCylinderPoints (pcl::PointCloud<Point>::Ptr cloud, pcl::on_nurbs::vector_vec3d &data, unsigned npoints,
-                      double alpha, double h, double r)
+CreateCylinderPoints (pcl::PointCloud<Point>::Ptr cloud,
+                      pcl::on_nurbs::vector_vec3d &data, unsigned npoints, double alpha,
+                      double h, double r)
 {
-  for (unsigned i = 0; i < npoints; i++)
-  {
-    double da = alpha * double (rand ()) / RAND_MAX;
-    double dh = h * (double (rand ()) / RAND_MAX - 0.5);
+  for (unsigned i = 0; i < npoints; i++) {
+    double da = alpha * double(rand ()) / RAND_MAX;
+    double dh = h * (double(rand ()) / RAND_MAX - 0.5);
 
     Point p;
-    p.x = float (r * cos (da));
-    p.y = float (r * sin (da));
-    p.z = float (dh);
+    p.x = float(r * cos (da));
+    p.y = float(r * sin (da));
+    p.z = float(dh);
 
     data.push_back (Eigen::Vector3d (p.x, p.y, p.z));
     cloud->push_back (p);
@@ -44,9 +44,10 @@ main ()
   viewer.addPointCloud<Point> (cloud, "cloud_cylinder");
 
   // fit NURBS surface
-  ON_NurbsSurface nurbs = pcl::on_nurbs::FittingSurface::initNurbsPCABoundingBox (3, &data);
+  ON_NurbsSurface nurbs =
+      pcl::on_nurbs::FittingSurface::initNurbsPCABoundingBox (3, &data);
   pcl::on_nurbs::FittingSurface fit (&data, nurbs);
-//  fit.setQuiet (false);
+  //  fit.setQuiet (false);
 
   pcl::on_nurbs::FittingSurface::Parameter params;
   params.interior_smoothness = 0.1;
@@ -55,15 +56,13 @@ main ()
   params.boundary_weight = 0.0;
 
   // NURBS refinement
-  for (unsigned i = 0; i < refinement; i++)
-  {
+  for (unsigned i = 0; i < refinement; i++) {
     fit.refine (0);
     fit.refine (1);
   }
 
   // fitting iterations
-  for (unsigned i = 0; i < iterations; i++)
-  {
+  for (unsigned i = 0; i < iterations; i++) {
     fit.assemble (params);
     fit.solve ();
   }

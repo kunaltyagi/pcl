@@ -34,7 +34,7 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *
  * $Id$
- * 
+ *
  */
 
 #include <pcl/registration/correspondence_rejection_var_trimmed.h>
@@ -42,35 +42,31 @@
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::registration::CorrespondenceRejectorVarTrimmed::getRemainingCorrespondences (
-    const pcl::Correspondences& original_correspondences,
-    pcl::Correspondences& remaining_correspondences)
+    const pcl::Correspondences &original_correspondences,
+    pcl::Correspondences &remaining_correspondences)
 {
-  std::vector <double> dists;
+  std::vector<double> dists;
   dists.resize (original_correspondences.size ());
 
-  for (size_t i = 0; i < original_correspondences.size (); ++i)
-  {
-    if (data_container_)
-    {
+  for (size_t i = 0; i < original_correspondences.size (); ++i) {
+    if (data_container_) {
       dists[i] = data_container_->getCorrespondenceScore (original_correspondences[i]);
-    }
-    else
-    {
+    } else {
       dists[i] = original_correspondences[i].distance;
     }
   }
   factor_ = optimizeInlierRatio (dists);
-  nth_element (dists.begin (), dists.begin () + int (double (dists.size ()) * factor_), dists.end ());
-  trimmed_distance_ = dists [int (double (dists.size ()) * factor_)];
+  nth_element (dists.begin (), dists.begin () + int(double(dists.size ()) * factor_),
+               dists.end ());
+  trimmed_distance_ = dists[int(double(dists.size ()) * factor_)];
 
   unsigned int number_valid_correspondences = 0;
   remaining_correspondences.resize (original_correspondences.size ());
 
-  for (size_t i = 0; i < original_correspondences.size (); ++i)
-  {
-    if ( dists[i] < trimmed_distance_)
-    {
-      remaining_correspondences[number_valid_correspondences] = original_correspondences[i];
+  for (size_t i = 0; i < original_correspondences.size (); ++i) {
+    if (dists[i] < trimmed_distance_) {
+      remaining_correspondences[number_valid_correspondences] =
+          original_correspondences[i];
       ++number_valid_correspondences;
     }
   }
@@ -79,26 +75,29 @@ pcl::registration::CorrespondenceRejectorVarTrimmed::getRemainingCorrespondences
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 float
-pcl::registration::CorrespondenceRejectorVarTrimmed::optimizeInlierRatio (std::vector <double>&  dists)
+pcl::registration::CorrespondenceRejectorVarTrimmed::optimizeInlierRatio (
+    std::vector<double> &dists)
 {
   unsigned int points_nbr = static_cast<unsigned int> (dists.size ());
   std::sort (dists.begin (), dists.end ());
 
-  const int min_el = int (floor (min_ratio_ * points_nbr));
-  const int max_el = int (floor (max_ratio_ * points_nbr));
+  const int min_el = int(floor (min_ratio_ * points_nbr));
+  const int max_el = int(floor (max_ratio_ * points_nbr));
 
-  using LineArray = Eigen::Array <double, Eigen::Dynamic, 1>;
+  using LineArray = Eigen::Array<double, Eigen::Dynamic, 1>;
   Eigen::Map<LineArray> sorted_dist (&dists[0], points_nbr);
 
-  const LineArray trunk_sorted_dist = sorted_dist.segment (min_el, max_el-min_el);
+  const LineArray trunk_sorted_dist = sorted_dist.segment (min_el, max_el - min_el);
   const double lower_sum = sorted_dist.head (min_el).sum ();
-  const LineArray ids = LineArray::LinSpaced (trunk_sorted_dist.rows (), min_el+1, max_el);
+  const LineArray ids =
+      LineArray::LinSpaced (trunk_sorted_dist.rows (), min_el + 1, max_el);
   const LineArray ratio = ids / points_nbr;
   const LineArray deno = ratio.pow (lambda_);
-  const LineArray FRMS = deno.inverse ().square () * ids.inverse () * (lower_sum + trunk_sorted_dist);
+  const LineArray FRMS =
+      deno.inverse ().square () * ids.inverse () * (lower_sum + trunk_sorted_dist);
   int min_index (0);
   FRMS.minCoeff (&min_index);
 
-  const float opt_ratio = float (min_index + min_el) / float (points_nbr);
+  const float opt_ratio = float(min_index + min_el) / float(points_nbr);
   return (opt_ratio);
 }

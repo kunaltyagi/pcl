@@ -31,7 +31,7 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *
- * 
+ *
  *
  */
 
@@ -43,7 +43,7 @@ using namespace on_nurbs;
 void
 SparseMat::get (std::vector<int> &i, std::vector<int> &j, std::vector<double> &v)
 {
-  std::map<int, std::map<int, double> >::iterator it_row;
+  std::map<int, std::map<int, double>>::iterator it_row;
   std::map<int, double>::iterator it_col;
 
   i.clear ();
@@ -51,11 +51,9 @@ SparseMat::get (std::vector<int> &i, std::vector<int> &j, std::vector<double> &v
   v.clear ();
 
   it_row = m_mat.begin ();
-  while (it_row != m_mat.end ())
-  {
+  while (it_row != m_mat.end ()) {
     it_col = it_row->second.begin ();
-    while (it_col != it_row->second.end ())
-    {
+    while (it_col != it_row->second.end ()) {
       i.push_back (it_row->first);
       j.push_back (it_col->first);
       v.push_back (it_col->second);
@@ -63,13 +61,12 @@ SparseMat::get (std::vector<int> &i, std::vector<int> &j, std::vector<double> &v
     }
     ++it_row;
   }
-
 }
 
 double
 SparseMat::get (int i, int j)
 {
-  std::map<int, std::map<int, double> >::iterator it_row;
+  std::map<int, std::map<int, double>>::iterator it_row;
   std::map<int, double>::iterator it_col;
 
   it_row = m_mat.find (i);
@@ -81,24 +78,21 @@ SparseMat::get (int i, int j)
     return 0.0;
 
   return it_col->second;
-
 }
 
 void
 SparseMat::set (int i, int j, double v)
 {
 
-  if (i < 0 || j < 0)
-  {
+  if (i < 0 || j < 0) {
     printf ("[SparseMat::set] Warning index out of bounds (%d,%d)\n", i, j);
     return;
   }
 
-  if (v == 0.0)
-  {
+  if (v == 0.0) {
     // delete entry
 
-    std::map<int, std::map<int, double> >::iterator it_row;
+    std::map<int, std::map<int, double>>::iterator it_row;
     std::map<int, double>::iterator it_col;
 
     it_row = m_mat.find (i);
@@ -110,57 +104,49 @@ SparseMat::set (int i, int j, double v)
       return;
 
     it_row->second.erase (it_col);
-    if (it_row->second.empty ())
-    {}
+    if (it_row->second.empty ()) {
+    }
     m_mat.erase (it_row);
 
-  }
-  else
-  {
+  } else {
     // update entry
     m_mat[i][j] = v;
-
   }
-
 }
 
 void
 SparseMat::deleteRow (int i)
 {
 
-  std::map<int, std::map<int, double> >::iterator it_row;
+  std::map<int, std::map<int, double>>::iterator it_row;
 
   it_row = m_mat.find (i);
   if (it_row != m_mat.end ())
     m_mat.erase (it_row);
-
 }
 
 void
 SparseMat::deleteColumn (int j)
 {
-  std::map<int, std::map<int, double> >::iterator it_row;
+  std::map<int, std::map<int, double>>::iterator it_row;
   std::map<int, double>::iterator it_col;
 
   it_row = m_mat.begin ();
-  while (it_row != m_mat.end ())
-  {
+  while (it_row != m_mat.end ()) {
     it_col = it_row->second.find (j);
     if (it_col != it_row->second.end ())
       it_row->second.erase (it_col);
     ++it_row;
   }
-
 }
 
 void
 SparseMat::size (int &si, int &sj)
 {
-  std::map<int, std::map<int, double> >::iterator it_row;
+  std::map<int, std::map<int, double>>::iterator it_row;
   std::map<int, double>::iterator it_col;
 
-  if (m_mat.empty ())
-  {
+  if (m_mat.empty ()) {
     si = 0;
     sj = 0;
     return;
@@ -170,8 +156,7 @@ SparseMat::size (int &si, int &sj)
   sj = 0;
 
   it_row = m_mat.begin ();
-  while (it_row != m_mat.end ())
-  {
+  while (it_row != m_mat.end ()) {
     it_col = it_row->second.end ();
     --it_col;
     if (sj < ((*it_col).first + 1))
@@ -183,40 +168,35 @@ SparseMat::size (int &si, int &sj)
   it_row = m_mat.end ();
   --it_row;
   si = (*it_row).first + 1;
-
 }
 
 int
 SparseMat::nonzeros ()
 {
-  std::map<int, std::map<int, double> >::iterator it_row;
+  std::map<int, std::map<int, double>>::iterator it_row;
   int s = 0;
 
   it_row = m_mat.begin ();
-  while (it_row != m_mat.end ())
-  {
-    s += int (it_row->second.size ());
+  while (it_row != m_mat.end ()) {
+    s += int(it_row->second.size ());
 
     ++it_row;
   }
 
   return s;
-
 }
 
 void
 SparseMat::printLong ()
 {
-  std::map<int, std::map<int, double> >::iterator it_row;
+  std::map<int, std::map<int, double>>::iterator it_row;
   std::map<int, double>::iterator it_col;
 
   int si, sj;
   size (si, sj);
 
-  for (int i = 0; i < si; i++)
-  {
-    for (int j = 0; j < sj; j++)
-    {
+  for (int i = 0; i < si; i++) {
+    for (int j = 0; j < sj; j++) {
       printf ("%f ", get (i, j));
     }
     printf ("\n");
@@ -226,15 +206,13 @@ SparseMat::printLong ()
 void
 SparseMat::print ()
 {
-  std::map<int, std::map<int, double> >::iterator it_row;
+  std::map<int, std::map<int, double>>::iterator it_row;
   std::map<int, double>::iterator it_col;
 
   it_row = m_mat.begin ();
-  while (it_row != m_mat.end ())
-  {
+  while (it_row != m_mat.end ()) {
     it_col = it_row->second.begin ();
-    while (it_col != it_row->second.end ())
-    {
+    while (it_col != it_row->second.end ()) {
       printf ("[%d,%d] %f ", it_row->first, it_col->first, it_col->second);
       ++it_col;
     }
@@ -242,4 +220,3 @@ SparseMat::print ()
     ++it_row;
   }
 }
-

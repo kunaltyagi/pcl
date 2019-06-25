@@ -44,102 +44,105 @@ namespace pcl
   namespace search
   {
     /** \brief Implementation of a simple brute force search algorithm.
-      * \author Suat Gedikli
-      * \ingroup search
-      */
-    template<typename PointT>
-    class BruteForce: public Search<PointT>
+     * \author Suat Gedikli
+     * \ingroup search
+     */
+    template <typename PointT>
+    class BruteForce : public Search<PointT>
     {
       using PointCloud = typename Search<PointT>::PointCloud;
       using PointCloudConstPtr = typename Search<PointT>::PointCloudConstPtr;
 
-      using IndicesPtr = boost::shared_ptr<std::vector<int> >;
-      using IndicesConstPtr = boost::shared_ptr<const std::vector<int> >;
+      using IndicesPtr = boost::shared_ptr<std::vector<int>>;
+      using IndicesConstPtr = boost::shared_ptr<const std::vector<int>>;
 
       using pcl::search::Search<PointT>::input_;
       using pcl::search::Search<PointT>::indices_;
       using pcl::search::Search<PointT>::sorted_results_;
 
-      struct Entry
-      {
+      struct Entry {
         Entry (int idx, float dist) : index (idx), distance (dist) {}
 
         Entry () : index (0), distance (0) {}
         unsigned index;
         float distance;
-        
-        inline bool 
-        operator < (const Entry& other) const
+
+        inline bool
+        operator< (const Entry &other) const
         {
           return (distance < other.distance);
         }
-        
-        inline bool 
-        operator > (const Entry& other) const
+
+        inline bool
+        operator> (const Entry &other) const
         {
           return (distance > other.distance);
         }
       };
 
       // replace by some metric functor
-      float getDistSqr (const PointT& point1, const PointT& point2) const;
+      float
+      getDistSqr (const PointT &point1, const PointT &point2) const;
+
       public:
-        BruteForce (bool sorted_results = false)
-        : Search<PointT> ("BruteForce", sorted_results)
-        {
-        }
+      BruteForce (bool sorted_results = false)
+          : Search<PointT> ("BruteForce", sorted_results)
+      {
+      }
 
-        /** \brief Destructor for KdTree. */
-        
-        ~BruteForce ()
-        {
-        }
+      /** \brief Destructor for KdTree. */
 
-        /** \brief Search for the k-nearest neighbors for the given query point.
-          * \param[in] point the given query point
-          * \param[in] k the number of neighbors to search for
-          * \param[out] k_indices the resultant indices of the neighboring points (must be resized to \a k a priori!)
-          * \param[out] k_distances the resultant squared distances to the neighboring points (must be resized to \a k
-          * a priori!)
-          * \return number of neighbors found
-          */
-        int
-        nearestKSearch (const PointT &point, int k, std::vector<int> &k_indices, std::vector<float> &k_distances) const override;
+      ~BruteForce () {}
 
-        /** \brief Search for all the nearest neighbors of the query point in a given radius.
-          * \param[in] point the given query point
-          * \param[in] radius the radius of the sphere bounding all of p_q's neighbors
-          * \param[out] k_indices the resultant indices of the neighboring points
-          * \param[out] k_sqr_distances the resultant squared distances to the neighboring points
-          * \param[in] max_nn if given, bounds the maximum returned neighbors to this value. If \a max_nn is set to
-          * 0 or to a number higher than the number of points in the input cloud, all neighbors in \a radius will be
-          * returned.
-          * \return number of neighbors found in radius
-          */
-        int
-        radiusSearch (const PointT& point, double radius,
-                      std::vector<int> &k_indices, std::vector<float> &k_sqr_distances,
-                      unsigned int max_nn = 0) const override;
+      /** \brief Search for the k-nearest neighbors for the given query point.
+       * \param[in] point the given query point
+       * \param[in] k the number of neighbors to search for
+       * \param[out] k_indices the resultant indices of the neighboring points (must be
+       * resized to \a k a priori!) \param[out] k_distances the resultant squared
+       * distances to the neighboring points (must be resized to \a k a priori!) \return
+       * number of neighbors found
+       */
+      int
+      nearestKSearch (const PointT &point, int k, std::vector<int> &k_indices,
+                      std::vector<float> &k_distances) const override;
+
+      /** \brief Search for all the nearest neighbors of the query point in a given
+       * radius. \param[in] point the given query point \param[in] radius the radius of
+       * the sphere bounding all of p_q's neighbors \param[out] k_indices the resultant
+       * indices of the neighboring points \param[out] k_sqr_distances the resultant
+       * squared distances to the neighboring points \param[in] max_nn if given, bounds
+       * the maximum returned neighbors to this value. If \a max_nn is set to 0 or to a
+       * number higher than the number of points in the input cloud, all neighbors in \a
+       * radius will be returned. \return number of neighbors found in radius
+       */
+      int
+      radiusSearch (const PointT &point, double radius, std::vector<int> &k_indices,
+                    std::vector<float> &k_sqr_distances,
+                    unsigned int max_nn = 0) const override;
 
       private:
-        int
-        denseKSearch (const PointT &point, int k, std::vector<int> &k_indices, std::vector<float> &k_distances) const;
+      int
+      denseKSearch (const PointT &point, int k, std::vector<int> &k_indices,
+                    std::vector<float> &k_distances) const;
 
-        int
-        sparseKSearch (const PointT &point, int k, std::vector<int> &k_indices, std::vector<float> &k_distances) const;
+      int
+      sparseKSearch (const PointT &point, int k, std::vector<int> &k_indices,
+                     std::vector<float> &k_distances) const;
 
-        int
-        denseRadiusSearch (const PointT& point, double radius,
-                           std::vector<int> &k_indices, std::vector<float> &k_sqr_distances,
-                           unsigned int max_nn = 0) const;
+      int
+      denseRadiusSearch (const PointT &point, double radius,
+                         std::vector<int> &k_indices,
+                         std::vector<float> &k_sqr_distances,
+                         unsigned int max_nn = 0) const;
 
-        int
-        sparseRadiusSearch (const PointT& point, double radius,
-                            std::vector<int> &k_indices, std::vector<float> &k_sqr_distances,
-                            unsigned int max_nn = 0) const;
+      int
+      sparseRadiusSearch (const PointT &point, double radius,
+                          std::vector<int> &k_indices,
+                          std::vector<float> &k_sqr_distances,
+                          unsigned int max_nn = 0) const;
     };
-  }
-}
+  } // namespace search
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/search/impl/brute_force.hpp>

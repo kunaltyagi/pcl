@@ -38,10 +38,10 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_cloud.h>
 #include <pcl/features/normal_3d.h>
 #include <pcl/features/ppf.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -66,7 +66,7 @@ TEST (PCL, PPFEstimation)
   normal_estimation.setKSearch (10); // Use 10 nearest neighbors to estimate the normals
   normal_estimation.compute (*normals);
 
-  PPFEstimation <PointXYZ, Normal, PPFSignature> ppf_estimation;
+  PPFEstimation<PointXYZ, Normal, PPFSignature> ppf_estimation;
   ppf_estimation.setInputCloud (cloud.makeShared ());
   ppf_estimation.setInputNormals (normals);
   PointCloud<PPFSignature>::Ptr feature_cloud (new PointCloud<PPFSignature> ());
@@ -101,17 +101,19 @@ TEST (PCL, PPFEstimation)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
-  if (loadPCDFile<PointXYZ> (argv[1], cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (loadPCDFile<PointXYZ> (argv[1], cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
 

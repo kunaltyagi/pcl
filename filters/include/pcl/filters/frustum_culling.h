@@ -37,10 +37,10 @@
 
 #pragma once
 
-#include <pcl/point_types.h>
-#include <pcl/filters/filter_indices.h>
-#include <pcl/common/transforms.h>
 #include <pcl/common/eigen.h>
+#include <pcl/common/transforms.h>
+#include <pcl/filters/filter_indices.h>
+#include <pcl/point_types.h>
 
 namespace pcl
 {
@@ -50,7 +50,7 @@ namespace pcl
    * Code example:
    *
    * \code
-   * pcl::PointCloud <pcl::PointXYZ>::Ptr source; 
+   * pcl::PointCloud <pcl::PointXYZ>::Ptr source;
    * // .. read or fill the source cloud
    *
    * pcl::FrustumCulling<pcl::PointXYZ> fc;
@@ -80,158 +80,152 @@ namespace pcl
     using PointCloudConstPtr = typename PointCloud::ConstPtr;
 
     public:
+    using Ptr = boost::shared_ptr<FrustumCulling<PointT>>;
+    using ConstPtr = boost::shared_ptr<const FrustumCulling<PointT>>;
 
-      using Ptr = boost::shared_ptr<FrustumCulling<PointT> >;
-      using ConstPtr = boost::shared_ptr<const FrustumCulling<PointT> >;
+    using Filter<PointT>::getClassName;
 
+    FrustumCulling (bool extract_removed_indices = false)
+        : FilterIndices<PointT>::FilterIndices (extract_removed_indices),
+          camera_pose_ (Eigen::Matrix4f::Identity ()), hfov_ (60.0f), vfov_ (60.0f),
+          np_dist_ (0.1f), fp_dist_ (5.0f)
+    {
+      filter_name_ = "FrustumCulling";
+    }
 
-      using Filter<PointT>::getClassName;
+    /** \brief Set the pose of the camera w.r.t the origin
+     * \param[in] camera_pose the camera pose
+     *
+     * Note: This assumes a coordinate system where X is forward,
+     * Y is up, and Z is right. To convert from the traditional camera
+     * coordinate system (X right, Y down, Z forward), one can use:
+     *
+     * \code
+     * Eigen::Matrix4f pose_orig = //pose in camera coordinates
+     * Eigen::Matrix4f cam2robot;
+     * cam2robot << 0, 0, 1, 0
+     *              0,-1, 0, 0
+     *              1, 0, 0, 0
+     *              0, 0, 0, 1;
+     * Eigen::Matrix4f pose_new = pose_orig * cam2robot;
+     * fc.setCameraPose (pose_new);
+     * \endcode
+     */
+    void
+    setCameraPose (const Eigen::Matrix4f &camera_pose)
+    {
+      camera_pose_ = camera_pose;
+    }
 
-      FrustumCulling (bool extract_removed_indices = false) 
-        : FilterIndices<PointT>::FilterIndices (extract_removed_indices)
-        , camera_pose_ (Eigen::Matrix4f::Identity ())
-        , hfov_ (60.0f)
-        , vfov_ (60.0f)
-        , np_dist_ (0.1f)
-        , fp_dist_ (5.0f)
-      {
-        filter_name_ = "FrustumCulling";
-      }
+    /** \brief Get the pose of the camera w.r.t the origin */
+    Eigen::Matrix4f
+    getCameraPose () const
+    {
+      return (camera_pose_);
+    }
 
-      /** \brief Set the pose of the camera w.r.t the origin
-        * \param[in] camera_pose the camera pose
-        *
-        * Note: This assumes a coordinate system where X is forward, 
-        * Y is up, and Z is right. To convert from the traditional camera 
-        * coordinate system (X right, Y down, Z forward), one can use:
-        *
-        * \code
-        * Eigen::Matrix4f pose_orig = //pose in camera coordinates
-        * Eigen::Matrix4f cam2robot;
-        * cam2robot << 0, 0, 1, 0
-        *              0,-1, 0, 0
-        *              1, 0, 0, 0
-        *              0, 0, 0, 1;
-        * Eigen::Matrix4f pose_new = pose_orig * cam2robot;
-        * fc.setCameraPose (pose_new);
-        * \endcode
-        */
-      void 
-      setCameraPose (const Eigen::Matrix4f& camera_pose)
-      {
-        camera_pose_ = camera_pose;
-      }
+    /** \brief Set the horizontal field of view for the camera in degrees
+     * \param[in] hfov the field of view
+     */
+    void
+    setHorizontalFOV (float hfov)
+    {
+      hfov_ = hfov;
+    }
 
-      /** \brief Get the pose of the camera w.r.t the origin */
-      Eigen::Matrix4f
-      getCameraPose () const
-      {
-        return (camera_pose_);
-      }
+    /** \brief Get the horizontal field of view for the camera in degrees */
+    float
+    getHorizontalFOV () const
+    {
+      return (hfov_);
+    }
 
-      /** \brief Set the horizontal field of view for the camera in degrees
-        * \param[in] hfov the field of view
-        */
-      void 
-      setHorizontalFOV (float hfov)
-      {
-        hfov_ = hfov;
-      }
+    /** \brief Set the vertical field of view for the camera in degrees
+     * \param[in] vfov the field of view
+     */
+    void
+    setVerticalFOV (float vfov)
+    {
+      vfov_ = vfov;
+    }
 
-      /** \brief Get the horizontal field of view for the camera in degrees */
-      float 
-      getHorizontalFOV () const
-      {
-        return (hfov_);
-      }
+    /** \brief Get the vertical field of view for the camera in degrees */
+    float
+    getVerticalFOV () const
+    {
+      return (vfov_);
+    }
 
-      /** \brief Set the vertical field of view for the camera in degrees
-        * \param[in] vfov the field of view
-        */
-      void 
-      setVerticalFOV (float vfov)
-      {
-        vfov_ = vfov;
-      }
+    /** \brief Set the near plane distance
+     * \param[in] np_dist the near plane distance
+     */
+    void
+    setNearPlaneDistance (float np_dist)
+    {
+      np_dist_ = np_dist;
+    }
 
-      /** \brief Get the vertical field of view for the camera in degrees */
-      float 
-      getVerticalFOV () const
-      {
-        return (vfov_);
-      }
+    /** \brief Get the near plane distance. */
+    float
+    getNearPlaneDistance () const
+    {
+      return (np_dist_);
+    }
 
-      /** \brief Set the near plane distance
-        * \param[in] np_dist the near plane distance
-        */
-      void 
-      setNearPlaneDistance (float np_dist)
-      {
-        np_dist_ = np_dist;
-      }
+    /** \brief Set the far plane distance
+     * \param[in] fp_dist the far plane distance
+     */
+    void
+    setFarPlaneDistance (float fp_dist)
+    {
+      fp_dist_ = fp_dist;
+    }
 
-      /** \brief Get the near plane distance. */
-      float
-      getNearPlaneDistance () const
-      {
-        return (np_dist_);
-      }
-
-      /** \brief Set the far plane distance
-        * \param[in] fp_dist the far plane distance
-        */
-      void 
-      setFarPlaneDistance (float fp_dist)
-      {
-        fp_dist_ = fp_dist;
-      }
-
-      /** \brief Get the far plane distance */
-      float 
-      getFarPlaneDistance () const
-      {
-        return (fp_dist_);
-      }
+    /** \brief Get the far plane distance */
+    float
+    getFarPlaneDistance () const
+    {
+      return (fp_dist_);
+    }
 
     protected:
-      using PCLBase<PointT>::input_;
-      using PCLBase<PointT>::indices_;
-      using Filter<PointT>::filter_name_;
-      using FilterIndices<PointT>::negative_;
-      using FilterIndices<PointT>::keep_organized_;
-      using FilterIndices<PointT>::user_filter_value_;
-      using FilterIndices<PointT>::extract_removed_indices_;
-      using FilterIndices<PointT>::removed_indices_;
+    using PCLBase<PointT>::input_;
+    using PCLBase<PointT>::indices_;
+    using Filter<PointT>::filter_name_;
+    using FilterIndices<PointT>::negative_;
+    using FilterIndices<PointT>::keep_organized_;
+    using FilterIndices<PointT>::user_filter_value_;
+    using FilterIndices<PointT>::extract_removed_indices_;
+    using FilterIndices<PointT>::removed_indices_;
 
-      /** \brief Sample of point indices into a separate PointCloud
-        * \param[out] output the resultant point cloud
-        */
-      void
-      applyFilter (PointCloud &output) override;
+    /** \brief Sample of point indices into a separate PointCloud
+     * \param[out] output the resultant point cloud
+     */
+    void
+    applyFilter (PointCloud &output) override;
 
-      /** \brief Sample of point indices
-        * \param[out] indices the resultant point cloud indices
-        */
-      void
-      applyFilter (std::vector<int> &indices) override;
+    /** \brief Sample of point indices
+     * \param[out] indices the resultant point cloud indices
+     */
+    void
+    applyFilter (std::vector<int> &indices) override;
 
     private:
-
-      /** \brief The camera pose */
-      Eigen::Matrix4f camera_pose_;
-      /** \brief Horizontal field of view */
-      float hfov_;
-      /** \brief Vertical field of view */
-      float vfov_;
-      /** \brief Near plane distance */
-      float np_dist_;
-      /** \brief Far plane distance */
-      float fp_dist_;
+    /** \brief The camera pose */
+    Eigen::Matrix4f camera_pose_;
+    /** \brief Horizontal field of view */
+    float hfov_;
+    /** \brief Vertical field of view */
+    float vfov_;
+    /** \brief Near plane distance */
+    float np_dist_;
+    /** \brief Far plane distance */
+    float fp_dist_;
 
     public:
-      EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   };
-}
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/filters/impl/frustum_culling.hpp>

@@ -38,17 +38,17 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_types.h>
-#include <pcl/point_cloud.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl/search/search.h>
 #include <pcl/features/normal_3d.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+#include <pcl/search/search.h>
 
 #include <pcl/segmentation/extract_polygonal_prism_data.h>
-#include <pcl/segmentation/segment_differences.h>
+#include <pcl/segmentation/min_cut_segmentation.h>
 #include <pcl/segmentation/region_growing.h>
 #include <pcl/segmentation/region_growing_rgb.h>
-#include <pcl/segmentation/min_cut_segmentation.h>
+#include <pcl/segmentation/segment_differences.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -73,7 +73,7 @@ TEST (RegionGrowingRGBTest, Segment)
   rg.setPointColorThreshold (6);
   rg.setMinClusterSize (20);
 
-  std::vector <pcl::PointIndices> clusters;
+  std::vector<pcl::PointIndices> clusters;
   rg.extract (clusters);
   int num_of_segments = static_cast<int> (clusters.size ());
   EXPECT_NE (0, num_of_segments);
@@ -86,7 +86,7 @@ TEST (RegionGrowingTest, Segment)
   rg.setInputCloud (cloud_);
   rg.setInputNormals (normals_);
 
-  std::vector <pcl::PointIndices> clusters;
+  std::vector<pcl::PointIndices> clusters;
   rg.extract (clusters);
   int num_of_segments = static_cast<int> (clusters.size ());
   EXPECT_NE (0, num_of_segments);
@@ -98,7 +98,7 @@ TEST (RegionGrowingTest, SegmentWithoutCloud)
   pcl::RegionGrowing<pcl::PointXYZ, pcl::Normal> rg;
   rg.setInputNormals (normals_);
 
-  std::vector <pcl::PointIndices> clusters;
+  std::vector<pcl::PointIndices> clusters;
   rg.extract (clusters);
   int num_of_segments = static_cast<int> (clusters.size ());
   EXPECT_EQ (0, num_of_segments);
@@ -110,7 +110,7 @@ TEST (RegionGrowingTest, SegmentWithoutNormals)
   pcl::RegionGrowing<pcl::PointXYZ, pcl::Normal> rg;
   rg.setInputCloud (cloud_);
 
-  std::vector <pcl::PointIndices> clusters;
+  std::vector<pcl::PointIndices> clusters;
   rg.extract (clusters);
   int num_of_segments = static_cast<int> (clusters.size ());
   EXPECT_EQ (0, num_of_segments);
@@ -126,7 +126,7 @@ TEST (RegionGrowingTest, SegmentEmptyCloud)
   rg.setInputCloud (empty_cloud);
   rg.setInputNormals (empty_normals);
 
-  std::vector <pcl::PointIndices> clusters;
+  std::vector<pcl::PointIndices> clusters;
   rg.extract (clusters);
   int num_of_segments = static_cast<int> (clusters.size ());
   EXPECT_EQ (0, num_of_segments);
@@ -143,7 +143,7 @@ TEST (RegionGrowingTest, SegmentWithDifferentNormalAndCloudSize)
   int second_cloud_size = static_cast<int> (another_cloud_->points.size ());
   ASSERT_NE (first_cloud_size, second_cloud_size);
 
-  std::vector <pcl::PointIndices> clusters;
+  std::vector<pcl::PointIndices> clusters;
   rg.extract (clusters);
   int num_of_segments = static_cast<int> (clusters.size ());
   EXPECT_EQ (0, num_of_segments);
@@ -165,7 +165,7 @@ TEST (RegionGrowingTest, SegmentWithWrongThresholdParameters)
 
   rg.setNumberOfNeighbours (0);
 
-  std::vector <pcl::PointIndices> clusters;
+  std::vector<pcl::PointIndices> clusters;
   rg.extract (clusters);
   int num_of_segments = static_cast<int> (clusters.size ());
   EXPECT_EQ (0, num_of_segments);
@@ -197,8 +197,8 @@ TEST (RegionGrowingTest, SegmentFromPoint)
 
   rg.setInputCloud (cloud_);
   rg.setInputNormals (normals_);
-  rg.getSegmentFromPoint(0, cluster);
-  EXPECT_NE (0, cluster.indices.size());
+  rg.getSegmentFromPoint (0, cluster);
+  EXPECT_NE (0, cluster.indices.size ());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,7 +220,8 @@ TEST (MinCutSegmentationTest, Segment)
   source_weight = 0.8;
   neighbor_number = 14;
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr foreground_points(new pcl::PointCloud<pcl::PointXYZ> ());
+  pcl::PointCloud<pcl::PointXYZ>::Ptr foreground_points (
+      new pcl::PointCloud<pcl::PointXYZ> ());
   foreground_points->points.push_back (object_center);
 
   mcSeg.setForegroundPoints (foreground_points);
@@ -230,7 +231,7 @@ TEST (MinCutSegmentationTest, Segment)
   mcSeg.setSourceWeight (source_weight);
   mcSeg.setNumberOfNeighbours (neighbor_number);
 
-  std::vector <pcl::PointIndices> clusters;
+  std::vector<pcl::PointIndices> clusters;
   mcSeg.extract (clusters);
   int num_of_segments = static_cast<int> (clusters.size ());
   EXPECT_EQ (2, num_of_segments);
@@ -243,7 +244,7 @@ TEST (MinCutSegmentationTest, SegmentWithoutForegroundPoints)
   mcSeg.setInputCloud (another_cloud_);
   mcSeg.setRadius (3.8003856);
 
-  std::vector <pcl::PointIndices> clusters;
+  std::vector<pcl::PointIndices> clusters;
   mcSeg.extract (clusters);
   int num_of_segments = static_cast<int> (clusters.size ());
   EXPECT_EQ (0, num_of_segments);
@@ -254,7 +255,7 @@ TEST (MinCutSegmentationTest, SegmentWithoutCloud)
 {
   pcl::MinCutSegmentation<pcl::PointXYZ> mcSeg;
 
-  std::vector <pcl::PointIndices> clusters;
+  std::vector<pcl::PointIndices> clusters;
   mcSeg.extract (clusters);
   int num_of_segments = static_cast<int> (clusters.size ());
   EXPECT_EQ (0, num_of_segments);
@@ -267,7 +268,7 @@ TEST (MinCutSegmentationTest, SegmentEmptyCloud)
   pcl::MinCutSegmentation<pcl::PointXYZ> mcSeg;
   mcSeg.setInputCloud (empty_cloud);
 
-  std::vector <pcl::PointIndices> clusters;
+  std::vector<pcl::PointIndices> clusters;
   mcSeg.extract (clusters);
   int num_of_segments = static_cast<int> (clusters.size ());
   EXPECT_EQ (0, num_of_segments);
@@ -282,7 +283,8 @@ TEST (MinCutSegmentationTest, SegmentWithWrongParameters)
   object_center.x = -36.01f;
   object_center.y = -64.73f;
   object_center.z = -6.18f;
-  pcl::PointCloud<pcl::PointXYZ>::Ptr foreground_points(new pcl::PointCloud<pcl::PointXYZ> ());
+  pcl::PointCloud<pcl::PointXYZ>::Ptr foreground_points (
+      new pcl::PointCloud<pcl::PointXYZ> ());
   foreground_points->points.push_back (object_center);
   mcSeg.setForegroundPoints (foreground_points);
 
@@ -328,7 +330,7 @@ TEST (MinCutSegmentationTest, SegmentWithWrongParameters)
 
   mcSeg.setRadius (3.8003856);
 
-  std::vector <pcl::PointIndices> clusters;
+  std::vector<pcl::PointIndices> clusters;
   mcSeg.extract (clusters);
   int num_of_segments = static_cast<int> (clusters.size ());
   EXPECT_EQ (2, num_of_segments);
@@ -348,19 +350,19 @@ TEST (SegmentDifferences, Segmentation)
   sd.segment (output);
 
   EXPECT_EQ (static_cast<int> (output.points.size ()), 0);
-  
+
   // Set a different target
   sd.setTargetCloud (cloud_t_);
   sd.segment (output);
   EXPECT_EQ (static_cast<int> (output.points.size ()), 126);
-  //savePCDFile ("./test/0-t.pcd", output);
+  // savePCDFile ("./test/0-t.pcd", output);
 
   // Reverse
   sd.setInputCloud (cloud_t_);
   sd.setTargetCloud (cloud_);
   sd.segment (output);
   EXPECT_EQ (static_cast<int> (output.points.size ()), 127);
-  //savePCDFile ("./test/t-0.pcd", output);
+  // savePCDFile ("./test/t-0.pcd", output);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -369,8 +371,7 @@ TEST (ExtractPolygonalPrism, Segmentation)
   PointCloud<PointXYZ>::Ptr hull (new PointCloud<PointXYZ>);
   hull->points.resize (5);
 
-  for (size_t i = 0; i < hull->points.size (); ++i)
-  {
+  for (size_t i = 0; i < hull->points.size (); ++i) {
     hull->points[i].x = hull->points[i].y = static_cast<float> (i);
     hull->points[i].z = 0.0f;
   }
@@ -387,56 +388,64 @@ TEST (ExtractPolygonalPrism, Segmentation)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 4)
-  {
-    std::cerr << "This test requires three point clouds. The first one must be 'bun0.pcd'." << std::endl;
-    std::cerr << "The second must be 'car6.pcd'. The last one must be 'colored_cloud.pcd'." << std::endl;
-    std::cerr << "Please download and pass them in the specified order(including the path to them)." << std::endl;
+  if (argc < 4) {
+    std::cerr
+        << "This test requires three point clouds. The first one must be 'bun0.pcd'."
+        << std::endl;
+    std::cerr
+        << "The second must be 'car6.pcd'. The last one must be 'colored_cloud.pcd'."
+        << std::endl;
+    std::cerr << "Please download and pass them in the specified order(including the "
+                 "path to them)."
+              << std::endl;
     return (-1);
   }
 
   // Load a standard PCD file from disk
   PointCloud<PointXYZ> cloud, cloud_t, another_cloud;
   PointCloud<PointXYZRGB> colored_cloud_1;
-  if (loadPCDFile (argv[1], cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (loadPCDFile (argv[1], cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
-  if (pcl::io::loadPCDFile (argv[2], another_cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `car6.pcd` and pass its path to the test." << std::endl;
+  if (pcl::io::loadPCDFile (argv[2], another_cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `car6.pcd` and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
-  if (pcl::io::loadPCDFile (argv[3], colored_cloud_1) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `colored_cloud.pcd` and pass its path to the test." << std::endl;
+  if (pcl::io::loadPCDFile (argv[3], colored_cloud_1) < 0) {
+    std::cerr << "Failed to read test file. Please download `colored_cloud.pcd` and "
+                 "pass its path to the test."
+              << std::endl;
     return (-1);
   }
 
-  colored_cloud = colored_cloud_1.makeShared();
+  colored_cloud = colored_cloud_1.makeShared ();
 
   // Tranpose the cloud
   cloud_t = cloud;
   for (size_t i = 0; i < cloud.points.size (); ++i)
     cloud_t.points[i].x += 0.01f;
 
-  cloud_   = cloud.makeShared ();
+  cloud_ = cloud.makeShared ();
   cloud_t_ = cloud_t.makeShared ();
 
-  another_cloud_ = another_cloud.makeShared();
-  normals_ = (new pcl::PointCloud<pcl::Normal>)->makeShared();
+  another_cloud_ = another_cloud.makeShared ();
+  normals_ = (new pcl::PointCloud<pcl::Normal>)->makeShared ();
   pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normal_estimator;
-  normal_estimator.setInputCloud(cloud_);
-  normal_estimator.setKSearch(30);
-  normal_estimator.compute(*normals_);
+  normal_estimator.setInputCloud (cloud_);
+  normal_estimator.setKSearch (30);
+  normal_estimator.compute (*normals_);
 
-  another_normals_ = (new pcl::PointCloud<pcl::Normal>)->makeShared();
-  normal_estimator.setInputCloud(another_cloud_);
-  normal_estimator.setKSearch(30);
-  normal_estimator.compute(*another_normals_);
+  another_normals_ = (new pcl::PointCloud<pcl::Normal>)->makeShared ();
+  normal_estimator.setInputCloud (another_cloud_);
+  normal_estimator.setKSearch (30);
+  normal_estimator.compute (*another_normals_);
 
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

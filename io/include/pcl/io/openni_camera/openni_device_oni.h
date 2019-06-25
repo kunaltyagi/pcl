@@ -49,7 +49,8 @@ namespace openni_wrapper
 {
 
   /**
-   * @brief Concrete implementation of the interface OpenNIDevice for a virtual device playing back an ONI file.
+   * @brief Concrete implementation of the interface OpenNIDevice for a virtual device
+   * playing back an ONI file.
    * @author Suat Gedikli
    * @date 19. june 2011
    * @ingroup io
@@ -57,32 +58,48 @@ namespace openni_wrapper
   class DeviceONI : public OpenNIDevice
   {
     friend class OpenNIDriver;
-  public:
-    DeviceONI (xn::Context& context, const std::string& file_name, bool repeat = false, bool streaming = true);
+
+    public:
+    DeviceONI (xn::Context &context, const std::string &file_name, bool repeat = false,
+               bool streaming = true);
     ~DeviceONI () throw ();
 
-    void startImageStream () override;
-    void stopImageStream () override;
+    void
+    startImageStream () override;
+    void
+    stopImageStream () override;
 
-    void startDepthStream () override;
-    void stopDepthStream () override;
+    void
+    startDepthStream () override;
+    void
+    stopDepthStream () override;
 
-    void startIRStream () override;
-    void stopIRStream () override;
+    void
+    startIRStream () override;
+    void
+    stopIRStream () override;
 
-    bool isImageStreamRunning () const throw () override;
-    bool isDepthStreamRunning () const throw () override;
-    bool isIRStreamRunning () const throw () override;
+    bool
+    isImageStreamRunning () const throw () override;
+    bool
+    isDepthStreamRunning () const throw () override;
+    bool
+    isIRStreamRunning () const throw () override;
 
-    bool isImageResizeSupported (unsigned input_width, unsigned input_height, unsigned output_width, unsigned output_height) const throw () override;
+    bool
+    isImageResizeSupported (unsigned input_width, unsigned input_height,
+                            unsigned output_width, unsigned output_height) const
+        throw () override;
 
     /** \brief Trigger a new frame in the ONI stream.
-      * \param[in] relative_offset the relative offset in case we want to seek in the file
-      */
-    bool 
+     * \param[in] relative_offset the relative offset in case we want to seek in the
+     * file
+     */
+    bool
     trigger (int relative_offset = 0);
 
-    bool isStreaming () const throw ();
+    bool
+    isStreaming () const throw ();
 
     /** \brief Check if there is any data left in the ONI file to process. */
     inline bool
@@ -91,13 +108,19 @@ namespace openni_wrapper
       return (!player_.IsEOF ());
     }
 
-  protected:
-    boost::shared_ptr<Image> getCurrentImage (boost::shared_ptr<xn::ImageMetaData> image_meta_data) const throw () override;
+    protected:
+    boost::shared_ptr<Image>
+    getCurrentImage (boost::shared_ptr<xn::ImageMetaData> image_meta_data) const
+        throw () override;
 
-    void PlayerThreadFunction ();
-    static void __stdcall NewONIDepthDataAvailable (xn::ProductionNode& node, void* cookie) throw ();
-    static void __stdcall NewONIImageDataAvailable (xn::ProductionNode& node, void* cookie) throw ();
-    static void __stdcall NewONIIRDataAvailable (xn::ProductionNode& node, void* cookie) throw ();
+    void
+    PlayerThreadFunction ();
+    static void __stdcall NewONIDepthDataAvailable (xn::ProductionNode &node,
+                                                    void *cookie) throw ();
+    static void __stdcall NewONIImageDataAvailable (xn::ProductionNode &node,
+                                                    void *cookie) throw ();
+    static void __stdcall NewONIIRDataAvailable (xn::ProductionNode &node,
+                                                 void *cookie) throw ();
 
     xn::Player player_;
     std::thread player_thread_;
@@ -108,5 +131,5 @@ namespace openni_wrapper
     bool image_stream_running_;
     bool ir_stream_running_;
   };
-} //namespace openni_wrapper
-#endif //HAVE_OPENNI
+} // namespace openni_wrapper
+#endif // HAVE_OPENNI

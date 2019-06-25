@@ -4,7 +4,7 @@
  *  Point Cloud Library (PCL) - www.pointclouds.org
  *  Copyright (c) 2010-2011, Willow Garage, Inc.
  *
- *  All rights reserved. 
+ *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
@@ -44,66 +44,62 @@
 namespace pcl
 {
 
-  struct DenseQuantizedSingleModTemplate
-  {
+  struct DenseQuantizedSingleModTemplate {
     std::vector<unsigned char> features;
 
-    void 
-    serialize (std::ostream & stream) const
+    void
+    serialize (std::ostream &stream) const
     {
       const size_t num_of_features = static_cast<size_t> (features.size ());
       write (stream, num_of_features);
-      for (size_t feature_index = 0; feature_index < num_of_features; ++feature_index)
-      {
+      for (size_t feature_index = 0; feature_index < num_of_features; ++feature_index) {
         write (stream, features[feature_index]);
       }
     }
 
-    void 
-    deserialize (std::istream & stream)
+    void
+    deserialize (std::istream &stream)
     {
       features.clear ();
 
       size_t num_of_features;
       read (stream, num_of_features);
       features.resize (num_of_features);
-      for (size_t feature_index = 0; feature_index < num_of_features; ++feature_index)
-      {
+      for (size_t feature_index = 0; feature_index < num_of_features; ++feature_index) {
         read (stream, features[feature_index]);
       }
     }
   };
 
-  struct DenseQuantizedMultiModTemplate
-  {
+  struct DenseQuantizedMultiModTemplate {
     std::vector<DenseQuantizedSingleModTemplate> modalities;
     float response_factor;
 
     RegionXY region;
 
-    void 
-    serialize (std::ostream & stream) const
+    void
+    serialize (std::ostream &stream) const
     {
       const size_t num_of_modalities = static_cast<size_t> (modalities.size ());
       write (stream, num_of_modalities);
-      for (size_t modality_index = 0; modality_index < num_of_modalities; ++modality_index)
-      {
+      for (size_t modality_index = 0; modality_index < num_of_modalities;
+           ++modality_index) {
         modalities[modality_index].serialize (stream);
       }
 
       region.serialize (stream);
     }
 
-    void 
-    deserialize (std::istream & stream)
+    void
+    deserialize (std::istream &stream)
     {
       modalities.clear ();
 
       size_t num_of_modalities;
       read (stream, num_of_modalities);
       modalities.resize (num_of_modalities);
-      for (size_t modality_index = 0; modality_index < num_of_modalities; ++modality_index)
-      {
+      for (size_t modality_index = 0; modality_index < num_of_modalities;
+           ++modality_index) {
         modalities[modality_index].deserialize (stream);
       }
 
@@ -111,4 +107,4 @@ namespace pcl
     }
   };
 
-}
+} // namespace pcl

@@ -4,7 +4,7 @@
  *  Point Cloud Library (PCL) - www.pointclouds.org
  *  Copyright (c) 2010-2011, Willow Garage, Inc.
  *
- *  All rights reserved. 
+ *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
@@ -35,58 +35,49 @@
  *
  */
 
-#include <pcl/recognition/quantizable_modality.h>
 #include <cstddef>
 #include <cstring>
+#include <pcl/recognition/quantizable_modality.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::QuantizableModality::QuantizableModality ()
-{
-}
+pcl::QuantizableModality::QuantizableModality () {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::QuantizableModality::~QuantizableModality ()
-{
-}
+pcl::QuantizableModality::~QuantizableModality () {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::QuantizedMap::QuantizedMap ()
-  : data_ (0), width_ (0), height_ (0)
-{
-}
+pcl::QuantizedMap::QuantizedMap () : data_ (0), width_ (0), height_ (0) {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::QuantizedMap::QuantizedMap (const QuantizedMap & copy_me)
-  : data_ (0), width_ (copy_me.width_), height_ (copy_me.height_)
+pcl::QuantizedMap::QuantizedMap (const QuantizedMap &copy_me)
+    : data_ (0), width_ (copy_me.width_), height_ (copy_me.height_)
 {
   data_.insert (data_.begin (), copy_me.data_.begin (), copy_me.data_.end ());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 pcl::QuantizedMap::QuantizedMap (const size_t width, const size_t height)
-  : data_ (width*height), width_ (width), height_ (height)
+    : data_ (width * height), width_ (width), height_ (height)
 {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::QuantizedMap::~QuantizedMap ()
-{
-}
+pcl::QuantizedMap::~QuantizedMap () {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::QuantizedMap::
-resize (const size_t width, const size_t height)
+pcl::QuantizedMap::resize (const size_t width, const size_t height)
 {
-  data_.resize (width*height);
+  data_.resize (width * height);
   width_ = width;
   height_ = height;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::QuantizedMap::
-spreadQuantizedMap (const QuantizedMap & input_map, QuantizedMap & output_map, const size_t spreading_size)
+pcl::QuantizedMap::spreadQuantizedMap (const QuantizedMap &input_map,
+                                       QuantizedMap &output_map,
+                                       const size_t spreading_size)
 {
   // TODO: implement differently (as in opencv)
   const size_t width = input_map.getWidth ();
@@ -96,14 +87,12 @@ spreadQuantizedMap (const QuantizedMap & input_map, QuantizedMap & output_map, c
   QuantizedMap tmp_map (width, height);
   output_map.resize (width, height);
 
-  for (size_t row_index = 0; row_index < height-spreading_size-1; ++row_index)
-  {
-    for (size_t col_index = 0; col_index < width-spreading_size-1; ++col_index)
-    {
+  for (size_t row_index = 0; row_index < height - spreading_size - 1; ++row_index) {
+    for (size_t col_index = 0; col_index < width - spreading_size - 1; ++col_index) {
       unsigned char value = 0;
-      const unsigned char * data_ptr = &(input_map (col_index, row_index));
-      for (size_t spreading_index = 0; spreading_index < spreading_size; ++spreading_index, ++data_ptr)
-      {
+      const unsigned char *data_ptr = &(input_map (col_index, row_index));
+      for (size_t spreading_index = 0; spreading_index < spreading_size;
+           ++spreading_index, ++data_ptr) {
         value |= *data_ptr;
       }
 
@@ -111,14 +100,12 @@ spreadQuantizedMap (const QuantizedMap & input_map, QuantizedMap & output_map, c
     }
   }
 
-  for (size_t row_index = 0; row_index < height-spreading_size-1; ++row_index)
-  {
-    for (size_t col_index = 0; col_index < width-spreading_size-1; ++col_index)
-    {
+  for (size_t row_index = 0; row_index < height - spreading_size - 1; ++row_index) {
+    for (size_t col_index = 0; col_index < width - spreading_size - 1; ++col_index) {
       unsigned char value = 0;
-      const unsigned char * data_ptr = &(tmp_map (col_index, row_index));
-      for (size_t spreading_index = 0; spreading_index < spreading_size; ++spreading_index, data_ptr += width)
-      {
+      const unsigned char *data_ptr = &(tmp_map (col_index, row_index));
+      for (size_t spreading_index = 0; spreading_index < spreading_size;
+           ++spreading_index, data_ptr += width) {
         value |= *data_ptr;
       }
 

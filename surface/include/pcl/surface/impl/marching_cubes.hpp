@@ -36,10 +36,10 @@
 #ifndef PCL_SURFACE_IMPL_MARCHING_CUBES_H_
 #define PCL_SURFACE_IMPL_MARCHING_CUBES_H_
 
-#include <pcl/surface/marching_cubes.h>
+#include <pcl/Vertices.h>
 #include <pcl/common/common.h>
 #include <pcl/common/vector_average.h>
-#include <pcl/Vertices.h>
+#include <pcl/surface/marching_cubes.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointNT>
@@ -48,7 +48,8 @@ pcl::MarchingCubes<PointNT>::~MarchingCubes ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointNT> void
+template <typename PointNT>
+void
 pcl::MarchingCubes<PointNT>::getBoundingBox ()
 {
   PointNT max_pt, min_pt;
@@ -57,54 +58,59 @@ pcl::MarchingCubes<PointNT>::getBoundingBox ()
   lower_boundary_ = min_pt.getArray3fMap ();
   upper_boundary_ = max_pt.getArray3fMap ();
 
-  const Eigen::Array3f size3_extend = 0.5f * percentage_extend_grid_ 
-    * (upper_boundary_ - lower_boundary_);
+  const Eigen::Array3f size3_extend =
+      0.5f * percentage_extend_grid_ * (upper_boundary_ - lower_boundary_);
 
   lower_boundary_ -= size3_extend;
   upper_boundary_ += size3_extend;
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointNT> void
-pcl::MarchingCubes<PointNT>::interpolateEdge (Eigen::Vector3f &p1,
-                                              Eigen::Vector3f &p2,
-                                              float val_p1,
-                                              float val_p2,
+template <typename PointNT>
+void
+pcl::MarchingCubes<PointNT>::interpolateEdge (Eigen::Vector3f &p1, Eigen::Vector3f &p2,
+                                              float val_p1, float val_p2,
                                               Eigen::Vector3f &output)
 {
   const float mu = (iso_level_ - val_p1) / (val_p2 - val_p1);
   output = p1 + mu * (p2 - p1);
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointNT> void
+template <typename PointNT>
+void
 pcl::MarchingCubes<PointNT>::createSurface (const std::vector<float> &leaf_node,
                                             const Eigen::Vector3i &index_3d,
                                             pcl::PointCloud<PointNT> &cloud)
 {
   int cubeindex = 0;
-  if (leaf_node[0] < iso_level_) cubeindex |= 1;
-  if (leaf_node[1] < iso_level_) cubeindex |= 2;
-  if (leaf_node[2] < iso_level_) cubeindex |= 4;
-  if (leaf_node[3] < iso_level_) cubeindex |= 8;
-  if (leaf_node[4] < iso_level_) cubeindex |= 16;
-  if (leaf_node[5] < iso_level_) cubeindex |= 32;
-  if (leaf_node[6] < iso_level_) cubeindex |= 64;
-  if (leaf_node[7] < iso_level_) cubeindex |= 128;
+  if (leaf_node[0] < iso_level_)
+    cubeindex |= 1;
+  if (leaf_node[1] < iso_level_)
+    cubeindex |= 2;
+  if (leaf_node[2] < iso_level_)
+    cubeindex |= 4;
+  if (leaf_node[3] < iso_level_)
+    cubeindex |= 8;
+  if (leaf_node[4] < iso_level_)
+    cubeindex |= 16;
+  if (leaf_node[5] < iso_level_)
+    cubeindex |= 32;
+  if (leaf_node[6] < iso_level_)
+    cubeindex |= 64;
+  if (leaf_node[7] < iso_level_)
+    cubeindex |= 128;
 
   // Cube is entirely in/out of the surface
   if (edgeTable[cubeindex] == 0)
     return;
 
-  const Eigen::Vector3f center = lower_boundary_ 
-    + size_voxel_ * index_3d.cast<float> ().array ();
+  const Eigen::Vector3f center =
+      lower_boundary_ + size_voxel_ * index_3d.cast<float> ().array ();
 
-  std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f> > p;
+  std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f>> p;
   p.resize (8);
-  for (int i = 0; i < 8; ++i)
-  {
+  for (int i = 0; i < 8; ++i) {
     Eigen::Vector3f point = center;
     if (i & 0x4)
       point[1] = static_cast<float> (center[1] + size_voxel_[1]);
@@ -119,7 +125,7 @@ pcl::MarchingCubes<PointNT>::createSurface (const std::vector<float> &leaf_node,
   }
 
   // Find the vertices where the surface intersects the cube
-  std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f> > vertex_list;
+  std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f>> vertex_list;
   vertex_list.resize (12);
   if (edgeTable[cubeindex] & 1)
     interpolateEdge (p[0], p[1], leaf_node[0], leaf_node[1], vertex_list[0]);
@@ -147,21 +153,20 @@ pcl::MarchingCubes<PointNT>::createSurface (const std::vector<float> &leaf_node,
     interpolateEdge (p[3], p[7], leaf_node[3], leaf_node[7], vertex_list[11]);
 
   // Create the triangle
-  for (int i = 0; triTable[cubeindex][i] != -1; i += 3)
-  {
+  for (int i = 0; triTable[cubeindex][i] != -1; i += 3) {
     PointNT p1, p2, p3;
     p1.getVector3fMap () = vertex_list[triTable[cubeindex][i]];
     cloud.push_back (p1);
-    p2.getVector3fMap () = vertex_list[triTable[cubeindex][i+1]];
+    p2.getVector3fMap () = vertex_list[triTable[cubeindex][i + 1]];
     cloud.push_back (p2);
-    p3.getVector3fMap () = vertex_list[triTable[cubeindex][i+2]];
+    p3.getVector3fMap () = vertex_list[triTable[cubeindex][i + 2]];
     cloud.push_back (p3);
   }
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointNT> void
+template <typename PointNT>
+void
 pcl::MarchingCubes<PointNT>::getNeighborList1D (std::vector<float> &leaf,
                                                 Eigen::Vector3i &index3d)
 {
@@ -176,19 +181,17 @@ pcl::MarchingCubes<PointNT>::getNeighborList1D (std::vector<float> &leaf,
   leaf[6] = getGridValue (index3d + Eigen::Vector3i (1, 1, 1));
   leaf[7] = getGridValue (index3d + Eigen::Vector3i (0, 1, 1));
 
-  for (int i = 0; i < 8; ++i)
-  {
-    if (std::isnan (leaf[i]))
-    {
+  for (int i = 0; i < 8; ++i) {
+    if (std::isnan (leaf[i])) {
       leaf.clear ();
       break;
     }
   }
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointNT> float
+template <typename PointNT>
+float
 pcl::MarchingCubes<PointNT>::getGridValue (Eigen::Vector3i pos)
 {
   /// TODO what to return?
@@ -199,12 +202,12 @@ pcl::MarchingCubes<PointNT>::getGridValue (Eigen::Vector3i pos)
   if (pos[2] < 0 || pos[2] >= res_z_)
     return -1.0f;
 
-  return grid_[pos[0]*res_y_*res_z_ + pos[1]*res_z_ + pos[2]];
+  return grid_[pos[0] * res_y_ * res_z_ + pos[1] * res_z_ + pos[2]];
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointNT> void
+template <typename PointNT>
+void
 pcl::MarchingCubes<PointNT>::performReconstruction (pcl::PolygonMesh &output)
 {
   pcl::PointCloud<PointNT> points;
@@ -214,16 +217,16 @@ pcl::MarchingCubes<PointNT>::performReconstruction (pcl::PolygonMesh &output)
   pcl::toPCLPointCloud2 (points, output.cloud);
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointNT> void
-pcl::MarchingCubes<PointNT>::performReconstruction (pcl::PointCloud<PointNT> &points,
-                                                    std::vector<pcl::Vertices> &polygons)
+template <typename PointNT>
+void
+pcl::MarchingCubes<PointNT>::performReconstruction (
+    pcl::PointCloud<PointNT> &points, std::vector<pcl::Vertices> &polygons)
 {
-  if (!(iso_level_ >= 0 && iso_level_ < 1))
-  {
-    PCL_ERROR ("[pcl::%s::performReconstruction] Invalid iso level %f! Please use a number between 0 and 1.\n", 
-        getClassName ().c_str (), iso_level_);
+  if (!(iso_level_ >= 0 && iso_level_ < 1)) {
+    PCL_ERROR ("[pcl::%s::performReconstruction] Invalid iso level %f! Please use a "
+               "number between 0 and 1.\n",
+               getClassName ().c_str (), iso_level_);
     points.width = points.height = 0;
     points.points.clear ();
     polygons.clear ();
@@ -234,29 +237,29 @@ pcl::MarchingCubes<PointNT>::performReconstruction (pcl::PointCloud<PointNT> &po
   pcl::PointCloud<PointNT> intermediate_cloud;
 
   // Create grid
-  grid_ = std::vector<float> (res_x_*res_y_*res_z_, NAN);
+  grid_ = std::vector<float> (res_x_ * res_y_ * res_z_, NAN);
 
   // Populate tree
   tree_->setInputCloud (input_);
 
   // Compute bounding box and voxel size
   getBoundingBox ();
-  size_voxel_ = (upper_boundary_ - lower_boundary_) 
-    * Eigen::Array3f (res_x_, res_y_, res_z_).inverse ();
+  size_voxel_ = (upper_boundary_ - lower_boundary_) *
+                Eigen::Array3f (res_x_, res_y_, res_z_).inverse ();
 
   // Transform the point cloud into a voxel grid
   // This needs to be implemented in a child class
   voxelizeData ();
 
   // preallocate memory assuming a hull. suppose 6 point per voxel
-  double size_reserve = std::min((double) intermediate_cloud.points.max_size (),
-      2.0 * 6.0 * (double) (res_y_*res_z_ + res_x_*res_z_ + res_x_*res_y_));
-  intermediate_cloud.reserve ((size_t) size_reserve);
+  double size_reserve = std::min (
+      (double)intermediate_cloud.points.max_size (),
+      2.0 * 6.0 * (double)(res_y_ * res_z_ + res_x_ * res_z_ + res_x_ * res_y_));
+  intermediate_cloud.reserve ((size_t)size_reserve);
 
-  for (int x = 1; x < res_x_-1; ++x)
-    for (int y = 1; y < res_y_-1; ++y)
-      for (int z = 1; z < res_z_-1; ++z)
-      {
+  for (int x = 1; x < res_x_ - 1; ++x)
+    for (int y = 1; y < res_y_ - 1; ++y)
+      for (int z = 1; z < res_z_ - 1; ++z) {
         Eigen::Vector3i index_3d (x, y, z);
         std::vector<float> leaf_node;
         getNeighborList1D (leaf_node, index_3d);
@@ -267,8 +270,7 @@ pcl::MarchingCubes<PointNT>::performReconstruction (pcl::PointCloud<PointNT> &po
   points.swap (intermediate_cloud);
 
   polygons.resize (points.size () / 3);
-  for (size_t i = 0; i < polygons.size (); ++i)
-  {
+  for (size_t i = 0; i < polygons.size (); ++i) {
     pcl::Vertices v;
     v.vertices.resize (3);
     for (int j = 0; j < 3; ++j)
@@ -277,7 +279,7 @@ pcl::MarchingCubes<PointNT>::performReconstruction (pcl::PointCloud<PointNT> &po
   }
 }
 
-#define PCL_INSTANTIATE_MarchingCubes(T) template class PCL_EXPORTS pcl::MarchingCubes<T>;
+#define PCL_INSTANTIATE_MarchingCubes(T)                                               \
+  template class PCL_EXPORTS pcl::MarchingCubes<T>;
 
-#endif    // PCL_SURFACE_IMPL_MARCHING_CUBES_H_
-
+#endif // PCL_SURFACE_IMPL_MARCHING_CUBES_H_

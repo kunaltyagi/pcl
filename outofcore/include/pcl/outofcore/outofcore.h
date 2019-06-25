@@ -33,7 +33,7 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
- *  
+ *
  *  $Id$
  */
 
@@ -50,6 +50,6 @@
 #include <pcl/outofcore/octree_disk_container.h>
 #include <pcl/outofcore/octree_ram_container.h>
 
-#include <pcl/outofcore/outofcore_iterator_base.h>
 #include <pcl/outofcore/outofcore_breadth_first_iterator.h>
 #include <pcl/outofcore/outofcore_depth_first_iterator.h>
+#include <pcl/outofcore/outofcore_iterator_base.h>

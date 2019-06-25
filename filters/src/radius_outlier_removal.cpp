@@ -38,8 +38,8 @@
  *
  */
 
-#include <pcl/filters/impl/radius_outlier_removal.hpp>
 #include <pcl/conversions.h>
+#include <pcl/filters/impl/radius_outlier_removal.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 void
@@ -47,16 +47,15 @@ pcl::RadiusOutlierRemoval<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &out
 {
   output.is_dense = true;
   // If fields x/y/z are not present, we cannot filter
-  if (x_idx_ == -1 || y_idx_ == -1 || z_idx_ == -1)
-  {
-    PCL_ERROR ("[pcl::%s::applyFilter] Input dataset doesn't have x-y-z coordinates!\n", getClassName ().c_str ());
+  if (x_idx_ == -1 || y_idx_ == -1 || z_idx_ == -1) {
+    PCL_ERROR ("[pcl::%s::applyFilter] Input dataset doesn't have x-y-z coordinates!\n",
+               getClassName ().c_str ());
     output.width = output.height = 0;
     output.data.clear ();
     return;
   }
 
-  if (search_radius_ == 0.0)
-  {
+  if (search_radius_ == 0.0) {
     PCL_ERROR ("[pcl::%s::applyFilter] No radius defined!\n", getClassName ().c_str ());
     output.width = output.height = 0;
     output.data.clear ();
@@ -67,8 +66,7 @@ pcl::RadiusOutlierRemoval<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &out
   pcl::fromPCLPointCloud2 (*input_, *cloud);
 
   // Initialize the spatial locator
-  if (!tree_)
-  {
+  if (!tree_) {
     if (cloud->isOrganized ())
       tree_.reset (new pcl::search::OrganizedNeighbor<pcl::PointXYZ> ());
     else
@@ -91,22 +89,19 @@ pcl::RadiusOutlierRemoval<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &out
   int nr_p = 0;
   int nr_removed_p = 0;
   // Go over all the points and check which doesn't have enough neighbors
-  for (int cp = 0; cp < static_cast<int> (indices_->size ()); ++cp)
-  {
+  for (int cp = 0; cp < static_cast<int> (indices_->size ()); ++cp) {
     int k = tree_->radiusSearch ((*indices_)[cp], search_radius_, nn_indices, nn_dists);
     // Check if the number of neighbors is larger than the user imposed limit
-    if (k < min_pts_radius_)
-    {
-      if (extract_removed_indices_)
-      {
+    if (k < min_pts_radius_) {
+      if (extract_removed_indices_) {
         (*removed_indices_)[nr_removed_p] = cp;
         nr_removed_p++;
       }
       continue;
     }
 
-    memcpy (&output.data[nr_p * output.point_step], &input_->data[(*indices_)[cp] * output.point_step],
-            output.point_step);
+    memcpy (&output.data[nr_p * output.point_step],
+            &input_->data[(*indices_)[cp] * output.point_step], output.point_step);
     nr_p++;
   }
 
@@ -123,7 +118,6 @@ pcl::RadiusOutlierRemoval<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &out
 #include <pcl/point_types.h>
 
 // Instantiations of specific point types
-PCL_INSTANTIATE(RadiusOutlierRemoval, PCL_XYZ_POINT_TYPES)
+PCL_INSTANTIATE (RadiusOutlierRemoval, PCL_XYZ_POINT_TYPES)
 
-#endif    // PCL_NO_PRECOMPILE
-
+#endif // PCL_NO_PRECOMPILE

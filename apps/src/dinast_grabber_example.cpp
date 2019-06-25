@@ -38,8 +38,8 @@
 #include <thread>
 
 #include <pcl/common/time.h>
-#include <pcl/point_types.h>
 #include <pcl/io/dinast_grabber.h>
+#include <pcl/point_types.h>
 #include <pcl/visualization/cloud_viewer.h>
 
 using namespace std::chrono_literals;
@@ -48,56 +48,56 @@ template <typename PointType>
 class DinastProcessor
 {
   public:
-    
-    using Cloud = pcl::PointCloud<PointType>;
-    using CloudConstPtr = typename Cloud::ConstPtr;
-    
-    DinastProcessor(pcl::Grabber& grabber) : interface(grabber), viewer("Dinast Cloud Viewer") {}
+  using Cloud = pcl::PointCloud<PointType>;
+  using CloudConstPtr = typename Cloud::ConstPtr;
 
-    void 
-    cloud_cb_ (CloudConstPtr cloud_cb)
-    {
-      static unsigned count = 0;
-      static double last = pcl::getTime ();
-      if (++count == 30)
-      {
-        double now = pcl::getTime ();
-        std::cout << "Average framerate: " << double(count)/double(now - last) << " Hz" <<  std::endl;
-        count = 0;
-        last = now;
-      }
-      if (!viewer.wasStopped())
-        viewer.showCloud(cloud_cb);
+  DinastProcessor (pcl::Grabber &grabber)
+      : interface (grabber), viewer ("Dinast Cloud Viewer")
+  {
+  }
+
+  void
+  cloud_cb_ (CloudConstPtr cloud_cb)
+  {
+    static unsigned count = 0;
+    static double last = pcl::getTime ();
+    if (++count == 30) {
+      double now = pcl::getTime ();
+      std::cout << "Average framerate: " << double(count) / double(now - last) << " Hz"
+                << std::endl;
+      count = 0;
+      last = now;
     }
-    
-    int 
-    run ()
-    {
-            
-      std::function<void (const CloudConstPtr&)> f =
+    if (!viewer.wasStopped ())
+      viewer.showCloud (cloud_cb);
+  }
+
+  int
+  run ()
+  {
+
+    std::function<void(const CloudConstPtr &)> f =
         boost::bind (&DinastProcessor::cloud_cb_, this, _1);
-      
-      boost::signals2::connection c = interface.registerCallback (f);
 
-      interface.start ();
-      
-      while (!viewer.wasStopped())
-      {
-        std::this_thread::sleep_for(1s);
-      }
-      
-      interface.stop ();
-      
-      return(0);
+    boost::signals2::connection c = interface.registerCallback (f);
+
+    interface.start ();
+
+    while (!viewer.wasStopped ()) {
+      std::this_thread::sleep_for (1s);
     }
-    
-    pcl::Grabber& interface;
-    pcl::visualization::CloudViewer viewer;  
-    
+
+    interface.stop ();
+
+    return (0);
+  }
+
+  pcl::Grabber &interface;
+  pcl::visualization::CloudViewer viewer;
 };
 
 int
-main () 
+main ()
 {
   pcl::DinastGrabber grabber;
   DinastProcessor<pcl::PointXYZI> v (grabber);

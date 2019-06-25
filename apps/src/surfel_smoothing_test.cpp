@@ -1,16 +1,15 @@
-#include <pcl/surface/surfel_smoothing.h>
-#include <pcl/io/pcd_io.h>
 #include <pcl/features/normal_3d.h>
-
+#include <pcl/io/pcd_io.h>
+#include <pcl/surface/surfel_smoothing.h>
 
 using namespace pcl;
 
 int
 main (int argc, char **argv)
 {
-  if (argc != 5)
-  {
-    PCL_ERROR ("./surfel_smoothing_test normal_search_radius surfel_scale source_cloud destination_cloud\n");
+  if (argc != 5) {
+    PCL_ERROR ("./surfel_smoothing_test normal_search_radius surfel_scale source_cloud "
+               "destination_cloud\n");
     return (-1);
   }
   PointCloud<PointXYZ>::Ptr cloud (new PointCloud<PointXYZ> ());
@@ -22,7 +21,6 @@ main (int argc, char **argv)
 
   float normal_search_radius = static_cast<float> (atof (argv[1]));
   float surfel_scale = static_cast<float> (atof (argv[2]));
-
 
   NormalEstimation<PointXYZ, Normal> normal_estimation;
   normal_estimation.setInputCloud (cloud);

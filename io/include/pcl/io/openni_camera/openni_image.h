@@ -35,14 +35,14 @@
  */
 
 #pragma once
- 
+
 #include <pcl/pcl_config.h>
 #ifdef HAVE_OPENNI
 
-#include <pcl/pcl_exports.h>
 #include "openni.h"
 #include "openni_exception.h"
 #include <pcl/io/boost.h>
+#include <pcl/pcl_exports.h>
 
 namespace openni_wrapper
 {
@@ -57,16 +57,11 @@ namespace openni_wrapper
    */
   class PCL_EXPORTS Image
   {
-  public:
+    public:
     using Ptr = boost::shared_ptr<Image>;
     using ConstPtr = boost::shared_ptr<const Image>;
 
-    enum Encoding
-    {
-      BAYER_GRBG,
-      YUV422,
-      RGB
-    };
+    enum Encoding { BAYER_GRBG, YUV422, RGB };
 
     /**
      * @author Suat Gedikli
@@ -89,26 +84,31 @@ namespace openni_wrapper
      * @param[in] output_height height of desired output image
      * @return whether the resizing is supported or not.
      */
-    virtual bool isResizingSupported (unsigned input_width, unsigned input_height,
-                                      unsigned output_width, unsigned output_height) const = 0;
+    virtual bool
+    isResizingSupported (unsigned input_width, unsigned input_height,
+                         unsigned output_width, unsigned output_height) const = 0;
 
     /**
      * @author Suat Gedikli
-     * @brief fills a user given buffer with the RGB values, with an optional nearest-neighbor down sampling and an optional subregion
+     * @brief fills a user given buffer with the RGB values, with an optional
+     * nearest-neighbor down sampling and an optional subregion
      * @param[in] width desired width of output image.
      * @param[in] height desired height of output image.
      * @param[in,out] rgb_buffer the output RGB buffer.
-     * @param[in] rgb_line_step optional line step in bytes to allow the output in a rectangular subregion of the output buffer.
+     * @param[in] rgb_line_step optional line step in bytes to allow the output in a
+     * rectangular subregion of the output buffer.
      */
-    virtual void fillRGB (unsigned width, unsigned height, unsigned char* rgb_buffer,
-                          unsigned rgb_line_step = 0) const = 0;
+    virtual void
+    fillRGB (unsigned width, unsigned height, unsigned char *rgb_buffer,
+             unsigned rgb_line_step = 0) const = 0;
 
     /**
      * @author Suat Gedikli
      * @brief returns the encoding of the native data.
      * @return encoding
      */
-    virtual Encoding getEncoding () const = 0;
+    virtual Encoding
+    getEncoding () const = 0;
 
     /**
      * @author Suat Gedikli
@@ -116,64 +116,72 @@ namespace openni_wrapper
      * @param[in,out] rgb_buffer
      */
     inline void
-    fillRaw (unsigned char* rgb_buffer) const throw ()
+    fillRaw (unsigned char *rgb_buffer) const throw ()
     {
       memcpy (rgb_buffer, image_md_->Data (), image_md_->DataSize ());
     }
 
     /**
      * @author Suat Gedikli
-     * @brief fills a user given buffer with the gray values, with an optional nearest-neighbor down sampling and an optional subregion
+     * @brief fills a user given buffer with the gray values, with an optional
+     * nearest-neighbor down sampling and an optional subregion
      * @param[in] width desired width of output image.
      * @param[in] height desired height of output image.
      * @param[in,out] gray_buffer the output gray buffer.
-     * @param[in] gray_line_step optional line step in bytes to allow the output in a rectangular subregion of the output buffer.
+     * @param[in] gray_line_step optional line step in bytes to allow the output in a
+     * rectangular subregion of the output buffer.
      */
-    virtual void fillGrayscale (unsigned width, unsigned height, unsigned char* gray_buffer,
-                                unsigned gray_line_step = 0) const = 0;
+    virtual void
+    fillGrayscale (unsigned width, unsigned height, unsigned char *gray_buffer,
+                   unsigned gray_line_step = 0) const = 0;
 
     /**
      * @author Suat Gedikli
      * @return width of the image
      */
-    inline unsigned getWidth () const throw ();
+    inline unsigned
+    getWidth () const throw ();
 
     /**
      * @author Suat Gedikli
      * @return height of the image
      */
-    inline unsigned getHeight () const throw ();
+    inline unsigned
+    getHeight () const throw ();
 
     /**
      * @author Suat Gedikli
      * @return frame id of the image.
      * @note frame ids are ascending, but not necessarily synch'ed with other streams
      */
-    inline unsigned getFrameID () const throw ();
+    inline unsigned
+    getFrameID () const throw ();
 
     /**
      * @author Suat Gedikli
      * @return the time stamp of the image
      * @note the time value is not synche'ed with the system time
      */
-    inline unsigned long getTimeStamp () const throw ();
+    inline unsigned long
+    getTimeStamp () const throw ();
 
     /**
      * @author Suat Gedikli
      * @return the actual data in native OpenNI format.
      */
-    inline const xn::ImageMetaData& getMetaData () const throw ();
+    inline const xn::ImageMetaData &
+    getMetaData () const throw ();
 
-  protected:
+    protected:
     boost::shared_ptr<xn::ImageMetaData> image_md_;
-  } ;
+  };
 
   Image::Image (boost::shared_ptr<xn::ImageMetaData> image_meta_data) throw ()
-  : image_md_ (image_meta_data)
+      : image_md_ (image_meta_data)
   {
   }
 
-  Image::~Image () throw () { }
+  Image::~Image () throw () {}
 
   unsigned
   Image::getWidth () const throw ()
@@ -199,10 +207,10 @@ namespace openni_wrapper
     return static_cast<unsigned long> (image_md_->Timestamp ());
   }
 
-  const xn::ImageMetaData&
+  const xn::ImageMetaData &
   Image::getMetaData () const throw ()
   {
     return *image_md_;
   }
-} // namespace
+} // namespace openni_wrapper
 #endif

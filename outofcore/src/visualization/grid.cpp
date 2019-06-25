@@ -3,22 +3,22 @@
 #include <pcl/outofcore/visualization/grid.h>
 
 // VTK
-#include <vtkVersion.h>
 #include <vtkActor.h>
-#include <vtkRectilinearGrid.h>
 #include <vtkDoubleArray.h>
 #include <vtkProperty.h>
+#include <vtkRectilinearGrid.h>
 #include <vtkSmartPointer.h>
+#include <vtkVersion.h>
 
 // Operators
 // -----------------------------------------------------------------------------
-Grid::Grid (std::string name, int size/*=10*/, double spacing/*=1.0*/) :
-    Object (name)
+Grid::Grid (std::string name, int size /*=10*/, double spacing /*=1.0*/) : Object (name)
 {
   grid_ = vtkSmartPointer<vtkRectilinearGrid>::New ();
   grid_actor_ = vtkSmartPointer<vtkActor>::New ();
 
-  vtkSmartPointer<vtkDataSetMapper> grid_mapper = vtkSmartPointer<vtkDataSetMapper>::New ();
+  vtkSmartPointer<vtkDataSetMapper> grid_mapper =
+      vtkSmartPointer<vtkDataSetMapper>::New ();
 
   vtkSmartPointer<vtkDoubleArray> xz_array = vtkSmartPointer<vtkDoubleArray>::New ();
   vtkSmartPointer<vtkDoubleArray> y_array = vtkSmartPointer<vtkDoubleArray>::New ();
@@ -37,7 +37,7 @@ Grid::Grid (std::string name, int size/*=10*/, double spacing/*=1.0*/) :
   grid_->SetYCoordinates (y_array);
   grid_->SetZCoordinates (xz_array);
 
-  grid_mapper->SetInputData(grid_);
+  grid_mapper->SetInputData (grid_);
 
   vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New ();
   grid_actor_->SetMapper (grid_mapper);

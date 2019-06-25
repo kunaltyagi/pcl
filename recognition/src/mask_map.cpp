@@ -4,7 +4,7 @@
  *  Point Cloud Library (PCL) - www.pointclouds.org
  *  Copyright (c) 2010-2011, Willow Garage, Inc.
  *
- *  All rights reserved. 
+ *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
@@ -40,38 +40,31 @@
 #include <cassert>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::MaskMap::MaskMap ()
-  : data_ (0), width_ (0), height_ (0)
-{
-}
+pcl::MaskMap::MaskMap () : data_ (0), width_ (0), height_ (0) {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 pcl::MaskMap::MaskMap (const size_t width, const size_t height)
-  : width_ (width), height_ (height)
+    : width_ (width), height_ (height)
 {
-  data_.resize (width*height);
-}  
+  data_.resize (width * height);
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::MaskMap::~MaskMap ()
-{
-}
+pcl::MaskMap::~MaskMap () {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::MaskMap::resize (const size_t width, const size_t height)
 {
-  data_.resize (width*height);
+  data_.resize (width * height);
   width_ = width;
   height_ = height;
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::MaskMap::getDifferenceMask (const MaskMap & mask0,
-                                 const MaskMap & mask1,
-                                 MaskMap & diff_mask)
+pcl::MaskMap::getDifferenceMask (const MaskMap &mask0, const MaskMap &mask1,
+                                 MaskMap &diff_mask)
 {
   const size_t width = mask0.getWidth ();
   const size_t height = mask0.getHeight ();
@@ -82,39 +75,30 @@ pcl::MaskMap::getDifferenceMask (const MaskMap & mask0,
   diff_mask.resize (width, height);
   diff_mask.reset ();
 
-  for (size_t row_index = 0; row_index < height; ++row_index)
-  {
-    for (size_t col_index = 0; col_index < width; ++col_index)
-    {
-      if (mask0 (col_index, row_index) != mask1 (col_index, row_index))
-      {
+  for (size_t row_index = 0; row_index < height; ++row_index) {
+    for (size_t col_index = 0; col_index < width; ++col_index) {
+      if (mask0 (col_index, row_index) != mask1 (col_index, row_index)) {
         diff_mask (col_index, row_index) = 255;
       }
     }
   }
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::MaskMap::erode (MaskMap & eroded_mask) const
+pcl::MaskMap::erode (MaskMap &eroded_mask) const
 {
-  const MaskMap & mask_in = *this;
+  const MaskMap &mask_in = *this;
   eroded_mask.resize (width_, height_);
 
-  for (size_t row_index = 1; row_index < height_-1; ++row_index)
-  {
-    for (size_t col_index = 1; col_index < width_-1; ++col_index)
-    {
-      if (!mask_in.isSet (col_index, row_index-1) ||
-          !mask_in.isSet (col_index-1, row_index) ||
-          !mask_in.isSet (col_index+1, row_index) ||
-          !mask_in.isSet (col_index, row_index+1))
-      {
+  for (size_t row_index = 1; row_index < height_ - 1; ++row_index) {
+    for (size_t col_index = 1; col_index < width_ - 1; ++col_index) {
+      if (!mask_in.isSet (col_index, row_index - 1) ||
+          !mask_in.isSet (col_index - 1, row_index) ||
+          !mask_in.isSet (col_index + 1, row_index) ||
+          !mask_in.isSet (col_index, row_index + 1)) {
         eroded_mask.unset (col_index, row_index);
-      }
-      else
-      {
+      } else {
         eroded_mask.set (col_index, row_index);
       }
     }

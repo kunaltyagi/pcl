@@ -40,11 +40,12 @@
 #ifndef PCL_FILTERS_IMPL_EXTRACT_INDICES_HPP_
 #define PCL_FILTERS_IMPL_EXTRACT_INDICES_HPP_
 
-#include <pcl/filters/extract_indices.h>
 #include <pcl/common/io.h>
+#include <pcl/filters/extract_indices.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::ExtractIndices<PointT>::filterDirectly (PointCloudPtr &cloud)
 {
   std::vector<int> indices;
@@ -56,17 +57,18 @@ pcl::ExtractIndices<PointT>::filterDirectly (PointCloudPtr &cloud)
 
   std::vector<pcl::PCLPointField> fields;
   pcl::for_each_type<FieldList> (pcl::detail::FieldAdder<PointT> (fields));
-  for (int rii = 0; rii < static_cast<int> (removed_indices_->size ()); ++rii)  // rii = removed indices iterator
+  for (int rii = 0; rii < static_cast<int> (removed_indices_->size ());
+       ++rii) // rii = removed indices iterator
   {
     size_t pt_index = (size_t) (*removed_indices_)[rii];
-    if (pt_index >= input_->points.size ())
-    {
-      PCL_ERROR ("[pcl::%s::filterDirectly] The index exceeds the size of the input. Do nothing.\n",
+    if (pt_index >= input_->points.size ()) {
+      PCL_ERROR ("[pcl::%s::filterDirectly] The index exceeds the size of the input. "
+                 "Do nothing.\n",
                  getClassName ().c_str ());
       *cloud = *input_;
       return;
     }
-    uint8_t* pt_data = reinterpret_cast<uint8_t*> (&cloud->points[pt_index]);
+    uint8_t *pt_data = reinterpret_cast<uint8_t *> (&cloud->points[pt_index]);
     for (const auto &field : fields)
       memcpy (pt_data + field.offset, &user_filter_value_, sizeof (float));
   }
@@ -75,12 +77,12 @@ pcl::ExtractIndices<PointT>::filterDirectly (PointCloudPtr &cloud)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::ExtractIndices<PointT>::applyFilter (PointCloud &output)
 {
   std::vector<int> indices;
-  if (keep_organized_)
-  {
+  if (keep_organized_) {
     bool temp = extract_removed_indices_;
     extract_removed_indices_ = true;
     applyFilterIndices (indices);
@@ -89,51 +91,52 @@ pcl::ExtractIndices<PointT>::applyFilter (PointCloud &output)
     output = *input_;
     std::vector<pcl::PCLPointField> fields;
     pcl::for_each_type<FieldList> (pcl::detail::FieldAdder<PointT> (fields));
-    for (int rii = 0; rii < static_cast<int> (removed_indices_->size ()); ++rii)  // rii = removed indices iterator
+    for (int rii = 0; rii < static_cast<int> (removed_indices_->size ());
+         ++rii) // rii = removed indices iterator
     {
-      size_t pt_index = (size_t)(*removed_indices_)[rii];
-      if (pt_index >= input_->points.size ())
-      {
-        PCL_ERROR ("[pcl::%s::applyFilter] The index exceeds the size of the input. Do nothing.\n",
+      size_t pt_index = (size_t) (*removed_indices_)[rii];
+      if (pt_index >= input_->points.size ()) {
+        PCL_ERROR ("[pcl::%s::applyFilter] The index exceeds the size of the input. Do "
+                   "nothing.\n",
                    getClassName ().c_str ());
         output = *input_;
         return;
       }
-      uint8_t* pt_data = reinterpret_cast<uint8_t*> (&output.points[pt_index]);
+      uint8_t *pt_data = reinterpret_cast<uint8_t *> (&output.points[pt_index]);
       for (const auto &field : fields)
         memcpy (pt_data + field.offset, &user_filter_value_, sizeof (float));
     }
     if (!std::isfinite (user_filter_value_))
       output.is_dense = false;
-  }
-  else
-  {
+  } else {
     applyFilterIndices (indices);
     copyPointCloud (*input_, indices, output);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::ExtractIndices<PointT>::applyFilterIndices (std::vector<int> &indices)
 {
-  if (indices_->size () > input_->points.size ())
-  {
-    PCL_ERROR ("[pcl::%s::applyFilter] The indices size exceeds the size of the input.\n", getClassName ().c_str ());
+  if (indices_->size () > input_->points.size ()) {
+    PCL_ERROR (
+        "[pcl::%s::applyFilter] The indices size exceeds the size of the input.\n",
+        getClassName ().c_str ());
     indices.clear ();
     removed_indices_->clear ();
     return;
   }
 
-  if (!negative_)  // Normal functionality
+  if (!negative_) // Normal functionality
   {
     indices = *indices_;
 
-    if (extract_removed_indices_)
-    {
+    if (extract_removed_indices_) {
       // Set up the full indices set
       std::vector<int> full_indices (input_->points.size ());
-      for (int fii = 0; fii < static_cast<int> (full_indices.size ()); ++fii)  // fii = full indices iterator
+      for (int fii = 0; fii < static_cast<int> (full_indices.size ());
+           ++fii) // fii = full indices iterator
         full_indices[fii] = fii;
 
       // Set up the sorted input indices
@@ -142,14 +145,16 @@ pcl::ExtractIndices<PointT>::applyFilterIndices (std::vector<int> &indices)
 
       // Store the difference in removed_indices
       removed_indices_->clear ();
-      set_difference (full_indices.begin (), full_indices.end (), sorted_input_indices.begin (), sorted_input_indices.end (), inserter (*removed_indices_, removed_indices_->begin ()));
+      set_difference (full_indices.begin (), full_indices.end (),
+                      sorted_input_indices.begin (), sorted_input_indices.end (),
+                      inserter (*removed_indices_, removed_indices_->begin ()));
     }
-  }
-  else  // Inverted functionality
+  } else // Inverted functionality
   {
     // Set up the full indices set
     std::vector<int> full_indices (input_->points.size ());
-    for (int fii = 0; fii < static_cast<int> (full_indices.size ()); ++fii)  // fii = full indices iterator
+    for (int fii = 0; fii < static_cast<int> (full_indices.size ());
+         ++fii) // fii = full indices iterator
       full_indices[fii] = fii;
 
     // Set up the sorted input indices
@@ -158,14 +163,16 @@ pcl::ExtractIndices<PointT>::applyFilterIndices (std::vector<int> &indices)
 
     // Store the difference in indices
     indices.clear ();
-    set_difference (full_indices.begin (), full_indices.end (), sorted_input_indices.begin (), sorted_input_indices.end (), inserter (indices, indices.begin ()));
+    set_difference (full_indices.begin (), full_indices.end (),
+                    sorted_input_indices.begin (), sorted_input_indices.end (),
+                    inserter (indices, indices.begin ()));
 
     if (extract_removed_indices_)
       removed_indices_ = indices_;
   }
 }
 
-#define PCL_INSTANTIATE_ExtractIndices(T) template class PCL_EXPORTS pcl::ExtractIndices<T>;
+#define PCL_INSTANTIATE_ExtractIndices(T)                                              \
+  template class PCL_EXPORTS pcl::ExtractIndices<T>;
 
-#endif  // PCL_FILTERS_IMPL_EXTRACT_INDICES_HPP_
-
+#endif // PCL_FILTERS_IMPL_EXTRACT_INDICES_HPP_

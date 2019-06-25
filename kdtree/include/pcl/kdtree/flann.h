@@ -40,14 +40,15 @@
 
 #include <pcl/pcl_macros.h>
 
-PCL_PRAGMA_WARNING("This header is deprecated and will be removed in an upcoming release.")
+PCL_PRAGMA_WARNING (
+    "This header is deprecated and will be removed in an upcoming release.")
 
 #if defined _MSC_VER
-#  pragma warning(disable: 4267 4244)
+#pragma warning(disable : 4267 4244)
 #endif
 
 #include <flann/flann.hpp>
 
 #if defined _MSC_VER
-#  pragma warning(default: 4267)
+#pragma warning(default : 4267)
 #endif

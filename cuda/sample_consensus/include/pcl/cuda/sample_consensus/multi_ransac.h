@@ -45,12 +45,12 @@ namespace pcl
   namespace cuda
   {
     /** \brief @b RandomSampleConsensus represents an implementation of the
-      * RANSAC (RAndom SAmple Consensus) algorithm, as described in: "Random
-      * Sample Consensus: A Paradigm for Model Fitting with Applications to Image
-      * Analysis and Automated Cartography", Martin A. Fischler and Robert C. Bolles, 
-      * Comm. Of the ACM 24: 381–395, June 1981.
-      * \author Radu Bogdan Rusu
-      */
+     * RANSAC (RAndom SAmple Consensus) algorithm, as described in: "Random
+     * Sample Consensus: A Paradigm for Model Fitting with Applications to Image
+     * Analysis and Automated Cartography", Martin A. Fischler and Robert C. Bolles,
+     * Comm. Of the ACM 24: 381–395, June 1981.
+     * \author Radu Bogdan Rusu
+     */
     template <template <typename> class Storage>
     class MultiRandomSampleConsensus : public SampleConsensus<Storage>
     {
@@ -73,104 +73,112 @@ namespace pcl
       using IndicesConstPtr = typename SampleConsensusModel<Storage>::IndicesConstPtr;
 
       public:
-        /** \brief RANSAC (RAndom SAmple Consensus) main constructor
-          * \param model a Sample Consensus model
-          */
-        MultiRandomSampleConsensus (const SampleConsensusModelPtr &model) : 
-          SampleConsensus<Storage> (model),
-          min_coverage_percent_ (0.9),
-          max_batches_ (5),
-          iterations_per_batch_ (1000)
-        {
-          // Maximum number of trials before we give up.
-          max_iterations_ = 10000;
-        }
+      /** \brief RANSAC (RAndom SAmple Consensus) main constructor
+       * \param model a Sample Consensus model
+       */
+      MultiRandomSampleConsensus (const SampleConsensusModelPtr &model)
+          : SampleConsensus<Storage> (model), min_coverage_percent_ (0.9),
+            max_batches_ (5), iterations_per_batch_ (1000)
+      {
+        // Maximum number of trials before we give up.
+        max_iterations_ = 10000;
+      }
 
-        /** \brief RANSAC (RAndom SAmple Consensus) main constructor
-          * \param model a Sample Consensus model
-          * \param threshold distance to model threshold
-          */
-        MultiRandomSampleConsensus (const SampleConsensusModelPtr &model, double threshold) : 
-          SampleConsensus<Storage> (model, threshold)
-        {
-          // Maximum number of trials before we give up.
-          max_iterations_ = 10000;
-        }
+      /** \brief RANSAC (RAndom SAmple Consensus) main constructor
+       * \param model a Sample Consensus model
+       * \param threshold distance to model threshold
+       */
+      MultiRandomSampleConsensus (const SampleConsensusModelPtr &model,
+                                  double threshold)
+          : SampleConsensus<Storage> (model, threshold)
+      {
+        // Maximum number of trials before we give up.
+        max_iterations_ = 10000;
+      }
 
-        /** \brief Compute the actual model and find the inliers
-          * \param debug_verbosity_level enable/disable on-screen debug
-          * information and set the verbosity level
-          */
-        bool 
-        computeModel (int debug_verbosity_level = 0);
+      /** \brief Compute the actual model and find the inliers
+       * \param debug_verbosity_level enable/disable on-screen debug
+       * information and set the verbosity level
+       */
+      bool
+      computeModel (int debug_verbosity_level = 0);
 
-        /** \brief how much (in percent) of the point cloud should be covered?
-         *  If it is not possible to find enough planes, it will stop according to the regular ransac criteria
-         */
-        void
-        setMinimumCoverage (float percent)
-        {
-          min_coverage_percent_ = percent;
-        }
-          
-        /** \brief Sets the maximum number of batches that should be processed.
-         *  Every Batch computes up to iterations_per_batch_ models and verifies them.
-         *  If planes with a sufficiently high total inlier count are found earlier, the
-         *  actual number of batch runs might be lower.
-         */
-        void
-        setMaximumBatches (int max_batches)
-        {
-          max_batches_ = max_batches_;
-        }
+      /** \brief how much (in percent) of the point cloud should be covered?
+       *  If it is not possible to find enough planes, it will stop according to the
+       * regular ransac criteria
+       */
+      void
+      setMinimumCoverage (float percent)
+      {
+        min_coverage_percent_ = percent;
+      }
 
-        /** \brief Sets the maximum number of batches that should be processed.
-         *  Every Batch computes up to max_iterations_ models and verifies them.
-         *  If planes with a sufficiently high total inlier count are found earlier, the
-         *  actual number of batch runs might be lower.
-         */
-        void
-        setIerationsPerBatch(int iterations_per_batch)
-        {
-          iterations_per_batch_ = iterations_per_batch;
-        }
+      /** \brief Sets the maximum number of batches that should be processed.
+       *  Every Batch computes up to iterations_per_batch_ models and verifies them.
+       *  If planes with a sufficiently high total inlier count are found earlier, the
+       *  actual number of batch runs might be lower.
+       */
+      void
+      setMaximumBatches (int max_batches)
+      {
+        max_batches_ = max_batches_;
+      }
 
-        inline std::vector<IndicesPtr>
-        getAllInliers () { return all_inliers_; }
+      /** \brief Sets the maximum number of batches that should be processed.
+       *  Every Batch computes up to max_iterations_ models and verifies them.
+       *  If planes with a sufficiently high total inlier count are found earlier, the
+       *  actual number of batch runs might be lower.
+       */
+      void
+      setIerationsPerBatch (int iterations_per_batch)
+      {
+        iterations_per_batch_ = iterations_per_batch;
+      }
 
-        inline std::vector<int>
-        getAllInlierCounts () { return all_inlier_counts_; }
+      inline std::vector<IndicesPtr>
+      getAllInliers ()
+      {
+        return all_inliers_;
+      }
 
-        /** \brief Return the model coefficients of the best model found so far. 
-          */
-        inline std::vector<float4>
-        getAllModelCoefficients () 
-        { 
-          return all_model_coefficients_; 
-        }
+      inline std::vector<int>
+      getAllInlierCounts ()
+      {
+        return all_inlier_counts_;
+      }
 
-        /** \brief Return the model coefficients of the best model found so far. 
-          */
-        inline std::vector<float3>
-        getAllModelCentroids () 
-        { 
-          return all_model_centroids_; 
-        }
+      /** \brief Return the model coefficients of the best model found so far.
+       */
+      inline std::vector<float4>
+      getAllModelCoefficients ()
+      {
+        return all_model_coefficients_;
+      }
+
+      /** \brief Return the model coefficients of the best model found so far.
+       */
+      inline std::vector<float3>
+      getAllModelCentroids ()
+      {
+        return all_model_centroids_;
+      }
 
       private:
-        float min_coverage_percent_;
-        unsigned int max_batches_;
-        unsigned int iterations_per_batch_;
+      float min_coverage_percent_;
+      unsigned int max_batches_;
+      unsigned int iterations_per_batch_;
 
-        /** \brief The vector of the centroids of our models computed directly from the models found. */
-        std::vector<float3> all_model_centroids_;
+      /** \brief The vector of the centroids of our models computed directly from the
+       * models found. */
+      std::vector<float3> all_model_centroids_;
 
-        /** \brief The vector of coefficients of our models computed directly from the models found. */
-        std::vector<float4> all_model_coefficients_;
+      /** \brief The vector of coefficients of our models computed directly from the
+       * models found. */
+      std::vector<float4> all_model_coefficients_;
 
-        std::vector<IndicesPtr> all_inliers_;
-        std::vector<int> all_inlier_counts_;
+      std::vector<IndicesPtr> all_inliers_;
+      std::vector<int> all_inlier_counts_;
     };
 
-  } // namespace
-} // namespace
+  } // namespace cuda
+} // namespace pcl

@@ -55,27 +55,27 @@ namespace pcl
     {
       Q_OBJECT
       public:
-        CloudBrowser (QWidget* parent = nullptr);
-        
-        void 
-        setModel (QAbstractItemModel* new_model) override;
-      
-      private:  
-        ProjectModel* current_project_model_;
-       
+      CloudBrowser (QWidget *parent = nullptr);
+
+      void
+      setModel (QAbstractItemModel *new_model) override;
+
+      private:
+      ProjectModel *current_project_model_;
     };
-    
+
     class BackgroundDelegate : public QStyledItemDelegate
     {
       public:
-        explicit 
-        BackgroundDelegate (QObject *parent = nullptr)
-          : QStyledItemDelegate(parent) {}
-          
-        void
-        paint (QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-        
+      explicit BackgroundDelegate (QObject *parent = nullptr)
+          : QStyledItemDelegate (parent)
+      {
+      }
+
+      void
+      paint (QPainter *painter, const QStyleOptionViewItem &option,
+             const QModelIndex &index) const override;
     };
-    
-  }
-}
+
+  } // namespace cloud_composer
+} // namespace pcl

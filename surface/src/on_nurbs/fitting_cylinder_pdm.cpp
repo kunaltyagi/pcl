@@ -31,13 +31,13 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *
- * 
+ *
  *
  */
 
-#include <stdexcept>
-#include <pcl/surface/on_nurbs/fitting_cylinder_pdm.h>
 #include <pcl/pcl_macros.h>
+#include <pcl/surface/on_nurbs/fitting_cylinder_pdm.h>
+#include <stdexcept>
 
 using namespace pcl;
 using namespace on_nurbs;
@@ -46,7 +46,8 @@ using namespace Eigen;
 FittingCylinder::FittingCylinder (int order, NurbsDataSurface *data)
 {
   if (order < 2)
-    throw std::runtime_error ("[FittingCylinder::FittingCylinder] Error order to low (order<2).");
+    throw std::runtime_error (
+        "[FittingCylinder::FittingCylinder] Error order to low (order<2).");
 
   ON::Begin ();
 
@@ -93,18 +94,15 @@ FittingCylinder::refine (int dim, double param)
 {
   std::vector<double> elements = getElementVector (m_nurbs, dim);
 
-  if (param == elements[elements.size () - 1])
-  {
+  if (param == elements[elements.size () - 1]) {
     size_t i = elements.size () - 2;
     double xi = elements[i] + 0.5 * (elements[i + 1] - elements[i]);
     m_nurbs.InsertKnot (dim, xi);
     return;
   }
 
-  for (size_t i = 0; i < elements.size () - 1; i++)
-  {
-    if (param >= elements[i] && param < elements[i + 1])
-    {
+  for (size_t i = 0; i < elements.size () - 1; i++) {
+    if (param >= elements[i] && param < elements[i + 1]) {
       double xi = elements[i] + 0.5 * (elements[i + 1] - elements[i]);
       m_nurbs.InsertKnot (dim, xi);
     }
@@ -116,13 +114,13 @@ FittingCylinder::refine (int dim, unsigned span_index)
 {
   std::vector<double> elements = getElementVector (m_nurbs, dim);
 
-  if (span_index > int (elements.size ()) - 2)
-  {
+  if (span_index > int(elements.size ()) - 2) {
     printf ("[NurbsTools::refine(int, unsigned)] Warning span index out of bounds\n");
     return;
   }
 
-  double xi = elements[span_index] + 0.5 * (elements[span_index + 1] - elements[span_index]);
+  double xi =
+      elements[span_index] + 0.5 * (elements[span_index + 1] - elements[span_index]);
 
   m_nurbs.InsertKnot (dim, xi);
 }
@@ -132,7 +130,7 @@ FittingCylinder::assemble (double smoothness)
 {
   int cp_red = (m_nurbs.m_order[1] - 2);
   int ncp = m_nurbs.m_cv_count[0] * (m_nurbs.m_cv_count[1] - 2 * cp_red);
-  int nInt = int (m_data->interior.size ());
+  int nInt = int(m_data->interior.size ());
   int nCageRegInt = (m_nurbs.m_cv_count[0] - 2) * (m_nurbs.m_cv_count[1] - 2 * cp_red);
   int nCageRegBnd = 2 * (m_nurbs.m_cv_count[1] - 2 * cp_red);
 
@@ -143,7 +141,8 @@ FittingCylinder::assemble (double smoothness)
   int nrows = nInt + nCageRegInt + nCageRegBnd;
 
   if (!m_quiet)
-    printf ("[FittingCylinder::assemble] %dx%d (invmap: %f %d)\n", nrows, ncp, in_accuracy, in_max_steps);
+    printf ("[FittingCylinder::assemble] %dx%d (invmap: %f %d)\n", nrows, ncp,
+            in_accuracy, in_max_steps);
 
   m_solver.assign (nrows, ncp, 3);
 
@@ -156,8 +155,7 @@ FittingCylinder::assemble (double smoothness)
   if (nCageRegInt > 0)
     addCageInteriorRegularisation (wCageRegInt, row);
 
-  if (nCageRegBnd > 0)
-  {
+  if (nCageRegBnd > 0) {
     addCageBoundaryRegularisation (wCageRegBnd, WEST, row);
     addCageBoundaryRegularisation (wCageRegBnd, EAST, row);
   }
@@ -175,10 +173,8 @@ FittingCylinder::updateSurf (double)
 {
   int cp_red = (m_nurbs.m_order[1] - 2);
 
-  for (int j = 0; j < m_nurbs.m_cv_count[1] - 2 * cp_red; j++)
-  {
-    for (int i = 0; i < m_nurbs.m_cv_count[0]; i++)
-    {
+  for (int j = 0; j < m_nurbs.m_cv_count[1] - 2 * cp_red; j++) {
+    for (int i = 0; i < m_nurbs.m_cv_count[0]; i++) {
 
       int A = grc2gl (i, j);
 
@@ -191,10 +187,8 @@ FittingCylinder::updateSurf (double)
     }
   }
 
-  for (int j = 0; j < cp_red; j++)
-  {
-    for (int i = 0; i < m_nurbs.m_cv_count[0]; i++)
-    {
+  for (int j = 0; j < cp_red; j++) {
+    for (int i = 0; i < m_nurbs.m_cv_count[0]; i++) {
 
       ON_3dPoint cp;
       m_nurbs.GetCV (i, m_nurbs.m_cv_count[1] - 1 - cp_red + j, cp);
@@ -220,19 +214,19 @@ FittingCylinder::initNurbsPCACylinder (int order, NurbsDataSurface *data)
   Eigen::Matrix3d eigenvectors;
   Eigen::Vector3d eigenvalues;
 
-  unsigned s = unsigned (data->interior.size ());
+  unsigned s = unsigned(data->interior.size ());
 
   NurbsTools::pca (data->interior, mean, eigenvectors, eigenvalues);
 
   data->mean = mean;
   data->eigenvectors = eigenvectors;
 
-  eigenvalues /= s; // seems that the eigenvalues are dependent on the number of points (???)
+  eigenvalues /=
+      s; // seems that the eigenvalues are dependent on the number of points (???)
 
   Eigen::Vector3d v_max (0.0, 0.0, 0.0);
   Eigen::Vector3d v_min (DBL_MAX, DBL_MAX, DBL_MAX);
-  for (unsigned i = 0; i < s; i++)
-  {
+  for (unsigned i = 0; i < s; i++) {
     Eigen::Vector3d p (eigenvectors.inverse () * (data->interior[i] - mean));
 
     if (p (0) > v_max (0))
@@ -263,10 +257,8 @@ FittingCylinder::initNurbsPCACylinder (int order, NurbsDataSurface *data)
   double rz = std::max<double> (std::fabs (v_min (2)), std::fabs (v_max (2)));
 
   Eigen::Vector3d cv_t, cv;
-  for (int i = 0; i < ncpsU; i++)
-  {
-    for (int j = 0; j < ncpsV; j++)
-    {
+  for (int i = 0; i < ncpsU; i++) {
+    for (int j = 0; j < ncpsV; j++) {
       cv (0) = v_min (0) + dcu * i;
       cv (1) = ry * sin (dcv * j);
       cv (2) = rz * cos (dcv * j);
@@ -279,19 +271,19 @@ FittingCylinder::initNurbsPCACylinder (int order, NurbsDataSurface *data)
 }
 
 ON_NurbsSurface
-FittingCylinder::initNurbsCylinderWithAxes (int order, NurbsDataSurface *data, Eigen::Matrix3d &axes)
+FittingCylinder::initNurbsCylinderWithAxes (int order, NurbsDataSurface *data,
+                                            Eigen::Matrix3d &axes)
 {
   Eigen::Vector3d mean;
 
-  unsigned s = unsigned (data->interior.size ());
+  unsigned s = unsigned(data->interior.size ());
   mean = NurbsTools::computeMean (data->interior);
 
   data->mean = mean;
 
   Eigen::Vector3d v_max (0.0, 0.0, 0.0);
   Eigen::Vector3d v_min (DBL_MAX, DBL_MAX, DBL_MAX);
-  for (unsigned i = 0; i < s; i++)
-  {
+  for (unsigned i = 0; i < s; i++) {
     Eigen::Vector3d p (axes.inverse () * (data->interior[i] - mean));
 
     if (p (0) > v_max (0))
@@ -322,10 +314,8 @@ FittingCylinder::initNurbsCylinderWithAxes (int order, NurbsDataSurface *data, E
   double rz = std::max<double> (std::fabs (v_min (2)), std::fabs (v_max (2)));
 
   Eigen::Vector3d cv_t, cv;
-  for (int i = 0; i < ncpsU; i++)
-  {
-    for (int j = 0; j < ncpsV; j++)
-    {
+  for (int i = 0; i < ncpsU; i++) {
+    for (int j = 0; j < ncpsV; j++) {
       cv (0) = v_min (0) + dcu * i;
       cv (1) = ry * sin (dcv * j);
       cv (2) = rz * cos (dcv * j);
@@ -342,55 +332,48 @@ FittingCylinder::getElementVector (const ON_NurbsSurface &nurbs, int dim) // !
 {
   std::vector<double> result;
 
-  if (dim == 0)
-  {
+  if (dim == 0) {
     int idx_min = 0;
     int idx_max = nurbs.KnotCount (0) - 1;
-    if (nurbs.IsClosed (0))
-    {
+    if (nurbs.IsClosed (0)) {
       idx_min = nurbs.Order (0) - 2;
       idx_max = nurbs.KnotCount (0) - nurbs.Order (0) + 1;
     }
 
-    const double* knotsU = nurbs.Knot (0);
+    const double *knotsU = nurbs.Knot (0);
 
     result.push_back (knotsU[idx_min]);
 
-    //for(int E=(m_nurbs.m_order[0]-2); E<(m_nurbs.m_knot_capacity[0]-m_nurbs.m_order[0]+2); E++) {
-    for (int E = idx_min + 1; E <= idx_max; E++)
-    {
+    // for(int E=(m_nurbs.m_order[0]-2);
+    // E<(m_nurbs.m_knot_capacity[0]-m_nurbs.m_order[0]+2); E++) {
+    for (int E = idx_min + 1; E <= idx_max; E++) {
 
       if (knotsU[E] != knotsU[E - 1]) // do not count double knots
         result.push_back (knotsU[E]);
-
     }
 
-  }
-  else if (dim == 1)
-  {
+  } else if (dim == 1) {
     int idx_min = 0;
     int idx_max = nurbs.KnotCount (1) - 1;
-    if (nurbs.IsClosed (1))
-    {
+    if (nurbs.IsClosed (1)) {
       idx_min = nurbs.Order (1) - 2;
       idx_max = nurbs.KnotCount (1) - nurbs.Order (1) + 1;
     }
-    const double* knotsV = nurbs.Knot (1);
+    const double *knotsV = nurbs.Knot (1);
 
     result.push_back (knotsV[idx_min]);
 
-    //for(int F=(m_nurbs.m_order[1]-2); F<(m_nurbs.m_knot_capacity[1]-m_nurbs.m_order[1]+2); F++) {
-    for (int F = idx_min + 1; F <= idx_max; F++)
-    {
+    // for(int F=(m_nurbs.m_order[1]-2);
+    // F<(m_nurbs.m_knot_capacity[1]-m_nurbs.m_order[1]+2); F++) {
+    for (int F = idx_min + 1; F <= idx_max; F++) {
 
       if (knotsV[F] != knotsV[F - 1])
         result.push_back (knotsV[F]);
-
     }
 
-  }
-  else
-    printf ("[FittingCylinder::getElementVector] Error, index exceeds problem dimensions!\n");
+  } else
+    printf ("[FittingCylinder::getElementVector] Error, index exceeds problem "
+            "dimensions!\n");
 
   return result;
 }
@@ -402,9 +385,8 @@ FittingCylinder::assembleInterior (double wInt, unsigned &row)
   m_data->interior_line_end.clear ();
   m_data->interior_error.clear ();
   m_data->interior_normals.clear ();
-  unsigned nInt = unsigned (m_data->interior.size ());
-  for (unsigned p = 0; p < nInt; p++)
-  {
+  unsigned nInt = unsigned(m_data->interior.size ());
+  for (unsigned p = 0; p < nInt; p++) {
     Vector3d pcp;
     pcp = m_data->interior[p];
 
@@ -412,15 +394,14 @@ FittingCylinder::assembleInterior (double wInt, unsigned &row)
     Vector2d params;
     Vector3d pt, tu, tv, n;
     double error;
-    if (p < m_data->interior_param.size ())
-    {
-      params = inverseMapping (m_nurbs, pcp, m_data->interior_param[p], error, pt, tu, tv, in_max_steps, in_accuracy);
+    if (p < m_data->interior_param.size ()) {
+      params = inverseMapping (m_nurbs, pcp, m_data->interior_param[p], error, pt, tu,
+                               tv, in_max_steps, in_accuracy);
       m_data->interior_param[p] = params;
-    }
-    else
-    {
+    } else {
       params = findClosestElementMidPoint (m_nurbs, pcp);
-      params = inverseMapping (m_nurbs, pcp, params, error, pt, tu, tv, in_max_steps, in_accuracy);
+      params = inverseMapping (m_nurbs, pcp, params, error, pt, tu, tv, in_max_steps,
+                               in_accuracy);
       m_data->interior_param.push_back (params);
     }
     m_data->interior_error.push_back (error);
@@ -437,14 +418,17 @@ FittingCylinder::assembleInterior (double wInt, unsigned &row)
 }
 
 void
-FittingCylinder::addPointConstraint (const Eigen::Vector2d &params, const Eigen::Vector3d &point, double weight,
+FittingCylinder::addPointConstraint (const Eigen::Vector2d &params,
+                                     const Eigen::Vector3d &point, double weight,
                                      unsigned &row)
 {
   double *N0 = new double[m_nurbs.m_order[0] * m_nurbs.m_order[0]];
   double *N1 = new double[m_nurbs.m_order[1] * m_nurbs.m_order[1]];
 
-  int E = ON_NurbsSpanIndex (m_nurbs.m_order[0], m_nurbs.m_cv_count[0], m_nurbs.m_knot[0], params (0), 0, 0);
-  int F = ON_NurbsSpanIndex (m_nurbs.m_order[1], m_nurbs.m_cv_count[1], m_nurbs.m_knot[1], params (1), 0, 0);
+  int E = ON_NurbsSpanIndex (m_nurbs.m_order[0], m_nurbs.m_cv_count[0],
+                             m_nurbs.m_knot[0], params (0), 0, 0);
+  int F = ON_NurbsSpanIndex (m_nurbs.m_order[1], m_nurbs.m_cv_count[1],
+                             m_nurbs.m_knot[1], params (1), 0, 0);
 
   ON_EvaluateNurbsBasis (m_nurbs.m_order[0], m_nurbs.m_knot[0] + E, params (0), N0);
   ON_EvaluateNurbsBasis (m_nurbs.m_order[1], m_nurbs.m_knot[1] + F, params (1), N1);
@@ -453,11 +437,9 @@ FittingCylinder::addPointConstraint (const Eigen::Vector2d &params, const Eigen:
   m_solver.f (row, 1, point (1) * weight);
   m_solver.f (row, 2, point (2) * weight);
 
-  for (int i = 0; i < m_nurbs.m_order[0]; i++)
-  {
+  for (int i = 0; i < m_nurbs.m_order[0]; i++) {
 
-    for (int j = 0; j < m_nurbs.m_order[1]; j++)
-    {
+    for (int j = 0; j < m_nurbs.m_order[1]; j++) {
 
       m_solver.K (row, lrc2gl (E, F, i, j), weight * N0[i] * N1[j]);
 
@@ -467,8 +449,8 @@ FittingCylinder::addPointConstraint (const Eigen::Vector2d &params, const Eigen:
 
   row++;
 
-  delete [] N1;
-  delete [] N0;
+  delete[] N1;
+  delete[] N0;
 }
 
 void
@@ -476,10 +458,8 @@ FittingCylinder::addCageInteriorRegularisation (double weight, unsigned &row)
 {
   int cp_red = (m_nurbs.m_order[1] - 2);
 
-  for (int i = 1; i < (m_nurbs.m_cv_count[0] - 1); i++)
-  {
-    for (int j = 0; j < (m_nurbs.m_cv_count[1] - 2 * cp_red); j++)
-    {
+  for (int i = 1; i < (m_nurbs.m_cv_count[0] - 1); i++) {
+    for (int j = 0; j < (m_nurbs.m_cv_count[1] - 2 * cp_red); j++) {
 
       m_solver.f (row, 0, 0.0);
       m_solver.f (row, 1, 0.0);
@@ -503,31 +483,31 @@ FittingCylinder::addCageBoundaryRegularisation (double weight, int side, unsigne
   int i = 0;
   int j = 0;
 
-  switch (side)
-  {
-    case EAST:
-      i = m_nurbs.m_cv_count[0] - 1;
-    case WEST:
-      for (j = 1; j < (m_nurbs.m_cv_count[1] - 2 * cp_red) + 1; j++)
-      {
+  switch (side) {
+  case EAST:
+    i = m_nurbs.m_cv_count[0] - 1;
+  case WEST:
+    for (j = 1; j < (m_nurbs.m_cv_count[1] - 2 * cp_red) + 1; j++) {
 
-        m_solver.f (row, 0, 0.0);
-        m_solver.f (row, 1, 0.0);
-        m_solver.f (row, 2, 0.0);
+      m_solver.f (row, 0, 0.0);
+      m_solver.f (row, 1, 0.0);
+      m_solver.f (row, 2, 0.0);
 
-        m_solver.K (row, grc2gl (i, j + 0), -2.0 * weight);
-        m_solver.K (row, grc2gl (i, j - 1), 1.0 * weight);
-        m_solver.K (row, grc2gl (i, j + 1), 1.0 * weight);
+      m_solver.K (row, grc2gl (i, j + 0), -2.0 * weight);
+      m_solver.K (row, grc2gl (i, j - 1), 1.0 * weight);
+      m_solver.K (row, grc2gl (i, j + 1), 1.0 * weight);
 
-        row++;
-      }
-      break;
+      row++;
+    }
+    break;
   }
 }
 
 Vector2d
-FittingCylinder::inverseMapping (const ON_NurbsSurface &nurbs, const Vector3d &pt, const Vector2d &hint, double &error,
-                                 Vector3d &p, Vector3d &tu, Vector3d &tv, int maxSteps, double accuracy, bool quiet)
+FittingCylinder::inverseMapping (const ON_NurbsSurface &nurbs, const Vector3d &pt,
+                                 const Vector2d &hint, double &error, Vector3d &p,
+                                 Vector3d &tu, Vector3d &tv, int maxSteps,
+                                 double accuracy, bool quiet)
 {
 
   double pointAndTangents[9];
@@ -545,8 +525,7 @@ FittingCylinder::inverseMapping (const ON_NurbsSurface &nurbs, const Vector3d &p
 
   current = hint;
 
-  for (int k = 0; k < maxSteps; k++)
-  {
+  for (int k = 0; k < maxSteps; k++) {
 
     nurbs.Evaluate (current (0), current (1), 1, 3, pointAndTangents);
     p (0) = pointAndTangents[0];
@@ -571,15 +550,12 @@ FittingCylinder::inverseMapping (const ON_NurbsSurface &nurbs, const Vector3d &p
 
     delta = A.ldlt ().solve (b);
 
-    if (delta.norm () < accuracy)
-    {
+    if (delta.norm () < accuracy) {
 
       error = r.norm ();
       return current;
 
-    }
-    else
-    {
+    } else {
       current += delta;
       if (current (0) < minU)
         current (0) = minU;
@@ -591,14 +567,14 @@ FittingCylinder::inverseMapping (const ON_NurbsSurface &nurbs, const Vector3d &p
       else if (current (1) > maxV)
         current (1) = minV + (current (1) - maxV);
     }
-
   }
 
   error = r.norm ();
 
-  if (!quiet)
-  {
-    printf ("[FittingCylinder::inverseMapping] Warning: Method did not converge (%e %d)\n", accuracy, maxSteps);
+  if (!quiet) {
+    printf (
+        "[FittingCylinder::inverseMapping] Warning: Method did not converge (%e %d)\n",
+        accuracy, maxSteps);
     printf ("  %f %f ... %f %f\n", hint (0), hint (1), current (0), current (1));
   }
 
@@ -606,7 +582,8 @@ FittingCylinder::inverseMapping (const ON_NurbsSurface &nurbs, const Vector3d &p
 }
 
 Vector2d
-FittingCylinder::findClosestElementMidPoint (const ON_NurbsSurface &nurbs, const Vector3d &pt)
+FittingCylinder::findClosestElementMidPoint (const ON_NurbsSurface &nurbs,
+                                             const Vector3d &pt)
 {
   Vector2d hint;
   Vector3d r;
@@ -614,10 +591,8 @@ FittingCylinder::findClosestElementMidPoint (const ON_NurbsSurface &nurbs, const
   std::vector<double> elementsV = getElementVector (nurbs, 1);
 
   double d_shortest = std::numeric_limits<double>::max ();
-  for (size_t i = 0; i < elementsU.size () - 1; i++)
-  {
-    for (size_t j = 0; j < elementsV.size () - 1; j++)
-    {
+  for (size_t i = 0; i < elementsU.size () - 1; i++) {
+    for (size_t j = 0; j < elementsV.size () - 1; j++) {
       double points[3];
 
       double xi = elementsU[i] + 0.5 * (elementsU[i + 1] - elementsU[i]);
@@ -630,8 +605,7 @@ FittingCylinder::findClosestElementMidPoint (const ON_NurbsSurface &nurbs, const
 
       double d = r.squaredNorm ();
 
-      if ((i == 0 && j == 0) || d < d_shortest)
-      {
+      if ((i == 0 && j == 0) || d < d_shortest) {
         d_shortest = d;
         hint (0) = xi;
         hint (1) = eta;
@@ -641,4 +615,3 @@ FittingCylinder::findClosestElementMidPoint (const ON_NurbsSurface &nurbs, const
 
   return hint;
 }
-

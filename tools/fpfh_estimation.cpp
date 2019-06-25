@@ -3,7 +3,7 @@
  *
  *  Point Cloud Library (PCL) - www.pointclouds.org
  *  Copyright (c) 2010-2012, Willow Garage, Inc.
- *  
+ *
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -38,20 +38,20 @@
  */
 
 #include <pcl/PCLPointCloud2.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl/features/fpfh.h>
-#include <pcl/console/print.h>
 #include <pcl/console/parse.h>
+#include <pcl/console/print.h>
 #include <pcl/console/time.h>
+#include <pcl/features/fpfh.h>
+#include <pcl/io/pcd_io.h>
 
 using namespace pcl;
 using namespace pcl::io;
 using namespace pcl::console;
 
-int    default_k = 0;
+int default_k = 0;
 double default_radius = 0.0;
 
-Eigen::Vector4f    translation;
+Eigen::Vector4f translation;
 Eigen::Quaternionf orientation;
 
 void
@@ -59,27 +59,36 @@ printHelp (int, char **argv)
 {
   print_error ("Syntax is: %s input.pcd output.pcd <options>\n", argv[0]);
   print_info ("  where options are:\n");
-  print_info ("                     -radius X = use a radius of Xm around each point to determine the neighborhood (default: "); 
-  print_value ("%f", default_radius); print_info (")\n");
-  print_info ("                     -k X      = use a fixed number of X-nearest neighbors around each point (default: "); 
-  print_value ("%d", default_k); print_info (")\n");
+  print_info ("                     -radius X = use a radius of Xm around each point "
+              "to determine the neighborhood (default: ");
+  print_value ("%f", default_radius);
+  print_info (")\n");
+  print_info ("                     -k X      = use a fixed number of X-nearest "
+              "neighbors around each point (default: ");
+  print_value ("%d", default_k);
+  print_info (")\n");
 }
 
 bool
 loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
 {
   TicToc tt;
-  print_highlight ("Loading "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Loading ");
+  print_value ("%s ", filename.c_str ());
 
   tt.tic ();
   if (loadPCDFile (filename, cloud, translation, orientation) < 0)
     return (false);
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", cloud.width * cloud.height); print_info (" points]\n");
-  print_info ("Available dimensions: "); print_value ("%s\n", getFieldsList (cloud).c_str ());
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", cloud.width * cloud.height);
+  print_info (" points]\n");
+  print_info ("Available dimensions: ");
+  print_value ("%s\n", getFieldsList (cloud).c_str ());
 
   // Check if the dataset has normals
-  if (getFieldIndex (cloud, "normal_x") == -1)
-  {
+  if (getFieldIndex (cloud, "normal_x") == -1) {
     print_error ("The input dataset does not contain normal information!\n");
     return (false);
   }
@@ -87,8 +96,8 @@ loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
 }
 
 void
-compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output,
-         int k, double radius)
+compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output, int k,
+         double radius)
 {
   // Convert data to PointCloud<T>
   PointCloud<PointNormal>::Ptr xyznormals (new PointCloud<PointNormal>);
@@ -97,20 +106,25 @@ compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output
   // Estimate
   TicToc tt;
   tt.tic ();
-  
+
   print_highlight (stderr, "Computing ");
 
   FPFHEstimation<PointNormal, PointNormal, FPFHSignature33> ne;
   ne.setInputCloud (xyznormals);
   ne.setInputNormals (xyznormals);
-  ne.setSearchMethod (search::KdTree<PointNormal>::Ptr (new search::KdTree<PointNormal>));
+  ne.setSearchMethod (
+      search::KdTree<PointNormal>::Ptr (new search::KdTree<PointNormal>));
   ne.setKSearch (k);
   ne.setRadiusSearch (radius);
-  
+
   PointCloud<FPFHSignature33> fpfhs;
   ne.compute (fpfhs);
 
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", fpfhs.width * fpfhs.height); print_info (" points]\n");
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", fpfhs.width * fpfhs.height);
+  print_info (" points]\n");
 
   // Convert data back
   pcl::PCLPointCloud2 output_fpfhs;
@@ -124,22 +138,28 @@ saveCloud (const std::string &filename, const pcl::PCLPointCloud2 &output)
   TicToc tt;
   tt.tic ();
 
-  print_highlight ("Saving "); print_value ("%s ", filename.c_str ());
-  
+  print_highlight ("Saving ");
+  print_value ("%s ", filename.c_str ());
+
   io::savePCDFile (filename, output, translation, orientation, true);
-  
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", output.width * output.height); print_info (" points]\n");
+
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", output.width * output.height);
+  print_info (" points]\n");
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  print_info ("Estimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: %s -h\n", argv[0]);
+  print_info ("Estimate FPFH (33) descriptors using pcl::FPFHEstimation. For more "
+              "information, use: %s -h\n",
+              argv[0]);
   bool help = false;
   parse_argument (argc, argv, "-h", help);
-  if (argc < 3 || help)
-  {
+  if (argc < 3 || help) {
     printHelp (argc, argv);
     return (-1);
   }
@@ -147,8 +167,7 @@ main (int argc, char** argv)
   // Parse the command line arguments for .pcd files
   std::vector<int> p_file_indices;
   p_file_indices = parse_file_extension_argument (argc, argv, ".pcd");
-  if (p_file_indices.size () != 2)
-  {
+  if (p_file_indices.size () != 2) {
     print_error ("Need one input PCD file and one output PCD file to continue.\n");
     return (-1);
   }
@@ -161,7 +180,7 @@ main (int argc, char** argv)
 
   // Load the first file
   pcl::PCLPointCloud2::Ptr cloud (new pcl::PCLPointCloud2);
-  if (!loadCloud (argv[p_file_indices[0]], *cloud)) 
+  if (!loadCloud (argv[p_file_indices[0]], *cloud))
     return (-1);
 
   // Perform the feature estimation
@@ -171,4 +190,3 @@ main (int argc, char** argv)
   // Save into the second file
   saveCloud (argv[p_file_indices[1]], output);
 }
-

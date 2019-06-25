@@ -1,20 +1,20 @@
-  /*=========================================================================
+/*=========================================================================
 
-  Program:   Visualization Toolkit
-  Module:    vtkPixelBufferObject.h
+Program:   Visualization Toolkit
+Module:    vtkPixelBufferObject.h
 
-  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
-  All rights reserved.
-  See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
+Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
+All rights reserved.
+See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notice for more information.
+   This software is distributed WITHOUT ANY WARRANTY; without even
+   the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+   PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
 // .NAME vtkVertexBufferObject - abstracts an OpenGL vertex buffer object.
 // .SECTION Description
-// Provides low-level access to GPU memory. Used to pass raw data to GPU. 
+// Provides low-level access to GPU memory. Used to pass raw data to GPU.
 // The data is uploaded into a vertex buffer.
 // .SECTION See Also
 // OpenGL Vertex Buffer Object Extension Spec (ARB_vertex_buffer_object):
@@ -44,11 +44,12 @@ class vtkRenderWindow;
 
 class PCL_EXPORTS vtkVertexBufferObject : public vtkObject
 {
-public:
-  
-  static vtkVertexBufferObject* New();
-  vtkTypeMacro(vtkVertexBufferObject, vtkObject);
-  void PrintSelf(ostream& os, vtkIndent indent) override;
+  public:
+  static vtkVertexBufferObject *
+  New ();
+  vtkTypeMacro (vtkVertexBufferObject, vtkObject);
+  void
+  PrintSelf (ostream &os, vtkIndent indent) override;
 
   // Description:
   // Get/Set the context. Context must be a vtkOpenGLRenderWindow.
@@ -56,14 +57,15 @@ public:
   // context to avoid reference loops.
   // SetContext() may raise an error is the OpenGL context does not support the
   // required OpenGL extensions.
-  void SetContext(vtkRenderWindow* context);
-  vtkRenderWindow* GetContext();
+  void
+  SetContext (vtkRenderWindow *context);
+  vtkRenderWindow *
+  GetContext ();
 
-  //BTX
+  // BTX
   // Usage values.
-  enum 
-  {
-    StreamDraw=0,
+  enum {
+    StreamDraw = 0,
     StreamRead,
     StreamCopy,
     StaticDraw,
@@ -74,8 +76,8 @@ public:
     DynamicCopy,
     NumberOfUsages
   };
-  //ETX
-  
+  // ETX
+
   // Description:
   // Usage is a performance hint.
   // Valid values are:
@@ -92,101 +94,120 @@ public:
   // S: as the source for GL drawing and image specification commands.
   // R: reading data from the GL
   // Initial value is StaticDraw, as in OpenGL spec.
-  vtkGetMacro(Usage, int);
-  vtkSetMacro(Usage, int);
-  
-  int GetAttributeIndex();
-  void SetUserDefinedAttribute(int index, bool normalized=false, int stride=0);
-  void ResetUserDefinedAttribute();
+  vtkGetMacro (Usage, int);
+  vtkSetMacro (Usage, int);
 
-  void SetAttributeNormalized(bool normalized);
+  int
+  GetAttributeIndex ();
+  void
+  SetUserDefinedAttribute (int index, bool normalized = false, int stride = 0);
+  void
+  ResetUserDefinedAttribute ();
+
+  void
+  SetAttributeNormalized (bool normalized);
 
   // Description:
   // Set point data
-  bool Upload(vtkPoints *points);
+  bool
+  Upload (vtkPoints *points);
 
   // Description:
   // Set indice data
-  bool Upload(vtkCellArray *verts);
+  bool
+  Upload (vtkCellArray *verts);
 
   // Description:
   // Set indice data
-  bool Upload(unsigned int *indices, unsigned int count);
+  bool
+  Upload (unsigned int *indices, unsigned int count);
 
   // Description:
   // Set color data
-  bool Upload(vtkUnsignedCharArray *colors);
+  bool
+  Upload (vtkUnsignedCharArray *colors);
 
   // Description:
   // Set color data
-  bool Upload(vtkDataArray *array);
-  bool Upload(vtkDataArray *array, int attributeType, int arrayType);
-  bool UploadNormals(vtkDataArray *normals);
-  bool UploadColors(vtkDataArray *colors);
-
+  bool
+  Upload (vtkDataArray *array);
+  bool
+  Upload (vtkDataArray *array, int attributeType, int arrayType);
+  bool
+  UploadNormals (vtkDataArray *normals);
+  bool
+  UploadColors (vtkDataArray *colors);
 
   // Description:
   // Get the size of the data loaded into the GPU. Size is in the number of
   // elements of the uploaded Type.
-  vtkGetMacro(Size, unsigned int);
+  vtkGetMacro (Size, unsigned int);
 
   // Description:
   // Get the size of the data loaded into the GPU. Size is in the number of
   // elements of the uploaded Type.
-  vtkGetMacro(Count, unsigned int);
+  vtkGetMacro (Count, unsigned int);
 
   // Description:
   // Get the openGL buffer handle.
-  vtkGetMacro(Handle, unsigned int);
+  vtkGetMacro (Handle, unsigned int);
 
   // Description:
   // Inactivate the buffer.
-  void UnBind();
+  void
+  UnBind ();
 
   // Description:
   // Make the buffer active.
-  void Bind();
+  void
+  Bind ();
 
   // Description:
   // Allocate the memory. size is in number of bytes. type is a VTK type.
-//  void Allocate(unsigned int size, int type);
-  
-//BTX
+  //  void Allocate(unsigned int size, int type);
+
+  // BTX
 
   // Description:
   // Release the memory allocated without destroying the PBO handle.
-  void ReleaseMemory();
+  void
+  ReleaseMemory ();
 
   // Description:
   // Returns if the context supports the required extensions.
-  static bool IsSupported(vtkRenderWindow* renWin);
+  static bool
+  IsSupported (vtkRenderWindow *renWin);
 
-//ETX
-//BTX
-protected:
-  vtkVertexBufferObject();
-  ~vtkVertexBufferObject();
+  // ETX
+  // BTX
+  protected:
+  vtkVertexBufferObject ();
+  ~vtkVertexBufferObject ();
 
   // Description:
   // Loads all required OpenGL extensions. Must be called every time a new
   // context is set.
-  bool LoadRequiredExtensions(vtkOpenGLExtensionManager* mgr);
+  bool
+  LoadRequiredExtensions (vtkOpenGLExtensionManager *mgr);
 
   // Description:
   // Create the pixel buffer object.
-  void CreateBuffer();
+  void
+  CreateBuffer ();
 
   // Description:
   // Destroys the pixel buffer object.
-  void DestroyBuffer();
+  void
+  DestroyBuffer ();
 
   // Description:
   // Uploads data to buffer object
-  bool Upload(GLvoid* data);
+  bool
+  Upload (GLvoid *data);
 
   // Description:
   // Get the openGL buffer handle.
-  vtkGetMacro(ArrayType, unsigned int);
+  vtkGetMacro (ArrayType, unsigned int);
 
   int Usage;
   unsigned int Size;
@@ -203,12 +224,13 @@ protected:
 
   vtkWeakPointer<vtkRenderWindow> Context;
 
-
-private:
-  vtkVertexBufferObject(const vtkVertexBufferObject&); // Not implemented.
-  void operator=(const vtkVertexBufferObject&); // Not implemented.
+  private:
+  vtkVertexBufferObject (const vtkVertexBufferObject &); // Not implemented.
+  void
+  operator= (const vtkVertexBufferObject &); // Not implemented.
 
   // Helper to get data type sizes when passing to opengl
-  int GetDataTypeSize(int type);
-  //ETX
+  int
+  GetDataTypeSize (int type);
+  // ETX
 };

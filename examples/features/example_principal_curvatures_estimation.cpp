@@ -37,18 +37,16 @@
  *
  */
 
-
 #include <iostream>
 #include <vector>
 
-#include <pcl/io/pcd_io.h>
-#include <pcl/point_types.h>
 #include <pcl/features/normal_3d.h>
 #include <pcl/features/principal_curvatures.h>
-
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
 
 int
-main (int, char** argv)
+main (int, char **argv)
 {
   std::string filename = argv[1];
   std::cout << "Reading " << filename << std::endl;
@@ -70,14 +68,17 @@ main (int, char** argv)
   pcl::search::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZ>);
   normal_estimation.setSearchMethod (tree);
 
-  pcl::PointCloud<pcl::Normal>::Ptr cloud_with_normals (new pcl::PointCloud<pcl::Normal>);
+  pcl::PointCloud<pcl::Normal>::Ptr cloud_with_normals (
+      new pcl::PointCloud<pcl::Normal>);
 
   normal_estimation.setRadiusSearch (0.03);
 
   normal_estimation.compute (*cloud_with_normals);
 
   // Setup the principal curvatures computation
-  pcl::PrincipalCurvaturesEstimation<pcl::PointXYZ, pcl::Normal, pcl::PrincipalCurvatures> principal_curvatures_estimation;
+  pcl::PrincipalCurvaturesEstimation<pcl::PointXYZ, pcl::Normal,
+                                     pcl::PrincipalCurvatures>
+      principal_curvatures_estimation;
 
   // Provide the original point cloud (without normals)
   principal_curvatures_estimation.setInputCloud (cloud);
@@ -90,10 +91,12 @@ main (int, char** argv)
   principal_curvatures_estimation.setRadiusSearch (1.0);
 
   // Actually compute the principal curvatures
-  pcl::PointCloud<pcl::PrincipalCurvatures>::Ptr principal_curvatures (new pcl::PointCloud<pcl::PrincipalCurvatures> ());
+  pcl::PointCloud<pcl::PrincipalCurvatures>::Ptr principal_curvatures (
+      new pcl::PointCloud<pcl::PrincipalCurvatures> ());
   principal_curvatures_estimation.compute (*principal_curvatures);
 
-  std::cout << "output points.size (): " << principal_curvatures->points.size () << std::endl;
+  std::cout << "output points.size (): " << principal_curvatures->points.size ()
+            << std::endl;
 
   // Display and retrieve the shape context descriptor vector for the 0th point.
   pcl::PrincipalCurvatures descriptor = principal_curvatures->points[0];

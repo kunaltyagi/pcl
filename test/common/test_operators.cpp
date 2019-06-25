@@ -36,9 +36,9 @@
  */
 
 #include <gtest/gtest.h>
+#include <pcl/common/point_operators.h>
 #include <pcl/pcl_tests.h>
 #include <pcl/point_types.h>
-#include <pcl/common/point_operators.h>
 
 using namespace pcl;
 using namespace pcl::test;
@@ -47,8 +47,14 @@ using namespace pcl::test;
 TEST (PointOperators, PointXYZ)
 {
   using namespace pcl::common;
-  PointXYZ p0; p0.x = 0.1f;  p0.y = 0.2f;  p0.z = 0.3f;
-  PointXYZ p1; p1.x = 0.05f; p1.y = 0.05f; p1.z = 0.05f;
+  PointXYZ p0;
+  p0.x = 0.1f;
+  p0.y = 0.2f;
+  p0.z = 0.3f;
+  PointXYZ p1;
+  p1.x = 0.05f;
+  p1.y = 0.05f;
+  p1.z = 0.05f;
   PointXYZ p2 = p0;
   p2 += p1;
   EXPECT_EQ (p2.x, p0.x + p1.x);
@@ -92,8 +98,16 @@ TEST (PointOperators, PointXYZ)
 TEST (PointOperators, PointXYZI)
 {
   using namespace pcl::common;
-  PointXYZI p0; p0.x = 0.1f; p0.y = 0.2f;  p0.z = 0.3f; p0.intensity = 123;
-  PointXYZI p1; p1.x = 0.05f; p1.y = 0.05f; p1.z = 0.05f; p1.intensity = 133;
+  PointXYZI p0;
+  p0.x = 0.1f;
+  p0.y = 0.2f;
+  p0.z = 0.3f;
+  p0.intensity = 123;
+  PointXYZI p1;
+  p1.x = 0.05f;
+  p1.y = 0.05f;
+  p1.z = 0.05f;
+  p1.intensity = 133;
   PointXYZI p2 = p0 + p1;
   PointXYZI p3 = p0 - p1;
 
@@ -121,8 +135,20 @@ TEST (PointOperators, PointXYZI)
 TEST (PointOperators, PointXYZRGB)
 {
   using namespace pcl::common;
-  PointXYZRGB p0; p0.x = 0.1f; p0.y = 0.2f;  p0.z = 0.3f; p0.r = 123; p0.g = 125; p0.b = 127;
-  PointXYZRGB p1; p1.x = 0.05f; p1.y = 0.05f; p1.z = 0.05f; p1.r = 123; p1.g = 125; p1.b = 127;
+  PointXYZRGB p0;
+  p0.x = 0.1f;
+  p0.y = 0.2f;
+  p0.z = 0.3f;
+  p0.r = 123;
+  p0.g = 125;
+  p0.b = 127;
+  PointXYZRGB p1;
+  p1.x = 0.05f;
+  p1.y = 0.05f;
+  p1.z = 0.05f;
+  p1.r = 123;
+  p1.g = 125;
+  p1.b = 127;
   PointXYZRGB p2 = p0 + p1;
   PointXYZRGB p3 = p0 - p1;
 
@@ -130,37 +156,36 @@ TEST (PointOperators, PointXYZRGB)
   EXPECT_EQ (p2.y, p0.y + p1.y);
   EXPECT_EQ (p2.z, p0.z + p1.z);
   // Disabled. Doesn't make any sense
-  //EXPECT_EQ (p2.r, p0.r + p1.r);
-  //EXPECT_EQ (p2.g, p0.g + p1.g);
-  //EXPECT_EQ (p2.b, p0.b + p1.b);
+  // EXPECT_EQ (p2.r, p0.r + p1.r);
+  // EXPECT_EQ (p2.g, p0.g + p1.g);
+  // EXPECT_EQ (p2.b, p0.b + p1.b);
 
   EXPECT_EQ (p3.x, p0.x - p1.x);
   EXPECT_EQ (p3.y, p0.y - p1.y);
   EXPECT_EQ (p3.z, p0.z - p1.z);
   // Disabled. Doesn't make any sense
-  //EXPECT_EQ (p3.r, p0.r - p1.r);
-  //EXPECT_EQ (p3.g, p0.g - p1.g);
-  //EXPECT_EQ (p3.b, p0.b - p1.b);
-
+  // EXPECT_EQ (p3.r, p0.r - p1.r);
+  // EXPECT_EQ (p3.g, p0.g - p1.g);
+  // EXPECT_EQ (p3.b, p0.b - p1.b);
 
   p2 = 0.1f * p1;
   EXPECT_NEAR (p2.x, 0.1 * p1.x, 1e-4);
   EXPECT_NEAR (p2.y, 0.1 * p1.y, 1e-4);
   EXPECT_NEAR (p2.z, 0.1 * p1.z, 1e-4);
   // Disabled. Doesn't make any sense
-  //EXPECT_EQ (p2.r, static_cast<pcl::uint8_t> (0.1 * p1.r));
-  //EXPECT_EQ (p2.g, static_cast<pcl::uint8_t> (0.1 * p1.g));
-  //EXPECT_EQ (p2.b, static_cast<pcl::uint8_t> (0.1 * p1.b));
+  // EXPECT_EQ (p2.r, static_cast<pcl::uint8_t> (0.1 * p1.r));
+  // EXPECT_EQ (p2.g, static_cast<pcl::uint8_t> (0.1 * p1.g));
+  // EXPECT_EQ (p2.b, static_cast<pcl::uint8_t> (0.1 * p1.b));
   PointXYZRGB p4 = p1 * 0.1f;
   EXPECT_EQ_VECTORS (p2.getVector3fMap (), p4.getVector3fMap ());
   // Disabled. Doesn't make any sense
-  //EXPECT_EQ (p2.r, p4.r);
-  //EXPECT_EQ (p2.g, p4.g);
-  //EXPECT_EQ (p2.b, p4.b);
+  // EXPECT_EQ (p2.r, p4.r);
+  // EXPECT_EQ (p2.g, p4.g);
+  // EXPECT_EQ (p2.b, p4.b);
 }
 
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

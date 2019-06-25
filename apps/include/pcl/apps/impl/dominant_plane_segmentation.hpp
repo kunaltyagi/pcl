@@ -33,16 +33,16 @@
  *
  */
 
-#include <pcl/visualization/pcl_visualizer.h>
-#include <pcl/features/integral_image_normal.h>
 #include <pcl/common/time.h>
+#include <pcl/features/integral_image_normal.h>
+#include <pcl/visualization/pcl_visualizer.h>
 
-template<typename PointType> void
+template <typename PointType>
+void
 pcl::apps::DominantPlaneSegmentation<PointType>::compute_table_plane ()
 {
   // Has the input dataset been set already?
-  if (!input_)
-  {
+  if (!input_) {
     PCL_WARN ("[pcl::apps::DominantPlaneSegmentation] No input dataset given!\n");
     return;
   }
@@ -50,13 +50,15 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_table_plane ()
   CloudConstPtr cloud_;
   CloudPtr cloud_filtered_ (new Cloud ());
   CloudPtr cloud_downsampled_ (new Cloud ());
-  pcl::PointCloud<pcl::Normal>::Ptr cloud_normals_ (new pcl::PointCloud<pcl::Normal> ());
+  pcl::PointCloud<pcl::Normal>::Ptr cloud_normals_ (
+      new pcl::PointCloud<pcl::Normal> ());
   pcl::PointIndices::Ptr table_inliers_ (new pcl::PointIndices ());
   pcl::ModelCoefficients::Ptr table_coefficients_ (new pcl::ModelCoefficients ());
   CloudPtr table_projected_ (new Cloud ());
   CloudPtr table_hull_ (new Cloud ());
 
-  typename pcl::search::KdTree<PointType>::Ptr normals_tree_ (new pcl::search::KdTree<PointType>);
+  typename pcl::search::KdTree<PointType>::Ptr normals_tree_ (
+      new pcl::search::KdTree<PointType>);
 
   // Normal estimation parameters
   n3d_.setKSearch (k_);
@@ -75,15 +77,14 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_table_plane ()
   bb_cluster_proj_.setModelType (pcl::SACMODEL_NORMAL_PLANE);
 
   // ---[ PassThroughFilter
-  pass_.setFilterLimits (float (min_z_bounds_), float (max_z_bounds_));
+  pass_.setFilterLimits (float(min_z_bounds_), float(max_z_bounds_));
   pass_.setFilterFieldName ("z");
   pass_.setInputCloud (input_);
   pass_.filter (*cloud_filtered_);
 
-  if (int (cloud_filtered_->points.size ()) < k_)
-  {
+  if (int(cloud_filtered_->points.size ()) < k_) {
     PCL_WARN ("[DominantPlaneSegmentation] Filtering returned %lu points! Aborting.",
-        cloud_filtered_->points.size ());
+              cloud_filtered_->points.size ());
     return;
   }
 
@@ -102,8 +103,7 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_table_plane ()
   seg_.setInputNormals (cloud_normals_);
   seg_.segment (*table_inliers_, *table_coefficients_);
 
-  if (table_inliers_->indices.empty ())
-  {
+  if (table_inliers_->indices.empty ()) {
     PCL_WARN ("[DominantPlaneSegmentation] No Plane Inliers points! Aborting.");
     return;
   }
@@ -137,39 +137,41 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_table_plane ()
   // Dot product between the (viewpoint - point) and the plane normal
   float cos_theta = vp.dot (model_coefficients);
   // Flip the plane normal
-  if (cos_theta < 0)
-  {
+  if (cos_theta < 0) {
     model_coefficients *= -1;
     model_coefficients[3] = 0;
     // Hessian form (D = nc . p_plane (centroid here) + p)
-    model_coefficients[3] = -1 * (model_coefficients.dot (table_hull->points[0].getVector4fMap ()));
+    model_coefficients[3] =
+        -1 * (model_coefficients.dot (table_hull->points[0].getVector4fMap ()));
   }
 
-  //Set table_coeffs
+  // Set table_coeffs
   table_coeffs_ = model_coefficients;
 }
 
-template<typename PointType> void
-pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (std::vector<CloudPtr> & clusters)
+template <typename PointType>
+void
+pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (
+    std::vector<CloudPtr> &clusters)
 {
   // Has the input dataset been set already?
-  if (!input_)
-  {
+  if (!input_) {
     PCL_WARN ("[pcl::apps::DominantPlaneSegmentation] No input dataset given!\n");
     return;
   }
 
   // Is the input dataset organized?
-  if (input_->is_dense)
-  {
-    PCL_WARN ("[pcl::apps::DominantPlaneSegmentation] compute_fast can only be used with organized point clouds!\n");
+  if (input_->is_dense) {
+    PCL_WARN ("[pcl::apps::DominantPlaneSegmentation] compute_fast can only be used "
+              "with organized point clouds!\n");
     return;
   }
 
   CloudConstPtr cloud_;
   CloudPtr cloud_filtered_ (new Cloud ());
   CloudPtr cloud_downsampled_ (new Cloud ());
-  pcl::PointCloud<pcl::Normal>::Ptr cloud_normals_ (new pcl::PointCloud<pcl::Normal> ());
+  pcl::PointCloud<pcl::Normal>::Ptr cloud_normals_ (
+      new pcl::PointCloud<pcl::Normal> ());
   pcl::PointIndices::Ptr table_inliers_ (new pcl::PointIndices ());
   pcl::ModelCoefficients::Ptr table_coefficients_ (new pcl::ModelCoefficients ());
   CloudPtr table_projected_ (new Cloud ());
@@ -177,8 +179,10 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (std::vector<Cloud
   CloudPtr cloud_objects_ (new Cloud ());
   CloudPtr cluster_object_ (new Cloud ());
 
-  typename pcl::search::KdTree<PointType>::Ptr normals_tree_ (new pcl::search::KdTree<PointType>);
-  typename pcl::search::KdTree<PointType>::Ptr clusters_tree_ (new pcl::search::KdTree<PointType>);
+  typename pcl::search::KdTree<PointType>::Ptr normals_tree_ (
+      new pcl::search::KdTree<PointType>);
+  typename pcl::search::KdTree<PointType>::Ptr clusters_tree_ (
+      new pcl::search::KdTree<PointType>);
   clusters_tree_->setEpsilon (1);
 
   // Normal estimation parameters
@@ -205,15 +209,14 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (std::vector<Cloud
   cluster_.setSearchMethod (clusters_tree_);
 
   // ---[ PassThroughFilter
-  pass_.setFilterLimits (float (min_z_bounds_), float (max_z_bounds_));
+  pass_.setFilterLimits (float(min_z_bounds_), float(max_z_bounds_));
   pass_.setFilterFieldName ("z");
   pass_.setInputCloud (input_);
   pass_.filter (*cloud_filtered_);
 
-  if (int (cloud_filtered_->points.size ()) < k_)
-  {
+  if (int(cloud_filtered_->points.size ()) < k_) {
     PCL_WARN ("[DominantPlaneSegmentation] Filtering returned %lu points! Aborting.",
-        cloud_filtered_->points.size ());
+              cloud_filtered_->points.size ());
     return;
   }
 
@@ -232,8 +235,7 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (std::vector<Cloud
   seg_.setInputNormals (cloud_normals_);
   seg_.segment (*table_inliers_, *table_coefficients_);
 
-  if (table_inliers_->indices.empty ())
-  {
+  if (table_inliers_->indices.empty ()) {
     PCL_WARN ("[DominantPlaneSegmentation] No Plane Inliers points! Aborting.");
     return;
   }
@@ -267,15 +269,15 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (std::vector<Cloud
   // Dot product between the (viewpoint - point) and the plane normal
   float cos_theta = vp.dot (model_coefficients);
   // Flip the plane normal
-  if (cos_theta < 0)
-  {
+  if (cos_theta < 0) {
     model_coefficients *= -1;
     model_coefficients[3] = 0;
     // Hessian form (D = nc . p_plane (centroid here) + p)
-    model_coefficients[3] = -1 * (model_coefficients.dot (table_hull->points[0].getVector4fMap ()));
+    model_coefficients[3] =
+        -1 * (model_coefficients.dot (table_hull->points[0].getVector4fMap ()));
   }
 
-  //Set table_coeffs
+  // Set table_coeffs
   table_coeffs_ = model_coefficients;
 
   // ---[ Get the objects on top of the table
@@ -286,11 +288,14 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (std::vector<Cloud
 
   pcl::ExtractIndices<PointType> extract_object_indices;
   extract_object_indices.setInputCloud (input_);
-  extract_object_indices.setIndices (boost::make_shared<const pcl::PointIndices> (cloud_object_indices));
+  extract_object_indices.setIndices (
+      boost::make_shared<const pcl::PointIndices> (cloud_object_indices));
   extract_object_indices.filter (*cloud_objects_);
 
-  //create new binary pointcloud with intensity values (0 and 1), 0 for non-object pixels and 1 otherwise
-  pcl::PointCloud<pcl::PointXYZI>::Ptr binary_cloud (new pcl::PointCloud<pcl::PointXYZI>);
+  // create new binary pointcloud with intensity values (0 and 1), 0 for non-object
+  // pixels and 1 otherwise
+  pcl::PointCloud<pcl::PointXYZI>::Ptr binary_cloud (
+      new pcl::PointCloud<pcl::PointXYZI>);
 
   {
     binary_cloud->width = input_->width;
@@ -298,14 +303,14 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (std::vector<Cloud
     binary_cloud->points.resize (input_->points.size ());
     binary_cloud->is_dense = input_->is_dense;
 
-    for (const int &idx : cloud_object_indices.indices)
-    {
-      binary_cloud->points[idx].getVector4fMap () = input_->points[idx].getVector4fMap ();
+    for (const int &idx : cloud_object_indices.indices) {
+      binary_cloud->points[idx].getVector4fMap () =
+          input_->points[idx].getVector4fMap ();
       binary_cloud->points[idx].intensity = 1.0;
     }
   }
 
-  //connected components on the binary image
+  // connected components on the binary image
 
   std::map<float, float> connected_labels;
   float c_intensity = 0.1f;
@@ -314,98 +319,84 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (std::vector<Cloud
   {
 
     int wsize = wsize_;
-    for (int i = 0; i < int (binary_cloud->width); i++)
-    {
-      for (int j = 0; j < int (binary_cloud->height); j++)
-      {
-        if (binary_cloud->at (i, j).intensity != 0)
-        {
-          //check neighboring pixels, first left and then top
-          //be aware of margins
+    for (int i = 0; i < int(binary_cloud->width); i++) {
+      for (int j = 0; j < int(binary_cloud->height); j++) {
+        if (binary_cloud->at (i, j).intensity != 0) {
+          // check neighboring pixels, first left and then top
+          // be aware of margins
 
-          if ((i - 1) < 0 && (j - 1) < 0)
-          {
-            //top-left pixel
+          if ((i - 1) < 0 && (j - 1) < 0) {
+            // top-left pixel
             (*binary_cloud) (i, j).intensity = c_intensity;
-          }
-          else
-          {
-            if ((j - 1) < 0)
-            {
-              //top-row, check on the left of pixel to assign a new label or not
-              int left = check ((*binary_cloud) (i - 1, j), (*binary_cloud) (i, j), c_intensity, object_cluster_tolerance_);
-              if (left)
-              {
-                //Nothing found on the left, check bigger window
+          } else {
+            if ((j - 1) < 0) {
+              // top-row, check on the left of pixel to assign a new label or not
+              int left = check ((*binary_cloud) (i - 1, j), (*binary_cloud) (i, j),
+                                c_intensity, object_cluster_tolerance_);
+              if (left) {
+                // Nothing found on the left, check bigger window
 
                 bool found = false;
-                for (int kk = 2; kk < wsize && !found; kk++)
-                {
+                for (int kk = 2; kk < wsize && !found; kk++) {
                   if ((i - kk) < 0)
                     continue;
 
-                  int left = check ((*binary_cloud) (i - kk, j), (*binary_cloud) (i, j), c_intensity, object_cluster_tolerance_);
-                  if (left == 0)
-                  {
+                  int left = check ((*binary_cloud) (i - kk, j), (*binary_cloud) (i, j),
+                                    c_intensity, object_cluster_tolerance_);
+                  if (left == 0) {
                     found = true;
                   }
                 }
 
-                if (!found)
-                {
+                if (!found) {
                   c_intensity += intensity_incr;
                   (*binary_cloud) (i, j).intensity = c_intensity;
                 }
-
               }
-            }
-            else
-            {
-              if ((i - 1) == 0)
-              {
-                //check only top
-                int top = check ((*binary_cloud) (i, j - 1), (*binary_cloud) (i, j), c_intensity, object_cluster_tolerance_);
-                if (top)
-                {
+            } else {
+              if ((i - 1) == 0) {
+                // check only top
+                int top = check ((*binary_cloud) (i, j - 1), (*binary_cloud) (i, j),
+                                 c_intensity, object_cluster_tolerance_);
+                if (top) {
                   bool found = false;
-                  for (int kk = 2; kk < wsize && !found; kk++)
-                  {
+                  for (int kk = 2; kk < wsize && !found; kk++) {
                     if ((j - kk) < 0)
                       continue;
 
-                    int top = check ((*binary_cloud) (i, j - kk), (*binary_cloud) (i, j), c_intensity, object_cluster_tolerance_);
-                    if (top == 0)
-                    {
+                    int top =
+                        check ((*binary_cloud) (i, j - kk), (*binary_cloud) (i, j),
+                               c_intensity, object_cluster_tolerance_);
+                    if (top == 0) {
                       found = true;
                     }
                   }
 
-                  if (!found)
-                  {
+                  if (!found) {
                     c_intensity += intensity_incr;
                     (*binary_cloud) (i, j).intensity = c_intensity;
                   }
                 }
 
-              }
-              else
-              {
-                //check left and top
-                int left = check ((*binary_cloud) (i - 1, j), (*binary_cloud) (i, j), c_intensity, object_cluster_tolerance_);
-                int top = check ((*binary_cloud) (i, j - 1), (*binary_cloud) (i, j), c_intensity, object_cluster_tolerance_);
+              } else {
+                // check left and top
+                int left = check ((*binary_cloud) (i - 1, j), (*binary_cloud) (i, j),
+                                  c_intensity, object_cluster_tolerance_);
+                int top = check ((*binary_cloud) (i, j - 1), (*binary_cloud) (i, j),
+                                 c_intensity, object_cluster_tolerance_);
 
-                if (left == 0 && top == 0)
-                {
-                  //both top and left had labels, check if they are different
-                  //if they are, take the smallest one and mark labels to be connected..
+                if (left == 0 && top == 0) {
+                  // both top and left had labels, check if they are different
+                  // if they are, take the smallest one and mark labels to be
+                  // connected..
 
-                  if ((*binary_cloud) (i - 1, j).intensity != (*binary_cloud) (i, j - 1).intensity)
-                  {
+                  if ((*binary_cloud) (i - 1, j).intensity !=
+                      (*binary_cloud) (i, j - 1).intensity) {
                     float smaller_intensity = (*binary_cloud) (i - 1, j).intensity;
                     float bigger_intensity = (*binary_cloud) (i, j - 1).intensity;
 
-                    if ((*binary_cloud) (i - 1, j).intensity > (*binary_cloud) (i, j - 1).intensity)
-                    {
+                    if ((*binary_cloud) (i - 1, j).intensity >
+                        (*binary_cloud) (i, j - 1).intensity) {
                       smaller_intensity = (*binary_cloud) (i, j - 1).intensity;
                       bigger_intensity = (*binary_cloud) (i - 1, j).intensity;
                     }
@@ -415,28 +406,31 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (std::vector<Cloud
                   }
                 }
 
-                if (left == 1 && top == 1)
-                {
-                  //if none had labels, increment c_intensity
-                  //search first on bigger window
+                if (left == 1 && top == 1) {
+                  // if none had labels, increment c_intensity
+                  // search first on bigger window
                   bool found = false;
-                  for (int dist = 2; dist < wsize && !found; dist++)
-                  {
+                  for (int dist = 2; dist < wsize && !found; dist++) {
                     if (((i - dist) < 0) || ((j - dist) < 0))
                       continue;
 
-                    int left = check ((*binary_cloud) (i - dist, j), (*binary_cloud) (i, j), c_intensity, object_cluster_tolerance_);
-                    int top = check ((*binary_cloud) (i, j - dist), (*binary_cloud) (i, j), c_intensity, object_cluster_tolerance_);
+                    int left =
+                        check ((*binary_cloud) (i - dist, j), (*binary_cloud) (i, j),
+                               c_intensity, object_cluster_tolerance_);
+                    int top =
+                        check ((*binary_cloud) (i, j - dist), (*binary_cloud) (i, j),
+                               c_intensity, object_cluster_tolerance_);
 
-                    if (left == 0 && top == 0)
-                    {
-                      if ((*binary_cloud) (i - dist, j).intensity != (*binary_cloud) (i, j - dist).intensity)
-                      {
-                        float smaller_intensity = (*binary_cloud) (i - dist, j).intensity;
-                        float bigger_intensity = (*binary_cloud) (i, j - dist).intensity;
+                    if (left == 0 && top == 0) {
+                      if ((*binary_cloud) (i - dist, j).intensity !=
+                          (*binary_cloud) (i, j - dist).intensity) {
+                        float smaller_intensity =
+                            (*binary_cloud) (i - dist, j).intensity;
+                        float bigger_intensity =
+                            (*binary_cloud) (i, j - dist).intensity;
 
-                        if ((*binary_cloud) (i - dist, j).intensity > (*binary_cloud) (i, j - dist).intensity)
-                        {
+                        if ((*binary_cloud) (i - dist, j).intensity >
+                            (*binary_cloud) (i, j - dist).intensity) {
                           smaller_intensity = (*binary_cloud) (i, j - dist).intensity;
                           bigger_intensity = (*binary_cloud) (i - dist, j).intensity;
                         }
@@ -445,17 +439,14 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (std::vector<Cloud
                         (*binary_cloud) (i, j).intensity = smaller_intensity;
                         found = true;
                       }
-                    }
-                    else if (left == 0 || top == 0)
-                    {
-                      //one had label
+                    } else if (left == 0 || top == 0) {
+                      // one had label
                       found = true;
                     }
                   }
 
-                  if (!found)
-                  {
-                    //none had label in the bigger window
+                  if (!found) {
+                    // none had label in the bigger window
                     c_intensity += intensity_incr;
                     (*binary_cloud) (i, j).intensity = c_intensity;
                   }
@@ -463,7 +454,6 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (std::vector<Cloud
               }
             }
           }
-
         }
       }
     }
@@ -474,30 +464,27 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (std::vector<Cloud
   {
     std::map<float, float>::iterator it;
 
-    for (int i = 0; i < int (binary_cloud->width); i++)
-    {
-      for (int j = 0; j < int (binary_cloud->height); j++)
-      {
-        if (binary_cloud->at (i, j).intensity != 0)
-        {
-          //check if this is a root label...
+    for (int i = 0; i < int(binary_cloud->width); i++) {
+      for (int j = 0; j < int(binary_cloud->height); j++) {
+        if (binary_cloud->at (i, j).intensity != 0) {
+          // check if this is a root label...
           it = connected_labels.find (binary_cloud->at (i, j).intensity);
-          while (it != connected_labels.end ())
-          {
-            //the label is on the list, change pixel intensity until it has a root label
+          while (it != connected_labels.end ()) {
+            // the label is on the list, change pixel intensity until it has a root
+            // label
             (*binary_cloud) (i, j).intensity = (*it).second;
             it = connected_labels.find (binary_cloud->at (i, j).intensity);
           }
 
           std::map<float, pcl::PointIndices>::iterator it_indices;
           it_indices = clusters_map.find (binary_cloud->at (i, j).intensity);
-          if (it_indices == clusters_map.end ())
-          {
+          if (it_indices == clusters_map.end ()) {
             pcl::PointIndices indices;
             clusters_map[binary_cloud->at (i, j).intensity] = indices;
           }
 
-          clusters_map[binary_cloud->at (i, j).intensity].indices.push_back (static_cast<int> (j * binary_cloud->width + i));
+          clusters_map[binary_cloud->at (i, j).intensity].indices.push_back (
+              static_cast<int> (j * binary_cloud->width + i));
         }
       }
     }
@@ -506,30 +493,28 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (std::vector<Cloud
   clusters.resize (clusters_map.size ());
 
   int k = 0;
-  for (const auto &cluster : clusters_map)
-  {
+  for (const auto &cluster : clusters_map) {
 
-    if (int (cluster.second.indices.size ()) >= object_cluster_min_size_)
-    {
+    if (int(cluster.second.indices.size ()) >= object_cluster_min_size_) {
 
       clusters[k] = CloudPtr (new Cloud ());
       pcl::copyPointCloud (*input_, cluster.second.indices, *clusters[k]);
       k++;
-      indices_clusters_.push_back(cluster.second);
+      indices_clusters_.push_back (cluster.second);
     }
   }
 
   clusters.resize (k);
-
 }
 
-template<typename PointType> void
-pcl::apps::DominantPlaneSegmentation<PointType>::compute (std::vector<CloudPtr> & clusters)
+template <typename PointType>
+void
+pcl::apps::DominantPlaneSegmentation<PointType>::compute (
+    std::vector<CloudPtr> &clusters)
 {
 
   // Has the input dataset been set already?
-  if (!input_)
-  {
+  if (!input_) {
     PCL_WARN ("[pcl::apps::DominantPlaneSegmentation] No input dataset given!\n");
     return;
   }
@@ -537,7 +522,8 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute (std::vector<CloudPtr> 
   CloudConstPtr cloud_;
   CloudPtr cloud_filtered_ (new Cloud ());
   CloudPtr cloud_downsampled_ (new Cloud ());
-  pcl::PointCloud<pcl::Normal>::Ptr cloud_normals_ (new pcl::PointCloud<pcl::Normal> ());
+  pcl::PointCloud<pcl::Normal>::Ptr cloud_normals_ (
+      new pcl::PointCloud<pcl::Normal> ());
   pcl::PointIndices::Ptr table_inliers_ (new pcl::PointIndices ());
   pcl::ModelCoefficients::Ptr table_coefficients_ (new pcl::ModelCoefficients ());
   CloudPtr table_projected_ (new Cloud ());
@@ -545,8 +531,10 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute (std::vector<CloudPtr> 
   CloudPtr cloud_objects_ (new Cloud ());
   CloudPtr cluster_object_ (new Cloud ());
 
-  typename pcl::search::KdTree<PointType>::Ptr normals_tree_ (new pcl::search::KdTree<PointType>);
-  typename pcl::search::KdTree<PointType>::Ptr clusters_tree_ (new pcl::search::KdTree<PointType>);
+  typename pcl::search::KdTree<PointType>::Ptr normals_tree_ (
+      new pcl::search::KdTree<PointType>);
+  typename pcl::search::KdTree<PointType>::Ptr clusters_tree_ (
+      new pcl::search::KdTree<PointType>);
   clusters_tree_->setEpsilon (1);
 
   // Normal estimation parameters
@@ -573,15 +561,14 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute (std::vector<CloudPtr> 
   cluster_.setSearchMethod (clusters_tree_);
 
   // ---[ PassThroughFilter
-  pass_.setFilterLimits (float (min_z_bounds_), float (max_z_bounds_));
+  pass_.setFilterLimits (float(min_z_bounds_), float(max_z_bounds_));
   pass_.setFilterFieldName ("z");
   pass_.setInputCloud (input_);
   pass_.filter (*cloud_filtered_);
 
-  if (int (cloud_filtered_->points.size ()) < k_)
-  {
+  if (int(cloud_filtered_->points.size ()) < k_) {
     PCL_WARN ("[DominantPlaneSegmentation] Filtering returned %lu points! Aborting.",
-        cloud_filtered_->points.size ());
+              cloud_filtered_->points.size ());
     return;
   }
 
@@ -591,22 +578,24 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute (std::vector<CloudPtr> 
   grid_.setInputCloud (cloud_filtered_);
   grid_.filter (*cloud_downsampled_);
 
-  PCL_INFO ("[DominantPlaneSegmentation] Number of points left after filtering (%f -> %f): %lu out of %lu\n",
-      min_z_bounds_, max_z_bounds_, cloud_downsampled_->points.size (), input_->points.size ());
+  PCL_INFO ("[DominantPlaneSegmentation] Number of points left after filtering (%f -> "
+            "%f): %lu out of %lu\n",
+            min_z_bounds_, max_z_bounds_, cloud_downsampled_->points.size (),
+            input_->points.size ());
 
   // ---[ Estimate the point normals
   n3d_.setInputCloud (cloud_downsampled_);
   n3d_.compute (*cloud_normals_);
 
-  PCL_INFO ("[DominantPlaneSegmentation] %lu normals estimated. \n", cloud_normals_->points.size ());
+  PCL_INFO ("[DominantPlaneSegmentation] %lu normals estimated. \n",
+            cloud_normals_->points.size ());
 
   // ---[ Perform segmentation
   seg_.setInputCloud (cloud_downsampled_);
   seg_.setInputNormals (cloud_normals_);
   seg_.segment (*table_inliers_, *table_coefficients_);
 
-  if (table_inliers_->indices.empty ())
-  {
+  if (table_inliers_->indices.empty ()) {
     PCL_WARN ("[DominantPlaneSegmentation] No Plane Inliers points! Aborting.");
     return;
   }
@@ -640,15 +629,15 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute (std::vector<CloudPtr> 
   // Dot product between the (viewpoint - point) and the plane normal
   float cos_theta = vp.dot (model_coefficients);
   // Flip the plane normal
-  if (cos_theta < 0)
-  {
+  if (cos_theta < 0) {
     model_coefficients *= -1;
     model_coefficients[3] = 0;
     // Hessian form (D = nc . p_plane (centroid here) + p)
-    model_coefficients[3] = -1 * (model_coefficients.dot (table_hull->points[0].getVector4fMap ()));
+    model_coefficients[3] =
+        -1 * (model_coefficients.dot (table_hull->points[0].getVector4fMap ()));
   }
 
-  //Set table_coeffs
+  // Set table_coeffs
   table_coeffs_ = model_coefficients;
 
   // ---[ Get the objects on top of the table
@@ -659,40 +648,42 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute (std::vector<CloudPtr> 
 
   pcl::ExtractIndices<PointType> extract_object_indices;
   extract_object_indices.setInputCloud (cloud_downsampled_);
-  extract_object_indices.setIndices (boost::make_shared<const pcl::PointIndices> (cloud_object_indices));
+  extract_object_indices.setIndices (
+      boost::make_shared<const pcl::PointIndices> (cloud_object_indices));
   extract_object_indices.filter (*cloud_objects_);
 
   if (cloud_objects_->points.empty ())
     return;
 
-  //down_.reset(new Cloud(*cloud_downsampled_));
+  // down_.reset(new Cloud(*cloud_downsampled_));
 
   // ---[ Split the objects into Euclidean clusters
   std::vector<pcl::PointIndices> clusters2;
   cluster_.setInputCloud (cloud_downsampled_);
-  cluster_.setIndices (boost::make_shared<const pcl::PointIndices> (cloud_object_indices));
+  cluster_.setIndices (
+      boost::make_shared<const pcl::PointIndices> (cloud_object_indices));
   cluster_.extract (clusters2);
 
-  PCL_INFO ("[DominantPlaneSegmentation::compute()] Number of clusters found matching the given constraints: %lu.\n",
-      clusters2.size ());
+  PCL_INFO ("[DominantPlaneSegmentation::compute()] Number of clusters found matching "
+            "the given constraints: %lu.\n",
+            clusters2.size ());
 
   clusters.resize (clusters2.size ());
 
-  for (size_t i = 0; i < clusters2.size (); ++i)
-  {
+  for (size_t i = 0; i < clusters2.size (); ++i) {
     clusters[i] = CloudPtr (new Cloud ());
     pcl::copyPointCloud (*cloud_downsampled_, clusters2[i].indices, *clusters[i]);
   }
 }
 
-template<typename PointType>
+template <typename PointType>
 void
-pcl::apps::DominantPlaneSegmentation<PointType>::compute_full (std::vector<CloudPtr> & clusters)
+pcl::apps::DominantPlaneSegmentation<PointType>::compute_full (
+    std::vector<CloudPtr> &clusters)
 {
 
   // Has the input dataset been set already?
-  if (!input_)
-  {
+  if (!input_) {
     PCL_WARN ("[pcl::apps::DominantPlaneSegmentation] No input dataset given!\n");
     return;
   }
@@ -700,7 +691,8 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_full (std::vector<Cloud
   CloudConstPtr cloud_;
   CloudPtr cloud_filtered_ (new Cloud ());
   CloudPtr cloud_downsampled_ (new Cloud ());
-  pcl::PointCloud<pcl::Normal>::Ptr cloud_normals_ (new pcl::PointCloud<pcl::Normal> ());
+  pcl::PointCloud<pcl::Normal>::Ptr cloud_normals_ (
+      new pcl::PointCloud<pcl::Normal> ());
   pcl::PointIndices::Ptr table_inliers_ (new pcl::PointIndices ());
   pcl::ModelCoefficients::Ptr table_coefficients_ (new pcl::ModelCoefficients ());
   CloudPtr table_projected_ (new Cloud ());
@@ -708,8 +700,10 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_full (std::vector<Cloud
   CloudPtr cloud_objects_ (new Cloud ());
   CloudPtr cluster_object_ (new Cloud ());
 
-  typename pcl::search::KdTree<PointType>::Ptr normals_tree_ (new pcl::search::KdTree<PointType>);
-  typename pcl::search::KdTree<PointType>::Ptr clusters_tree_ (new pcl::search::KdTree<PointType>);
+  typename pcl::search::KdTree<PointType>::Ptr normals_tree_ (
+      new pcl::search::KdTree<PointType>);
+  typename pcl::search::KdTree<PointType>::Ptr clusters_tree_ (
+      new pcl::search::KdTree<PointType>);
   clusters_tree_->setEpsilon (1);
 
   // Normal estimation parameters
@@ -736,15 +730,14 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_full (std::vector<Cloud
   cluster_.setSearchMethod (clusters_tree_);
 
   // ---[ PassThroughFilter
-  pass_.setFilterLimits (float (min_z_bounds_), float (max_z_bounds_));
+  pass_.setFilterLimits (float(min_z_bounds_), float(max_z_bounds_));
   pass_.setFilterFieldName ("z");
   pass_.setInputCloud (input_);
   pass_.filter (*cloud_filtered_);
 
-  if (int (cloud_filtered_->points.size ()) < k_)
-  {
+  if (int(cloud_filtered_->points.size ()) < k_) {
     PCL_WARN ("[DominantPlaneSegmentation] Filtering returned %lu points! Aborting.",
-        cloud_filtered_->points.size ());
+              cloud_filtered_->points.size ());
     return;
   }
 
@@ -754,22 +747,24 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_full (std::vector<Cloud
   grid_.setInputCloud (cloud_filtered_);
   grid_.filter (*cloud_downsampled_);
 
-  PCL_INFO ("[DominantPlaneSegmentation] Number of points left after filtering&downsampling (%f -> %f): %lu out of %lu\n",
-      min_z_bounds_, max_z_bounds_, cloud_downsampled_->points.size (), input_->points.size ());
+  PCL_INFO ("[DominantPlaneSegmentation] Number of points left after "
+            "filtering&downsampling (%f -> %f): %lu out of %lu\n",
+            min_z_bounds_, max_z_bounds_, cloud_downsampled_->points.size (),
+            input_->points.size ());
 
   // ---[ Estimate the point normals
   n3d_.setInputCloud (cloud_downsampled_);
   n3d_.compute (*cloud_normals_);
 
-  PCL_INFO ("[DominantPlaneSegmentation] %lu normals estimated. \n", cloud_normals_->points.size ());
+  PCL_INFO ("[DominantPlaneSegmentation] %lu normals estimated. \n",
+            cloud_normals_->points.size ());
 
   // ---[ Perform segmentation
   seg_.setInputCloud (cloud_downsampled_);
   seg_.setInputNormals (cloud_normals_);
   seg_.segment (*table_inliers_, *table_coefficients_);
 
-  if (table_inliers_->indices.empty ())
-  {
+  if (table_inliers_->indices.empty ()) {
     PCL_WARN ("[DominantPlaneSegmentation] No Plane Inliers points! Aborting.");
     return;
   }
@@ -803,15 +798,15 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_full (std::vector<Cloud
   // Dot product between the (viewpoint - point) and the plane normal
   float cos_theta = vp.dot (model_coefficients);
   // Flip the plane normal
-  if (cos_theta < 0)
-  {
+  if (cos_theta < 0) {
     model_coefficients *= -1;
     model_coefficients[3] = 0;
     // Hessian form (D = nc . p_plane (centroid here) + p)
-    model_coefficients[3] = -1 * (model_coefficients.dot (table_hull->points[0].getVector4fMap ()));
+    model_coefficients[3] =
+        -1 * (model_coefficients.dot (table_hull->points[0].getVector4fMap ()));
   }
 
-  //Set table_coeffs
+  // Set table_coeffs
   table_coeffs_ = model_coefficients;
 
   // ---[ Get the objects on top of the table
@@ -822,7 +817,8 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_full (std::vector<Cloud
 
   pcl::ExtractIndices<PointType> extract_object_indices;
   extract_object_indices.setInputCloud (cloud_downsampled_);
-  extract_object_indices.setIndices (boost::make_shared<const pcl::PointIndices> (cloud_object_indices));
+  extract_object_indices.setIndices (
+      boost::make_shared<const pcl::PointIndices> (cloud_object_indices));
   extract_object_indices.filter (*cloud_objects_);
 
   if (cloud_objects_->points.empty ())
@@ -831,19 +827,21 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_full (std::vector<Cloud
   // ---[ Split the objects into Euclidean clusters
   std::vector<pcl::PointIndices> clusters2;
   cluster_.setInputCloud (cloud_filtered_);
-  cluster_.setIndices (boost::make_shared<const pcl::PointIndices> (cloud_object_indices));
+  cluster_.setIndices (
+      boost::make_shared<const pcl::PointIndices> (cloud_object_indices));
   cluster_.extract (clusters2);
 
-  PCL_INFO ("[DominantPlaneSegmentation::compute_full()] Number of clusters found matching the given constraints: %lu.\n",
-      clusters2.size ());
+  PCL_INFO ("[DominantPlaneSegmentation::compute_full()] Number of clusters found "
+            "matching the given constraints: %lu.\n",
+            clusters2.size ());
 
   clusters.resize (clusters2.size ());
 
-  for (size_t i = 0; i < clusters2.size (); ++i)
-  {
+  for (size_t i = 0; i < clusters2.size (); ++i) {
     clusters[i] = CloudPtr (new Cloud ());
     pcl::copyPointCloud (*cloud_filtered_, clusters2[i].indices, *clusters[i]);
   }
 }
 
-#define PCL_INSTANTIATE_DominantPlaneSegmentation(T) template class PCL_EXPORTS pcl::apps::DominantPlaneSegmentation<T>;
+#define PCL_INSTANTIATE_DominantPlaneSegmentation(T)                                   \
+  template class PCL_EXPORTS pcl::apps::DominantPlaneSegmentation<T>;

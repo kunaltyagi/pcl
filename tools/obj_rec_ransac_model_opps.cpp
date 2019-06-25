@@ -39,24 +39,25 @@
  *  Created on: Jan 29, 2013
  *      Author: papazov
  *
- *  Adds a model to the model library and visualizes the oriented point pairs (opps) sampled from the model.
+ *  Adds a model to the model library and visualizes the oriented point pairs (opps)
+ * sampled from the model.
  */
 
-#include <pcl/recognition/ransac_based/obj_rec_ransac.h>
-#include <pcl/visualization/pcl_visualizer.h>
-#include <pcl/console/print.h>
+#include <cstdio>
 #include <pcl/console/parse.h>
+#include <pcl/console/print.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_cloud.h>
-#include <vtkVersion.h>
-#include <vtkPolyDataReader.h>
-#include <vtkDoubleArray.h>
-#include <vtkDataArray.h>
-#include <vtkPointData.h>
-#include <vtkHedgeHog.h>
-#include <cstdio>
+#include <pcl/recognition/ransac_based/obj_rec_ransac.h>
+#include <pcl/visualization/pcl_visualizer.h>
 #include <thread>
 #include <vector>
+#include <vtkDataArray.h>
+#include <vtkDoubleArray.h>
+#include <vtkHedgeHog.h>
+#include <vtkPointData.h>
+#include <vtkPolyDataReader.h>
+#include <vtkVersion.h>
 
 using namespace std;
 using namespace std::chrono_literals;
@@ -69,34 +70,41 @@ using namespace visualization;
 #define _SHOW_MODEL_OCTREE_POINTS_
 //#define _SHOW_MODEL_OCTREE_NORMALS_
 
-void run (float pair_width, float voxel_size, float max_coplanarity_angle);
-void showModelOpps (PCLVisualizer& viz, const ModelLibrary::HashTable& hash_table, const ModelLibrary::Model* model, float pair_width);
-bool vtk_to_pointcloud (const char* file_name, PointCloud<PointXYZ>& pcl_points, PointCloud<Normal>& pcl_normals);
+void
+run (float pair_width, float voxel_size, float max_coplanarity_angle);
+void
+showModelOpps (PCLVisualizer &viz, const ModelLibrary::HashTable &hash_table,
+               const ModelLibrary::Model *model, float pair_width);
+bool
+vtk_to_pointcloud (const char *file_name, PointCloud<PointXYZ> &pcl_points,
+                   PointCloud<Normal> &pcl_normals);
 
 //===========================================================================================================================================
 
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  printf ("\nUsage: ./pcl_obj_rec_ransac_model_opps <pair_width> <voxel_size> <max_coplanarity_angle>\n\n");
+  printf ("\nUsage: ./pcl_obj_rec_ransac_model_opps <pair_width> <voxel_size> "
+          "<max_coplanarity_angle>\n\n");
 
   const int num_params = 3;
-  float parameters[num_params] = {10.0f/*pair width*/, 5.0f/*voxel size*/, 5.0f/*max co-planarity angle*/};
-  string parameter_names[num_params] = {"pair_width", "voxel_size", "max_coplanarity_angle"};
+  float parameters[num_params] = {10.0f /*pair width*/, 5.0f /*voxel size*/,
+                                  5.0f /*max co-planarity angle*/};
+  string parameter_names[num_params] = {"pair_width", "voxel_size",
+                                        "max_coplanarity_angle"};
 
   // Read the user input if any
-  for ( int i = 0 ; i < argc-1 && i < num_params ; ++i )
-  {
-    parameters[i] = static_cast<float> (atof (argv[i+1]));
-    if ( parameters[i] <= 0.0f )
-    {
-      fprintf(stderr, "ERROR: the %i-th parameter has to be positive and not %f\n", i+1, parameters[i]);
+  for (int i = 0; i < argc - 1 && i < num_params; ++i) {
+    parameters[i] = static_cast<float> (atof (argv[i + 1]));
+    if (parameters[i] <= 0.0f) {
+      fprintf (stderr, "ERROR: the %i-th parameter has to be positive and not %f\n",
+               i + 1, parameters[i]);
       return (-1);
     }
   }
 
   printf ("The following parameter values will be used:\n");
-  for ( int i = 0 ; i < num_params ; ++i )
+  for (int i = 0; i < num_params; ++i)
     cout << "  " << parameter_names[i] << " = " << parameters[i] << endl;
   cout << endl;
 
@@ -107,7 +115,8 @@ main (int argc, char** argv)
 
 //===============================================================================================================================
 
-void run (float pair_width, float voxel_size, float max_coplanarity_angle)
+void
+run (float pair_width, float voxel_size, float max_coplanarity_angle)
 {
   PointCloud<PointXYZ>::Ptr model_points (new PointCloud<PointXYZ> ());
   PointCloud<Normal>::Ptr model_normals (new PointCloud<Normal> ());
@@ -115,7 +124,7 @@ void run (float pair_width, float voxel_size, float max_coplanarity_angle)
   char model_name[] = "../../test/tum_amicelli_box.vtk";
 
   // Get the points and normals from the input vtk file
-  if ( !vtk_to_pointcloud (model_name, *model_points, *model_normals) )
+  if (!vtk_to_pointcloud (model_name, *model_points, *model_normals))
     return;
 
   // The recognition object
@@ -124,8 +133,8 @@ void run (float pair_width, float voxel_size, float max_coplanarity_angle)
   // Add the model
   objrec.addModel (*model_points, *model_normals, "amicelli");
 
-  const ModelLibrary::Model* model = objrec.getModel ("amicelli");
-  if ( !model )
+  const ModelLibrary::Model *model = objrec.getModel ("amicelli");
+  if (!model)
     return;
 
   // The visualizer
@@ -146,33 +155,38 @@ void run (float pair_width, float voxel_size, float max_coplanarity_angle)
 
   model->getOctree ().getFullLeavesPoints (*octree_points);
   viz.addPointCloud (octree_points, "octree points");
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "octree points");
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 0.0, 0.0, "octree points");
+  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
+                                        5, "octree points");
+  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 1.0,
+                                        0.0, 0.0, "octree points");
 #endif
 
 #if defined _SHOW_MODEL_OCTREE_NORMALS_ && defined _SHOW_MODEL_OCTREE_POINTS_
   PointCloud<Normal>::Ptr octree_normals (new PointCloud<Normal> ());
 
   model->getOctree ().getNormalsOfFullLeaves (*octree_normals);
-  viz.addPointCloudNormals<PointXYZ,Normal> (octree_points, octree_normals, 1, 6.0f, "octree normals");
+  viz.addPointCloudNormals<PointXYZ, Normal> (octree_points, octree_normals, 1, 6.0f,
+                                              "octree normals");
 #endif
 
   // Enter the main loop
-  while (!viz.wasStopped ())
-  {
-    //main loop of the visualizer
+  while (!viz.wasStopped ()) {
+    // main loop of the visualizer
     viz.spinOnce (100);
-    std::this_thread::sleep_for(100ms);
+    std::this_thread::sleep_for (100ms);
   }
 }
 
 //===============================================================================================================================
 
-void showModelOpps (PCLVisualizer& viz, const ModelLibrary::HashTable& hash_table, const ModelLibrary::Model* model, float pair_width)
+void
+showModelOpps (PCLVisualizer &viz, const ModelLibrary::HashTable &hash_table,
+               const ModelLibrary::Model *model, float pair_width)
 {
-  printf ("Visualizing ... "); fflush (stdout);
+  printf ("Visualizing ... ");
+  fflush (stdout);
 
-  const ModelLibrary::HashTableCell* cells = hash_table.getVoxels ();
+  const ModelLibrary::HashTableCell *cells = hash_table.getVoxels ();
 
   // The opps points and lines
   vtkSmartPointer<vtkPolyData> vtk_opps = vtkSmartPointer<vtkPolyData>::New ();
@@ -187,26 +201,28 @@ void showModelOpps (PCLVisualizer& viz, const ModelLibrary::HashTable& hash_tabl
 
   // Check cell by cell
   const int num_cells = hash_table.getNumberOfVoxels ();
-  for (int i = 0 ; i < num_cells ; ++i )
-  {
+  for (int i = 0; i < num_cells; ++i) {
     // Make sure that we get only point pairs belonging to 'model'
-	ModelLibrary::HashTableCell::const_iterator res = cells[i].find (model);
-    if ( res == cells[i].end () )
+    ModelLibrary::HashTableCell::const_iterator res = cells[i].find (model);
+    if (res == cells[i].end ())
       continue;
 
     // Get the opps in the current cell
-    const ModelLibrary::node_data_pair_list& data_pairs = res->second;
+    const ModelLibrary::node_data_pair_list &data_pairs = res->second;
 
-    for (const auto &data_pair : data_pairs)
-    {
+    for (const auto &data_pair : data_pairs) {
       vtk_opps_points->InsertNextPoint (data_pair.first->getPoint ());
       vtk_opps_points->InsertNextPoint (data_pair.second->getPoint ());
       vtk_opps_lines->InsertNextCell (2, ids);
       ids[0] += 2;
       ids[1] += 2;
 #ifndef _SHOW_MODEL_OCTREE_NORMALS_
-      vtk_normals->InsertNextTuple3 (data_pair.first->getNormal  ()[0], data_pair.first->getNormal  ()[1], data_pair.first->getNormal  ()[2]);
-      vtk_normals->InsertNextTuple3 (data_pair.second->getNormal ()[0], data_pair.second->getNormal ()[1], data_pair.second->getNormal ()[2]);
+      vtk_normals->InsertNextTuple3 (data_pair.first->getNormal ()[0],
+                                     data_pair.first->getNormal ()[1],
+                                     data_pair.first->getNormal ()[2]);
+      vtk_normals->InsertNextTuple3 (data_pair.second->getNormal ()[0],
+                                     data_pair.second->getNormal ()[1],
+                                     data_pair.second->getNormal ()[2]);
 #endif
     }
   }
@@ -220,31 +236,35 @@ void showModelOpps (PCLVisualizer& viz, const ModelLibrary::HashTable& hash_tabl
   // Setup the hedge hog object
   vtk_hedge_hog->SetInputData (vtk_opps);
   vtk_hedge_hog->SetVectorModeToUseNormal ();
-  vtk_hedge_hog->SetScaleFactor (0.5f*pair_width);
+  vtk_hedge_hog->SetScaleFactor (0.5f * pair_width);
   vtk_hedge_hog->Update ();
   // Show the opps' normals
   viz.addModelFromPolyData (vtk_hedge_hog->GetOutput (), "opps' normals");
 #endif
 
   viz.addModelFromPolyData (vtk_opps, "opps");
-  viz.setShapeRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 1.0, 0.0, "opps");
+  viz.setShapeRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 1.0,
+                                   0.0, "opps");
 
   printf ("done.\n");
 }
 
 //===============================================================================================================================
 
-bool vtk_to_pointcloud (const char* file_name, PointCloud<PointXYZ>& pcl_points, PointCloud<Normal>& pcl_normals)
+bool
+vtk_to_pointcloud (const char *file_name, PointCloud<PointXYZ> &pcl_points,
+                   PointCloud<Normal> &pcl_normals)
 {
   size_t len = strlen (file_name);
-  if ( file_name[len-3] != 'v' || file_name[len-2] != 't' || file_name[len-1] != 'k' )
-  {
+  if (file_name[len - 3] != 'v' || file_name[len - 2] != 't' ||
+      file_name[len - 1] != 'k') {
     fprintf (stderr, "ERROR: we need a .vtk object!\n");
     return false;
   }
 
   // Load the model
-  vtkSmartPointer<vtkPolyDataReader> reader = vtkSmartPointer<vtkPolyDataReader>::New ();
+  vtkSmartPointer<vtkPolyDataReader> reader =
+      vtkSmartPointer<vtkPolyDataReader>::New ();
   reader->SetFileName (file_name);
   reader->Update ();
 
@@ -257,8 +277,7 @@ bool vtk_to_pointcloud (const char* file_name, PointCloud<PointXYZ>& pcl_points,
   pcl_points.resize (num_points);
 
   // Copy the points
-  for ( vtkIdType i = 0 ; i < num_points ; ++i )
-  {
+  for (vtkIdType i = 0; i < num_points; ++i) {
     vtk_points->GetPoint (i, p);
     pcl_points[i].x = static_cast<float> (p[0]);
     pcl_points[i].y = static_cast<float> (p[1]);
@@ -267,13 +286,12 @@ bool vtk_to_pointcloud (const char* file_name, PointCloud<PointXYZ>& pcl_points,
 
   // Check if we have normals
   vtkDataArray *vtk_normals = vtk_poly->GetPointData ()->GetNormals ();
-  if ( !vtk_normals )
+  if (!vtk_normals)
     return false;
 
   pcl_normals.resize (num_points);
   // Copy the normals
-  for ( vtkIdType i = 0 ; i < num_points ; ++i )
-  {
+  for (vtkIdType i = 0; i < num_points; ++i) {
     vtk_normals->GetTuple (i, p);
     pcl_normals[i].normal_x = static_cast<float> (p[0]);
     pcl_normals[i].normal_y = static_cast<float> (p[1]);

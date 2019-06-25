@@ -38,16 +38,16 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_cloud.h>
 #include <pcl/features/moment_of_inertia_estimation.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
 
-pcl::PointCloud <pcl::PointXYZ>::Ptr cloud;
+pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TEST (MomentOfInertia, FeatureExtraction)
 {
-  pcl::MomentOfInertiaEstimation <pcl::PointXYZ> feature_extractor;
+  pcl::MomentOfInertiaEstimation<pcl::PointXYZ> feature_extractor;
   feature_extractor.setInputCloud (cloud);
   feature_extractor.compute ();
 
@@ -66,12 +66,12 @@ TEST (MomentOfInertia, FeatureExtraction)
   dot_product = middle_vec.dot (minor_vec);
   EXPECT_NEAR (0.0f, dot_product, 0.00001f);
 
-  std::vector <float> moment_of_inertia;
-  std::vector <float> eccentricity;
+  std::vector<float> moment_of_inertia;
+  std::vector<float> eccentricity;
   feature_extractor.getMomentOfInertia (moment_of_inertia);
   feature_extractor.getEccentricity (eccentricity);
-  unsigned int m_size = static_cast <unsigned int> (moment_of_inertia.size ());
-  unsigned int e_size = static_cast <unsigned int> (eccentricity.size ());
+  unsigned int m_size = static_cast<unsigned int> (moment_of_inertia.size ());
+  unsigned int e_size = static_cast<unsigned int> (eccentricity.size ());
   EXPECT_EQ (m_size, e_size);
   EXPECT_NE (0, m_size);
 }
@@ -82,7 +82,7 @@ TEST (MomentOfInertia, InvalidParameters)
   float angle_step = 0.0f;
   float point_mass = 0.0f;
 
-  pcl::MomentOfInertiaEstimation <pcl::PointXYZ> feature_extractor;
+  pcl::MomentOfInertiaEstimation<pcl::PointXYZ> feature_extractor;
   feature_extractor.setInputCloud (cloud);
 
   angle_step = 0.0f;
@@ -108,18 +108,20 @@ TEST (MomentOfInertia, InvalidParameters)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `lamppost.pcd` and pass its paths to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `lamppost.pcd` and pass its "
+                 "paths to the test."
+              << std::endl;
     return (-1);
   }
 
   cloud = (new pcl::PointCloud<pcl::PointXYZ> ())->makeShared ();
-  if (pcl::io::loadPCDFile (argv[1], *cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `lamppost.pcd` and pass its path to the test." << std::endl;
+  if (pcl::io::loadPCDFile (argv[1], *cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `lamppost.pcd` and pass "
+                 "its path to the test."
+              << std::endl;
     return (-1);
   }
 

@@ -42,20 +42,21 @@
 
 namespace pcl
 {
-  /** \brief A Difference of Normals (DoN) scale filter implementation for point cloud data.
+  /** \brief A Difference of Normals (DoN) scale filter implementation for point cloud
+   * data.
    *
-   * For each point in the point cloud two normals estimated with a differing search radius (sigma_s, sigma_l)
-   * are subtracted, the difference of these normals provides a scale-based feature which
-   * can be further used to filter the point cloud, somewhat like the Difference of Guassians
-   * in image processing, but instead on surfaces. Best results are had when the two search
-   * radii are related as sigma_l=10*sigma_s, the octaves between the two search radii
-   * can be though of as a filter bandwidth. For appropriate values and thresholds it
-   * can be used for surface edge extraction.
+   * For each point in the point cloud two normals estimated with a differing search
+   * radius (sigma_s, sigma_l) are subtracted, the difference of these normals provides
+   * a scale-based feature which can be further used to filter the point cloud, somewhat
+   * like the Difference of Guassians in image processing, but instead on surfaces. Best
+   * results are had when the two search radii are related as sigma_l=10*sigma_s, the
+   * octaves between the two search radii can be though of as a filter bandwidth. For
+   * appropriate values and thresholds it can be used for surface edge extraction.
    *
-   * \attention The input normals given by setInputNormalsSmall and setInputNormalsLarge have
-   * to match the input point cloud given by setInputCloud. This behavior is different than
-   * feature estimation methods that extend FeatureFromNormals, which match the normals
-   * with the search surface.
+   * \attention The input normals given by setInputNormalsSmall and setInputNormalsLarge
+   * have to match the input point cloud given by setInputCloud. This behavior is
+   * different than feature estimation methods that extend FeatureFromNormals, which
+   * match the normals with the search surface.
    *
    * \note For more information please see
    *    <b>Yani Ioannou. Automatic Urban Modelling using Mobile Urban LIDAR Data.
@@ -67,76 +68,86 @@ namespace pcl
   template <typename PointInT, typename PointNT, typename PointOutT>
   class DifferenceOfNormalsEstimation : public Feature<PointInT, PointOutT>
   {
-      using Feature<PointInT, PointOutT>::getClassName;
-      using Feature<PointInT, PointOutT>::feature_name_;
-      using PCLBase<PointInT>::input_;
-      using PointCloudN = pcl::PointCloud<PointNT>;
-      using PointCloudNPtr = typename PointCloudN::Ptr;
-      using PointCloudNConstPtr = typename PointCloudN::ConstPtr;
-      using PointCloudOut = typename Feature<PointInT, PointOutT>::PointCloudOut;
+    using Feature<PointInT, PointOutT>::getClassName;
+    using Feature<PointInT, PointOutT>::feature_name_;
+    using PCLBase<PointInT>::input_;
+    using PointCloudN = pcl::PointCloud<PointNT>;
+    using PointCloudNPtr = typename PointCloudN::Ptr;
+    using PointCloudNConstPtr = typename PointCloudN::ConstPtr;
+    using PointCloudOut = typename Feature<PointInT, PointOutT>::PointCloudOut;
+
     public:
-      using Ptr = boost::shared_ptr<DifferenceOfNormalsEstimation<PointInT, PointNT, PointOutT> >;
-      using ConstPtr = boost::shared_ptr<const DifferenceOfNormalsEstimation<PointInT, PointNT, PointOutT> >;
+    using Ptr =
+        boost::shared_ptr<DifferenceOfNormalsEstimation<PointInT, PointNT, PointOutT>>;
+    using ConstPtr = boost::shared_ptr<
+        const DifferenceOfNormalsEstimation<PointInT, PointNT, PointOutT>>;
 
-      /**
-        * Creates a new Difference of Normals filter.
-        */
-      DifferenceOfNormalsEstimation ()
-      {
-        feature_name_ = "DifferenceOfNormalsEstimation";
-      }
+    /**
+     * Creates a new Difference of Normals filter.
+     */
+    DifferenceOfNormalsEstimation ()
+    {
+      feature_name_ = "DifferenceOfNormalsEstimation";
+    }
 
-      ~DifferenceOfNormalsEstimation ()
-      {
-        //
-      }
+    ~DifferenceOfNormalsEstimation ()
+    {
+      //
+    }
 
-      /**
-       * Set the normals calculated using a smaller search radius (scale) for the DoN operator.
-       * @param normals the smaller radius (scale) of the DoN filter.
-       */
-      inline void
-      setNormalScaleSmall (const PointCloudNConstPtr &normals)
-      {
-        input_normals_small_ = normals;
-      }
+    /**
+     * Set the normals calculated using a smaller search radius (scale) for the DoN
+     * operator.
+     * @param normals the smaller radius (scale) of the DoN filter.
+     */
+    inline void
+    setNormalScaleSmall (const PointCloudNConstPtr &normals)
+    {
+      input_normals_small_ = normals;
+    }
 
-      /**
-       * Set the normals calculated using a larger search radius (scale) for the DoN operator.
-       * @param normals the larger radius (scale) of the DoN filter.
-       */
-      inline void
-      setNormalScaleLarge (const PointCloudNConstPtr &normals)
-      {
-        input_normals_large_ = normals;
-      }
+    /**
+     * Set the normals calculated using a larger search radius (scale) for the DoN
+     * operator.
+     * @param normals the larger radius (scale) of the DoN filter.
+     */
+    inline void
+    setNormalScaleLarge (const PointCloudNConstPtr &normals)
+    {
+      input_normals_large_ = normals;
+    }
 
-      /**
-       * Computes the DoN vector for each point in the input point cloud and outputs the vector cloud to the given output.
-       * @param output the cloud to output the DoN vector cloud to.
-       */
-      void
-      computeFeature (PointCloudOut &output) override;
+    /**
+     * Computes the DoN vector for each point in the input point cloud and outputs the
+     * vector cloud to the given output.
+     * @param output the cloud to output the DoN vector cloud to.
+     */
+    void
+    computeFeature (PointCloudOut &output) override;
 
-      /**
-       * Initialize for computation of features.
-       * @return true if parameters (input normals, input) are sufficient to perform computation.
-       */
-      bool
-      initCompute () override;
+    /**
+     * Initialize for computation of features.
+     * @return true if parameters (input normals, input) are sufficient to perform
+     * computation.
+     */
+    bool
+    initCompute () override;
+
     private:
-      /** \brief Make the compute (&PointCloudOut); inaccessible from outside the class
-        * \param[out] output the output point cloud
-        */
-      void
-      compute (PointCloudOut &) {}
+    /** \brief Make the compute (&PointCloudOut); inaccessible from outside the class
+     * \param[out] output the output point cloud
+     */
+    void
+    compute (PointCloudOut &)
+    {
+    }
 
-      ///The smallest radius (scale) used in the DoN filter.
-      PointCloudNConstPtr input_normals_small_;
-      ///The largest radius (scale) used in the DoN filter.
-      PointCloudNConstPtr input_normals_large_;
-    };
-}
+    /// The smallest radius (scale) used in the DoN filter.
+    PointCloudNConstPtr input_normals_small_;
+    /// The largest radius (scale) used in the DoN filter.
+    PointCloudNConstPtr input_normals_large_;
+  };
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/features/impl/don.hpp>

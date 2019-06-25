@@ -35,9 +35,9 @@
  *
  */
 
-#include <pcl/io/pcd_io.h>
-#include <pcl/console/print.h>
 #include <pcl/console/parse.h>
+#include <pcl/console/print.h>
+#include <pcl/io/pcd_io.h>
 
 using namespace std;
 using namespace pcl;
@@ -55,21 +55,20 @@ loadCloud (const string &filename, PointCloud<PointXYZ> &cloud)
 {
   ifstream fs;
   fs.open (filename.c_str (), ios::binary);
-  if (!fs.is_open () || fs.fail ())
-  {
-    PCL_ERROR ("Could not open file '%s'! Error : %s\n", filename.c_str (), strerror (errno)); 
+  if (!fs.is_open () || fs.fail ()) {
+    PCL_ERROR ("Could not open file '%s'! Error : %s\n", filename.c_str (),
+               strerror (errno));
     fs.close ();
     return (false);
   }
-  
+
   string line;
   vector<string> st;
 
-  while (!fs.eof ())
-  {
+  while (!fs.eof ()) {
     getline (fs, line);
     // Ignore empty lines
-    if (line.empty())
+    if (line.empty ())
       continue;
 
     // Tokenize the line
@@ -79,22 +78,27 @@ loadCloud (const string &filename, PointCloud<PointXYZ> &cloud)
     if (st.size () != 3)
       continue;
 
-    cloud.push_back (PointXYZ (float (atof (st[0].c_str ())), float (atof (st[1].c_str ())), float (atof (st[2].c_str ()))));
+    cloud.push_back (PointXYZ (float(atof (st[0].c_str ())),
+                               float(atof (st[1].c_str ())),
+                               float(atof (st[2].c_str ()))));
   }
   fs.close ();
 
-  cloud.width = uint32_t (cloud.size ()); cloud.height = 1; cloud.is_dense = true;
+  cloud.width = uint32_t (cloud.size ());
+  cloud.height = 1;
+  cloud.is_dense = true;
   return (true);
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  print_info ("Convert a simple XYZ file to PCD format. For more information, use: %s -h\n", argv[0]);
+  print_info (
+      "Convert a simple XYZ file to PCD format. For more information, use: %s -h\n",
+      argv[0]);
 
-  if (argc < 3)
-  {
+  if (argc < 3) {
     printHelp (argc, argv);
     return (-1);
   }
@@ -102,19 +106,17 @@ main (int argc, char** argv)
   // Parse the command line arguments for .pcd and .ply files
   vector<int> pcd_file_indices = parse_file_extension_argument (argc, argv, ".pcd");
   vector<int> xyz_file_indices = parse_file_extension_argument (argc, argv, ".xyz");
-  if (pcd_file_indices.size () != 1 || xyz_file_indices.size () != 1)
-  {
+  if (pcd_file_indices.size () != 1 || xyz_file_indices.size () != 1) {
     print_error ("Need one input XYZ file and one output PCD file.\n");
     return (-1);
   }
 
   // Load the first file
   PointCloud<PointXYZ> cloud;
-  if (!loadCloud (argv[xyz_file_indices[0]], cloud)) 
+  if (!loadCloud (argv[xyz_file_indices[0]], cloud))
     return (-1);
 
   // Convert to PCD and save
   PCDWriter w;
   w.writeBinaryCompressed (argv[pcd_file_indices[0]], cloud);
 }
-

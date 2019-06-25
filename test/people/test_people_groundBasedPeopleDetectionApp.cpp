@@ -38,19 +38,19 @@
  * Author: Matteo Munaro
  *
  * Test file for testing people detection on a point cloud.
- * As a first step, the ground is manually initialized, then people detection is performed with the GroundBasedPeopleDetectionApp class,
- * which implements the people detection algorithm described here:
- * M. Munaro, F. Basso and E. Menegatti,
- * Tracking people within groups with RGB-D data,
- * In Proceedings of the International Conference on Intelligent Robots and Systems (IROS) 2012, Vilamoura (Portugal), 2012.
+ * As a first step, the ground is manually initialized, then people detection is
+ * performed with the GroundBasedPeopleDetectionApp class, which implements the people
+ * detection algorithm described here: M. Munaro, F. Basso and E. Menegatti, Tracking
+ * people within groups with RGB-D data, In Proceedings of the International Conference
+ * on Intelligent Robots and Systems (IROS) 2012, Vilamoura (Portugal), 2012.
  */
 
 #include <gtest/gtest.h>
 #include <pcl/io/pcd_io.h>
-#include <pcl/point_types.h>
-#include <pcl/visualization/pcl_visualizer.h>
-#include <pcl/sample_consensus/sac_model_plane.h>
 #include <pcl/people/ground_based_people_detection_app.h>
+#include <pcl/point_types.h>
+#include <pcl/sample_consensus/sac_model_plane.h>
+#include <pcl/visualization/pcl_visualizer.h>
 
 using PointT = pcl::PointXYZRGB;
 using PointCloudT = pcl::PointCloud<PointT>;
@@ -71,54 +71,62 @@ Eigen::VectorXf ground_coeffs;
 TEST (PCL, PersonClassifier)
 {
   // Create classifier for people detection:
-  EXPECT_TRUE (person_classifier.loadSVMFromFile(svm_filename)); // load trained SVM
+  EXPECT_TRUE (person_classifier.loadSVMFromFile (svm_filename)); // load trained SVM
 }
 
 TEST (PCL, GroundBasedPeopleDetectionApp)
 {
   // People detection app initialization:
-  pcl::people::GroundBasedPeopleDetectionApp<PointT> people_detector;    // people detection object
-  people_detector.setVoxelSize(voxel_size);                        // set the voxel size
-  people_detector.setIntrinsics(rgb_intrinsics_matrix);            // set RGB camera intrinsic parameters
-  people_detector.setClassifier(person_classifier);                // set person classifier
-  people_detector.setPersonClusterLimits(min_height, max_height, min_width, max_width);
+  pcl::people::GroundBasedPeopleDetectionApp<PointT>
+      people_detector;                       // people detection object
+  people_detector.setVoxelSize (voxel_size); // set the voxel size
+  people_detector.setIntrinsics (
+      rgb_intrinsics_matrix); // set RGB camera intrinsic parameters
+  people_detector.setClassifier (person_classifier); // set person classifier
+  people_detector.setPersonClusterLimits (min_height, max_height, min_width, max_width);
 
   // Perform people detection on the new cloud:
-  std::vector<pcl::people::PersonCluster<PointT> > clusters;   // vector containing persons clusters
-  people_detector.setInputCloud(cloud);
-  people_detector.setGround(ground_coeffs);                    // set floor coefficients
-  EXPECT_TRUE (people_detector.compute(clusters));             // perform people detection
+  std::vector<pcl::people::PersonCluster<PointT>>
+      clusters; // vector containing persons clusters
+  people_detector.setInputCloud (cloud);
+  people_detector.setGround (ground_coeffs);        // set floor coefficients
+  EXPECT_TRUE (people_detector.compute (clusters)); // perform people detection
 
   unsigned int k = 0;
-  for(const auto &cluster : clusters)
-  {
-    if(cluster.getPersonConfidence() > min_confidence)             // draw only people with confidence above a threshold
+  for (const auto &cluster : clusters) {
+    if (cluster.getPersonConfidence () >
+        min_confidence) // draw only people with confidence above a threshold
       k++;
   }
-  EXPECT_EQ (k, 5);		// verify number of people found (should be five)
+  EXPECT_EQ (k, 5); // verify number of people found (should be five)
 }
 
-int main (int argc, char** argv)
+int
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    cerr << "No svm filename provided. Please download `trainedLinearSVMForPeopleDetectionWithHOG.yaml` and pass its path to the test." << endl;
+  if (argc < 2) {
+    cerr << "No svm filename provided. Please download "
+            "`trainedLinearSVMForPeopleDetectionWithHOG.yaml` and pass its path to the "
+            "test."
+         << endl;
     return (-1);
   }
-  	
-  if (argc < 3)
-  {
-    cerr << "No test file given. Please download 'five_people.pcd` and pass its path to the test." << endl;
+
+  if (argc < 3) {
+    cerr << "No test file given. Please download 'five_people.pcd` and pass its path "
+            "to the test."
+         << endl;
     return (-1);
   }
 
   cloud = PointCloudT::Ptr (new PointCloudT);
-  if (pcl::io::loadPCDFile (argv[2], *cloud) < 0)
-  {
-    cerr << "Failed to read test file. Please download `five_people.pcd` and pass its path to the test." << endl;
+  if (pcl::io::loadPCDFile (argv[2], *cloud) < 0) {
+    cerr << "Failed to read test file. Please download `five_people.pcd` and pass its "
+            "path to the test."
+         << endl;
     return (-1);
-  }	
-	
+  }
+
   // Algorithm parameters:
   svm_filename = argv[1];
   min_confidence = -1.5;
@@ -128,9 +136,10 @@ int main (int argc, char** argv)
   max_height = 2.3;
   voxel_size = 0.06;
 
-  rgb_intrinsics_matrix << 525, 0.0, 319.5, 0.0, 525, 239.5, 0.0, 0.0, 1.0; // Kinect RGB camera intrinsics
-  ground_coeffs.resize(4);
-  ground_coeffs << -0.0103586, 0.997011, 0.0765573, -1.26614;			// set ground coefficients
+  rgb_intrinsics_matrix << 525, 0.0, 319.5, 0.0, 525, 239.5, 0.0, 0.0,
+      1.0; // Kinect RGB camera intrinsics
+  ground_coeffs.resize (4);
+  ground_coeffs << -0.0103586, 0.997011, 0.0765573, -1.26614; // set ground coefficients
 
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

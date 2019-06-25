@@ -52,69 +52,64 @@
 class CommandQueue
 {
   public:
-    /// @brief Default Constructor
-    /// @details Creates a command queue object and makes its depth limit
-    /// be the default value.
-    CommandQueue ();
+  /// @brief Default Constructor
+  /// @details Creates a command queue object and makes its depth limit
+  /// be the default value.
+  CommandQueue ();
 
-    /// @brief Constructor
-    /// @details Create a command queue with specified depth limit.
-    /// @param max_size the value to be used to set the depth limit of this
-    /// object.
-    CommandQueue (unsigned int max_size);
+  /// @brief Constructor
+  /// @details Create a command queue with specified depth limit.
+  /// @param max_size the value to be used to set the depth limit of this
+  /// object.
+  CommandQueue (unsigned int max_size);
 
-    /// @brief Destructor
-    ~CommandQueue ()
-    {
-    }
+  /// @brief Destructor
+  ~CommandQueue () {}
 
-    /// @brief Executes a command. If the command has an undo function, then
-    /// adds the command to the queue.
-    /// @param command_ptr a shared pointer pointing to a command object whose
-    /// execute function will be invoked by this object.
-    void
-    execute (CommandPtr);
+  /// @brief Executes a command. If the command has an undo function, then
+  /// adds the command to the queue.
+  /// @param command_ptr a shared pointer pointing to a command object whose
+  /// execute function will be invoked by this object.
+  void execute (CommandPtr);
 
-    /// @brief Undoes the last command by popping the tail of the queue, invoke
-    /// the undo function of the command.
-    void
-    undo ();
+  /// @brief Undoes the last command by popping the tail of the queue, invoke
+  /// the undo function of the command.
+  void
+  undo ();
 
-    /// @brief Changes the command history limit.
-    /// @details If the passed size is smaller than the current size then the
-    /// oldest commands are removed (their undo functions are not called).
-    /// @param size The new maximum number of commands that may exist in this
-    /// queue for undo purposes.
-    /// @return The actual maximum size set.  It may happen that the passed
-    /// value is too large and cannot be set.
-    unsigned int
-    setMaxSize(unsigned int size);
+  /// @brief Changes the command history limit.
+  /// @details If the passed size is smaller than the current size then the
+  /// oldest commands are removed (their undo functions are not called).
+  /// @param size The new maximum number of commands that may exist in this
+  /// queue for undo purposes.
+  /// @return The actual maximum size set.  It may happen that the passed
+  /// value is too large and cannot be set.
+  unsigned int
+  setMaxSize (unsigned int size);
 
-    /// @brief The default maximal size of the depth limit
-    static const unsigned int DEFAULT_MAX_SIZE_ = 200;
-    
+  /// @brief The default maximal size of the depth limit
+  static const unsigned int DEFAULT_MAX_SIZE_ = 200;
+
   private:
-    /// @brief Copy constructor - object is non-copyable
-    CommandQueue(const CommandQueue&)
-    {
-      assert(false);
-    }
-    
-    /// @brief Equal operator - object is non-copyable
-    CommandQueue& 
-    operator= (const CommandQueue&)
-    {
-      assert(false); return (*this);
-    }
+  /// @brief Copy constructor - object is non-copyable
+  CommandQueue (const CommandQueue &) { assert (false); }
 
-    /// @brief Enforces the depth limit of the command queue. If the depth is
-    /// larger than the depth limit, a deque operation will be invoked.
-    void
-    enforceDequeLimit ();
+  /// @brief Equal operator - object is non-copyable
+  CommandQueue &
+  operator= (const CommandQueue &)
+  {
+    assert (false);
+    return (*this);
+  }
 
-    /// The internal representation of this object.
-    std::deque<CommandPtr> command_deque_;
+  /// @brief Enforces the depth limit of the command queue. If the depth is
+  /// larger than the depth limit, a deque operation will be invoked.
+  void
+  enforceDequeLimit ();
 
-    /// The depth limit of the command queue.
-    unsigned int depth_limit_;
+  /// The internal representation of this object.
+  std::deque<CommandPtr> command_deque_;
+
+  /// The depth limit of the command queue.
+  unsigned int depth_limit_;
 };

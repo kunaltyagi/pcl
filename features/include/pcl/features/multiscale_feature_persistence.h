@@ -39,23 +39,24 @@
 
 #pragma once
 
-#include <pcl/pcl_base.h>
-#include <pcl/features/feature.h>
-#include <pcl/point_representation.h>
-#include <pcl/common/norms.h>
 #include <list>
+#include <pcl/common/norms.h>
+#include <pcl/features/feature.h>
+#include <pcl/pcl_base.h>
+#include <pcl/point_representation.h>
 
 namespace pcl
 {
-  /** \brief Generic class for extracting the persistent features from an input point cloud
-   * It can be given any Feature estimator instance and will compute the features of the input
-   * over a multiscale representation of the cloud and output the unique ones over those scales.
+  /** \brief Generic class for extracting the persistent features from an input point
+   * cloud It can be given any Feature estimator instance and will compute the features
+   * of the input over a multiscale representation of the cloud and output the unique
+   * ones over those scales.
    *
    * Please refer to the following publication for more details:
    *    Radu Bogdan Rusu, Zoltan Csaba Marton, Nico Blodow, and Michael Beetz
    *    Persistent Point Feature Histograms for 3D Point Clouds
-   *    Proceedings of the 10th International Conference on Intelligent Autonomous Systems (IAS-10)
-   *    2008, Baden-Baden, Germany
+   *    Proceedings of the 10th International Conference on Intelligent Autonomous
+   * Systems (IAS-10) 2008, Baden-Baden, Germany
    *
    * \author Alexandru-Eugen Ichim
    */
@@ -63,143 +64,182 @@ namespace pcl
   class MultiscaleFeaturePersistence : public PCLBase<PointSource>
   {
     public:
-      using Ptr = boost::shared_ptr<MultiscaleFeaturePersistence<PointSource, PointFeature> >;
-      using ConstPtr = boost::shared_ptr<const MultiscaleFeaturePersistence<PointSource, PointFeature> >;
-      using FeatureCloud = pcl::PointCloud<PointFeature>;
-      using FeatureCloudPtr = typename pcl::PointCloud<PointFeature>::Ptr;
-      using FeatureEstimatorPtr = typename pcl::Feature<PointSource, PointFeature>::Ptr;
-      using FeatureRepresentationConstPtr = boost::shared_ptr<const pcl::PointRepresentation<PointFeature> >;
+    using Ptr =
+        boost::shared_ptr<MultiscaleFeaturePersistence<PointSource, PointFeature>>;
+    using ConstPtr = boost::shared_ptr<
+        const MultiscaleFeaturePersistence<PointSource, PointFeature>>;
+    using FeatureCloud = pcl::PointCloud<PointFeature>;
+    using FeatureCloudPtr = typename pcl::PointCloud<PointFeature>::Ptr;
+    using FeatureEstimatorPtr = typename pcl::Feature<PointSource, PointFeature>::Ptr;
+    using FeatureRepresentationConstPtr =
+        boost::shared_ptr<const pcl::PointRepresentation<PointFeature>>;
 
-      using pcl::PCLBase<PointSource>::input_;
+    using pcl::PCLBase<PointSource>::input_;
 
-      /** \brief Empty constructor */
-      MultiscaleFeaturePersistence ();
-      
-      /** \brief Empty destructor */
-      ~MultiscaleFeaturePersistence () {}
+    /** \brief Empty constructor */
+    MultiscaleFeaturePersistence ();
 
-      /** \brief Method that calls computeFeatureAtScale () for each scale parameter */
-      void
-      computeFeaturesAtAllScales ();
+    /** \brief Empty destructor */
+    ~MultiscaleFeaturePersistence () {}
 
-      /** \brief Central function that computes the persistent features
-       * \param output_features a cloud containing the persistent features
-       * \param output_indices vector containing the indices of the points in the input cloud
-       * that have persistent features, under a one-to-one correspondence with the output_features cloud
-       */
-      void
-      determinePersistentFeatures (FeatureCloud &output_features,
-                                   boost::shared_ptr<std::vector<int> > &output_indices);
+    /** \brief Method that calls computeFeatureAtScale () for each scale parameter */
+    void
+    computeFeaturesAtAllScales ();
 
-      /** \brief Method for setting the scale parameters for the algorithm
-       * \param scale_values vector of scales to determine the characteristic of each scaling step
-       */
-      inline void
-      setScalesVector (std::vector<float> &scale_values) { scale_values_ = scale_values; }
+    /** \brief Central function that computes the persistent features
+     * \param output_features a cloud containing the persistent features
+     * \param output_indices vector containing the indices of the points in the input
+     * cloud that have persistent features, under a one-to-one correspondence with the
+     * output_features cloud
+     */
+    void
+    determinePersistentFeatures (FeatureCloud &output_features,
+                                 boost::shared_ptr<std::vector<int>> &output_indices);
 
-      /** \brief Method for getting the scale parameters vector */
-      inline std::vector<float>
-      getScalesVector () { return scale_values_; }
+    /** \brief Method for setting the scale parameters for the algorithm
+     * \param scale_values vector of scales to determine the characteristic of each
+     * scaling step
+     */
+    inline void
+    setScalesVector (std::vector<float> &scale_values)
+    {
+      scale_values_ = scale_values;
+    }
 
-      /** \brief Setter method for the feature estimator
-       * \param feature_estimator pointer to the feature estimator instance that will be used
-       * \note the feature estimator instance should already have the input data given beforehand
-       * and everything set, ready to be given the compute () command
-       */
-      inline void
-      setFeatureEstimator (FeatureEstimatorPtr feature_estimator) { feature_estimator_ = feature_estimator; };
+    /** \brief Method for getting the scale parameters vector */
+    inline std::vector<float>
+    getScalesVector ()
+    {
+      return scale_values_;
+    }
 
-      /** \brief Getter method for the feature estimator */
-      inline FeatureEstimatorPtr
-      getFeatureEstimator () { return feature_estimator_; }
+    /** \brief Setter method for the feature estimator
+     * \param feature_estimator pointer to the feature estimator instance that will be
+     * used \note the feature estimator instance should already have the input data
+     * given beforehand and everything set, ready to be given the compute () command
+     */
+    inline void
+    setFeatureEstimator (FeatureEstimatorPtr feature_estimator)
+    {
+      feature_estimator_ = feature_estimator;
+    };
 
-      /** \brief Provide a pointer to the feature representation to use to convert features to k-D vectors.
-       * \param feature_representation the const boost shared pointer to a PointRepresentation
-       */
-      inline void
-      setPointRepresentation (const FeatureRepresentationConstPtr& feature_representation) { feature_representation_ = feature_representation; }
+    /** \brief Getter method for the feature estimator */
+    inline FeatureEstimatorPtr
+    getFeatureEstimator ()
+    {
+      return feature_estimator_;
+    }
 
-      /** \brief Get a pointer to the feature representation used when converting features into k-D vectors. */
-      inline FeatureRepresentationConstPtr const
-      getPointRepresentation () { return feature_representation_; }
+    /** \brief Provide a pointer to the feature representation to use to convert
+     * features to k-D vectors. \param feature_representation the const boost shared
+     * pointer to a PointRepresentation
+     */
+    inline void
+    setPointRepresentation (const FeatureRepresentationConstPtr &feature_representation)
+    {
+      feature_representation_ = feature_representation;
+    }
 
-      /** \brief Sets the alpha parameter
-       * \param alpha value to replace the current alpha with
-       */
-      inline void
-      setAlpha (float alpha) { alpha_ = alpha; }
+    /** \brief Get a pointer to the feature representation used when converting features
+     * into k-D vectors. */
+    inline FeatureRepresentationConstPtr const
+    getPointRepresentation ()
+    {
+      return feature_representation_;
+    }
 
-      /** \brief Get the value of the alpha parameter */
-      inline float
-      getAlpha () { return alpha_; }
+    /** \brief Sets the alpha parameter
+     * \param alpha value to replace the current alpha with
+     */
+    inline void
+    setAlpha (float alpha)
+    {
+      alpha_ = alpha;
+    }
 
-      /** \brief Method for setting the distance metric that will be used for computing the difference between feature vectors
-       * \param distance_metric the new distance metric chosen from the NormType enum
-       */
-      inline void
-      setDistanceMetric (NormType distance_metric) { distance_metric_ = distance_metric; }
+    /** \brief Get the value of the alpha parameter */
+    inline float
+    getAlpha ()
+    {
+      return alpha_;
+    }
 
-      /** \brief Returns the distance metric that is currently used to calculate the difference between feature vectors */
-      inline NormType
-      getDistanceMetric () { return distance_metric_; }
+    /** \brief Method for setting the distance metric that will be used for computing
+     * the difference between feature vectors \param distance_metric the new distance
+     * metric chosen from the NormType enum
+     */
+    inline void
+    setDistanceMetric (NormType distance_metric)
+    {
+      distance_metric_ = distance_metric;
+    }
 
+    /** \brief Returns the distance metric that is currently used to calculate the
+     * difference between feature vectors */
+    inline NormType
+    getDistanceMetric ()
+    {
+      return distance_metric_;
+    }
 
     private:
-      /** \brief Checks if all the necessary input was given and the computations can successfully start */
-      bool
-      initCompute ();
+    /** \brief Checks if all the necessary input was given and the computations can
+     * successfully start */
+    bool
+    initCompute ();
 
+    /** \brief Method to compute the features for the point cloud at the given scale */
+    virtual void
+    computeFeatureAtScale (float &scale, FeatureCloudPtr &features);
 
-      /** \brief Method to compute the features for the point cloud at the given scale */
-      virtual void
-      computeFeatureAtScale (float &scale,
-                             FeatureCloudPtr &features);
+    /** \brief Function that calculates the scalar difference between two features
+     * \return the difference as a floating point type
+     */
+    float
+    distanceBetweenFeatures (const std::vector<float> &a, const std::vector<float> &b);
 
+    /** \brief Method that averages all the features at all scales in order to obtain
+     * the global mean feature; this value is stored in the mean_feature field
+     */
+    void
+    calculateMeanFeature ();
 
-      /** \brief Function that calculates the scalar difference between two features
-       * \return the difference as a floating point type
-       */
-      float
-      distanceBetweenFeatures (const std::vector<float> &a,
-                               const std::vector<float> &b);
+    /** \brief Selects the so-called 'unique' features from the cloud of features at
+     * each level. These features are the ones that fall outside the standard deviation
+     * * alpha_
+     */
+    void
+    extractUniqueFeatures ();
 
-      /** \brief Method that averages all the features at all scales in order to obtain the global mean feature;
-       * this value is stored in the mean_feature field
-       */
-      void
-      calculateMeanFeature ();
+    /** \brief The general parameter for determining each scale level */
+    std::vector<float> scale_values_;
 
-      /** \brief Selects the so-called 'unique' features from the cloud of features at each level.
-       * These features are the ones that fall outside the standard deviation * alpha_
-       */
-      void
-      extractUniqueFeatures ();
+    /** \brief Parameter that determines if a feature is to be considered unique or not
+     */
+    float alpha_;
 
+    /** \brief Parameter that determines which distance metric is to be usedto calculate
+     * the difference between feature vectors */
+    NormType distance_metric_;
 
-      /** \brief The general parameter for determining each scale level */
-      std::vector<float> scale_values_;
+    /** \brief the feature estimator that will be used to determine the feature set at
+     * each scale level */
+    FeatureEstimatorPtr feature_estimator_;
 
-      /** \brief Parameter that determines if a feature is to be considered unique or not */
-      float alpha_;
+    std::vector<FeatureCloudPtr> features_at_scale_;
+    std::vector<std::vector<std::vector<float>>> features_at_scale_vectorized_;
+    std::vector<float> mean_feature_;
+    FeatureRepresentationConstPtr feature_representation_;
 
-      /** \brief Parameter that determines which distance metric is to be usedto calculate the difference between feature vectors */
-      NormType distance_metric_;
-
-      /** \brief the feature estimator that will be used to determine the feature set at each scale level */
-      FeatureEstimatorPtr feature_estimator_;
-
-      std::vector<FeatureCloudPtr> features_at_scale_;
-      std::vector<std::vector<std::vector<float> > > features_at_scale_vectorized_;
-      std::vector<float> mean_feature_;
-      FeatureRepresentationConstPtr feature_representation_;
-
-      /** \brief Two structures in which to hold the results of the unique feature extraction process.
-       * They are superfluous with respect to each other, but improve the time performance of the algorithm
-       */
-      std::vector<std::list<size_t> > unique_features_indices_;
-      std::vector<std::vector<bool> > unique_features_table_;
+    /** \brief Two structures in which to hold the results of the unique feature
+     * extraction process. They are superfluous with respect to each other, but improve
+     * the time performance of the algorithm
+     */
+    std::vector<std::list<size_t>> unique_features_indices_;
+    std::vector<std::vector<bool>> unique_features_table_;
   };
-}
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/features/impl/multiscale_feature_persistence.hpp>

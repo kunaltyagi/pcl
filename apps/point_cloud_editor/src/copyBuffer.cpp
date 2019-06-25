@@ -37,28 +37,28 @@
 /// @details implementation of the class CopyBuffer
 /// @author  Yue Li and Matthew Hielsberg
 
+#include <pcl/apps/point_cloud_editor/common.h>
 #include <pcl/apps/point_cloud_editor/copyBuffer.h>
 #include <pcl/apps/point_cloud_editor/selection.h>
 #include <pcl/apps/point_cloud_editor/statistics.h>
-#include <pcl/apps/point_cloud_editor/common.h>
 
 void
-CopyBuffer::set (ConstCloudPtr cloud_ptr, const Selection& selection)
+CopyBuffer::set (ConstCloudPtr cloud_ptr, const Selection &selection)
 {
-  clean();
+  clean ();
   if (!cloud_ptr)
-      return;
-  for(const unsigned int &s_it : selection)
-    buffer_.append( (*cloud_ptr)[s_it] );
+    return;
+  for (const unsigned int &s_it : selection)
+    buffer_.append ((*cloud_ptr)[s_it]);
 }
 
-const Cloud&
+const Cloud &
 CopyBuffer::get () const
 {
   return (buffer_);
 }
 
-Cloud&
+Cloud &
 CopyBuffer::get ()
 {
   return (buffer_);
@@ -67,16 +67,16 @@ CopyBuffer::get ()
 void
 CopyBuffer::clean ()
 {
-  buffer_.clear();
+  buffer_.clear ();
 }
 
 std::string
 CopyBuffer::getStat () const
 {
-  if (buffer_.size() == 0)
+  if (buffer_.size () == 0)
     return ("");
   std::string title = "The number of points copied to the clipboard: ";
   std::string num_str;
-  ::toString(buffer_.size(), num_str);
+  ::toString (buffer_.size (), num_str);
   return (title + num_str);
 }

@@ -45,30 +45,33 @@ namespace pcl
     class IntParameter;
     class DoubleParameter;
 
-    class StatisticalOutlierRemovalWorker : public AbstractWorker 
+    class StatisticalOutlierRemovalWorker : public AbstractWorker
     {
       public:
-        StatisticalOutlierRemovalWorker(const QList<CloudMeshItem*>& cloud_mesh_items, QWidget* parent=nullptr);
-        ~StatisticalOutlierRemovalWorker();
+      StatisticalOutlierRemovalWorker (const QList<CloudMeshItem *> &cloud_mesh_items,
+                                       QWidget *parent = nullptr);
+      ~StatisticalOutlierRemovalWorker ();
 
       protected:
-        std::string
-        getName () const override {return ("Statistical Outlier Removal");}
+      std::string
+      getName () const override
+      {
+        return ("Statistical Outlier Removal");
+      }
 
-        void
-        initParameters(CloudMeshItem* cloud_mesh_item) override;
+      void
+      initParameters (CloudMeshItem *cloud_mesh_item) override;
 
-        void
-        setupParameters() override;
+      void
+      setupParameters () override;
 
-        void
-        processImpl(CloudMeshItem* cloud_mesh_item) override;
+      void
+      processImpl (CloudMeshItem *cloud_mesh_item) override;
 
       private:
-        IntParameter* mean_k_;
-        DoubleParameter* stddev_mul_thresh_;
-
+      IntParameter *mean_k_;
+      DoubleParameter *stddev_mul_thresh_;
     };
 
-  }
-}
+  } // namespace modeler
+} // namespace pcl

@@ -39,9 +39,9 @@
 
 #include <gtest/gtest.h>
 
-#include <pcl/point_types.h>
-#include <pcl/io/pcd_io.h>
 #include <pcl/features/normal_3d.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
 #include <pcl/visualization/pcl_visualizer.h>
 
 using namespace pcl;
@@ -75,7 +75,9 @@ TEST (PCL, PCLVisualizer_camera)
 
   float M_PIf = static_cast<float> (M_PI);
   Eigen::Matrix4f given_extrinsics (Eigen::Matrix4f::Identity ());
-  given_extrinsics.block<3, 3> (0, 0) = Eigen::AngleAxisf (30.f * M_PIf / 180.f, Eigen::Vector3f (1.f, 0.f, 0.f)).matrix ();
+  given_extrinsics.block<3, 3> (0, 0) =
+      Eigen::AngleAxisf (30.f * M_PIf / 180.f, Eigen::Vector3f (1.f, 0.f, 0.f))
+          .matrix ();
   given_extrinsics.block<3, 1> (0, 3) = Eigen::Vector3f (10.f, 15.f, 20.f);
 
   visualizer.setCameraParameters (given_intrinsics, given_extrinsics);
@@ -85,29 +87,30 @@ TEST (PCL, PCLVisualizer_camera)
     for (size_t j = 0; j < 4; ++j)
       EXPECT_NEAR (given_extrinsics (i, j), viewer_pose (i, j), 1e-6);
 
-
   // Next, check if setting the OpenGL settings translate well back
   // Look towards the x-axis, which equates to a 90 degree rotation around the y-axis
   Eigen::Vector3f trans (10.f, 2.f, 20.f);
-  visualizer.setCameraPosition (trans[0], trans[1], trans[2], trans[0] + 1., trans[1], trans[2], 0., 1., 0.);
+  visualizer.setCameraPosition (trans[0], trans[1], trans[2], trans[0] + 1., trans[1],
+                                trans[2], 0., 1., 0.);
   viewer_pose = visualizer.getViewerPose ().matrix ();
-  Eigen::Matrix3f expected_rotation = Eigen::AngleAxisf (M_PIf / 2.0f, Eigen::Vector3f (0.f, 1.f, 0.f)).matrix ();
+  Eigen::Matrix3f expected_rotation =
+      Eigen::AngleAxisf (M_PIf / 2.0f, Eigen::Vector3f (0.f, 1.f, 0.f)).matrix ();
   for (size_t i = 0; i < 3; ++i)
     for (size_t j = 0; j < 3; ++j)
       EXPECT_NEAR (viewer_pose (i, j), expected_rotation (i, j), 1e-6);
   for (size_t i = 0; i < 3; ++i)
     EXPECT_NEAR (viewer_pose (i, 3), trans[i], 1e-6);
 
+  // Now add the bunny point cloud and reset the camera based on the scene (i.e., VTK
+  // will compute a new camera pose so that it includes the whole scene in the window)
+  /// TODO stuck here, resetCamera () does not seem to work if there is no window
+  /// present - can't do that on a Mac
+  //  visualizer.addPointCloud (cloud1);
+  //  visualizer.resetCamera ();
+  //  visualizer.spinOnce ();
+  //  viewer_pose = visualizer.getViewerPose ().matrix ();
 
-  // Now add the bunny point cloud and reset the camera based on the scene (i.e., VTK will compute a new camera pose
-  // so that it includes the whole scene in the window)
-  /// TODO stuck here, resetCamera () does not seem to work if there is no window present - can't do that on a Mac
-//  visualizer.addPointCloud (cloud1);
-//  visualizer.resetCamera ();
-//  visualizer.spinOnce ();
-//  viewer_pose = visualizer.getViewerPose ().matrix ();
-
-//  cerr << "reset camera viewer pose:" << endl << viewer_pose << endl;
+  //  cerr << "reset camera viewer pose:" << endl << viewer_pose << endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -117,33 +120,33 @@ TEST (PCL, PCLVisualizer_getPointCloudRenderingProperties)
 
   std::string cloud_id = "input_cloud";
   visualizer.addPointCloud (cloud, cloud_id);
-  ASSERT_TRUE (visualizer.setPointCloudRenderingProperties (PCL_VISUALIZER_COLOR,
-                                                            1., 0., 0., cloud_id));
+  ASSERT_TRUE (visualizer.setPointCloudRenderingProperties (PCL_VISUALIZER_COLOR, 1.,
+                                                            0., 0., cloud_id));
   double r, g, b;
   EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_POINT_SIZE,
                                                              r, g, b, cloud_id));
-  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_OPACITY,
-                                                             r, g, b, cloud_id));
+  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_OPACITY, r,
+                                                             g, b, cloud_id));
   EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_LINE_WIDTH,
                                                              r, g, b, cloud_id));
   EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_FONT_SIZE,
                                                              r, g, b, cloud_id));
-  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_REPRESENTATION,
-                                                             r, g, b, cloud_id));
-  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_IMMEDIATE_RENDERING,
-                                                             r, g, b, cloud_id));
-  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_SHADING,
-                                                             r, g, b, cloud_id));
-  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_LUT,
-                                                             r, g, b, cloud_id));
+  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (
+      PCL_VISUALIZER_REPRESENTATION, r, g, b, cloud_id));
+  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (
+      PCL_VISUALIZER_IMMEDIATE_RENDERING, r, g, b, cloud_id));
+  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_SHADING, r,
+                                                             g, b, cloud_id));
+  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_LUT, r, g,
+                                                             b, cloud_id));
   EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_LUT_RANGE,
                                                              r, g, b, cloud_id));
 
   r = 666.;
   g = 666.;
   b = 666.;
-  EXPECT_TRUE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_COLOR,
-                                                            r, g, b, cloud_id));
+  EXPECT_TRUE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_COLOR, r, g,
+                                                            b, cloud_id));
 
   EXPECT_EQ (r, 1.);
   EXPECT_EQ (g, 0.);
@@ -152,11 +155,12 @@ TEST (PCL, PCLVisualizer_getPointCloudRenderingProperties)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bunny.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bunny.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
@@ -173,25 +177,24 @@ main (int argc, char** argv)
   NormalEstimation<PointXYZ, Normal> n;
   PointCloud<Normal>::Ptr normals (new PointCloud<Normal> ());
   n.setInputCloud (cloud);
-  //n.setIndices (indices[B);
+  // n.setIndices (indices[B);
   n.setSearchMethod (tree);
   n.setKSearch (20);
   n.compute (*normals);
 
   // Concatenate XYZ and normal information
   pcl::concatenateFields (*cloud, *normals, *cloud_with_normals);
-      
+
   // Create search tree
   tree2.reset (new search::KdTree<PointNormal>);
   tree2->setInputCloud (cloud_with_normals);
 
   // Process for update cloud
-  if (argc == 3)
-  {
+  if (argc == 3) {
     pcl::PCLPointCloud2 cloud_blob1;
     loadPCDFile (argv[2], cloud_blob1);
     fromPCLPointCloud2 (cloud_blob1, *cloud1);
-        // Create search tree
+    // Create search tree
     tree3.reset (new search::KdTree<PointXYZ> (false));
     tree3->setInputCloud (cloud1);
 

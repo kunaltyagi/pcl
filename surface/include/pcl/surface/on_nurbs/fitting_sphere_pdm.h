@@ -31,15 +31,15 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *
- * 
+ *
  *
  */
 
 #pragma once
 
-#include <pcl/surface/on_nurbs/nurbs_tools.h>
 #include <pcl/surface/on_nurbs/nurbs_data.h>
 #include <pcl/surface/on_nurbs/nurbs_solve.h>
+#include <pcl/surface/on_nurbs/nurbs_tools.h>
 
 namespace pcl
 {
@@ -53,15 +53,14 @@ namespace pcl
      * \ingroup surface     */
     class FittingSphere
     {
-    public:
-
+      public:
       ON_TextLog m_out;
       ON_NurbsSurface m_nurbs;
       NurbsDataSurface *m_data;
 
-      /** \brief Constructor initializing B-Spline surface using initNurbsPCACylinder(...).
-       * \param[in] order the polynomial order of the B-Spline surface.
-       * \param[in] data pointer to the 2D point-cloud data to be fit.
+      /** \brief Constructor initializing B-Spline surface using
+       * initNurbsPCACylinder(...). \param[in] order the polynomial order of the
+       * B-Spline surface. \param[in] data pointer to the 2D point-cloud data to be fit.
        * \param[in] z vector defining front face of surface.        */
       FittingSphere (int order, NurbsDataSurface *data);
 
@@ -72,12 +71,13 @@ namespace pcl
 
       /** \brief Assemble the system of equations for fitting
        * - for large point-clouds this is time consuming.
-       * - should be done once before refinement to initialize the starting points for point inversion. */
+       * - should be done once before refinement to initialize the starting points for
+       * point inversion. */
       void
       assemble (double smoothness = 0.000001f);
 
-      /** \brief Solve system of equations using Eigen or UmfPack (can be defined in on_nurbs.cmake),
-       *  and updates B-Spline surface if a solution can be obtained. */
+      /** \brief Solve system of equations using Eigen or UmfPack (can be defined in
+       * on_nurbs.cmake), and updates B-Spline surface if a solution can be obtained. */
       void
       solve (double damp = 1.0);
 
@@ -99,41 +99,44 @@ namespace pcl
         m_solver.setQuiet (val);
       }
 
-      /** \brief Initializing a cylindric B-Spline surface using principal-component-analysis and eigen values */
+      /** \brief Initializing a cylindric B-Spline surface using
+       * principal-component-analysis and eigen values */
       static ON_NurbsSurface
-      initNurbsSphere (int order, NurbsDataSurface *data, Eigen::Vector3d pole_axis = Eigen::Vector3d (0.0, 0.0, 1.0));
+      initNurbsSphere (int order, NurbsDataSurface *data,
+                       Eigen::Vector3d pole_axis = Eigen::Vector3d (0.0, 0.0, 1.0));
 
       /** \brief Get the elements of a cylindric B-Spline surface.*/
       static std::vector<double>
       getElementVector (const ON_NurbsSurface &nurbs, int dim);
 
-      /** \brief Inverse mapping / point inversion: Given a point pt, this function finds the closest
-       * point on the B-Spline surface using Newtons method and
+      /** \brief Inverse mapping / point inversion: Given a point pt, this function
+       * finds the closest point on the B-Spline surface using Newtons method and
        * point-distance (L2-, Euclidean norm).
        *  \param[in] nurbs the B-Spline surface.
-       *  \param[in] pt the point to which the closest point on the surface will be computed.
-       *  \param[in] hint the starting point in parametric domain (warning: may lead to convergence at local minima).
-       *  \param[in] error the distance between the point pt and p after convergence.
-       *  \param[in] p closest boundary point on surface.
-       *  \param[in] tu the tangent vector at point p in u-direction.
-       *  \param[in] tv the tangent vector at point p in v-direction.
-       *  \param[in] maxSteps maximum number of iterations.
-       *  \param[in] accuracy convergence criteria: if error is lower than accuracy the function returns
-       *  \return closest point on surface in parametric domain.*/
+       *  \param[in] pt the point to which the closest point on the surface will be
+       * computed. \param[in] hint the starting point in parametric domain (warning: may
+       * lead to convergence at local minima). \param[in] error the distance between the
+       * point pt and p after convergence. \param[in] p closest boundary point on
+       * surface. \param[in] tu the tangent vector at point p in u-direction. \param[in]
+       * tv the tangent vector at point p in v-direction. \param[in] maxSteps maximum
+       * number of iterations. \param[in] accuracy convergence criteria: if error is
+       * lower than accuracy the function returns \return closest point on surface in
+       * parametric domain.*/
       static Eigen::Vector2d
-      inverseMapping (const ON_NurbsSurface &nurbs, const Eigen::Vector3d &pt, const Eigen::Vector2d &hint,
-                      double &error, Eigen::Vector3d &p, Eigen::Vector3d &tu, Eigen::Vector3d &tv, int maxSteps = 100,
+      inverseMapping (const ON_NurbsSurface &nurbs, const Eigen::Vector3d &pt,
+                      const Eigen::Vector2d &hint, double &error, Eigen::Vector3d &p,
+                      Eigen::Vector3d &tu, Eigen::Vector3d &tv, int maxSteps = 100,
                       double accuracy = 1e-6, bool quiet = true);
 
-      /** \brief Given a point pt, the function finds the closest midpoint of the elements of the surface.
-       *  \param[in] nurbs the B-Spline surface.
-       *  \param[in] pt the point to which the closest midpoint of the elements will be computed.
+      /** \brief Given a point pt, the function finds the closest midpoint of the
+       * elements of the surface. \param[in] nurbs the B-Spline surface. \param[in] pt
+       * the point to which the closest midpoint of the elements will be computed.
        *  return closest midpoint in parametric domain. */
       static Eigen::Vector2d
-      findClosestElementMidPoint (const ON_NurbsSurface &nurbs, const Eigen::Vector3d &pt);
+      findClosestElementMidPoint (const ON_NurbsSurface &nurbs,
+                                  const Eigen::Vector3d &pt);
 
-    protected:
-
+      protected:
       /** \brief Initialisation of member variables */
       void
       init ();
@@ -142,19 +145,23 @@ namespace pcl
       void
       assembleInterior (double wInt, unsigned &row);
 
-      /** \brief Add minimization constraint: point-to-surface distance (point-distance-minimization). */
+      /** \brief Add minimization constraint: point-to-surface distance
+       * (point-distance-minimization). */
       void
-      addPointConstraint (const Eigen::Vector2d &params, const Eigen::Vector3d &point, double weight, unsigned &row);
+      addPointConstraint (const Eigen::Vector2d &params, const Eigen::Vector3d &point,
+                          double weight, unsigned &row);
 
-      /** \brief Add minimization constraint: interior smoothness by control point regularisation. */
+      /** \brief Add minimization constraint: interior smoothness by control point
+       * regularisation. */
       void
       addCageInteriorRegularisation (double weight, unsigned &row);
 
-      /** \brief Add minimization constraint: corner smoothness by control point regularisation. */
+      /** \brief Add minimization constraint: corner smoothness by control point
+       * regularisation. */
       void
       addCageBoundaryRegularisation (double weight, int side, unsigned &row);
 
-    private:
+      private:
       NurbsSolve m_solver;
       bool m_quiet;
 
@@ -184,8 +191,7 @@ namespace pcl
       {
         return (A % m_nurbs.CVCount (1));
       } // global lexicographic in global col index
-
     };
 
-  }
-}
+  } // namespace on_nurbs
+} // namespace pcl

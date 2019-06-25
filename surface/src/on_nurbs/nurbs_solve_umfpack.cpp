@@ -31,15 +31,15 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *
- * 
+ *
  *
  */
 
+#include <iostream>
+#include <stdexcept>
+#include <stdio.h>
 #include <suitesparse/cholmod.h>
 #include <suitesparse/umfpack.h>
-#include <iostream>
-#include <stdio.h>
-#include <stdexcept>
 
 #include <pcl/surface/on_nurbs/nurbs_solve.h>
 
@@ -102,10 +102,8 @@ NurbsSolve::printK ()
 void
 NurbsSolve::printX ()
 {
-  for (unsigned r = 0; r < m_xeig.rows (); r++)
-  {
-    for (unsigned c = 0; c < m_xeig.cols (); c++)
-    {
+  for (unsigned r = 0; r < m_xeig.rows (); r++) {
+    for (unsigned c = 0; c < m_xeig.cols (); c++) {
       printf (" %f", m_xeig (r, c));
     }
     printf ("\n");
@@ -115,10 +113,8 @@ NurbsSolve::printX ()
 void
 NurbsSolve::printF ()
 {
-  for (unsigned r = 0; r < m_feig.rows (); r++)
-  {
-    for (unsigned c = 0; c < m_feig.cols (); c++)
-    {
+  for (unsigned r = 0; r < m_feig.rows (); r++) {
+    for (unsigned c = 0; c < m_feig.cols (); c++) {
       printf (" %f", m_feig (r, c));
     }
     printf ("\n");
@@ -130,55 +126,56 @@ namespace pcl
   namespace on_nurbs
   {
     bool
-    solveSparseLinearSystem (cholmod_sparse* A, cholmod_dense* b, cholmod_dense* x, bool transpose)
+    solveSparseLinearSystem (cholmod_sparse *A, cholmod_dense *b, cholmod_dense *x,
+                             bool transpose)
     {
-      double* vals = (double*)A->x;
-      int* cols = (int*)A->p;
-      int* rows = (int*)A->i;
-      double* rhs = (double*)b->x;
-      double* sol = (double*)x->x;
+      double *vals = (double *)A->x;
+      int *cols = (int *)A->p;
+      int *rows = (int *)A->i;
+      double *rhs = (double *)b->x;
+      double *sol = (double *)x->x;
 
       int noOfVerts = b->nrow;
       int noOfCols = b->ncol;
 
-      double* tempRhs = new double[noOfVerts];
-      double* tempSol = new double[noOfVerts];
+      double *tempRhs = new double[noOfVerts];
+      double *tempSol = new double[noOfVerts];
 
-      double* null = (double*)NULL;
+      double *null = (double *)NULL;
       void *Symbolic, *Numeric;
 
-      if (umfpack_di_symbolic (A->nrow, A->ncol, cols, rows, vals, &Symbolic, null, null) != 0)
-      {
-        std::cout << "[NurbsSolve[UMFPACK]::solveSparseLinearSystem] Warning: something is wrong with input matrix!"
-            << std::endl;
-        delete [] tempRhs;
-        delete [] tempSol;
+      if (umfpack_di_symbolic (A->nrow, A->ncol, cols, rows, vals, &Symbolic, null,
+                               null) != 0) {
+        std::cout << "[NurbsSolve[UMFPACK]::solveSparseLinearSystem] Warning: "
+                     "something is wrong with input matrix!"
+                  << std::endl;
+        delete[] tempRhs;
+        delete[] tempSol;
         return false;
-
       }
 
-      if (umfpack_di_numeric (cols, rows, vals, Symbolic, &Numeric, null, null) != 0)
-      {
-        std::cout
-            << "[NurbsSolve[UMFPACK]::solveSparseLinearSystem] Warning: ordering was ok but factorization failed!"
-            << std::endl;
-        delete [] tempRhs;
-        delete [] tempSol;
+      if (umfpack_di_numeric (cols, rows, vals, Symbolic, &Numeric, null, null) != 0) {
+        std::cout << "[NurbsSolve[UMFPACK]::solveSparseLinearSystem] Warning: ordering "
+                     "was ok but factorization failed!"
+                  << std::endl;
+        delete[] tempRhs;
+        delete[] tempSol;
         return false;
       }
 
       umfpack_di_free_symbolic (&Symbolic);
 
-      for (int i = 0; i < noOfCols; i++)
-      {
+      for (int i = 0; i < noOfCols; i++) {
         for (int k = 0; k < noOfVerts; k++)
           tempRhs[k] = rhs[i * noOfVerts + k];
 
         // At or A?
         if (transpose)
-          umfpack_di_solve (UMFPACK_At, cols, rows, vals, tempSol, tempRhs, Numeric, null, null);
+          umfpack_di_solve (UMFPACK_At, cols, rows, vals, tempSol, tempRhs, Numeric,
+                            null, null);
         else
-          umfpack_di_solve (UMFPACK_A, cols, rows, vals, tempSol, tempRhs, Numeric, null, null);
+          umfpack_di_solve (UMFPACK_A, cols, rows, vals, tempSol, tempRhs, Numeric,
+                            null, null);
 
         for (int k = 0; k < noOfVerts; k++)
           sol[i * noOfVerts + k] = tempSol[k];
@@ -186,21 +183,24 @@ namespace pcl
 
       // clean up
       umfpack_di_free_numeric (&Numeric);
-      delete [] tempRhs;
-      delete [] tempSol;
+      delete[] tempRhs;
+      delete[] tempSol;
       return true;
     }
 
     bool
-    solveSparseLinearSystemLQ (cholmod_sparse* A, cholmod_dense* b, cholmod_dense* x)
+    solveSparseLinearSystemLQ (cholmod_sparse *A, cholmod_dense *b, cholmod_dense *x)
     {
       cholmod_common c;
       cholmod_start (&c);
       c.print = 4;
 
-      cholmod_sparse* At = cholmod_allocate_sparse (A->ncol, A->nrow, A->ncol * A->nrow, 0, 1, 0, CHOLMOD_REAL, &c);
-      //  cholmod_dense* Atb = cholmod_allocate_dense(b->nrow, b->ncol, b->nrow, CHOLMOD_REAL, &c);
-      cholmod_dense* Atb = cholmod_allocate_dense (A->ncol, b->ncol, A->ncol, CHOLMOD_REAL, &c);
+      cholmod_sparse *At = cholmod_allocate_sparse (A->ncol, A->nrow, A->ncol * A->nrow,
+                                                    0, 1, 0, CHOLMOD_REAL, &c);
+      //  cholmod_dense* Atb = cholmod_allocate_dense(b->nrow, b->ncol, b->nrow,
+      //  CHOLMOD_REAL, &c);
+      cholmod_dense *Atb =
+          cholmod_allocate_dense (A->ncol, b->ncol, A->ncol, CHOLMOD_REAL, &c);
 
       double one[2] = {1, 0};
       double zero[2] = {0, 0};
@@ -208,16 +208,17 @@ namespace pcl
 
       unsigned trials (20);
       unsigned i (0);
-      while (!cholmod_transpose_unsym (A, 1, NULL, NULL, A->ncol, At, &c) && i < trials)
-      {
-        printf (
-                "[NurbsSolveUmfpack::solveSparseLinearSystemLQ] Warning allocated memory to low, trying to increase %dx\n",
+      while (!cholmod_transpose_unsym (A, 1, NULL, NULL, A->ncol, At, &c) &&
+             i < trials) {
+        printf ("[NurbsSolveUmfpack::solveSparseLinearSystemLQ] Warning allocated "
+                "memory to low, trying to increase %dx\n",
                 (i + 2));
 
         cholmod_free_sparse (&At, &c);
         cholmod_free_dense (&Atb, &c);
 
-        At = cholmod_allocate_sparse (A->ncol, A->nrow, (i + 2) * A->ncol * A->nrow, 0, 1, 0, CHOLMOD_REAL, &c);
+        At = cholmod_allocate_sparse (A->ncol, A->nrow, (i + 2) * A->ncol * A->nrow, 0,
+                                      1, 0, CHOLMOD_REAL, &c);
         Atb = cholmod_allocate_dense (A->ncol, b->ncol, A->ncol, CHOLMOD_REAL, &c);
 
         double one[2] = {1, 0};
@@ -225,17 +226,17 @@ namespace pcl
         cholmod_sdmult (A, 1, one, zero, b, Atb, &c);
         i++;
       }
-      
-      if (i == trials)
-      {
-        printf ("[NurbsSolveUmfpack::solveSparseLinearSystemLQ] Not enough memory for system to solve. (%d trials)\n",
+
+      if (i == trials) {
+        printf ("[NurbsSolveUmfpack::solveSparseLinearSystemLQ] Not enough memory for "
+                "system to solve. (%d trials)\n",
                 trials);
         cholmod_free_sparse (&At, &c);
         cholmod_free_dense (&Atb, &c);
         return false;
       }
 
-      cholmod_sparse* AtA = cholmod_ssmult (At, A, 0, 1, 1, &c);
+      cholmod_sparse *AtA = cholmod_ssmult (At, A, 0, 1, 1, &c);
 
       //  cholmod_print_sparse(AtA,"A: ", &c);
 
@@ -249,8 +250,8 @@ namespace pcl
 
       return success;
     }
-  }
-}
+  } // namespace on_nurbs
+} // namespace pcl
 
 bool
 NurbsSolve::solve ()
@@ -268,44 +269,40 @@ NurbsSolve::solve ()
 
   //  m_Ksparse.printLong();
 
-  cholmod_sparse* K = cholmod_allocate_sparse (n_rows, n_cols, n_rows * n_cols, 0, 1, 0, CHOLMOD_REAL, &c);
-  cholmod_dense* f = cholmod_allocate_dense (n_rows, n_dims, n_rows, CHOLMOD_REAL, &c);
-  cholmod_dense* d = cholmod_allocate_dense (n_cols, n_dims, n_cols, CHOLMOD_REAL, &c);
+  cholmod_sparse *K = cholmod_allocate_sparse (n_rows, n_cols, n_rows * n_cols, 0, 1, 0,
+                                               CHOLMOD_REAL, &c);
+  cholmod_dense *f = cholmod_allocate_dense (n_rows, n_dims, n_rows, CHOLMOD_REAL, &c);
+  cholmod_dense *d = cholmod_allocate_dense (n_cols, n_dims, n_cols, CHOLMOD_REAL, &c);
 
   std::vector<int> rowinds;
   std::vector<int> colinds;
   std::vector<double> values;
   m_Ksparse.get (rowinds, colinds, values);
 
-  double* vals = (double*)K->x;
-  int* cols = (int*)K->p;
-  int* rows = (int*)K->i;
+  double *vals = (double *)K->x;
+  int *cols = (int *)K->p;
+  int *rows = (int *)K->i;
 
-  umfpack_di_triplet_to_col (n_rows, n_cols, n_nz, &rowinds[0], &colinds[0], &values[0], cols, rows, vals, NULL);
+  umfpack_di_triplet_to_col (n_rows, n_cols, n_nz, &rowinds[0], &colinds[0], &values[0],
+                             cols, rows, vals, NULL);
 
-  double* temp = (double*)f->x;
+  double *temp = (double *)f->x;
 
-  for (int j = 0; j < n_dims; j++)
-  {
-    for (int i = 0; i < n_rows; i++)
-    {
+  for (int j = 0; j < n_dims; j++) {
+    for (int i = 0; i < n_rows; i++) {
 
       temp[j * n_rows + i] = m_feig (i, j);
-
     }
   }
 
   bool success = solveSparseLinearSystemLQ (K, f, d);
 
-  temp = (double*)d->x;
+  temp = (double *)d->x;
 
-  for (int j = 0; j < n_dims; j++)
-  {
-    for (int i = 0; i < n_cols; i++)
-    {
+  for (int j = 0; j < n_dims; j++) {
+    for (int i = 0; i < n_cols; i++) {
 
       m_xeig (i, j) = temp[j * n_cols + i];
-
     }
   }
 
@@ -317,16 +314,12 @@ NurbsSolve::solve ()
 
   time_end = clock ();
 
-  if (success)
-  {
-    if (!m_quiet)
-    {
+  if (success) {
+    if (!m_quiet) {
       double solve_time = (double)(time_end - time_start) / (double)(CLOCKS_PER_SEC);
       printf ("[NurbsSolve[UMFPACK]::solve()] solution found! (%f sec)\n", solve_time);
     }
-  }
-  else
-  {
+  } else {
     printf ("[NurbsSolve[UMFPACK]::solve()] Error: solution NOT found\n");
   }
 
@@ -341,22 +334,18 @@ NurbsSolve::diff ()
   m_Ksparse.size (n_rows, n_cols);
   n_dims = m_feig.cols ();
 
-  if (n_rows != m_feig.rows ())
-  {
+  if (n_rows != m_feig.rows ()) {
     printf ("[NurbsSolve::diff] K.rows: %d  f.rows: %d\n", n_rows, (int)m_feig.rows ());
     throw std::runtime_error ("[NurbsSolve::diff] Rows of equation do not match\n");
   }
 
   Eigen::MatrixXd f = Eigen::MatrixXd::Zero (n_rows, n_dims);
 
-  for (int r = 0; r < n_rows; r++)
-  {
-    for (int c = 0; c < n_cols; c++)
-    {
+  for (int r = 0; r < n_rows; r++) {
+    for (int c = 0; c < n_cols; c++) {
       f.row (r) = f.row (r) + m_xeig.row (c) * m_Ksparse.get (r, c);
     }
   }
 
   return (f - m_feig);
 }
-

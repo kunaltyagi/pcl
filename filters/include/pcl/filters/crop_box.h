@@ -39,20 +39,20 @@
 
 #pragma once
 
-#include <pcl/point_types.h>
-#include <pcl/filters/filter_indices.h>
-#include <pcl/common/transforms.h>
 #include <pcl/common/eigen.h>
+#include <pcl/common/transforms.h>
+#include <pcl/filters/filter_indices.h>
+#include <pcl/point_types.h>
 
 namespace pcl
 {
   /** \brief CropBox is a filter that allows the user to filter all the data
-    * inside of a given box.
-    *
-    * \author Justin Rosen
-    * \ingroup filters
-    */
-  template<typename PointT>
+   * inside of a given box.
+   *
+   * \author Justin Rosen
+   * \ingroup filters
+   */
+  template <typename PointT>
   class CropBox : public FilterIndices<PointT>
   {
     using Filter<PointT>::getClassName;
@@ -62,151 +62,153 @@ namespace pcl
     using PointCloudConstPtr = typename PointCloud::ConstPtr;
 
     public:
+    using Ptr = boost::shared_ptr<CropBox<PointT>>;
+    using ConstPtr = boost::shared_ptr<const CropBox<PointT>>;
 
-      using Ptr = boost::shared_ptr<CropBox<PointT> >;
-      using ConstPtr = boost::shared_ptr<const CropBox<PointT> >;
+    /** \brief Constructor.
+     * \param[in] extract_removed_indices Set to true if you want to be able to extract
+     * the indices of points being removed (default = false).
+     */
+    CropBox (bool extract_removed_indices = false)
+        : FilterIndices<PointT>::FilterIndices (extract_removed_indices),
+          min_pt_ (Eigen::Vector4f (-1, -1, -1, 1)),
+          max_pt_ (Eigen::Vector4f (1, 1, 1, 1)), rotation_ (Eigen::Vector3f::Zero ()),
+          translation_ (Eigen::Vector3f::Zero ()),
+          transform_ (Eigen::Affine3f::Identity ())
+    {
+      filter_name_ = "CropBox";
+    }
 
-      /** \brief Constructor.
-        * \param[in] extract_removed_indices Set to true if you want to be able to extract the indices of points being removed (default = false).
-        */
-      CropBox (bool extract_removed_indices = false) :
-        FilterIndices<PointT>::FilterIndices (extract_removed_indices),
-        min_pt_ (Eigen::Vector4f (-1, -1, -1, 1)),
-        max_pt_ (Eigen::Vector4f (1, 1, 1, 1)),
-        rotation_ (Eigen::Vector3f::Zero ()),
-        translation_ (Eigen::Vector3f::Zero ()),
-        transform_ (Eigen::Affine3f::Identity ())
-      {
-        filter_name_ = "CropBox";
-      }
+    /** \brief Set the minimum point of the box
+     * \param[in] min_pt the minimum point of the box
+     */
+    inline void
+    setMin (const Eigen::Vector4f &min_pt)
+    {
+      min_pt_ = min_pt;
+    }
 
-      /** \brief Set the minimum point of the box
-        * \param[in] min_pt the minimum point of the box
-        */
-      inline void
-      setMin (const Eigen::Vector4f &min_pt)
-      {
-        min_pt_ = min_pt;
-      }
+    /** \brief Get the value of the minimum point of the box, as set by the user
+     * \return the value of the internal \a min_pt parameter.
+     */
+    inline Eigen::Vector4f
+    getMin () const
+    {
+      return (min_pt_);
+    }
 
-      /** \brief Get the value of the minimum point of the box, as set by the user
-        * \return the value of the internal \a min_pt parameter.
-        */
-      inline Eigen::Vector4f
-      getMin () const
-      {
-        return (min_pt_);
-      }
+    /** \brief Set the maximum point of the box
+     * \param[in] max_pt the maximum point of the box
+     */
+    inline void
+    setMax (const Eigen::Vector4f &max_pt)
+    {
+      max_pt_ = max_pt;
+    }
 
-      /** \brief Set the maximum point of the box
-        * \param[in] max_pt the maximum point of the box
-        */
-      inline void
-      setMax (const Eigen::Vector4f &max_pt)
-      {
-        max_pt_ = max_pt;
-      }
+    /** \brief Get the value of the maximum point of the box, as set by the user
+     * \return the value of the internal \a max_pt parameter.
+     */
+    inline Eigen::Vector4f
+    getMax () const
+    {
+      return (max_pt_);
+    }
 
-      /** \brief Get the value of the maximum point of the box, as set by the user
-        * \return the value of the internal \a max_pt parameter.
-        */
-      inline Eigen::Vector4f
-      getMax () const
-      {
-        return (max_pt_);
-      }
+    /** \brief Set a translation value for the box
+     * \param[in] translation the (tx,ty,tz) values that the box should be translated by
+     */
+    inline void
+    setTranslation (const Eigen::Vector3f &translation)
+    {
+      translation_ = translation;
+    }
 
-      /** \brief Set a translation value for the box
-        * \param[in] translation the (tx,ty,tz) values that the box should be translated by
-        */
-      inline void
-      setTranslation (const Eigen::Vector3f &translation)
-      {
-        translation_ = translation;
-      }
+    /** \brief Get the value of the box translation parameter as set by the user. */
+    Eigen::Vector3f
+    getTranslation () const
+    {
+      return (translation_);
+    }
 
-      /** \brief Get the value of the box translation parameter as set by the user. */
-      Eigen::Vector3f
-      getTranslation () const
-      {
-        return (translation_);
-      }
+    /** \brief Set a rotation value for the box
+     * \param[in] rotation the (rx,ry,rz) values that the box should be rotated by
+     */
+    inline void
+    setRotation (const Eigen::Vector3f &rotation)
+    {
+      rotation_ = rotation;
+    }
 
-      /** \brief Set a rotation value for the box
-        * \param[in] rotation the (rx,ry,rz) values that the box should be rotated by
-        */
-      inline void
-      setRotation (const Eigen::Vector3f &rotation)
-      {
-        rotation_ = rotation;
-      }
+    /** \brief Get the value of the box rotatation parameter, as set by the user. */
+    inline Eigen::Vector3f
+    getRotation () const
+    {
+      return (rotation_);
+    }
 
-      /** \brief Get the value of the box rotatation parameter, as set by the user. */
-      inline Eigen::Vector3f
-      getRotation () const
-      {
-        return (rotation_);
-      }
+    /** \brief Set a transformation that should be applied to the cloud before filtering
+     * \param[in] transform an affine transformation that needs to be applied to the
+     * cloud before filtering
+     */
+    inline void
+    setTransform (const Eigen::Affine3f &transform)
+    {
+      transform_ = transform;
+    }
 
-      /** \brief Set a transformation that should be applied to the cloud before filtering
-        * \param[in] transform an affine transformation that needs to be applied to the cloud before filtering
-        */
-      inline void
-      setTransform (const Eigen::Affine3f &transform)
-      {
-        transform_ = transform;
-      }
-
-      /** \brief Get the value of the transformation parameter, as set by the user. */
-      inline Eigen::Affine3f
-      getTransform () const
-      {
-        return (transform_);
-      }
+    /** \brief Get the value of the transformation parameter, as set by the user. */
+    inline Eigen::Affine3f
+    getTransform () const
+    {
+      return (transform_);
+    }
 
     protected:
-      using PCLBase<PointT>::input_;
-      using PCLBase<PointT>::indices_;
-      using Filter<PointT>::filter_name_;
-      using FilterIndices<PointT>::negative_;
-      using FilterIndices<PointT>::keep_organized_;
-      using FilterIndices<PointT>::user_filter_value_;
-      using FilterIndices<PointT>::extract_removed_indices_;
-      using FilterIndices<PointT>::removed_indices_;
+    using PCLBase<PointT>::input_;
+    using PCLBase<PointT>::indices_;
+    using Filter<PointT>::filter_name_;
+    using FilterIndices<PointT>::negative_;
+    using FilterIndices<PointT>::keep_organized_;
+    using FilterIndices<PointT>::user_filter_value_;
+    using FilterIndices<PointT>::extract_removed_indices_;
+    using FilterIndices<PointT>::removed_indices_;
 
-      /** \brief Sample of point indices into a separate PointCloud
-        * \param[out] output the resultant point cloud
-        */
-      void
-      applyFilter (PointCloud &output) override;
+    /** \brief Sample of point indices into a separate PointCloud
+     * \param[out] output the resultant point cloud
+     */
+    void
+    applyFilter (PointCloud &output) override;
 
-      /** \brief Sample of point indices
-        * \param[out] indices the resultant point cloud indices
-        */
-      void
-      applyFilter (std::vector<int> &indices) override;
+    /** \brief Sample of point indices
+     * \param[out] indices the resultant point cloud indices
+     */
+    void
+    applyFilter (std::vector<int> &indices) override;
+
     private:
-      /** \brief The minimum point of the box. */
-      Eigen::Vector4f min_pt_;
-      /** \brief The maximum point of the box. */
-      Eigen::Vector4f max_pt_;
-      /** \brief The 3D rotation for the box. */
-      Eigen::Vector3f rotation_;
-      /** \brief The 3D translation for the box. */
-      Eigen::Vector3f translation_;
-      /** \brief The affine transform applied to the cloud. */
-      Eigen::Affine3f transform_;
+    /** \brief The minimum point of the box. */
+    Eigen::Vector4f min_pt_;
+    /** \brief The maximum point of the box. */
+    Eigen::Vector4f max_pt_;
+    /** \brief The 3D rotation for the box. */
+    Eigen::Vector3f rotation_;
+    /** \brief The 3D translation for the box. */
+    Eigen::Vector3f translation_;
+    /** \brief The affine transform applied to the cloud. */
+    Eigen::Affine3f transform_;
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /** \brief CropBox is a filter that allows the user to filter all the data
-    * inside of a given box.
-    *
-    * \author Justin Rosen
-    * \ingroup filters
-    */
-  template<>
-  class PCL_EXPORTS CropBox<pcl::PCLPointCloud2> : public FilterIndices<pcl::PCLPointCloud2>
+   * inside of a given box.
+   *
+   * \author Justin Rosen
+   * \ingroup filters
+   */
+  template <>
+  class PCL_EXPORTS CropBox<pcl::PCLPointCloud2>
+      : public FilterIndices<pcl::PCLPointCloud2>
   {
     using Filter<pcl::PCLPointCloud2>::filter_name_;
     using Filter<pcl::PCLPointCloud2>::getClassName;
@@ -216,129 +218,130 @@ namespace pcl
     using PCLPointCloud2ConstPtr = PCLPointCloud2::ConstPtr;
 
     public:
-      /** \brief Constructor.
-        * \param[in] extract_removed_indices Set to true if you want to be able to extract the indices of points being removed (default = false).
-        */
-       CropBox (bool extract_removed_indices = false) :
-        FilterIndices<pcl::PCLPointCloud2>::FilterIndices (extract_removed_indices),
-        min_pt_(Eigen::Vector4f (-1, -1, -1, 1)),
-        max_pt_(Eigen::Vector4f (1, 1, 1, 1)),
-        translation_ (Eigen::Vector3f::Zero ()),
-        rotation_ (Eigen::Vector3f::Zero ()),
-        transform_(Eigen::Affine3f::Identity ())
-      {
-        filter_name_ = "CropBox";
-      }
+    /** \brief Constructor.
+     * \param[in] extract_removed_indices Set to true if you want to be able to extract
+     * the indices of points being removed (default = false).
+     */
+    CropBox (bool extract_removed_indices = false)
+        : FilterIndices<pcl::PCLPointCloud2>::FilterIndices (extract_removed_indices),
+          min_pt_ (Eigen::Vector4f (-1, -1, -1, 1)),
+          max_pt_ (Eigen::Vector4f (1, 1, 1, 1)),
+          translation_ (Eigen::Vector3f::Zero ()), rotation_ (Eigen::Vector3f::Zero ()),
+          transform_ (Eigen::Affine3f::Identity ())
+    {
+      filter_name_ = "CropBox";
+    }
 
-      /** \brief Set the minimum point of the box
-        * \param[in] min_pt the minimum point of the box
-        */
-      inline void
-      setMin (const Eigen::Vector4f& min_pt)
-      {
-        min_pt_ = min_pt;
-      }
+    /** \brief Set the minimum point of the box
+     * \param[in] min_pt the minimum point of the box
+     */
+    inline void
+    setMin (const Eigen::Vector4f &min_pt)
+    {
+      min_pt_ = min_pt;
+    }
 
-      /** \brief Get the value of the minimum point of the box, as set by the user
-        * \return the value of the internal \a min_pt parameter.
-        */
-      inline Eigen::Vector4f
-      getMin () const
-      {
-        return (min_pt_);
-      }
+    /** \brief Get the value of the minimum point of the box, as set by the user
+     * \return the value of the internal \a min_pt parameter.
+     */
+    inline Eigen::Vector4f
+    getMin () const
+    {
+      return (min_pt_);
+    }
 
-      /** \brief Set the maximum point of the box
-        * \param[in] max_pt the maximum point of the box
-        */
-      inline void
-      setMax (const Eigen::Vector4f &max_pt)
-      {
-        max_pt_ = max_pt;
-      }
+    /** \brief Set the maximum point of the box
+     * \param[in] max_pt the maximum point of the box
+     */
+    inline void
+    setMax (const Eigen::Vector4f &max_pt)
+    {
+      max_pt_ = max_pt;
+    }
 
-      /** \brief Get the value of the maxiomum point of the box, as set by the user
-        * \return the value of the internal \a max_pt parameter.
-        */
-      inline Eigen::Vector4f
-      getMax () const
-      {
-        return (max_pt_);
-      }
+    /** \brief Get the value of the maxiomum point of the box, as set by the user
+     * \return the value of the internal \a max_pt parameter.
+     */
+    inline Eigen::Vector4f
+    getMax () const
+    {
+      return (max_pt_);
+    }
 
-      /** \brief Set a translation value for the box
-        * \param[in] translation the (tx,ty,tz) values that the box should be translated by
-        */
-      inline void
-      setTranslation (const Eigen::Vector3f &translation)
-      {
-        translation_ = translation;
-      }
+    /** \brief Set a translation value for the box
+     * \param[in] translation the (tx,ty,tz) values that the box should be translated by
+     */
+    inline void
+    setTranslation (const Eigen::Vector3f &translation)
+    {
+      translation_ = translation;
+    }
 
-      /** \brief Get the value of the box translation parameter as set by the user. */
-      inline Eigen::Vector3f
-      getTranslation () const
-      {
-        return (translation_);
-      }
+    /** \brief Get the value of the box translation parameter as set by the user. */
+    inline Eigen::Vector3f
+    getTranslation () const
+    {
+      return (translation_);
+    }
 
-      /** \brief Set a rotation value for the box
-        * \param[in] rotation the (rx,ry,rz) values that the box should be rotated by
-        */
-      inline void
-      setRotation (const Eigen::Vector3f &rotation)
-      {
-        rotation_ = rotation;
-      }
+    /** \brief Set a rotation value for the box
+     * \param[in] rotation the (rx,ry,rz) values that the box should be rotated by
+     */
+    inline void
+    setRotation (const Eigen::Vector3f &rotation)
+    {
+      rotation_ = rotation;
+    }
 
-      /** \brief Get the value of the box rotatation parameter, as set by the user. */
-      inline Eigen::Vector3f
-      getRotation () const
-      {
-        return (rotation_);
-      }
+    /** \brief Get the value of the box rotatation parameter, as set by the user. */
+    inline Eigen::Vector3f
+    getRotation () const
+    {
+      return (rotation_);
+    }
 
-      /** \brief Set a transformation that should be applied to the cloud before filtering
-        * \param[in] transform an affine transformation that needs to be applied to the cloud before filtering
-        */
-      inline void
-      setTransform (const Eigen::Affine3f &transform)
-      {
-        transform_ = transform;
-      }
+    /** \brief Set a transformation that should be applied to the cloud before filtering
+     * \param[in] transform an affine transformation that needs to be applied to the
+     * cloud before filtering
+     */
+    inline void
+    setTransform (const Eigen::Affine3f &transform)
+    {
+      transform_ = transform;
+    }
 
-      /** \brief Get the value of the transformation parameter, as set by the user. */
-      inline Eigen::Affine3f
-      getTransform () const
-      {
-        return (transform_);
-      }
+    /** \brief Get the value of the transformation parameter, as set by the user. */
+    inline Eigen::Affine3f
+    getTransform () const
+    {
+      return (transform_);
+    }
 
     protected:
-      /** \brief Sample of point indices into a separate PointCloud
-        * \param output the resultant point cloud
-        */
-      void
-      applyFilter (PCLPointCloud2 &output) override;
+    /** \brief Sample of point indices into a separate PointCloud
+     * \param output the resultant point cloud
+     */
+    void
+    applyFilter (PCLPointCloud2 &output) override;
 
-      /** \brief Sample of point indices
-        * \param indices the resultant point cloud indices
-        */
-      void
-      applyFilter (std::vector<int> &indices) override;
+    /** \brief Sample of point indices
+     * \param indices the resultant point cloud indices
+     */
+    void
+    applyFilter (std::vector<int> &indices) override;
 
-      /** \brief The minimum point of the box. */
-      Eigen::Vector4f min_pt_;
-      /** \brief The maximum point of the box. */
-      Eigen::Vector4f max_pt_;
-      /** \brief The 3D translation for the box. */
-      Eigen::Vector3f translation_;
-      /** \brief The 3D rotation for the box. */
-      Eigen::Vector3f rotation_;
-      /** \brief The affine transform applied to the cloud. */
-      Eigen::Affine3f transform_;
+    /** \brief The minimum point of the box. */
+    Eigen::Vector4f min_pt_;
+    /** \brief The maximum point of the box. */
+    Eigen::Vector4f max_pt_;
+    /** \brief The 3D translation for the box. */
+    Eigen::Vector3f translation_;
+    /** \brief The 3D rotation for the box. */
+    Eigen::Vector3f rotation_;
+    /** \brief The affine transform applied to the cloud. */
+    Eigen::Affine3f transform_;
   };
-}
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/filters/impl/crop_box.hpp>

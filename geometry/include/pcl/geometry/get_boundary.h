@@ -47,16 +47,19 @@ namespace pcl
   namespace geometry
   {
     /** \brief Get a collection of boundary half-edges for the input mesh.
-      * \param[in] mesh The input mesh.
-      * \param[out] boundary_he_collection Collection of boundary half-edges. Each element in the vector is one connected boundary. The whole boundary is the union of all elements.
-      * \param [in] expected_size If you already know the size of the longest boundary you can tell this here. Defaults to 3 (minimum possible boundary).
-      * \author Martin Saelzle
-      * \ingroup geometry
-      */
-    template <class MeshT> void
-    getBoundBoundaryHalfEdges (const MeshT&                                   mesh,
-                               std::vector <typename MeshT::HalfEdgeIndices>& boundary_he_collection,
-                               const size_t                                   expected_size = 3)
+     * \param[in] mesh The input mesh.
+     * \param[out] boundary_he_collection Collection of boundary half-edges. Each
+     * element in the vector is one connected boundary. The whole boundary is the union
+     * of all elements. \param [in] expected_size If you already know the size of the
+     * longest boundary you can tell this here. Defaults to 3 (minimum possible
+     * boundary). \author Martin Saelzle \ingroup geometry
+     */
+    template <class MeshT>
+    void
+    getBoundBoundaryHalfEdges (
+        const MeshT &mesh,
+        std::vector<typename MeshT::HalfEdgeIndices> &boundary_he_collection,
+        const size_t expected_size = 3)
     {
       using Mesh = MeshT;
       using HalfEdgeIndex = typename Mesh::HalfEdgeIndex;
@@ -65,21 +68,19 @@ namespace pcl
 
       boundary_he_collection.clear ();
 
-      HalfEdgeIndices boundary_he; boundary_he.reserve (expected_size);
-      std::vector <bool> visited (mesh.sizeEdges (), false);
+      HalfEdgeIndices boundary_he;
+      boundary_he.reserve (expected_size);
+      std::vector<bool> visited (mesh.sizeEdges (), false);
       IHEAFC circ, circ_end;
 
-      for (HalfEdgeIndex i (0); i<HalfEdgeIndex (mesh.sizeHalfEdges ()); ++i)
-      {
-        if (mesh.isBoundary (i) && !visited [pcl::geometry::toEdgeIndex (i).get ()])
-        {
+      for (HalfEdgeIndex i (0); i < HalfEdgeIndex (mesh.sizeHalfEdges ()); ++i) {
+        if (mesh.isBoundary (i) && !visited[pcl::geometry::toEdgeIndex (i).get ()]) {
           boundary_he.clear ();
 
-          circ     = mesh.getInnerHalfEdgeAroundFaceCirculator (i);
+          circ = mesh.getInnerHalfEdgeAroundFaceCirculator (i);
           circ_end = circ;
-          do
-          {
-            visited [pcl::geometry::toEdgeIndex (circ.getTargetIndex ()).get ()] = true;
+          do {
+            visited[pcl::geometry::toEdgeIndex (circ.getTargetIndex ()).get ()] = true;
             boundary_he.push_back (circ.getTargetIndex ());
           } while (++circ != circ_end);
 

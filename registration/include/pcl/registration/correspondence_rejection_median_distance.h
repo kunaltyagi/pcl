@@ -40,171 +40,195 @@
 
 #pragma once
 
-#include <pcl/registration/correspondence_rejection.h>
 #include <pcl/point_cloud.h>
+#include <pcl/registration/correspondence_rejection.h>
 
 namespace pcl
 {
   namespace registration
   {
     /** \brief CorrespondenceRejectorMedianDistance implements a simple correspondence
-      * rejection method based on thresholding based on the median distance between the
-      * correspondences.
-      *
-      * \note If \ref setInputCloud and \ref setInputTarget are given, then the
-      * distances between correspondences will be estimated using the given XYZ
-      * data, and not read from the set of input correspondences.
-      *
-      * \author Aravindhan K Krishnan. This code is ported from libpointmatcher (https://github.com/ethz-asl/libpointmatcher)
-      * \ingroup registration
-      */
-    class PCL_EXPORTS CorrespondenceRejectorMedianDistance: public CorrespondenceRejector
+     * rejection method based on thresholding based on the median distance between the
+     * correspondences.
+     *
+     * \note If \ref setInputCloud and \ref setInputTarget are given, then the
+     * distances between correspondences will be estimated using the given XYZ
+     * data, and not read from the set of input correspondences.
+     *
+     * \author Aravindhan K Krishnan. This code is ported from libpointmatcher
+     * (https://github.com/ethz-asl/libpointmatcher) \ingroup registration
+     */
+    class PCL_EXPORTS CorrespondenceRejectorMedianDistance
+        : public CorrespondenceRejector
     {
+      using CorrespondenceRejector::getClassName;
       using CorrespondenceRejector::input_correspondences_;
       using CorrespondenceRejector::rejection_name_;
-      using CorrespondenceRejector::getClassName;
 
       public:
-        using Ptr = boost::shared_ptr<CorrespondenceRejectorMedianDistance>;
-        using ConstPtr = boost::shared_ptr<const CorrespondenceRejectorMedianDistance>;
+      using Ptr = boost::shared_ptr<CorrespondenceRejectorMedianDistance>;
+      using ConstPtr = boost::shared_ptr<const CorrespondenceRejectorMedianDistance>;
 
-        /** \brief Empty constructor. */
-        CorrespondenceRejectorMedianDistance () 
-          : median_distance_ (0)
-          , factor_ (1.0)
-        {
-          rejection_name_ = "CorrespondenceRejectorMedianDistance";
-        }
+      /** \brief Empty constructor. */
+      CorrespondenceRejectorMedianDistance () : median_distance_ (0), factor_ (1.0)
+      {
+        rejection_name_ = "CorrespondenceRejectorMedianDistance";
+      }
 
-        /** \brief Get a list of valid correspondences after rejection from the original set of correspondences.
-          * \param[in] original_correspondences the set of initial correspondences given
-          * \param[out] remaining_correspondences the resultant filtered set of remaining correspondences
-          */
-        void 
-        getRemainingCorrespondences (const pcl::Correspondences& original_correspondences, 
-                                     pcl::Correspondences& remaining_correspondences) override;
+      /** \brief Get a list of valid correspondences after rejection from the original
+       * set of correspondences. \param[in] original_correspondences the set of initial
+       * correspondences given \param[out] remaining_correspondences the resultant
+       * filtered set of remaining correspondences
+       */
+      void
+      getRemainingCorrespondences (
+          const pcl::Correspondences &original_correspondences,
+          pcl::Correspondences &remaining_correspondences) override;
 
-        /** \brief Get the median distance used for thresholding in correspondence rejection. */
-        inline double
-        getMedianDistance () const { return (median_distance_); };
+      /** \brief Get the median distance used for thresholding in correspondence
+       * rejection. */
+      inline double
+      getMedianDistance () const
+      {
+        return (median_distance_);
+      };
 
-        /** \brief Provide a source point cloud dataset (must contain XYZ
-          * data!), used to compute the correspondence distance.  
-          * \param[in] cloud a cloud containing XYZ data
-          */
-        template <typename PointT> inline void 
-        setInputSource (const typename pcl::PointCloud<PointT>::ConstPtr &cloud)
-        {
-          if (!data_container_)
-            data_container_.reset (new DataContainer<PointT>);
-          boost::static_pointer_cast<DataContainer<PointT> > (data_container_)->setInputSource (cloud);
-        }
+      /** \brief Provide a source point cloud dataset (must contain XYZ
+       * data!), used to compute the correspondence distance.
+       * \param[in] cloud a cloud containing XYZ data
+       */
+      template <typename PointT>
+      inline void
+      setInputSource (const typename pcl::PointCloud<PointT>::ConstPtr &cloud)
+      {
+        if (!data_container_)
+          data_container_.reset (new DataContainer<PointT>);
+        boost::static_pointer_cast<DataContainer<PointT>> (data_container_)
+            ->setInputSource (cloud);
+      }
 
-        /** \brief Provide a source point cloud dataset (must contain XYZ
-          * data!), used to compute the correspondence distance.  
-          * \param[in] cloud a cloud containing XYZ data
-          */
-        template <typename PointT> inline void 
-        setInputCloud (const typename pcl::PointCloud<PointT>::ConstPtr &cloud)
-        {
-          PCL_WARN ("[pcl::registration::%s::setInputCloud] setInputCloud is deprecated. Please use setInputSource instead.\n", getClassName ().c_str ());
-          if (!data_container_)
-            data_container_.reset (new DataContainer<PointT>);
-          boost::static_pointer_cast<DataContainer<PointT> > (data_container_)->setInputSource (cloud);
-        }
+      /** \brief Provide a source point cloud dataset (must contain XYZ
+       * data!), used to compute the correspondence distance.
+       * \param[in] cloud a cloud containing XYZ data
+       */
+      template <typename PointT>
+      inline void
+      setInputCloud (const typename pcl::PointCloud<PointT>::ConstPtr &cloud)
+      {
+        PCL_WARN ("[pcl::registration::%s::setInputCloud] setInputCloud is deprecated. "
+                  "Please use setInputSource instead.\n",
+                  getClassName ().c_str ());
+        if (!data_container_)
+          data_container_.reset (new DataContainer<PointT>);
+        boost::static_pointer_cast<DataContainer<PointT>> (data_container_)
+            ->setInputSource (cloud);
+      }
 
-        /** \brief Provide a target point cloud dataset (must contain XYZ
-          * data!), used to compute the correspondence distance.  
-          * \param[in] target a cloud containing XYZ data
-          */
-        template <typename PointT> inline void 
-        setInputTarget (const typename pcl::PointCloud<PointT>::ConstPtr &target)
-        {
-          if (!data_container_)
-            data_container_.reset (new DataContainer<PointT>);
-          boost::static_pointer_cast<DataContainer<PointT> > (data_container_)->setInputTarget (target);
-        }
-        
-        /** \brief See if this rejector requires source points */
-        bool
-        requiresSourcePoints () const override
-        { return (true); }
+      /** \brief Provide a target point cloud dataset (must contain XYZ
+       * data!), used to compute the correspondence distance.
+       * \param[in] target a cloud containing XYZ data
+       */
+      template <typename PointT>
+      inline void
+      setInputTarget (const typename pcl::PointCloud<PointT>::ConstPtr &target)
+      {
+        if (!data_container_)
+          data_container_.reset (new DataContainer<PointT>);
+        boost::static_pointer_cast<DataContainer<PointT>> (data_container_)
+            ->setInputTarget (target);
+      }
 
-        /** \brief Blob method for setting the source cloud */
-        void
-        setSourcePoints (pcl::PCLPointCloud2::ConstPtr cloud2) override
-        { 
-          PointCloud<PointXYZ>::Ptr cloud (new PointCloud<PointXYZ>);
-          fromPCLPointCloud2 (*cloud2, *cloud);
-          setInputSource<PointXYZ> (cloud);
-        }
-        
-        /** \brief See if this rejector requires a target cloud */
-        bool
-        requiresTargetPoints () const override
-        { return (true); }
+      /** \brief See if this rejector requires source points */
+      bool
+      requiresSourcePoints () const override
+      {
+        return (true);
+      }
 
-        /** \brief Method for setting the target cloud */
-        void
-        setTargetPoints (pcl::PCLPointCloud2::ConstPtr cloud2) override
-        { 
-          PointCloud<PointXYZ>::Ptr cloud (new PointCloud<PointXYZ>);
-          fromPCLPointCloud2 (*cloud2, *cloud);
-          setInputTarget<PointXYZ> (cloud);
-        }
+      /** \brief Blob method for setting the source cloud */
+      void
+      setSourcePoints (pcl::PCLPointCloud2::ConstPtr cloud2) override
+      {
+        PointCloud<PointXYZ>::Ptr cloud (new PointCloud<PointXYZ>);
+        fromPCLPointCloud2 (*cloud2, *cloud);
+        setInputSource<PointXYZ> (cloud);
+      }
 
-        /** \brief Provide a pointer to the search object used to find correspondences in
-          * the target cloud.
-          * \param[in] tree a pointer to the spatial search object.
-          * \param[in] force_no_recompute If set to true, this tree will NEVER be 
-          * recomputed, regardless of calls to setInputTarget. Only use if you are 
-          * confident that the tree will be set correctly.
-          */
-        template <typename PointT> inline void
-        setSearchMethodTarget (const typename pcl::search::KdTree<PointT>::Ptr &tree,
-                               bool force_no_recompute = false)
-        { 
-          boost::static_pointer_cast< DataContainer<PointT> > 
-            (data_container_)->setSearchMethodTarget (tree, force_no_recompute );
-        }
+      /** \brief See if this rejector requires a target cloud */
+      bool
+      requiresTargetPoints () const override
+      {
+        return (true);
+      }
 
-        /** \brief Set the factor for correspondence rejection. Points with distance greater than median times factor
-         *  will be rejected
-         *  \param[in] factor value
-         */
-        inline void
-        setMedianFactor (double factor) { factor_ = factor; };
+      /** \brief Method for setting the target cloud */
+      void
+      setTargetPoints (pcl::PCLPointCloud2::ConstPtr cloud2) override
+      {
+        PointCloud<PointXYZ>::Ptr cloud (new PointCloud<PointXYZ>);
+        fromPCLPointCloud2 (*cloud2, *cloud);
+        setInputTarget<PointXYZ> (cloud);
+      }
 
-        /** \brief Get the factor used for thresholding in correspondence rejection. */
-        inline double
-        getMedianFactor () const { return factor_; };
+      /** \brief Provide a pointer to the search object used to find correspondences in
+       * the target cloud.
+       * \param[in] tree a pointer to the spatial search object.
+       * \param[in] force_no_recompute If set to true, this tree will NEVER be
+       * recomputed, regardless of calls to setInputTarget. Only use if you are
+       * confident that the tree will be set correctly.
+       */
+      template <typename PointT>
+      inline void
+      setSearchMethodTarget (const typename pcl::search::KdTree<PointT>::Ptr &tree,
+                             bool force_no_recompute = false)
+      {
+        boost::static_pointer_cast<DataContainer<PointT>> (data_container_)
+            ->setSearchMethodTarget (tree, force_no_recompute);
+      }
+
+      /** \brief Set the factor for correspondence rejection. Points with distance
+       * greater than median times factor will be rejected \param[in] factor value
+       */
+      inline void
+      setMedianFactor (double factor)
+      {
+        factor_ = factor;
+      };
+
+      /** \brief Get the factor used for thresholding in correspondence rejection. */
+      inline double
+      getMedianFactor () const
+      {
+        return factor_;
+      };
 
       protected:
+      /** \brief Apply the rejection algorithm.
+       * \param[out] correspondences the set of resultant correspondences.
+       */
+      inline void
+      applyRejection (pcl::Correspondences &correspondences) override
+      {
+        getRemainingCorrespondences (*input_correspondences_, correspondences);
+      }
 
-        /** \brief Apply the rejection algorithm.
-          * \param[out] correspondences the set of resultant correspondences.
-          */
-        inline void 
-        applyRejection (pcl::Correspondences &correspondences) override
-        {
-          getRemainingCorrespondences (*input_correspondences_, correspondences);
-        }
+      /** \brief The median distance threshold between two correspondent points in
+       * source <-> target.
+       */
+      double median_distance_;
 
-        /** \brief The median distance threshold between two correspondent points in source <-> target.
-          */
-        double median_distance_;
+      /** \brief The factor for correspondence rejection. Points with distance greater
+       * than median times factor will be rejected
+       */
+      double factor_;
 
-        /** \brief The factor for correspondence rejection. Points with distance greater than median times factor
-         *  will be rejected
-         */
-        double factor_;
+      using DataContainerPtr = boost::shared_ptr<DataContainerInterface>;
 
-        using DataContainerPtr = boost::shared_ptr<DataContainerInterface>;
-
-        /** \brief A pointer to the DataContainer object containing the input and target point clouds */
-        DataContainerPtr data_container_;
+      /** \brief A pointer to the DataContainer object containing the input and target
+       * point clouds */
+      DataContainerPtr data_container_;
     };
-  }
-}
+  } // namespace registration
+} // namespace pcl
 
 #include <pcl/registration/impl/correspondence_rejection_median_distance.hpp>

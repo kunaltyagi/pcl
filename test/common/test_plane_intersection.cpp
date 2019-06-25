@@ -39,7 +39,6 @@
 #include <pcl/common/intersections.h>
 #include <pcl/pcl_tests.h>
 
-
 using namespace pcl;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,7 +47,7 @@ TEST (PCL, lineWithLineIntersection)
   Eigen::VectorXf line_a (6);
   Eigen::VectorXf line_b (6);
 
-  //case 1
+  // case 1
   line_a[0] = 0.01;
   line_a[1] = 0.02;
   line_a[2] = 0.03;
@@ -81,7 +80,7 @@ TEST (PCL, lineWithLineIntersection)
   EXPECT_EQ (point_case_1[3], zero[3]);
 
   EXPECT_FALSE (result_case_1);
-  
+
   pcl::ModelCoefficients line_a_mod;
   pcl::ModelCoefficients line_b_mod;
 
@@ -106,14 +105,15 @@ TEST (PCL, lineWithLineIntersection)
 
   Eigen::Vector4f point_mod_1;
   EXPECT_FALSE (lineWithLineIntersection (line_a_mod, line_b_mod, point_mod_1));
-  EXPECT_EQ (result_case_1, lineWithLineIntersection (line_a_mod, line_b_mod, point_mod_1));
+  EXPECT_EQ (result_case_1,
+             lineWithLineIntersection (line_a_mod, line_b_mod, point_mod_1));
 
   EXPECT_EQ (point_mod_1[0], zero[0]);
   EXPECT_EQ (point_mod_1[1], zero[1]);
   EXPECT_EQ (point_mod_1[2], zero[2]);
   EXPECT_EQ (point_mod_1[3], zero[3]);
 
-  //case 2
+  // case 2
   line_a[0] = 0.00100;
   line_a[1] = 0.00200;
   line_a[2] = 0.00300;
@@ -132,7 +132,8 @@ TEST (PCL, lineWithLineIntersection)
 
   Eigen::Vector4f point_case_2;
   double sqr_eps_case_2 = 1e-1;
-  bool result_case_2 = lineWithLineIntersection (line_a, line_b, point_case_2, sqr_eps_case_2);
+  bool result_case_2 =
+      lineWithLineIntersection (line_a, line_b, point_case_2, sqr_eps_case_2);
 
   double sqr_dist_case_2 = (p1 - p2).squaredNorm ();
   EXPECT_LT (sqr_dist_case_2, sqr_eps_case_2);
@@ -170,23 +171,27 @@ TEST (PCL, lineWithLineIntersection)
   Eigen::Vector4f point_mod_case_2;
   double sqr_mod_case_2 = 1e-1;
 
-  Eigen::VectorXf coeff1 = Eigen::VectorXf::Map (&line_a_mod_2.values[0], line_a_mod_2.values.size ());
-  Eigen::VectorXf coeff2 = Eigen::VectorXf::Map (&line_b_mod_2.values[0], line_b_mod_2.values.size ());
+  Eigen::VectorXf coeff1 =
+      Eigen::VectorXf::Map (&line_a_mod_2.values[0], line_a_mod_2.values.size ());
+  Eigen::VectorXf coeff2 =
+      Eigen::VectorXf::Map (&line_b_mod_2.values[0], line_b_mod_2.values.size ());
 
   Eigen::Vector4f p1_mod, p2_mod;
   lineToLineSegment (coeff1, coeff2, p1_mod, p2_mod);
   double sqr_mod_act_2 = (p1_mod - p2_mod).squaredNorm ();
 
   EXPECT_LT (sqr_mod_act_2, sqr_mod_case_2);
-  EXPECT_EQ (lineWithLineIntersection (coeff1, coeff2, point_mod_case_2, sqr_mod_case_2),
-                        lineWithLineIntersection (line_a_mod_2, line_b_mod_2, point_mod_2, sqr_mod_case_2));
-  EXPECT_TRUE (lineWithLineIntersection (line_a_mod_2, line_b_mod_2, point_mod_2, sqr_mod_case_2));
+  EXPECT_EQ (
+      lineWithLineIntersection (coeff1, coeff2, point_mod_case_2, sqr_mod_case_2),
+      lineWithLineIntersection (line_a_mod_2, line_b_mod_2, point_mod_2,
+                                sqr_mod_case_2));
+  EXPECT_TRUE (lineWithLineIntersection (line_a_mod_2, line_b_mod_2, point_mod_2,
+                                         sqr_mod_case_2));
 
   EXPECT_EQ (point_mod_2[0], point_mod_case_2[0]);
   EXPECT_EQ (point_mod_2[1], point_mod_case_2[1]);
   EXPECT_EQ (point_mod_2[2], point_mod_case_2[2]);
   EXPECT_EQ (point_mod_2[3], point_mod_case_2[3]);
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -210,7 +215,8 @@ TEST (PCL, planeWithPlaneIntersection)
 
   // Testing nearly parallel planes, plane normal not normalized!
   plane_a << 1.0, 2.0, 3.0, -0.5;
-  plane_b << 1.0, 2.5, 3.0, 0.5;;
+  plane_b << 1.0, 2.5, 3.0, 0.5;
+  ;
   plane_ad << 1.0, 2.0, 3.0, -0.5;
   plane_bd << 1.0, 2.5, 3.0, 0.5;
 
@@ -222,14 +228,14 @@ TEST (PCL, planeWithPlaneIntersection)
   EXPECT_NEAR (line[1], -2.0, tolerance);
   EXPECT_NEAR (line[2], 1.35, tolerance);
   EXPECT_NEAR (line[3], -1.5, tolerance);
-  EXPECT_NEAR (line[4], 0.0,  tolerance);
-  EXPECT_NEAR (line[5], 0.5,  tolerance);
+  EXPECT_NEAR (line[4], 0.0, tolerance);
+  EXPECT_NEAR (line[5], 0.5, tolerance);
   EXPECT_NEAR (lined[0], 0.45, tolerance);
   EXPECT_NEAR (lined[1], -2.0, tolerance);
   EXPECT_NEAR (lined[2], 1.35, tolerance);
   EXPECT_NEAR (lined[3], -1.5, tolerance);
-  EXPECT_NEAR (lined[4], 0.0,  tolerance);
-  EXPECT_NEAR (lined[5], 0.5,  tolerance);
+  EXPECT_NEAR (lined[4], 0.0, tolerance);
+  EXPECT_NEAR (lined[5], 0.5, tolerance);
 
   // Orthogonal planes, Hessian form (plane normal normalized)
   plane_a << 0.0, 0.0, 1.0, +0.0;
@@ -298,12 +304,12 @@ TEST (PCL, threePlanesIntersection)
   EXPECT_FALSE (threePlanesIntersection (plane_a, plane_b, plane_c, point, 1e-3));
   EXPECT_FALSE (threePlanesIntersection (fplane_a, fplane_b, fplane_c, fpoint, 1e-3));
 
-  EXPECT_DOUBLE_EQ (1.0, point [0]);
-  EXPECT_DOUBLE_EQ (2.0, point [1]);
-  EXPECT_DOUBLE_EQ (3.0, point [2]);
-  EXPECT_FLOAT_EQ (1.0, fpoint [0]);
-  EXPECT_FLOAT_EQ (2.0, fpoint [1]);
-  EXPECT_FLOAT_EQ (3.0, fpoint [2]);
+  EXPECT_DOUBLE_EQ (1.0, point[0]);
+  EXPECT_DOUBLE_EQ (2.0, point[1]);
+  EXPECT_DOUBLE_EQ (3.0, point[2]);
+  EXPECT_FLOAT_EQ (1.0, fpoint[0]);
+  EXPECT_FLOAT_EQ (2.0, fpoint[1]);
+  EXPECT_FLOAT_EQ (3.0, fpoint[2]);
 
   // Perfect box
   plane_b << 0.0, 1.0, 0.0, 0.5;
@@ -312,12 +318,12 @@ TEST (PCL, threePlanesIntersection)
   EXPECT_TRUE (threePlanesIntersection (plane_a, plane_b, plane_c, point));
   EXPECT_TRUE (threePlanesIntersection (fplane_a, fplane_b, fplane_c, fpoint));
 
-  EXPECT_DOUBLE_EQ (0.5, point [0]);
-  EXPECT_DOUBLE_EQ (-0.5, point [1]);
-  EXPECT_DOUBLE_EQ (0.5, point [2]);
-  EXPECT_FLOAT_EQ (0.5, fpoint [0]);
-  EXPECT_FLOAT_EQ (-0.5, fpoint [1]);
-  EXPECT_FLOAT_EQ (0.5, fpoint [2]);
+  EXPECT_DOUBLE_EQ (0.5, point[0]);
+  EXPECT_DOUBLE_EQ (-0.5, point[1]);
+  EXPECT_DOUBLE_EQ (0.5, point[2]);
+  EXPECT_FLOAT_EQ (0.5, fpoint[0]);
+  EXPECT_FLOAT_EQ (-0.5, fpoint[1]);
+  EXPECT_FLOAT_EQ (0.5, fpoint[2]);
 
   // Random planes
   plane_a << 1.4564, 0.5465, -0.1325, 0.4685;
@@ -330,21 +336,19 @@ TEST (PCL, threePlanesIntersection)
   EXPECT_TRUE (threePlanesIntersection (plane_a, plane_b, plane_c, point));
   EXPECT_TRUE (threePlanesIntersection (fplane_a, fplane_b, fplane_c, fpoint));
 
-  EXPECT_NEAR (-0.413977, point [0], 1e-4);
-  EXPECT_NEAR (0.0694323, point [1], 1e-4);
-  EXPECT_NEAR (-0.728082, point [2], 1e-4);
-  EXPECT_NEAR (-0.413977, fpoint [0], 1e-4);
-  EXPECT_NEAR (0.0694323, fpoint [1], 1e-4);
-  EXPECT_NEAR (-0.728082, fpoint [2], 1e-4);
+  EXPECT_NEAR (-0.413977, point[0], 1e-4);
+  EXPECT_NEAR (0.0694323, point[1], 1e-4);
+  EXPECT_NEAR (-0.728082, point[2], 1e-4);
+  EXPECT_NEAR (-0.413977, fpoint[0], 1e-4);
+  EXPECT_NEAR (0.0694323, fpoint[1], 1e-4);
+  EXPECT_NEAR (-0.728082, fpoint[2], 1e-4);
 }
 
 //* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());
 }
 /* ]--- */
-
-

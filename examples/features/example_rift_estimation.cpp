@@ -41,15 +41,15 @@
 #include <iostream>
 
 // PCL
-#include <pcl/io/pcd_io.h>
-#include <pcl/point_types.h>
 #include <pcl/common/io.h>
+#include <pcl/features/intensity_gradient.h>
 #include <pcl/features/normal_3d.h>
 #include <pcl/features/rift.h>
-#include <pcl/features/intensity_gradient.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
 
 int
-main (int, char** argv)
+main (int, char **argv)
 {
   std::string filename = argv[1];
   std::cout << "Reading " << filename << std::endl;
@@ -67,43 +67,48 @@ main (int, char** argv)
   // Estimate the surface normals
   pcl::PointCloud<pcl::Normal>::Ptr cloud_n (new pcl::PointCloud<pcl::Normal>);
   pcl::NormalEstimation<pcl::PointXYZI, pcl::Normal> norm_est;
-  norm_est.setInputCloud(cloud);
-  pcl::search::KdTree<pcl::PointXYZI>::Ptr treept1 (new pcl::search::KdTree<pcl::PointXYZI> (false));
-  norm_est.setSearchMethod(treept1);
-  norm_est.setRadiusSearch(0.25);
-  norm_est.compute(*cloud_n);
+  norm_est.setInputCloud (cloud);
+  pcl::search::KdTree<pcl::PointXYZI>::Ptr treept1 (
+      new pcl::search::KdTree<pcl::PointXYZI> (false));
+  norm_est.setSearchMethod (treept1);
+  norm_est.setRadiusSearch (0.25);
+  norm_est.compute (*cloud_n);
 
-  std::cout<<" Surface normals estimated";
-  std::cout<<" with size "<< cloud_n->points.size() <<std::endl;
- 
+  std::cout << " Surface normals estimated";
+  std::cout << " with size " << cloud_n->points.size () << std::endl;
+
   // Estimate the Intensity Gradient
-  pcl::PointCloud<pcl::IntensityGradient>::Ptr cloud_ig (new pcl::PointCloud<pcl::IntensityGradient>);
-  pcl::IntensityGradientEstimation<pcl::PointXYZI, pcl::Normal, pcl::IntensityGradient> gradient_est;
-  gradient_est.setInputCloud(cloud);
-  gradient_est.setInputNormals(cloud_n);
-  pcl::search::KdTree<pcl::PointXYZI>::Ptr treept2 (new pcl::search::KdTree<pcl::PointXYZI> (false));
-  gradient_est.setSearchMethod(treept2);
-  gradient_est.setRadiusSearch(0.25);
-  gradient_est.compute(*cloud_ig);
-  std::cout<<" Intensity Gradient estimated";
-  std::cout<<" with size "<< cloud_ig->points.size() <<std::endl;
-
+  pcl::PointCloud<pcl::IntensityGradient>::Ptr cloud_ig (
+      new pcl::PointCloud<pcl::IntensityGradient>);
+  pcl::IntensityGradientEstimation<pcl::PointXYZI, pcl::Normal, pcl::IntensityGradient>
+      gradient_est;
+  gradient_est.setInputCloud (cloud);
+  gradient_est.setInputNormals (cloud_n);
+  pcl::search::KdTree<pcl::PointXYZI>::Ptr treept2 (
+      new pcl::search::KdTree<pcl::PointXYZI> (false));
+  gradient_est.setSearchMethod (treept2);
+  gradient_est.setRadiusSearch (0.25);
+  gradient_est.compute (*cloud_ig);
+  std::cout << " Intensity Gradient estimated";
+  std::cout << " with size " << cloud_ig->points.size () << std::endl;
 
   // Estimate the RIFT feature
-  pcl::RIFTEstimation<pcl::PointXYZI, pcl::IntensityGradient, pcl::Histogram<32> > rift_est;
-  pcl::search::KdTree<pcl::PointXYZI>::Ptr treept3 (new pcl::search::KdTree<pcl::PointXYZI> (false));
-  rift_est.setSearchMethod(treept3);
-  rift_est.setRadiusSearch(10.0);
+  pcl::RIFTEstimation<pcl::PointXYZI, pcl::IntensityGradient, pcl::Histogram<32>>
+      rift_est;
+  pcl::search::KdTree<pcl::PointXYZI>::Ptr treept3 (
+      new pcl::search::KdTree<pcl::PointXYZI> (false));
+  rift_est.setSearchMethod (treept3);
+  rift_est.setRadiusSearch (10.0);
   rift_est.setNrDistanceBins (4);
   rift_est.setNrGradientBins (8);
-  rift_est.setInputCloud(cloud);
-  rift_est.setInputGradient(cloud_ig);
-  pcl::PointCloud<pcl::Histogram<32> > rift_output;
-  rift_est.compute(rift_output);
+  rift_est.setInputCloud (cloud);
+  rift_est.setInputGradient (cloud_ig);
+  pcl::PointCloud<pcl::Histogram<32>> rift_output;
+  rift_est.compute (rift_output);
 
-  std::cout<<" RIFT feature estimated";
-  std::cout<<" with size "<<rift_output.points.size()<<std::endl;
-  
+  std::cout << " RIFT feature estimated";
+  std::cout << " with size " << rift_output.points.size () << std::endl;
+
   // Display and retrieve the rift descriptor vector for the first point
   pcl::Histogram<32> first_descriptor = rift_output.points[0];
   std::cout << first_descriptor << std::endl;

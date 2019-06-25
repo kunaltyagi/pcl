@@ -1,20 +1,21 @@
-#include <vector>
-#include <string>
-#include <sstream>
-#include <pcl/io/pcd_io.h>
 #include <pcl/common/time.h>
 #include <pcl/console/parse.h>
-#include <pcl/search/kdtree.h>
+#include <pcl/io/pcd_io.h>
 #include <pcl/search/brute_force.h>
+#include <pcl/search/kdtree.h>
+#include <sstream>
+#include <string>
+#include <vector>
 
 using namespace std;
 
 int
-main (int argc, char ** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    pcl::console::print_info ("Syntax is: %s [-pcd <pcd-file>] (-radius <radius> [-knn <k>] | -knn <k> )\n", argv[0]);
+  if (argc < 2) {
+    pcl::console::print_info (
+        "Syntax is: %s [-pcd <pcd-file>] (-radius <radius> [-knn <k>] | -knn <k> )\n",
+        argv[0]);
     return (1);
   }
 
@@ -31,8 +32,7 @@ main (int argc, char ** argv)
   if (pcl::console::find_switch (argc, argv, "-knn"))
     pcl::console::parse (argc, argv, "-knn", k);
 
-  if (radius < 0 && k < 0)
-  {
+  if (radius < 0 && k < 0) {
     cout << "please specify at least one of the options -radius and -knn" << endl;
     return (1);
   }
@@ -41,11 +41,9 @@ main (int argc, char ** argv)
 
   if (use_pcd_file)
     pcl::io::loadPCDFile (pcd_path, *cloud);
-  else
-  {
+  else {
     cloud->resize (1000000);
-    for (size_t idx = 0; idx < cloud->size (); ++idx)
-    {
+    for (size_t idx = 0; idx < cloud->size (); ++idx) {
       (*cloud)[idx].x = static_cast<float> (rand () / RAND_MAX);
       (*cloud)[idx].y = static_cast<float> (rand () / RAND_MAX);
       (*cloud)[idx].z = static_cast<float> (rand () / RAND_MAX);
@@ -69,8 +67,7 @@ main (int argc, char ** argv)
   double bf_setup;
   double bf_search;
 
-  if (k > 0)
-  {
+  if (k > 0) {
     start = pcl::getTime ();
     tree.setInputCloud (cloud);
     stop = pcl::getTime ();
@@ -79,7 +76,8 @@ main (int argc, char ** argv)
     start = pcl::getTime ();
     tree.nearestKSearchT (query, k, kd_indices, kd_distances);
     stop = pcl::getTime ();
-    cout << "single search with kd tree; " << (kd_search = stop - start) << " :: " << kd_indices[0] << " , " << kd_distances [0] << endl;
+    cout << "single search with kd tree; " << (kd_search = stop - start)
+         << " :: " << kd_indices[0] << " , " << kd_distances[0] << endl;
 
     pcl::search::BruteForce<pcl::PointXYZRGB> brute_force;
     start = pcl::getTime ();
@@ -90,11 +88,11 @@ main (int argc, char ** argv)
     start = pcl::getTime ();
     brute_force.nearestKSearchT (query, k, bf_indices, bf_distances);
     stop = pcl::getTime ();
-    cout << "single search with brute force; " << (bf_search = stop - start) << " :: " << bf_indices[0] << " , " << bf_distances [0] << endl;
-    cout << "amortization after searches: " << (kd_setup - bf_setup) / (bf_search - kd_search) << endl;
-  }
-  else
-  {
+    cout << "single search with brute force; " << (bf_search = stop - start)
+         << " :: " << bf_indices[0] << " , " << bf_distances[0] << endl;
+    cout << "amortization after searches: "
+         << (kd_setup - bf_setup) / (bf_search - kd_search) << endl;
+  } else {
     start = pcl::getTime ();
     tree.setInputCloud (cloud);
     stop = pcl::getTime ();
@@ -103,7 +101,8 @@ main (int argc, char ** argv)
     start = pcl::getTime ();
     tree.radiusSearch (query, radius, kd_indices, kd_distances, k);
     stop = pcl::getTime ();
-    cout << "single search with kd tree; " << (kd_search = stop - start) << " :: " << kd_indices[0] << " , " << kd_distances [0] << endl;
+    cout << "single search with kd tree; " << (kd_search = stop - start)
+         << " :: " << kd_indices[0] << " , " << kd_distances[0] << endl;
 
     pcl::search::BruteForce<pcl::PointXYZRGB> brute_force;
     start = pcl::getTime ();
@@ -114,24 +113,24 @@ main (int argc, char ** argv)
     start = pcl::getTime ();
     brute_force.radiusSearch (query, radius, bf_indices, bf_distances, k);
     stop = pcl::getTime ();
-    cout << "single search with brute force; " << (bf_search = stop - start) << " :: " << bf_indices[0] << " , " << bf_distances [0] << endl;
-    cout << "amortization after searches: " << (kd_setup - bf_setup) / (bf_search - kd_search) << endl;
+    cout << "single search with brute force; " << (bf_search = stop - start)
+         << " :: " << bf_indices[0] << " , " << bf_distances[0] << endl;
+    cout << "amortization after searches: "
+         << (kd_setup - bf_setup) / (bf_search - kd_search) << endl;
   }
 
-  if (kd_indices.size () != bf_indices.size ())
-  {
-    cerr << "size of results do not match " <<kd_indices.size () << " vs. " << bf_indices.size () << endl;
-  }
-  else
-  {
-    cerr << "size of result: " <<kd_indices.size () << endl;
-    for (size_t idx = 0; idx < kd_indices.size (); ++idx)
-    {
-      if (kd_indices[idx] != bf_indices[idx] && kd_distances[idx] != bf_distances[idx])
-      {
-        cerr << "results do not match: " << idx << " nearest neighbor: "
-                << kd_indices[idx] << " with distance: " << kd_distances[idx] << " vs. "
-                << bf_indices[idx] << " with distance: " << bf_distances[idx] << endl;
+  if (kd_indices.size () != bf_indices.size ()) {
+    cerr << "size of results do not match " << kd_indices.size () << " vs. "
+         << bf_indices.size () << endl;
+  } else {
+    cerr << "size of result: " << kd_indices.size () << endl;
+    for (size_t idx = 0; idx < kd_indices.size (); ++idx) {
+      if (kd_indices[idx] != bf_indices[idx] &&
+          kd_distances[idx] != bf_distances[idx]) {
+        cerr << "results do not match: " << idx
+             << " nearest neighbor: " << kd_indices[idx]
+             << " with distance: " << kd_distances[idx] << " vs. " << bf_indices[idx]
+             << " with distance: " << bf_distances[idx] << endl;
       }
     }
   }

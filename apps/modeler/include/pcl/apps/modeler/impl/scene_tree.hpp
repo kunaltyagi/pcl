@@ -44,22 +44,21 @@ namespace pcl
   namespace modeler
   {
     /////////////////////////////////////////////////////////////////////////////////////////////
-    template <class T> QList<T*>
-    pcl::modeler::SceneTree::selectedTypeItems() const
+    template <class T>
+    QList<T *>
+    pcl::modeler::SceneTree::selectedTypeItems () const
     {
-       QList<QTreeWidgetItem*> selected_items = selectedItems();
-       QList<T*> selected_t_items;
-       for (auto &selected_item : selected_items)
-       {
-         T* t_item = dynamic_cast<T*>(selected_item);
-         if(t_item != nullptr)
-           selected_t_items.push_back(t_item);
-       }
+      QList<QTreeWidgetItem *> selected_items = selectedItems ();
+      QList<T *> selected_t_items;
+      for (auto &selected_item : selected_items) {
+        T *t_item = dynamic_cast<T *> (selected_item);
+        if (t_item != nullptr)
+          selected_t_items.push_back (t_item);
+      }
 
-       return (selected_t_items);
+      return (selected_t_items);
     }
-  }
-}
-
+  } // namespace modeler
+} // namespace pcl
 
 #endif // PCL_MODELER_SCENE_TREE_IMPL_H_

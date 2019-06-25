@@ -42,11 +42,11 @@
 
 namespace pcl
 {
-  const static int SAC_RANSAC  = 0;
-  const static int SAC_LMEDS   = 1;
-  const static int SAC_MSAC    = 2;
+  const static int SAC_RANSAC = 0;
+  const static int SAC_LMEDS = 1;
+  const static int SAC_MSAC = 2;
   const static int SAC_RRANSAC = 3;
-  const static int SAC_RMSAC   = 4;
-  const static int SAC_MLESAC  = 5;
-  const static int SAC_PROSAC  = 6;
-}
+  const static int SAC_RMSAC = 4;
+  const static int SAC_MLESAC = 5;
+  const static int SAC_PROSAC = 6;
+} // namespace pcl

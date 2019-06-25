@@ -44,46 +44,45 @@ namespace pcl
   namespace outofcore
   {
 
-    template<typename PointT, typename ContainerT> 
-    OutofcoreBreadthFirstIterator<PointT, ContainerT>::OutofcoreBreadthFirstIterator (OutofcoreOctreeBase<ContainerT, PointT>& octree_arg)
-    : OutofcoreIteratorBase<PointT, ContainerT> (octree_arg)
+    template <typename PointT, typename ContainerT>
+    OutofcoreBreadthFirstIterator<PointT, ContainerT>::OutofcoreBreadthFirstIterator (
+        OutofcoreOctreeBase<ContainerT, PointT> &octree_arg)
+        : OutofcoreIteratorBase<PointT, ContainerT> (octree_arg)
     {
-      reset();
+      reset ();
     }
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    template<typename PointT, typename ContainerT> 
+    template <typename PointT, typename ContainerT>
     OutofcoreBreadthFirstIterator<PointT, ContainerT>::~OutofcoreBreadthFirstIterator ()
     {
     }
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    template<typename PointT, typename ContainerT>
-    OutofcoreBreadthFirstIterator<PointT, ContainerT>&
+    template <typename PointT, typename ContainerT>
+    OutofcoreBreadthFirstIterator<PointT, ContainerT> &
     OutofcoreBreadthFirstIterator<PointT, ContainerT>::operator++ ()
     {
-      if (!FIFO_.empty ())
-      {
+      if (!FIFO_.empty ()) {
         // Get the first entry from the FIFO queue
         OctreeDiskNode *node = FIFO_.front ();
         FIFO_.pop_front ();
 
-        // If not skipping children, not at the max specified depth and we're a branch then iterate over children
-        if (!skip_child_voxels_ && node->getDepth () < this->max_depth_ && node->getNodeType () == pcl::octree::BRANCH_NODE)
-        {
+        // If not skipping children, not at the max specified depth and we're a branch
+        // then iterate over children
+        if (!skip_child_voxels_ && node->getDepth () < this->max_depth_ &&
+            node->getNodeType () == pcl::octree::BRANCH_NODE) {
           // Get the branch node
-          BranchNode* branch = static_cast<BranchNode*> (node);
-          OctreeDiskNode* child = nullptr;
+          BranchNode *branch = static_cast<BranchNode *> (node);
+          OctreeDiskNode *child = nullptr;
 
           // Iterate over the branches children
-          for (unsigned char child_idx = 0; child_idx < 8 ; child_idx++)
-          {
+          for (unsigned char child_idx = 0; child_idx < 8; child_idx++) {
             // If child/index exists add it to FIFO queue
             child = this->octree_.getBranchChildPtr (*branch, child_idx);
-            if (child)
-            {
+            if (child) {
               FIFO_.push_back (child);
             }
           }
@@ -94,12 +93,9 @@ namespace pcl
       skip_child_voxels_ = false;
 
       // If there's a queue, set the current node to the first entry
-      if (!FIFO_.empty ())
-      {
+      if (!FIFO_.empty ()) {
         this->currentNode_ = FIFO_.front ();
-      }
-      else
-      {
+      } else {
         this->currentNode_ = nullptr;
       }
 
@@ -108,8 +104,7 @@ namespace pcl
 
     ////////////////////////////////////////////////////////////////////////////////
 
-  }//namesapce pcl
-}//namespace outofcore
+  } // namespace outofcore
+} // namespace pcl
 
-#endif //PCL_OUTOFCORE_BREADTH_FIRST_ITERATOR_IMPL_H_
-
+#endif // PCL_OUTOFCORE_BREADTH_FIRST_ITERATOR_IMPL_H_

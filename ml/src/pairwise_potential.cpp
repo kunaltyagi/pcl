@@ -40,18 +40,18 @@
 #include <pcl/ml/pairwise_potential.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-pcl::PairwisePotential::PairwisePotential (const std::vector<float> &feature, 
-                                           const int feature_dimension, 
-                                           const int N, const float w) :
-  N_ (N), w_ (w)
-{  
-  //lattice_.init (feature, feature_dimension, N);
+pcl::PairwisePotential::PairwisePotential (const std::vector<float> &feature,
+                                           const int feature_dimension, const int N,
+                                           const float w)
+    : N_ (N), w_ (w)
+{
+  // lattice_.init (feature, feature_dimension, N);
   std::cout << "0---------" << std::endl;
   lattice_.init (feature, feature_dimension, N);
-  
+
   std::cout << "1---------" << std::endl;
 
-  //lattice_.debug ();
+  // lattice_.debug ();
 
   norm_.resize (N);
   for (int i = 0; i < N; i++)
@@ -59,7 +59,7 @@ pcl::PairwisePotential::PairwisePotential (const std::vector<float> &feature,
 
   // Compute the normalization factor
 
-  //lattice_.compute (norm_, norm_, 1);
+  // lattice_.compute (norm_, norm_, 1);
 
   /*
   std::vector<float> normOLD;
@@ -72,28 +72,26 @@ pcl::PairwisePotential::PairwisePotential (const std::vector<float> &feature,
 
   lattice_.compute (norm_, norm_, 1);
 
-
   std::cout << "3---------" << std::endl;
 
-/*
-  ///////////
-  // DEBUG //
-  bool same = true;
-  for (size_t i = 0; i < normOLD.size (); i++)
-  {
-    if (norm_[i] != normOLD[i])
-      same = false;
-  }
-  if (same)
-    std::cout << "DEBUG norm -  OK" << std::endl;
-  else
-    std::cout << "DEBUG norm - ERROR" << std::endl;
-*/
-  
+  /*
+    ///////////
+    // DEBUG //
+    bool same = true;
+    for (size_t i = 0; i < normOLD.size (); i++)
+    {
+      if (norm_[i] != normOLD[i])
+        same = false;
+    }
+    if (same)
+      std::cout << "DEBUG norm -  OK" << std::endl;
+    else
+      std::cout << "DEBUG norm - ERROR" << std::endl;
+  */
 
   // per pixel normalization
   for (int i = 0; i < N; i++)
-    norm_[i] = 1.0f / (norm_[i] + 1e-20f); 
+    norm_[i] = 1.0f / (norm_[i] + 1e-20f);
 
   std::cout << "4---------" << std::endl;
 
@@ -102,18 +100,14 @@ pcl::PairwisePotential::PairwisePotential (const std::vector<float> &feature,
   std::cout << "5---------" << std::endl;
 
   features_ = feature;
-  
+
   std::cout << "6---------" << std::endl;
 
-
-/*  
-  std::cout << "bary size: " << bary_.size () << std::endl;
-  for (int g = 0; g < 25; g++)
-    std::cout << bary_[g] << std::endl;
-*/
-
-
-
+  /*
+    std::cout << "bary size: " << bary_.size () << std::endl;
+    for (int g = 0; g < 25; g++)
+      std::cout << bary_[g] << std::endl;
+  */
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

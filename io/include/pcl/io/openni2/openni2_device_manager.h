@@ -31,15 +31,15 @@
 
 #pragma once
 
-#include <pcl/pcl_exports.h>
 #include "pcl/io/openni2/openni2_device_info.h"
+#include <pcl/pcl_exports.h>
 
-#include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/shared_ptr.hpp>
 
-#include <vector>
-#include <string>
 #include <ostream>
+#include <string>
+#include <vector>
 
 namespace pcl
 {
@@ -53,22 +53,24 @@ namespace pcl
 
       class PCL_EXPORTS OpenNI2DeviceManager
       {
-      public:
+        public:
         OpenNI2DeviceManager ();
         virtual ~OpenNI2DeviceManager ();
 
-        // This may not actually be a singleton yet. Need to work out cross-dll incerface.
-        // Based on http://stackoverflow.com/a/13431981/1789618
-        static boost::shared_ptr<OpenNI2DeviceManager> getInstance ()
+        // This may not actually be a singleton yet. Need to work out cross-dll
+        // incerface. Based on http://stackoverflow.com/a/13431981/1789618
+        static boost::shared_ptr<OpenNI2DeviceManager>
+        getInstance ()
         {
-          static boost::shared_ptr<OpenNI2DeviceManager> instance = boost::make_shared<OpenNI2DeviceManager>();
+          static boost::shared_ptr<OpenNI2DeviceManager> instance =
+              boost::make_shared<OpenNI2DeviceManager> ();
           return (instance);
         }
 
-        boost::shared_ptr<std::vector<OpenNI2DeviceInfo> >
+        boost::shared_ptr<std::vector<OpenNI2DeviceInfo>>
         getConnectedDeviceInfos () const;
 
-        boost::shared_ptr<std::vector<std::string> >
+        boost::shared_ptr<std::vector<std::string>>
         getConnectedDeviceURIs () const;
 
         std::size_t
@@ -78,21 +80,21 @@ namespace pcl
         getAnyDevice ();
 
         boost::shared_ptr<OpenNI2Device>
-        getDevice (const std::string& device_URI);
+        getDevice (const std::string &device_URI);
 
         boost::shared_ptr<OpenNI2Device>
         getDeviceByIndex (int index);
 
         boost::shared_ptr<OpenNI2Device>
-        getFileDevice (const std::string& path);
+        getFileDevice (const std::string &path);
 
-      protected:
+        protected:
         boost::shared_ptr<OpenNI2DeviceListener> device_listener_;
       };
 
-      std::ostream&
-      operator<< (std::ostream& stream, const OpenNI2DeviceManager& device_manager);
+      std::ostream &
+      operator<< (std::ostream &stream, const OpenNI2DeviceManager &device_manager);
 
-    } // namespace
-  }
-}
+    } // namespace openni2
+  }   // namespace io
+} // namespace pcl

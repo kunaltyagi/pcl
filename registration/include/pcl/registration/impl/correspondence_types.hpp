@@ -45,26 +45,29 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////
 inline void
-pcl::registration::getCorDistMeanStd (const pcl::Correspondences &correspondences, double &mean, double &stddev)
+pcl::registration::getCorDistMeanStd (const pcl::Correspondences &correspondences,
+                                      double &mean, double &stddev)
 {
   if (correspondences.empty ())
     return;
 
   double sum = 0, sq_sum = 0;
 
-  for (const auto &correspondence : correspondences)
-  {
+  for (const auto &correspondence : correspondences) {
     sum += correspondence.distance;
     sq_sum += correspondence.distance * correspondence.distance;
   }
   mean = sum / static_cast<double> (correspondences.size ());
-  double variance = (sq_sum - sum * sum / static_cast<double> (correspondences.size ())) / static_cast<double> (correspondences.size () - 1);
+  double variance =
+      (sq_sum - sum * sum / static_cast<double> (correspondences.size ())) /
+      static_cast<double> (correspondences.size () - 1);
   stddev = sqrt (variance);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 inline void
-pcl::registration::getQueryIndices (const pcl::Correspondences& correspondences, std::vector<int>& indices)
+pcl::registration::getQueryIndices (const pcl::Correspondences &correspondences,
+                                    std::vector<int> &indices)
 {
   indices.resize (correspondences.size ());
   for (size_t i = 0; i < correspondences.size (); ++i)
@@ -73,7 +76,8 @@ pcl::registration::getQueryIndices (const pcl::Correspondences& correspondences,
 
 //////////////////////////////////////////////////////////////////////////////////////////
 inline void
-pcl::registration::getMatchIndices (const pcl::Correspondences& correspondences, std::vector<int>& indices)
+pcl::registration::getMatchIndices (const pcl::Correspondences &correspondences,
+                                    std::vector<int> &indices)
 {
   indices.resize (correspondences.size ());
   for (size_t i = 0; i < correspondences.size (); ++i)

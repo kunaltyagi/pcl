@@ -45,58 +45,60 @@
 
 namespace pcl
 {
-  /** \brief @b RandomSampleConsensus represents an implementation of the RANSAC (RAndom SAmple Consensus) algorithm, as 
-    * described in: "Random Sample Consensus: A Paradigm for Model Fitting with Applications to Image Analysis and 
-    * Automated Cartography", Martin A. Fischler and Robert C. Bolles, Comm. Of the ACM 24: 381–395, June 1981.
-    * \author Radu B. Rusu
-    * \ingroup sample_consensus
-    */
+  /** \brief @b RandomSampleConsensus represents an implementation of the RANSAC (RAndom
+   * SAmple Consensus) algorithm, as described in: "Random Sample Consensus: A Paradigm
+   * for Model Fitting with Applications to Image Analysis and Automated Cartography",
+   * Martin A. Fischler and Robert C. Bolles, Comm. Of the ACM 24: 381–395, June 1981.
+   * \author Radu B. Rusu
+   * \ingroup sample_consensus
+   */
   template <typename PointT>
   class RandomSampleConsensus : public SampleConsensus<PointT>
   {
     using SampleConsensusModelPtr = typename SampleConsensusModel<PointT>::Ptr;
 
     public:
-      using Ptr = boost::shared_ptr<RandomSampleConsensus<PointT> >;
-      using ConstPtr = boost::shared_ptr<const RandomSampleConsensus<PointT> >;
+    using Ptr = boost::shared_ptr<RandomSampleConsensus<PointT>>;
+    using ConstPtr = boost::shared_ptr<const RandomSampleConsensus<PointT>>;
 
-      using SampleConsensus<PointT>::max_iterations_;
-      using SampleConsensus<PointT>::threshold_;
-      using SampleConsensus<PointT>::iterations_;
-      using SampleConsensus<PointT>::sac_model_;
-      using SampleConsensus<PointT>::model_;
-      using SampleConsensus<PointT>::model_coefficients_;
-      using SampleConsensus<PointT>::inliers_;
-      using SampleConsensus<PointT>::probability_;
+    using SampleConsensus<PointT>::max_iterations_;
+    using SampleConsensus<PointT>::threshold_;
+    using SampleConsensus<PointT>::iterations_;
+    using SampleConsensus<PointT>::sac_model_;
+    using SampleConsensus<PointT>::model_;
+    using SampleConsensus<PointT>::model_coefficients_;
+    using SampleConsensus<PointT>::inliers_;
+    using SampleConsensus<PointT>::probability_;
 
-      /** \brief RANSAC (RAndom SAmple Consensus) main constructor
-        * \param[in] model a Sample Consensus model
-        */
-      RandomSampleConsensus (const SampleConsensusModelPtr &model) 
+    /** \brief RANSAC (RAndom SAmple Consensus) main constructor
+     * \param[in] model a Sample Consensus model
+     */
+    RandomSampleConsensus (const SampleConsensusModelPtr &model)
         : SampleConsensus<PointT> (model)
-      {
-        // Maximum number of trials before we give up.
-        max_iterations_ = 10000;
-      }
+    {
+      // Maximum number of trials before we give up.
+      max_iterations_ = 10000;
+    }
 
-      /** \brief RANSAC (RAndom SAmple Consensus) main constructor
-        * \param[in] model a Sample Consensus model
-        * \param[in] threshold distance to model threshold
-        */
-      RandomSampleConsensus (const SampleConsensusModelPtr &model, double threshold) 
+    /** \brief RANSAC (RAndom SAmple Consensus) main constructor
+     * \param[in] model a Sample Consensus model
+     * \param[in] threshold distance to model threshold
+     */
+    RandomSampleConsensus (const SampleConsensusModelPtr &model, double threshold)
         : SampleConsensus<PointT> (model, threshold)
-      {
-        // Maximum number of trials before we give up.
-        max_iterations_ = 10000;
-      }
+    {
+      // Maximum number of trials before we give up.
+      max_iterations_ = 10000;
+    }
 
-      /** \brief Compute the actual model and find the inliers
-        * \param[in] debug_verbosity_level enable/disable on-screen debug information and set the verbosity level
-        */
-      bool 
-      computeModel (int debug_verbosity_level = 0) override;
+    /** \brief Compute the actual model and find the inliers
+     * \param[in] debug_verbosity_level enable/disable on-screen debug information and
+     * set the verbosity level
+     */
+    bool
+    computeModel (int debug_verbosity_level = 0) override;
   };
-}
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/sample_consensus/impl/ransac.hpp>

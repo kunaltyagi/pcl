@@ -42,31 +42,28 @@
 
 namespace pcl
 {
-  /** \brief 
-    *
-    *
-    * \author Christian Potthast (potthast@usc.edu)
-    */
+  /** \brief
+   *
+   *
+   * \author Christian Potthast (potthast@usc.edu)
+   */
   class PCL_EXPORTS VoxelGridLabel : public VoxelGrid<pcl::PointXYZRGBL>
   {
     public:
+    using Ptr = boost::shared_ptr<VoxelGridLabel>;
+    using ConstPtr = boost::shared_ptr<const VoxelGridLabel>;
 
-      using Ptr = boost::shared_ptr<VoxelGridLabel>;
-      using ConstPtr = boost::shared_ptr<const VoxelGridLabel>;
-
-
-      /** \brief Constructor.
-       * Sets \ref leaf_size_ to 0.
-       */
-      VoxelGridLabel () {};
+    /** \brief Constructor.
+     * Sets \ref leaf_size_ to 0.
+     */
+    VoxelGridLabel (){};
 
     protected:
-
-      /** \brief Filter cloud and initializes voxel structure.
-        * \param[out] output cloud containing centroids of voxels containing a sufficient number of points
-        */
-      void 
-      applyFilter (PointCloud &output) override;
-
+    /** \brief Filter cloud and initializes voxel structure.
+     * \param[out] output cloud containing centroids of voxels containing a sufficient
+     * number of points
+     */
+    void
+    applyFilter (PointCloud &output) override;
   };
-}
+} // namespace pcl

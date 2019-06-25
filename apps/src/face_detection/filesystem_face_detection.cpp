@@ -6,10 +6,10 @@
  */
 
 #include "pcl/recognition/face_detection/rf_face_detector_trainer.h"
+#include <boost/filesystem.hpp>
 #include <pcl/console/parse.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/visualization/pcl_visualizer.h>
-#include <boost/filesystem.hpp>
 namespace bf = boost::filesystem;
 
 #include "pcl/apps/face_detection/face_detection_apps_utils.h"
@@ -17,18 +17,21 @@ namespace bf = boost::filesystem;
 bool SHOW_GT = false;
 bool VIDEO = false;
 
-template<class PointInT>
-void run(pcl::RFFaceDetectorTrainer & fdrf, typename pcl::PointCloud<PointInT>::Ptr & scene_vis, pcl::visualization::PCLVisualizer & vis, bool heat_map,
-    bool show_votes, const std::string & filename)
+template <class PointInT>
+void
+run (pcl::RFFaceDetectorTrainer &fdrf,
+     typename pcl::PointCloud<PointInT>::Ptr &scene_vis,
+     pcl::visualization::PCLVisualizer &vis, bool heat_map, bool show_votes,
+     const std::string &filename)
 {
   pcl::PointCloud<pcl::PointXYZ>::Ptr scene (new pcl::PointCloud<pcl::PointXYZ>);
   pcl::copyPointCloud (*scene_vis, *scene);
 
   fdrf.setInputCloud (scene);
 
-  if (heat_map)
-  {
-    pcl::PointCloud<pcl::PointXYZI>::Ptr intensity_cloud (new pcl::PointCloud<pcl::PointXYZI>);
+  if (heat_map) {
+    pcl::PointCloud<pcl::PointXYZI>::Ptr intensity_cloud (
+        new pcl::PointCloud<pcl::PointXYZI>);
     fdrf.setFaceHeatMapCloud (intensity_cloud);
   }
 
@@ -38,46 +41,55 @@ void run(pcl::RFFaceDetectorTrainer & fdrf, typename pcl::PointCloud<PointInT>::
 
   float rgb_m;
   bool exists_m;
-  pcl::for_each_type < FieldListM > (pcl::CopyIfFieldExists<PointInT, float> (scene_vis->points[0], "rgb", exists_m, rgb_m));
+  pcl::for_each_type<FieldListM> (pcl::CopyIfFieldExists<PointInT, float> (
+      scene_vis->points[0], "rgb", exists_m, rgb_m));
 
   std::cout << "Color exists:" << static_cast<int> (exists_m) << std::endl;
-  if (exists_m)
-  {
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr to_visualize (new pcl::PointCloud<pcl::PointXYZRGB>);
+  if (exists_m) {
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr to_visualize (
+        new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::copyPointCloud (*scene_vis, *to_visualize);
 
-    pcl::visualization::PointCloudColorHandlerRGBField < pcl::PointXYZRGB > handler_keypoints (to_visualize);
-    vis.addPointCloud < pcl::PointXYZRGB > (to_visualize, handler_keypoints, "scene_cloud");
-  } else
-  {
+    pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGB>
+        handler_keypoints (to_visualize);
+    vis.addPointCloud<pcl::PointXYZRGB> (to_visualize, handler_keypoints,
+                                         "scene_cloud");
+  } else {
     vis.addPointCloud (scene_vis, "scene_cloud");
   }
 
-  if (heat_map)
-  {
-    pcl::PointCloud<pcl::PointXYZI>::Ptr intensity_cloud (new pcl::PointCloud<pcl::PointXYZI>);
+  if (heat_map) {
+    pcl::PointCloud<pcl::PointXYZI>::Ptr intensity_cloud (
+        new pcl::PointCloud<pcl::PointXYZI>);
     fdrf.getFaceHeatMap (intensity_cloud);
 
-    pcl::visualization::PointCloudColorHandlerGenericField < pcl::PointXYZI > handler_keypoints (intensity_cloud, "intensity");
-    vis.addPointCloud < pcl::PointXYZI > (intensity_cloud, handler_keypoints, "heat_map");
+    pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI>
+        handler_keypoints (intensity_cloud, "intensity");
+    vis.addPointCloud<pcl::PointXYZI> (intensity_cloud, handler_keypoints, "heat_map");
   }
 
-  if (show_votes)
-  {
-    //display votes_
-    /*pcl::PointCloud<pcl::PointXYZ>::Ptr votes_cloud(new pcl::PointCloud<pcl::PointXYZ>());
-     fdrf.getVotes(votes_cloud);
-     pcl::visualization::PointCloudColorHandlerCustom < pcl::PointXYZ > handler_votes(votes_cloud, 255, 0, 0);
-     vis.addPointCloud < pcl::PointXYZ > (votes_cloud, handler_votes, "votes_cloud");
-     vis.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 14, "votes_cloud");
-     vis.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_OPACITY, 0.5, "votes_cloud");
-     vis.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_OPACITY, 0.75, "votes_cloud");*/
+  if (show_votes) {
+    // display votes_
+    /*pcl::PointCloud<pcl::PointXYZ>::Ptr votes_cloud(new
+     pcl::PointCloud<pcl::PointXYZ>()); fdrf.getVotes(votes_cloud);
+     pcl::visualization::PointCloudColorHandlerCustom < pcl::PointXYZ >
+     handler_votes(votes_cloud, 255, 0, 0); vis.addPointCloud < pcl::PointXYZ >
+     (votes_cloud, handler_votes, "votes_cloud");
+     vis.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
+     14, "votes_cloud");
+     vis.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_OPACITY,
+     0.5, "votes_cloud");
+     vis.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_OPACITY,
+     0.75, "votes_cloud");*/
 
-    pcl::PointCloud<pcl::PointXYZI>::Ptr votes_cloud (new pcl::PointCloud<pcl::PointXYZI> ());
+    pcl::PointCloud<pcl::PointXYZI>::Ptr votes_cloud (
+        new pcl::PointCloud<pcl::PointXYZI> ());
     fdrf.getVotes2 (votes_cloud);
-    pcl::visualization::PointCloudColorHandlerGenericField < pcl::PointXYZI > handler_votes (votes_cloud, "intensity");
-    vis.addPointCloud < pcl::PointXYZI > (votes_cloud, handler_votes, "votes_cloud");
-    vis.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 14, "votes_cloud");
+    pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI>
+        handler_votes (votes_cloud, "intensity");
+    vis.addPointCloud<pcl::PointXYZI> (votes_cloud, handler_votes, "votes_cloud");
+    vis.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
+                                          14, "votes_cloud");
   }
 
   vis.addCoordinateSystem (0.1, "global");
@@ -86,9 +98,8 @@ void run(pcl::RFFaceDetectorTrainer & fdrf, typename pcl::PointCloud<PointInT>::
   fdrf.getDetectedFaces (heads);
   face_detection_apps_utils::displayHeads (heads, vis);
 
-  if (SHOW_GT)
-  {
-    //check if there is ground truth data
+  if (SHOW_GT) {
+    // check if there is ground truth data
     std::string pose_file (filename);
     boost::replace_all (pose_file, ".pcd", "_pose.txt");
 
@@ -96,10 +107,10 @@ void run(pcl::RFFaceDetectorTrainer & fdrf, typename pcl::PointCloud<PointInT>::
     pose_mat.setIdentity (4, 4);
     bool result = face_detection_apps_utils::readMatrixFromFile (pose_file, pose_mat);
 
-    if (result)
-    {
+    if (result) {
       Eigen::Vector3f ea = pose_mat.block<3, 3> (0, 0).eulerAngles (0, 1, 2);
-      Eigen::Vector3f trans_vector = Eigen::Vector3f (pose_mat (0, 3), pose_mat (1, 3), pose_mat (2, 3));
+      Eigen::Vector3f trans_vector =
+          Eigen::Vector3f (pose_mat (0, 3), pose_mat (1, 3), pose_mat (2, 3));
       std::cout << ea << std::endl;
       std::cout << trans_vector << std::endl;
 
@@ -122,10 +133,11 @@ void run(pcl::RFFaceDetectorTrainer & fdrf, typename pcl::PointCloud<PointInT>::
       Eigen::Vector3f vec = Eigen::Vector3f::UnitZ () * -1.f;
       Eigen::Matrix3f matrixxx;
 
-      matrixxx = Eigen::AngleAxisf (ea[0], Eigen::Vector3f::UnitX ()) * Eigen::AngleAxisf (ea[1], Eigen::Vector3f::UnitY ())
-          * Eigen::AngleAxisf (ea[2], Eigen::Vector3f::UnitZ ());
+      matrixxx = Eigen::AngleAxisf (ea[0], Eigen::Vector3f::UnitX ()) *
+                 Eigen::AngleAxisf (ea[1], Eigen::Vector3f::UnitY ()) *
+                 Eigen::AngleAxisf (ea[2], Eigen::Vector3f::UnitZ ());
 
-      //matrixxx = pose_mat.block<3,3>(0,0);
+      // matrixxx = pose_mat.block<3,3>(0,0);
       vec = matrixxx * vec;
 
       cylinder_coeff.values[3] = vec[0];
@@ -139,11 +151,9 @@ void run(pcl::RFFaceDetectorTrainer & fdrf, typename pcl::PointCloud<PointInT>::
 
   vis.setRepresentationToSurfaceForAllActors ();
 
-  if (VIDEO)
-  {
+  if (VIDEO) {
     vis.spinOnce (50, true);
-  } else
-  {
+  } else {
     vis.spin ();
   }
 
@@ -151,7 +161,8 @@ void run(pcl::RFFaceDetectorTrainer & fdrf, typename pcl::PointCloud<PointInT>::
   vis.removeAllShapes ();
 }
 
-int main(int argc, char ** argv)
+int
+main (int argc, char **argv)
 {
   int STRIDE_SW = 5;
   std::string forest_fn = "forest.txt";
@@ -194,13 +205,12 @@ int main(int argc, char ** argv)
   fdrf.setLeavesFaceThreshold (face_threshold);
   fdrf.setFaceMinVotes (min_votes_size);
 
-  if (pose_refinement_)
-  {
+  if (pose_refinement_) {
     fdrf.setPoseRefinement (true, icp_iterations);
     fdrf.setModelPath (model_path_);
   }
 
-//load forest from file and pass it to the detector
+  // load forest from file and pass it to the detector
   std::filebuf fb;
   fb.open (forest_fn.c_str (), std::ios::in);
   std::istream os (&fb);
@@ -214,9 +224,8 @@ int main(int argc, char ** argv)
 
   pcl::visualization::PCLVisualizer vis ("PCL Face detection");
 
-  if (!test_directory.empty())
-  {
-    //recognize all files in directory...
+  if (!test_directory.empty ()) {
+    // recognize all files in directory...
     std::string start;
     std::string ext = std::string ("pcd");
     bf::path dir = test_directory;
@@ -226,37 +235,32 @@ int main(int argc, char ** argv)
 
     std::sort (files.begin (), files.end (), face_detection_apps_utils::sortFiles);
 
-    for (const auto &filename : files)
-    {
+    for (const auto &filename : files) {
       std::string file = test_directory + '/' + filename;
       std::cout << file << std::endl;
 
-      if (rgb_exists)
-      {
+      if (rgb_exists) {
         std::cout << "Loading a PointXYZRGBA cloud..." << std::endl;
-        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (
+            new pcl::PointCloud<pcl::PointXYZRGB>);
         pcl::io::loadPCDFile (file, *cloud);
         run<pcl::PointXYZRGB> (fdrf, cloud, vis, heat_map, show_votes, file);
-      } else
-      {
+      } else {
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
         pcl::io::loadPCDFile (file, *cloud);
         run<pcl::PointXYZ> (fdrf, cloud, vis, heat_map, show_votes, file);
       }
     }
-  } else
-  {
-    if (rgb_exists)
-    {
-      pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
+  } else {
+    if (rgb_exists) {
+      pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (
+          new pcl::PointCloud<pcl::PointXYZRGB>);
       pcl::io::loadPCDFile (filename, *cloud);
       run<pcl::PointXYZRGB> (fdrf, cloud, vis, heat_map, show_votes, filename);
-    } else
-    {
+    } else {
       pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
       pcl::io::loadPCDFile (filename, *cloud);
       run<pcl::PointXYZ> (fdrf, cloud, vis, heat_map, show_votes, filename);
     }
   }
 }
-

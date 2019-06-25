@@ -39,23 +39,23 @@
 #pragma once
 
 #include <Eigen/Core>
-#include <string>
 #include <pcl/PCLPointCloud2.h>
 #include <pcl/Vertices.h>
+#include <string>
 
 namespace pcl
 {
   /** \author Khai Tran */
-  struct TexMaterial
-  {
-    TexMaterial () : tex_Ka (), tex_Kd (), tex_Ks (), tex_d (), tex_Ns (), tex_illum () {}
-
-    struct RGB
+  struct TexMaterial {
+    TexMaterial () : tex_Ka (), tex_Kd (), tex_Ks (), tex_d (), tex_Ns (), tex_illum ()
     {
+    }
+
+    struct RGB {
       float r;
       float g;
       float b;
-    }; //RGB
+    }; // RGB
 
     /** \brief Texture name. */
     std::string tex_name;
@@ -64,46 +64,49 @@ namespace pcl
     std::string tex_file;
 
     /** \brief Defines the ambient color of the material to be (r,g,b). */
-    RGB         tex_Ka;
+    RGB tex_Ka;
 
     /** \brief Defines the diffuse color of the material to be (r,g,b). */
-    RGB         tex_Kd;
+    RGB tex_Kd;
 
-    /** \brief Defines the specular color of the material to be (r,g,b). This color shows up in highlights. */
-    RGB         tex_Ks;
+    /** \brief Defines the specular color of the material to be (r,g,b). This color
+     * shows up in highlights. */
+    RGB tex_Ks;
 
     /** \brief Defines the transparency of the material to be alpha. */
-    float       tex_d;
+    float tex_d;
 
     /** \brief Defines the shininess of the material to be s. */
-    float       tex_Ns;
+    float tex_Ns;
 
     /** \brief Denotes the illumination model used by the material.
-      *
-      * illum = 1 indicates a flat material with no specular highlights, so the value of Ks is not used.
-      * illum = 2 denotes the presence of specular highlights, and so a specification for Ks is required.
-      */
-    int         tex_illum;
+     *
+     * illum = 1 indicates a flat material with no specular highlights, so the value of
+     * Ks is not used. illum = 2 denotes the presence of specular highlights, and so a
+     * specification for Ks is required.
+     */
+    int tex_illum;
   }; // TexMaterial
 
   /** \author Khai Tran */
-  struct TextureMesh
-  {
+  struct TextureMesh {
     TextureMesh () {}
 
-    pcl::PCLPointCloud2  cloud;
-    pcl::PCLHeader  header;
+    pcl::PCLPointCloud2 cloud;
+    pcl::PCLHeader header;
 
-
-    std::vector<std::vector<pcl::Vertices> >    tex_polygons;     // polygon which is mapped with specific texture defined in TexMaterial
-    std::vector<std::vector<Eigen::Vector2f, Eigen::aligned_allocator<Eigen::Vector2f> > > tex_coordinates;  // UV coordinates
-    std::vector<pcl::TexMaterial>               tex_materials;    // define texture material
+    std::vector<std::vector<pcl::Vertices>>
+        tex_polygons; // polygon which is mapped with specific texture defined in
+                      // TexMaterial
+    std::vector<std::vector<Eigen::Vector2f, Eigen::aligned_allocator<Eigen::Vector2f>>>
+        tex_coordinates;                         // UV coordinates
+    std::vector<pcl::TexMaterial> tex_materials; // define texture material
 
     public:
-      using Ptr = boost::shared_ptr<pcl::TextureMesh>;
-      using ConstPtr = boost::shared_ptr<const pcl::TextureMesh>;
-   }; // struct TextureMesh
+    using Ptr = boost::shared_ptr<pcl::TextureMesh>;
+    using ConstPtr = boost::shared_ptr<const pcl::TextureMesh>;
+  }; // struct TextureMesh
 
-   using TextureMeshPtr = boost::shared_ptr<pcl::TextureMesh>;
-   using TextureMeshConstPtr = boost::shared_ptr<const pcl::TextureMesh>;
+  using TextureMeshPtr = boost::shared_ptr<pcl::TextureMesh>;
+  using TextureMeshConstPtr = boost::shared_ptr<const pcl::TextureMesh>;
 } // namespace pcl

@@ -36,45 +36,48 @@
  *  $Id$
  */
 
-#include <pcl/io/pcd_io.h>
 #include <pcl/console/print.h>
+#include <pcl/io/pcd_io.h>
 
 #include <pcl/outofcore/outofcore.h>
 #include <pcl/outofcore/outofcore_impl.h>
 
 #include <pcl/outofcore/boost.h>
 
-#include<pcl/point_types.h>
 #include <pcl/PCLPointCloud2.h>
+#include <pcl/point_types.h>
 
 using namespace pcl::outofcore;
 
-using OctreeDisk = OutofcoreOctreeBase<OutofcoreOctreeDiskContainer<pcl::PointXYZ>, pcl::PointXYZ>;
-using OctreeDiskNode = OutofcoreOctreeBaseNode<OutofcoreOctreeDiskContainer<pcl::PointXY>, pcl::PointXYZ>;
+using OctreeDisk =
+    OutofcoreOctreeBase<OutofcoreOctreeDiskContainer<pcl::PointXYZ>, pcl::PointXYZ>;
+using OctreeDiskNode =
+    OutofcoreOctreeBaseNode<OutofcoreOctreeDiskContainer<pcl::PointXY>, pcl::PointXYZ>;
 
-int main (int, char** argv)
+int
+main (int, char **argv)
 {
 
-  //Find all PCD files located in argv[1] directory
+  // Find all PCD files located in argv[1] directory
 
   int depth = 3;
   Eigen::Vector3d min (-10.0, -10.0, -10.0);
   Eigen::Vector3d max (10.0, 10.0, 10.0);
   boost::filesystem::path file_location ("tree/tree.oct_idx");
-  
-  OctreeDisk* octree;
-  
+
+  OctreeDisk *octree;
+
   octree = new OctreeDisk (depth, min, max, file_location, "ECEF");
 
   pcl::PCLPointCloud2::Ptr cloud (new pcl::PCLPointCloud2 ());
-    
+
   pcl::io::loadPCDFile (argv[1], *cloud);
-  
+
   octree->addPointCloud (cloud, false);
 
   octree->setSamplePercent (0.125);
 
   octree->buildLOD ();
-  
+
   return (0);
 }

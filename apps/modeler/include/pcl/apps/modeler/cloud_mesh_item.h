@@ -52,61 +52,64 @@ namespace pcl
     class CloudMeshItem : public QTreeWidgetItem, public AbstractItem
     {
       public:
-        CloudMeshItem(QTreeWidgetItem* parent, const std::string& filename);
-        CloudMeshItem(QTreeWidgetItem* parent, CloudMesh::PointCloudPtr cloud);
-        CloudMeshItem(QTreeWidgetItem* parent, const CloudMeshItem& cloud_mesh_item);
-        ~CloudMeshItem();
+      CloudMeshItem (QTreeWidgetItem *parent, const std::string &filename);
+      CloudMeshItem (QTreeWidgetItem *parent, CloudMesh::PointCloudPtr cloud);
+      CloudMeshItem (QTreeWidgetItem *parent, const CloudMeshItem &cloud_mesh_item);
+      ~CloudMeshItem ();
 
-        inline CloudMesh::Ptr&
-        getCloudMesh()
-        {
-          return cloud_mesh_;
-        }
+      inline CloudMesh::Ptr &
+      getCloudMesh ()
+      {
+        return cloud_mesh_;
+      }
 
-        inline const CloudMesh::Ptr&
-        getCloudMesh() const
-        {
-          return cloud_mesh_;
-        }
+      inline const CloudMesh::Ptr &
+      getCloudMesh () const
+      {
+        return cloud_mesh_;
+      }
 
-        static bool
-        savePointCloud(const QList<CloudMeshItem*>& items, const QString& filename);
+      static bool
+      savePointCloud (const QList<CloudMeshItem *> &items, const QString &filename);
 
-        bool
-        open();
+      bool
+      open ();
 
-        void
-        createChannels();
+      void
+      createChannels ();
 
-        void
-        updateChannels();
+      void
+      updateChannels ();
 
-        std::string
-        getItemName() const override {return "Cloud Mesh Item";}
+      std::string
+      getItemName () const override
+      {
+        return "Cloud Mesh Item";
+      }
 
-        void
-        updateRenderWindow();
+      void
+      updateRenderWindow ();
 
       protected:
-        void
-        prepareContextMenu(QMenu* menu) const override;
+      void
+      prepareContextMenu (QMenu *menu) const override;
 
-        void
-        prepareProperties(ParameterDialog* parameter_dialog) override;
+      void
+      prepareProperties (ParameterDialog *parameter_dialog) override;
 
-        void
-        setProperties() override;
+      void
+      setProperties () override;
 
       private:
-        std::string                           filename_;
-        CloudMesh::Ptr                        cloud_mesh_;
+      std::string filename_;
+      CloudMesh::Ptr cloud_mesh_;
 
-        DoubleParameter*                      translation_x_;
-        DoubleParameter*                      translation_y_;
-        DoubleParameter*                      translation_z_;
-        DoubleParameter*                      rotation_x_;
-        DoubleParameter*                      rotation_y_;
-        DoubleParameter*                      rotation_z_;
+      DoubleParameter *translation_x_;
+      DoubleParameter *translation_y_;
+      DoubleParameter *translation_z_;
+      DoubleParameter *rotation_x_;
+      DoubleParameter *rotation_y_;
+      DoubleParameter *rotation_z_;
     };
-  }
-}
+  } // namespace modeler
+} // namespace pcl

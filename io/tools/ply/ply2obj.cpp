@@ -33,7 +33,7 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
- *	
+ *
  * $Id$
  *
  */
@@ -47,203 +47,213 @@
 #include <pcl/io/ply/ply_parser.h>
 
 /** \class ply_to_obj_converter
-  * Convert a PLY file, optionally meshed to an OBJ file.
-  * The following PLY elements and properties are supported.
-  *  element vertex
-  *    property float32 x
-  *    property float32 y
-  *    property float32 z
-  *  element face
-  *    property list uint8 int32 vertex_indices.
-  *
-  * \author Ares Lagae
-  * \ingroup io
-  */ 
+ * Convert a PLY file, optionally meshed to an OBJ file.
+ * The following PLY elements and properties are supported.
+ *  element vertex
+ *    property float32 x
+ *    property float32 y
+ *    property float32 z
+ *  element face
+ *    property list uint8 int32 vertex_indices.
+ *
+ * \author Ares Lagae
+ * \ingroup io
+ */
 class ply_to_obj_converter
 {
   public:
-    using flags_type = int;
-    enum { triangulate = 1 << 0 };
+  using flags_type = int;
+  enum { triangulate = 1 << 0 };
 
-    ply_to_obj_converter (flags_type flags = 0);
+  ply_to_obj_converter (flags_type flags = 0);
 
-    bool 
-    convert (std::istream& istream, const std::string& istream_filename, std::ostream& ostream, const std::string& ostream_filename);
+  bool
+  convert (std::istream &istream, const std::string &istream_filename,
+           std::ostream &ostream, const std::string &ostream_filename);
 
   private:
+  void
+  info_callback (const std::string &filename, std::size_t line_number,
+                 const std::string &message);
 
-    void
-    info_callback (const std::string& filename, std::size_t line_number, const std::string& message);
+  void
+  warning_callback (const std::string &filename, std::size_t line_number,
+                    const std::string &message);
 
-    void
-    warning_callback (const std::string& filename, std::size_t line_number, const std::string& message);
+  void
+  error_callback (const std::string &filename, std::size_t line_number,
+                  const std::string &message);
 
-    void
-    error_callback (const std::string& filename, std::size_t line_number, const std::string& message);
+  boost::tuple<std::function<void()>, std::function<void()>>
+  element_definition_callback (const std::string &element_name, std::size_t count);
 
-    boost::tuple<std::function<void ()>, std::function<void ()> > 
-    element_definition_callback (const std::string& element_name, std::size_t count);
+  template <typename ScalarType>
+  std::function<void(ScalarType)>
+  scalar_property_definition_callback (const std::string &element_name,
+                                       const std::string &property_name);
 
-    template <typename ScalarType> std::function<void (ScalarType)> 
-    scalar_property_definition_callback (const std::string& element_name, const std::string& property_name);
+  template <typename SizeType, typename ScalarType>
+  boost::tuple<std::function<void(SizeType)>, std::function<void(ScalarType)>,
+               std::function<void()>>
+  list_property_definition_callback (const std::string &element_name,
+                                     const std::string &property_name);
 
-    template <typename SizeType, typename ScalarType> boost::tuple<std::function<void (SizeType)>, 
-                                                                      std::function<void (ScalarType)>, 
-                                                                      std::function<void ()> > 
-    list_property_definition_callback (const std::string& element_name, const std::string& property_name);
+  void
+  vertex_begin ();
 
-    void
-    vertex_begin ();
+  void
+  vertex_x (pcl::io::ply::float32 x);
 
-    void
-    vertex_x (pcl::io::ply::float32 x);
+  void
+  vertex_y (pcl::io::ply::float32 y);
 
-    void
-    vertex_y (pcl::io::ply::float32 y);
+  void
+  vertex_z (pcl::io::ply::float32 z);
 
-    void
-    vertex_z (pcl::io::ply::float32 z);
+  void
+  vertex_end ();
 
-    void
-    vertex_end ();
+  void
+  face_begin ();
 
-    void
-    face_begin ();
+  void
+  face_vertex_indices_begin (pcl::io::ply::uint8 size);
 
-    void
-    face_vertex_indices_begin (pcl::io::ply::uint8 size);
+  void
+  face_vertex_indices_element (pcl::io::ply::int32 vertex_index);
 
-    void
-    face_vertex_indices_element (pcl::io::ply::int32 vertex_index);
+  void
+  face_vertex_indices_end ();
 
-    void
-    face_vertex_indices_end ();
+  void
+  face_end ();
 
-    void
-    face_end ();
-
-    flags_type flags_;
-    std::ostream* ostream_;
-    double vertex_x_, vertex_y_, vertex_z_;
-    std::size_t face_vertex_indices_element_index_, face_vertex_indices_first_element_, face_vertex_indices_previous_element_;
+  flags_type flags_;
+  std::ostream *ostream_;
+  double vertex_x_, vertex_y_, vertex_z_;
+  std::size_t face_vertex_indices_element_index_, face_vertex_indices_first_element_,
+      face_vertex_indices_previous_element_;
 };
 
 ply_to_obj_converter::ply_to_obj_converter (flags_type flags)
-  : flags_ (flags), ostream_ (), 
-  vertex_x_ (0), vertex_y_ (0), vertex_z_ (0),
-  face_vertex_indices_element_index_ (), 
-  face_vertex_indices_first_element_ (),
-  face_vertex_indices_previous_element_ ()
+    : flags_ (flags), ostream_ (), vertex_x_ (0), vertex_y_ (0), vertex_z_ (0),
+      face_vertex_indices_element_index_ (), face_vertex_indices_first_element_ (),
+      face_vertex_indices_previous_element_ ()
 {
 }
 
-void 
-ply_to_obj_converter::info_callback (const std::string& filename, std::size_t line_number, const std::string& message)
+void
+ply_to_obj_converter::info_callback (const std::string &filename,
+                                     std::size_t line_number,
+                                     const std::string &message)
 {
-  std::cerr << filename << ":" << line_number << ": " << "info: " << message << std::endl;
+  std::cerr << filename << ":" << line_number << ": "
+            << "info: " << message << std::endl;
 }
 
-void 
-ply_to_obj_converter::warning_callback (const std::string& filename, std::size_t line_number, const std::string& message)
+void
+ply_to_obj_converter::warning_callback (const std::string &filename,
+                                        std::size_t line_number,
+                                        const std::string &message)
 {
-  std::cerr << filename << ":" << line_number << ": " << "warning: " << message << std::endl;
+  std::cerr << filename << ":" << line_number << ": "
+            << "warning: " << message << std::endl;
 }
 
-void 
-ply_to_obj_converter::error_callback (const std::string& filename, std::size_t line_number, const std::string& message)
+void
+ply_to_obj_converter::error_callback (const std::string &filename,
+                                      std::size_t line_number,
+                                      const std::string &message)
 {
-  std::cerr << filename << ":" << line_number << ": " << "error: " << message << std::endl;
+  std::cerr << filename << ":" << line_number << ": "
+            << "error: " << message << std::endl;
 }
 
-boost::tuple<std::function<void ()>, std::function<void ()> > 
-ply_to_obj_converter::element_definition_callback (const std::string& element_name, std::size_t)
+boost::tuple<std::function<void()>, std::function<void()>>
+ply_to_obj_converter::element_definition_callback (const std::string &element_name,
+                                                   std::size_t)
 {
-  if (element_name == "vertex") 
-  {
-    return boost::tuple<std::function<void ()>, std::function<void ()> > (
-      boost::bind (&ply_to_obj_converter::vertex_begin, this),
-      boost::bind (&ply_to_obj_converter::vertex_end, this)
-    );
-  }
-  else if (element_name == "face") 
-  {
-    return boost::tuple<std::function<void ()>, std::function<void ()> > (
-      boost::bind (&ply_to_obj_converter::face_begin, this),
-      boost::bind (&ply_to_obj_converter::face_end, this)
-    );
-  }
-  else {
+  if (element_name == "vertex") {
+    return boost::tuple<std::function<void()>, std::function<void()>> (
+        boost::bind (&ply_to_obj_converter::vertex_begin, this),
+        boost::bind (&ply_to_obj_converter::vertex_end, this));
+  } else if (element_name == "face") {
+    return boost::tuple<std::function<void()>, std::function<void()>> (
+        boost::bind (&ply_to_obj_converter::face_begin, this),
+        boost::bind (&ply_to_obj_converter::face_end, this));
+  } else {
     return {};
   }
 }
 
-template <> std::function<void (pcl::io::ply::float32)> 
-ply_to_obj_converter::scalar_property_definition_callback (const std::string& element_name, const std::string& property_name)
+template <>
+std::function<void(pcl::io::ply::float32)>
+ply_to_obj_converter::scalar_property_definition_callback (
+    const std::string &element_name, const std::string &property_name)
 {
   if (element_name == "vertex") {
     if (property_name == "x") {
       return boost::bind (&ply_to_obj_converter::vertex_x, this, _1);
-    }
-    else if (property_name == "y") {
+    } else if (property_name == "y") {
       return boost::bind (&ply_to_obj_converter::vertex_y, this, _1);
-    }
-    else if (property_name == "z") {
+    } else if (property_name == "z") {
       return boost::bind (&ply_to_obj_converter::vertex_z, this, _1);
-    }
-    else {
+    } else {
       return {};
     }
-  }
-  else {
+  } else {
     return {};
   }
 }
 
-template <> boost::tuple<std::function<void (pcl::io::ply::uint8)>, std::function<void (pcl::io::ply::int32)>, std::function<void ()> > 
-ply_to_obj_converter::list_property_definition_callback (const std::string& element_name, const std::string& property_name)
+template <>
+boost::tuple<std::function<void(pcl::io::ply::uint8)>,
+             std::function<void(pcl::io::ply::int32)>, std::function<void()>>
+ply_to_obj_converter::list_property_definition_callback (
+    const std::string &element_name, const std::string &property_name)
 {
   if ((element_name == "face") && (property_name == "vertex_indices")) {
-    return boost::tuple<std::function<void (pcl::io::ply::uint8)>, std::function<void (pcl::io::ply::int32)>, std::function<void ()> > (
-      boost::bind (&ply_to_obj_converter::face_vertex_indices_begin, this, _1),
-      boost::bind (&ply_to_obj_converter::face_vertex_indices_element, this, _1),
-      boost::bind (&ply_to_obj_converter::face_vertex_indices_end, this)
-    );
-  }
-  else {
+    return boost::tuple<std::function<void(pcl::io::ply::uint8)>,
+                        std::function<void(pcl::io::ply::int32)>,
+                        std::function<void()>> (
+        boost::bind (&ply_to_obj_converter::face_vertex_indices_begin, this, _1),
+        boost::bind (&ply_to_obj_converter::face_vertex_indices_element, this, _1),
+        boost::bind (&ply_to_obj_converter::face_vertex_indices_end, this));
+  } else {
     return {};
   }
 }
 
-void 
+void
 ply_to_obj_converter::vertex_begin ()
 {
 }
 
-void 
+void
 ply_to_obj_converter::vertex_x (pcl::io::ply::float32 x)
 {
   vertex_x_ = x;
 }
 
-void 
+void
 ply_to_obj_converter::vertex_y (pcl::io::ply::float32 y)
 {
   vertex_y_ = y;
 }
 
-void 
+void
 ply_to_obj_converter::vertex_z (pcl::io::ply::float32 z)
 {
   vertex_z_ = z;
 }
 
-void 
+void
 ply_to_obj_converter::vertex_end ()
 {
   (*ostream_) << "v " << vertex_x_ << " " << vertex_y_ << " " << vertex_z_ << "\n";
 }
 
-void 
+void
 ply_to_obj_converter::face_begin ()
 {
   if (!(flags_ & triangulate)) {
@@ -251,34 +261,32 @@ ply_to_obj_converter::face_begin ()
   }
 }
 
-void 
-ply_to_obj_converter::face_vertex_indices_begin (pcl::io::ply::uint8)
+void ply_to_obj_converter::face_vertex_indices_begin (pcl::io::ply::uint8)
 {
   face_vertex_indices_element_index_ = 0;
 }
 
-void 
+void
 ply_to_obj_converter::face_vertex_indices_element (pcl::io::ply::int32 vertex_index)
 {
   if (flags_ & triangulate) {
     if (face_vertex_indices_element_index_ == 0) {
       face_vertex_indices_first_element_ = vertex_index;
-    }
-    else if (face_vertex_indices_element_index_ == 1) {
+    } else if (face_vertex_indices_element_index_ == 1) {
       face_vertex_indices_previous_element_ = vertex_index;
-    }
-    else {
-      (*ostream_) << "f " << (face_vertex_indices_first_element_ + 1) << " " << (face_vertex_indices_previous_element_ + 1) << " " << (vertex_index + 1) << "\n";
+    } else {
+      (*ostream_) << "f " << (face_vertex_indices_first_element_ + 1) << " "
+                  << (face_vertex_indices_previous_element_ + 1) << " "
+                  << (vertex_index + 1) << "\n";
       face_vertex_indices_previous_element_ = vertex_index;
     }
     ++face_vertex_indices_element_index_;
-  }
-  else {
+  } else {
     (*ostream_) << " " << (vertex_index + 1);
   }
 }
 
-void 
+void
 ply_to_obj_converter::face_vertex_indices_end ()
 {
   if (!(flags_ & triangulate)) {
@@ -286,28 +294,46 @@ ply_to_obj_converter::face_vertex_indices_end ()
   }
 }
 
-void 
+void
 ply_to_obj_converter::face_end ()
 {
 }
 
-bool 
-ply_to_obj_converter::convert (std::istream&, const std::string& istream_filename, std::ostream& ostream, const std::string&)
+bool
+ply_to_obj_converter::convert (std::istream &, const std::string &istream_filename,
+                               std::ostream &ostream, const std::string &)
 {
   pcl::io::ply::ply_parser ply_parser;
 
-  ply_parser.info_callback (boost::bind (&ply_to_obj_converter::info_callback, this, boost::ref (istream_filename), _1, _2));
-  ply_parser.warning_callback (boost::bind (&ply_to_obj_converter::warning_callback, this, boost::ref (istream_filename), _1, _2));
-  ply_parser.error_callback (boost::bind (&ply_to_obj_converter::error_callback, this, boost::ref (istream_filename), _1, _2)); 
+  ply_parser.info_callback (boost::bind (&ply_to_obj_converter::info_callback, this,
+                                         boost::ref (istream_filename), _1, _2));
+  ply_parser.warning_callback (boost::bind (&ply_to_obj_converter::warning_callback,
+                                            this, boost::ref (istream_filename), _1,
+                                            _2));
+  ply_parser.error_callback (boost::bind (&ply_to_obj_converter::error_callback, this,
+                                          boost::ref (istream_filename), _1, _2));
 
-  ply_parser.element_definition_callback (boost::bind (&ply_to_obj_converter::element_definition_callback, this, _1, _2));
+  ply_parser.element_definition_callback (
+      boost::bind (&ply_to_obj_converter::element_definition_callback, this, _1, _2));
 
-  pcl::io::ply::ply_parser::scalar_property_definition_callbacks_type scalar_property_definition_callbacks;
-  pcl::io::ply::ply_parser::at<pcl::io::ply::float32> (scalar_property_definition_callbacks) = boost::bind (&ply_to_obj_converter::scalar_property_definition_callback<pcl::io::ply::float32>, this, _1, _2);
-  ply_parser.scalar_property_definition_callbacks (scalar_property_definition_callbacks);
+  pcl::io::ply::ply_parser::scalar_property_definition_callbacks_type
+      scalar_property_definition_callbacks;
+  pcl::io::ply::ply_parser::at<pcl::io::ply::float32> (
+      scalar_property_definition_callbacks) =
+      boost::bind (&ply_to_obj_converter::scalar_property_definition_callback<
+                       pcl::io::ply::float32>,
+                   this, _1, _2);
+  ply_parser.scalar_property_definition_callbacks (
+      scalar_property_definition_callbacks);
 
-  pcl::io::ply::ply_parser::list_property_definition_callbacks_type list_property_definition_callbacks;
-  pcl::io::ply::ply_parser::at<pcl::io::ply::uint8, pcl::io::ply::int32> (list_property_definition_callbacks) = boost::bind (&ply_to_obj_converter::list_property_definition_callback<pcl::io::ply::uint8, pcl::io::ply::int32>, this, _1, _2);
+  pcl::io::ply::ply_parser::list_property_definition_callbacks_type
+      list_property_definition_callbacks;
+  pcl::io::ply::ply_parser::at<pcl::io::ply::uint8, pcl::io::ply::int32> (
+      list_property_definition_callbacks) =
+      boost::bind (
+          &ply_to_obj_converter::list_property_definition_callback<pcl::io::ply::uint8,
+                                                                   pcl::io::ply::int32>,
+          this, _1, _2);
   ply_parser.list_property_definition_callbacks (list_property_definition_callbacks);
 
   ostream_ = &ostream;
@@ -315,7 +341,8 @@ ply_to_obj_converter::convert (std::istream&, const std::string& istream_filenam
   return ply_parser.parse (istream_filename);
 }
 
-int main (int argc, char* argv[])
+int
+main (int argc, char *argv[])
 {
   ply_to_obj_converter::flags_type ply_to_obj_converter_flags = 0;
 
@@ -337,8 +364,7 @@ int main (int argc, char* argv[])
       while (*long_opt != '\0') {
         ++long_opt;
       }
-    }
-    else {
+    } else {
       short_opt = 0;
       long_opt = &argv[argi][2];
       opt_arg = long_opt;
@@ -360,7 +386,8 @@ int main (int argc, char* argv[])
       std::cout << "\n";
       std::cout << "FLAG may be one of the following: triangulate.\n";
       std::cout << "\n";
-      std::cout << "With no INFILE/OUTFILE, or when INFILE/OUTFILE is -, read standard input/output.\n";
+      std::cout << "With no INFILE/OUTFILE, or when INFILE/OUTFILE is -, read standard "
+                   "input/output.\n";
       std::cout << "\n";
       std::cout << "The following PLY elements and properties are supported.\n";
       std::cout << "  element vertex\n";
@@ -380,28 +407,44 @@ int main (int argc, char* argv[])
       std::cout << " Copyright (c) 2007-2012, Ares Lagae\n";
       std::cout << " Copyright (c) 2012, Willow Garage, Inc.\n";
       std::cout << " All rights reserved.\n";
-      std::cout << " Redistribution and use in source and binary forms, with or without\n";
-      std::cout << " modification, are permitted provided that the following conditions\n";
+      std::cout
+          << " Redistribution and use in source and binary forms, with or without\n";
+      std::cout
+          << " modification, are permitted provided that the following conditions\n";
       std::cout << " are met:\n";
-      std::cout << "  * Redistributions of source code must retain the above copyright\n";
-      std::cout << "    notice, this list of conditions and the following disclaimer.\n";
+      std::cout
+          << "  * Redistributions of source code must retain the above copyright\n";
+      std::cout
+          << "    notice, this list of conditions and the following disclaimer.\n";
       std::cout << "  * Redistributions in binary form must reproduce the above\n";
       std::cout << "    copyright notice, this list of conditions and the following\n";
-      std::cout << "    disclaimer in the documentation and/or other materials provided\n";
+      std::cout
+          << "    disclaimer in the documentation and/or other materials provided\n";
       std::cout << "    with the distribution.\n";
       std::cout << "  * Neither the name of Willow Garage, Inc. nor the names of its\n";
-      std::cout << "    contributors may be used to endorse or promote products derived\n";
-      std::cout << "    from this software without specific prior written permission.\n";
-      std::cout << " THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n";
-      std::cout << " \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\n";
-      std::cout << " LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS\n";
+      std::cout
+          << "    contributors may be used to endorse or promote products derived\n";
+      std::cout
+          << "    from this software without specific prior written permission.\n";
+      std::cout
+          << " THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n";
+      std::cout
+          << " \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\n";
+      std::cout
+          << " LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS\n";
       std::cout << " FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE\n";
-      std::cout << " COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,\n";
-      std::cout << " INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,\n";
-      std::cout << " BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;\n";
-      std::cout << " LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER\n";
-      std::cout << " CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT\n";
-      std::cout << " LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN\n";
+      std::cout
+          << " COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,\n";
+      std::cout
+          << " INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,\n";
+      std::cout
+          << " BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;\n";
+      std::cout
+          << " LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER\n";
+      std::cout
+          << " CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT\n";
+      std::cout
+          << " LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN\n";
       std::cout << " ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE\n";
       std::cout << " POSSIBILITY OF SUCH DAMAGE.\n";
       return EXIT_SUCCESS;
@@ -410,58 +453,68 @@ int main (int argc, char* argv[])
     else if ((short_opt == 'f') || (std::strcmp (long_opt, "flag") == 0)) {
       if (strcmp (opt_arg, "triangulate") == 0) {
         ply_to_obj_converter_flags |= ply_to_obj_converter::triangulate;
-      }
-      else {
-        std::cerr << "ply2obj : " << "invalid option `" << argv[argi] << "'" << "\n";
+      } else {
+        std::cerr << "ply2obj : "
+                  << "invalid option `" << argv[argi] << "'"
+                  << "\n";
         std::cerr << "Try `" << argv[0] << " --help' for more information.\n";
         return EXIT_FAILURE;
       }
     }
 
     else {
-      std::cerr << "ply2obj: " << "invalid option `" << argv[argi] << "'" << "\n";
+      std::cerr << "ply2obj: "
+                << "invalid option `" << argv[argi] << "'"
+                << "\n";
       std::cerr << "Try `" << argv[0] << " --help' for more information.\n";
       return EXIT_FAILURE;
     }
   }
 
   int parc = argc - argi;
-  char** parv = argv + argi;
+  char **parv = argv + argi;
   if (parc > 2) {
-    std::cerr << "ply2obj: " << "too many parameters" << "\n";
+    std::cerr << "ply2obj: "
+              << "too many parameters"
+              << "\n";
     std::cerr << "Try `" << argv[0] << " --help' for more information.\n";
     return EXIT_FAILURE;
   }
 
   std::ifstream ifstream;
-  const char* istream_filename = "";
+  const char *istream_filename = "";
   if (parc > 0) {
     istream_filename = parv[0];
     if (std::strcmp (istream_filename, "-") != 0) {
       ifstream.open (istream_filename);
       if (!ifstream.is_open ()) {
-        std::cerr << "ply2obj: " << istream_filename << ": " << "no such file or directory" << "\n";
+        std::cerr << "ply2obj: " << istream_filename << ": "
+                  << "no such file or directory"
+                  << "\n";
         return EXIT_FAILURE;
       }
     }
   }
 
   std::ofstream ofstream;
-  const char* ostream_filename = "";
+  const char *ostream_filename = "";
   if (parc > 1) {
     ostream_filename = parv[1];
     if (std::strcmp (ostream_filename, "-") != 0) {
       ofstream.open (ostream_filename);
       if (!ofstream.is_open ()) {
-        std::cerr << "ply2obj: " << ostream_filename << ": " << "could not open file" << "\n";
+        std::cerr << "ply2obj: " << ostream_filename << ": "
+                  << "could not open file"
+                  << "\n";
         return EXIT_FAILURE;
       }
     }
   }
 
-  std::istream& istream = ifstream.is_open () ? ifstream : std::cin;
-  std::ostream& ostream = ofstream.is_open () ? ofstream : std::cout;
+  std::istream &istream = ifstream.is_open () ? ifstream : std::cin;
+  std::ostream &ostream = ofstream.is_open () ? ofstream : std::cout;
 
   class ply_to_obj_converter ply_to_obj_converter (ply_to_obj_converter_flags);
-  return ply_to_obj_converter.convert (istream, istream_filename, ostream, ostream_filename);
+  return ply_to_obj_converter.convert (istream, istream_filename, ostream,
+                                       ostream_filename);
 }

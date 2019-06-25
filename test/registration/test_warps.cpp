@@ -53,7 +53,12 @@ TEST (PCL, WarpPointRigid6DFloat)
   Eigen::Vector3f t (0.82550f, 0.11697f, 0.44864f);
 
   Eigen::VectorXf p (6);
-  p[0] = t.x (); p[1] = t.y (); p[2] = t.z (); p[3] = q.x (); p[4] = q.y (); p[5] = q.z ();
+  p[0] = t.x ();
+  p[1] = t.y ();
+  p[2] = t.z ();
+  p[3] = q.x ();
+  p[4] = q.y ();
+  p[5] = q.z ();
   warp.setParam (p);
 
   PointXYZ pin (1, 2, 3), pout;
@@ -72,7 +77,12 @@ TEST (PCL, WarpPointRigid6DDouble)
   Eigen::Vector3d t (0.82550, 0.11697, 0.44864);
 
   Eigen::VectorXd p (6);
-  p[0] = t.x (); p[1] = t.y (); p[2] = t.z (); p[3] = q.x (); p[4] = q.y (); p[5] = q.z ();
+  p[0] = t.x ();
+  p[1] = t.y ();
+  p[2] = t.z ();
+  p[3] = q.x ();
+  p[4] = q.y ();
+  p[5] = q.z ();
   warp.setParam (p);
 
   PointXYZ pin (1, 2, 3), pout;
@@ -84,7 +94,7 @@ TEST (PCL, WarpPointRigid6DDouble)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

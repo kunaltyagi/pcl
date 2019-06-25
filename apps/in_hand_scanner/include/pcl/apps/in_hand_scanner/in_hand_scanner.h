@@ -40,15 +40,15 @@
 
 #pragma once
 
-#include <pcl/pcl_exports.h>
 #include <pcl/apps/in_hand_scanner/boost.h>
 #include <pcl/apps/in_hand_scanner/common_types.h>
 #include <pcl/apps/in_hand_scanner/opengl_viewer.h>
+#include <pcl/pcl_exports.h>
 
-#include <mutex>
-#include <string>
-#include <sstream>
 #include <iomanip>
+#include <mutex>
+#include <sstream>
+#include <string>
 
 ////////////////////////////////////////////////////////////////////////////////
 // Forward declarations
@@ -76,231 +76,244 @@ namespace pcl
   namespace ihs
   {
     /** \brief
-      * \todo Add Documentation
-      */
+     * \todo Add Documentation
+     */
     class PCL_EXPORTS InHandScanner : public pcl::ihs::OpenGLViewer
     {
       Q_OBJECT
 
       public:
+      using Base = pcl::ihs::OpenGLViewer;
+      using Self = pcl::ihs::InHandScanner;
 
-        using Base = pcl::ihs::OpenGLViewer;
-        using Self = pcl::ihs::InHandScanner;
+      using InputDataProcessing = pcl::ihs::InputDataProcessing;
+      using InputDataProcessingPtr = boost::shared_ptr<InputDataProcessing>;
+      using InputDataProcessingConstPtr = boost::shared_ptr<const InputDataProcessing>;
 
-        using InputDataProcessing = pcl::ihs::InputDataProcessing;
-        using InputDataProcessingPtr = boost::shared_ptr<InputDataProcessing>;
-        using InputDataProcessingConstPtr = boost::shared_ptr<const InputDataProcessing>;
+      using ICP = pcl::ihs::ICP;
+      using ICPPtr = boost::shared_ptr<ICP>;
+      using ICPConstPtr = boost::shared_ptr<const ICP>;
 
-        using ICP = pcl::ihs::ICP;
-        using ICPPtr = boost::shared_ptr<ICP>;
-        using ICPConstPtr = boost::shared_ptr<const ICP>;
+      using Integration = pcl::ihs::Integration;
+      using IntegrationPtr = boost::shared_ptr<Integration>;
+      using IntegrationConstPtr = boost::shared_ptr<const Integration>;
 
-        using Integration = pcl::ihs::Integration;
-        using IntegrationPtr = boost::shared_ptr<Integration>;
-        using IntegrationConstPtr = boost::shared_ptr<const Integration>;
+      using MeshProcessing = pcl::ihs::MeshProcessing;
+      using MeshProcessingPtr = boost::shared_ptr<MeshProcessing>;
+      using MeshProcessingConstPtr = boost::shared_ptr<const MeshProcessing>;
 
-        using MeshProcessing = pcl::ihs::MeshProcessing;
-        using MeshProcessingPtr = boost::shared_ptr<MeshProcessing>;
-        using MeshProcessingConstPtr = boost::shared_ptr<const MeshProcessing>;
+      /** \brief Switch between different branches of the scanning pipeline. */
+      enum RunningMode {
+        RM_SHOW_MODEL = 0,  /**< Shows the model shape (if it is available). */
+        RM_UNPROCESSED = 1, /**< Shows the unprocessed input data. */
+        RM_PROCESSED = 2,   /**< Shows the processed input data. */
+        RM_REGISTRATION_CONT =
+            3, /**< Registers new data to the first acquired data continuously. */
+        RM_REGISTRATION_SINGLE =
+            4 /**< Registers new data once and returns to showing the processed data. */
+      };
 
-        /** \brief Switch between different branches of the scanning pipeline. */
-        enum RunningMode
-        {
-          RM_SHOW_MODEL          = 0, /**< Shows the model shape (if it is available). */
-          RM_UNPROCESSED         = 1, /**< Shows the unprocessed input data. */
-          RM_PROCESSED           = 2, /**< Shows the processed input data. */
-          RM_REGISTRATION_CONT   = 3, /**< Registers new data to the first acquired data continuously. */
-          RM_REGISTRATION_SINGLE = 4  /**< Registers new data once and returns to showing the processed data. */
-        };
+      /** \brief File type for saving and loading files. */
+      enum FileType {
+        FT_PLY = 0, /**< Polygon File Format. */
+        FT_VTK = 1  /**< VTK File Format. */
+      };
 
-        /** \brief File type for saving and loading files. */
-        enum FileType
-        {
-          FT_PLY = 0, /**< Polygon File Format. */
-          FT_VTK = 1  /**< VTK File Format. */
-        };
+      /** \brief Constructor. */
+      explicit InHandScanner (Base *parent = nullptr);
 
-        /** \brief Constructor. */
-        explicit InHandScanner (Base* parent=nullptr);
+      /** \brief Destructor. */
+      ~InHandScanner ();
 
-        /** \brief Destructor. */
-        ~InHandScanner ();
+      /** \brief Get the input data processing. */
+      inline InputDataProcessing &
+      getInputDataProcessing ()
+      {
+        return (*input_data_processing_);
+      }
 
-        /** \brief Get the input data processing. */
-        inline InputDataProcessing&
-        getInputDataProcessing () {return (*input_data_processing_);}
+      /** \brief Get the registration. */
+      inline ICP &
+      getICP ()
+      {
+        return (*icp_);
+      }
 
-        /** \brief Get the registration. */
-        inline ICP&
-        getICP () {return (*icp_);}
-
-        /** \brief Get the integration. */
-        inline Integration&
-        getIntegration () {return (*integration_);}
+      /** \brief Get the integration. */
+      inline Integration &
+      getIntegration ()
+      {
+        return (*integration_);
+      }
 
       Q_SIGNALS:
 
-        /** \brief Emitted when the running mode changes. */
-        void
-        runningModeChanged (RunningMode new_running_mode) const;
+      /** \brief Emitted when the running mode changes. */
+      void
+      runningModeChanged (RunningMode new_running_mode) const;
 
       public Q_SLOTS:
 
-        /** \brief Start the grabber (enables the scanning pipeline). */
-        void
-        startGrabber ();
+      /** \brief Start the grabber (enables the scanning pipeline). */
+      void
+      startGrabber ();
 
-        /** \brief Shows the unprocessed input data. */
-        void
-        showUnprocessedData ();
+      /** \brief Shows the unprocessed input data. */
+      void
+      showUnprocessedData ();
 
-        /** \brief Shows the processed input data. */
-        void
-        showProcessedData ();
+      /** \brief Shows the processed input data. */
+      void
+      showProcessedData ();
 
-        /** \brief Registers new data to the first acquired data continuously. */
-        void
-        registerContinuously ();
+      /** \brief Registers new data to the first acquired data continuously. */
+      void
+      registerContinuously ();
 
-        /** \brief Registers new data once and returns to showing the processed data. */
-        void
-        registerOnce ();
+      /** \brief Registers new data once and returns to showing the processed data. */
+      void
+      registerOnce ();
 
-        /** \brief Show the model shape (if one is available). */
-        void
-        showModel ();
+      /** \brief Show the model shape (if one is available). */
+      void
+      showModel ();
 
-        /** \brief Removes unfit vertices regardless of their age. Unfit vertices are those that have not been observed from enough directions. */
-        void
-        removeUnfitVertices ();
+      /** \brief Removes unfit vertices regardless of their age. Unfit vertices are
+       * those that have not been observed from enough directions. */
+      void
+      removeUnfitVertices ();
 
-        /** \brief Reset the scanning pipeline. */
-        void
-        reset ();
+      /** \brief Reset the scanning pipeline. */
+      void
+      reset ();
 
-        /** \brief Saves the model mesh in a file with the given filename and filetype.
-          * \note The extension of the filename is ignored!
-          */
-        void
-        saveAs (const std::string& filename, const FileType& filetype);
+      /** \brief Saves the model mesh in a file with the given filename and filetype.
+       * \note The extension of the filename is ignored!
+       */
+      void
+      saveAs (const std::string &filename, const FileType &filetype);
 
-        /** \see http://doc.qt.digia.com/qt/qwidget.html#keyPressEvent */
-        void
-        keyPressEvent (QKeyEvent* event) override;
+      /** \see http://doc.qt.digia.com/qt/qwidget.html#keyPressEvent */
+      void
+      keyPressEvent (QKeyEvent *event) override;
 
       private:
+      using PointXYZRGBA = pcl::PointXYZRGBA;
+      using CloudXYZRGBA = pcl::PointCloud<PointXYZRGBA>;
+      using CloudXYZRGBAPtr = CloudXYZRGBA::Ptr;
+      using CloudXYZRGBAConstPtr = CloudXYZRGBA::ConstPtr;
 
-        using PointXYZRGBA = pcl::PointXYZRGBA;
-        using CloudXYZRGBA = pcl::PointCloud<PointXYZRGBA>;
-        using CloudXYZRGBAPtr = CloudXYZRGBA::Ptr;
-        using CloudXYZRGBAConstPtr = CloudXYZRGBA::ConstPtr;
+      using PointXYZRGBNormal = pcl::PointXYZRGBNormal;
+      using CloudXYZRGBNormal = pcl::PointCloud<PointXYZRGBNormal>;
+      using CloudXYZRGBNormalPtr = CloudXYZRGBNormal::Ptr;
+      using CloudXYZRGBNormalConstPtr = CloudXYZRGBNormal::ConstPtr;
 
-        using PointXYZRGBNormal = pcl::PointXYZRGBNormal;
-        using CloudXYZRGBNormal = pcl::PointCloud<PointXYZRGBNormal>;
-        using CloudXYZRGBNormalPtr = CloudXYZRGBNormal::Ptr;
-        using CloudXYZRGBNormalConstPtr = CloudXYZRGBNormal::ConstPtr;
+      using PointIHS = pcl::ihs::PointIHS;
+      using CloudIHS = pcl::ihs::CloudIHS;
+      using CloudIHSPtr = pcl::ihs::CloudIHSPtr;
+      using CloudIHSConstPtr = pcl::ihs::CloudIHSConstPtr;
 
-        using PointIHS = pcl::ihs::PointIHS;
-        using CloudIHS = pcl::ihs::CloudIHS;
-        using CloudIHSPtr = pcl::ihs::CloudIHSPtr;
-        using CloudIHSConstPtr = pcl::ihs::CloudIHSConstPtr;
+      using Mesh = pcl::ihs::Mesh;
+      using MeshPtr = pcl::ihs::MeshPtr;
+      using MeshConstPtr = pcl::ihs::MeshConstPtr;
 
-        using Mesh = pcl::ihs::Mesh;
-        using MeshPtr = pcl::ihs::MeshPtr;
-        using MeshConstPtr = pcl::ihs::MeshConstPtr;
+      using Grabber = pcl::OpenNIGrabber;
+      using GrabberPtr = boost::shared_ptr<Grabber>;
+      using GrabberConstPtr = boost::shared_ptr<const Grabber>;
 
-        using Grabber = pcl::OpenNIGrabber;
-        using GrabberPtr = boost::shared_ptr<Grabber>;
-        using GrabberConstPtr = boost::shared_ptr<const Grabber>;
+      /** \brief Helper object for the computation thread. Please have a look at the
+       * documentation of calcFPS. */
+      class ComputationFPS : public Base::FPS
+      {
+        public:
+        ComputationFPS () {}
+        ~ComputationFPS () {}
+      };
 
-        /** \brief Helper object for the computation thread. Please have a look at the documentation of calcFPS. */
-        class ComputationFPS : public Base::FPS
-        {
-          public:
-            ComputationFPS () {}
-            ~ComputationFPS () {}
-        };
+      /** \brief Helper object for the visualization thread. Please have a look at the
+       * documentation of calcFPS. */
+      class VisualizationFPS : public Base::FPS
+      {
+        public:
+        VisualizationFPS () {}
+        ~VisualizationFPS () {}
+      };
 
-        /** \brief Helper object for the visualization thread. Please have a look at the documentation of calcFPS. */
-        class VisualizationFPS : public Base::FPS
-        {
-          public:
-            VisualizationFPS () {}
-            ~VisualizationFPS () {}
-        };
+      /** \brief Called when new data arries from the grabber. The grabbing -
+       * registration - integration pipeline is implemented here. */
+      void
+      newDataCallback (const CloudXYZRGBAConstPtr &cloud_in);
 
-        /** \brief Called when new data arries from the grabber. The grabbing - registration - integration pipeline is implemented here. */
-        void
-        newDataCallback (const CloudXYZRGBAConstPtr& cloud_in);
+      /** \see http://doc.qt.digia.com/qt/qwidget.html#paintEvent
+       * \see http://doc.qt.digia.com/qt/opengl-overpainting.html
+       */
+      void
+      paintEvent (QPaintEvent *event) override;
 
-        /** \see http://doc.qt.digia.com/qt/qwidget.html#paintEvent
-          * \see http://doc.qt.digia.com/qt/opengl-overpainting.html
-          */
-        void
-        paintEvent (QPaintEvent* event) override;
+      /** \brief Draw text over the opengl scene.
+       * \see http://doc.qt.digia.com/qt/opengl-overpainting.html
+       */
+      void
+      drawText ();
 
-        /** \brief Draw text over the opengl scene.
-          * \see http://doc.qt.digia.com/qt/opengl-overpainting.html
-          */
-        void
-        drawText ();
+      /** \brief Actual implementeation of startGrabber (needed so it can be run in a
+       * different thread and doesn't block the application when starting up). */
+      void
+      startGrabberImpl ();
 
-        /** \brief Actual implementeation of startGrabber (needed so it can be run in a different thread and doesn't block the application when starting up). */
-        void
-        startGrabberImpl ();
+      ////////////////////////////////////////////////////////////////////////
+      // Members
+      ////////////////////////////////////////////////////////////////////////
 
-        ////////////////////////////////////////////////////////////////////////
-        // Members
-        ////////////////////////////////////////////////////////////////////////
+      /** \brief Synchronization. */
+      std::mutex mutex_;
 
-        /** \brief Synchronization. */
-        std::mutex mutex_;
+      /** \brief Please have a look at the documentation of ComputationFPS. */
+      ComputationFPS computation_fps_;
 
-        /** \brief Please have a look at the documentation of ComputationFPS. */
-        ComputationFPS computation_fps_;
+      /** \brief Please have a look at the documentation of VisualizationFPS. */
+      VisualizationFPS visualization_fps_;
 
-        /** \brief Please have a look at the documentation of VisualizationFPS. */
-        VisualizationFPS visualization_fps_;
+      /** \brief Switch between different branches of the scanning pipeline. */
+      RunningMode running_mode_;
 
-        /** \brief Switch between different branches of the scanning pipeline. */
-        RunningMode running_mode_;
+      /** \brief The iteration of the scanning pipeline (grab - register - integrate).
+       */
+      unsigned int iteration_;
 
-        /** \brief The iteration of the scanning pipeline (grab - register - integrate). */
-        unsigned int iteration_;
+      /** \brief Used to get new data from the sensor. */
+      GrabberPtr grabber_;
 
-        /** \brief Used to get new data from the sensor. */
-        GrabberPtr grabber_;
+      /** \brief This variable is true if the grabber is starting. */
+      bool starting_grabber_;
 
-        /** \brief This variable is true if the grabber is starting. */
-        bool starting_grabber_;
+      /** \brief Connection of the grabber signal with the data processing thread. */
+      boost::signals2::connection new_data_connection_;
 
-        /** \brief Connection of the grabber signal with the data processing thread. */
-        boost::signals2::connection new_data_connection_;
+      /** \brief Processes the data from the sensor. Output is input to the
+       * registration. */
+      InputDataProcessingPtr input_data_processing_;
 
-        /** \brief Processes the data from the sensor. Output is input to the registration. */
-        InputDataProcessingPtr input_data_processing_;
+      /** \brief Registration (Iterative Closest Point). */
+      ICPPtr icp_;
 
-        /** \brief Registration (Iterative Closest Point). */
-        ICPPtr icp_;
+      /** \brief Transformation that brings the data cloud into model coordinates. */
+      Eigen::Matrix4f transformation_;
 
-        /** \brief Transformation that brings the data cloud into model coordinates. */
-        Eigen::Matrix4f transformation_;
+      /** \brief Integrate the data cloud into a common model. */
+      IntegrationPtr integration_;
 
-        /** \brief Integrate the data cloud into a common model. */
-        IntegrationPtr integration_;
+      /** \brief Methods called after the integration. */
+      MeshProcessingPtr mesh_processing_;
 
-        /** \brief Methods called after the integration. */
-        MeshProcessingPtr mesh_processing_;
+      /** \brief Model to which new data is registered to (stored as a mesh). */
+      MeshPtr mesh_model_;
 
-        /** \brief Model to which new data is registered to (stored as a mesh). */
-        MeshPtr mesh_model_;
-
-        /** \brief Prevent the application to crash while closing. */
-        bool destructor_called_;
+      /** \brief Prevent the application to crash while closing. */
+      bool destructor_called_;
 
       public:
-
-        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+      EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     };
   } // End namespace ihs
 } // End namespace pcl

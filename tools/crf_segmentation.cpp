@@ -37,14 +37,13 @@
  *
  */
 
-
-#include <pcl/io/pcd_io.h>
-#include <pcl/console/print.h>
 #include <pcl/console/parse.h>
+#include <pcl/console/print.h>
 #include <pcl/console/time.h>
+#include <pcl/io/pcd_io.h>
 
-#include <pcl/segmentation/crf_segmentation.h>
 #include <pcl/features/normal_3d.h>
+#include <pcl/segmentation/crf_segmentation.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -63,22 +62,31 @@ printHelp (int, char **argv)
 {
   print_error ("Syntax is: %s input.pcd output.pcd <options>\n", argv[0]);
   print_info ("  where options are:\n");
-  print_info ("                     -leaf x,y,z   = the VoxelGrid leaf size (default: "); 
-  print_value ("%f, %f, %f", default_leaf_size, default_leaf_size, default_leaf_size); print_info (")\n");
-  print_info ("                     -normal-search X = Normal radius search (default: "); 
-  print_value ("%f", default_normal_radius_search); print_info (")\n");
+  print_info (
+      "                     -leaf x,y,z   = the VoxelGrid leaf size (default: ");
+  print_value ("%f, %f, %f", default_leaf_size, default_leaf_size, default_leaf_size);
+  print_info (")\n");
+  print_info (
+      "                     -normal-search X = Normal radius search (default: ");
+  print_value ("%f", default_normal_radius_search);
+  print_info (")\n");
 }
 
 bool
 loadCloud (const std::string &filename, CloudT::Ptr &cloud)
 {
   TicToc tt;
-  print_highlight ("Loading "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Loading ");
+  print_value ("%s ", filename.c_str ());
 
   tt.tic ();
   if (loadPCDFile (filename, *cloud) < 0)
     return (false);
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", cloud->width * cloud->height); print_info (" points]\n");
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", cloud->width * cloud->height);
+  print_info (" points]\n");
 
   return (true);
 }
@@ -87,34 +95,36 @@ bool
 loadCloud (const std::string &filename, CloudLT::Ptr &cloud)
 {
   TicToc tt;
-  print_highlight ("Loading "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Loading ");
+  print_value ("%s ", filename.c_str ());
 
   tt.tic ();
   if (loadPCDFile (filename, *cloud) < 0)
     return (false);
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", cloud->width * cloud->height); print_info (" points]\n");
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", cloud->width * cloud->height);
+  print_info (" points]\n");
 
   return (true);
 }
 
 void
-compute (const CloudT::Ptr &cloud, 
-         const CloudLT::Ptr &anno,
-         float normal_radius_search,
-         float leaf_x, float leaf_y, float leaf_z,
-         CloudLT::Ptr &out)
+compute (const CloudT::Ptr &cloud, const CloudLT::Ptr &anno, float normal_radius_search,
+         float leaf_x, float leaf_y, float leaf_z, CloudLT::Ptr &out)
 {
   TicToc tt;
   tt.tic ();
-  
+
   print_highlight ("Computing ");
 
-  pcl::PointCloud<pcl::PointNormal>::Ptr cloud_normals (new pcl::PointCloud<pcl::PointNormal>);
+  pcl::PointCloud<pcl::PointNormal>::Ptr cloud_normals (
+      new pcl::PointCloud<pcl::PointNormal>);
   cloud_normals->width = cloud->width;
   cloud_normals->height = cloud->height;
   cloud_normals->points.resize (cloud->points.size ());
-  for (size_t i = 0; i < cloud->points.size (); i++)
-  {
+  for (size_t i = 0; i < cloud->points.size (); i++) {
     cloud_normals->points[i].x = cloud->points[i].x;
     cloud_normals->points[i].y = cloud->points[i].y;
     cloud_normals->points[i].z = cloud->points[i].z;
@@ -136,13 +146,14 @@ compute (const CloudT::Ptr &cloud,
   crf.setSmoothnessKernelParameters (3, 3, 3, 1.0);
   crf.setAppearanceKernelParameters (30, 30, 30, 20, 20, 20, 3.5);
   crf.setSurfaceKernelParameters (20, 20, 20, 0.3f, 0.3f, 0.3f, 8.5);
-  //crf.setSurfaceKernelParameters (20, 20, 20, 0.3, 0.3, 0.3, 0.0);
+  // crf.setSurfaceKernelParameters (20, 20, 20, 0.3, 0.3, 0.3, 0.0);
   crf.setNumberOfIterations (10);
   crf.segmentPoints (*out);
 
-  print_info ("[done, "); 
-  print_value ("%g", tt.toc ()); 
-  print_info (" ms : "); print_value ("%d", out->width * out->height); 
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", out->width * out->height);
   print_info (" points]\n");
 }
 
@@ -152,24 +163,27 @@ saveCloud (const std::string &filename, CloudLT::Ptr &output)
   TicToc tt;
   tt.tic ();
 
-  print_highlight ("Saving "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Saving ");
+  print_value ("%s ", filename.c_str ());
 
   PCDWriter w;
   w.write (filename, *output);
-  
-  print_info ("[done, "); 
-  print_value ("%g", tt.toc ()); print_info (" ms : "); 
-  print_value ("%d", output->width * output->height); print_info (" points]\n");
+
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", output->width * output->height);
+  print_info (" points]\n");
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  print_info ("Train unary classifier using FPFH. For more information, use: %s -h\n", argv[0]);
+  print_info ("Train unary classifier using FPFH. For more information, use: %s -h\n",
+              argv[0]);
 
-  if (argc < 4)
-  {
+  if (argc < 4) {
     printHelp (argc, argv);
     return (-1);
   }
@@ -177,54 +191,49 @@ main (int argc, char** argv)
   // Parse the command line arguments for .pcd files
   std::vector<int> p_file_indices;
   p_file_indices = parse_file_extension_argument (argc, argv, ".pcd");
-  if (p_file_indices.size () != 3)
-  {
-    print_error ("Need one input PCD file, pre-segmented PCD file and one output PCD file to continue.\n");
+  if (p_file_indices.size () != 3) {
+    print_error ("Need one input PCD file, pre-segmented PCD file and one output PCD "
+                 "file to continue.\n");
     return (-1);
   }
 
   // Load the input file
   CloudT::Ptr cloud (new CloudT);
-  if (!loadCloud (argv[p_file_indices[0]], cloud)) 
+  if (!loadCloud (argv[p_file_indices[0]], cloud))
     return (-1);
 
   // Load the input file
   CloudLT::Ptr cloud_anno (new CloudLT);
-  if (!loadCloud (argv[p_file_indices[1]], cloud_anno)) 
+  if (!loadCloud (argv[p_file_indices[1]], cloud_anno))
     return (-1);
-
 
   // TODO:: make this as an optional argument ??
   std::vector<int> tmp_indices;
   pcl::removeNaNFromPointCloud (*cloud, *cloud, tmp_indices);
-  
+
   // parse optional input arguments from the command line
   float normal_radius_search = static_cast<float> (default_normal_radius_search);
 
   // Command line parsing
-  float leaf_x = default_leaf_size,
-        leaf_y = default_leaf_size,
+  float leaf_x = default_leaf_size, leaf_y = default_leaf_size,
         leaf_z = default_leaf_size;
 
   std::vector<double> values;
   parse_x_arguments (argc, argv, "-leaf", values);
-  if (values.size () == 1)
-  {
+  if (values.size () == 1) {
     leaf_x = static_cast<float> (values[0]);
     leaf_y = static_cast<float> (values[0]);
     leaf_z = static_cast<float> (values[0]);
-  }
-  else if (values.size () == 3)
-  {
+  } else if (values.size () == 3) {
     leaf_x = static_cast<float> (values[0]);
     leaf_y = static_cast<float> (values[1]);
     leaf_z = static_cast<float> (values[2]);
+  } else {
+    print_error ("Leaf size must be specified with either 1 or 3 numbers (%lu given). ",
+                 values.size ());
   }
-  else
-  {
-    print_error ("Leaf size must be specified with either 1 or 3 numbers (%lu given). ", values.size ());
-  }
-  print_info ("Using a leaf size of: "); print_value ("%f, %f, %f\n", leaf_x, leaf_y, leaf_z);
+  print_info ("Using a leaf size of: ");
+  print_value ("%f, %f, %f\n", leaf_x, leaf_y, leaf_z);
 
   parse_argument (argc, argv, "-normal-radius-search", normal_radius_search);
 
@@ -235,4 +244,3 @@ main (int argc, char** argv)
   // save cloud
   saveCloud (argv[p_file_indices[2]], out);
 }
-

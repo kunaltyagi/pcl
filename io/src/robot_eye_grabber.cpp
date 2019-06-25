@@ -35,26 +35,23 @@
  *
  */
 
-#include <pcl/io/robot_eye_grabber.h>
 #include <pcl/console/print.h>
+#include <pcl/io/robot_eye_grabber.h>
 
 /////////////////////////////////////////////////////////////////////////////
 pcl::RobotEyeGrabber::RobotEyeGrabber ()
-  : terminate_thread_ (false)
-  , signal_point_cloud_size_ (1000)
-  , data_port_ (443)
-  , sensor_address_ (boost::asio::ip::address_v4::any ())
+    : terminate_thread_ (false), signal_point_cloud_size_ (1000), data_port_ (443),
+      sensor_address_ (boost::asio::ip::address_v4::any ())
 {
   point_cloud_signal_ = createSignal<sig_cb_robot_eye_point_cloud_xyzi> ();
   resetPointCloud ();
 }
 
 /////////////////////////////////////////////////////////////////////////////
-pcl::RobotEyeGrabber::RobotEyeGrabber (const boost::asio::ip::address& ipAddress, unsigned short port)
-  : terminate_thread_ (false)
-  , signal_point_cloud_size_ (1000)
-  , data_port_ (port)
-  , sensor_address_ (ipAddress)
+pcl::RobotEyeGrabber::RobotEyeGrabber (const boost::asio::ip::address &ipAddress,
+                                       unsigned short port)
+    : terminate_thread_ (false), signal_point_cloud_size_ (1000), data_port_ (port),
+      sensor_address_ (ipAddress)
 {
   point_cloud_signal_ = createSignal<sig_cb_robot_eye_point_cloud_xyzi> ();
   resetPointCloud ();
@@ -103,7 +100,7 @@ pcl::RobotEyeGrabber::setDataPort (const unsigned short port)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-const boost::asio::ip::address&
+const boost::asio::ip::address &
 pcl::RobotEyeGrabber::getSensorAddress () const
 {
   return (sensor_address_);
@@ -111,7 +108,7 @@ pcl::RobotEyeGrabber::getSensorAddress () const
 
 /////////////////////////////////////////////////////////////////////////////
 void
-pcl::RobotEyeGrabber::setSensorAddress (const boost::asio::ip::address& ipAddress)
+pcl::RobotEyeGrabber::setSensorAddress (const boost::asio::ip::address &ipAddress)
 {
   sensor_address_ = ipAddress;
 }
@@ -149,12 +146,11 @@ pcl::RobotEyeGrabber::resetPointCloud ()
 void
 pcl::RobotEyeGrabber::consumerThreadLoop ()
 {
-  while (true)
-  {
+  while (true) {
     boost::shared_array<unsigned char> data;
     if (!packet_queue_.dequeue (data))
       return;
-    convertPacketData (data.get(), data_size_);
+    convertPacketData (data.get (), data_size_);
   }
 }
 
@@ -162,50 +158,42 @@ pcl::RobotEyeGrabber::consumerThreadLoop ()
 void
 pcl::RobotEyeGrabber::convertPacketData (unsigned char *data_packet, size_t length)
 {
-  //Check for the presence of the header
+  // Check for the presence of the header
   size_t offset = 0;
-  //The old packet data format does not start with an E since it just starts with laser data
-  if(data_packet[0] != 'E')
-  {
-    //old packet data format (just laser data)
+  // The old packet data format does not start with an E since it just starts with laser
+  // data
+  if (data_packet[0] != 'E') {
+    // old packet data format (just laser data)
     offset = 0;
-  }
-  else
-  {
-    //The new packet data format contains this as a header
-    //char[6]  "EBRBEP"
-    //uint32_t Timestamp // counts of a 66 MHz clock since power-on of eye.
+  } else {
+    // The new packet data format contains this as a header
+    // char[6]  "EBRBEP"
+    // uint32_t Timestamp // counts of a 66 MHz clock since power-on of eye.
     size_t response_size = 6; //"EBRBEP"
-    if( !strncmp((char*)(data_packet), "EBRBEP", response_size) )
-    {
+    if (!strncmp ((char *)(data_packet), "EBRBEP", response_size)) {
       boost::uint32_t timestamp; // counts of a 66 MHz clock since power-on of eye.
-      computeTimestamp(timestamp, data_packet + response_size);
-      //std::cout << "Timestamp: " << timestamp << std::endl;
-      offset = (response_size + sizeof(timestamp));
-    }
-    else
-    {
-      //Invalid packet received, ignore it.
+      computeTimestamp (timestamp, data_packet + response_size);
+      // std::cout << "Timestamp: " << timestamp << std::endl;
+      offset = (response_size + sizeof (timestamp));
+    } else {
+      // Invalid packet received, ignore it.
       return;
     }
   }
 
   const size_t bytes_per_point = 8;
-  const size_t total_points = (length - offset)/ bytes_per_point;
+  const size_t total_points = (length - offset) / bytes_per_point;
 
-  for (size_t i = 0; i < total_points; ++i)
-  {
+  for (size_t i = 0; i < total_points; ++i) {
     PointXYZI xyzi;
-    computeXYZI (xyzi, data_packet + i*bytes_per_point + offset);
+    computeXYZI (xyzi, data_packet + i * bytes_per_point + offset);
 
-    if (pcl::isFinite(xyzi))
-    {
+    if (pcl::isFinite (xyzi)) {
       point_cloud_xyzi_->push_back (xyzi);
     }
   }
 
-  if (point_cloud_xyzi_->size () > signal_point_cloud_size_)
-  {
+  if (point_cloud_xyzi_->size () > signal_point_cloud_size_) {
     if (point_cloud_signal_->num_slots () > 0)
       point_cloud_signal_->operator() (point_cloud_xyzi_);
 
@@ -215,7 +203,7 @@ pcl::RobotEyeGrabber::convertPacketData (unsigned char *data_packet, size_t leng
 
 /////////////////////////////////////////////////////////////////////////////
 void
-pcl::RobotEyeGrabber::computeXYZI (pcl::PointXYZI& point, unsigned char* point_data)
+pcl::RobotEyeGrabber::computeXYZI (pcl::PointXYZI &point, unsigned char *point_data)
 {
   uint16_t buffer = 0;
   double az = 0.0;
@@ -229,29 +217,30 @@ pcl::RobotEyeGrabber::computeXYZI (pcl::PointXYZI& point, unsigned char* point_d
   az = (buffer / 100.0);
 
   buffer = 0x00;
-  buffer =  point_data[2] << 8;
+  buffer = point_data[2] << 8;
   buffer |= point_data[3]; // Second 2-byte read will be Elevation
   el = (signed short int)buffer / 100.0;
 
   buffer = 0x00;
-  buffer =  point_data[4] << 8;
+  buffer = point_data[4] << 8;
   buffer |= point_data[5]; // Third 2-byte read will be Range
   range = (signed short int)buffer / 100.0;
 
   buffer = 0x00;
-  buffer =  point_data[6] << 8;
+  buffer = point_data[6] << 8;
   buffer |= point_data[7]; // Fourth 2-byte read will be Intensity
   intensity = buffer;
 
-  point.x = range * std::cos (el * M_PI/180) * std::sin (az * M_PI/180);
-  point.y = range * std::cos (el * M_PI/180) * std::cos (az * M_PI/180);
-  point.z = range * std::sin (el * M_PI/180);
+  point.x = range * std::cos (el * M_PI / 180) * std::sin (az * M_PI / 180);
+  point.y = range * std::cos (el * M_PI / 180) * std::cos (az * M_PI / 180);
+  point.z = range * std::sin (el * M_PI / 180);
   point.intensity = intensity;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void
-pcl::RobotEyeGrabber::computeTimestamp (boost::uint32_t& timestamp, unsigned char* point_data)
+pcl::RobotEyeGrabber::computeTimestamp (boost::uint32_t &timestamp,
+                                        unsigned char *point_data)
 {
   boost::uint32_t buffer = 0;
 
@@ -263,15 +252,13 @@ pcl::RobotEyeGrabber::computeTimestamp (boost::uint32_t& timestamp, unsigned cha
   timestamp = buffer;
 }
 
-
-
 /////////////////////////////////////////////////////////////////////////////
 void
 pcl::RobotEyeGrabber::socketThreadLoop ()
 {
-  asyncSocketReceive();
-  io_service_.reset();
-  io_service_.run();
+  asyncSocketReceive ();
+  io_service_.reset ();
+  io_service_.run ();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -279,25 +266,27 @@ void
 pcl::RobotEyeGrabber::asyncSocketReceive ()
 {
   // expecting at most max_length bytes (UDP packet).
-  socket_->async_receive_from(boost::asio::buffer(receive_buffer_, MAX_LENGTH), sender_endpoint_,
-    boost::bind(&RobotEyeGrabber::socketCallback, this, boost::asio::placeholders::error,
-    boost::asio::placeholders::bytes_transferred));
+  socket_->async_receive_from (
+      boost::asio::buffer (receive_buffer_, MAX_LENGTH), sender_endpoint_,
+      boost::bind (&RobotEyeGrabber::socketCallback, this,
+                   boost::asio::placeholders::error,
+                   boost::asio::placeholders::bytes_transferred));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void
-pcl::RobotEyeGrabber::socketCallback (const boost::system::error_code&, std::size_t number_of_bytes)
+pcl::RobotEyeGrabber::socketCallback (const boost::system::error_code &,
+                                      std::size_t number_of_bytes)
 {
   if (terminate_thread_)
     return;
 
-  if (sensor_address_ == boost::asio::ip::address_v4::any ()
-    || sensor_address_ == sender_endpoint_.address ())
-  {
+  if (sensor_address_ == boost::asio::ip::address_v4::any () ||
+      sensor_address_ == sender_endpoint_.address ()) {
     data_size_ = number_of_bytes;
     unsigned char *dup = new unsigned char[number_of_bytes];
     memcpy (dup, receive_buffer_, number_of_bytes);
-    packet_queue_.enqueue (boost::shared_array<unsigned char>(dup));
+    packet_queue_.enqueue (boost::shared_array<unsigned char> (dup));
   }
 
   asyncSocketReceive ();
@@ -312,22 +301,21 @@ pcl::RobotEyeGrabber::start ()
   if (isRunning ())
     return;
 
-  boost::asio::ip::udp::endpoint destinationEndpoint (boost::asio::ip::address_v4::any (), data_port_);
+  boost::asio::ip::udp::endpoint destinationEndpoint (
+      boost::asio::ip::address_v4::any (), data_port_);
 
-  try
-  {
+  try {
     socket_.reset (new boost::asio::ip::udp::socket (io_service_, destinationEndpoint));
-  }
-  catch (std::exception &e)
-  {
-    PCL_ERROR ("[pcl::RobotEyeGrabber::start] Unable to bind to socket! %s\n", e.what ());
+  } catch (std::exception &e) {
+    PCL_ERROR ("[pcl::RobotEyeGrabber::start] Unable to bind to socket! %s\n",
+               e.what ());
     return;
   }
 
   terminate_thread_ = false;
   resetPointCloud ();
-  consumer_thread_.reset(new std::thread (&RobotEyeGrabber::consumerThreadLoop, this));
-  socket_thread_.reset(new std::thread (&RobotEyeGrabber::socketThreadLoop, this));
+  consumer_thread_.reset (new std::thread (&RobotEyeGrabber::consumerThreadLoop, this));
+  socket_thread_.reset (new std::thread (&RobotEyeGrabber::socketThreadLoop, this));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -343,7 +331,7 @@ pcl::RobotEyeGrabber::stop ()
   io_service_.stop ();
   socket_thread_->join ();
   socket_thread_.reset ();
-  socket_.reset();
+  socket_.reset ();
 
   packet_queue_.stopQueue ();
   consumer_thread_->join ();

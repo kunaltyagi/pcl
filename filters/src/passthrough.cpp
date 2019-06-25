@@ -44,18 +44,18 @@
 void
 pcl::PassThrough<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
 {
-  if (!input_)
-  {
-    PCL_ERROR ("[pcl::%s::applyFilter] Input dataset not given!\n", getClassName ().c_str ());
+  if (!input_) {
+    PCL_ERROR ("[pcl::%s::applyFilter] Input dataset not given!\n",
+               getClassName ().c_str ());
     output.width = output.height = 0;
     output.data.clear ();
     return;
   }
 
   // If fields x/y/z are not present, we cannot filter
-  if (x_idx_ == -1 || y_idx_ == -1 || z_idx_ == -1)
-  {
-    PCL_ERROR ("[pcl::%s::applyFilter] Input dataset doesn't have x-y-z coordinates!\n", getClassName ().c_str ());
+  if (x_idx_ == -1 || y_idx_ == -1 || z_idx_ == -1) {
+    PCL_ERROR ("[pcl::%s::applyFilter] Input dataset doesn't have x-y-z coordinates!\n",
+               getClassName ().c_str ());
     output.width = output.height = 0;
     output.data.clear ();
     return;
@@ -64,12 +64,10 @@ pcl::PassThrough<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
   int nr_points = input_->width * input_->height;
 
   // Check if we're going to keep the organized structure of the cloud or not
-  if (keep_organized_)
-  {
-    if (filter_field_name_.empty ())
-    {
-      // Silly - if no filtering is actually done, and we want to keep the data organized, 
-      // just copy everything. Any optimizations that can be done here???
+  if (keep_organized_) {
+    if (filter_field_name_.empty ()) {
+      // Silly - if no filtering is actually done, and we want to keep the data
+      // organized, just copy everything. Any optimizations that can be done here???
       output = *input_;
       return;
     }
@@ -81,9 +79,7 @@ pcl::PassThrough<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
       output.is_dense = false;
     else
       output.is_dense = input_->is_dense;
-  }
-  else
-  {
+  } else {
     // Copy the header (and thus the frame_id) + allocate enough space for points
     output.height = 1; // filtering breaks the organized structure
     // Because we're doing explicit checks for isfinite, is_dense = true
@@ -99,27 +95,30 @@ pcl::PassThrough<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
   int nr_p = 0;
   int nr_removed_p = 0;
   // Create the first xyz_offset
-  Eigen::Array4i xyz_offset (input_->fields[x_idx_].offset, input_->fields[y_idx_].offset,
+  Eigen::Array4i xyz_offset (input_->fields[x_idx_].offset,
+                             input_->fields[y_idx_].offset,
                              input_->fields[z_idx_].offset, 0);
 
   Eigen::Vector4f pt = Eigen::Vector4f::Zero ();
-  // If we don't want to process the entire cloud, but rather filter points far away from the viewpoint first...
-  if (!filter_field_name_.empty ())
-  {
+  // If we don't want to process the entire cloud, but rather filter points far away
+  // from the viewpoint first...
+  if (!filter_field_name_.empty ()) {
     // Get the distance field index
     int distance_idx = pcl::getFieldIndex (*input_, filter_field_name_);
-    if (distance_idx == -1)
-    {
-      PCL_WARN ("[pcl::%s::applyFilter] Invalid filter field name. Index is %d.\n", getClassName ().c_str (), distance_idx);
+    if (distance_idx == -1) {
+      PCL_WARN ("[pcl::%s::applyFilter] Invalid filter field name. Index is %d.\n",
+                getClassName ().c_str (), distance_idx);
       output.width = output.height = 0;
       output.data.clear ();
       return;
     }
 
     // @todo fixme
-    if (input_->fields[distance_idx].datatype != pcl::PCLPointField::FLOAT32)
-    {
-      PCL_ERROR ("[pcl::%s::downsample] Distance filtering requested, but distances are not float/double in the dataset! Only FLOAT32/FLOAT64 distances are supported right now.\n", getClassName ().c_str ());
+    if (input_->fields[distance_idx].datatype != pcl::PCLPointField::FLOAT32) {
+      PCL_ERROR ("[pcl::%s::downsample] Distance filtering requested, but distances "
+                 "are not float/double in the dataset! Only FLOAT32/FLOAT64 distances "
+                 "are supported right now.\n",
+                 getClassName ().c_str ());
       output.width = output.height = 0;
       output.data.clear ();
       return;
@@ -127,49 +126,43 @@ pcl::PassThrough<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
 
     float badpt = user_filter_value_;
     // Check whether we need to store filtered valued in place
-    if (keep_organized_)
-    {
+    if (keep_organized_) {
       float distance_value = 0;
       // Go over all points
-      for (int cp = 0; cp < nr_points; ++cp, xyz_offset += input_->point_step)
-      {
+      for (int cp = 0; cp < nr_points; ++cp, xyz_offset += input_->point_step) {
         // Copy all the fields
-        memcpy (&output.data[cp * output.point_step], &input_->data[cp * output.point_step], output.point_step);
+        memcpy (&output.data[cp * output.point_step],
+                &input_->data[cp * output.point_step], output.point_step);
 
         // Get the distance value
-        memcpy (&distance_value, &input_->data[cp * input_->point_step + input_->fields[distance_idx].offset],
+        memcpy (&distance_value,
+                &input_->data[cp * input_->point_step +
+                              input_->fields[distance_idx].offset],
                 sizeof (float));
 
-        if (filter_limit_negative_)
-        {
+        if (filter_limit_negative_) {
           // Use a threshold for cutting out points which inside the interval
-          if ((distance_value < filter_limit_max_) && (distance_value > filter_limit_min_))
-          {
+          if ((distance_value < filter_limit_max_) &&
+              (distance_value > filter_limit_min_)) {
             // Unoptimized memcpys: assume fields x, y, z are in random order
             memcpy (&output.data[xyz_offset[0]], &badpt, sizeof (float));
             memcpy (&output.data[xyz_offset[1]], &badpt, sizeof (float));
             memcpy (&output.data[xyz_offset[2]], &badpt, sizeof (float));
             continue;
-          }
-          else
-          {
+          } else {
             if (extract_removed_indices_)
               (*removed_indices_)[nr_removed_p++] = cp;
           }
-        }
-        else
-        {
+        } else {
           // Use a threshold for cutting out points which are too close/far away
-          if ((distance_value > filter_limit_max_) || (distance_value < filter_limit_min_))
-          {
+          if ((distance_value > filter_limit_max_) ||
+              (distance_value < filter_limit_min_)) {
             // Unoptimized memcpys: assume fields x, y, z are in random order
             memcpy (&output.data[xyz_offset[0]], &badpt, sizeof (float));
             memcpy (&output.data[xyz_offset[1]], &badpt, sizeof (float));
             memcpy (&output.data[xyz_offset[2]], &badpt, sizeof (float));
             continue;
-          }
-          else
-          {
+          } else {
             if (extract_removed_indices_)
               (*removed_indices_)[nr_removed_p++] = cp;
           }
@@ -177,44 +170,38 @@ pcl::PassThrough<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
       }
     }
     // Remove filtered points
-    else
-    {
+    else {
       // Go over all points
       float distance_value = 0;
-      for (int cp = 0; cp < nr_points; ++cp, xyz_offset += input_->point_step)
-      {
+      for (int cp = 0; cp < nr_points; ++cp, xyz_offset += input_->point_step) {
         // Get the distance value
-        memcpy (&distance_value, &input_->data[cp * input_->point_step + input_->fields[distance_idx].offset],
-                sizeof(float));
+        memcpy (&distance_value,
+                &input_->data[cp * input_->point_step +
+                              input_->fields[distance_idx].offset],
+                sizeof (float));
 
         // Remove NAN/INF/-INF values. We expect passthrough to output clean valid data.
-        if (!std::isfinite (distance_value))
-        {
+        if (!std::isfinite (distance_value)) {
           if (extract_removed_indices_)
             (*removed_indices_)[nr_removed_p++] = cp;
           continue;
         }
 
-        if (filter_limit_negative_)
-        {
+        if (filter_limit_negative_) {
           // Use a threshold for cutting out points which inside the interval
-          if (distance_value < filter_limit_max_ && distance_value > filter_limit_min_)
-          {
-            if (extract_removed_indices_)
-            {
+          if (distance_value < filter_limit_max_ &&
+              distance_value > filter_limit_min_) {
+            if (extract_removed_indices_) {
               (*removed_indices_)[nr_removed_p] = cp;
               nr_removed_p++;
             }
             continue;
           }
-        }
-        else
-        {
+        } else {
           // Use a threshold for cutting out points which are too close/far away
-          if (distance_value > filter_limit_max_ || distance_value < filter_limit_min_)
-          {
-            if (extract_removed_indices_)
-            {
+          if (distance_value > filter_limit_max_ ||
+              distance_value < filter_limit_min_) {
+            if (extract_removed_indices_) {
               (*removed_indices_)[nr_removed_p] = cp;
               nr_removed_p++;
             }
@@ -223,15 +210,14 @@ pcl::PassThrough<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
         }
 
         // Unoptimized memcpys: assume fields x, y, z are in random order
-        memcpy (&pt[0], &input_->data[xyz_offset[0]], sizeof(float));
-        memcpy (&pt[1], &input_->data[xyz_offset[1]], sizeof(float));
-        memcpy (&pt[2], &input_->data[xyz_offset[2]], sizeof(float));
+        memcpy (&pt[0], &input_->data[xyz_offset[0]], sizeof (float));
+        memcpy (&pt[1], &input_->data[xyz_offset[1]], sizeof (float));
+        memcpy (&pt[2], &input_->data[xyz_offset[2]], sizeof (float));
 
         // Check if the point is invalid
-        if (!std::isfinite (pt[0]) || !std::isfinite (pt[1]) || !std::isfinite (pt[2]))
-        {
-          if (extract_removed_indices_)
-          {
+        if (!std::isfinite (pt[0]) || !std::isfinite (pt[1]) ||
+            !std::isfinite (pt[2])) {
+          if (extract_removed_indices_) {
             (*removed_indices_)[nr_removed_p] = cp;
             nr_removed_p++;
           }
@@ -239,27 +225,25 @@ pcl::PassThrough<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
         }
 
         // Copy all the fields
-        memcpy (&output.data[nr_p * output.point_step], &input_->data[cp * output.point_step], output.point_step);
+        memcpy (&output.data[nr_p * output.point_step],
+                &input_->data[cp * output.point_step], output.point_step);
         nr_p++;
       }
       output.width = nr_p;
     } // !keep_organized_
   }
-  // No distance filtering, process all data. No need to check for is_organized here as we did it above
-  else
-  {
-    for (int cp = 0; cp < nr_points; ++cp, xyz_offset += input_->point_step)
-    {
+  // No distance filtering, process all data. No need to check for is_organized here as
+  // we did it above
+  else {
+    for (int cp = 0; cp < nr_points; ++cp, xyz_offset += input_->point_step) {
       // Unoptimized memcpys: assume fields x, y, z are in random order
-      memcpy (&pt[0], &input_->data[xyz_offset[0]], sizeof(float));
-      memcpy (&pt[1], &input_->data[xyz_offset[1]], sizeof(float));
-      memcpy (&pt[2], &input_->data[xyz_offset[2]], sizeof(float));
+      memcpy (&pt[0], &input_->data[xyz_offset[0]], sizeof (float));
+      memcpy (&pt[1], &input_->data[xyz_offset[1]], sizeof (float));
+      memcpy (&pt[2], &input_->data[xyz_offset[2]], sizeof (float));
 
       // Check if the point is invalid
-      if (!std::isfinite (pt[0]) || !std::isfinite (pt[1]) || !std::isfinite (pt[2]))
-      {
-        if (extract_removed_indices_)
-        {
+      if (!std::isfinite (pt[0]) || !std::isfinite (pt[1]) || !std::isfinite (pt[2])) {
+        if (extract_removed_indices_) {
           (*removed_indices_)[nr_removed_p] = cp;
           nr_removed_p++;
         }
@@ -267,7 +251,8 @@ pcl::PassThrough<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
       }
 
       // Copy all the fields
-      memcpy (&output.data[nr_p * output.point_step], &input_->data[cp * output.point_step], output.point_step);
+      memcpy (&output.data[nr_p * output.point_step],
+              &input_->data[cp * output.point_step], output.point_step);
       nr_p++;
     }
     output.width = nr_p;
@@ -284,7 +269,6 @@ pcl::PassThrough<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
 #include <pcl/point_types.h>
 
 // Instantiations of specific point types
-PCL_INSTANTIATE(PassThrough, PCL_XYZ_POINT_TYPES)
+PCL_INSTANTIATE (PassThrough, PCL_XYZ_POINT_TYPES)
 
-#endif    // PCL_NO_PRECOMPILE
-
+#endif // PCL_NO_PRECOMPILE

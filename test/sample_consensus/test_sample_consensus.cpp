@@ -38,11 +38,11 @@
 
 #include <gtest/gtest.h>
 
-#include <pcl/sample_consensus/msac.h>
 #include <pcl/sample_consensus/lmeds.h>
-#include <pcl/sample_consensus/rmsac.h>
 #include <pcl/sample_consensus/mlesac.h>
+#include <pcl/sample_consensus/msac.h>
 #include <pcl/sample_consensus/ransac.h>
+#include <pcl/sample_consensus/rmsac.h>
 #include <pcl/sample_consensus/rransac.h>
 #include <pcl/sample_consensus/sac_model_sphere.h>
 
@@ -62,7 +62,8 @@ TEST (SampleConsensus, Base)
   PointCloud<PointXYZ>::Ptr cloud (new PointCloud<PointXYZ>);
 
   // Create a shared sphere model pointer directly
-  SampleConsensusModelSpherePtr model (new SampleConsensusModelSphere<PointXYZ> (cloud));
+  SampleConsensusModelSpherePtr model (
+      new SampleConsensusModelSphere<PointXYZ> (cloud));
 
   // Create the RANSAC object
   RandomSampleConsensus<PointXYZ> sac (model, 0.03);
@@ -82,33 +83,33 @@ TEST (SampleConsensus, Base)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Test if RANSAC finishes within a second.
 template <typename SacT>
-class SacTest : public ::testing::Test {};
+class SacTest : public ::testing::Test
+{
+};
 
-using sacTypes = ::testing::Types<
-  RandomSampleConsensus<PointXYZ>,
-  LeastMedianSquares<PointXYZ>,
-  MEstimatorSampleConsensus<PointXYZ>,
-  RandomizedRandomSampleConsensus<PointXYZ>,
-  RandomizedMEstimatorSampleConsensus<PointXYZ>,
-  MaximumLikelihoodSampleConsensus<PointXYZ>
->;
-TYPED_TEST_CASE(SacTest, sacTypes);
+using sacTypes =
+    ::testing::Types<RandomSampleConsensus<PointXYZ>, LeastMedianSquares<PointXYZ>,
+                     MEstimatorSampleConsensus<PointXYZ>,
+                     RandomizedRandomSampleConsensus<PointXYZ>,
+                     RandomizedMEstimatorSampleConsensus<PointXYZ>,
+                     MaximumLikelihoodSampleConsensus<PointXYZ>>;
+TYPED_TEST_CASE (SacTest, sacTypes);
 
-TYPED_TEST(SacTest, InfiniteLoop)
+TYPED_TEST (SacTest, InfiniteLoop)
 {
   using namespace std::chrono_literals;
 
   const unsigned point_count = 100;
   PointCloud<PointXYZ> cloud;
   cloud.points.resize (point_count);
-  for (unsigned idx = 0; idx < point_count; ++idx)
-  {
+  for (unsigned idx = 0; idx < point_count; ++idx) {
     cloud.points[idx].x = static_cast<float> (idx);
     cloud.points[idx].y = 0.0;
     cloud.points[idx].z = 0.0;
   }
 
-  SampleConsensusModelSpherePtr model (new SampleConsensusModelSphere<PointXYZ> (cloud.makeShared ()));
+  SampleConsensusModelSpherePtr model (
+      new SampleConsensusModelSphere<PointXYZ> (cloud.makeShared ()));
   TypeParam sac (model, 0.03);
 
   // Set up timed conditions
@@ -116,8 +117,7 @@ TYPED_TEST(SacTest, InfiniteLoop)
   std::mutex mtx;
 
   // Create the RANSAC object
-  std::thread thread ([&] ()
-  {
+  std::thread thread ([&]() {
     sac.computeModel (0);
 
     // Notify things are done
@@ -125,19 +125,18 @@ TYPED_TEST(SacTest, InfiniteLoop)
     cv.notify_one ();
   });
 
-
   // Waits for the delay
   std::unique_lock<std::mutex> lock (mtx);
-  #if defined(DEBUG) || defined(_DEBUG)
-    EXPECT_EQ (std::cv_status::no_timeout, cv.wait_for (lock, 15s));
-  #else
-    EXPECT_EQ (std::cv_status::no_timeout, cv.wait_for (lock, 1s));
-  #endif
+#if defined(DEBUG) || defined(_DEBUG)
+  EXPECT_EQ (std::cv_status::no_timeout, cv.wait_for (lock, 15s));
+#else
+  EXPECT_EQ (std::cv_status::no_timeout, cv.wait_for (lock, 1s));
+#endif
   thread.join ();
 }
 
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

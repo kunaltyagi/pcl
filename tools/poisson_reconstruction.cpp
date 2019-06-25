@@ -39,11 +39,11 @@
  */
 
 #include <pcl/PCLPointCloud2.h>
+#include <pcl/console/parse.h>
+#include <pcl/console/print.h>
+#include <pcl/console/time.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/vtk_io.h>
-#include <pcl/console/print.h>
-#include <pcl/console/parse.h>
-#include <pcl/console/time.h>
 #include <pcl/surface/poisson.h>
 
 using namespace pcl;
@@ -60,44 +60,64 @@ printHelp (int, char **argv)
 {
   print_error ("Syntax is: %s input.pcd output.vtk <options>\n", argv[0]);
   print_info ("  where options are:\n");
-  print_info ("                     -depth X          = set the maximum depth of the tree that will be used for surface reconstruction (default: ");
-  print_value ("%d", default_depth); print_info (")\n");
-  print_info ("                     -solver_divide X  = set the the depth at which a block Gauss-Seidel solver is used to solve the Laplacian equation (default: ");
-  print_value ("%d", default_solver_divide); print_info (")\n");
-  print_info ("                     -iso_divide X     = Set the depth at which a block iso-surface extractor should be used to extract the iso-surface (default: ");
-  print_value ("%d", default_iso_divide); print_info (")\n");
-  print_info ("                     -point_weight X   = Specifies the importance that interpolation of the point samples is given in the formulation of the screened Poisson equation. The results of the original (unscreened) Poisson Reconstruction can be obtained by setting this value to 0. (default: ");
-  print_value ("%f", default_point_weight); print_info (")\n");
+  print_info ("                     -depth X          = set the maximum depth of the "
+              "tree that will be used for surface reconstruction (default: ");
+  print_value ("%d", default_depth);
+  print_info (")\n");
+  print_info (
+      "                     -solver_divide X  = set the the depth at which a block "
+      "Gauss-Seidel solver is used to solve the Laplacian equation (default: ");
+  print_value ("%d", default_solver_divide);
+  print_info (")\n");
+  print_info (
+      "                     -iso_divide X     = Set the depth at which a block "
+      "iso-surface extractor should be used to extract the iso-surface (default: ");
+  print_value ("%d", default_iso_divide);
+  print_info (")\n");
+  print_info (
+      "                     -point_weight X   = Specifies the importance that "
+      "interpolation of the point samples is given in the formulation of the screened "
+      "Poisson equation. The results of the original (unscreened) Poisson "
+      "Reconstruction can be obtained by setting this value to 0. (default: ");
+  print_value ("%f", default_point_weight);
+  print_info (")\n");
 }
 
 bool
 loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
 {
   TicToc tt;
-  print_highlight ("Loading "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Loading ");
+  print_value ("%s ", filename.c_str ());
 
   tt.tic ();
   if (loadPCDFile (filename, cloud) < 0)
     return (false);
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", cloud.width * cloud.height); print_info (" points]\n");
-  print_info ("Available dimensions: "); print_value ("%s\n", pcl::getFieldsList (cloud).c_str ());
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", cloud.width * cloud.height);
+  print_info (" points]\n");
+  print_info ("Available dimensions: ");
+  print_value ("%s\n", pcl::getFieldsList (cloud).c_str ());
 
   return (true);
 }
 
 void
-compute (const pcl::PCLPointCloud2::ConstPtr &input, PolygonMesh &output,
-         int depth, int solver_divide, int iso_divide, float point_weight)
+compute (const pcl::PCLPointCloud2::ConstPtr &input, PolygonMesh &output, int depth,
+         int solver_divide, int iso_divide, float point_weight)
 {
   PointCloud<PointNormal>::Ptr xyz_cloud (new pcl::PointCloud<PointNormal> ());
   fromPCLPointCloud2 (*input, *xyz_cloud);
 
-  print_info ("Using parameters: depth %d, solverDivide %d, isoDivide %d\n", depth, solver_divide, iso_divide);
+  print_info ("Using parameters: depth %d, solverDivide %d, isoDivide %d\n", depth,
+              solver_divide, iso_divide);
 
-	Poisson<PointNormal> poisson;
-	poisson.setDepth (depth);
-	poisson.setSolverDivide (solver_divide);
-	poisson.setIsoDivide (iso_divide);
+  Poisson<PointNormal> poisson;
+  poisson.setDepth (depth);
+  poisson.setSolverDivide (solver_divide);
+  poisson.setIsoDivide (iso_divide);
   poisson.setPointWeight (point_weight);
   poisson.setInputCloud (xyz_cloud);
 
@@ -106,7 +126,9 @@ compute (const pcl::PCLPointCloud2::ConstPtr &input, PolygonMesh &output,
   print_highlight ("Computing ...");
   poisson.reconstruct (output);
 
-  print_info ("[Done, "); print_value ("%g", tt.toc ()); print_info (" ms]\n");
+  print_info ("[Done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms]\n");
 }
 
 void
@@ -115,20 +137,25 @@ saveCloud (const std::string &filename, const PolygonMesh &output)
   TicToc tt;
   tt.tic ();
 
-  print_highlight ("Saving "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Saving ");
+  print_value ("%s ", filename.c_str ());
   saveVTKFile (filename, output);
 
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms]\n");
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms]\n");
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  print_info ("Compute the surface reconstruction of a point cloud using the Poisson surface reconstruction (pcl::surface::Poisson). For more information, use: %s -h\n", argv[0]);
+  print_info (
+      "Compute the surface reconstruction of a point cloud using the Poisson surface "
+      "reconstruction (pcl::surface::Poisson). For more information, use: %s -h\n",
+      argv[0]);
 
-  if (argc < 3)
-  {
+  if (argc < 3) {
     printHelp (argc, argv);
     return (-1);
   }
@@ -136,15 +163,14 @@ main (int argc, char** argv)
   // Parse the command line arguments for .pcd files
   std::vector<int> pcd_file_indices;
   pcd_file_indices = parse_file_extension_argument (argc, argv, ".pcd");
-  if (pcd_file_indices.size () != 1)
-  {
+  if (pcd_file_indices.size () != 1) {
     print_error ("Need one input PCD file and one output VTK file to continue.\n");
     return (-1);
   }
 
-  std::vector<int> vtk_file_indices = parse_file_extension_argument (argc, argv, ".vtk");
-  if (vtk_file_indices.size () != 1)
-  {
+  std::vector<int> vtk_file_indices =
+      parse_file_extension_argument (argc, argv, ".vtk");
+  if (vtk_file_indices.size () != 1) {
     print_error ("Need one output VTK file to continue.\n");
     return (-1);
   }
@@ -152,19 +178,23 @@ main (int argc, char** argv)
   // Command line parsing
   int depth = default_depth;
   parse_argument (argc, argv, "-depth", depth);
-  print_info ("Using a depth of: "); print_value ("%d\n", depth);
+  print_info ("Using a depth of: ");
+  print_value ("%d\n", depth);
 
   int solver_divide = default_solver_divide;
   parse_argument (argc, argv, "-solver_divide", solver_divide);
-  print_info ("Setting solver_divide to: "); print_value ("%d\n", solver_divide);
+  print_info ("Setting solver_divide to: ");
+  print_value ("%d\n", solver_divide);
 
   int iso_divide = default_iso_divide;
   parse_argument (argc, argv, "-iso_divide", iso_divide);
-  print_info ("Setting iso_divide to: "); print_value ("%d\n", iso_divide);
+  print_info ("Setting iso_divide to: ");
+  print_value ("%d\n", iso_divide);
 
   float point_weight = default_point_weight;
   parse_argument (argc, argv, "-point_weight", point_weight);
-  print_info ("Setting point_weight to: "); print_value ("%f\n", point_weight);
+  print_info ("Setting point_weight to: ");
+  print_value ("%f\n", point_weight);
 
   // Load the first file
   pcl::PCLPointCloud2::Ptr cloud (new pcl::PCLPointCloud2);
@@ -178,4 +208,3 @@ main (int argc, char** argv)
   // Save into the second file
   saveCloud (argv[vtk_file_indices[0]], output);
 }
-

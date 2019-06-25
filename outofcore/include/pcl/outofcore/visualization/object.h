@@ -12,20 +12,17 @@
 #include <vtkRenderer.h>
 #include <vtkSmartPointer.h>
 
-//Forward Declaration
+// Forward Declaration
 class Scene;
 
 class Object
 {
-public:
-
+  public:
   // Operators
   // -----------------------------------------------------------------------------
   Object (std::string name);
 
-  virtual
-  ~Object () { }
-
+  virtual ~Object () {}
 
   // Accessors
   // -----------------------------------------------------------------------------
@@ -36,7 +33,7 @@ public:
   setName (std::string name);
 
   virtual void
-  render (vtkRenderer* renderer);
+  render (vtkRenderer *renderer);
 
   bool
   hasActor (vtkActor *actor);
@@ -50,15 +47,13 @@ public:
   vtkSmartPointer<vtkActorCollection>
   getActors ();
 
-protected:
+  protected:
   vtkSmartPointer<vtkActorCollection> actors_;
   std::mutex actors_mutex_;
 
-private:
-
+  private:
   // Members
   // -----------------------------------------------------------------------------
   std::string name_;
-  std::map<vtkActor*, std::set<vtkRenderer*> > associated_renderers_;
-
+  std::map<vtkActor *, std::set<vtkRenderer *>> associated_renderers_;
 };

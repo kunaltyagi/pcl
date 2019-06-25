@@ -38,11 +38,11 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_cloud.h>
-#include <pcl/features/normal_3d.h>
 #include <pcl/features/cvfh.h>
-#include <pcl/io/pcd_io.h>
+#include <pcl/features/normal_3d.h>
 #include <pcl/filters/voxel_grid.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -86,7 +86,7 @@ TEST (PCL, CVFHEstimation)
 
   // estimate
   cvfh.compute (*vfhs);
-  EXPECT_EQ (static_cast<int>(vfhs->points.size ()), 1);
+  EXPECT_EQ (static_cast<int> (vfhs->points.size ()), 1);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ TEST (PCL, CVFHEstimationMilk)
   PointCloud<Normal>::Ptr normals (new PointCloud<Normal> ());
   n.setInputCloud (cloud_milk);
   n.setSearchMethod (tree);
-  n.setRadiusSearch (leaf_size_ * 4); //2cm to estimate normals
+  n.setRadiusSearch (leaf_size_ * 4); // 2cm to estimate normals
   n.compute (*normals);
 
   CVFHEstimation<PointXYZ, Normal, VFHSignature308> cvfh;
@@ -116,44 +116,46 @@ TEST (PCL, CVFHEstimationMilk)
 
   // estimate
   cvfh.compute (*vfhs);
-  EXPECT_EQ (static_cast<int>(vfhs->points.size ()), 2);
+  EXPECT_EQ (static_cast<int> (vfhs->points.size ()), 2);
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 3)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and `milk.pcd` pass its path to the test." << std::endl;
+  if (argc < 3) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and `milk.pcd` pass "
+                 "its path to the test."
+              << std::endl;
     return (-1);
   }
 
-  if (loadPCDFile<PointXYZ> (argv[1], cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (loadPCDFile<PointXYZ> (argv[1], cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
 
-  CloudPtr milk_loaded(new PointCloud<PointXYZ>());
-  if (loadPCDFile<PointXYZ> (argv[2], *milk_loaded) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `milk.pcd` and pass its path to the test." << std::endl;
+  CloudPtr milk_loaded (new PointCloud<PointXYZ> ());
+  if (loadPCDFile<PointXYZ> (argv[2], *milk_loaded) < 0) {
+    std::cerr << "Failed to read test file. Please download `milk.pcd` and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
 
   indices.resize (cloud.points.size ());
-  for (size_t i = 0; i < indices.size (); ++i)
-  {
-    indices[i] = static_cast<int>(i);
+  for (size_t i = 0; i < indices.size (); ++i) {
+    indices[i] = static_cast<int> (i);
   }
 
   tree.reset (new search::KdTree<PointXYZ> (false));
   tree->setInputCloud (cloud.makeShared ());
 
-  cloud_milk.reset(new PointCloud<PointXYZ>());
+  cloud_milk.reset (new PointCloud<PointXYZ> ());
   CloudPtr grid;
-  pcl::VoxelGrid < pcl::PointXYZ > grid_;
+  pcl::VoxelGrid<pcl::PointXYZ> grid_;
   grid_.setInputCloud (milk_loaded);
   grid_.setLeafSize (leaf_size_, leaf_size_, leaf_size_);
   grid_.filter (*cloud_milk);

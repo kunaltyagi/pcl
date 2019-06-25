@@ -34,40 +34,38 @@
  *
  */
 
+#include <pcl/apps/modeler/dock_widget.h>
+#include <pcl/apps/modeler/main_window.h>
 #include <pcl/apps/modeler/render_window.h>
 #include <pcl/apps/modeler/render_window_item.h>
 #include <pcl/apps/modeler/scene_tree.h>
-#include <pcl/apps/modeler/dock_widget.h>
-#include <pcl/apps/modeler/main_window.h>
-#include <vtkProp.h>
-#include <vtkRenderer.h>
 #include <vtkBoundingBox.h>
-#include <vtkSmartPointer.h>
-#include <vtkRenderWindow.h>
 #include <vtkCubeAxesActor.h>
+#include <vtkProp.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderer.h>
 #include <vtkRendererCollection.h>
-
+#include <vtkSmartPointer.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::modeler::RenderWindow::RenderWindow(RenderWindowItem* render_window_item, QWidget *parent, Qt::WindowFlags flags)
-  : QVTKWidget(parent, flags),
-  axes_(vtkSmartPointer<vtkCubeAxesActor>::New()),
-  render_window_item_(render_window_item)
+pcl::modeler::RenderWindow::RenderWindow (RenderWindowItem *render_window_item,
+                                          QWidget *parent, Qt::WindowFlags flags)
+    : QVTKWidget (parent, flags), axes_ (vtkSmartPointer<vtkCubeAxesActor>::New ()),
+      render_window_item_ (render_window_item)
 {
-  setFocusPolicy(Qt::StrongFocus);
-  initRenderer();
-  updateAxes();
-  setShowAxes(true);
+  setFocusPolicy (Qt::StrongFocus);
+  initRenderer ();
+  updateAxes ();
+  setShowAxes (true);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::modeler::RenderWindow::~RenderWindow()
+pcl::modeler::RenderWindow::~RenderWindow ()
 {
-  DockWidget* dock_widget = dynamic_cast<DockWidget*>(parent());
-  if (dock_widget != nullptr)
-  {
-    MainWindow::getInstance().removeDockWidget(dock_widget);
-    dock_widget->deleteLater();
+  DockWidget *dock_widget = dynamic_cast<DockWidget *> (parent ());
+  if (dock_widget != nullptr) {
+    MainWindow::getInstance ().removeDockWidget (dock_widget);
+    dock_widget->deleteLater ();
   }
 
   return;
@@ -75,19 +73,19 @@ pcl::modeler::RenderWindow::~RenderWindow()
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::RenderWindow::initRenderer()
+pcl::modeler::RenderWindow::initRenderer ()
 {
-  vtkSmartPointer<vtkRenderWindow> win = GetRenderWindow();
-  vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
-  win->AddRenderer(renderer);
+  vtkSmartPointer<vtkRenderWindow> win = GetRenderWindow ();
+  vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New ();
+  win->AddRenderer (renderer);
 
   // FPS callback
-  //vtkSmartPointer<vtkTextActor> txt = vtkSmartPointer<vtkTextActor>::New ();
-  //using FPSCallback = pcl::visualization::FPSCallback;
-  //vtkSmartPointer<FPSCallback> update_fps = vtkSmartPointer<FPSCallback>::New ();
-  //update_fps->setTextActor (txt);
-  //renderer->AddObserver (vtkCommand::EndEvent, update_fps);
-  //renderer->AddActor (txt);
+  // vtkSmartPointer<vtkTextActor> txt = vtkSmartPointer<vtkTextActor>::New ();
+  // using FPSCallback = pcl::visualization::FPSCallback;
+  // vtkSmartPointer<FPSCallback> update_fps = vtkSmartPointer<FPSCallback>::New ();
+  // update_fps->setTextActor (txt);
+  // renderer->AddObserver (vtkCommand::EndEvent, update_fps);
+  // renderer->AddActor (txt);
 
   // Set up render window
   win->AlphaBitPlanesOff ();
@@ -96,108 +94,110 @@ pcl::modeler::RenderWindow::initRenderer()
   win->PolygonSmoothingOff ();
   win->SwapBuffersOn ();
   win->SetStereoTypeToAnaglyph ();
-  win->GetInteractor()->SetDesiredUpdateRate (30.0);
+  win->GetInteractor ()->SetDesiredUpdateRate (30.0);
 
   return;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::RenderWindow::focusInEvent(QFocusEvent * event)
+pcl::modeler::RenderWindow::focusInEvent (QFocusEvent *event)
 {
-  dynamic_cast<SceneTree*>(render_window_item_->treeWidget())->selectRenderWindowItem(render_window_item_);
+  dynamic_cast<SceneTree *> (render_window_item_->treeWidget ())
+      ->selectRenderWindowItem (render_window_item_);
 
-  QVTKWidget::focusInEvent(event);
+  QVTKWidget::focusInEvent (event);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::RenderWindow::setActive(bool flag)
+pcl::modeler::RenderWindow::setActive (bool flag)
 {
-  DockWidget* dock_widget = dynamic_cast<DockWidget*>(parent());
+  DockWidget *dock_widget = dynamic_cast<DockWidget *> (parent ());
   if (dock_widget != nullptr)
-    dock_widget->setFocusBasedStyle(flag);
+    dock_widget->setFocusBasedStyle (flag);
 
   return;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::RenderWindow::setTitle(const QString& title)
+pcl::modeler::RenderWindow::setTitle (const QString &title)
 {
-  DockWidget* dock_widget = dynamic_cast<DockWidget*>(parent());
+  DockWidget *dock_widget = dynamic_cast<DockWidget *> (parent ());
   if (dock_widget != nullptr)
-    dock_widget->setWindowTitle(title);
+    dock_widget->setWindowTitle (title);
 
   return;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::RenderWindow::render()
+pcl::modeler::RenderWindow::render ()
 {
-  GetRenderWindow()->Render();
+  GetRenderWindow ()->Render ();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::RenderWindow::resetCamera()
+pcl::modeler::RenderWindow::resetCamera ()
 {
   double bounds[6];
-  GetRenderWindow()->GetRenderers()->GetFirstRenderer()->ComputeVisiblePropBounds(bounds);
-  GetRenderWindow()->GetRenderers()->GetFirstRenderer()->ResetCamera(bounds);
-  render();
+  GetRenderWindow ()->GetRenderers ()->GetFirstRenderer ()->ComputeVisiblePropBounds (
+      bounds);
+  GetRenderWindow ()->GetRenderers ()->GetFirstRenderer ()->ResetCamera (bounds);
+  render ();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::RenderWindow::getBackground(double& r, double& g, double& b)
+pcl::modeler::RenderWindow::getBackground (double &r, double &g, double &b)
 {
-  GetRenderWindow()->GetRenderers()->GetFirstRenderer()->GetBackground(r, g, b);
+  GetRenderWindow ()->GetRenderers ()->GetFirstRenderer ()->GetBackground (r, g, b);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::RenderWindow::setBackground(double r, double g, double b)
+pcl::modeler::RenderWindow::setBackground (double r, double g, double b)
 {
-  GetRenderWindow()->GetRenderers()->GetFirstRenderer()->SetBackground(r, g, b);
+  GetRenderWindow ()->GetRenderers ()->GetFirstRenderer ()->SetBackground (r, g, b);
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::RenderWindow::updateAxes()
+pcl::modeler::RenderWindow::updateAxes ()
 {
   vtkBoundingBox bb;
 
-  vtkActorCollection* actors = GetRenderWindow()->GetRenderers()->GetFirstRenderer()->GetActors();
+  vtkActorCollection *actors =
+      GetRenderWindow ()->GetRenderers ()->GetFirstRenderer ()->GetActors ();
 
-  actors->InitTraversal();
-  for (int i = 0, i_end = actors->GetNumberOfItems(); i < i_end; ++ i)
-  {
-    vtkActor* actor = actors->GetNextActor();
-    if (actor == axes_.GetPointer())
+  actors->InitTraversal ();
+  for (int i = 0, i_end = actors->GetNumberOfItems (); i < i_end; ++i) {
+    vtkActor *actor = actors->GetNextActor ();
+    if (actor == axes_.GetPointer ())
       continue;
 
     double actor_bounds[6];
-    actor->GetBounds(actor_bounds);
-    bb.AddBounds(actor_bounds);
+    actor->GetBounds (actor_bounds);
+    bb.AddBounds (actor_bounds);
   }
 
   double bounds[6];
-  bb.GetBounds(bounds);
-  axes_->SetBounds(bounds);
-  axes_->SetCamera(GetRenderWindow()->GetRenderers()->GetFirstRenderer()->GetActiveCamera());
+  bb.GetBounds (bounds);
+  axes_->SetBounds (bounds);
+  axes_->SetCamera (
+      GetRenderWindow ()->GetRenderers ()->GetFirstRenderer ()->GetActiveCamera ());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::RenderWindow::setShowAxes(bool flag)
+pcl::modeler::RenderWindow::setShowAxes (bool flag)
 {
   if (flag)
-    GetRenderWindow()->GetRenderers()->GetFirstRenderer()->AddActor(axes_);
+    GetRenderWindow ()->GetRenderers ()->GetFirstRenderer ()->AddActor (axes_);
   else
-    GetRenderWindow()->GetRenderers()->GetFirstRenderer()->RemoveActor(axes_);
+    GetRenderWindow ()->GetRenderers ()->GetFirstRenderer ()->RemoveActor (axes_);
 
   return;
 }

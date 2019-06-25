@@ -35,7 +35,7 @@
  */
 
 #pragma once
- 
+
 #include <pcl/pcl_config.h>
 #ifdef HAVE_OPENNI
 
@@ -44,28 +44,40 @@
 
 namespace openni_wrapper
 {
-/**
- * @brief Concrete implementation of the interface OpenNIDevice for a Primesense device.
- * @author Suat Gedikli
- * @date 02.january 2011
- * @ingroup io
- */
-class DevicePrimesense : public OpenNIDevice
-{
-  friend class OpenNIDriver;
-public:
-  DevicePrimesense (xn::Context& context, const xn::NodeInfo& device_node, const xn::NodeInfo& image_node, const xn::NodeInfo& depth_node, const xn::NodeInfo& ir_node);
-  ~DevicePrimesense () throw ();
-  //virtual void setImageOutputMode (const XnMapOutputMode& output_mode);
+  /**
+   * @brief Concrete implementation of the interface OpenNIDevice for a Primesense
+   * device.
+   * @author Suat Gedikli
+   * @date 02.january 2011
+   * @ingroup io
+   */
+  class DevicePrimesense : public OpenNIDevice
+  {
+    friend class OpenNIDriver;
 
-protected:
-  boost::shared_ptr<Image> getCurrentImage (boost::shared_ptr<xn::ImageMetaData> image_meta_data) const throw () override;
-  void enumAvailableModes () throw ();
-  bool isImageResizeSupported (unsigned input_width, unsigned input_height, unsigned output_width, unsigned output_height) const throw () override;
+    public:
+    DevicePrimesense (xn::Context &context, const xn::NodeInfo &device_node,
+                      const xn::NodeInfo &image_node, const xn::NodeInfo &depth_node,
+                      const xn::NodeInfo &ir_node);
+    ~DevicePrimesense () throw ();
+    // virtual void setImageOutputMode (const XnMapOutputMode& output_mode);
 
-  void startImageStream () override;
-  void startDepthStream () override;
-};
-} // namespace
+    protected:
+    boost::shared_ptr<Image>
+    getCurrentImage (boost::shared_ptr<xn::ImageMetaData> image_meta_data) const
+        throw () override;
+    void
+    enumAvailableModes () throw ();
+    bool
+    isImageResizeSupported (unsigned input_width, unsigned input_height,
+                            unsigned output_width, unsigned output_height) const
+        throw () override;
+
+    void
+    startImageStream () override;
+    void
+    startDepthStream () override;
+  };
+} // namespace openni_wrapper
 
 #endif

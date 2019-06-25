@@ -35,45 +35,46 @@
  */
 /** \author Bastian Steder */
 
-#include <pcl/pcl_macros.h>
-#include <iostream> 
-#include <sstream> 
 #include <gtest/gtest.h>
+#include <iostream>
 #include <pcl/common/vector_average.h>
+#include <pcl/pcl_macros.h>
+#include <sstream>
 using namespace pcl;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TEST (PCL, VectorAverage_mean)
 {
-  std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f> > points;
-  std::vector<Eigen::Vector3f::Scalar, Eigen::aligned_allocator<Eigen::Vector3f::Scalar> > weights;
-  points.emplace_back(-0.558191f, 0.180822f, -0.809769f);
+  std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f>> points;
+  std::vector<Eigen::Vector3f::Scalar,
+              Eigen::aligned_allocator<Eigen::Vector3f::Scalar>>
+      weights;
+  points.emplace_back (-0.558191f, 0.180822f, -0.809769f);
   weights.push_back (0.160842f);
-  points.emplace_back(-0.510641f, 0.290673f, -0.809169f);
+  points.emplace_back (-0.510641f, 0.290673f, -0.809169f);
   weights.push_back (0.526732f);
-  points.emplace_back(-0.440713f, 0.385624f, -0.810597f);
+  points.emplace_back (-0.440713f, 0.385624f, -0.810597f);
   weights.push_back (0.312427f);
-  
+
   Eigen::Vector3f correct_mean (0.0f, 0.0f, 0.0f);
   float weigth_sum = 0.0f;
-  for (size_t i = 0; i < points.size (); ++i)
-  {
-    correct_mean += weights[i]*points[i];
+  for (size_t i = 0; i < points.size (); ++i) {
+    correct_mean += weights[i] * points[i];
     weigth_sum += weights[i];
   }
   correct_mean /= weigth_sum;
-  
+
   pcl::VectorAverage<float, 3> va;
-  for (size_t i = 0; i < points.size(); ++i)
-    va.add(points[i], weights[i]);
-  Eigen::Vector3f mean = va.getMean();
-  //std::cout << "Correct: "<<correct_mean <<"\n"<< "Result: "<<mean<<"\n";
-  EXPECT_NEAR ((mean-correct_mean).norm(), 0.0f, 1e-4);
+  for (size_t i = 0; i < points.size (); ++i)
+    va.add (points[i], weights[i]);
+  Eigen::Vector3f mean = va.getMean ();
+  // std::cout << "Correct: "<<correct_mean <<"\n"<< "Result: "<<mean<<"\n";
+  EXPECT_NEAR ((mean - correct_mean).norm (), 0.0f, 1e-4);
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

@@ -57,46 +57,42 @@ namespace pcl
     {
       Q_OBJECT
       public:
-        ItemInspector (QWidget* parent = nullptr);
-        ~ItemInspector();
-      
+      ItemInspector (QWidget *parent = nullptr);
+      ~ItemInspector ();
+
       public Q_SLOTS:
-        void 
-        setModel (ProjectModel* new_model);
-        void 
-        selectionChanged (const QModelIndex &current, const QModelIndex &previous);
-        void 
-        itemChanged (QStandardItem* item);
-        
-        
-        
+      void
+      setModel (ProjectModel *new_model);
+      void
+      selectionChanged (const QModelIndex &current, const QModelIndex &previous);
+      void
+      itemChanged (QStandardItem *item);
+
       private:
-        void 
-        createItemWidgets ();
-        /** \brief Stores the state of the current tree view in item_treestate_map_  */
-        void 
-        storeTreeState ();
-        /** \brief Restores the state of \param model 's view from item_treestate_map_  */
-        void
-        restoreTreeState ();
-        /** \brief Removes the extra tabs the item might have */
-        void
-        removeTabs ();
-        /** \brief Refreshes the data shown in the current displayed view widget */
-        void
-        updateView ();
-        
-        //! The tree object used to display/edit parameters 
-        QTreeView* parameter_view_;
-        
-        
-        ProjectModel* current_project_model_;
-        PropertiesModel* current_item_properties_model_;
-        const QItemSelectionModel *current_selection_model_;
-        QMap <QString, QWidget*> itemtype_widget_map;
-        QMap <QStandardItemModel*, QList <QPersistentModelIndex> > item_treestate_map_;
+      void
+      createItemWidgets ();
+      /** \brief Stores the state of the current tree view in item_treestate_map_  */
+      void
+      storeTreeState ();
+      /** \brief Restores the state of \param model 's view from item_treestate_map_  */
+      void
+      restoreTreeState ();
+      /** \brief Removes the extra tabs the item might have */
+      void
+      removeTabs ();
+      /** \brief Refreshes the data shown in the current displayed view widget */
+      void
+      updateView ();
+
+      //! The tree object used to display/edit parameters
+      QTreeView *parameter_view_;
+
+      ProjectModel *current_project_model_;
+      PropertiesModel *current_item_properties_model_;
+      const QItemSelectionModel *current_selection_model_;
+      QMap<QString, QWidget *> itemtype_widget_map;
+      QMap<QStandardItemModel *, QList<QPersistentModelIndex>> item_treestate_map_;
     };
-    
-    
-  }
-}
+
+  } // namespace cloud_composer
+} // namespace pcl

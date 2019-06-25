@@ -40,14 +40,14 @@
 #pragma once
 
 #if defined __GNUC__
-#  pragma GCC system_header 
+#pragma GCC system_header
 #endif
 
 //#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/graph_traits.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
+#include <boost/graph/graph_traits.hpp>
 #include <boost/property_map/property_map.hpp>
 
-#include <boost/noncopyable.hpp>
-#include <boost/make_shared.hpp>
 #include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/noncopyable.hpp>

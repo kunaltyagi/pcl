@@ -46,51 +46,54 @@
 #include <pcl/io/openni_camera/openni_image_rgb24.h>
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-openni_wrapper::DeviceONI::DeviceONI (
-    xn::Context& context, 
-    const std::string& file_name, 
-    bool repeat, 
-    bool streaming)
-  : OpenNIDevice (context)
-  , streaming_  (streaming)
-  , depth_stream_running_ (false)
-  , image_stream_running_ (false)
-  , ir_stream_running_ (false)
+openni_wrapper::DeviceONI::DeviceONI (xn::Context &context,
+                                      const std::string &file_name, bool repeat,
+                                      bool streaming)
+    : OpenNIDevice (context), streaming_ (streaming), depth_stream_running_ (false),
+      image_stream_running_ (false), ir_stream_running_ (false)
 {
   XnStatus status;
 #if (XN_MINOR_VERSION >= 3)
-  status = context_.OpenFileRecording (file_name.c_str(), player_);
+  status = context_.OpenFileRecording (file_name.c_str (), player_);
   if (status != XN_STATUS_OK)
-    THROW_OPENNI_EXCEPTION ("Could not open ONI file. Reason: %s", xnGetStatusString (status));
+    THROW_OPENNI_EXCEPTION ("Could not open ONI file. Reason: %s",
+                            xnGetStatusString (status));
 #else
-  status = context_.OpenFileRecording (file_name.c_str());
+  status = context_.OpenFileRecording (file_name.c_str ());
   if (status != XN_STATUS_OK)
-    THROW_OPENNI_EXCEPTION ("Could not open ONI file. Reason: %s", xnGetStatusString (status));
+    THROW_OPENNI_EXCEPTION ("Could not open ONI file. Reason: %s",
+                            xnGetStatusString (status));
 
   status = context_.FindExistingNode (XN_NODE_TYPE_PLAYER, player_);
   if (status != XN_STATUS_OK)
-    THROW_OPENNI_EXCEPTION ("Failed to find player node: %s\n", xnGetStatusString (status));
+    THROW_OPENNI_EXCEPTION ("Failed to find player node: %s\n",
+                            xnGetStatusString (status));
 #endif
 
   status = context_.FindExistingNode (XN_NODE_TYPE_DEPTH, depth_generator_);
   if (status != XN_STATUS_OK)
-    THROW_OPENNI_EXCEPTION ("could not find depth stream in file %s. Reason: %s", file_name.c_str(), xnGetStatusString (status));
-  else
-  {
+    THROW_OPENNI_EXCEPTION ("could not find depth stream in file %s. Reason: %s",
+                            file_name.c_str (), xnGetStatusString (status));
+  else {
     available_depth_modes_.push_back (getDepthOutputMode ());
-    depth_generator_.RegisterToNewDataAvailable (static_cast<xn::StateChangedHandler> (NewONIDepthDataAvailable), this, depth_callback_handle_);
+    depth_generator_.RegisterToNewDataAvailable (
+        static_cast<xn::StateChangedHandler> (NewONIDepthDataAvailable), this,
+        depth_callback_handle_);
   }
 
   status = context_.FindExistingNode (XN_NODE_TYPE_IMAGE, image_generator_);
-  if (status == XN_STATUS_OK)
-  {
+  if (status == XN_STATUS_OK) {
     available_image_modes_.push_back (getImageOutputMode ());
-    image_generator_.RegisterToNewDataAvailable (static_cast<xn::StateChangedHandler> (NewONIImageDataAvailable), this, image_callback_handle_);
+    image_generator_.RegisterToNewDataAvailable (
+        static_cast<xn::StateChangedHandler> (NewONIImageDataAvailable), this,
+        image_callback_handle_);
   }
 
-  status = context_.FindExistingNode(XN_NODE_TYPE_IR, ir_generator_);
+  status = context_.FindExistingNode (XN_NODE_TYPE_IR, ir_generator_);
   if (status == XN_STATUS_OK)
-    ir_generator_.RegisterToNewDataAvailable (static_cast<xn::StateChangedHandler> (NewONIIRDataAvailable), this, ir_callback_handle_);
+    ir_generator_.RegisterToNewDataAvailable (
+        static_cast<xn::StateChangedHandler> (NewONIIRDataAvailable), this,
+        ir_callback_handle_);
 
   device_node_info_ = player_.GetInfo ();
   Init ();
@@ -101,99 +104,97 @@ openni_wrapper::DeviceONI::DeviceONI (
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-openni_wrapper::DeviceONI::~DeviceONI() throw ()
+openni_wrapper::DeviceONI::~DeviceONI () throw ()
 {
-  if (streaming_)
-  {
+  if (streaming_) {
     quit_ = true;
-    player_thread_.join();
+    player_thread_.join ();
   }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void 
+void
 openni_wrapper::DeviceONI::startImageStream ()
 {
-  if (hasImageStream() && !image_stream_running_)
+  if (hasImageStream () && !image_stream_running_)
     image_stream_running_ = true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void 
+void
 openni_wrapper::DeviceONI::stopImageStream ()
 {
-  if (hasImageStream() && image_stream_running_)
+  if (hasImageStream () && image_stream_running_)
     image_stream_running_ = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void 
+void
 openni_wrapper::DeviceONI::startDepthStream ()
 {
-  if (hasDepthStream() && !depth_stream_running_)
+  if (hasDepthStream () && !depth_stream_running_)
     depth_stream_running_ = true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void 
+void
 openni_wrapper::DeviceONI::stopDepthStream ()
 {
-  if (hasDepthStream() && depth_stream_running_)
+  if (hasDepthStream () && depth_stream_running_)
     depth_stream_running_ = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void 
+void
 openni_wrapper::DeviceONI::startIRStream ()
 {
-  if (hasIRStream() && !ir_stream_running_)
+  if (hasIRStream () && !ir_stream_running_)
     ir_stream_running_ = true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void 
+void
 openni_wrapper::DeviceONI::stopIRStream ()
 {
-  if (hasIRStream() && ir_stream_running_)
+  if (hasIRStream () && ir_stream_running_)
     ir_stream_running_ = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool 
+bool
 openni_wrapper::DeviceONI::isImageStreamRunning () const throw ()
 {
- return (image_stream_running_);
+  return (image_stream_running_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool 
+bool
 openni_wrapper::DeviceONI::isDepthStreamRunning () const throw ()
 {
   return (depth_stream_running_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool 
+bool
 openni_wrapper::DeviceONI::isIRStreamRunning () const throw ()
 {
   return (ir_stream_running_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool 
+bool
 openni_wrapper::DeviceONI::trigger (int relative_offset)
 {
   if (streaming_)
-    THROW_OPENNI_EXCEPTION ("Virtual device is in streaming mode. Trigger not available.");
+    THROW_OPENNI_EXCEPTION (
+        "Virtual device is in streaming mode. Trigger not available.");
 
-  if (relative_offset < 0)
-  {
-    XnStatus res = player_.SeekToFrame (depth_generator_.GetName (), relative_offset, XN_PLAYER_SEEK_CUR);
-    if (res != XN_STATUS_OK) 
-      return (false); 
-  }
-  else
-  {
+  if (relative_offset < 0) {
+    XnStatus res = player_.SeekToFrame (depth_generator_.GetName (), relative_offset,
+                                        XN_PLAYER_SEEK_CUR);
+    if (res != XN_STATUS_OK)
+      return (false);
+  } else {
     if (player_.IsEOF ())
       return (false);
   }
@@ -203,14 +204,14 @@ openni_wrapper::DeviceONI::trigger (int relative_offset)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool 
+bool
 openni_wrapper::DeviceONI::isStreaming () const throw ()
 {
   return (streaming_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void 
+void
 openni_wrapper::DeviceONI::PlayerThreadFunction ()
 {
   quit_ = false;
@@ -219,45 +220,51 @@ openni_wrapper::DeviceONI::PlayerThreadFunction ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void __stdcall 
-openni_wrapper::DeviceONI::NewONIDepthDataAvailable (xn::ProductionNode&, void* cookie) throw ()
+void __stdcall openni_wrapper::DeviceONI::NewONIDepthDataAvailable (
+    xn::ProductionNode &, void *cookie) throw ()
 {
-  DeviceONI* device = reinterpret_cast<DeviceONI*>(cookie);
+  DeviceONI *device = reinterpret_cast<DeviceONI *> (cookie);
   if (device->depth_stream_running_)
     device->depth_condition_.notify_all ();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void __stdcall 
-openni_wrapper::DeviceONI::NewONIImageDataAvailable (xn::ProductionNode&, void* cookie) throw ()
+void __stdcall openni_wrapper::DeviceONI::NewONIImageDataAvailable (
+    xn::ProductionNode &, void *cookie) throw ()
 {
-  DeviceONI* device = reinterpret_cast<DeviceONI*> (cookie);
+  DeviceONI *device = reinterpret_cast<DeviceONI *> (cookie);
   if (device->image_stream_running_)
     device->image_condition_.notify_all ();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void __stdcall 
-openni_wrapper::DeviceONI::NewONIIRDataAvailable (xn::ProductionNode&, void* cookie) throw ()
+void __stdcall openni_wrapper::DeviceONI::NewONIIRDataAvailable (xn::ProductionNode &,
+                                                                 void *cookie) throw ()
 {
-  DeviceONI* device = reinterpret_cast<DeviceONI*> (cookie);
+  DeviceONI *device = reinterpret_cast<DeviceONI *> (cookie);
   if (device->ir_stream_running_)
     device->ir_condition_.notify_all ();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-boost::shared_ptr<openni_wrapper::Image> 
-openni_wrapper::DeviceONI::getCurrentImage(boost::shared_ptr<xn::ImageMetaData> image_meta_data) const throw ()
+boost::shared_ptr<openni_wrapper::Image>
+openni_wrapper::DeviceONI::getCurrentImage (
+    boost::shared_ptr<xn::ImageMetaData> image_meta_data) const throw ()
 {
-  return (boost::shared_ptr<openni_wrapper::Image> (new openni_wrapper::ImageRGB24 (image_meta_data)));
+  return (boost::shared_ptr<openni_wrapper::Image> (
+      new openni_wrapper::ImageRGB24 (image_meta_data)));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool 
-openni_wrapper::DeviceONI::isImageResizeSupported(unsigned input_width, unsigned input_height, unsigned output_width, unsigned output_height) const throw ()
+bool
+openni_wrapper::DeviceONI::isImageResizeSupported (unsigned input_width,
+                                                   unsigned input_height,
+                                                   unsigned output_width,
+                                                   unsigned output_height) const
+    throw ()
 {
-  return (openni_wrapper::ImageRGB24::resizingSupported (input_width, input_height, output_width, output_height));
+  return (openni_wrapper::ImageRGB24::resizingSupported (input_width, input_height,
+                                                         output_width, output_height));
 }
 
-#endif //HAVE_OPENNI
-
+#endif // HAVE_OPENNI

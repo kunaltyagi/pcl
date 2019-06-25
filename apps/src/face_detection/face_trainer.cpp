@@ -8,7 +8,8 @@
 #include "pcl/recognition/face_detection/rf_face_detector_trainer.h"
 #include <pcl/console/parse.h>
 
-int main(int argc, char ** argv)
+int
+main (int argc, char **argv)
 {
   int ntrees = 10;
   std::string forest_fn = "forest.txt";
@@ -33,7 +34,6 @@ int main(int argc, char ** argv)
   fdrf.setUseNormals (static_cast<bool> (use_normals));
   fdrf.setNumTrainingImages (num_images);
 
-  //TODO: do some checks here..., fn file exists, directory exists, etc...
+  // TODO: do some checks here..., fn file exists, directory exists, etc...
   fdrf.trainWithDataProvider ();
 }
-

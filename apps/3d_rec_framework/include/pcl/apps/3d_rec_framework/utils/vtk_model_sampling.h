@@ -7,15 +7,15 @@
 
 #pragma once
 
-#include <vtkPolyData.h>
-#include <vtkTriangle.h>
-#include <vtkSmartPointer.h>
+#include <pcl/common/common.h>
 #include <vtkCellArray.h>
 #include <vtkPLYReader.h>
+#include <vtkPolyData.h>
 #include <vtkPolyDataMapper.h>
+#include <vtkSmartPointer.h>
 #include <vtkTransform.h>
 #include <vtkTransformFilter.h>
-#include <pcl/common/common.h>
+#include <vtkTriangle.h>
 
 namespace pcl
 {
@@ -30,7 +30,8 @@ namespace pcl
     }
 
     inline void
-    randomPointTriangle (double a1, double a2, double a3, double b1, double b2, double b3, double c1, double c2, double c3, Eigen::Vector4f& p)
+    randomPointTriangle (double a1, double a2, double a3, double b1, double b2,
+                         double b3, double c1, double c2, double c3, Eigen::Vector4f &p)
     {
       float r1 = static_cast<float> (uniform_deviate (rand ()));
       float r2 = static_cast<float> (uniform_deviate (rand ()));
@@ -53,11 +54,13 @@ namespace pcl
     }
 
     inline void
-    randPSurface (vtkPolyData * polydata, std::vector<double> * cumulativeAreas, double totalArea, Eigen::Vector4f& p)
+    randPSurface (vtkPolyData *polydata, std::vector<double> *cumulativeAreas,
+                  double totalArea, Eigen::Vector4f &p)
     {
       float r = static_cast<float> (uniform_deviate (rand ()) * totalArea);
 
-      std::vector<double>::iterator low = std::lower_bound (cumulativeAreas->begin (), cumulativeAreas->end (), r);
+      std::vector<double>::iterator low =
+          std::lower_bound (cumulativeAreas->begin (), cumulativeAreas->end (), r);
       vtkIdType el = static_cast<vtkIdType> (low - cumulativeAreas->begin ());
 
       double A[3], B[3], C[3];
@@ -74,75 +77,74 @@ namespace pcl
       randomPointTriangle (A[0], A[1], A[2], B[0], B[1], B[2], C[0], C[1], C[2], p);
     }
 
-    template<typename PointT>
-      inline void
-      uniform_sampling (vtkSmartPointer<vtkPolyData> polydata, size_t n_samples, typename pcl::PointCloud<PointT> & cloud_out)
-      {
-        polydata->BuildCells ();
-        vtkSmartPointer < vtkCellArray > cells = polydata->GetPolys ();
+    template <typename PointT>
+    inline void
+    uniform_sampling (vtkSmartPointer<vtkPolyData> polydata, size_t n_samples,
+                      typename pcl::PointCloud<PointT> &cloud_out)
+    {
+      polydata->BuildCells ();
+      vtkSmartPointer<vtkCellArray> cells = polydata->GetPolys ();
 
-        double p1[3], p2[3], p3[3], totalArea = 0;
-        std::vector<double> cumulativeAreas (cells->GetNumberOfCells (), 0);
-        size_t i = 0;
-        vtkIdType npts = 0, *ptIds = nullptr;
-        for (cells->InitTraversal (); cells->GetNextCell (npts, ptIds); i++)
-        {
-          polydata->GetPoint (ptIds[0], p1);
-          polydata->GetPoint (ptIds[1], p2);
-          polydata->GetPoint (ptIds[2], p3);
-          totalArea += vtkTriangle::TriangleArea (p1, p2, p3);
-          cumulativeAreas[i] = totalArea;
-        }
-
-        cloud_out.points.resize (n_samples);
-        cloud_out.width = static_cast<int> (n_samples);
-        cloud_out.height = 1;
-
-        for (i = 0; i < n_samples; i++)
-        {
-          Eigen::Vector4f p (0.f, 0.f, 0.f, 0.f);
-          randPSurface (polydata, &cumulativeAreas, totalArea, p);
-          cloud_out.points[i].x = static_cast<float> (p[0]);
-          cloud_out.points[i].y = static_cast<float> (p[1]);
-          cloud_out.points[i].z = static_cast<float> (p[2]);
-        }
+      double p1[3], p2[3], p3[3], totalArea = 0;
+      std::vector<double> cumulativeAreas (cells->GetNumberOfCells (), 0);
+      size_t i = 0;
+      vtkIdType npts = 0, *ptIds = nullptr;
+      for (cells->InitTraversal (); cells->GetNextCell (npts, ptIds); i++) {
+        polydata->GetPoint (ptIds[0], p1);
+        polydata->GetPoint (ptIds[1], p2);
+        polydata->GetPoint (ptIds[2], p3);
+        totalArea += vtkTriangle::TriangleArea (p1, p2, p3);
+        cumulativeAreas[i] = totalArea;
       }
 
-    template<typename PointT>
-      inline void
-      uniform_sampling (std::string & file, size_t n_samples, typename pcl::PointCloud<PointT> & cloud_out, float scale = 1.f)
-      {
+      cloud_out.points.resize (n_samples);
+      cloud_out.width = static_cast<int> (n_samples);
+      cloud_out.height = 1;
 
-        vtkSmartPointer < vtkPLYReader > reader = vtkSmartPointer<vtkPLYReader>::New ();
-        reader->SetFileName (file.c_str ());
-
-        vtkSmartPointer < vtkPolyDataMapper > mapper = vtkSmartPointer<vtkPolyDataMapper>::New ();
-
-        if (scale == 1.f)
-        {
-          mapper->SetInputConnection (reader->GetOutputPort ());
-          mapper->Update ();
-        }
-        else
-        {
-          vtkSmartPointer<vtkTransform> trans = vtkSmartPointer<vtkTransform>::New ();
-          trans->Scale (scale, scale, scale);
-          vtkSmartPointer < vtkTransformFilter > trans_filter = vtkSmartPointer<vtkTransformFilter>::New ();
-          trans_filter->SetTransform (trans);
-          trans_filter->SetInputConnection (reader->GetOutputPort ());
-          trans_filter->Update ();
-          mapper->SetInputConnection (trans_filter->GetOutputPort ());
-          mapper->Update ();
-        }
-
-        vtkSmartPointer<vtkPolyData> poly = mapper->GetInput ();
-
-        uniform_sampling (poly, n_samples, cloud_out);
-
+      for (i = 0; i < n_samples; i++) {
+        Eigen::Vector4f p (0.f, 0.f, 0.f, 0.f);
+        randPSurface (polydata, &cumulativeAreas, totalArea, p);
+        cloud_out.points[i].x = static_cast<float> (p[0]);
+        cloud_out.points[i].y = static_cast<float> (p[1]);
+        cloud_out.points[i].z = static_cast<float> (p[2]);
       }
+    }
+
+    template <typename PointT>
+    inline void
+    uniform_sampling (std::string &file, size_t n_samples,
+                      typename pcl::PointCloud<PointT> &cloud_out, float scale = 1.f)
+    {
+
+      vtkSmartPointer<vtkPLYReader> reader = vtkSmartPointer<vtkPLYReader>::New ();
+      reader->SetFileName (file.c_str ());
+
+      vtkSmartPointer<vtkPolyDataMapper> mapper =
+          vtkSmartPointer<vtkPolyDataMapper>::New ();
+
+      if (scale == 1.f) {
+        mapper->SetInputConnection (reader->GetOutputPort ());
+        mapper->Update ();
+      } else {
+        vtkSmartPointer<vtkTransform> trans = vtkSmartPointer<vtkTransform>::New ();
+        trans->Scale (scale, scale, scale);
+        vtkSmartPointer<vtkTransformFilter> trans_filter =
+            vtkSmartPointer<vtkTransformFilter>::New ();
+        trans_filter->SetTransform (trans);
+        trans_filter->SetInputConnection (reader->GetOutputPort ());
+        trans_filter->Update ();
+        mapper->SetInputConnection (trans_filter->GetOutputPort ());
+        mapper->Update ();
+      }
+
+      vtkSmartPointer<vtkPolyData> poly = mapper->GetInput ();
+
+      uniform_sampling (poly, n_samples, cloud_out);
+    }
 
     inline void
-    getVerticesAsPointCloud (vtkSmartPointer<vtkPolyData> polydata, pcl::PointCloud<pcl::PointXYZ> & cloud_out)
+    getVerticesAsPointCloud (vtkSmartPointer<vtkPolyData> polydata,
+                             pcl::PointCloud<pcl::PointXYZ> &cloud_out)
     {
       vtkPoints *points = polydata->GetPoints ();
       cloud_out.points.resize (points->GetNumberOfPoints ());
@@ -150,8 +152,7 @@ namespace pcl
       cloud_out.height = 1;
       cloud_out.is_dense = false;
 
-      for (vtkIdType i = 0; i < points->GetNumberOfPoints (); i++)
-      {
+      for (vtkIdType i = 0; i < points->GetNumberOfPoints (); i++) {
         double p[3];
         points->GetPoint (i, p);
         cloud_out.points[i].x = static_cast<float> (p[0]);
@@ -159,5 +160,5 @@ namespace pcl
         cloud_out.points[i].z = static_cast<float> (p[2]);
       }
     }
-  }
-}
+  } // namespace rec_3d_framework
+} // namespace pcl

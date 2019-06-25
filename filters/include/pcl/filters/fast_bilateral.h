@@ -44,151 +44,176 @@
 
 namespace pcl
 {
-  /** \brief Implementation of a fast bilateral filter for smoothing depth information in organized point clouds
-   *  Based on the following paper:
+  /** \brief Implementation of a fast bilateral filter for smoothing depth information
+   * in organized point clouds Based on the following paper:
    *    * Sylvain Paris and Fredo Durand
-   *      "A Fast Approximation of the Bilateral Filter using a Signal Processing Approach"
-   *       European Conference on Computer Vision (ECCV'06)
+   *      "A Fast Approximation of the Bilateral Filter using a Signal Processing
+   * Approach" European Conference on Computer Vision (ECCV'06)
    *
    *  More details on the webpage: http://people.csail.mit.edu/sparis/bf/
    */
-  template<typename PointT>
+  template <typename PointT>
   class FastBilateralFilter : public Filter<PointT>
   {
     protected:
-      using Filter<PointT>::input_;
-      using PointCloud = typename Filter<PointT>::PointCloud;
+    using Filter<PointT>::input_;
+    using PointCloud = typename Filter<PointT>::PointCloud;
 
     public:
-    
-      using Ptr = boost::shared_ptr<FastBilateralFilter<PointT> >;
-      using ConstPtr = boost::shared_ptr<const FastBilateralFilter<PointT> >;
+    using Ptr = boost::shared_ptr<FastBilateralFilter<PointT>>;
+    using ConstPtr = boost::shared_ptr<const FastBilateralFilter<PointT>>;
 
-      /** \brief Empty constructor. */
-      FastBilateralFilter ()
-        : sigma_s_ (15.0f)
-        , sigma_r_ (0.05f)
-        , early_division_ (false)
-      { }
-      
-      /** \brief Empty destructor */
-      ~FastBilateralFilter () {}
+    /** \brief Empty constructor. */
+    FastBilateralFilter () : sigma_s_ (15.0f), sigma_r_ (0.05f), early_division_ (false)
+    {
+    }
 
-      /** \brief Set the standard deviation of the Gaussian used by the bilateral filter for
-        * the spatial neighborhood/window.
-        * \param[in] sigma_s the size of the Gaussian bilateral filter window to use
-        */
-      inline void
-      setSigmaS (float sigma_s)
-      { sigma_s_ = sigma_s; }
+    /** \brief Empty destructor */
+    ~FastBilateralFilter () {}
 
-      /** \brief Get the size of the Gaussian bilateral filter window as set by the user. */
-      inline float
-      getSigmaS () const
-      { return sigma_s_; }
+    /** \brief Set the standard deviation of the Gaussian used by the bilateral filter
+     * for the spatial neighborhood/window. \param[in] sigma_s the size of the Gaussian
+     * bilateral filter window to use
+     */
+    inline void
+    setSigmaS (float sigma_s)
+    {
+      sigma_s_ = sigma_s;
+    }
 
+    /** \brief Get the size of the Gaussian bilateral filter window as set by the user.
+     */
+    inline float
+    getSigmaS () const
+    {
+      return sigma_s_;
+    }
 
-      /** \brief Set the standard deviation of the Gaussian used to control how much an adjacent
-        * pixel is downweighted because of the intensity difference (depth in our case).
-        * \param[in] sigma_r the standard deviation of the Gaussian for the intensity difference
-        */
-      inline void
-      setSigmaR (float sigma_r)
-      { sigma_r_ = sigma_r; }
+    /** \brief Set the standard deviation of the Gaussian used to control how much an
+     * adjacent pixel is downweighted because of the intensity difference (depth in our
+     * case). \param[in] sigma_r the standard deviation of the Gaussian for the
+     * intensity difference
+     */
+    inline void
+    setSigmaR (float sigma_r)
+    {
+      sigma_r_ = sigma_r;
+    }
 
-      /** \brief Get the standard deviation of the Gaussian for the intensity difference */
-      inline float
-      getSigmaR () const
-      { return sigma_r_; }
+    /** \brief Get the standard deviation of the Gaussian for the intensity difference
+     */
+    inline float
+    getSigmaR () const
+    {
+      return sigma_r_;
+    }
 
-      /** \brief Filter the input data and store the results into output.
-        * \param[out] output the resultant point cloud
-        */
-      void
-      applyFilter (PointCloud &output) override;
+    /** \brief Filter the input data and store the results into output.
+     * \param[out] output the resultant point cloud
+     */
+    void
+    applyFilter (PointCloud &output) override;
 
     protected:
-      float sigma_s_;
-      float sigma_r_;
-      bool early_division_;
+    float sigma_s_;
+    float sigma_r_;
+    bool early_division_;
 
-      class Array3D
+    class Array3D
+    {
+      public:
+      Array3D (const size_t width, const size_t height, const size_t depth)
       {
-        public:
-          Array3D (const size_t width, const size_t height, const size_t depth)
-          {
-            x_dim_ = width;
-            y_dim_ = height;
-            z_dim_ = depth;
-            v_ = std::vector<Eigen::Vector2f, Eigen::aligned_allocator<Eigen::Vector2f> > (width*height*depth, Eigen::Vector2f (0.0f, 0.0f));
-          }
+        x_dim_ = width;
+        y_dim_ = height;
+        z_dim_ = depth;
+        v_ = std::vector<Eigen::Vector2f, Eigen::aligned_allocator<Eigen::Vector2f>> (
+            width * height * depth, Eigen::Vector2f (0.0f, 0.0f));
+      }
 
-          inline Eigen::Vector2f&
-          operator () (const size_t x, const size_t y, const size_t z)
-          { return v_[(x * y_dim_ + y) * z_dim_ + z]; }
+      inline Eigen::Vector2f &
+      operator() (const size_t x, const size_t y, const size_t z)
+      {
+        return v_[(x * y_dim_ + y) * z_dim_ + z];
+      }
 
-          inline const Eigen::Vector2f&
-          operator () (const size_t x, const size_t y, const size_t z) const
-          { return v_[(x * y_dim_ + y) * z_dim_ + z]; }
+      inline const Eigen::Vector2f &
+      operator() (const size_t x, const size_t y, const size_t z) const
+      {
+        return v_[(x * y_dim_ + y) * z_dim_ + z];
+      }
 
-          inline void
-          resize (const size_t width, const size_t height, const size_t depth)
-          {
-            x_dim_ = width;
-            y_dim_ = height;
-            z_dim_ = depth;
-            v_.resize (x_dim_ * y_dim_ * z_dim_);
-          }
+      inline void
+      resize (const size_t width, const size_t height, const size_t depth)
+      {
+        x_dim_ = width;
+        y_dim_ = height;
+        z_dim_ = depth;
+        v_.resize (x_dim_ * y_dim_ * z_dim_);
+      }
 
-          Eigen::Vector2f
-          trilinear_interpolation (const float x,
-                                   const float y,
-                                   const float z);
+      Eigen::Vector2f
+      trilinear_interpolation (const float x, const float y, const float z);
 
-          static inline size_t
-          clamp (const size_t min_value,
-                 const size_t max_value,
-                 const size_t x);
+      static inline size_t
+      clamp (const size_t min_value, const size_t max_value, const size_t x);
 
-          inline size_t
-          x_size () const
-          { return x_dim_; }
+      inline size_t
+      x_size () const
+      {
+        return x_dim_;
+      }
 
-          inline size_t
-          y_size () const
-          { return y_dim_; }
+      inline size_t
+      y_size () const
+      {
+        return y_dim_;
+      }
 
-          inline size_t
-          z_size () const
-          { return z_dim_; }
+      inline size_t
+      z_size () const
+      {
+        return z_dim_;
+      }
 
-          inline std::vector<Eigen::Vector2f, Eigen::aligned_allocator<Eigen::Vector2f> >::iterator
-          begin ()
-          { return v_.begin (); }
+      inline std::vector<Eigen::Vector2f,
+                         Eigen::aligned_allocator<Eigen::Vector2f>>::iterator
+      begin ()
+      {
+        return v_.begin ();
+      }
 
-          inline std::vector<Eigen::Vector2f, Eigen::aligned_allocator<Eigen::Vector2f> >::iterator
-          end ()
-          { return v_.end (); }
+      inline std::vector<Eigen::Vector2f,
+                         Eigen::aligned_allocator<Eigen::Vector2f>>::iterator
+      end ()
+      {
+        return v_.end ();
+      }
 
-          inline std::vector<Eigen::Vector2f, Eigen::aligned_allocator<Eigen::Vector2f> >::const_iterator
-          begin () const
-          { return v_.begin (); }
+      inline std::vector<Eigen::Vector2f,
+                         Eigen::aligned_allocator<Eigen::Vector2f>>::const_iterator
+      begin () const
+      {
+        return v_.begin ();
+      }
 
-          inline std::vector<Eigen::Vector2f, Eigen::aligned_allocator<Eigen::Vector2f> >::const_iterator
-          end () const
-          { return v_.end (); }
+      inline std::vector<Eigen::Vector2f,
+                         Eigen::aligned_allocator<Eigen::Vector2f>>::const_iterator
+      end () const
+      {
+        return v_.end ();
+      }
 
-        private:
-          std::vector<Eigen::Vector2f, Eigen::aligned_allocator<Eigen::Vector2f> > v_;
-          size_t x_dim_, y_dim_, z_dim_;
-      };
-
-
+      private:
+      std::vector<Eigen::Vector2f, Eigen::aligned_allocator<Eigen::Vector2f>> v_;
+      size_t x_dim_, y_dim_, z_dim_;
+    };
   };
-}
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/filters/impl/fast_bilateral.hpp>
 #else
-#define PCL_INSTANTIATE_FastBilateralFilter(T) template class PCL_EXPORTS pcl::FastBilateralFilter<T>;
+#define PCL_INSTANTIATE_FastBilateralFilter(T)                                         \
+  template class PCL_EXPORTS pcl::FastBilateralFilter<T>;
 #endif

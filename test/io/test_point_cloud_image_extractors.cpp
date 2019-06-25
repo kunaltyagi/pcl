@@ -40,8 +40,8 @@
 #include <iostream>
 
 #include <gtest/gtest.h>
-#include <pcl/point_types.h>
 #include <pcl/io/point_cloud_image_extractors.h>
+#include <pcl/point_types.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -55,11 +55,10 @@ TEST (PCL, PointCloudImageExtractorFromNormalField)
   cloud.height = 2;
   cloud.is_dense = true;
   cloud.points.resize (cloud.width * cloud.height);
-  for (auto &point : cloud.points)
-  {
+  for (auto &point : cloud.points) {
     point.normal_x = -1.0;
-    point.normal_y =  0.0;
-    point.normal_z =  1.0;
+    point.normal_y = 0.0;
+    point.normal_z = 1.0;
   }
   pcl::PCLImage image;
   PointCloudImageExtractorFromNormalField<PointT> pcie;
@@ -70,10 +69,10 @@ TEST (PCL, PointCloudImageExtractorFromNormalField)
   EXPECT_EQ (cloud.width, image.width);
   EXPECT_EQ (cloud.height, image.height);
 
-  EXPECT_EQ (  0, image.data[0 * 3 + 0]);
-  EXPECT_EQ (  0, image.data[1 * 3 + 0]);
-  EXPECT_EQ (  0, image.data[2 * 3 + 0]);
-  EXPECT_EQ (  0, image.data[3 * 3 + 0]);
+  EXPECT_EQ (0, image.data[0 * 3 + 0]);
+  EXPECT_EQ (0, image.data[1 * 3 + 0]);
+  EXPECT_EQ (0, image.data[2 * 3 + 0]);
+  EXPECT_EQ (0, image.data[3 * 3 + 0]);
   EXPECT_EQ (127, image.data[0 * 3 + 1]);
   EXPECT_EQ (127, image.data[1 * 3 + 1]);
   EXPECT_EQ (127, image.data[2 * 3 + 1]);
@@ -93,9 +92,8 @@ TEST (PCL, PointCloudImageExtractorFromRGBField)
   cloud.height = 2;
   cloud.is_dense = true;
   cloud.points.resize (cloud.width * cloud.height);
-  for (auto &point : cloud.points)
-  {
-    point.r =   0;
+  for (auto &point : cloud.points) {
+    point.r = 0;
     point.g = 127;
     point.b = 254;
   }
@@ -108,10 +106,10 @@ TEST (PCL, PointCloudImageExtractorFromRGBField)
   EXPECT_EQ (cloud.width, image.width);
   EXPECT_EQ (cloud.height, image.height);
 
-  EXPECT_EQ (  0, image.data[0 * 3 + 0]);
-  EXPECT_EQ (  0, image.data[1 * 3 + 0]);
-  EXPECT_EQ (  0, image.data[2 * 3 + 0]);
-  EXPECT_EQ (  0, image.data[3 * 3 + 0]);
+  EXPECT_EQ (0, image.data[0 * 3 + 0]);
+  EXPECT_EQ (0, image.data[1 * 3 + 0]);
+  EXPECT_EQ (0, image.data[2 * 3 + 0]);
+  EXPECT_EQ (0, image.data[3 * 3 + 0]);
   EXPECT_EQ (127, image.data[0 * 3 + 1]);
   EXPECT_EQ (127, image.data[1 * 3 + 1]);
   EXPECT_EQ (127, image.data[2 * 3 + 1]);
@@ -131,9 +129,8 @@ TEST (PCL, PointCloudImageExtractorFromRGBAField)
   cloud.height = 2;
   cloud.is_dense = true;
   cloud.points.resize (cloud.width * cloud.height);
-  for (auto &point : cloud.points)
-  {
-    point.r =   0;
+  for (auto &point : cloud.points) {
+    point.r = 0;
     point.g = 127;
     point.b = 254;
     point.a = 100;
@@ -147,10 +144,10 @@ TEST (PCL, PointCloudImageExtractorFromRGBAField)
   EXPECT_EQ (cloud.width, image.width);
   EXPECT_EQ (cloud.height, image.height);
 
-  EXPECT_EQ (  0, image.data[0 * 3 + 0]);
-  EXPECT_EQ (  0, image.data[1 * 3 + 0]);
-  EXPECT_EQ (  0, image.data[2 * 3 + 0]);
-  EXPECT_EQ (  0, image.data[3 * 3 + 0]);
+  EXPECT_EQ (0, image.data[0 * 3 + 0]);
+  EXPECT_EQ (0, image.data[1 * 3 + 0]);
+  EXPECT_EQ (0, image.data[2 * 3 + 0]);
+  EXPECT_EQ (0, image.data[3 * 3 + 0]);
   EXPECT_EQ (127, image.data[0 * 3 + 1]);
   EXPECT_EQ (127, image.data[1 * 3 + 1]);
   EXPECT_EQ (127, image.data[2 * 3 + 1]);
@@ -178,7 +175,7 @@ TEST (PCL, PointCloudImageExtractorFromLabelFieldMono)
   pcie.setColorMode (pcie.COLORS_MONO);
 
   ASSERT_TRUE (pcie.extract (cloud, image));
-  unsigned short* data = reinterpret_cast<unsigned short*> (&image.data[0]);
+  unsigned short *data = reinterpret_cast<unsigned short *> (&image.data[0]);
 
   EXPECT_EQ ("mono16", image.encoding);
   EXPECT_EQ (cloud.width, image.width);
@@ -279,7 +276,7 @@ TEST (PCL, PointCloudImageExtractorFromZField)
   PointCloudImageExtractorFromZField<PointT> pcie;
 
   ASSERT_TRUE (pcie.extract (cloud, image));
-  unsigned short* data = reinterpret_cast<unsigned short*> (&image.data[0]);
+  unsigned short *data = reinterpret_cast<unsigned short *> (&image.data[0]);
 
   EXPECT_EQ ("mono16", image.encoding);
   EXPECT_EQ (cloud.width, image.width);
@@ -309,7 +306,7 @@ TEST (PCL, PointCloudImageExtractorFromCurvatureField)
   PointCloudImageExtractorFromCurvatureField<PointT> pcie;
 
   ASSERT_TRUE (pcie.extract (cloud, image));
-  unsigned short* data = reinterpret_cast<unsigned short*> (&image.data[0]);
+  unsigned short *data = reinterpret_cast<unsigned short *> (&image.data[0]);
 
   EXPECT_EQ ("mono16", image.encoding);
   EXPECT_EQ (cloud.width, image.width);
@@ -317,9 +314,9 @@ TEST (PCL, PointCloudImageExtractorFromCurvatureField)
 
   // by default Curvature field extractor scales to full range of unsigned short
   EXPECT_EQ (0, data[0]);
-  EXPECT_EQ (std::numeric_limits<unsigned short>::max () , data[1]);
+  EXPECT_EQ (std::numeric_limits<unsigned short>::max (), data[1]);
   EXPECT_EQ (0, data[2]);
-  EXPECT_EQ (std::numeric_limits<unsigned short>::max () , data[3]);
+  EXPECT_EQ (std::numeric_limits<unsigned short>::max (), data[3]);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -341,7 +338,7 @@ TEST (PCL, PointCloudImageExtractorFromIntensityField)
   PointCloudImageExtractorFromIntensityField<PointT> pcie;
 
   ASSERT_TRUE (pcie.extract (cloud, image));
-  unsigned short* data = reinterpret_cast<unsigned short*> (&image.data[0]);
+  unsigned short *data = reinterpret_cast<unsigned short *> (&image.data[0]);
 
   EXPECT_EQ ("mono16", image.encoding);
   EXPECT_EQ (cloud.width, image.width);
@@ -412,7 +409,7 @@ TEST (PCL, PointCloudImageExtractorBlackNaNs)
   ASSERT_TRUE (pcie.extract (cloud, image));
 
   {
-    unsigned short* data = reinterpret_cast<unsigned short*> (&image.data[0]);
+    unsigned short *data = reinterpret_cast<unsigned short *> (&image.data[0]);
     EXPECT_EQ (std::numeric_limits<unsigned short>::max (), data[3]);
   }
 
@@ -421,15 +418,14 @@ TEST (PCL, PointCloudImageExtractorBlackNaNs)
   ASSERT_TRUE (pcie.extract (cloud, image));
 
   {
-    unsigned short* data = reinterpret_cast<unsigned short*> (&image.data[0]);
+    unsigned short *data = reinterpret_cast<unsigned short *> (&image.data[0]);
     EXPECT_EQ (0, data[3]);
   }
 }
 
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());
 }
-

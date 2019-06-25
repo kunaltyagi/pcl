@@ -35,49 +35,44 @@
  */
 
 #include <pcl/apps/modeler/dock_widget.h>
-#include <pcl/apps/modeler/render_window.h>
 #include <pcl/apps/modeler/main_window.h>
-
+#include <pcl/apps/modeler/render_window.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::modeler::DockWidget::DockWidget(const QString &title, QWidget *parent, Qt::WindowFlags flags) : 
-  QDockWidget(title, parent, flags)
+pcl::modeler::DockWidget::DockWidget (const QString &title, QWidget *parent,
+                                      Qt::WindowFlags flags)
+    : QDockWidget (title, parent, flags)
 {
-  setStyleSheet("QDockWidget::title {text-align: center;}");
-  setFocusPolicy(Qt::StrongFocus);
+  setStyleSheet ("QDockWidget::title {text-align: center;}");
+  setFocusPolicy (Qt::StrongFocus);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::modeler::DockWidget::DockWidget(QWidget *parent, Qt::WindowFlags flags) : 
-  QDockWidget(parent, flags) 
+pcl::modeler::DockWidget::DockWidget (QWidget *parent, Qt::WindowFlags flags)
+    : QDockWidget (parent, flags)
 {
-  setStyleSheet("QDockWidget::title {text-align: center;}");
-  setFocusPolicy(Qt::StrongFocus);
+  setStyleSheet ("QDockWidget::title {text-align: center;}");
+  setFocusPolicy (Qt::StrongFocus);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::modeler::DockWidget::~DockWidget()
+pcl::modeler::DockWidget::~DockWidget () {}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+void
+pcl::modeler::DockWidget::focusInEvent (QFocusEvent *event)
 {
+  QDockWidget::focusInEvent (event);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::DockWidget::focusInEvent ( QFocusEvent * event )
+pcl::modeler::DockWidget::setFocusBasedStyle (bool focused)
 {
-  QDockWidget::focusInEvent(event);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-void
-pcl::modeler::DockWidget::setFocusBasedStyle(bool focused)
-{
-  if (focused)
-  {
-    setStyleSheet("QDockWidget::title {text-align: center; background: #87CEFA;}");
-  }
-  else
-  {
-    setStyleSheet("QDockWidget::title {text-align: center;}");
+  if (focused) {
+    setStyleSheet ("QDockWidget::title {text-align: center; background: #87CEFA;}");
+  } else {
+    setStyleSheet ("QDockWidget::title {text-align: center;}");
   }
 
   return;

@@ -38,12 +38,13 @@
 #ifndef PCL_SEGMENTATION_IMPL_EXTRACT_POLYGONAL_PRISM_DATA_H_
 #define PCL_SEGMENTATION_IMPL_EXTRACT_POLYGONAL_PRISM_DATA_H_
 
-#include <pcl/segmentation/extract_polygonal_prism_data.h>
 #include <pcl/common/centroid.h>
 #include <pcl/common/eigen.h>
+#include <pcl/segmentation/extract_polygonal_prism_data.h>
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
+template <typename PointT>
+bool
 pcl::isPointIn2DPolygon (const PointT &point, const pcl::PointCloud<PointT> &polygon)
 {
   // Compute the plane coefficients
@@ -58,9 +59,9 @@ pcl::isPointIn2DPolygon (const PointT &point, const pcl::PointCloud<PointT> &pol
   EIGEN_ALIGN16 Eigen::Vector3f eigen_vector;
   eigen33 (covariance_matrix, eigen_value, eigen_vector);
 
-  model_coefficients[0] = eigen_vector [0];
-  model_coefficients[1] = eigen_vector [1];
-  model_coefficients[2] = eigen_vector [2];
+  model_coefficients[0] = eigen_vector[0];
+  model_coefficients[1] = eigen_vector[1];
+  model_coefficients[2] = eigen_vector[2];
   model_coefficients[3] = 0;
 
   // Hessian form (D = nc . p_plane (centroid here) + p)
@@ -68,8 +69,7 @@ pcl::isPointIn2DPolygon (const PointT &point, const pcl::PointCloud<PointT> &pol
 
   float distance_to_plane = model_coefficients[0] * point.x +
                             model_coefficients[1] * point.y +
-                            model_coefficients[2] * point.z +
-                            model_coefficients[3];
+                            model_coefficients[2] * point.z + model_coefficients[3];
   PointT ppoint;
   // Calculate the projection of the point on the plane
   ppoint.x = point.x - distance_to_plane * model_coefficients[0];
@@ -79,16 +79,16 @@ pcl::isPointIn2DPolygon (const PointT &point, const pcl::PointCloud<PointT> &pol
   // Create a X-Y projected representation for within bounds polygonal checking
   int k0, k1, k2;
   // Determine the best plane to project points onto
-  k0 = (fabs (model_coefficients[0] ) > fabs (model_coefficients[1])) ? 0  : 1;
+  k0 = (fabs (model_coefficients[0]) > fabs (model_coefficients[1])) ? 0 : 1;
   k0 = (fabs (model_coefficients[k0]) > fabs (model_coefficients[2])) ? k0 : 2;
   k1 = (k0 + 1) % 3;
   k2 = (k0 + 2) % 3;
   // Project the convex hull
   pcl::PointCloud<PointT> xy_polygon;
   xy_polygon.points.resize (polygon.points.size ());
-  for (size_t i = 0; i < polygon.points.size (); ++i)
-  {
-    Eigen::Vector4f pt (polygon.points[i].x, polygon.points[i].y, polygon.points[i].z, 0);
+  for (size_t i = 0; i < polygon.points.size (); ++i) {
+    Eigen::Vector4f pt (polygon.points[i].x, polygon.points[i].y, polygon.points[i].z,
+                        0);
     xy_polygon.points[i].x = pt[k1];
     xy_polygon.points[i].y = pt[k2];
     xy_polygon.points[i].z = 0;
@@ -103,8 +103,10 @@ pcl::isPointIn2DPolygon (const PointT &point, const pcl::PointCloud<PointT> &pol
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
-pcl::isXYPointIn2DXYPolygon (const PointT &point, const pcl::PointCloud<PointT> &polygon)
+template <typename PointT>
+bool
+pcl::isXYPointIn2DXYPolygon (const PointT &point,
+                             const pcl::PointCloud<PointT> &polygon)
 {
   bool in_poly = false;
   double x1, x2, y1, y2;
@@ -113,27 +115,23 @@ pcl::isXYPointIn2DXYPolygon (const PointT &point, const pcl::PointCloud<PointT> 
   // start with the last point to make the check last point<->first point the first one
   double xold = polygon.points[nr_poly_points - 1].x;
   double yold = polygon.points[nr_poly_points - 1].y;
-  for (int i = 0; i < nr_poly_points; i++)
-  {
+  for (int i = 0; i < nr_poly_points; i++) {
     double xnew = polygon.points[i].x;
     double ynew = polygon.points[i].y;
-    if (xnew > xold)
-    {
+    if (xnew > xold) {
       x1 = xold;
       x2 = xnew;
       y1 = yold;
       y2 = ynew;
-    }
-    else
-    {
+    } else {
       x1 = xnew;
       x2 = xold;
       y1 = ynew;
       y2 = yold;
     }
 
-    if ( (xnew < point.x) == (point.x <= xold) && (point.y - y1) * (x2 - x1) < (y2 - y1) * (point.x - x1) )
-    {
+    if ((xnew < point.x) == (point.x <= xold) &&
+        (point.y - y1) * (x2 - x1) < (y2 - y1) * (point.x - x1)) {
       in_poly = !in_poly;
     }
     xold = xnew;
@@ -144,20 +142,20 @@ pcl::isXYPointIn2DXYPolygon (const PointT &point, const pcl::PointCloud<PointT> 
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::ExtractPolygonalPrismData<PointT>::segment (pcl::PointIndices &output)
 {
   output.header = input_->header;
 
-  if (!initCompute ())
-  {
+  if (!initCompute ()) {
     output.indices.clear ();
     return;
   }
 
-  if (static_cast<int> (planar_hull_->points.size ()) < min_pts_hull_)
-  {
-    PCL_ERROR ("[pcl::%s::segment] Not enough points (%lu) in the hull!\n", getClassName ().c_str (), planar_hull_->points.size ());
+  if (static_cast<int> (planar_hull_->points.size ()) < min_pts_hull_) {
+    PCL_ERROR ("[pcl::%s::segment] Not enough points (%lu) in the hull!\n",
+               getClassName ().c_str (), planar_hull_->points.size ());
     output.indices.clear ();
     return;
   }
@@ -174,9 +172,9 @@ pcl::ExtractPolygonalPrismData<PointT>::segment (pcl::PointIndices &output)
   EIGEN_ALIGN16 Eigen::Vector3f eigen_vector;
   eigen33 (covariance_matrix, eigen_value, eigen_vector);
 
-  model_coefficients[0] = eigen_vector [0];
-  model_coefficients[1] = eigen_vector [1];
-  model_coefficients[2] = eigen_vector [2];
+  model_coefficients[0] = eigen_vector[0];
+  model_coefficients[1] = eigen_vector[1];
+  model_coefficients[2] = eigen_vector[2];
   model_coefficients[3] = 0;
 
   // Hessian form (D = nc . p_plane (centroid here) + p)
@@ -190,12 +188,12 @@ pcl::ExtractPolygonalPrismData<PointT>::segment (pcl::PointIndices &output)
   // Dot product between the (viewpoint - point) and the plane normal
   float cos_theta = vp.dot (model_coefficients);
   // Flip the plane normal
-  if (cos_theta < 0)
-  {
+  if (cos_theta < 0) {
     model_coefficients *= -1;
     model_coefficients[3] = 0;
     // Hessian form (D = nc . p_plane (centroid here) + p)
-    model_coefficients[3] = -1 * (model_coefficients.dot (planar_hull_->points[0].getVector4fMap ()));
+    model_coefficients[3] =
+        -1 * (model_coefficients.dot (planar_hull_->points[0].getVector4fMap ()));
   }
 
   // Project all points
@@ -206,16 +204,16 @@ pcl::ExtractPolygonalPrismData<PointT>::segment (pcl::PointIndices &output)
   // Create a X-Y projected representation for within bounds polygonal checking
   int k0, k1, k2;
   // Determine the best plane to project points onto
-  k0 = (fabs (model_coefficients[0] ) > fabs (model_coefficients[1])) ? 0  : 1;
+  k0 = (fabs (model_coefficients[0]) > fabs (model_coefficients[1])) ? 0 : 1;
   k0 = (fabs (model_coefficients[k0]) > fabs (model_coefficients[2])) ? k0 : 2;
   k1 = (k0 + 1) % 3;
   k2 = (k0 + 2) % 3;
   // Project the convex hull
   pcl::PointCloud<PointT> polygon;
   polygon.points.resize (planar_hull_->points.size ());
-  for (size_t i = 0; i < planar_hull_->points.size (); ++i)
-  {
-    Eigen::Vector4f pt (planar_hull_->points[i].x, planar_hull_->points[i].y, planar_hull_->points[i].z, 0);
+  for (size_t i = 0; i < planar_hull_->points.size (); ++i) {
+    Eigen::Vector4f pt (planar_hull_->points[i].x, planar_hull_->points[i].y,
+                        planar_hull_->points[i].z, 0);
     polygon.points[i].x = pt[k1];
     polygon.points[i].y = pt[k2];
     polygon.points[i].z = 0;
@@ -226,17 +224,16 @@ pcl::ExtractPolygonalPrismData<PointT>::segment (pcl::PointIndices &output)
 
   output.indices.resize (indices_->size ());
   int l = 0;
-  for (size_t i = 0; i < projected_points.points.size (); ++i)
-  {
+  for (size_t i = 0; i < projected_points.points.size (); ++i) {
     // Check the distance to the user imposed limits from the table planar model
-    double distance = pointToPlaneDistanceSigned (input_->points[(*indices_)[i]], model_coefficients);
+    double distance =
+        pointToPlaneDistanceSigned (input_->points[(*indices_)[i]], model_coefficients);
     if (distance < height_limit_min_ || distance > height_limit_max_)
       continue;
 
     // Check what points are inside the hull
-    Eigen::Vector4f pt (projected_points.points[i].x,
-                         projected_points.points[i].y,
-                         projected_points.points[i].z, 0);
+    Eigen::Vector4f pt (projected_points.points[i].x, projected_points.points[i].y,
+                        projected_points.points[i].z, 0);
     pt_xy.x = pt[k1];
     pt_xy.y = pt[k2];
 
@@ -250,9 +247,13 @@ pcl::ExtractPolygonalPrismData<PointT>::segment (pcl::PointIndices &output)
   deinitCompute ();
 }
 
-#define PCL_INSTANTIATE_ExtractPolygonalPrismData(T) template class PCL_EXPORTS pcl::ExtractPolygonalPrismData<T>;
-#define PCL_INSTANTIATE_isPointIn2DPolygon(T) template bool PCL_EXPORTS pcl::isPointIn2DPolygon<T>(const T&, const pcl::PointCloud<T> &);
-#define PCL_INSTANTIATE_isXYPointIn2DXYPolygon(T) template bool PCL_EXPORTS pcl::isXYPointIn2DXYPolygon<T>(const T &, const pcl::PointCloud<T> &);
+#define PCL_INSTANTIATE_ExtractPolygonalPrismData(T)                                   \
+  template class PCL_EXPORTS pcl::ExtractPolygonalPrismData<T>;
+#define PCL_INSTANTIATE_isPointIn2DPolygon(T)                                          \
+  template bool PCL_EXPORTS pcl::isPointIn2DPolygon<T> (const T &,                     \
+                                                        const pcl::PointCloud<T> &);
+#define PCL_INSTANTIATE_isXYPointIn2DXYPolygon(T)                                      \
+  template bool PCL_EXPORTS pcl::isXYPointIn2DXYPolygon<T> (                           \
+      const T &, const pcl::PointCloud<T> &);
 
-#endif    // PCL_SEGMENTATION_IMPL_EXTRACT_POLYGONAL_PRISM_DATA_H_
-
+#endif // PCL_SEGMENTATION_IMPL_EXTRACT_POLYGONAL_PRISM_DATA_H_

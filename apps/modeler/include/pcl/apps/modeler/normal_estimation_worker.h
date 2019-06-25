@@ -44,33 +44,36 @@ namespace pcl
   {
     class DoubleParameter;
 
-    class NormalEstimationWorker : public AbstractWorker 
+    class NormalEstimationWorker : public AbstractWorker
     {
       public:
-        NormalEstimationWorker(const QList<CloudMeshItem*>& cloud_mesh_items, QWidget* parent = nullptr);
-        ~NormalEstimationWorker();
+      NormalEstimationWorker (const QList<CloudMeshItem *> &cloud_mesh_items,
+                              QWidget *parent = nullptr);
+      ~NormalEstimationWorker ();
 
       protected:
-        std::string
-        getName () const override { return ("Normal Estimation"); }
+      std::string
+      getName () const override
+      {
+        return ("Normal Estimation");
+      }
 
-        void
-        initParameters(CloudMeshItem* cloud_mesh_item) override;
+      void
+      initParameters (CloudMeshItem *cloud_mesh_item) override;
 
-        void
-        setupParameters() override;
+      void
+      setupParameters () override;
 
-        void
-        processImpl(CloudMeshItem* cloud_mesh_item) override;
+      void
+      processImpl (CloudMeshItem *cloud_mesh_item) override;
 
       private:
-        double x_min_, x_max_;
-        double y_min_, y_max_;
-        double z_min_, z_max_;
+      double x_min_, x_max_;
+      double y_min_, y_max_;
+      double z_min_, z_max_;
 
-        DoubleParameter* search_radius_;
+      DoubleParameter *search_radius_;
     };
 
-  }
-}
-
+  } // namespace modeler
+} // namespace pcl

@@ -38,11 +38,11 @@
 /// @author Yue Li and Matthew Hielsberg
 
 #include <pcl/PointIndices.h>
-#include <pcl/point_types.h>
-#include <pcl/filters/statistical_outlier_removal.h>
+#include <pcl/apps/point_cloud_editor/cloud.h>
 #include <pcl/apps/point_cloud_editor/denoiseCommand.h>
 #include <pcl/apps/point_cloud_editor/selection.h>
-#include <pcl/apps/point_cloud_editor/cloud.h>
+#include <pcl/filters/statistical_outlier_removal.h>
+#include <pcl/point_types.h>
 
 void
 DenoiseCommand::execute ()
@@ -52,26 +52,26 @@ DenoiseCommand::execute ()
   // uses point neighborhood statistics to filter outlier data.
   // For a more detailed explanation, see PCL's tutorial on denoising:
   // http://pointclouds.org/documentation/tutorials/statistical_outlier.php
-  pcl::StatisticalOutlierRemoval<Point3D> filter(true);
-  filter.setInputCloud(cloud_ptr_->getInternalCloud().makeShared());
-  filter.setMeanK(mean_);
+  pcl::StatisticalOutlierRemoval<Point3D> filter (true);
+  filter.setInputCloud (cloud_ptr_->getInternalCloud ().makeShared ());
+  filter.setMeanK (mean_);
   filter.setStddevMulThresh (threshold_);
   // filtering and back up
-  filter.setNegative(false);
-  filter.filter(temp_cloud);
+  filter.setNegative (false);
+  filter.filter (temp_cloud);
   // back up the removed indices.
-  pcl::IndicesConstPtr indices_ptr = filter.getRemovedIndices();
-  for(const int &it : *indices_ptr)
-    removed_indices_.addIndex(static_cast<unsigned int>(it));
+  pcl::IndicesConstPtr indices_ptr = filter.getRemovedIndices ();
+  for (const int &it : *indices_ptr)
+    removed_indices_.addIndex (static_cast<unsigned int> (it));
   // back up the removed points.
-  removed_points_.set(cloud_ptr_, removed_indices_);
+  removed_points_.set (cloud_ptr_, removed_indices_);
   // remove the noisy points.
-  cloud_ptr_->remove(removed_indices_);
-  selection_ptr_->clear();
+  cloud_ptr_->remove (removed_indices_);
+  selection_ptr_->clear ();
 }
 
 void
 DenoiseCommand::undo ()
 {
-  cloud_ptr_->restore(removed_points_, removed_indices_);
+  cloud_ptr_->restore (removed_points_, removed_indices_);
 }

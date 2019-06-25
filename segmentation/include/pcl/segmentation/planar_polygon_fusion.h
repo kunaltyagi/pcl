@@ -38,49 +38,53 @@
 #pragma once
 
 #include <Eigen/Core>
-#include <vector>
 #include <pcl/segmentation/planar_region.h>
+#include <vector>
 
 namespace pcl
 {
   /** \brief PlanarPolygonFusion takes a list of 2D planar polygons and
-    * attempts to reduce them to a minimum set that best represents the scene,
-    * based on various given comparators.
-    */
+   * attempts to reduce them to a minimum set that best represents the scene,
+   * based on various given comparators.
+   */
   template <typename PointT>
   class PlanarPolygonFusion
   {
     public:
-      /** \brief Constructor */
-      PlanarPolygonFusion () : regions_ () {}
-     
-      /** \brief Destructor */
-      virtual ~PlanarPolygonFusion () {}
+    /** \brief Constructor */
+    PlanarPolygonFusion () : regions_ () {}
 
-      /** \brief Reset the state (clean the list of planar models). */
-      void 
-      reset ()
-      {
-        regions_.clear ();
-      }
-      
-      /** \brief Set the list of 2D planar polygons to refine.
-        * \param[in] input the list of 2D planar polygons to refine
-        */
-      void
-      addInputPolygons (const std::vector<PlanarRegion<PointT>, Eigen::aligned_allocator<PlanarRegion<PointT> > > &input)
-      {
-        int start = static_cast<int> (regions_.size ());
-        regions_.resize (regions_.size () + input.size ());
-        for(size_t i = 0; i < input.size (); i++)
-          regions_[start+i] = input[i];
-      }
+    /** \brief Destructor */
+    virtual ~PlanarPolygonFusion () {}
+
+    /** \brief Reset the state (clean the list of planar models). */
+    void
+    reset ()
+    {
+      regions_.clear ();
+    }
+
+    /** \brief Set the list of 2D planar polygons to refine.
+     * \param[in] input the list of 2D planar polygons to refine
+     */
+    void
+    addInputPolygons (
+        const std::vector<PlanarRegion<PointT>,
+                          Eigen::aligned_allocator<PlanarRegion<PointT>>> &input)
+    {
+      int start = static_cast<int> (regions_.size ());
+      regions_.resize (regions_.size () + input.size ());
+      for (size_t i = 0; i < input.size (); i++)
+        regions_[start + i] = input[i];
+    }
 
     protected:
-      /** \brief Internal list of planar states. */
-      std::vector<pcl::PlanarRegion<PointT>, Eigen::aligned_allocator<pcl::PlanarRegion<PointT> > > regions_;
+    /** \brief Internal list of planar states. */
+    std::vector<pcl::PlanarRegion<PointT>,
+                Eigen::aligned_allocator<pcl::PlanarRegion<PointT>>>
+        regions_;
   };
-}
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/segmentation/impl/planar_polygon_fusion.hpp>

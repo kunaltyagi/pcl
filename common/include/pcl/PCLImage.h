@@ -1,25 +1,22 @@
 #pragma once
 
+#include <ostream>
 #include <string>
 #include <vector>
-#include <ostream>
 
 #ifdef USE_ROS
-   #error USE_ROS setup requires PCL to compile against ROS message headers, which is now deprecated
-#endif   
+#error USE_ROS setup requires PCL to compile against ROS message headers, which is now deprecated
+#endif
 
 // Include the correct Header path here
 #include <pcl/PCLHeader.h>
 
 namespace pcl
 {
-  struct PCLImage
-  {
-    PCLImage () : height (0), width (0),
-               is_bigendian (0), step (0)
-    {}
+  struct PCLImage {
+    PCLImage () : height (0), width (0), is_bigendian (0), step (0) {}
 
-     ::pcl::PCLHeader  header;
+    ::pcl::PCLHeader header;
 
     pcl::uint32_t height;
     pcl::uint32_t width;
@@ -30,14 +27,15 @@ namespace pcl
 
     std::vector<pcl::uint8_t> data;
 
-    using Ptr = boost::shared_ptr< ::pcl::PCLImage>;
+    using Ptr = boost::shared_ptr<::pcl::PCLImage>;
     using ConstPtr = boost::shared_ptr<const ::pcl::PCLImage>;
   }; // struct PCLImage
 
-  using PCLImagePtr = boost::shared_ptr< ::pcl::PCLImage>;
+  using PCLImagePtr = boost::shared_ptr<::pcl::PCLImage>;
   using PCLImageConstPtr = boost::shared_ptr<const ::pcl::PCLImage>;
 
-  inline std::ostream& operator<<(std::ostream& s, const  ::pcl::PCLImage & v)
+  inline std::ostream &
+  operator<< (std::ostream &s, const ::pcl::PCLImage &v)
   {
     s << "header: " << std::endl;
     s << v.header;
@@ -52,8 +50,7 @@ namespace pcl
     s << "step: ";
     s << "  " << v.step << std::endl;
     s << "data[]" << std::endl;
-    for (size_t i = 0; i < v.data.size (); ++i)
-    {
+    for (size_t i = 0; i < v.data.size (); ++i) {
       s << "  data[" << i << "]: ";
       s << "  " << v.data[i] << std::endl;
     }

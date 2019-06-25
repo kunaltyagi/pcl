@@ -38,9 +38,9 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_cloud.h>
-#include <pcl/io/pcd_io.h>
 #include <pcl/features/moment_invariants.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -85,8 +85,7 @@ TEST (PCL, MomentInvariantsEstimation)
   mi.compute (*moments);
   EXPECT_EQ (moments->points.size (), indices.size ());
 
-  for (const auto &point : moments->points)
-  {
+  for (const auto &point : moments->points) {
     EXPECT_NEAR (point.j1, 1.59244, 1e-4);
     EXPECT_NEAR (point.j2, 0.652063, 1e-4);
     EXPECT_NEAR (point.j3, 0.053917, 1e-4);
@@ -95,17 +94,19 @@ TEST (PCL, MomentInvariantsEstimation)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
-  if (loadPCDFile<PointXYZ> (argv[1], cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (loadPCDFile<PointXYZ> (argv[1], cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
 

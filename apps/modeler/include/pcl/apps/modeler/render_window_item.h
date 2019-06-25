@@ -1,4 +1,4 @@
- /*
+/*
  * Software License Agreement (BSD License)
  *
  *  Point Cloud Library (PCL) - www.pointclouds.org
@@ -41,7 +41,6 @@
 #include <pcl/apps/modeler/abstract_item.h>
 #include <pcl/apps/modeler/cloud_mesh.h>
 
-
 namespace pcl
 {
   namespace modeler
@@ -54,43 +53,46 @@ namespace pcl
     class RenderWindowItem : public QTreeWidgetItem, public AbstractItem
     {
       public:
-        RenderWindowItem(QTreeWidget * parent);
-        ~RenderWindowItem();
+      RenderWindowItem (QTreeWidget *parent);
+      ~RenderWindowItem ();
 
-        inline RenderWindow*
-        getRenderWindow()
-        {
-          return render_window_;
-        }
-        inline const RenderWindow*
-        getRenderWindow() const
-        {
-          return render_window_;
-        }
+      inline RenderWindow *
+      getRenderWindow ()
+      {
+        return render_window_;
+      }
+      inline const RenderWindow *
+      getRenderWindow () const
+      {
+        return render_window_;
+      }
 
-        bool
-        openPointCloud(const QString& filename);
+      bool
+      openPointCloud (const QString &filename);
 
-        CloudMeshItem*
-        addPointCloud(CloudMesh::PointCloudPtr cloud);
+      CloudMeshItem *
+      addPointCloud (CloudMesh::PointCloudPtr cloud);
 
-        std::string
-        getItemName() const override {return "Render Window Item";}
+      std::string
+      getItemName () const override
+      {
+        return "Render Window Item";
+      }
 
       protected:
-        void
-        prepareContextMenu(QMenu* menu) const override;
+      void
+      prepareContextMenu (QMenu *menu) const override;
 
-        void
-        prepareProperties(ParameterDialog* parameter_dialog) override;
+      void
+      prepareProperties (ParameterDialog *parameter_dialog) override;
 
-        void
-        setProperties() override;
+      void
+      setProperties () override;
 
       private:
-        RenderWindow*     render_window_;
-        ColorParameter*   background_color_;
-        BoolParameter*    show_axes_;
+      RenderWindow *render_window_;
+      ColorParameter *background_color_;
+      BoolParameter *show_axes_;
     };
-  }
-}
+  } // namespace modeler
+} // namespace pcl

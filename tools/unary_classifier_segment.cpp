@@ -37,11 +37,10 @@
  *
  */
 
-
-#include <pcl/io/pcd_io.h>
-#include <pcl/console/print.h>
 #include <pcl/console/parse.h>
+#include <pcl/console/print.h>
 #include <pcl/console/time.h>
+#include <pcl/io/pcd_io.h>
 
 #include <pcl/segmentation/unary_classifier.h>
 
@@ -64,31 +63,35 @@ printHelp (int, char **argv)
   print_error ("Syntax is: %s input.pcd output.pcd <options>\n", argv[0]);
   print_info ("  where options are:\n");
   print_info ("                     -d = trained features directory \n");
-  print_info ("                     -threshold X = feature threshold (default: "); 
-  print_value ("%f", default_feature_threshold); print_info (")\n");
-  print_info ("                     -normal-search X = Normal radius search (default: "); 
-  print_value ("%f", default_normal_radius_search); print_info (")\n");
-  print_info ("                     -fpfh-search X = FPFH radius search (default: "); 
-  print_value ("%f", default_fpfh_radius_search); print_info (")\n");
+  print_info ("                     -threshold X = feature threshold (default: ");
+  print_value ("%f", default_feature_threshold);
+  print_info (")\n");
+  print_info (
+      "                     -normal-search X = Normal radius search (default: ");
+  print_value ("%f", default_normal_radius_search);
+  print_info (")\n");
+  print_info ("                     -fpfh-search X = FPFH radius search (default: ");
+  print_value ("%f", default_fpfh_radius_search);
+  print_info (")\n");
 }
 
 bool
 loadTrainedFeatures (std::vector<FeatureT::Ptr> &out,
                      const boost::filesystem::path &base_dir)
 {
-  if (!boost::filesystem::exists (base_dir) && !boost::filesystem::is_directory (base_dir))
+  if (!boost::filesystem::exists (base_dir) &&
+      !boost::filesystem::is_directory (base_dir))
     return false;
 
-  for (boost::filesystem::directory_iterator it (base_dir); it != boost::filesystem::directory_iterator (); ++it)
-  {    
+  for (boost::filesystem::directory_iterator it (base_dir);
+       it != boost::filesystem::directory_iterator (); ++it) {
     if (!boost::filesystem::is_directory (it->status ()) &&
-        boost::filesystem::extension (it->path ()) == ".pcd")
-    {   
+        boost::filesystem::extension (it->path ()) == ".pcd") {
       std::stringstream ss;
       ss << it->path ().string ();
 
       print_highlight ("Loading %s \n", ss.str ().c_str ());
-      
+
       FeatureT::Ptr features (new FeatureT);
       if (loadPCDFile (ss.str ().c_str (), *features) < 0)
         return false;
@@ -103,26 +106,29 @@ bool
 loadCloud (const std::string &filename, CloudT::Ptr &cloud)
 {
   TicToc tt;
-  print_highlight ("Loading "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Loading ");
+  print_value ("%s ", filename.c_str ());
 
   tt.tic ();
   if (loadPCDFile (filename, *cloud) < 0)
     return (false);
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", cloud->width * cloud->height); print_info (" points]\n");
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", cloud->width * cloud->height);
+  print_info (" points]\n");
 
   return (true);
 }
 
 void
 compute (const CloudT::Ptr &input, std::vector<FeatureT::Ptr> &trained_features,
-         CloudLT::Ptr &out,
-         float normal_radius_search,
-         float fpfh_radius_search,
+         CloudLT::Ptr &out, float normal_radius_search, float fpfh_radius_search,
          float feature_threshold)
 {
   TicToc tt;
   tt.tic ();
-  
+
   print_highlight ("Computing ");
 
   UnaryClassifier<PointT> classifier;
@@ -134,11 +140,11 @@ compute (const CloudT::Ptr &input, std::vector<FeatureT::Ptr> &trained_features,
 
   classifier.segment (out);
 
-  print_info ("[done, "); 
-  print_value ("%g", tt.toc ()); 
-  print_info (" ms : "); print_value ("%d", out->width * out->height); 
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", out->width * out->height);
   print_info (" points]\n");
-
 }
 
 void
@@ -147,24 +153,27 @@ saveCloud (const std::string &filename, CloudLT::Ptr &output)
   TicToc tt;
   tt.tic ();
 
-  print_highlight ("Saving "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Saving ");
+  print_value ("%s ", filename.c_str ());
 
   PCDWriter w;
   w.write (filename, *output);
-  
-  print_info ("[done, "); 
-  print_value ("%g", tt.toc ()); print_info (" ms : "); 
-  print_value ("%d", output->width * output->height); print_info (" points]\n");
+
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", output->width * output->height);
+  print_info (" points]\n");
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  print_info ("Train unary classifier using FPFH. For more information, use: %s -h\n", argv[0]);
+  print_info ("Train unary classifier using FPFH. For more information, use: %s -h\n",
+              argv[0]);
 
-  if (argc < 4)
-  {
+  if (argc < 4) {
     printHelp (argc, argv);
     return (-1);
   }
@@ -172,21 +181,20 @@ main (int argc, char** argv)
   // Parse the command line arguments for .pcd files
   std::vector<int> p_file_indices;
   p_file_indices = parse_file_extension_argument (argc, argv, ".pcd");
-  if (p_file_indices.size () != 2)
-  {
+  if (p_file_indices.size () != 2) {
     print_error ("Need one input PCD file and one output PCD file to continue.\n");
     return (-1);
   }
 
   // Load the input file
   CloudT::Ptr cloud (new CloudT);
-  if (!loadCloud (argv[p_file_indices[0]], cloud)) 
+  if (!loadCloud (argv[p_file_indices[0]], cloud))
     return (-1);
 
   // TODO:: make this as an optional argument ??
   std::vector<int> tmp_indices;
   pcl::removeNaNFromPointCloud (*cloud, *cloud, tmp_indices);
-  
+
   // parse optional input arguments from the command line
   float normal_radius_search = static_cast<float> (default_normal_radius_search);
   float fpfh_radius_search = static_cast<float> (default_fpfh_radius_search);
@@ -197,7 +205,6 @@ main (int argc, char** argv)
   parse_argument (argc, argv, "-threshold", feature_threshold);
   parse_argument (argc, argv, "-normal-radius-search", normal_radius_search);
   parse_argument (argc, argv, "-fpfh-radius-search", fpfh_radius_search);
-
 
   print_info ("trained feature directory: %s \n", dir_name.c_str ());
 
@@ -211,8 +218,8 @@ main (int argc, char** argv)
   print_info ("fpfh-radius-search: %f \n\n", fpfh_radius_search);
 
   CloudLT::Ptr out (new CloudLT);
-  compute (cloud, trained_features, out, normal_radius_search, fpfh_radius_search, feature_threshold);
+  compute (cloud, trained_features, out, normal_radius_search, fpfh_radius_search,
+           feature_threshold);
 
   saveCloud (argv[p_file_indices[1]], out);
 }
-

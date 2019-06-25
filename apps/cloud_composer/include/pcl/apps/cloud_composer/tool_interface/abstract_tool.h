@@ -47,141 +47,164 @@ namespace pcl
 {
   namespace cloud_composer
   {
-       
-        
+
     class AbstractTool : public QObject
     {
       Q_OBJECT
       public:
+      AbstractTool (PropertiesModel *parameter_model, QObject *parent);
 
-        AbstractTool (PropertiesModel* parameter_model, QObject* parent); 
+      ~AbstractTool () { qDebug () << "Tool Destructed"; }
 
-        ~AbstractTool () { qDebug() << "Tool Destructed"; }
-        
-        /**  \brief Function called which does work in plugin 
-         *  \param data input_data from the model - const for good reason
-         *  Returned list will become the output, replacing input_data in the model - you must deep copy
-         *  the input_data, since undo works by switching back and forth
-         */ 
-        virtual QList <CloudComposerItem*>
-        performAction (QList <const CloudComposerItem*> input_data, PointTypeFlags::PointType type = PointTypeFlags::NONE) = 0;
-        
-        virtual CloudCommand*
-        createCommand (QList <const CloudComposerItem*> input_data) = 0;
-        
-        QString 
-        getActionText () const {return action_text_;}
-        
-        void
-        setActionText (const QString text) { action_text_ = text; }
-              
-        virtual QString
-        getToolName () const = 0;
-        
+      /**  \brief Function called which does work in plugin
+       *  \param data input_data from the model - const for good reason
+       *  Returned list will become the output, replacing input_data in the model - you
+       * must deep copy the input_data, since undo works by switching back and forth
+       */
+      virtual QList<CloudComposerItem *>
+      performAction (QList<const CloudComposerItem *> input_data,
+                     PointTypeFlags::PointType type = PointTypeFlags::NONE) = 0;
+
+      virtual CloudCommand *
+      createCommand (QList<const CloudComposerItem *> input_data) = 0;
+
+      QString
+      getActionText () const
+      {
+        return action_text_;
+      }
+
+      void
+      setActionText (const QString text)
+      {
+        action_text_ = text;
+      }
+
+      virtual QString
+      getToolName () const = 0;
+
       protected:
-             
-        PropertiesModel* parameter_model_;   
-       
+      PropertiesModel *parameter_model_;
+
       private:
-        QString action_text_;
-        
+      QString action_text_;
     };
-    
+
     class ModifyItemTool : public AbstractTool
     {
       Q_OBJECT
       public:
-        ModifyItemTool (PropertiesModel* parameter_model, QObject* parent) 
-                      : AbstractTool (parameter_model, parent) 
-                      {}
-        
-        ~ModifyItemTool () { }
-        
-        QList <CloudComposerItem*>
-        performAction (QList <const CloudComposerItem*> input_data, PointTypeFlags::PointType type = PointTypeFlags::NONE) override = 0;
-        
-        inline CloudCommand* 
-        createCommand (QList <const CloudComposerItem*> input_data) override 
-        {
-          return new ModifyItemCommand (input_data);
-        }
-        
-        inline QString
-        getToolName () const override { return "ModifyItemTool";}
-        
+      ModifyItemTool (PropertiesModel *parameter_model, QObject *parent)
+          : AbstractTool (parameter_model, parent)
+      {
+      }
+
+      ~ModifyItemTool () {}
+
+      QList<CloudComposerItem *>
+      performAction (QList<const CloudComposerItem *> input_data,
+                     PointTypeFlags::PointType type = PointTypeFlags::NONE) override =
+          0;
+
+      inline CloudCommand *
+      createCommand (QList<const CloudComposerItem *> input_data) override
+      {
+        return new ModifyItemCommand (input_data);
+      }
+
+      inline QString
+      getToolName () const override
+      {
+        return "ModifyItemTool";
+      }
     };
-    
+
     class NewItemTool : public AbstractTool
     {
       Q_OBJECT
       public:
-        NewItemTool (PropertiesModel* parameter_model, QObject* parent) 
-                      : AbstractTool (parameter_model, parent)
-                      {}
-        
-        ~NewItemTool () { }
-        
-        QList <CloudComposerItem*>
-        performAction (QList <const CloudComposerItem*> input_data, PointTypeFlags::PointType type = PointTypeFlags::NONE) override = 0;
-        
-        inline CloudCommand*
-        createCommand (QList <const CloudComposerItem*> input_data) override 
-        {
-          return new NewItemCloudCommand (input_data);
-        }
-        
-        inline QString
-        getToolName () const override { return "NewItemTool";}
-      
+      NewItemTool (PropertiesModel *parameter_model, QObject *parent)
+          : AbstractTool (parameter_model, parent)
+      {
+      }
+
+      ~NewItemTool () {}
+
+      QList<CloudComposerItem *>
+      performAction (QList<const CloudComposerItem *> input_data,
+                     PointTypeFlags::PointType type = PointTypeFlags::NONE) override =
+          0;
+
+      inline CloudCommand *
+      createCommand (QList<const CloudComposerItem *> input_data) override
+      {
+        return new NewItemCloudCommand (input_data);
+      }
+
+      inline QString
+      getToolName () const override
+      {
+        return "NewItemTool";
+      }
     };
-    
+
     class SplitItemTool : public AbstractTool
     {
       Q_OBJECT
       public:
-        SplitItemTool (PropertiesModel* parameter_model, QObject* parent) 
-                      : AbstractTool (parameter_model, parent) 
-                      {}
-        
-        ~SplitItemTool () { }
-        
-        QList <CloudComposerItem*>
-        performAction (QList <const CloudComposerItem*> input_data, PointTypeFlags::PointType type = PointTypeFlags::NONE) override = 0;
-        
-        inline CloudCommand* 
-        createCommand (QList <const CloudComposerItem*> input_data) override 
-        {
-          return new SplitCloudCommand (input_data);
-        }
-        
-        inline QString
-        getToolName () const override { return "SplitItemTool";}
-        
+      SplitItemTool (PropertiesModel *parameter_model, QObject *parent)
+          : AbstractTool (parameter_model, parent)
+      {
+      }
+
+      ~SplitItemTool () {}
+
+      QList<CloudComposerItem *>
+      performAction (QList<const CloudComposerItem *> input_data,
+                     PointTypeFlags::PointType type = PointTypeFlags::NONE) override =
+          0;
+
+      inline CloudCommand *
+      createCommand (QList<const CloudComposerItem *> input_data) override
+      {
+        return new SplitCloudCommand (input_data);
+      }
+
+      inline QString
+      getToolName () const override
+      {
+        return "SplitItemTool";
+      }
     };
-    
+
     class MergeCloudTool : public AbstractTool
     {
       Q_OBJECT
       public:
-        MergeCloudTool (PropertiesModel* parameter_model, QObject* parent) 
-                      : AbstractTool (parameter_model, parent) 
-                      {}
-        
-        ~MergeCloudTool () { }
-        
-        QList <CloudComposerItem*>
-        performAction (QList <const CloudComposerItem*> input_data, PointTypeFlags::PointType type = PointTypeFlags::NONE) override = 0;
-        
-        inline CloudCommand* 
-        createCommand (QList <const CloudComposerItem*> input_data) override 
-        {
-          return new MergeCloudCommand (input_data);
-        }
-        
-        inline QString
-        getToolName () const override { return "MergeCloudTool";}
-        
+      MergeCloudTool (PropertiesModel *parameter_model, QObject *parent)
+          : AbstractTool (parameter_model, parent)
+      {
+      }
+
+      ~MergeCloudTool () {}
+
+      QList<CloudComposerItem *>
+      performAction (QList<const CloudComposerItem *> input_data,
+                     PointTypeFlags::PointType type = PointTypeFlags::NONE) override =
+          0;
+
+      inline CloudCommand *
+      createCommand (QList<const CloudComposerItem *> input_data) override
+      {
+        return new MergeCloudCommand (input_data);
+      }
+
+      inline QString
+      getToolName () const override
+      {
+        return "MergeCloudTool";
+      }
     };
 
-  }
-}
+  } // namespace cloud_composer
+} // namespace pcl

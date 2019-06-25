@@ -52,13 +52,13 @@
 //#include <opencv2/highgui/highgui.hpp>
 
 // PCL specific includes
+#include <pcl/PointIndices.h>
+#include <pcl/common/centroid.h>
+#include <pcl/common/common.h>
+#include <pcl/common/eigen.h>
+#include <pcl/conversions.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
-#include <pcl/conversions.h>
-#include <pcl/common/eigen.h>
-#include <pcl/common/common.h>
-#include <pcl/common/centroid.h>
-#include <pcl/PointIndices.h>
 
 #include <pcl/common/time.h>
 
@@ -79,7 +79,7 @@ namespace pcl
          * \param[in] depthThres the z-distance threshold
          * \todo add a Gaussian contribution function to depth and vote
          **/
-        //inline void smoothLabelImage ( cv::Mat&      lmap_in,
+        // inline void smoothLabelImage ( cv::Mat&      lmap_in,
         //                        cv::Mat&      dmap,
         //                        cv::Mat&      lmap_out,
         //                        unsigned int  patch_size,
@@ -101,7 +101,8 @@ namespace pcl
         //  for(unsigned int h = (0 + half_patch); h < (lmap_in.rows - half_patch); h++)
         //  {
         //    // iterate over the width of the image (from 2 till 638)
-        //    for(unsigned int w = (0 + half_patch); w < (lmap_in.cols - half_patch); w++)
+        //    for(unsigned int w = (0 + half_patch); w < (lmap_in.cols - half_patch);
+        //    w++)
         //    {
         //      short depth = dmap.at<short>(h, w);
         //      unsigned int votes[NUM_PARTS];
@@ -113,18 +114,20 @@ namespace pcl
         //      for(unsigned int h_l = (h - half_patch); h_l <= (h + half_patch); h_l++)
         //      {
         //        // iterate over the size of the patch in the width
-        //        for(unsigned int w_l = (w - half_patch); w_l <= (w + half_patch); w_l++)
+        //        for(unsigned int w_l = (w - half_patch); w_l <= (w + half_patch);
+        //        w_l++)
         //        {
         //          // get the depth of this part of the patch
         //          short depth_l = dmap.at<short>(h_l,w_l);
-        //          // evaluate the difference to the centroid 
+        //          // evaluate the difference to the centroid
         //          if(abs(depth - depth_l) < static_cast<int> (depthThres))
         //          {
         //            char label = lmap_in.at<char>(h_l,w_l);
         //            if(label >= 0 && label < NUM_PARTS)
         //              votes[static_cast<unsigned int> (label)]++;
         //            else
-        //              std::cout << "(E) : smoothLabelImage(): I've read a label that is non valid" << std::endl;
+        //              std::cout << "(E) : smoothLabelImage(): I've read a label that
+        //              is non valid" << std::endl;
         //          }
         //        }
         //      }
@@ -155,7 +158,7 @@ namespace pcl
          * \todo make the z-distance a parameter
          * \todo add a Gaussian contribution function to depth and vote
          **/
-        //inline void smoothLabelImage2 ( cv::Mat&  lmap_in,
+        // inline void smoothLabelImage2 ( cv::Mat&  lmap_in,
         //                        cv::Mat&  dmap,
         //                        cv::Mat&  lmap_out)
         //{
@@ -199,14 +202,15 @@ namespace pcl
         //        {
         //          // get the depth of this part of the patch
         //          short depth_l = dmap.at<short>(h_l,w_l);
-        //          // evaluate the difference to the centroid 
+        //          // evaluate the difference to the centroid
         //          if(abs(depth - depth_l) < static_cast<int> (depthThres))
         //          {
         //            char label = lmap_in.at<char>(h_l,w_l);
         //            if(label >= 0 && label < NUM_PARTS)
         //              votes[static_cast<unsigned int>(label)]++;
         //            else
-        //              std::cout << "(E) : smoothLabelImage(): I've read a label that is non valid" << std::endl;
+        //              std::cout << "(E) : smoothLabelImage(): I've read a label that
+        //              is non valid" << std::endl;
         //          }
         //        }
         //      }
@@ -237,21 +241,20 @@ namespace pcl
          * @todo make the z-distance a parameter
          * @todo add a Gaussian contribution function to depth and vote
          **/
-        inline void smoothLabelImage ( cv::Mat&  lmap_in,
-                                cv::Mat&  dmap,
-                                cv::Mat&  lmap_out)
+        inline void
+        smoothLabelImage (cv::Mat &lmap_in, cv::Mat &dmap, cv::Mat &lmap_out)
         {
           // check depth
-          assert(lmap_in.depth() == CV_8UC1);
-          assert(dmap.depth() == CV_16U);
-          assert(lmap_out.depth() == CV_8UC1);
+          assert (lmap_in.depth () == CV_8UC1);
+          assert (dmap.depth () == CV_16U);
+          assert (lmap_out.depth () == CV_8UC1);
           // check size
-          assert(lmap_in.rows == dmap.rows);
-          assert(lmap_in.cols == dmap.cols);
-          assert(lmap_out.rows == dmap.rows);
-          assert(lmap_out.cols == dmap.cols);
+          assert (lmap_in.rows == dmap.rows);
+          assert (lmap_in.cols == dmap.cols);
+          assert (lmap_out.rows == dmap.rows);
+          assert (lmap_out.cols == dmap.cols);
 
-          //unsigned int patch_size = 5;
+          // unsigned int patch_size = 5;
           unsigned int half_patch = 2;
           unsigned int depthThres = 300; // Think this is in mm, verify this!!!!!
 
@@ -260,46 +263,41 @@ namespace pcl
           unsigned int endcol = (lmap_in.cols - half_patch);
           unsigned int votes[NUM_PARTS];
           unsigned int endheight, endwidth;
-          const short* drow;
+          const short *drow;
           char *loutrow;
           short depth;
-          const short* drow_offset;
-          const char* lrow_offset;
+          const short *drow_offset;
+          const char *lrow_offset;
           short depth_l;
           char label;
-          for(unsigned int h = (0 + half_patch); h < endrow; h++)
-          {
+          for (unsigned int h = (0 + half_patch); h < endrow; h++) {
             endheight = (h + half_patch);
 
-            drow = dmap.ptr<short>(h);
-            loutrow = lmap_out.ptr<char>(h);
+            drow = dmap.ptr<short> (h);
+            loutrow = lmap_out.ptr<char> (h);
 
             // iterate over the width of the image (from 2 till 638)
-            for(unsigned int w = (0 + half_patch); w < endcol; w++)
-            {
+            for (unsigned int w = (0 + half_patch); w < endcol; w++) {
               endwidth = (w + half_patch);
 
               depth = drow[w];
               // reset votes
-              for(int j = 0 ; j< NUM_PARTS; j++)
+              for (int j = 0; j < NUM_PARTS; j++)
                 votes[j] = 0;
 
               // iterate over the size of the patch in the height
-              for(unsigned int h_l = (h - half_patch); h_l <= endheight; h_l++)
-              {
-                drow_offset = dmap.ptr<short>(h_l);
-                lrow_offset = lmap_in.ptr<char>(h_l);
+              for (unsigned int h_l = (h - half_patch); h_l <= endheight; h_l++) {
+                drow_offset = dmap.ptr<short> (h_l);
+                lrow_offset = lmap_in.ptr<char> (h_l);
 
                 // iterate over the size of the patch in the width
-                for(unsigned int w_l = (w - half_patch); w_l <= endwidth; w_l++)
-                {
+                for (unsigned int w_l = (w - half_patch); w_l <= endwidth; w_l++) {
                   // get the depth of this part of the patch
                   depth_l = drow_offset[w_l];
-                  // evaluate the difference to the centroid 
-                  if(abs(depth - depth_l) < static_cast<int> (depthThres))
-                  {
+                  // evaluate the difference to the centroid
+                  if (abs (depth - depth_l) < static_cast<int> (depthThres)) {
                     label = lrow_offset[w_l];
-                    votes[static_cast<unsigned int>(label)]++;
+                    votes[static_cast<unsigned int> (label)]++;
                   }
                 }
               }
@@ -307,11 +305,9 @@ namespace pcl
               unsigned int max = 0;
 
               // iterate over the bin to find the max
-              for(char i=0; i<NUM_PARTS; i++)
-              {
-                if(votes[static_cast<unsigned int>(i)] > max)
-                {
-                  max = votes[static_cast<unsigned int>(i)];
+              for (char i = 0; i < NUM_PARTS; i++) {
+                if (votes[static_cast<unsigned int> (i)] > max) {
+                  max = votes[static_cast<unsigned int> (i)];
                   loutrow[w] = i;
                 }
               }
@@ -320,72 +316,76 @@ namespace pcl
         }
 
         /**
-         * @brief This function takes a number of indices with label and sorts them in the blob matrix
-         * @param[in] cloud_in the original input pointcloud from which everything was calculated
+         * @brief This function takes a number of indices with label and sorts them in
+         *the blob matrix
+         * @param[in] cloud_in the original input pointcloud from which everything was
+         *calculated
          * @param[in] sizeThres the minimal size needed to be considered as a valid blob
          * @param[out] sorted the matrix in which every blob will be pushed back
          * @param[in] indices the matrix of PointIndices
          * @todo implement the eigenvalue evaluation again
          * @todo do we still need sizeThres?
          **/
-        inline void sortIndicesToBlob2 ( const pcl::PointCloud<pcl::PointXYZ>&                       cloud_in,
-                                  unsigned int                                                          sizeThres,
-                                  std::vector< std::vector<Blob2, Eigen::aligned_allocator<Blob2> > >&  sorted,
-                                  std::vector< std::vector<pcl::PointIndices> >&                        indices)
+        inline void
+        sortIndicesToBlob2 (
+            const pcl::PointCloud<pcl::PointXYZ> &cloud_in, unsigned int sizeThres,
+            std::vector<std::vector<Blob2, Eigen::aligned_allocator<Blob2>>> &sorted,
+            std::vector<std::vector<pcl::PointIndices>> &indices)
         {
-          assert(sorted.size () == indices.size ());
+          assert (sorted.size () == indices.size ());
 
           unsigned int id = 0;
           // Iterate over all labels
-          for(unsigned int lab = 0; lab < indices.size(); ++lab)
-          {
+          for (unsigned int lab = 0; lab < indices.size (); ++lab) {
             unsigned int lid = 0;
             // Iterate over all blobs of this label
-            for(unsigned int l = 0; l < indices[lab].size(); l++)
-            {
+            for (unsigned int l = 0; l < indices[lab].size (); l++) {
               // If the blob has enough pixels
-              if(indices[lab][l].indices.size() > sizeThres)
-              {
+              if (indices[lab][l].indices.size () > sizeThres) {
                 Blob2 b;
 
                 b.indices = indices[lab][l];
 
-                pcl::compute3DCentroid(cloud_in, b.indices, b.mean);
+                pcl::compute3DCentroid (cloud_in, b.indices, b.mean);
 #ifdef NEED_STATS
-                pcl::computeCovarianceMatrixNormalized(cloud_in, b.indices, b.mean, b.cov);
-                pcl::getMinMax3D(cloud_in, b.indices, b.min, b.max);
-                pcl::eigen33(b.cov, b.eigenvect, b.eigenval);
+                pcl::computeCovarianceMatrixNormalized (cloud_in, b.indices, b.mean,
+                                                        b.cov);
+                pcl::getMinMax3D (cloud_in, b.indices, b.min, b.max);
+                pcl::eigen33 (b.cov, b.eigenvect, b.eigenval);
 #endif
                 // Check if it is a valid blob
-                //if((b.eigenval(0) < LUT_max_part_size[(int) lab]) && (b.mean(2) != 0))
-                if((b.mean(2) != 0))
-                {
+                // if((b.eigenval(0) < LUT_max_part_size[(int) lab]) && (b.mean(2) !=
+                // 0))
+                if ((b.mean (2) != 0)) {
                   b.id = id;
                   id++;
                   b.label = static_cast<part_t> (lab);
                   b.lid = lid;
                   lid++;
-                  sorted[lab].push_back(b); 
+                  sorted[lab].push_back (b);
                 }
               }
             }
-          }         
+          }
         }
 
         /**
-         * @brief This function is a stupid helper function to debug easilier, it print out how the matrix was sorted
+         * @brief This function is a stupid helper function to debug easilier, it print
+         *out how the matrix was sorted
          * @param[in] sorted the matrix of blobs
          * @return Zero if everything went well
          **/
-        inline int giveSortedBlobsInfo ( std::vector<std::vector<Blob2, Eigen::aligned_allocator<Blob2> > >& sorted)
+        inline int
+        giveSortedBlobsInfo (
+            std::vector<std::vector<Blob2, Eigen::aligned_allocator<Blob2>>> &sorted)
         {
-          std::cout << "(I) : giveSortedBlobsInfo(): Size of outer vector: " << sorted.size() << std::endl;
-          for(unsigned int i = 0; i < sorted.size(); i++)
-          {
-            std::cout << "(I) : giveSortedBlobsInfo(): Found " << sorted[i].size() << " parts of type " << i << std::endl;
+          std::cout << "(I) : giveSortedBlobsInfo(): Size of outer vector: "
+                    << sorted.size () << std::endl;
+          for (unsigned int i = 0; i < sorted.size (); i++) {
+            std::cout << "(I) : giveSortedBlobsInfo(): Found " << sorted[i].size ()
+                      << " parts of type " << i << std::endl;
             std::cout << "(I) : giveSortedBlobsInfo(): indices : ";
-            for(unsigned int j = 0; j < sorted[i].size(); j++)
-            {
+            for (unsigned int j = 0; j < sorted[i].size (); j++) {
               std::cout << " id:" << sorted[i][j].id << " lid:" << sorted[i][j].lid;
             }
             std::cout << std::endl;
@@ -393,6 +393,6 @@ namespace pcl
           return 0;
         }
       } // end namespace label_skeleton
-    } // end namespace people
-  } // end namespace gpu
+    }   // end namespace people
+  }     // end namespace gpu
 } // end namespace pcl

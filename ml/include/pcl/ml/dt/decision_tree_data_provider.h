@@ -43,33 +43,30 @@
 
 namespace pcl
 {
-  template<class FeatureType, class DataSet, class LabelType, class ExampleIndex, class NodeType>
+  template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+            class NodeType>
   class PCL_EXPORTS DecisionTreeTrainerDataProvider
   {
 
-      /** \brief The training data set. */
-      DataSet data_set_;
-      /** \brief The label data. */
-      std::vector<LabelType> label_data_;
+    /** \brief The training data set. */
+    DataSet data_set_;
+    /** \brief The label data. */
+    std::vector<LabelType> label_data_;
 
     public:
+    using Ptr = boost::shared_ptr<DecisionTreeTrainerDataProvider<
+        FeatureType, DataSet, LabelType, ExampleIndex, NodeType>>;
 
-      using Ptr = boost::shared_ptr<DecisionTreeTrainerDataProvider<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>>;
+    /** \brief Constructor. */
+    DecisionTreeTrainerDataProvider () {}
 
-      /** \brief Constructor. */
-      DecisionTreeTrainerDataProvider()
-      {
+    /** \brief Destructor. */
+    ~DecisionTreeTrainerDataProvider () {}
 
-      }
-
-      /** \brief Destructor. */
-      ~DecisionTreeTrainerDataProvider()
-      {
-
-      }
-
-      /** \brief Virtual function called to obtain training examples and labels before training a specific tree */
-      virtual void
-      getDatasetAndLabels(DataSet & data_set, std::vector<LabelType> & label_data, std::vector<ExampleIndex> & examples) = 0;
+    /** \brief Virtual function called to obtain training examples and labels before
+     * training a specific tree */
+    virtual void
+    getDatasetAndLabels (DataSet &data_set, std::vector<LabelType> &label_data,
+                         std::vector<ExampleIndex> &examples) = 0;
   };
-}
+} // namespace pcl

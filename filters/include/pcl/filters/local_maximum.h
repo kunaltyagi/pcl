@@ -46,83 +46,89 @@
 
 namespace pcl
 {
-  /** \brief LocalMaximum downsamples the cloud, by eliminating points that are locally maximal.
-    *
-    * The LocalMaximum class analyzes each point and removes those that are
-    * found to be locally maximal with respect to their neighbors (found via
-    * radius search). The comparison is made in the z dimension only at this
-    * time.
-    *
-    * \author Bradley J Chambers
-    * \ingroup filters
-    */
+  /** \brief LocalMaximum downsamples the cloud, by eliminating points that are locally
+   * maximal.
+   *
+   * The LocalMaximum class analyzes each point and removes those that are
+   * found to be locally maximal with respect to their neighbors (found via
+   * radius search). The comparison is made in the z dimension only at this
+   * time.
+   *
+   * \author Bradley J Chambers
+   * \ingroup filters
+   */
   template <typename PointT>
-  class LocalMaximum: public FilterIndices<PointT>
+  class LocalMaximum : public FilterIndices<PointT>
   {
     protected:
-      using PointCloud = typename FilterIndices<PointT>::PointCloud;
-      using SearcherPtr = typename pcl::search::Search<PointT>::Ptr;
+    using PointCloud = typename FilterIndices<PointT>::PointCloud;
+    using SearcherPtr = typename pcl::search::Search<PointT>::Ptr;
 
     public:
-      /** \brief Empty constructor. */
-      LocalMaximum (bool extract_removed_indices = false) :
-        FilterIndices<PointT>::FilterIndices (extract_removed_indices),
-        searcher_ (),
-        radius_ (1)
-      {
-        filter_name_ = "LocalMaximum";
-      }
+    /** \brief Empty constructor. */
+    LocalMaximum (bool extract_removed_indices = false)
+        : FilterIndices<PointT>::FilterIndices (extract_removed_indices), searcher_ (),
+          radius_ (1)
+    {
+      filter_name_ = "LocalMaximum";
+    }
 
-      /** \brief Set the radius to use to determine if a point is the local max.
-        * \param[in] radius The radius to use to determine if a point is the local max.
-        */
-      inline void
-      setRadius (float radius) { radius_ = radius; }
+    /** \brief Set the radius to use to determine if a point is the local max.
+     * \param[in] radius The radius to use to determine if a point is the local max.
+     */
+    inline void
+    setRadius (float radius)
+    {
+      radius_ = radius;
+    }
 
-      /** \brief Get the radius to use to determine if a point is the local max.
-        * \return The radius to use to determine if a point is the local max.
-        */
-      inline float
-      getRadius () const { return (radius_); }
+    /** \brief Get the radius to use to determine if a point is the local max.
+     * \return The radius to use to determine if a point is the local max.
+     */
+    inline float
+    getRadius () const
+    {
+      return (radius_);
+    }
 
     protected:
-      using PCLBase<PointT>::input_;
-      using PCLBase<PointT>::indices_;
-      using Filter<PointT>::filter_name_;
-      using Filter<PointT>::getClassName;
-      using FilterIndices<PointT>::negative_;
-      using FilterIndices<PointT>::extract_removed_indices_;
-      using FilterIndices<PointT>::removed_indices_;
+    using PCLBase<PointT>::input_;
+    using PCLBase<PointT>::indices_;
+    using Filter<PointT>::filter_name_;
+    using Filter<PointT>::getClassName;
+    using FilterIndices<PointT>::negative_;
+    using FilterIndices<PointT>::extract_removed_indices_;
+    using FilterIndices<PointT>::removed_indices_;
 
-      /** \brief Downsample a Point Cloud by eliminating points that are locally maximal in z
-        * \param[out] output the resultant point cloud message
-        */
-      void
-      applyFilter (PointCloud &output) override;
+    /** \brief Downsample a Point Cloud by eliminating points that are locally maximal
+     * in z \param[out] output the resultant point cloud message
+     */
+    void
+    applyFilter (PointCloud &output) override;
 
-      /** \brief Filtered results are indexed by an indices array.
-        * \param[out] indices The resultant indices.
-        */
-      void
-      applyFilter (std::vector<int> &indices) override
-      {
-        applyFilterIndices (indices);
-      }
+    /** \brief Filtered results are indexed by an indices array.
+     * \param[out] indices The resultant indices.
+     */
+    void
+    applyFilter (std::vector<int> &indices) override
+    {
+      applyFilterIndices (indices);
+    }
 
-      /** \brief Filtered results are indexed by an indices array.
-        * \param[out] indices The resultant indices.
-        */
-      void
-      applyFilterIndices (std::vector<int> &indices);
+    /** \brief Filtered results are indexed by an indices array.
+     * \param[out] indices The resultant indices.
+     */
+    void
+    applyFilterIndices (std::vector<int> &indices);
 
     private:
-      /** \brief A pointer to the spatial search object. */
-      SearcherPtr searcher_;
+    /** \brief A pointer to the spatial search object. */
+    SearcherPtr searcher_;
 
-      /** \brief The radius to use to determine if a point is the local max. */
-      float radius_;
+    /** \brief The radius to use to determine if a point is the local max. */
+    float radius_;
   };
-}
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/filters/impl/local_maximum.hpp>

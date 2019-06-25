@@ -39,11 +39,11 @@
 
 #pragma once
 
-#include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
-#include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+#include <vector>
 
 // Forward declaration for commonly used objects
 class Command;
@@ -105,44 +105,26 @@ using CommandQueuePtr = boost::shared_ptr<CommandQueue>;
 using BitMask = unsigned int;
 
 /// ID's for the key modifiers.
-enum KeyModifier
-{
+enum KeyModifier {
   NONE = 0x00000000,
   SHFT = 0x02000000,
   CTRL = 0x04000000,
-  ALT  = 0x08000000
+  ALT = 0x08000000
 };
 
 /// ID's for the mouse buttons.
-enum MouseButton
-{
-  NOBUTTON,
-  LEFT,
-  RIGHT
-};
+enum MouseButton { NOBUTTON, LEFT, RIGHT };
 
 /// Indices for the coordinate axes
 /// It is assumed that the ColorScheme X,Y,Z match these values
-enum Axis
-{
-  X,
-  Y,
-  Z
-};
+enum Axis { X, Y, Z };
 
 /// Indices for color components
-enum Color
-{
-  RED,
-  GREEN,
-  BLUE,
-  RGB
-};
+enum Color { RED, GREEN, BLUE, RGB };
 
 /// Scheme used for coloring the whole cloud.
 /// It is assumed that the Axiz X,Y,Z match the COLOR_BY_[X,Y,Z] values
-enum ColorScheme
-{
+enum ColorScheme {
   COLOR_BY_X = 0,
   COLOR_BY_Y,
   COLOR_BY_Z,
@@ -151,14 +133,11 @@ enum ColorScheme
 };
 
 /// Simple functor that produces sequential integers from an initial value
-struct IncIndex
-{
+struct IncIndex {
   unsigned int val_;
-  IncIndex(int v=0)
-  {
-    val_ = v;
-  }
-  unsigned int operator()()
+  IncIndex (int v = 0) { val_ = v; }
+  unsigned int
+  operator() ()
   {
     return (val_++);
   }

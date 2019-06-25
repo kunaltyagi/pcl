@@ -47,24 +47,34 @@ namespace pcl
     {
       Q_OBJECT
       public:
-        MergeSelection (QMap <const CloudItem*, pcl::PointIndices::ConstPtr > selected_item_index_map, QObject* parent = nullptr);
-        ~MergeSelection ();
-        
-        QList <CloudComposerItem*>
-        performAction (QList <const CloudComposerItem*> input_data, PointTypeFlags::PointType type = PointTypeFlags::NONE) override;
-        
-        inline QString
-        getToolName () const override { return "Merge Selection Tool";}
-        
-        QList <const CloudItem*>
-        getSelectedItems () { return selected_item_index_map_.keys ();}
-        
-        template <typename PointT> QList <CloudComposerItem*>
-        performTemplatedAction (QList <const CloudComposerItem*> input_data);
-        
+      MergeSelection (
+          QMap<const CloudItem *, pcl::PointIndices::ConstPtr> selected_item_index_map,
+          QObject *parent = nullptr);
+      ~MergeSelection ();
+
+      QList<CloudComposerItem *>
+      performAction (QList<const CloudComposerItem *> input_data,
+                     PointTypeFlags::PointType type = PointTypeFlags::NONE) override;
+
+      inline QString
+      getToolName () const override
+      {
+        return "Merge Selection Tool";
+      }
+
+      QList<const CloudItem *>
+      getSelectedItems ()
+      {
+        return selected_item_index_map_.keys ();
+      }
+
+      template <typename PointT>
+      QList<CloudComposerItem *>
+      performTemplatedAction (QList<const CloudComposerItem *> input_data);
+
       private:
-        QMap <const CloudItem*, pcl::PointIndices::ConstPtr > selected_item_index_map_;
+      QMap<const CloudItem *, pcl::PointIndices::ConstPtr> selected_item_index_map_;
     };
 
-  }
-}
+  } // namespace cloud_composer
+} // namespace pcl

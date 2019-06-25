@@ -42,8 +42,7 @@
 
 namespace pcl
 {
-  enum SacModel
-  {
+  enum SacModel {
     SACMODEL_PLANE,
     SACMODEL_LINE,
     SACMODEL_CIRCLE2D,

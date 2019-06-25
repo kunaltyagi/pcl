@@ -1,23 +1,23 @@
 #pragma once
 
-#include <pcl/tracking/tracking.h>
-#include <pcl/tracking/particle_filter.h>
 #include <pcl/tracking/coherence.h>
+#include <pcl/tracking/particle_filter.h>
+#include <pcl/tracking/tracking.h>
 
 namespace pcl
 {
   namespace tracking
   {
-  /** \brief @b ParticleFilterOMPTracker tracks the PointCloud which is given by
-      setReferenceCloud within the measured PointCloud using particle filter method
-      in parallel, using the OpenMP standard.
-    * \author Ryohei Ueda
-    * \ingroup tracking
-    */
+    /** \brief @b ParticleFilterOMPTracker tracks the PointCloud which is given by
+        setReferenceCloud within the measured PointCloud using particle filter method
+        in parallel, using the OpenMP standard.
+      * \author Ryohei Ueda
+      * \ingroup tracking
+      */
     template <typename PointInT, typename StateT>
-    class ParticleFilterOMPTracker: public ParticleFilterTracker<PointInT, StateT>
+    class ParticleFilterOMPTracker : public ParticleFilterTracker<PointInT, StateT>
     {
-    public:
+      public:
       using Tracker<PointInT, StateT>::tracker_name_;
       using Tracker<PointInT, StateT>::search_;
       using Tracker<PointInT, StateT>::input_;
@@ -35,7 +35,7 @@ namespace pcl
       using ParticleFilterTracker<PointInT, StateT>::particle_num_;
       using ParticleFilterTracker<PointInT, StateT>::change_detector_filter_;
       using ParticleFilterTracker<PointInT, StateT>::transed_reference_vector_;
-      //using ParticleFilterTracker<PointInT, StateT>::calcLikelihood;
+      // using ParticleFilterTracker<PointInT, StateT>::calcLikelihood;
       using ParticleFilterTracker<PointInT, StateT>::normalizeWeight;
       using ParticleFilterTracker<PointInT, StateT>::normalizeParticleWeight;
       using ParticleFilterTracker<PointInT, StateT>::calcBoundingBox;
@@ -59,34 +59,36 @@ namespace pcl
       using CloudCoherenceConstPtr = boost::shared_ptr<const CloudCoherence>;
 
       /** \brief Initialize the scheduler and set the number of threads to use.
-        * \param nr_threads the number of hardware threads to use (0 sets the value back to automatic)
-        */
+       * \param nr_threads the number of hardware threads to use (0 sets the value back
+       * to automatic)
+       */
       ParticleFilterOMPTracker (unsigned int nr_threads = 0)
-      : ParticleFilterTracker<PointInT, StateT> ()
+          : ParticleFilterTracker<PointInT, StateT> ()
       {
         tracker_name_ = "ParticleFilterOMPTracker";
 
-        setNumberOfThreads(nr_threads);
+        setNumberOfThreads (nr_threads);
       }
 
       /** \brief Initialize the scheduler and set the number of threads to use.
-        * \param nr_threads the number of hardware threads to use (0 sets the value back to automatic)
-        */
+       * \param nr_threads the number of hardware threads to use (0 sets the value back
+       * to automatic)
+       */
       void
       setNumberOfThreads (unsigned int nr_threads = 0);
 
-    protected:
+      protected:
       /** \brief The number of threads the scheduler should use. */
       unsigned int threads_;
 
       /** \brief weighting phase of particle filter method.
           calculate the likelihood of all of the particles and set the weights.
         */
-      void weight () override;
-
+      void
+      weight () override;
     };
-  }
-}
+  } // namespace tracking
+} // namespace pcl
 
 //#include <pcl/tracking/impl/particle_filter_omp.hpp>
 #ifdef PCL_NO_PRECOMPILE

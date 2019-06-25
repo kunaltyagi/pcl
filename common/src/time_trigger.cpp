@@ -35,15 +35,13 @@
  *
  */
 
-#include <pcl/common/time_trigger.h>
-#include <pcl/common/time.h>
 #include <iostream>
+#include <pcl/common/time.h>
+#include <pcl/common/time_trigger.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::TimeTrigger::TimeTrigger (double interval, const callback_type& callback)
-: interval_ (interval)
-, quit_ (false)
-, running_ (false)
+pcl::TimeTrigger::TimeTrigger (double interval, const callback_type &callback)
+    : interval_ (interval), quit_ (false), running_ (false)
 {
   timer_thread_ = std::thread (&TimeTrigger::thread_function, this);
   registerCallback (callback);
@@ -51,9 +49,7 @@ pcl::TimeTrigger::TimeTrigger (double interval, const callback_type& callback)
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 pcl::TimeTrigger::TimeTrigger (double interval)
-: interval_ (interval)
-, quit_ (false)
-, running_ (false)
+    : interval_ (interval), quit_ (false), running_ (false)
 {
   timer_thread_ = std::thread (&TimeTrigger::thread_function, this);
 }
@@ -70,8 +66,8 @@ pcl::TimeTrigger::~TimeTrigger ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-boost::signals2::connection 
-pcl::TimeTrigger::registerCallback (const callback_type& callback)
+boost::signals2::connection
+pcl::TimeTrigger::registerCallback (const callback_type &callback)
 {
   return (callbacks_.connect (callback));
 }
@@ -82,7 +78,8 @@ pcl::TimeTrigger::setInterval (double interval_seconds)
 {
   std::unique_lock<std::mutex> lock (condition_mutex_);
   interval_ = interval_seconds;
-  // notify, since we could switch from a large interval to a shorter one -> interrupt waiting for timeout!
+  // notify, since we could switch from a large interval to a shorter one -> interrupt
+  // waiting for timeout!
   condition_.notify_all ();
 }
 
@@ -91,8 +88,7 @@ void
 pcl::TimeTrigger::start ()
 {
   std::unique_lock<std::mutex> lock (condition_mutex_);
-  if (!running_)
-  {
+  if (!running_) {
     running_ = true;
     condition_.notify_all ();
   }
@@ -103,8 +99,7 @@ void
 pcl::TimeTrigger::stop ()
 {
   std::unique_lock<std::mutex> lock (condition_mutex_);
-  if (running_)
-  {
+  if (running_) {
     running_ = false;
     condition_.notify_all ();
   }
@@ -114,22 +109,19 @@ pcl::TimeTrigger::stop ()
 void
 pcl::TimeTrigger::thread_function ()
 {
-  while (true)
-  {
+  while (true) {
     double time = getTime ();
     std::unique_lock<std::mutex> lock (condition_mutex_);
-    if(quit_)
+    if (quit_)
       break;
     if (!running_)
       condition_.wait (lock); // wait util start is called or destructor is called
-    else
-    {
+    else {
       using namespace std::chrono_literals;
 
-      callbacks_();
+      callbacks_ ();
       double rest = interval_ + time - getTime ();
       condition_.wait_for (lock, rest * 1s);
     }
   }
 }
-

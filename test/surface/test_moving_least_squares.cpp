@@ -39,12 +39,12 @@
 
 #include <gtest/gtest.h>
 
-#include <pcl/point_types.h>
+#include <pcl/common/common.h>
+#include <pcl/features/normal_3d.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/vtk_io.h>
-#include <pcl/features/normal_3d.h>
+#include <pcl/point_types.h>
 #include <pcl/surface/mls.h>
-#include <pcl/common/common.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -102,16 +102,15 @@ TEST (PCL, MovingLeastSquares)
   mls_omp.process (*mls_normals);
 
   int count = 0;
-  for (size_t i = 0; i < mls_normals->size (); ++i)
-  {
-  	if (fabs (mls_normals->points[i].x - 0.005417) < 1e-3 &&
-	    fabs (mls_normals->points[i].y - 0.113463) < 1e-3 &&
-	    fabs (mls_normals->points[i].z - 0.040715) < 1e-3 &&
-	    fabs (fabs (mls_normals->points[i].normal[0]) - 0.111894) < 1e-3 &&
-		fabs (fabs (mls_normals->points[i].normal[1]) - 0.594906) < 1e-3 &&
-		fabs (fabs (mls_normals->points[i].normal[2]) - 0.795969) < 1e-3 &&
-		fabs (mls_normals->points[i].curvature - 0.012019) < 1e-3)
-		count ++;
+  for (size_t i = 0; i < mls_normals->size (); ++i) {
+    if (fabs (mls_normals->points[i].x - 0.005417) < 1e-3 &&
+        fabs (mls_normals->points[i].y - 0.113463) < 1e-3 &&
+        fabs (mls_normals->points[i].z - 0.040715) < 1e-3 &&
+        fabs (fabs (mls_normals->points[i].normal[0]) - 0.111894) < 1e-3 &&
+        fabs (fabs (mls_normals->points[i].normal[1]) - 0.594906) < 1e-3 &&
+        fabs (fabs (mls_normals->points[i].normal[2]) - 0.795969) < 1e-3 &&
+        fabs (mls_normals->points[i].curvature - 0.012019) < 1e-3)
+      count++;
   }
 
   EXPECT_EQ (count, 1);
@@ -126,7 +125,8 @@ TEST (PCL, MovingLeastSquares)
   mls_upsampling.setPolynomialOrder (2);
   mls_upsampling.setSearchMethod (tree);
   mls_upsampling.setSearchRadius (0.03);
-  mls_upsampling.setUpsamplingMethod (MovingLeastSquares<PointXYZ, PointNormal>::SAMPLE_LOCAL_PLANE);
+  mls_upsampling.setUpsamplingMethod (
+      MovingLeastSquares<PointXYZ, PointNormal>::SAMPLE_LOCAL_PLANE);
   mls_upsampling.setUpsamplingRadius (0.025);
   mls_upsampling.setUpsamplingStepSize (0.01);
 
@@ -142,26 +142,26 @@ TEST (PCL, MovingLeastSquares)
   EXPECT_NEAR (mls_normals->points[10].curvature, 0.012019, 1e-3);
   EXPECT_EQ (mls_normals->size (), 6352);
 
-
   /// TODO Would need to set a seed point here for the random number generator
-  /// But as long as the other 2 upsampling methods work fine, this should have no issues.
-  /// The RANDOM_UNIFORM_DENSITY upsampling will be changed soon anyway, hopefully in PCL 1.6.1
-//  mls_upsampling.setUpsamplingMethod (MovingLeastSquares<PointXYZ, PointNormal>::RANDOM_UNIFORM_DENSITY);
-//  mls_upsampling.setPointDensity (100);
-//  mls_normals->clear ();
-//  mls_upsampling.process (*mls_normals);
-//
-//  EXPECT_NEAR (mls_normals->points[10].x, 0.018806, 1e-3);
-//  EXPECT_NEAR (mls_normals->points[10].y, 0.114685, 1e-3);
-//  EXPECT_NEAR (mls_normals->points[10].z, 0.037500, 1e-3);
-//  EXPECT_NEAR (fabs (mls_normals->points[10].normal[0]), 0.351352, 1e-3);
-//  EXPECT_NEAR (fabs (mls_normals->points[10].normal[1]), 0.537741, 1e-3);
-//  EXPECT_NEAR (fabs (mls_normals->points[10].normal[2]), 0.766411, 1e-3);
-//  EXPECT_NEAR (mls_normals->points[10].curvature, 0.019003, 1e-3);
-//  EXPECT_EQ (mls_normals->size (), 457);
+  /// But as long as the other 2 upsampling methods work fine, this should have no
+  /// issues. The RANDOM_UNIFORM_DENSITY upsampling will be changed soon anyway,
+  /// hopefully in PCL 1.6.1
+  //  mls_upsampling.setUpsamplingMethod (MovingLeastSquares<PointXYZ,
+  //  PointNormal>::RANDOM_UNIFORM_DENSITY); mls_upsampling.setPointDensity (100);
+  //  mls_normals->clear ();
+  //  mls_upsampling.process (*mls_normals);
+  //
+  //  EXPECT_NEAR (mls_normals->points[10].x, 0.018806, 1e-3);
+  //  EXPECT_NEAR (mls_normals->points[10].y, 0.114685, 1e-3);
+  //  EXPECT_NEAR (mls_normals->points[10].z, 0.037500, 1e-3);
+  //  EXPECT_NEAR (fabs (mls_normals->points[10].normal[0]), 0.351352, 1e-3);
+  //  EXPECT_NEAR (fabs (mls_normals->points[10].normal[1]), 0.537741, 1e-3);
+  //  EXPECT_NEAR (fabs (mls_normals->points[10].normal[2]), 0.766411, 1e-3);
+  //  EXPECT_NEAR (mls_normals->points[10].curvature, 0.019003, 1e-3);
+  //  EXPECT_EQ (mls_normals->size (), 457);
 
-
-  mls_upsampling.setUpsamplingMethod (MovingLeastSquares<PointXYZ, PointNormal>::VOXEL_GRID_DILATION);
+  mls_upsampling.setUpsamplingMethod (
+      MovingLeastSquares<PointXYZ, PointNormal>::VOXEL_GRID_DILATION);
   mls_upsampling.setDilationIterations (5);
   mls_upsampling.setDilationVoxelSize (0.005f);
   mls_normals->clear ();
@@ -170,16 +170,17 @@ TEST (PCL, MovingLeastSquares)
   EXPECT_NEAR (mls_normals->points[10].y, 0.028887597844004631, 2e-3);
   EXPECT_NEAR (mls_normals->points[10].z, 0.01788550429046154, 2e-3);
   EXPECT_NEAR (mls_normals->points[10].curvature, 0.107273, 1e-1);
-  EXPECT_NEAR (double (mls_normals->size ()), 29394, 2);
+  EXPECT_NEAR (double(mls_normals->size ()), 29394, 2);
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
@@ -196,24 +197,24 @@ main (int argc, char** argv)
   NormalEstimation<PointXYZ, Normal> n;
   PointCloud<Normal>::Ptr normals (new PointCloud<Normal> ());
   n.setInputCloud (cloud);
-  //n.setIndices (indices[B);
+  // n.setIndices (indices[B);
   n.setSearchMethod (tree);
   n.setKSearch (20);
   n.compute (*normals);
 
   // Concatenate XYZ and normal information
   pcl::concatenateFields (*cloud, *normals, *cloud_with_normals);
-      
+
   // Create search tree
   tree2.reset (new search::KdTree<PointNormal>);
   tree2->setInputCloud (cloud_with_normals);
 
   // Process for update cloud
-  if(argc == 3){
+  if (argc == 3) {
     pcl::PCLPointCloud2 cloud_blob1;
     loadPCDFile (argv[2], cloud_blob1);
     fromPCLPointCloud2 (cloud_blob1, *cloud1);
-        // Create search tree
+    // Create search tree
     tree3.reset (new search::KdTree<PointXYZ> (false));
     tree3->setInputCloud (cloud1);
 

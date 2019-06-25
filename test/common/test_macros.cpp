@@ -35,9 +35,9 @@
  */
 
 #include <gtest/gtest.h>
+#include <pcl/common/eigen.h>
 #include <pcl/pcl_config.h>
 #include <pcl/pcl_tests.h>
-#include <pcl/common/eigen.h>
 #include <vector>
 
 using namespace pcl::test;
@@ -45,10 +45,9 @@ using namespace pcl::test;
 std::vector<float> v1, v2;
 Eigen::Vector3f ev1, ev2;
 
-TEST(MACROS, expect_eq_vectors_macro)
+TEST (MACROS, expect_eq_vectors_macro)
 {
-  for (size_t i = 0; i < 3; i++)
-  {
+  for (size_t i = 0; i < 3; i++) {
     float val = static_cast<float> (i) * 1.5f;
     v1.push_back (val);
     v2.push_back (val);
@@ -60,53 +59,53 @@ TEST(MACROS, expect_eq_vectors_macro)
   EXPECT_EQ_VECTORS (ev1, ev2);
   EXPECT_EQ_VECTORS (v1, ev2);
   EXPECT_EQ_VECTORS (ev1, v2);
-//  equal_vectors<std::vector<float>, std::vector<float> >(v1, v2);
+  //  equal_vectors<std::vector<float>, std::vector<float> >(v1, v2);
 }
 
-TEST(MACROS, expect_near_vectors_macro)
+TEST (MACROS, expect_near_vectors_macro)
 {
   v1.clear ();
   v2.clear ();
   const static float epsilon = 1e-5f;
-  for (size_t i = 0; i < 3; i++)
-  {
+  for (size_t i = 0; i < 3; i++) {
     float val = static_cast<float> (i) * 1.5f;
     v1.push_back (val);
     v2.push_back (val + epsilon);
     ev1[i] = val;
     ev2[i] = val + epsilon;
   }
-  EXPECT_NEAR_VECTORS (v1, v2, 2*epsilon);
-  EXPECT_NEAR_VECTORS (ev1, ev2, 2*epsilon);
-  EXPECT_NEAR_VECTORS (v1, ev2, 2*epsilon);
-  EXPECT_NEAR_VECTORS (ev1, v2, 2*epsilon);
+  EXPECT_NEAR_VECTORS (v1, v2, 2 * epsilon);
+  EXPECT_NEAR_VECTORS (ev1, ev2, 2 * epsilon);
+  EXPECT_NEAR_VECTORS (v1, ev2, 2 * epsilon);
+  EXPECT_NEAR_VECTORS (ev1, v2, 2 * epsilon);
 }
 
-TEST(MACROS, PCL_VERSION_COMPARE)
+TEST (MACROS, PCL_VERSION_COMPARE)
 {
-  // PCL_MAJOR_VERSION.PCL_MINOR_VERSION.PCL_REVISION_VERSION : latest released PCL version
+  // PCL_MAJOR_VERSION.PCL_MINOR_VERSION.PCL_REVISION_VERSION : latest released PCL
+  // version
 
   // Current version should be:
   //   * equal (if release version is being tested)
   //   * greater (if development version is being tested)
 #if PCL_VERSION_COMPARE(>=, PCL_MAJOR_VERSION, PCL_MINOR_VERSION, PCL_REVISION_VERSION)
-  SUCCEED();
+  SUCCEED ();
 #else
-  FAIL();
+  FAIL ();
 #endif
 
   // If current version is greater, then it must be a development version
 #if PCL_VERSION_COMPARE(>, PCL_MAJOR_VERSION, PCL_MINOR_VERSION, PCL_REVISION_VERSION)
-  EXPECT_TRUE(PCL_DEV_VERSION);
+  EXPECT_TRUE (PCL_DEV_VERSION);
 #else
-  EXPECT_FALSE(PCL_DEV_VERSION);
+  EXPECT_FALSE (PCL_DEV_VERSION);
 #endif
 
   // If current version is equal, then it must be a release version (not development)
 #if PCL_VERSION_COMPARE(==, PCL_MAJOR_VERSION, PCL_MINOR_VERSION, PCL_REVISION_VERSION)
-  EXPECT_FALSE(PCL_DEV_VERSION);
+  EXPECT_FALSE (PCL_DEV_VERSION);
 #else
-  EXPECT_TRUE(PCL_DEV_VERSION);
+  EXPECT_TRUE (PCL_DEV_VERSION);
 #endif
 
   // Pretend that current version is 1.7.2-dev
@@ -119,32 +118,32 @@ TEST(MACROS, PCL_VERSION_COMPARE)
 #define PCL_REVISION_VERSION 2
 #define PCL_DEV_VERSION 1
   // Should be greater than these:
-  EXPECT_TRUE(PCL_VERSION_COMPARE(>, 1, 7, 2));
-  EXPECT_TRUE(PCL_VERSION_COMPARE(>, 1, 7, 1));
-  EXPECT_TRUE(PCL_VERSION_COMPARE(>, 1, 6, 3));
-  EXPECT_TRUE(PCL_VERSION_COMPARE(>, 0, 8, 4));
+  EXPECT_TRUE (PCL_VERSION_COMPARE (>, 1, 7, 2));
+  EXPECT_TRUE (PCL_VERSION_COMPARE (>, 1, 7, 1));
+  EXPECT_TRUE (PCL_VERSION_COMPARE (>, 1, 6, 3));
+  EXPECT_TRUE (PCL_VERSION_COMPARE (>, 0, 8, 4));
   // Should be less than these:
-  EXPECT_TRUE(PCL_VERSION_COMPARE(<, 1, 7, 3));
-  EXPECT_TRUE(PCL_VERSION_COMPARE(<, 1, 8, 0));
-  EXPECT_TRUE(PCL_VERSION_COMPARE(<, 2, 0, 0));
+  EXPECT_TRUE (PCL_VERSION_COMPARE (<, 1, 7, 3));
+  EXPECT_TRUE (PCL_VERSION_COMPARE (<, 1, 8, 0));
+  EXPECT_TRUE (PCL_VERSION_COMPARE (<, 2, 0, 0));
 
   // Now pretend that current version is 1.7.2 (release)
 #undef PCL_DEV_VERSION
 #define PCL_DEV_VERSION 0
   // Should be greater than these:
-  EXPECT_TRUE(PCL_VERSION_COMPARE(>, 1, 7, 1));
-  EXPECT_TRUE(PCL_VERSION_COMPARE(>, 1, 6, 3));
-  EXPECT_TRUE(PCL_VERSION_COMPARE(>, 0, 8, 4));
+  EXPECT_TRUE (PCL_VERSION_COMPARE (>, 1, 7, 1));
+  EXPECT_TRUE (PCL_VERSION_COMPARE (>, 1, 6, 3));
+  EXPECT_TRUE (PCL_VERSION_COMPARE (>, 0, 8, 4));
   // Should be equal to itself
-  EXPECT_TRUE(PCL_VERSION_COMPARE(==, 1, 7, 2));
+  EXPECT_TRUE (PCL_VERSION_COMPARE (==, 1, 7, 2));
   // Should be less than these:
-  EXPECT_TRUE(PCL_VERSION_COMPARE(<, 1, 7, 3));
-  EXPECT_TRUE(PCL_VERSION_COMPARE(<, 1, 8, 0));
-  EXPECT_TRUE(PCL_VERSION_COMPARE(<, 2, 0, 0));
+  EXPECT_TRUE (PCL_VERSION_COMPARE (<, 1, 7, 3));
+  EXPECT_TRUE (PCL_VERSION_COMPARE (<, 1, 8, 0));
+  EXPECT_TRUE (PCL_VERSION_COMPARE (<, 2, 0, 0));
 }
 
-int 
-main (int argc, char** argv)
+int
+main (int argc, char **argv)
 {
 #if ((PCL_MAJOR_VERSION == 1) && (PCL_MINOR_VERSION == 4))
   std::cerr << "1.4.0 detected" << std::endl;

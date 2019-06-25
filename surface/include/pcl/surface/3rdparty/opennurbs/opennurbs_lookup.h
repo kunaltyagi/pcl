@@ -8,7 +8,7 @@
 // THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY.
 // ALL IMPLIED WARRANTIES OF FITNESS FOR ANY PARTICULAR PURPOSE AND OF
 // MERCHANTABILITY ARE HEREBY DISCLAIMED.
-//				
+//
 // For complete openNURBS copyright information see <http://www.opennurbs.org>.
 //
 ////////////////////////////////////////////////////////////////
@@ -19,9 +19,9 @@
 
 /*
 Description:
-  ON_SerialNumberMap provides a way to map set of unique 
+  ON_SerialNumberMap provides a way to map set of unique
   serial number - uuid pairs to application defined values
-  so that adding, finding and removing serial numbers is 
+  so that adding, finding and removing serial numbers is
   fast and efficient.  The class is designed to handle
   several millions of unique serial numbers.  There are no
   restrictions on what order numbers are added and removed.
@@ -32,29 +32,26 @@ Description:
 */
 class ON_CLASS ON_SerialNumberMap
 {
-public:
-  ON_SerialNumberMap( ON_MEMORY_POOL* pool = 0 );
-  ~ON_SerialNumberMap();
+  public:
+  ON_SerialNumberMap (ON_MEMORY_POOL *pool = 0);
+  ~ON_SerialNumberMap ();
 
-  struct MAP_VALUE
-  {
+  struct MAP_VALUE {
     ON__UINT32 m_u_type;
-    union
-    {
-      void* ptr;
+    union {
+      void *ptr;
       unsigned int ui;
       int i;
     } m_u;
   };
 
-  struct SN_ELEMENT
-  {
+  struct SN_ELEMENT {
     ////////////////////////////////////////////////////////////
     //
     // ID
     //
     ON_UUID m_id;
-    struct SN_ELEMENT* m_next; // id hash table linked list
+    struct SN_ELEMENT *m_next; // id hash table linked list
 
     ////////////////////////////////////////////////////////////
     //
@@ -85,31 +82,34 @@ public:
     //   (&m_value) may change at any time.
     struct MAP_VALUE m_value;
 
-    void Dump(ON_TextLog&) const;
+    void
+    Dump (ON_TextLog &) const;
   };
 
   /*
   Returns:
     Number of active serial numbers in the list.
   */
-  size_t ActiveSerialNumberCount() const;
+  size_t
+  ActiveSerialNumberCount () const;
 
   /*
   Returns:
     Number of active ids in the list.  This number
     is less than or equal to ActiveSerialNumberCount().
   */
-  size_t ActiveIdCount() const;
+  size_t
+  ActiveIdCount () const;
 
   /*
   Returns:
-    The active element with the smallest serial number, 
+    The active element with the smallest serial number,
     or null if the list is empty.
   Restrictions:
     The returned pointer may become invalid after any
-    subsequent calls to any function in this class.  
+    subsequent calls to any function in this class.
     If you need to save information in the returned
-    SN_ELEMENT for future use, you must copy the 
+    SN_ELEMENT for future use, you must copy the
     information into storage you are managing.
 
     You may change the value of the SN_ELEMENT's m_value
@@ -117,7 +117,8 @@ public:
     fields or you will break searching and possibly cause
     crashes.
   */
-  struct SN_ELEMENT* FirstElement() const;
+  struct SN_ELEMENT *
+  FirstElement () const;
 
   /*
   Returns:
@@ -125,9 +126,9 @@ public:
     or null if the list is empty.
   Restrictions:
     The returned pointer may become invalid after any
-    subsequent calls to any function in this class.  
+    subsequent calls to any function in this class.
     If you need to save information in the returned
-    SN_ELEMENT for future use, you must copy the 
+    SN_ELEMENT for future use, you must copy the
     information into storage you are managing.
 
     You may change the value of the SN_ELEMENT's m_value
@@ -135,7 +136,8 @@ public:
     fields or you will break searching and possibly cause
     crashes.
   */
-  struct SN_ELEMENT* LastElement() const;
+  struct SN_ELEMENT *
+  LastElement () const;
 
   /*
   Parameters:
@@ -145,9 +147,9 @@ public:
     its element is returned.
   Restrictions:
     The returned pointer may become invalid after any
-    subsequent calls to any function in this class.  
+    subsequent calls to any function in this class.
     If you need to save information in the returned
-    SN_ELEMENT for future use, you must copy the 
+    SN_ELEMENT for future use, you must copy the
     information into storage you are managing.
 
     You may change the value of the SN_ELEMENT's m_value
@@ -155,7 +157,8 @@ public:
     fields or you will break searching and possibly cause
     crashes.
   */
-  struct SN_ELEMENT* FindSerialNumber(unsigned int sn) const;
+  struct SN_ELEMENT *
+  FindSerialNumber (unsigned int sn) const;
 
   /*
   Parameters:
@@ -165,9 +168,9 @@ public:
     its element is returned.
   Restrictions:
     The returned pointer may become invalid after any
-    subsequent calls to any function in this class.  
+    subsequent calls to any function in this class.
     If you need to save information in the returned
-    SN_ELEMENT for future use, you must copy the 
+    SN_ELEMENT for future use, you must copy the
     information into storage you are managing.
 
     You may change the value of the SN_ELEMENT's m_value
@@ -175,7 +178,7 @@ public:
     fields or you will break searching and possibly cause
     crashes.
   */
-  struct SN_ELEMENT* FindId(ON_UUID) const;
+  struct SN_ELEMENT *FindId (ON_UUID) const;
 
   /*
   Description:
@@ -184,20 +187,20 @@ public:
     sn - [in] serial number to add.
   Returns:
     If the serial number is valid (>0), a pointer to its
-    element is returned.  When a new element is added, 
+    element is returned.  When a new element is added,
     every byte of the m_value field is set to 0.
     If the serial number was already active, its element is
     also returned.  If you need to distinguish between new
-    and previously existing elements, then change  
+    and previously existing elements, then change
     m_value.m_u_type to something besides 0 after you add
     a new serial number.  The id associated with this
     serial number will be zero and cannot be found using
     FindId().
   Restrictions:
     The returned pointer may become invalid after any
-    subsequent calls to any function in this class.  
+    subsequent calls to any function in this class.
     If you need to save information in the returned
-    SN_ELEMENT for future use, you must copy the 
+    SN_ELEMENT for future use, you must copy the
     information into storage you are managing.
 
     You may change the value of the SN_ELEMENT's m_value
@@ -205,7 +208,8 @@ public:
     fields or you will break searching and possibly cause
     crashes.
   */
-  struct SN_ELEMENT* AddSerialNumber(unsigned int sn);
+  struct SN_ELEMENT *
+  AddSerialNumber (unsigned int sn);
 
   /*
   Parameters:
@@ -215,13 +219,13 @@ public:
               to the element.
   Returns:
     If the serial number is valid (>0), a pointer to its
-    element is returned.  When a new element is added, 
+    element is returned.  When a new element is added,
     every byte of the m_value field is set to 0.
     If the serial number was already active, its element is
     also returned.  If you need to distinguish between new
-    and previously existing elements, then change  
+    and previously existing elements, then change
     m_value.m_u_type to something besides 0 after you add
-    a new serial number. 
+    a new serial number.
     If the id parameter is zero, then a new uuid is created
     and added. If the id parameter is non zero but is active
     on another element, a new uuid is created and added.
@@ -230,9 +234,9 @@ public:
     the element.
   Restrictions:
     The returned pointer may become invalid after any
-    subsequent calls to any function in this class.  
+    subsequent calls to any function in this class.
     If you need to save information in the returned
-    SN_ELEMENT for future use, you must copy the 
+    SN_ELEMENT for future use, you must copy the
     information into storage you are managing.
 
     You may change the value of the SN_ELEMENT's m_value
@@ -240,7 +244,8 @@ public:
     fields or you will break searching and possibly cause
     crashes.
   */
-  struct SN_ELEMENT* AddSerialNumberAndId(unsigned int sn, ON_UUID id);
+  struct SN_ELEMENT *
+  AddSerialNumberAndId (unsigned int sn, ON_UUID id);
 
   /*
   Parameters:
@@ -251,9 +256,9 @@ public:
     the element's id was active, the id is also removed.
   Restrictions:
     The returned pointer may become invalid after any
-    subsequent calls to any function in this class.  
+    subsequent calls to any function in this class.
     If you need to save information in the returned
-    SN_ELEMENT for future use, you must copy the 
+    SN_ELEMENT for future use, you must copy the
     information into storage you are managing.
 
     You may change the value of the SN_ELEMENT's m_value
@@ -261,7 +266,8 @@ public:
     fields or you will break searching and possibly cause
     crashes.
   */
-  struct SN_ELEMENT* RemoveSerialNumberAndId(unsigned int sn);
+  struct SN_ELEMENT *
+  RemoveSerialNumberAndId (unsigned int sn);
 
   /*
   Parameters:
@@ -276,9 +282,9 @@ public:
     use RemoveSerialNumberAndId().
   Restrictions:
     The returned pointer may become invalid after any
-    subsequent calls to any function in this class.  
+    subsequent calls to any function in this class.
     If you need to save information in the returned
-    SN_ELEMENT for future use, you must copy the 
+    SN_ELEMENT for future use, you must copy the
     information into storage you are managing.
 
     You may change the value of the SN_ELEMENT's m_value
@@ -286,7 +292,8 @@ public:
     fields or you will break searching and possibly cause
     crashes.
   */
-  struct SN_ELEMENT* RemoveId(unsigned int sn, ON_UUID id);
+  struct SN_ELEMENT *
+  RemoveId (unsigned int sn, ON_UUID id);
 
   /*
   Description:
@@ -310,18 +317,16 @@ public:
     When many elements are returned, GetElements() can be
     substantially faster than repeated calls to FindElement().
   */
-  size_t GetElements(
-          unsigned int sn0,
-          unsigned int sn1, 
-          size_t max_count,
-          ON_SimpleArray<SN_ELEMENT>& elements
-          ) const;
+  size_t
+  GetElements (unsigned int sn0, unsigned int sn1, size_t max_count,
+               ON_SimpleArray<SN_ELEMENT> &elements) const;
 
   /*
   Description:
     Empties the list.
   */
-  void EmptyList();
+  void
+  EmptyList ();
 
   /*
   Description:
@@ -332,18 +337,20 @@ public:
   Returns:
     true if the list if valid.
   */
-  bool IsValid(ON_TextLog* textlog) const;
+  bool
+  IsValid (ON_TextLog *textlog) const;
 
-  void Dump(ON_TextLog& text_log) const;
+  void
+  Dump (ON_TextLog &text_log) const;
 
-private:
+  private:
   // prohibit copy construction and operator=
   // no implementation
-  ON_SerialNumberMap(const ON_SerialNumberMap&);
-  ON_SerialNumberMap& operator=(const ON_SerialNumberMap&);
+  ON_SerialNumberMap (const ON_SerialNumberMap &);
+  ON_SerialNumberMap &
+  operator= (const ON_SerialNumberMap &);
 
-  enum
-  {
+  enum {
     // These numbers are chosen so the ON_SerialNumberMap
     // will be computationally efficient for up to
     // 10 million entries.
@@ -352,33 +359,41 @@ private:
     ID_HASH_TABLE_COUNT = 8192
   };
 
-  struct SN_BLOCK
-  {
-    size_t m_count;  // used elements in m_sn[]
-    size_t m_purged; // number of purged elements in m_sn[]
+  struct SN_BLOCK {
+    size_t m_count;        // used elements in m_sn[]
+    size_t m_purged;       // number of purged elements in m_sn[]
     unsigned int m_sorted; // 0 = no, 1 = yes
-    unsigned int m_sn0; // minimum sn in m_sn[]
-    unsigned int m_sn1; // maximum sn in m_sn[]
+    unsigned int m_sn0;    // minimum sn in m_sn[]
+    unsigned int m_sn1;    // maximum sn in m_sn[]
     struct SN_ELEMENT m_sn[SN_BLOCK_CAPACITY];
-    void EmptyBlock();
-    void CullBlockHelper();
-    void SortBlockHelper();
-    bool IsValidBlock(ON_TextLog* textlog,struct SN_ELEMENT*const* hash_table,size_t* active_id_count) const;
-    struct SN_ELEMENT* BinarySearchBlockHelper(unsigned int sn);
-    static int CompareMaxSN(const void*,const void*);
-    size_t ActiveElementEstimate(unsigned int sn0, unsigned int sn1) const;
-    void Dump(ON_TextLog&) const;
+    void
+    EmptyBlock ();
+    void
+    CullBlockHelper ();
+    void
+    SortBlockHelper ();
+    bool
+    IsValidBlock (ON_TextLog *textlog, struct SN_ELEMENT *const *hash_table,
+                  size_t *active_id_count) const;
+    struct SN_ELEMENT *
+    BinarySearchBlockHelper (unsigned int sn);
+    static int
+    CompareMaxSN (const void *, const void *);
+    size_t
+    ActiveElementEstimate (unsigned int sn0, unsigned int sn1) const;
+    void
+    Dump (ON_TextLog &) const;
   };
 
   unsigned int m_maxsn; // largest sn stored anywhere
   unsigned int m_reserved;
 
   // All heap used in this class is allocated from this pool.
-  ON_MEMORY_POOL* m_pool;
+  ON_MEMORY_POOL *m_pool;
 
   // Serial Number list counts
-  size_t m_sn_count;   // total number of elements                       
-  size_t m_sn_purged;  // total number of purged elements
+  size_t m_sn_count;  // total number of elements
+  size_t m_sn_purged; // total number of purged elements
 
   // ID hash table counts (all ids in the hash table are active)
   bool m_bHashTableIsValid; // true if m_hash_table[] is valid
@@ -389,7 +404,6 @@ private:
                             // id so we don't have to waste time
                             // searching the hash table for
                             // an id that is not there.
-                            
 
   // The blocks in m_sn_list[] are alwasy sorted, disjoint,
   // and in increasing order.  m_sn_list is used when
@@ -397,7 +411,7 @@ private:
   // The sn list is partitioned into blocks to avoid
   // requiring large amounts of contiguous memory for
   // situations with millions of serial numbers.
-  struct SN_BLOCK** m_snblk_list;
+  struct SN_BLOCK **m_snblk_list;
   size_t m_snblk_list_capacity; // capacity of m_blk_list[]
   size_t m_snblk_list_count;    // used elements in m_snblk_list[]
 
@@ -406,29 +420,37 @@ private:
   // that contains the returned element.  In all other
   // situations the value in m_e_blk is undefined and
   // m_e_blk must not be dereferenced.
-  struct SN_BLOCK* m_e_blk;
+  struct SN_BLOCK *m_e_blk;
 
   // m_sn_block0 is where the new additions are added.
   // When serial numbers are not added in increasing
   // order, m_sn_block0.m_sn[] may not be sorted.
   SN_BLOCK m_sn_block0;
 
-  struct SN_ELEMENT* FindElementHelper(unsigned int sn);
-  void UpdateMaxSNHelper();
-  void GarbageCollectHelper();
-  size_t GarbageCollectMoveHelper(SN_BLOCK* dst,SN_BLOCK* src);
+  struct SN_ELEMENT *
+  FindElementHelper (unsigned int sn);
+  void
+  UpdateMaxSNHelper ();
+  void
+  GarbageCollectHelper ();
+  size_t
+  GarbageCollectMoveHelper (SN_BLOCK *dst, SN_BLOCK *src);
 
-  // When m_bHashTableIsValid is true, then m_hash_table[i] is 
-  // a linked list of elements whose id satisfies 
+  // When m_bHashTableIsValid is true, then m_hash_table[i] is
+  // a linked list of elements whose id satisfies
   // i = HashIndex(&e->m_id).  When m_bHashTableIsValid is false,
   // m_hash_table[] is identically zero.
-  struct SN_ELEMENT* m_hash_table[ID_HASH_TABLE_COUNT];
-  size_t HashIndex(const ON_UUID*) const;
-  void InvalidateHashTableHelper(); // marks table as dirty
-  bool RemoveBlockFromHashTableHelper(const struct SN_BLOCK* blk);
-  void AddBlockToHashTableHelper(struct SN_BLOCK* blk);
-  void BuildHashTableHelper();      // prepares table for use
+  struct SN_ELEMENT *m_hash_table[ID_HASH_TABLE_COUNT];
+  size_t
+  HashIndex (const ON_UUID *) const;
+  void
+  InvalidateHashTableHelper (); // marks table as dirty
+  bool
+  RemoveBlockFromHashTableHelper (const struct SN_BLOCK *blk);
+  void
+  AddBlockToHashTableHelper (struct SN_BLOCK *blk);
+  void
+  BuildHashTableHelper (); // prepares table for use
 };
-
 
 #endif

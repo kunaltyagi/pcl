@@ -38,15 +38,15 @@
 
 #pragma once
 
+#include <ostream>
 #include <pcl/outofcore/boost.h>
 #include <vector>
-#include <ostream>
 
 namespace pcl
 {
   namespace outofcore
   {
-    
+
     /** \class AbstractMetadata
      *
      *  \brief Abstract interface for outofcore metadata file types
@@ -57,17 +57,12 @@ namespace pcl
 
     class PCL_EXPORTS OutofcoreAbstractMetadata
     {
-    public:
-      
+      public:
       /** \brief Empty constructor */
-      OutofcoreAbstractMetadata ()
-      {
-      }
-      
-      virtual
-      ~OutofcoreAbstractMetadata ()
-      {}
-      
+      OutofcoreAbstractMetadata () {}
+
+      virtual ~OutofcoreAbstractMetadata () {}
+
       /** \brief Write the metadata in the on-disk format, e.g. JSON. */
       virtual void
       serializeMetadataToDisk () = 0;
@@ -75,20 +70,20 @@ namespace pcl
       /** \brief Method which should read and parse metadata and store
        *  it in variables that have public getters and setters*/
       virtual int
-      loadMetadataFromDisk (const boost::filesystem::path& path_to_metadata) = 0;
-      
+      loadMetadataFromDisk (const boost::filesystem::path &path_to_metadata) = 0;
+
       /** \brief Should write the same ascii metadata that is saved on
-       *   disk, or a human readable format of the metadata in case a binary format is being used */
-      friend std::ostream& 
-      operator<<(std::ostream& os, const OutofcoreAbstractMetadata& metadata_arg);
-      
-    protected:
-      
-      /** \brief Constructs the metadata ascii which can be written to disk or piped to stdout */
+       *   disk, or a human readable format of the metadata in case a binary format is
+       * being used */
+      friend std::ostream &
+      operator<< (std::ostream &os, const OutofcoreAbstractMetadata &metadata_arg);
+
+      protected:
+      /** \brief Constructs the metadata ascii which can be written to disk or piped to
+       * stdout */
       virtual void
-      writeMetadataString (std::vector<char>& buf) =0;
-      
+      writeMetadataString (std::vector<char> &buf) = 0;
     };
-    
-  }//namespace outofcore
-}//namespace pcl
+
+  } // namespace outofcore
+} // namespace pcl

@@ -40,37 +40,35 @@
 #ifndef PCL_FILTERS_IMPL_MEDIAN_FILTER_HPP_
 #define PCL_FILTERS_IMPL_MEDIAN_FILTER_HPP_
 
-#include <pcl/filters/median_filter.h>
 #include <pcl/common/io.h>
+#include <pcl/filters/median_filter.h>
 
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::MedianFilter<PointT>::applyFilter (PointCloud &output)
 {
-  if (!input_->isOrganized ())
-  {
+  if (!input_->isOrganized ()) {
     PCL_ERROR ("[pcl::MedianFilter] Input cloud needs to be organized\n");
     return;
   }
 
-  // Copy everything from the input cloud to the output cloud (takes care of all the fields)
+  // Copy everything from the input cloud to the output cloud (takes care of all the
+  // fields)
   copyPointCloud (*input_, output);
 
   int height = static_cast<int> (output.height);
   int width = static_cast<int> (output.width);
   for (int y = 0; y < height; ++y)
     for (int x = 0; x < width; ++x)
-      if (pcl::isFinite ((*input_)(x, y)))
-      {
+      if (pcl::isFinite ((*input_) (x, y))) {
         std::vector<float> vals;
         vals.reserve (window_size_ * window_size_);
         // Fill in the vector of values with the depths around the interest point
-        for (int y_dev = -window_size_/2; y_dev <= window_size_/2; ++y_dev)
-          for (int x_dev = -window_size_/2; x_dev <= window_size_/2; ++x_dev)
-          {
-            if (x + x_dev >= 0 && x + x_dev < width &&
-                y + y_dev >= 0 && y + y_dev < height &&
-                pcl::isFinite ((*input_)(x+x_dev, y+y_dev)))
-              vals.push_back ((*input_)(x+x_dev, y+y_dev).z);
+        for (int y_dev = -window_size_ / 2; y_dev <= window_size_ / 2; ++y_dev)
+          for (int x_dev = -window_size_ / 2; x_dev <= window_size_ / 2; ++x_dev) {
+            if (x + x_dev >= 0 && x + x_dev < width && y + y_dev >= 0 &&
+                y + y_dev < height && pcl::isFinite ((*input_) (x + x_dev, y + y_dev)))
+              vals.push_back ((*input_) (x + x_dev, y + y_dev).z);
           }
 
         if (vals.empty ())
@@ -80,13 +78,13 @@ pcl::MedianFilter<PointT>::applyFilter (PointCloud &output)
         partial_sort (vals.begin (), vals.begin () + vals.size () / 2 + 1, vals.end ());
         float new_depth = vals[vals.size () / 2];
         // Do not allow points to move more than the set max_allowed_movement_
-        if (fabs (new_depth - (*input_)(x, y).z) < max_allowed_movement_)
+        if (fabs (new_depth - (*input_) (x, y).z) < max_allowed_movement_)
           output (x, y).z = new_depth;
         else
-          output (x, y).z = (*input_)(x, y).z +
-                            max_allowed_movement_ * (new_depth - (*input_)(x, y).z) / fabsf (new_depth - (*input_)(x, y).z);
+          output (x, y).z = (*input_) (x, y).z +
+                            max_allowed_movement_ * (new_depth - (*input_) (x, y).z) /
+                                fabsf (new_depth - (*input_) (x, y).z);
       }
 }
-
 
 #endif /* PCL_FILTERS_IMPL_MEDIAN_FILTER_HPP_ */

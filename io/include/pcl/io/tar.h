@@ -43,11 +43,10 @@ namespace pcl
 {
   namespace io
   {
-    /** \brief A TAR file's header, as described on 
-      * http://en.wikipedia.org/wiki/Tar_%28file_format%29. 
-      */
-    struct TARHeader
-    {
+    /** \brief A TAR file's header, as described on
+     * http://en.wikipedia.org/wiki/Tar_%28file_format%29.
+     */
+    struct TARHeader {
       char file_name[100];
       char file_mode[8];
       char uid[8];
@@ -67,13 +66,12 @@ namespace pcl
       char _padding[12];
 
       /** \brief get file size */
-      unsigned int 
+      unsigned int
       getFileSize ()
       {
         unsigned int output = 0;
         char *str = file_size;
-        for (int i = 0; i < 11; i++)
-        {
+        for (int i = 0; i < 11; i++) {
           output = output * 8 + *str - '0';
           str++;
         }
@@ -81,19 +79,21 @@ namespace pcl
       }
     };
 
-    /** \brief Save a PointCloud dataset into a TAR file. 
-      * Append if the file exists, or create a new one if not.
-      * \remark till implemented will return FALSE
-      */
-      // param[in] tar_filename the name of the TAR file to save the cloud to
-      // param[in] cloud the point cloud dataset to save
-      // param[in] pcd_filename the internal name of the PCD file that should be stored in the TAR header
-    template <typename PointT> bool
-    saveTARPointCloud (const std::string& /*tar_filename*/,
-                       const PointCloud<PointT>& /*cloud*/,
-                       const std::string& /*pcd_filename*/)
+    /** \brief Save a PointCloud dataset into a TAR file.
+     * Append if the file exists, or create a new one if not.
+     * \remark till implemented will return FALSE
+     */
+    // param[in] tar_filename the name of the TAR file to save the cloud to
+    // param[in] cloud the point cloud dataset to save
+    // param[in] pcd_filename the internal name of the PCD file that should be stored in
+    // the TAR header
+    template <typename PointT>
+    bool
+    saveTARPointCloud (const std::string & /*tar_filename*/,
+                       const PointCloud<PointT> & /*cloud*/,
+                       const std::string & /*pcd_filename*/)
     {
       return (false);
     }
-  }
-}
+  } // namespace io
+} // namespace pcl

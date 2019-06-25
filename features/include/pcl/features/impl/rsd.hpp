@@ -45,10 +45,12 @@
 #include <pcl/features/rsd.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointNT, typename PointOutT> Eigen::MatrixXf
-pcl::computeRSD (const pcl::PointCloud<PointInT> &surface, const pcl::PointCloud<PointNT> &normals,
-		 const std::vector<int> &indices, double max_dist,
-		 int nr_subdiv, double plane_radius, PointOutT &radii, bool compute_histogram)
+template <typename PointInT, typename PointNT, typename PointOutT>
+Eigen::MatrixXf
+pcl::computeRSD (const pcl::PointCloud<PointInT> &surface,
+                 const pcl::PointCloud<PointNT> &normals,
+                 const std::vector<int> &indices, double max_dist, int nr_subdiv,
+                 double plane_radius, PointOutT &radii, bool compute_histogram)
 {
   // Check if the full histogram has to be saved or not
   Eigen::MatrixXf histogram;
@@ -56,202 +58,214 @@ pcl::computeRSD (const pcl::PointCloud<PointInT> &surface, const pcl::PointCloud
     histogram = Eigen::MatrixXf::Zero (nr_subdiv, nr_subdiv);
 
   // Check if enough points are provided or not
-  if (indices.size () < 2)
-  {
+  if (indices.size () < 2) {
     radii.r_max = 0;
     radii.r_min = 0;
     return histogram;
   }
-  
+
   // Initialize minimum and maximum angle values in each distance bin
-  std::vector<std::vector<double> > min_max_angle_by_dist (nr_subdiv);
+  std::vector<std::vector<double>> min_max_angle_by_dist (nr_subdiv);
   min_max_angle_by_dist[0].resize (2);
   min_max_angle_by_dist[0][0] = min_max_angle_by_dist[0][1] = 0.0;
-  for (int di=1; di<nr_subdiv; di++)
-  {
+  for (int di = 1; di < nr_subdiv; di++) {
     min_max_angle_by_dist[di].resize (2);
     min_max_angle_by_dist[di][0] = +DBL_MAX;
     min_max_angle_by_dist[di][1] = -DBL_MAX;
   }
 
   // Compute distance by normal angle distribution for points
-  std::vector<int>::const_iterator i, begin (indices.begin()), end (indices.end());
-  for(i = begin+1; i != end; ++i)
-  {
-    // compute angle between the two lines going through normals (disregard orientation!)
+  std::vector<int>::const_iterator i, begin (indices.begin ()), end (indices.end ());
+  for (i = begin + 1; i != end; ++i) {
+    // compute angle between the two lines going through normals (disregard
+    // orientation!)
     double cosine = normals.points[*i].normal[0] * normals.points[*begin].normal[0] +
                     normals.points[*i].normal[1] * normals.points[*begin].normal[1] +
                     normals.points[*i].normal[2] * normals.points[*begin].normal[2];
-    if (cosine > 1) cosine = 1;
-    if (cosine < -1) cosine = -1;
-    double angle  = acos (cosine);
-    if (angle > M_PI/2) angle = M_PI - angle; /// \note: orientation is neglected!
+    if (cosine > 1)
+      cosine = 1;
+    if (cosine < -1)
+      cosine = -1;
+    double angle = acos (cosine);
+    if (angle > M_PI / 2)
+      angle = M_PI - angle; /// \note: orientation is neglected!
 
     // Compute point to point distance
-    double dist = sqrt ((surface.points[*i].x - surface.points[*begin].x) * (surface.points[*i].x - surface.points[*begin].x) +
-                        (surface.points[*i].y - surface.points[*begin].y) * (surface.points[*i].y - surface.points[*begin].y) +
-                        (surface.points[*i].z - surface.points[*begin].z) * (surface.points[*i].z - surface.points[*begin].z));
+    double dist = sqrt ((surface.points[*i].x - surface.points[*begin].x) *
+                            (surface.points[*i].x - surface.points[*begin].x) +
+                        (surface.points[*i].y - surface.points[*begin].y) *
+                            (surface.points[*i].y - surface.points[*begin].y) +
+                        (surface.points[*i].z - surface.points[*begin].z) *
+                            (surface.points[*i].z - surface.points[*begin].z));
 
     if (dist > max_dist)
       continue; /// \note: we neglect points that are outside the specified interval!
 
     // compute bins and increase
     int bin_d = static_cast<int> (floor (nr_subdiv * dist / max_dist));
-    if (compute_histogram)
-    {
-      int bin_a = std::min (nr_subdiv-1, static_cast<int> (floor (nr_subdiv * angle / (M_PI/2))));
-      histogram(bin_a, bin_d)++;
+    if (compute_histogram) {
+      int bin_a = std::min (nr_subdiv - 1,
+                            static_cast<int> (floor (nr_subdiv * angle / (M_PI / 2))));
+      histogram (bin_a, bin_d)++;
     }
 
     // update min-max values for distance bins
-    if (min_max_angle_by_dist[bin_d][0] > angle) min_max_angle_by_dist[bin_d][0] = angle;
-    if (min_max_angle_by_dist[bin_d][1] < angle) min_max_angle_by_dist[bin_d][1] = angle;
+    if (min_max_angle_by_dist[bin_d][0] > angle)
+      min_max_angle_by_dist[bin_d][0] = angle;
+    if (min_max_angle_by_dist[bin_d][1] < angle)
+      min_max_angle_by_dist[bin_d][1] = angle;
   }
 
   // Estimate radius from min and max lines
   double Amint_Amin = 0, Amint_d = 0;
   double Amaxt_Amax = 0, Amaxt_d = 0;
-  for (int di=0; di<nr_subdiv; di++)
-  {
+  for (int di = 0; di < nr_subdiv; di++) {
     // combute the members of A'*A*r = A'*D
-    if (min_max_angle_by_dist[di][1] >= 0)
-    {
+    if (min_max_angle_by_dist[di][1] >= 0) {
       double p_min = min_max_angle_by_dist[di][0];
       double p_max = min_max_angle_by_dist[di][1];
-      double f = (di+0.5)*max_dist/nr_subdiv;
+      double f = (di + 0.5) * max_dist / nr_subdiv;
       Amint_Amin += p_min * p_min;
       Amint_d += p_min * f;
       Amaxt_Amax += p_max * p_max;
       Amaxt_d += p_max * f;
     }
   }
-  float min_radius = Amint_Amin == 0.0f ? float (plane_radius) : float (std::min (Amint_d/Amint_Amin, plane_radius));
-  float max_radius = Amaxt_Amax == 0.0f ? float (plane_radius) : float (std::min (Amaxt_d/Amaxt_Amax, plane_radius));
+  float min_radius = Amint_Amin == 0.0f
+                         ? float(plane_radius)
+                         : float(std::min (Amint_d / Amint_Amin, plane_radius));
+  float max_radius = Amaxt_Amax == 0.0f
+                         ? float(plane_radius)
+                         : float(std::min (Amaxt_d / Amaxt_Amax, plane_radius));
 
-  // Small correction of the systematic error of the estimation (based on analysis with nr_subdiv_ = 5)
+  // Small correction of the systematic error of the estimation (based on analysis with
+  // nr_subdiv_ = 5)
   min_radius *= 1.1f;
   max_radius *= 0.9f;
-  if (min_radius < max_radius)
-  {
+  if (min_radius < max_radius) {
     radii.r_min = min_radius;
     radii.r_max = max_radius;
-  }
-  else
-  {
+  } else {
     radii.r_max = min_radius;
     radii.r_min = max_radius;
   }
-  
+
   return histogram;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointNT, typename PointOutT> Eigen::MatrixXf
+template <typename PointNT, typename PointOutT>
+Eigen::MatrixXf
 pcl::computeRSD (const pcl::PointCloud<PointNT> &normals,
-		 const std::vector<int> &indices, const std::vector<float> &sqr_dists, double max_dist,
-		 int nr_subdiv, double plane_radius, PointOutT &radii, bool compute_histogram)
+                 const std::vector<int> &indices, const std::vector<float> &sqr_dists,
+                 double max_dist, int nr_subdiv, double plane_radius, PointOutT &radii,
+                 bool compute_histogram)
 {
   // Check if the full histogram has to be saved or not
   Eigen::MatrixXf histogram;
   if (compute_histogram)
     histogram = Eigen::MatrixXf::Zero (nr_subdiv, nr_subdiv);
-  
+
   // Check if enough points are provided or not
-  if (indices.size () < 2)
-  {
+  if (indices.size () < 2) {
     radii.r_max = 0;
     radii.r_min = 0;
     return histogram;
   }
-  
+
   // Initialize minimum and maximum angle values in each distance bin
-  std::vector<std::vector<double> > min_max_angle_by_dist (nr_subdiv);
+  std::vector<std::vector<double>> min_max_angle_by_dist (nr_subdiv);
   min_max_angle_by_dist[0].resize (2);
   min_max_angle_by_dist[0][0] = min_max_angle_by_dist[0][1] = 0.0;
-  for (int di=1; di<nr_subdiv; di++)
-  {
+  for (int di = 1; di < nr_subdiv; di++) {
     min_max_angle_by_dist[di].resize (2);
     min_max_angle_by_dist[di][0] = +DBL_MAX;
     min_max_angle_by_dist[di][1] = -DBL_MAX;
   }
-  
+
   // Compute distance by normal angle distribution for points
-  std::vector<int>::const_iterator i, begin (indices.begin()), end (indices.end());
-  for(i = begin+1; i != end; ++i)
-  {
-    // compute angle between the two lines going through normals (disregard orientation!)
+  std::vector<int>::const_iterator i, begin (indices.begin ()), end (indices.end ());
+  for (i = begin + 1; i != end; ++i) {
+    // compute angle between the two lines going through normals (disregard
+    // orientation!)
     double cosine = normals.points[*i].normal[0] * normals.points[*begin].normal[0] +
                     normals.points[*i].normal[1] * normals.points[*begin].normal[1] +
                     normals.points[*i].normal[2] * normals.points[*begin].normal[2];
-    if (cosine > 1) cosine = 1;
-    if (cosine < -1) cosine = -1;
-    double angle  = acos (cosine);
-    if (angle > M_PI/2) angle = M_PI - angle; /// \note: orientation is neglected!
+    if (cosine > 1)
+      cosine = 1;
+    if (cosine < -1)
+      cosine = -1;
+    double angle = acos (cosine);
+    if (angle > M_PI / 2)
+      angle = M_PI - angle; /// \note: orientation is neglected!
 
     // Compute point to point distance
-    double dist = sqrt (sqr_dists[i-begin]);
+    double dist = sqrt (sqr_dists[i - begin]);
 
     if (dist > max_dist)
       continue; /// \note: we neglect points that are outside the specified interval!
 
     // compute bins and increase
     int bin_d = static_cast<int> (floor (nr_subdiv * dist / max_dist));
-    if (compute_histogram)
-    {
-      int bin_a = std::min (nr_subdiv-1, static_cast<int> (floor (nr_subdiv * angle / (M_PI/2))));
-      histogram(bin_a, bin_d)++;
+    if (compute_histogram) {
+      int bin_a = std::min (nr_subdiv - 1,
+                            static_cast<int> (floor (nr_subdiv * angle / (M_PI / 2))));
+      histogram (bin_a, bin_d)++;
     }
 
     // update min-max values for distance bins
-    if (min_max_angle_by_dist[bin_d][0] > angle) min_max_angle_by_dist[bin_d][0] = angle;
-    if (min_max_angle_by_dist[bin_d][1] < angle) min_max_angle_by_dist[bin_d][1] = angle;
+    if (min_max_angle_by_dist[bin_d][0] > angle)
+      min_max_angle_by_dist[bin_d][0] = angle;
+    if (min_max_angle_by_dist[bin_d][1] < angle)
+      min_max_angle_by_dist[bin_d][1] = angle;
   }
 
   // Estimate radius from min and max lines
   double Amint_Amin = 0, Amint_d = 0;
   double Amaxt_Amax = 0, Amaxt_d = 0;
-  for (int di=0; di<nr_subdiv; di++)
-  {
+  for (int di = 0; di < nr_subdiv; di++) {
     // combute the members of A'*A*r = A'*D
-    if (min_max_angle_by_dist[di][1] >= 0)
-    {
+    if (min_max_angle_by_dist[di][1] >= 0) {
       double p_min = min_max_angle_by_dist[di][0];
       double p_max = min_max_angle_by_dist[di][1];
-      double f = (di+0.5)*max_dist/nr_subdiv;
+      double f = (di + 0.5) * max_dist / nr_subdiv;
       Amint_Amin += p_min * p_min;
       Amint_d += p_min * f;
       Amaxt_Amax += p_max * p_max;
       Amaxt_d += p_max * f;
     }
   }
-  float min_radius = Amint_Amin == 0.0f ? float (plane_radius) : float (std::min (Amint_d/Amint_Amin, plane_radius));
-  float max_radius = Amaxt_Amax == 0.0f ? float (plane_radius) : float (std::min (Amaxt_d/Amaxt_Amax, plane_radius));
+  float min_radius = Amint_Amin == 0.0f
+                         ? float(plane_radius)
+                         : float(std::min (Amint_d / Amint_Amin, plane_radius));
+  float max_radius = Amaxt_Amax == 0.0f
+                         ? float(plane_radius)
+                         : float(std::min (Amaxt_d / Amaxt_Amax, plane_radius));
 
-  // Small correction of the systematic error of the estimation (based on analysis with nr_subdiv_ = 5)
+  // Small correction of the systematic error of the estimation (based on analysis with
+  // nr_subdiv_ = 5)
   min_radius *= 1.1f;
   max_radius *= 0.9f;
-  if (min_radius < max_radius)
-  {
+  if (min_radius < max_radius) {
     radii.r_min = min_radius;
     radii.r_max = max_radius;
-  }
-  else
-  {
+  } else {
     radii.r_max = min_radius;
     radii.r_min = max_radius;
   }
-  
+
   return histogram;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointNT, typename PointOutT> void
+template <typename PointInT, typename PointNT, typename PointOutT>
+void
 pcl::RSDEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut &output)
 {
   // Check if search_radius_ was set
-  if (search_radius_ < 0)
-  {
-    PCL_ERROR ("[pcl::%s::computeFeature] A search radius needs to be set!\n", getClassName ().c_str ());
+  if (search_radius_ < 0) {
+    PCL_ERROR ("[pcl::%s::computeFeature] A search radius needs to be set!\n",
+               getClassName ().c_str ());
     output.width = output.height = 0;
     output.points.clear ();
     return;
@@ -263,34 +277,38 @@ pcl::RSDEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
   std::vector<float> nn_sqr_dists;
 
   // Check if the full histogram has to be saved or not
-  if (save_histograms_)
-  {
+  if (save_histograms_) {
     // Reserve space for the output histogram dataset
-    histograms_.reset (new std::vector<Eigen::MatrixXf, Eigen::aligned_allocator<Eigen::MatrixXf> >);
+    histograms_.reset (
+        new std::vector<Eigen::MatrixXf, Eigen::aligned_allocator<Eigen::MatrixXf>>);
     histograms_->reserve (output.points.size ());
-    
+
     // Iterating over the entire index vector
-    for (size_t idx = 0; idx < indices_->size (); ++idx)
-    {
+    for (size_t idx = 0; idx < indices_->size (); ++idx) {
       // Compute and store r_min and r_max in the output cloud
-      this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices, nn_sqr_dists);
-      //histograms_->push_back (computeRSD (*surface_, *normals_, nn_indices, search_radius_, nr_subdiv_, plane_radius_, output.points[idx], true));
-      histograms_->push_back (computeRSD (*normals_, nn_indices, nn_sqr_dists, search_radius_, nr_subdiv_, plane_radius_, output.points[idx], true));
+      this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
+                                nn_sqr_dists);
+      // histograms_->push_back (computeRSD (*surface_, *normals_, nn_indices,
+      // search_radius_, nr_subdiv_, plane_radius_, output.points[idx], true));
+      histograms_->push_back (computeRSD (*normals_, nn_indices, nn_sqr_dists,
+                                          search_radius_, nr_subdiv_, plane_radius_,
+                                          output.points[idx], true));
     }
-  }
-  else
-  {
+  } else {
     // Iterating over the entire index vector
-    for (size_t idx = 0; idx < indices_->size (); ++idx)
-    {
+    for (size_t idx = 0; idx < indices_->size (); ++idx) {
       // Compute and store r_min and r_max in the output cloud
-      this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices, nn_sqr_dists);
-      //computeRSD (*surface_, *normals_, nn_indices, search_radius_, nr_subdiv_, plane_radius_, output.points[idx], false);
-      computeRSD (*normals_, nn_indices, nn_sqr_dists, search_radius_, nr_subdiv_, plane_radius_, output.points[idx], false);
+      this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
+                                nn_sqr_dists);
+      // computeRSD (*surface_, *normals_, nn_indices, search_radius_, nr_subdiv_,
+      // plane_radius_, output.points[idx], false);
+      computeRSD (*normals_, nn_indices, nn_sqr_dists, search_radius_, nr_subdiv_,
+                  plane_radius_, output.points[idx], false);
     }
   }
 }
 
-#define PCL_INSTANTIATE_RSDEstimation(T,NT,OutT) template class PCL_EXPORTS pcl::RSDEstimation<T,NT,OutT>;
+#define PCL_INSTANTIATE_RSDEstimation(T, NT, OutT)                                     \
+  template class PCL_EXPORTS pcl::RSDEstimation<T, NT, OutT>;
 
-#endif    // PCL_FEATURES_IMPL_RSD_H_ 
+#endif // PCL_FEATURES_IMPL_RSD_H_

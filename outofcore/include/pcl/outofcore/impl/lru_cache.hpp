@@ -5,53 +5,46 @@
 #include <cassert>
 #include <list>
 
-template<typename T>
+template <typename T>
 class LRUCacheItem
 {
-public:
-
+  public:
   virtual size_t
   sizeOf () const
   {
     return sizeof (item);
   }
 
-  virtual
-  ~LRUCacheItem () { }
+  virtual ~LRUCacheItem () {}
 
   T item;
   size_t timestamp;
 };
 
-template<typename KeyT, typename CacheItemT>
+template <typename KeyT, typename CacheItemT>
 class LRUCache
 {
-public:
-
+  public:
   using KeyIndex = std::list<KeyT>;
   using KeyIndexIterator = typename KeyIndex::iterator;
 
-  using Cache = std::map<KeyT, std::pair<CacheItemT, typename KeyIndex::iterator> >;
+  using Cache = std::map<KeyT, std::pair<CacheItemT, typename KeyIndex::iterator>>;
   using CacheIterator = typename Cache::iterator;
 
-  LRUCache (size_t c) :
-      capacity_ (c), size_ (0)
-  {
-    assert(capacity_ != 0);
-  }
+  LRUCache (size_t c) : capacity_ (c), size_ (0) { assert (capacity_ != 0); }
 
   bool
-  hasKey (const KeyT& k)
+  hasKey (const KeyT &k)
   {
     return (cache_.find (k) != cache_.end ());
   }
 
-  CacheItemT&
-  get (const KeyT& k)
+  CacheItemT &
+  get (const KeyT &k)
   {
     // Get existing key
     const CacheIterator it = cache_.find (k);
-    assert(it != cache_.end ());
+    assert (it != cache_.end ());
 
     // Move key to MRU key index
     key_index_.splice (key_index_.end (), key_index_, (*it).second.second);
@@ -61,11 +54,11 @@ public:
   }
 
   void
-  touch (const KeyT& key)
+  touch (const KeyT &key)
   {
     // Get existing key
     const CacheIterator it = cache_.find (key);
-    assert(it != cache_.end ());
+    assert (it != cache_.end ());
 
     // Move key to MRU key index
     key_index_.splice (key_index_.end (), key_index_, it->second.second);
@@ -73,10 +66,9 @@ public:
 
   // Record a fresh key-value pair in the cache
   bool
-  insert (const KeyT& key, const CacheItemT& value)
+  insert (const KeyT &key, const CacheItemT &value)
   {
-    if (cache_.find (key) != cache_.end ())
-    {
+    if (cache_.find (key) != cache_.end ()) {
       touch (key);
       return true;
     }
@@ -88,8 +80,7 @@ public:
     // Get LRU key iterator
     KeyIndexIterator key_it = key_index_.begin ();
 
-    while (size + item_size >= capacity_)
-    {
+    while (size + item_size >= capacity_) {
       const CacheIterator cache_it = cache_.find (*key_it);
 
       // Get tail item (Least Recently Used)
@@ -97,8 +88,7 @@ public:
       size_t tail_size = cache_it->second.first.sizeOf ();
 
       // Check timestamp to see if we've completely filled the cache in one go
-      if (value.timestamp == tail_timestamp)
-      {
+      if (value.timestamp == tail_timestamp) {
         return false;
       }
 
@@ -127,7 +117,7 @@ public:
     capacity_ = capacity;
   }
 
-  CacheItemT&
+  CacheItemT &
   tailItem ()
   {
     const CacheIterator it = cache_.find (key_index_.front ());
@@ -135,23 +125,22 @@ public:
   }
 
   size_t
-  sizeOf (const CacheItemT& value)
+  sizeOf (const CacheItemT &value)
   {
     return value.sizeOf ();
   }
 
   // Evict the least-recently-used item from the cache
   bool
-  evict (int item_count=1)
+  evict (int item_count = 1)
   {
-    for (int i=0; i < item_count; i++)
-    {
+    for (int i = 0; i < item_count; i++) {
       if (key_index_.empty ())
         return false;
 
       // Get LRU item
       const CacheIterator it = cache_.find (key_index_.front ());
-      assert(it != cache_.end());
+      assert (it != cache_.end ());
 
       // Remove LRU item from cache and key index
       size_ -= it->second.first.sizeOf ();

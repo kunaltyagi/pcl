@@ -45,17 +45,26 @@ namespace pcl
   {
 
     template <template <typename> class Storage, typename OutT, typename InT>
-    void createIndicesImage (OutT &dst, InT &region_mask);
+    void
+    createIndicesImage (OutT &dst, InT &region_mask);
 
     template <template <typename> class Storage, typename OutT, typename InT>
-    void createNormalsImage (const OutT &dst, InT &normals);
+    void
+    createNormalsImage (const OutT &dst, InT &normals);
 
     template <template <typename> class Storage>
-    void markInliers (const typename PointCloudAOS<Storage>::ConstPtr &input, typename Storage<int>::type &region_mask, std::vector<boost::shared_ptr<typename Storage<int>::type> > inlier_stencils);
+    void
+    markInliers (
+        const typename PointCloudAOS<Storage>::ConstPtr &input,
+        typename Storage<int>::type &region_mask,
+        std::vector<boost::shared_ptr<typename Storage<int>::type>> inlier_stencils);
 
     template <template <typename> class Storage>
-    std::vector<typename Storage<int>::type> createRegionStencils (typename Storage<int>::type &parent, typename Storage<int>::type &rank, typename Storage<int>::type &size, int min_size, float percentage);
-    
-  } // namespace
-} // namespace
+    std::vector<typename Storage<int>::type>
+    createRegionStencils (typename Storage<int>::type &parent,
+                          typename Storage<int>::type &rank,
+                          typename Storage<int>::type &size, int min_size,
+                          float percentage);
 
+  } // namespace cuda
+} // namespace pcl

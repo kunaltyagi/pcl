@@ -51,90 +51,88 @@ namespace pcl
   namespace outofcore
   {
     /** \brief Abstract octree iterator class
-     *  \note This class is based on the octree_iterator written by Julius Kammerl adapted to the outofcore octree. The interface is very similar, but it does \b not inherit the \ref pcl::octree iterator base.
-     *  \ingroup outofcore
-     *  \author Stephen Fox (foxstephend@gmail.com)
+     *  \note This class is based on the octree_iterator written by Julius Kammerl
+     * adapted to the outofcore octree. The interface is very similar, but it does \b
+     * not inherit the \ref pcl::octree iterator base. \ingroup outofcore \author
+     * Stephen Fox (foxstephend@gmail.com)
      */
-    template<typename PointT, typename ContainerT>
-    class OutofcoreIteratorBase : public std::iterator<std::forward_iterator_tag,     /*iterator type*/
-                                                      const OutofcoreOctreeBaseNode<ContainerT, PointT>,
-                                                       void,  /*no defined distance between iterator*/
-                                                       const OutofcoreOctreeBaseNode<ContainerT, PointT>*,/*Pointer type*/
-                                                       const OutofcoreOctreeBaseNode<ContainerT, PointT>&>/*Reference type*/
+    template <typename PointT, typename ContainerT>
+    class OutofcoreIteratorBase
+        : public std::iterator<
+              std::forward_iterator_tag, /*iterator type*/
+              const OutofcoreOctreeBaseNode<ContainerT, PointT>,
+              void, /*no defined distance between iterator*/
+              const OutofcoreOctreeBaseNode<ContainerT, PointT> *, /*Pointer type*/
+              const OutofcoreOctreeBaseNode<ContainerT, PointT> &> /*Reference type*/
     {
       public:
-        using OctreeDisk = pcl::outofcore::OutofcoreOctreeBase<ContainerT, PointT>;
-        using OctreeDiskNode = pcl::outofcore::OutofcoreOctreeBaseNode<ContainerT, PointT>;
-        
-        using BranchNode = typename pcl::outofcore::OutofcoreOctreeBase<ContainerT, PointT>::BranchNode;
-        using LeafNode = typename pcl::outofcore::OutofcoreOctreeBase<ContainerT, PointT>::LeafNode;
+      using OctreeDisk = pcl::outofcore::OutofcoreOctreeBase<ContainerT, PointT>;
+      using OctreeDiskNode =
+          pcl::outofcore::OutofcoreOctreeBaseNode<ContainerT, PointT>;
 
-        using OutofcoreNodeType = typename OctreeDisk::OutofcoreNodeType;
+      using BranchNode =
+          typename pcl::outofcore::OutofcoreOctreeBase<ContainerT, PointT>::BranchNode;
+      using LeafNode =
+          typename pcl::outofcore::OutofcoreOctreeBase<ContainerT, PointT>::LeafNode;
 
-        explicit
-        OutofcoreIteratorBase (OctreeDisk& octree_arg) 
+      using OutofcoreNodeType = typename OctreeDisk::OutofcoreNodeType;
+
+      explicit OutofcoreIteratorBase (OctreeDisk &octree_arg)
           : octree_ (octree_arg), currentNode_ (nullptr)
-        {
-          reset ();
-        }
-        
-        virtual
-        ~OutofcoreIteratorBase ()
-        {
-        }
+      {
+        reset ();
+      }
 
-        OutofcoreIteratorBase (const OutofcoreIteratorBase& src)
+      virtual ~OutofcoreIteratorBase () {}
+
+      OutofcoreIteratorBase (const OutofcoreIteratorBase &src)
           : octree_ (src.octree_), currentNode_ (src.currentNode_)
-        {
+      {
+      }
+
+      inline OutofcoreIteratorBase &
+      operator= (const OutofcoreIteratorBase &src)
+      {
+        octree_ = src.octree_;
+        currentNode_ = src.currentNode_;
+        currentOctreeDepth_ = src.currentOctreeDepth_;
+      }
+
+      inline OutofcoreNodeType *operator* () const
+      {
+        return (this->getCurrentOctreeNode ());
+      }
+
+      virtual inline OutofcoreNodeType *
+      getCurrentOctreeNode () const
+      {
+        return (currentNode_);
+      }
+
+      virtual inline void
+      reset ()
+      {
+        currentNode_ = static_cast<OctreeDiskNode *> (octree_.getRootNode ());
+        currentOctreeDepth_ = 0;
+        max_depth_ = static_cast<unsigned int> (octree_.getDepth ());
+      }
+
+      inline void
+      setMaxDepth (unsigned int max_depth)
+      {
+        if (max_depth > static_cast<unsigned int> (octree_.getDepth ())) {
+          max_depth = static_cast<unsigned int> (octree_.getDepth ());
         }
 
-        inline OutofcoreIteratorBase&
-        operator = (const OutofcoreIteratorBase& src)
-        {
-          octree_ = src.octree_;
-          currentNode_ = src.currentNode_;
-          currentOctreeDepth_ = src.currentOctreeDepth_;
-        }
-        
-        
-        inline OutofcoreNodeType*
-        operator* () const
-        {
-          return (this->getCurrentOctreeNode ());
-        }
-
-        virtual inline OutofcoreNodeType*
-        getCurrentOctreeNode () const
-        {
-          return (currentNode_);
-        }
-        
-        virtual inline void
-        reset ()
-        {
-          currentNode_ = static_cast<OctreeDiskNode*> (octree_.getRootNode ());
-          currentOctreeDepth_ = 0;
-          max_depth_ = static_cast<unsigned int> (octree_.getDepth ());
-        }
-
-        inline void
-        setMaxDepth (unsigned int max_depth)
-        {
-          if (max_depth > static_cast<unsigned int> (octree_.getDepth ()))
-          {
-            max_depth = static_cast<unsigned int> (octree_.getDepth ());
-          }
-
-          max_depth_ = max_depth;
-        }
+        max_depth_ = max_depth;
+      }
 
       protected:
-        OctreeDisk& octree_;
-        OctreeDiskNode* currentNode_;
-        unsigned int currentOctreeDepth_;
-        unsigned int max_depth_;
+      OctreeDisk &octree_;
+      OctreeDiskNode *currentNode_;
+      unsigned int currentOctreeDepth_;
+      unsigned int max_depth_;
     };
-
 
 #if 0
     class PCL_EXPORTS OutofcoreBreadthFirstIterator : public OutofcoreIteratorBase
@@ -152,5 +150,5 @@ namespace pcl
 
     };
 #endif
-  }
-}
+  } // namespace outofcore
+} // namespace pcl

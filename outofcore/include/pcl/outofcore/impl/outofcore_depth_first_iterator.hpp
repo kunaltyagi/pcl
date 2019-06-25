@@ -44,108 +44,97 @@ namespace pcl
   namespace outofcore
   {
 
-    template<typename PointT, typename ContainerT> 
-    OutofcoreDepthFirstIterator<PointT, ContainerT>::OutofcoreDepthFirstIterator (OutofcoreOctreeBase<ContainerT, PointT>& octree_arg) 
-    : OutofcoreIteratorBase<PointT, ContainerT> (octree_arg)
-    , currentChildIdx_ (0)
-    , stack_ (0)
+    template <typename PointT, typename ContainerT>
+    OutofcoreDepthFirstIterator<PointT, ContainerT>::OutofcoreDepthFirstIterator (
+        OutofcoreOctreeBase<ContainerT, PointT> &octree_arg)
+        : OutofcoreIteratorBase<PointT, ContainerT> (octree_arg), currentChildIdx_ (0),
+          stack_ (0)
     {
       stack_.reserve (this->octree_.getTreeDepth ());
-      OutofcoreIteratorBase<PointT,ContainerT>::reset ();
+      OutofcoreIteratorBase<PointT, ContainerT>::reset ();
     }
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    template<typename PointT, typename ContainerT> 
+    template <typename PointT, typename ContainerT>
     OutofcoreDepthFirstIterator<PointT, ContainerT>::~OutofcoreDepthFirstIterator ()
     {
     }
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    template<typename PointT, typename ContainerT> 
-    OutofcoreDepthFirstIterator<PointT, ContainerT>& 
+    template <typename PointT, typename ContainerT>
+    OutofcoreDepthFirstIterator<PointT, ContainerT> &
     OutofcoreDepthFirstIterator<PointT, ContainerT>::operator++ ()
     {
-      //when currentNode_ is 0, skip incrementing because it is already at the end
-      if (this->currentNode_)
-      {
+      // when currentNode_ is 0, skip incrementing because it is already at the end
+      if (this->currentNode_) {
         bool bTreeUp = false;
-        OutofcoreOctreeBaseNode<ContainerT, PointT>* itNode = nullptr;
+        OutofcoreOctreeBaseNode<ContainerT, PointT> *itNode = nullptr;
 
-        if (this->currentNode_->getNodeType () == pcl::octree::BRANCH_NODE)
-        {
-          BranchNode* currentBranch = static_cast<BranchNode*> (this->currentNode_);
-          
-          if (currentChildIdx_ < 8)
-          {
+        if (this->currentNode_->getNodeType () == pcl::octree::BRANCH_NODE) {
+          BranchNode *currentBranch = static_cast<BranchNode *> (this->currentNode_);
+
+          if (currentChildIdx_ < 8) {
             itNode = this->octree_.getBranchChildPtr (*currentBranch, currentChildIdx_);
 
-            //keep looking for a valid child until we've run out of children or a valid one is found
-            while ((currentChildIdx_ < 7) && !(itNode))
-            {
-              //find next existing child node
+            // keep looking for a valid child until we've run out of children or a valid
+            // one is found
+            while ((currentChildIdx_ < 7) && !(itNode)) {
+              // find next existing child node
               currentChildIdx_++;
-              itNode = this->octree_.getBranchChildPtr (*currentBranch, currentChildIdx_);
+              itNode =
+                  this->octree_.getBranchChildPtr (*currentBranch, currentChildIdx_);
             }
-            //if no valid one was found, set flag to move back up the tree to the parent node
-            if (!itNode)
-            {
+            // if no valid one was found, set flag to move back up the tree to the
+            // parent node
+            if (!itNode) {
               bTreeUp = true;
             }
-          }
-          else
-          {
+          } else {
             bTreeUp = true;
           }
-        }
-        else
-        {
+        } else {
           bTreeUp = true;
         }
-        
-        if (bTreeUp)
-        {
-          if (!stack_.empty ())
-          {
-            std::pair<OutofcoreOctreeBaseNode<ContainerT, PointT>*, unsigned char>& stackEntry = stack_.back ();
+
+        if (bTreeUp) {
+          if (!stack_.empty ()) {
+            std::pair<OutofcoreOctreeBaseNode<ContainerT, PointT> *, unsigned char>
+                &stackEntry = stack_.back ();
             stack_.pop_back ();
-              
+
             this->currentNode_ = stackEntry.first;
             currentChildIdx_ = stackEntry.second;
-              
-            //don't do anything with the keys here...
+
+            // don't do anything with the keys here...
             this->currentOctreeDepth_--;
-          }
-          else
-          {
+          } else {
             this->currentNode_ = nullptr;
           }
-            
-        }
-        else
-        {
-          std::pair<OutofcoreOctreeBaseNode<ContainerT, PointT>*, unsigned char> newStackEntry;
+
+        } else {
+          std::pair<OutofcoreOctreeBaseNode<ContainerT, PointT> *, unsigned char>
+              newStackEntry;
           newStackEntry.first = this->currentNode_;
-          newStackEntry.second = static_cast<unsigned char> (currentChildIdx_+1);
-            
+          newStackEntry.second = static_cast<unsigned char> (currentChildIdx_ + 1);
+
           stack_.push_back (newStackEntry);
-            
-          //don't do anything with the keys here...
-            
+
+          // don't do anything with the keys here...
+
           this->currentOctreeDepth_++;
-          currentChildIdx_= 0;
+          currentChildIdx_ = 0;
           this->currentNode_ = itNode;
         }
       }
-        
+
       return (*this);
     }
 
     ////////////////////////////////////////////////////////////////////////////////
 
-  }//namesapce pcl
-}//namespace outofcore
+  } // namespace outofcore
+} // namespace pcl
 
-#endif //PCL_OUTOFCORE_DEPTH_FIRST_ITERATOR_IMPL_H_
-
+#endif // PCL_OUTOFCORE_DEPTH_FIRST_ITERATOR_IMPL_H_

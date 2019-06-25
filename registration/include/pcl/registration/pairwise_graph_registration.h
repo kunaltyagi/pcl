@@ -46,70 +46,70 @@
 namespace pcl
 {
   /** \brief @b PairwiseGraphRegistration class aligns the clouds two by two
-    * \author Nicola Fioraio
-    * \ingroup registration
-    */
+   * \author Nicola Fioraio
+   * \ingroup registration
+   */
   template <typename GraphT, typename PointT>
   class PairwiseGraphRegistration : public GraphRegistration<GraphT>
   {
     public:
-      using GraphRegistration<GraphT>::graph_handler_;
-      using GraphRegistration<GraphT>::last_aligned_vertex_;
-      using GraphRegistration<GraphT>::last_vertices_;
+    using GraphRegistration<GraphT>::graph_handler_;
+    using GraphRegistration<GraphT>::last_aligned_vertex_;
+    using GraphRegistration<GraphT>::last_vertices_;
 
-      using RegistrationPtr = typename Registration<PointT, PointT>::Ptr;
-      using GraphHandlerVertex = typename pcl::registration::GraphHandler<GraphT>::Vertex;
+    using RegistrationPtr = typename Registration<PointT, PointT>::Ptr;
+    using GraphHandlerVertex = typename pcl::registration::GraphHandler<GraphT>::Vertex;
 
-      /** \brief Empty destructor */
-      virtual ~PairwiseGraphRegistration () {}
+    /** \brief Empty destructor */
+    virtual ~PairwiseGraphRegistration () {}
 
+    /** \brief Empty constructor */
+    PairwiseGraphRegistration () : registration_method_ (), incremental_ (true) {}
+    /** \brief Constructor */
+    PairwiseGraphRegistration (const RegistrationPtr &reg, bool incremental)
+        : registration_method_ (reg), incremental_ (incremental)
+    {
+    }
 
-      /** \brief Empty constructor */
-      PairwiseGraphRegistration () : registration_method_ (), incremental_ (true)
-      {}
-      /** \brief Constructor */
-      PairwiseGraphRegistration (const RegistrationPtr& reg, bool incremental) : registration_method_ (reg), incremental_ (incremental)
-      {}
+    /** \brief Set the registration object */
+    inline void
+    setRegistrationMethod (const RegistrationPtr &reg)
+    {
+      registration_method_ = reg;
+    }
 
-      /** \brief Set the registration object */
-      inline void
-      setRegistrationMethod (const RegistrationPtr& reg)
-      {
-        registration_method_ = reg;
-      }
+    /** \brief Get the registration object */
+    inline RegistrationPtr
+    getRegistrationMethod ()
+    {
+      return registration_method_;
+    }
 
-      /** \brief Get the registration object */
-      inline RegistrationPtr
-      getRegistrationMethod ()
-      {
-        return registration_method_;
-      }
+    /** \brief If True the initial transformation is always set to the Identity */
+    inline void
+    setIncremental (bool incremental)
+    {
+      incremental_ = incremental;
+    }
 
-      /** \brief If True the initial transformation is always set to the Identity */
-      inline void
-      setIncremental (bool incremental)
-      {
-        incremental_ = incremental;
-      }
-
-      /** \brief Is incremental ? */
-      inline bool
-      isIncremental () const
-      {
-        return incremental_;
-      }
+    /** \brief Is incremental ? */
+    inline bool
+    isIncremental () const
+    {
+      return incremental_;
+    }
 
     protected:
-      /** \brief The registration object */
-      RegistrationPtr registration_method_;
-      /** \brief If True the initial transformation is always set to the Identity */
-      bool incremental_;
+    /** \brief The registration object */
+    RegistrationPtr registration_method_;
+    /** \brief If True the initial transformation is always set to the Identity */
+    bool incremental_;
 
     private:
-      /** \brief The registration method */
-      virtual void
-      computeRegistration ();
+    /** \brief The registration method */
+    virtual void
+    computeRegistration ();
   };
-}
+} // namespace pcl
 
 #include <pcl/registration/impl/pairwise_graph_registration.hpp>

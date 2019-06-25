@@ -57,10 +57,18 @@ TEST (Filters, LocalMaximum)
   cloud_in.is_dense = true;
   cloud_in.resize (4);
 
-  cloud_in[0].x = 0;    cloud_in[0].y = 0;    cloud_in[0].z = 0.25;
-  cloud_in[1].x = 0.25; cloud_in[1].y = 0.25; cloud_in[1].z = 0.5;
-  cloud_in[2].x = 0.5;  cloud_in[2].y = 0.5;  cloud_in[2].z = 1;
-  cloud_in[3].x = 5;    cloud_in[3].y = 5;    cloud_in[3].z = 2;
+  cloud_in[0].x = 0;
+  cloud_in[0].y = 0;
+  cloud_in[0].z = 0.25;
+  cloud_in[1].x = 0.25;
+  cloud_in[1].y = 0.25;
+  cloud_in[1].z = 0.5;
+  cloud_in[2].x = 0.5;
+  cloud_in[2].y = 0.5;
+  cloud_in[2].z = 1;
+  cloud_in[3].x = 5;
+  cloud_in[3].y = 5;
+  cloud_in[3].z = 2;
 
   LocalMaximum<PointXYZ> lm;
   lm.setInputCloud (cloud_in.makeShared ());
@@ -75,10 +83,9 @@ TEST (Filters, LocalMaximum)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());
 }
 /* ]--- */
-

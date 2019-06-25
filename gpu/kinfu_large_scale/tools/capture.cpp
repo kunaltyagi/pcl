@@ -44,7 +44,7 @@ using namespace pcl;
 using namespace pcl::gpu;
 using namespace xn;
 
-//const std::string XMLConfig =
+// const std::string XMLConfig =
 //"<OpenNI>"
 //        "<Licenses>"
 //        "<License vendor=\"PrimeSense\" key=\"0KOIk2JeIBYClPWVnMoRKn5cdY4=\"/>"
@@ -60,13 +60,15 @@ using namespace xn;
 //        "<ProductionNodes>"
 //                "<Node type=\"Image\" name=\"Image1\">"
 //                        "<Configuration>"
-//                                "<MapOutputMode xRes=\"640\" yRes=\"480\" FPS=\"30\"/>"
+//                                "<MapOutputMode xRes=\"640\" yRes=\"480\"
+//                                FPS=\"30\"/>"
 //                                "<Mirror on=\"false\"/>"
 //                        "</Configuration>"
 //                "</Node> "
 //                "<Node type=\"Depth\" name=\"Depth1\">"
 //                        "<Configuration>"
-//                                "<MapOutputMode xRes=\"640\" yRes=\"480\" FPS=\"30\"/>"
+//                                "<MapOutputMode xRes=\"640\" yRes=\"480\"
+//                                FPS=\"30\"/>"
 //                                "<Mirror on=\"false\"/>"
 //                        "</Configuration>"
 //                "</Node>"
@@ -75,8 +77,7 @@ using namespace xn;
 
 #define REPORT_ERROR(msg) pcl::gpu::error ((msg), __FILE__, __LINE__)
 
-struct pcl::gpu::kinfuLS::CaptureOpenNI::Impl
-{
+struct pcl::gpu::kinfuLS::CaptureOpenNI::Impl {
   Context context;
   ScriptNode scriptNode;
   DepthGenerator depth;
@@ -90,15 +91,22 @@ struct pcl::gpu::kinfuLS::CaptureOpenNI::Impl
   bool has_image;
 };
 
-pcl::gpu::kinfuLS::CaptureOpenNI::CaptureOpenNI() : depth_focal_length_VGA (0.f), baseline (0.f), shadow_value (0), no_sample_value (0), pixelSize (0.0), max_depth (0) {}
-pcl::gpu::kinfuLS::CaptureOpenNI::CaptureOpenNI(int device) {open (device); }
-pcl::gpu::kinfuLS::CaptureOpenNI::CaptureOpenNI(const string& filename) {open (filename); }
-pcl::gpu::kinfuLS::CaptureOpenNI::~CaptureOpenNI() { release (); }
+pcl::gpu::kinfuLS::CaptureOpenNI::CaptureOpenNI ()
+    : depth_focal_length_VGA (0.f), baseline (0.f), shadow_value (0),
+      no_sample_value (0), pixelSize (0.0), max_depth (0)
+{
+}
+pcl::gpu::kinfuLS::CaptureOpenNI::CaptureOpenNI (int device) { open (device); }
+pcl::gpu::kinfuLS::CaptureOpenNI::CaptureOpenNI (const string &filename)
+{
+  open (filename);
+}
+pcl::gpu::kinfuLS::CaptureOpenNI::~CaptureOpenNI () { release (); }
 
 void
 pcl::gpu::kinfuLS::CaptureOpenNI::open (int device)
 {
-  impl_.reset ( new Impl () );
+  impl_.reset (new Impl ());
 
   XnMapOutputMode mode;
   mode.nXRes = XN_VGA_X_RES;
@@ -107,16 +115,15 @@ pcl::gpu::kinfuLS::CaptureOpenNI::open (int device)
 
   XnStatus rc;
   rc = impl_->context.Init ();
-  if (rc != XN_STATUS_OK)
-  {
+  if (rc != XN_STATUS_OK) {
     sprintf (impl_->strError, "Init failed: %s\n", xnGetStatusString (rc));
     REPORT_ERROR (impl_->strError);
   }
 
   xn::NodeInfoList devicesList;
-  rc = impl_->context.EnumerateProductionTrees ( XN_NODE_TYPE_DEVICE, nullptr, devicesList, nullptr );
-  if (rc != XN_STATUS_OK)
-  {
+  rc = impl_->context.EnumerateProductionTrees (XN_NODE_TYPE_DEVICE, nullptr,
+                                                devicesList, nullptr);
+  if (rc != XN_STATUS_OK) {
     sprintf (impl_->strError, "Init failed: %s\n", xnGetStatusString (rc));
     REPORT_ERROR (impl_->strError);
   }
@@ -126,44 +133,38 @@ pcl::gpu::kinfuLS::CaptureOpenNI::open (int device)
     it++;
 
   NodeInfo node = *it;
-  rc = impl_->context.CreateProductionTree ( node, impl_->node );
-  if (rc != XN_STATUS_OK)
-  {
+  rc = impl_->context.CreateProductionTree (node, impl_->node);
+  if (rc != XN_STATUS_OK) {
     sprintf (impl_->strError, "Init failed: %s\n", xnGetStatusString (rc));
     REPORT_ERROR (impl_->strError);
   }
 
   XnLicense license;
-  const char* vendor = "PrimeSense";
-  const char* key = "0KOIk2JeIBYClPWVnMoRKn5cdY4=";
+  const char *vendor = "PrimeSense";
+  const char *key = "0KOIk2JeIBYClPWVnMoRKn5cdY4=";
   sprintf (license.strKey, key);
   sprintf (license.strVendor, vendor);
 
   rc = impl_->context.AddLicense (license);
-  if (rc != XN_STATUS_OK)
-  {
+  if (rc != XN_STATUS_OK) {
     sprintf (impl_->strError, "licence failed: %s\n", xnGetStatusString (rc));
     REPORT_ERROR (impl_->strError);
   }
 
   rc = impl_->depth.Create (impl_->context);
-  if (rc != XN_STATUS_OK)
-  {
+  if (rc != XN_STATUS_OK) {
     sprintf (impl_->strError, "Depth generator  failed: %s\n", xnGetStatusString (rc));
     REPORT_ERROR (impl_->strError);
   }
-  //rc = impl_->depth.SetIntProperty("HoleFilter", 1);
+  // rc = impl_->depth.SetIntProperty("HoleFilter", 1);
   rc = impl_->depth.SetMapOutputMode (mode);
   impl_->has_depth = true;
 
   rc = impl_->image.Create (impl_->context);
-  if (rc != XN_STATUS_OK)
-  {
+  if (rc != XN_STATUS_OK) {
     printf ("Image generator creation failed: %s\n", xnGetStatusString (rc));
     impl_->has_image = false;
-  }
-  else
-  {
+  } else {
     impl_->has_image = true;
     rc = impl_->image.SetMapOutputMode (mode);
   }
@@ -171,30 +172,27 @@ pcl::gpu::kinfuLS::CaptureOpenNI::open (int device)
   getParams ();
 
   rc = impl_->context.StartGeneratingAll ();
-  if (rc != XN_STATUS_OK)
-  {
+  if (rc != XN_STATUS_OK) {
     sprintf (impl_->strError, "Start failed: %s\n", xnGetStatusString (rc));
     REPORT_ERROR (impl_->strError);
   }
 }
 
 void
-pcl::gpu::kinfuLS::CaptureOpenNI::open (const std::string& filename)
+pcl::gpu::kinfuLS::CaptureOpenNI::open (const std::string &filename)
 {
-  impl_.reset ( new Impl () );
+  impl_.reset (new Impl ());
 
   XnStatus rc;
 
   rc = impl_->context.Init ();
-  if (rc != XN_STATUS_OK)
-  {
+  if (rc != XN_STATUS_OK) {
     sprintf (impl_->strError, "Init failed: %s\n", xnGetStatusString (rc));
     REPORT_ERROR (impl_->strError);
   }
 
   rc = impl_->context.OpenFileRecording (filename.c_str (), impl_->node);
-  if (rc != XN_STATUS_OK)
-  {
+  if (rc != XN_STATUS_OK) {
     sprintf (impl_->strError, "Open failed: %s\n", xnGetStatusString (rc));
     REPORT_ERROR (impl_->strError);
   }
@@ -224,8 +222,7 @@ pcl::gpu::kinfuLS::CaptureOpenNI::open (const std::string& filename)
 void
 pcl::gpu::kinfuLS::CaptureOpenNI::release ()
 {
-  if (impl_)
-  {
+  if (impl_) {
     impl_->context.StopGeneratingAll ();
     impl_->context.Release ();
   }
@@ -239,7 +236,8 @@ pcl::gpu::kinfuLS::CaptureOpenNI::release ()
 }
 
 bool
-pcl::gpu::kinfuLS::CaptureOpenNI::grab (PtrStepSz<const unsigned short>& depth, PtrStepSz<const RGB>& rgb24)
+pcl::gpu::kinfuLS::CaptureOpenNI::grab (PtrStepSz<const unsigned short> &depth,
+                                        PtrStepSz<const RGB> &rgb24)
 {
   XnStatus rc = XN_STATUS_OK;
 
@@ -247,34 +245,29 @@ pcl::gpu::kinfuLS::CaptureOpenNI::grab (PtrStepSz<const unsigned short>& depth, 
   if (rc != XN_STATUS_OK)
     return printf ("Read failed: %s\n", xnGetStatusString (rc)), false;
 
-  if (impl_->has_depth)
-  {
+  if (impl_->has_depth) {
     impl_->depth.GetMetaData (impl_->depthMD);
-    const XnDepthPixel* pDepth = impl_->depthMD.Data ();
+    const XnDepthPixel *pDepth = impl_->depthMD.Data ();
     int x = impl_->depthMD.FullXRes ();
     int y = impl_->depthMD.FullYRes ();
     depth.cols = x;
     depth.rows = y;
     depth.data = pDepth;
     depth.step = x * depth.elemSize ();
-  }
-  else
+  } else
     printf ("no depth\n");
 
-  if (impl_->has_image)
-  {
+  if (impl_->has_image) {
     impl_->image.GetMetaData (impl_->imageMD);
-    const XnRGB24Pixel* pImage = impl_->imageMD.RGB24Data ();
+    const XnRGB24Pixel *pImage = impl_->imageMD.RGB24Data ();
     int x = impl_->imageMD.FullXRes ();
     int y = impl_->imageMD.FullYRes ();
 
-    rgb24.data = (const RGB*)pImage;
+    rgb24.data = (const RGB *)pImage;
     rgb24.cols = x;
     rgb24.rows = y;
     rgb24.step = x * rgb24.elemSize ();
-  }
-  else
-  {
+  } else {
     printf ("no image\n");
     rgb24.data = nullptr;
     rgb24.cols = rgb24.rows = rgb24.step = 0;
@@ -290,33 +283,29 @@ pcl::gpu::kinfuLS::CaptureOpenNI::getParams ()
 
   max_depth = impl_->depth.GetDeviceMaxDepth ();
 
-  rc = impl_->depth.GetRealProperty ( "ZPPS", pixelSize );  // in mm
-  if (rc != XN_STATUS_OK)
-  {
+  rc = impl_->depth.GetRealProperty ("ZPPS", pixelSize); // in mm
+  if (rc != XN_STATUS_OK) {
     sprintf (impl_->strError, "ZPPS failed: %s\n", xnGetStatusString (rc));
     REPORT_ERROR (impl_->strError);
   }
 
-  XnUInt64 depth_focal_length_SXGA_mm;   //in mm
+  XnUInt64 depth_focal_length_SXGA_mm; // in mm
   rc = impl_->depth.GetIntProperty ("ZPD", depth_focal_length_SXGA_mm);
-  if (rc != XN_STATUS_OK)
-  {
+  if (rc != XN_STATUS_OK) {
     sprintf (impl_->strError, "ZPD failed: %s\n", xnGetStatusString (rc));
     REPORT_ERROR (impl_->strError);
   }
 
   XnDouble baseline_local;
   rc = impl_->depth.GetRealProperty ("LDDIS", baseline_local);
-  if (rc != XN_STATUS_OK)
-  {
+  if (rc != XN_STATUS_OK) {
     sprintf (impl_->strError, "ZPD failed: %s\n", xnGetStatusString (rc));
     REPORT_ERROR (impl_->strError);
   }
 
   XnUInt64 shadow_value_local;
   rc = impl_->depth.GetIntProperty ("ShadowValue", shadow_value_local);
-  if (rc != XN_STATUS_OK)
-  {
+  if (rc != XN_STATUS_OK) {
     sprintf (impl_->strError, "ShadowValue failed: %s\n", xnGetStatusString (rc));
     REPORT_ERROR (impl_->strError);
   }
@@ -324,19 +313,18 @@ pcl::gpu::kinfuLS::CaptureOpenNI::getParams ()
 
   XnUInt64 no_sample_value_local;
   rc = impl_->depth.GetIntProperty ("NoSampleValue", no_sample_value_local);
-  if (rc != XN_STATUS_OK)
-  {
+  if (rc != XN_STATUS_OK) {
     sprintf (impl_->strError, "NoSampleValue failed: %s\n", xnGetStatusString (rc));
     REPORT_ERROR (impl_->strError);
   }
   no_sample_value = (int)no_sample_value_local;
 
-
   // baseline from cm -> mm
   baseline = (float)(baseline_local * 10);
 
-  //focal length from mm -> pixels (valid for 1280x1024)
-  float depth_focal_length_SXGA = static_cast<float>(depth_focal_length_SXGA_mm / pixelSize);
+  // focal length from mm -> pixels (valid for 1280x1024)
+  float depth_focal_length_SXGA =
+      static_cast<float> (depth_focal_length_SXGA_mm / pixelSize);
   depth_focal_length_VGA = depth_focal_length_SXGA / 2;
 }
 
@@ -345,16 +333,15 @@ pcl::gpu::kinfuLS::CaptureOpenNI::setRegistration (bool value)
 {
   XnStatus rc = XN_STATUS_OK;
 
-  if (value)
-  {
+  if (value) {
     if (!impl_->has_image)
       return false;
 
-    if (impl_->depth.GetAlternativeViewPointCap ().IsViewPointAs (impl_->image) )
+    if (impl_->depth.GetAlternativeViewPointCap ().IsViewPointAs (impl_->image))
       return true;
 
-    if (!impl_->depth.GetAlternativeViewPointCap ().IsViewPointSupported (impl_->image) )
-    {
+    if (!impl_->depth.GetAlternativeViewPointCap ().IsViewPointSupported (
+            impl_->image)) {
       printf ("SetRegistration failed: Unsupported viewpoint.\n");
       return false;
     }
@@ -363,8 +350,7 @@ pcl::gpu::kinfuLS::CaptureOpenNI::setRegistration (bool value)
     if (rc != XN_STATUS_OK)
       printf ("SetRegistration failed: %s\n", xnGetStatusString (rc));
 
-  }
-  else   // "off"
+  } else // "off"
   {
     rc = impl_->depth.GetAlternativeViewPointCap ().ResetViewPoint ();
     if (rc != XN_STATUS_OK)

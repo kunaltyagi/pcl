@@ -42,8 +42,7 @@ namespace pcl
     namespace openni2
     {
 
-      struct OpenNI2DeviceInfo
-      {
+      struct OpenNI2DeviceInfo {
         std::string uri_;
         std::string vendor_;
         std::string name_;
@@ -51,9 +50,9 @@ namespace pcl
         uint16_t product_id_;
       };
 
-      std::ostream&
-      operator<< (std::ostream& stream, const OpenNI2DeviceInfo& device_info);
+      std::ostream &
+      operator<< (std::ostream &stream, const OpenNI2DeviceInfo &device_info);
 
-    } // namespace
-  }
-}
+    } // namespace openni2
+  }   // namespace io
+} // namespace pcl

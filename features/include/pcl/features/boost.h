@@ -40,7 +40,7 @@
 #pragma once
 
 #if defined __GNUC__
-#  pragma GCC system_header 
+#pragma GCC system_header
 #endif
 
 #include <boost/property_map/property_map.hpp>

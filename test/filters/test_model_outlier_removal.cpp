@@ -36,15 +36,16 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/io/pcd_io.h>
 #include <pcl/filters/model_outlier_removal.h>
+#include <pcl/io/pcd_io.h>
 
 #include <pcl/sample_consensus/ransac.h>
 #include <pcl/sample_consensus/sac_model_plane.h>
 
 /* Expectation:
- A model found by ransac has the same inliers and outliers as the same model filtered with model_outlier_removal
- as long as the thresholdfunction of ransac and model_outlier_removal is the same */
+ A model found by ransac has the same inliers and outliers as the same model filtered
+ with model_outlier_removal as long as the thresholdfunction of ransac and
+ model_outlier_removal is the same */
 
 using namespace pcl;
 
@@ -56,10 +57,11 @@ TEST (ModelOutlierRemoval, Model_Outlier_Filter)
   PointCloud<PointXYZ>::Ptr cloud_filter_out (new PointCloud<PointXYZ>);
   std::vector<int> ransac_inliers;
   float thresh = 0.01;
-  //run ransac
+  // run ransac
   Eigen::VectorXf model_coefficients;
-  pcl::SampleConsensusModelPlane<pcl::PointXYZ>::Ptr model_p (new pcl::SampleConsensusModelPlane<pcl::PointXYZ> (cloud_in));
-  RandomSampleConsensus < pcl::PointXYZ > ransac (model_p);
+  pcl::SampleConsensusModelPlane<pcl::PointXYZ>::Ptr model_p (
+      new pcl::SampleConsensusModelPlane<pcl::PointXYZ> (cloud_in));
+  RandomSampleConsensus<pcl::PointXYZ> ransac (model_p);
   ransac.setDistanceThreshold (thresh);
   ransac.computeModel ();
   ransac.getInliers (ransac_inliers);
@@ -68,34 +70,35 @@ TEST (ModelOutlierRemoval, Model_Outlier_Filter)
   EXPECT_EQ (model_coefficients.size (), 4);
   if (model_coefficients.size () != 4)
     return;
-  //run filter
+  // run filter
   pcl::ModelCoefficients model_coeff;
   model_coeff.values.resize (4);
   for (int i = 0; i < 4; i++)
     model_coeff.values[i] = model_coefficients[i];
-  pcl::ModelOutlierRemoval < pcl::PointXYZ > filter;
+  pcl::ModelOutlierRemoval<pcl::PointXYZ> filter;
   filter.setModelCoefficients (model_coeff);
   filter.setThreshold (thresh);
   filter.setModelType (pcl::SACMODEL_PLANE);
   filter.setInputCloud (cloud_in);
   filter.filter (*cloud_filter_out);
-  //compare results
+  // compare results
   EXPECT_EQ (cloud_filter_out->points.size (), ransac_inliers.size ());
-  //TODO: also compare content
+  // TODO: also compare content
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   // Load a standard PCD file from disk
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `milk_cartoon_all_small_clorox.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download "
+                 "`milk_cartoon_all_small_clorox.pcd` and pass its path to the test."
+              << std::endl;
     return (-1);
   }
 
-  char* file_name = argv[1];
+  char *file_name = argv[1];
   // Load a standard PCD file from disk
   io::loadPCDFile (file_name, *cloud_in);
 

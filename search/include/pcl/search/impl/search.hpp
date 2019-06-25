@@ -42,91 +42,92 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
-pcl::search::Search<PointT>::Search (const std::string& name, bool sorted)
-  : input_ () 
-  , sorted_results_ (sorted)
-  , name_ (name)
+pcl::search::Search<PointT>::Search (const std::string &name, bool sorted)
+    : input_ (), sorted_results_ (sorted), name_ (name)
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> const std::string& 
+template <typename PointT>
+const std::string &
 pcl::search::Search<PointT>::getName () const
 {
   return (name_);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::search::Search<PointT>::setSortedResults (bool sorted)
 {
   sorted_results_ = sorted;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
+template <typename PointT>
+bool
 pcl::search::Search<PointT>::getSortedResults ()
 {
   return (sorted_results_);
 }
- 
+
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
-pcl::search::Search<PointT>::setInputCloud (
-    const PointCloudConstPtr& cloud, const IndicesConstPtr &indices)
+template <typename PointT>
+void
+pcl::search::Search<PointT>::setInputCloud (const PointCloudConstPtr &cloud,
+                                            const IndicesConstPtr &indices)
 {
   input_ = cloud;
   indices_ = indices;
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> int
-pcl::search::Search<PointT>::nearestKSearch (
-    const PointCloud &cloud, int index, int k,
-    std::vector<int> &k_indices, std::vector<float> &k_sqr_distances) const
+template <typename PointT>
+int
+pcl::search::Search<PointT>::nearestKSearch (const PointCloud &cloud, int index, int k,
+                                             std::vector<int> &k_indices,
+                                             std::vector<float> &k_sqr_distances) const
 {
-  assert (index >= 0 && index < static_cast<int> (cloud.points.size ()) && "Out-of-bounds error in nearestKSearch!");
+  assert (index >= 0 && index < static_cast<int> (cloud.points.size ()) &&
+          "Out-of-bounds error in nearestKSearch!");
   return (nearestKSearch (cloud.points[index], k, k_indices, k_sqr_distances));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> int
-pcl::search::Search<PointT>::nearestKSearch (
-    int index, int k, 
-    std::vector<int> &k_indices, 
-    std::vector<float> &k_sqr_distances) const
+template <typename PointT>
+int
+pcl::search::Search<PointT>::nearestKSearch (int index, int k,
+                                             std::vector<int> &k_indices,
+                                             std::vector<float> &k_sqr_distances) const
 {
-  if (!indices_)
-  {
-    assert (index >= 0 && index < static_cast<int> (input_->points.size ()) && "Out-of-bounds error in nearestKSearch!");
+  if (!indices_) {
+    assert (index >= 0 && index < static_cast<int> (input_->points.size ()) &&
+            "Out-of-bounds error in nearestKSearch!");
     return (nearestKSearch (input_->points[index], k, k_indices, k_sqr_distances));
-  }
-  else
-  {
-    assert (index >= 0 && index < static_cast<int> (indices_->size ()) && "Out-of-bounds error in nearestKSearch!");
+  } else {
+    assert (index >= 0 && index < static_cast<int> (indices_->size ()) &&
+            "Out-of-bounds error in nearestKSearch!");
     if (index >= static_cast<int> (indices_->size ()) || index < 0)
       return (0);
-    return (nearestKSearch (input_->points[(*indices_)[index]], k, k_indices, k_sqr_distances));
+    return (nearestKSearch (input_->points[(*indices_)[index]], k, k_indices,
+                            k_sqr_distances));
   }
 }
- 
+
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::search::Search<PointT>::nearestKSearch (
-    const PointCloud& cloud, const std::vector<int>& indices, 
-    int k, std::vector< std::vector<int> >& k_indices,
-    std::vector< std::vector<float> >& k_sqr_distances) const
+    const PointCloud &cloud, const std::vector<int> &indices, int k,
+    std::vector<std::vector<int>> &k_indices,
+    std::vector<std::vector<float>> &k_sqr_distances) const
 {
-  if (indices.empty ())
-  {
+  if (indices.empty ()) {
     k_indices.resize (cloud.size ());
     k_sqr_distances.resize (cloud.size ());
     for (size_t i = 0; i < cloud.size (); i++)
       nearestKSearch (cloud, static_cast<int> (i), k, k_indices[i], k_sqr_distances[i]);
-  }
-  else
-  {
+  } else {
     k_indices.resize (indices.size ());
     k_sqr_distances.resize (indices.size ());
     for (size_t i = 0; i < indices.size (); i++)
@@ -135,75 +136,79 @@ pcl::search::Search<PointT>::nearestKSearch (
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> int
-pcl::search::Search<PointT>::radiusSearch (
-    const PointCloud &cloud, int index, double radius,
-    std::vector<int> &k_indices, std::vector<float> &k_sqr_distances,
-    unsigned int max_nn) const
+template <typename PointT>
+int
+pcl::search::Search<PointT>::radiusSearch (const PointCloud &cloud, int index,
+                                           double radius, std::vector<int> &k_indices,
+                                           std::vector<float> &k_sqr_distances,
+                                           unsigned int max_nn) const
 {
-  assert (index >= 0 && index < static_cast<int> (cloud.points.size ()) && "Out-of-bounds error in radiusSearch!");
-  return (radiusSearch(cloud.points[index], radius, k_indices, k_sqr_distances, max_nn));
+  assert (index >= 0 && index < static_cast<int> (cloud.points.size ()) &&
+          "Out-of-bounds error in radiusSearch!");
+  return (
+      radiusSearch (cloud.points[index], radius, k_indices, k_sqr_distances, max_nn));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> int
-pcl::search::Search<PointT>::radiusSearch (
-    int index, double radius, std::vector<int> &k_indices,
-    std::vector<float> &k_sqr_distances, unsigned int max_nn ) const
+template <typename PointT>
+int
+pcl::search::Search<PointT>::radiusSearch (int index, double radius,
+                                           std::vector<int> &k_indices,
+                                           std::vector<float> &k_sqr_distances,
+                                           unsigned int max_nn) const
 {
-  if (!indices_)
-  {
-    assert (index >= 0 && index < static_cast<int> (input_->points.size ()) && "Out-of-bounds error in radiusSearch!");
-    return (radiusSearch (input_->points[index], radius, k_indices, k_sqr_distances, max_nn));
-  }
-  else
-  {
-    assert (index >= 0 && index < static_cast<int> (indices_->size ()) && "Out-of-bounds error in radiusSearch!");
-    return (radiusSearch (input_->points[(*indices_)[index]], radius, k_indices, k_sqr_distances, max_nn));
+  if (!indices_) {
+    assert (index >= 0 && index < static_cast<int> (input_->points.size ()) &&
+            "Out-of-bounds error in radiusSearch!");
+    return (radiusSearch (input_->points[index], radius, k_indices, k_sqr_distances,
+                          max_nn));
+  } else {
+    assert (index >= 0 && index < static_cast<int> (indices_->size ()) &&
+            "Out-of-bounds error in radiusSearch!");
+    return (radiusSearch (input_->points[(*indices_)[index]], radius, k_indices,
+                          k_sqr_distances, max_nn));
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::search::Search<PointT>::radiusSearch (
-    const PointCloud& cloud,
-    const std::vector<int>& indices,
-    double radius,
-    std::vector< std::vector<int> >& k_indices,
-    std::vector< std::vector<float> > &k_sqr_distances,
-    unsigned int max_nn) const
+    const PointCloud &cloud, const std::vector<int> &indices, double radius,
+    std::vector<std::vector<int>> &k_indices,
+    std::vector<std::vector<float>> &k_sqr_distances, unsigned int max_nn) const
 {
-  if (indices.empty ())
-  {
+  if (indices.empty ()) {
     k_indices.resize (cloud.size ());
     k_sqr_distances.resize (cloud.size ());
     for (size_t i = 0; i < cloud.size (); i++)
-      radiusSearch (cloud, static_cast<int> (i), radius,k_indices[i], k_sqr_distances[i], max_nn);
-  }
-  else
-  {
+      radiusSearch (cloud, static_cast<int> (i), radius, k_indices[i],
+                    k_sqr_distances[i], max_nn);
+  } else {
     k_indices.resize (indices.size ());
     k_sqr_distances.resize (indices.size ());
     for (size_t i = 0; i < indices.size (); i++)
-      radiusSearch (cloud,indices[i],radius,k_indices[i],k_sqr_distances[i], max_nn);
+      radiusSearch (cloud, indices[i], radius, k_indices[i], k_sqr_distances[i],
+                    max_nn);
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
-pcl::search::Search<PointT>::sortResults (
-    std::vector<int>& indices, std::vector<float>& distances) const
+template <typename PointT>
+void
+pcl::search::Search<PointT>::sortResults (std::vector<int> &indices,
+                                          std::vector<float> &distances) const
 {
   std::vector<int> order (indices.size ());
   for (size_t idx = 0; idx < order.size (); ++idx)
-    order [idx] = static_cast<int> (idx);
+    order[idx] = static_cast<int> (idx);
 
   Compare compare (distances);
   sort (order.begin (), order.end (), compare);
 
   std::vector<int> sorted (indices.size ());
   for (size_t idx = 0; idx < order.size (); ++idx)
-    sorted [idx] = indices[order [idx]];
+    sorted[idx] = indices[order[idx]];
 
   indices = sorted;
 
@@ -213,6 +218,4 @@ pcl::search::Search<PointT>::sortResults (
 
 #define PCL_INSTANTIATE_Search(T) template class PCL_EXPORTS pcl::search::Search<T>;
 
-#endif  //#ifndef _PCL_SEARCH_SEARCH_IMPL_HPP_
-
-
+#endif //#ifndef _PCL_SEARCH_SEARCH_IMPL_HPP_

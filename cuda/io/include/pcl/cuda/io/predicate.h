@@ -44,49 +44,59 @@
 //#else
 //#endif
 
-
 namespace pcl
 {
-namespace cuda
-{
-  template <class T>
-  struct isNotZero
+  namespace cuda
   {
-      __inline__ __host__ __device__ bool 
-      operator()(T x) { return (x != 0); }
-  };
+    template <class T>
+    struct isNotZero {
+      __inline__ __host__ __device__ bool
+      operator() (T x)
+      {
+        return (x != 0);
+      }
+    };
 
-  struct isInlier
-  {
-      __inline__ __host__ __device__ bool 
-      operator()(int x) { return (x != -1); }
-  };
+    struct isInlier {
+      __inline__ __host__ __device__ bool
+      operator() (int x)
+      {
+        return (x != -1);
+      }
+    };
 
-  struct isNotInlier
-  {
-      __inline__ __host__ __device__ bool 
-      operator()(int x) { return (x == -1); }
-  };
+    struct isNotInlier {
+      __inline__ __host__ __device__ bool
+      operator() (int x)
+      {
+        return (x == -1);
+      }
+    };
 
-  struct SetColor
-  {
-    SetColor (const OpenNIRGB& color) : color_(color) {}
-    __inline__ __host__ __device__ void 
-       operator()(PointXYZRGB& point) { point.rgb.r = color_.r; point.rgb.g = color_.g; point.rgb.b = color_.b;}
-    OpenNIRGB color_;
-  };
+    struct SetColor {
+      SetColor (const OpenNIRGB &color) : color_ (color) {}
+      __inline__ __host__ __device__ void
+      operator() (PointXYZRGB &point)
+      {
+        point.rgb.r = color_.r;
+        point.rgb.g = color_.g;
+        point.rgb.b = color_.b;
+      }
+      OpenNIRGB color_;
+    };
 
-  struct ChangeColor
-  {
-    ChangeColor (const OpenNIRGB& color) : color_(color) {}
-    __inline__ __host__ __device__ PointXYZRGB&
-       operator()(PointXYZRGB& point)
-       {
-         point.rgb.r = color_.r; point.rgb.g = color_.g; point.rgb.b = color_.b;
-         return point;
-       }
-    OpenNIRGB color_;
-  };
+    struct ChangeColor {
+      ChangeColor (const OpenNIRGB &color) : color_ (color) {}
+      __inline__ __host__ __device__ PointXYZRGB &
+      operator() (PointXYZRGB &point)
+      {
+        point.rgb.r = color_.r;
+        point.rgb.g = color_.g;
+        point.rgb.b = color_.b;
+        return point;
+      }
+      OpenNIRGB color_;
+    };
 
-} // namespace
-} // namespace
+  } // namespace cuda
+} // namespace pcl

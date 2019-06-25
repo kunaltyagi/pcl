@@ -35,15 +35,15 @@
  *
  */
 
-#include <pcl/visualization/pcl_visualizer.h>
-#include <pcl/io/pcd_io.h>
 #include <pcl/common/transforms.h>
-#include <vtkPLYReader.h>
-#include <vtkOBJReader.h>
-#include <vtkPolyDataMapper.h>
-#include <pcl/filters/voxel_grid.h>
-#include <pcl/console/print.h>
 #include <pcl/console/parse.h>
+#include <pcl/console/print.h>
+#include <pcl/filters/voxel_grid.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/visualization/pcl_visualizer.h>
+#include <vtkOBJReader.h>
+#include <vtkPLYReader.h>
+#include <vtkPolyDataMapper.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -58,29 +58,31 @@ printHelp (int, char **argv)
 {
   print_error ("Syntax is: %s input.{ply,obj} output.pcd <options>\n", argv[0]);
   print_info ("  where options are:\n");
-  print_info ("                     -level X      = tessellated sphere level (default: ");
+  print_info (
+      "                     -level X      = tessellated sphere level (default: ");
   print_value ("%d", default_tesselated_sphere_level);
   print_info (")\n");
-  print_info ("                     -resolution X = the sphere resolution in angle increments (default: ");
+  print_info ("                     -resolution X = the sphere resolution in angle "
+              "increments (default: ");
   print_value ("%d", default_resolution);
   print_info (" deg)\n");
-  print_info (
-              "                     -leaf_size X  = the XYZ leaf size for the VoxelGrid -- for data reduction (default: ");
+  print_info ("                     -leaf_size X  = the XYZ leaf size for the "
+              "VoxelGrid -- for data reduction (default: ");
   print_value ("%f", default_leaf_size);
   print_info (" m)\n");
-  print_info (
-              "                     -no_vis_result = flag to stop visualizing the generated pcd\n");
+  print_info ("                     -no_vis_result = flag to stop visualizing the "
+              "generated pcd\n");
 }
 
 /* ---[ */
 int
 main (int argc, char **argv)
 {
-  print_info ("Convert a CAD model to a point cloud using ray tracing operations. For more information, use: %s -h\n",
+  print_info ("Convert a CAD model to a point cloud using ray tracing operations. For "
+              "more information, use: %s -h\n",
               argv[0]);
 
-  if (argc < 3)
-  {
+  if (argc < 3) {
     printHelp (argc, argv);
     return (-1);
   }
@@ -92,33 +94,31 @@ main (int argc, char **argv)
   parse_argument (argc, argv, "-resolution", resolution);
   float leaf_size = default_leaf_size;
   parse_argument (argc, argv, "-leaf_size", leaf_size);
-  bool vis_result = ! find_switch (argc, argv, "-no_vis_result");
+  bool vis_result = !find_switch (argc, argv, "-no_vis_result");
 
   // Parse the command line arguments for .ply and PCD files
-  std::vector<int> pcd_file_indices = parse_file_extension_argument (argc, argv, ".pcd");
-  if (pcd_file_indices.size () != 1)
-  {
+  std::vector<int> pcd_file_indices =
+      parse_file_extension_argument (argc, argv, ".pcd");
+  if (pcd_file_indices.size () != 1) {
     print_error ("Need a single output PCD file to continue.\n");
     return (-1);
   }
-  std::vector<int> ply_file_indices = parse_file_extension_argument (argc, argv, ".ply");
-  std::vector<int> obj_file_indices = parse_file_extension_argument (argc, argv, ".obj");
-  if (ply_file_indices.size () != 1 && obj_file_indices.size () != 1)
-  {
+  std::vector<int> ply_file_indices =
+      parse_file_extension_argument (argc, argv, ".ply");
+  std::vector<int> obj_file_indices =
+      parse_file_extension_argument (argc, argv, ".obj");
+  if (ply_file_indices.size () != 1 && obj_file_indices.size () != 1) {
     print_error ("Need a single input PLY/OBJ file to continue.\n");
     return (-1);
   }
 
   vtkSmartPointer<vtkPolyData> polydata1;
-  if (ply_file_indices.size () == 1)
-  {
+  if (ply_file_indices.size () == 1) {
     vtkSmartPointer<vtkPLYReader> readerQuery = vtkSmartPointer<vtkPLYReader>::New ();
     readerQuery->SetFileName (argv[ply_file_indices[0]]);
     readerQuery->Update ();
     polydata1 = readerQuery->GetOutput ();
-  }
-  else if (obj_file_indices.size () == 1)
-  {
+  } else if (obj_file_indices.size () == 1) {
     vtkSmartPointer<vtkOBJReader> readerQuery = vtkSmartPointer<vtkOBJReader>::New ();
     readerQuery->SetFileName (argv[obj_file_indices[0]]);
     readerQuery->Update ();
@@ -130,15 +130,15 @@ main (int argc, char **argv)
   vis.setRepresentationToSurfaceForAllActors ();
 
   PointCloud<PointXYZ>::CloudVectorType views_xyz;
-  std::vector<Eigen::Matrix4f, Eigen::aligned_allocator<Eigen::Matrix4f> > poses;
+  std::vector<Eigen::Matrix4f, Eigen::aligned_allocator<Eigen::Matrix4f>> poses;
   std::vector<float> enthropies;
-  vis.renderViewTesselatedSphere (resolution, resolution, views_xyz, poses, enthropies, tesselated_sphere_level);
+  vis.renderViewTesselatedSphere (resolution, resolution, views_xyz, poses, enthropies,
+                                  tesselated_sphere_level);
 
-  //take views and fuse them together
+  // take views and fuse them together
   std::vector<PointCloud<PointXYZ>::Ptr> aligned_clouds;
 
-  for (size_t i = 0; i < views_xyz.size (); i++)
-  {
+  for (size_t i = 0; i < views_xyz.size (); i++) {
     PointCloud<PointXYZ>::Ptr cloud (new PointCloud<PointXYZ> ());
     Eigen::Matrix4f pose_inverse;
     pose_inverse = poses[i].inverse ();
@@ -151,8 +151,7 @@ main (int argc, char **argv)
   for (const auto &aligned_cloud : aligned_clouds)
     *big_boy += *aligned_cloud;
 
-  if (vis_result)
-  {
+  if (vis_result) {
     visualization::PCLVisualizer vis2 ("visualize");
     vis2.addPointCloud (big_boy);
     vis2.spin ();
@@ -164,8 +163,7 @@ main (int argc, char **argv)
   grid_.setLeafSize (leaf_size, leaf_size, leaf_size);
   grid_.filter (*big_boy);
 
-  if (vis_result)
-  {
+  if (vis_result) {
     visualization::PCLVisualizer vis3 ("visualize");
     vis3.addPointCloud (big_boy);
     vis3.spin ();

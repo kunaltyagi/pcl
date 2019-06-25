@@ -41,16 +41,18 @@
 #include <pcl/segmentation/extract_clusters.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::extractEuclideanClusters (const PointCloud<PointT> &cloud,
                                const typename search::Search<PointT>::Ptr &tree,
                                float tolerance, std::vector<PointIndices> &clusters,
                                unsigned int min_pts_per_cluster,
                                unsigned int max_pts_per_cluster)
 {
-  if (tree->getInputCloud ()->points.size () != cloud.points.size ())
-  {
-    PCL_ERROR ("[pcl::extractEuclideanClusters] Tree built for a different point cloud dataset (%lu) than the input cloud (%lu)!\n", tree->getInputCloud ()->points.size (), cloud.points.size ());
+  if (tree->getInputCloud ()->points.size () != cloud.points.size ()) {
+    PCL_ERROR ("[pcl::extractEuclideanClusters] Tree built for a different point cloud "
+               "dataset (%lu) than the input cloud (%lu)!\n",
+               tree->getInputCloud ()->points.size (), cloud.points.size ());
     return;
   }
   // Check if the tree is sorted -- if it is we don't need to check the first element
@@ -61,8 +63,7 @@ pcl::extractEuclideanClusters (const PointCloud<PointT> &cloud,
   std::vector<int> nn_indices;
   std::vector<float> nn_distances;
   // Process all points in the indices vector
-  for (int i = 0; i < static_cast<int> (cloud.points.size ()); ++i)
-  {
+  for (int i = 0; i < static_cast<int> (cloud.points.size ()); ++i) {
     if (processed[i])
       continue;
 
@@ -72,18 +73,19 @@ pcl::extractEuclideanClusters (const PointCloud<PointT> &cloud,
 
     processed[i] = true;
 
-    while (sq_idx < static_cast<int> (seed_queue.size ()))
-    {
+    while (sq_idx < static_cast<int> (seed_queue.size ())) {
       // Search for sq_idx
-      if (!tree->radiusSearch (seed_queue[sq_idx], tolerance, nn_indices, nn_distances))
-      {
+      if (!tree->radiusSearch (seed_queue[sq_idx], tolerance, nn_indices,
+                               nn_distances)) {
         sq_idx++;
         continue;
       }
 
-      for (size_t j = nn_start_idx; j < nn_indices.size (); ++j)             // can't assume sorted (default isn't!)
+      for (size_t j = nn_start_idx; j < nn_indices.size ();
+           ++j) // can't assume sorted (default isn't!)
       {
-        if (nn_indices[j] == -1 || processed[nn_indices[j]])        // Has this point been processed before ?
+        if (nn_indices[j] == -1 ||
+            processed[nn_indices[j]]) // Has this point been processed before ?
           continue;
 
         // Perform a simple Euclidean clustering
@@ -95,8 +97,8 @@ pcl::extractEuclideanClusters (const PointCloud<PointT> &cloud,
     }
 
     // If this queue is satisfactory, add to the clusters
-    if (seed_queue.size () >= min_pts_per_cluster && seed_queue.size () <= max_pts_per_cluster)
-    {
+    if (seed_queue.size () >= min_pts_per_cluster &&
+        seed_queue.size () <= max_pts_per_cluster) {
       pcl::PointIndices r;
       r.indices.resize (seed_queue.size ());
       for (size_t j = 0; j < seed_queue.size (); ++j)
@@ -104,17 +106,19 @@ pcl::extractEuclideanClusters (const PointCloud<PointT> &cloud,
 
       // These two lines should not be needed: (can anyone confirm?) -FF
       std::sort (r.indices.begin (), r.indices.end ());
-      r.indices.erase (std::unique (r.indices.begin (), r.indices.end ()), r.indices.end ());
+      r.indices.erase (std::unique (r.indices.begin (), r.indices.end ()),
+                       r.indices.end ());
 
       r.header = cloud.header;
-      clusters.push_back (r);   // We could avoid a copy by working directly in the vector
+      clusters.push_back (r); // We could avoid a copy by working directly in the vector
     }
   }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 /** @todo: fix the return value, make sure the exit is not needed anymore*/
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::extractEuclideanClusters (const PointCloud<PointT> &cloud,
                                const std::vector<int> &indices,
                                const typename search::Search<PointT>::Ptr &tree,
@@ -122,16 +126,19 @@ pcl::extractEuclideanClusters (const PointCloud<PointT> &cloud,
                                unsigned int min_pts_per_cluster,
                                unsigned int max_pts_per_cluster)
 {
-  // \note If the tree was created over <cloud, indices>, we guarantee a 1-1 mapping between what the tree returns
-  //and indices[i]
-  if (tree->getInputCloud ()->points.size () != cloud.points.size ())
-  {
-    PCL_ERROR ("[pcl::extractEuclideanClusters] Tree built for a different point cloud dataset (%lu) than the input cloud (%lu)!\n", tree->getInputCloud ()->points.size (), cloud.points.size ());
+  // \note If the tree was created over <cloud, indices>, we guarantee a 1-1 mapping
+  // between what the tree returns
+  // and indices[i]
+  if (tree->getInputCloud ()->points.size () != cloud.points.size ()) {
+    PCL_ERROR ("[pcl::extractEuclideanClusters] Tree built for a different point cloud "
+               "dataset (%lu) than the input cloud (%lu)!\n",
+               tree->getInputCloud ()->points.size (), cloud.points.size ());
     return;
   }
-  if (tree->getIndices ()->size () != indices.size ())
-  {
-    PCL_ERROR ("[pcl::extractEuclideanClusters] Tree built for a different set of indices (%lu) than the input set (%lu)!\n", tree->getIndices ()->size (), indices.size ());
+  if (tree->getIndices ()->size () != indices.size ()) {
+    PCL_ERROR ("[pcl::extractEuclideanClusters] Tree built for a different set of "
+               "indices (%lu) than the input set (%lu)!\n",
+               tree->getIndices ()->size (), indices.size ());
     return;
   }
   // Check if the tree is sorted -- if it is we don't need to check the first element
@@ -143,8 +150,7 @@ pcl::extractEuclideanClusters (const PointCloud<PointT> &cloud,
   std::vector<int> nn_indices;
   std::vector<float> nn_distances;
   // Process all points in the indices vector
-  for (const int &index : indices)
-  {
+  for (const int &index : indices) {
     if (processed[index])
       continue;
 
@@ -154,24 +160,25 @@ pcl::extractEuclideanClusters (const PointCloud<PointT> &cloud,
 
     processed[index] = true;
 
-    while (sq_idx < static_cast<int> (seed_queue.size ()))
-    {
+    while (sq_idx < static_cast<int> (seed_queue.size ())) {
       // Search for sq_idx
-      int ret = tree->radiusSearch (cloud.points[seed_queue[sq_idx]], tolerance, nn_indices, nn_distances);
-      if( ret == -1)
-      {
-        PCL_ERROR("[pcl::extractEuclideanClusters] Received error code -1 from radiusSearch\n");
-        exit(0);
+      int ret = tree->radiusSearch (cloud.points[seed_queue[sq_idx]], tolerance,
+                                    nn_indices, nn_distances);
+      if (ret == -1) {
+        PCL_ERROR ("[pcl::extractEuclideanClusters] Received error code -1 from "
+                   "radiusSearch\n");
+        exit (0);
       }
-      if (!ret)
-      {
+      if (!ret) {
         sq_idx++;
         continue;
       }
 
-      for (size_t j = nn_start_idx; j < nn_indices.size (); ++j)             // can't assume sorted (default isn't!)
+      for (size_t j = nn_start_idx; j < nn_indices.size ();
+           ++j) // can't assume sorted (default isn't!)
       {
-        if (nn_indices[j] == -1 || processed[nn_indices[j]])        // Has this point been processed before ?
+        if (nn_indices[j] == -1 ||
+            processed[nn_indices[j]]) // Has this point been processed before ?
           continue;
 
         // Perform a simple Euclidean clustering
@@ -183,8 +190,8 @@ pcl::extractEuclideanClusters (const PointCloud<PointT> &cloud,
     }
 
     // If this queue is satisfactory, add to the clusters
-    if (seed_queue.size () >= min_pts_per_cluster && seed_queue.size () <= max_pts_per_cluster)
-    {
+    if (seed_queue.size () >= min_pts_per_cluster &&
+        seed_queue.size () <= max_pts_per_cluster) {
       pcl::PointIndices r;
       r.indices.resize (seed_queue.size ());
       for (size_t j = 0; j < seed_queue.size (); ++j)
@@ -192,12 +199,13 @@ pcl::extractEuclideanClusters (const PointCloud<PointT> &cloud,
         r.indices[j] = seed_queue[j];
 
       // These two lines should not be needed: (can anyone confirm?) -FF
-      //r.indices.assign(seed_queue.begin(), seed_queue.end());
+      // r.indices.assign(seed_queue.begin(), seed_queue.end());
       std::sort (r.indices.begin (), r.indices.end ());
-      r.indices.erase (std::unique (r.indices.begin (), r.indices.end ()), r.indices.end ());
+      r.indices.erase (std::unique (r.indices.begin (), r.indices.end ()),
+                       r.indices.end ());
 
       r.header = cloud.header;
-      clusters.push_back (r);   // We could avoid a copy by working directly in the vector
+      clusters.push_back (r); // We could avoid a copy by working directly in the vector
     }
   }
 }
@@ -206,20 +214,18 @@ pcl::extractEuclideanClusters (const PointCloud<PointT> &cloud,
 //////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-template <typename PointT> void 
+template <typename PointT>
+void
 pcl::EuclideanClusterExtraction<PointT>::extract (std::vector<PointIndices> &clusters)
 {
-  if (!initCompute () || 
-      (input_   && input_->points.empty ()) ||
-      (indices_ && indices_->empty ()))
-  {
+  if (!initCompute () || (input_ && input_->points.empty ()) ||
+      (indices_ && indices_->empty ())) {
     clusters.clear ();
     return;
   }
 
   // Initialize the spatial locator
-  if (!tree_)
-  {
+  if (!tree_) {
     if (input_->isOrganized ())
       tree_.reset (new pcl::search::OrganizedNeighbor<PointT> ());
     else
@@ -228,10 +234,13 @@ pcl::EuclideanClusterExtraction<PointT>::extract (std::vector<PointIndices> &clu
 
   // Send the input dataset to the spatial locator
   tree_->setInputCloud (input_, indices_);
-  extractEuclideanClusters (*input_, *indices_, tree_, static_cast<float> (cluster_tolerance_), clusters, min_pts_per_cluster_, max_pts_per_cluster_);
+  extractEuclideanClusters (*input_, *indices_, tree_,
+                            static_cast<float> (cluster_tolerance_), clusters,
+                            min_pts_per_cluster_, max_pts_per_cluster_);
 
-  //tree_->setInputCloud (input_);
-  //extractEuclideanClusters (*input_, tree_, cluster_tolerance_, clusters, min_pts_per_cluster_, max_pts_per_cluster_);
+  // tree_->setInputCloud (input_);
+  // extractEuclideanClusters (*input_, tree_, cluster_tolerance_, clusters,
+  // min_pts_per_cluster_, max_pts_per_cluster_);
 
   // Sort the clusters based on their size (largest one first)
   std::sort (clusters.rbegin (), clusters.rend (), comparePointClusters);
@@ -239,8 +248,16 @@ pcl::EuclideanClusterExtraction<PointT>::extract (std::vector<PointIndices> &clu
   deinitCompute ();
 }
 
-#define PCL_INSTANTIATE_EuclideanClusterExtraction(T) template class PCL_EXPORTS pcl::EuclideanClusterExtraction<T>;
-#define PCL_INSTANTIATE_extractEuclideanClusters(T) template void PCL_EXPORTS pcl::extractEuclideanClusters<T>(const pcl::PointCloud<T> &, const typename pcl::search::Search<T>::Ptr &, float , std::vector<pcl::PointIndices> &, unsigned int, unsigned int);
-#define PCL_INSTANTIATE_extractEuclideanClusters_indices(T) template void PCL_EXPORTS pcl::extractEuclideanClusters<T>(const pcl::PointCloud<T> &, const std::vector<int> &, const typename pcl::search::Search<T>::Ptr &, float , std::vector<pcl::PointIndices> &, unsigned int, unsigned int);
+#define PCL_INSTANTIATE_EuclideanClusterExtraction(T)                                  \
+  template class PCL_EXPORTS pcl::EuclideanClusterExtraction<T>;
+#define PCL_INSTANTIATE_extractEuclideanClusters(T)                                    \
+  template void PCL_EXPORTS pcl::extractEuclideanClusters<T> (                         \
+      const pcl::PointCloud<T> &, const typename pcl::search::Search<T>::Ptr &, float, \
+      std::vector<pcl::PointIndices> &, unsigned int, unsigned int);
+#define PCL_INSTANTIATE_extractEuclideanClusters_indices(T)                            \
+  template void PCL_EXPORTS pcl::extractEuclideanClusters<T> (                         \
+      const pcl::PointCloud<T> &, const std::vector<int> &,                            \
+      const typename pcl::search::Search<T>::Ptr &, float,                             \
+      std::vector<pcl::PointIndices> &, unsigned int, unsigned int);
 
-#endif        // PCL_EXTRACT_CLUSTERS_IMPL_H_
+#endif // PCL_EXTRACT_CLUSTERS_IMPL_H_

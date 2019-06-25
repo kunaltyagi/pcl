@@ -48,199 +48,204 @@
 
 #include <pcl/pcl_exports.h>
 
-#include <vector>
 #include <opencv2/core/core.hpp>
 #include <opencv2/gpu/gpu.hpp>
+#include <vector>
 
 using namespace std;
 
 namespace pcl
 {
-namespace cuda
-{
-namespace detail
-{
-
-//
-// Declarations
-//
-
-class DjSets
-{
-public:
-    DjSets(int n);
-    int find(int elem);
-    int merge(int set1, int set2);
-
-    void init (int n);
-
-    vector<int> parent;
-    vector<int> rank;
-    vector<int> size;
-private:
-    DjSets(const DjSets&);
-    void operator =(const DjSets&);
-};
-
-
-template <typename T>
-struct GraphEdge
-{
-    GraphEdge() {}
-    GraphEdge(int to, int next, const T& val) : to(to), next(next), val(val) {}
-    int to;
-    int next;
-    T val;
-};
-
-
-template <typename T>
-class Graph
-{
-public:
-    using Edge = GraphEdge<T>;
-
-    Graph(int numv, int nume_max);
-
-    void addEdge(int from, int to, const T& val=T());
-
-    vector<int> start;
-    vector<Edge> edges;
-
-    int numv;
-    int nume_max;
-    int nume;
-private:
-    Graph(const Graph&);
-    void operator =(const Graph&);
-};
-
-
-struct SegmLinkVal
-{
-    SegmLinkVal() {}
-    SegmLinkVal(int dr, int dsp) : dr(dr), dsp(dsp) {}
-    bool operator <(const SegmLinkVal& other) const
+  namespace cuda
+  {
+    namespace detail
     {
-        return dr + dsp < other.dr + other.dsp;
-    }
-    int dr;
-    int dsp;
-};
 
+      //
+      // Declarations
+      //
 
-struct SegmLink
-{
-    SegmLink() {}
-    SegmLink(int from, int to, const SegmLinkVal& val)
-        : from(from), to(to), val(val) {}
-    bool operator <(const SegmLink& other) const
-    {
-        return val < other.val;
-    }
-    int from;
-    int to;
-    SegmLinkVal val;
-};
+      class DjSets
+      {
+        public:
+        DjSets (int n);
+        int
+        find (int elem);
+        int
+        merge (int set1, int set2);
 
-//
-// Implementation
-//
+        void
+        init (int n);
 
-DjSets::DjSets(int n)
-{
-    init (n);
-}
+        vector<int> parent;
+        vector<int> rank;
+        vector<int> size;
 
+        private:
+        DjSets (const DjSets &);
+        void
+        operator= (const DjSets &);
+      };
 
-inline int DjSets::find(int elem)
-{
-    int set = elem;
-    while (set != parent[set])
-        set = parent[set];
-    while (elem != parent[elem])
-    {
-        int next = parent[elem];
-        parent[elem] = set;
-        elem = next;
-    }
-    return set;
-}
+      template <typename T>
+      struct GraphEdge {
+        GraphEdge () {}
+        GraphEdge (int to, int next, const T &val) : to (to), next (next), val (val) {}
+        int to;
+        int next;
+        T val;
+      };
 
-inline void DjSets::init(int n)
-{
-    parent.resize(n);
-    rank.resize(n, 0);
-    size.resize(n, 1);
-    for (int i = 0; i < n; ++i)
-        parent[i] = i;
-}
+      template <typename T>
+      class Graph
+      {
+        public:
+        using Edge = GraphEdge<T>;
 
-inline int DjSets::merge(int set1, int set2)
-{
-    if (rank[set1] < rank[set2])
-    {
+        Graph (int numv, int nume_max);
+
+        void
+        addEdge (int from, int to, const T &val = T ());
+
+        vector<int> start;
+        vector<Edge> edges;
+
+        int numv;
+        int nume_max;
+        int nume;
+
+        private:
+        Graph (const Graph &);
+        void
+        operator= (const Graph &);
+      };
+
+      struct SegmLinkVal {
+        SegmLinkVal () {}
+        SegmLinkVal (int dr, int dsp) : dr (dr), dsp (dsp) {}
+        bool
+        operator< (const SegmLinkVal &other) const
+        {
+          return dr + dsp < other.dr + other.dsp;
+        }
+        int dr;
+        int dsp;
+      };
+
+      struct SegmLink {
+        SegmLink () {}
+        SegmLink (int from, int to, const SegmLinkVal &val)
+            : from (from), to (to), val (val)
+        {
+        }
+        bool
+        operator< (const SegmLink &other) const
+        {
+          return val < other.val;
+        }
+        int from;
+        int to;
+        SegmLinkVal val;
+      };
+
+      //
+      // Implementation
+      //
+
+      DjSets::DjSets (int n) { init (n); }
+
+      inline int
+      DjSets::find (int elem)
+      {
+        int set = elem;
+        while (set != parent[set])
+          set = parent[set];
+        while (elem != parent[elem]) {
+          int next = parent[elem];
+          parent[elem] = set;
+          elem = next;
+        }
+        return set;
+      }
+
+      inline void
+      DjSets::init (int n)
+      {
+        parent.resize (n);
+        rank.resize (n, 0);
+        size.resize (n, 1);
+        for (int i = 0; i < n; ++i)
+          parent[i] = i;
+      }
+
+      inline int
+      DjSets::merge (int set1, int set2)
+      {
+        if (rank[set1] < rank[set2]) {
+          parent[set1] = set2;
+          size[set2] += size[set1];
+          return set2;
+        }
+        if (rank[set2] < rank[set1]) {
+          parent[set2] = set1;
+          size[set1] += size[set2];
+          return set1;
+        }
         parent[set1] = set2;
+        rank[set2]++;
         size[set2] += size[set1];
         return set2;
-    }
-    if (rank[set2] < rank[set1])
-    {
-        parent[set2] = set1;
-        size[set1] += size[set2];
-        return set1;
-    }
-    parent[set1] = set2;
-    rank[set2]++;
-    size[set2] += size[set1];
-    return set2;
-}
+      }
 
+      template <typename T>
+      Graph<T>::Graph (int numv, int nume_max) : start (numv, -1), edges (nume_max)
+      {
+        this->numv = numv;
+        this->nume_max = nume_max;
+        nume = 0;
+      }
 
-template <typename T>
-Graph<T>::Graph(int numv, int nume_max) : start(numv, -1), edges(nume_max)
-{
-    this->numv = numv;
-    this->nume_max = nume_max;
-    nume = 0;
-}
+      template <typename T>
+      inline void
+      Graph<T>::addEdge (int from, int to, const T &val)
+      {
+        edges[nume] = Edge (to, start[from], val);
+        start[from] = nume;
+        nume++;
+      }
 
+      inline int
+      pix (int y, int x, int ncols)
+      {
+        return y * ncols + x;
+      }
 
-template <typename T>
-inline void Graph<T>::addEdge(int from, int to, const T& val)
-{
-    edges[nume] = Edge(to, start[from], val);
-    start[from] = nume;
-    nume++;
-}
+      inline int
+      sqr (int x)
+      {
+        return x * x;
+      }
 
+      inline int
+      dist2 (const cv::Vec4b &lhs, const cv::Vec4b &rhs)
+      {
+        return sqr (lhs[0] - rhs[0]) + sqr (lhs[1] - rhs[1]) + sqr (lhs[2] - rhs[2]);
+      }
 
-inline int pix(int y, int x, int ncols)
-{
-    return y * ncols + x;
-}
+      inline int
+      dist2 (const cv::Vec2s &lhs, const cv::Vec2s &rhs)
+      {
+        return sqr (lhs[0] - rhs[0]) + sqr (lhs[1] - rhs[1]);
+      }
 
+    } // namespace detail
 
-inline int sqr(int x)
-{
-    return x * x;
-}
+    PCL_EXPORTS void
+    meanShiftSegmentation (const cv::gpu::GpuMat &src, cv::Mat &dst, int sp, int sr,
+                           int minsize, detail::DjSets &comps,
+                           cv::TermCriteria criteria = cv::TermCriteria (
+                               cv::TermCriteria::MAX_ITER + cv::TermCriteria::EPS, 5,
+                               1));
 
-
-inline int dist2(const cv::Vec4b& lhs, const cv::Vec4b& rhs)
-{
-    return sqr(lhs[0] - rhs[0]) + sqr(lhs[1] - rhs[1]) + sqr(lhs[2] - rhs[2]);
-}
-
-
-inline int dist2(const cv::Vec2s& lhs, const cv::Vec2s& rhs)
-{
-    return sqr(lhs[0] - rhs[0]) + sqr(lhs[1] - rhs[1]);
-}
-
-} // namespace
-
-PCL_EXPORTS void meanShiftSegmentation(const cv::gpu::GpuMat& src, cv::Mat& dst, int sp, int sr, int minsize, detail::DjSets &comps, cv::TermCriteria criteria = cv::TermCriteria(cv::TermCriteria::MAX_ITER + cv::TermCriteria::EPS, 5, 1) );
-
-} // namespace
-} // namespace
+  } // namespace cuda
+} // namespace pcl

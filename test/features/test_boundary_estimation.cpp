@@ -38,10 +38,10 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_cloud.h>
-#include <pcl/features/normal_3d.h>
 #include <pcl/features/boundary.h>
+#include <pcl/features/normal_3d.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -76,35 +76,40 @@ TEST (PCL, BoundaryEstimation)
   EXPECT_EQ (b.getInputNormals (), normals);
 
   // getCoordinateSystemOnPlane
-  for (const auto &point : normals->points)
-  {
+  for (const auto &point : normals->points) {
     b.getCoordinateSystemOnPlane (point, u, v);
     Vector4fMapConst n4uv = point.getNormalVector4fMap ();
-    EXPECT_NEAR (n4uv.dot(u), 0, 1e-4);
-    EXPECT_NEAR (n4uv.dot(v), 0, 1e-4);
-    EXPECT_NEAR (u.dot(v), 0, 1e-4);
+    EXPECT_NEAR (n4uv.dot (u), 0, 1e-4);
+    EXPECT_NEAR (n4uv.dot (v), 0, 1e-4);
+    EXPECT_NEAR (u.dot (v), 0, 1e-4);
   }
 
   // isBoundaryPoint (indices)
   bool pt = false;
-  pt = b.isBoundaryPoint (cloud, 0, indices, u, v, float (M_PI) / 2.0);
+  pt = b.isBoundaryPoint (cloud, 0, indices, u, v, float(M_PI) / 2.0);
   EXPECT_EQ (pt, false);
-  pt = b.isBoundaryPoint (cloud, static_cast<int> (indices.size ()) / 3, indices, u, v, float (M_PI) / 2.0);
+  pt = b.isBoundaryPoint (cloud, static_cast<int> (indices.size ()) / 3, indices, u, v,
+                          float(M_PI) / 2.0);
   EXPECT_EQ (pt, false);
-  pt = b.isBoundaryPoint (cloud, static_cast<int> (indices.size ()) / 2, indices, u, v, float (M_PI) / 2.0);
+  pt = b.isBoundaryPoint (cloud, static_cast<int> (indices.size ()) / 2, indices, u, v,
+                          float(M_PI) / 2.0);
   EXPECT_EQ (pt, false);
-  pt = b.isBoundaryPoint (cloud, static_cast<int> (indices.size ()) - 1, indices, u, v, float (M_PI) / 2.0);
+  pt = b.isBoundaryPoint (cloud, static_cast<int> (indices.size ()) - 1, indices, u, v,
+                          float(M_PI) / 2.0);
   EXPECT_EQ (pt, true);
 
   // isBoundaryPoint (points)
   pt = false;
-  pt = b.isBoundaryPoint (cloud, cloud.points[0], indices, u, v, float (M_PI) / 2.0);
+  pt = b.isBoundaryPoint (cloud, cloud.points[0], indices, u, v, float(M_PI) / 2.0);
   EXPECT_EQ (pt, false);
-  pt = b.isBoundaryPoint (cloud, cloud.points[indices.size () / 3], indices, u, v, float (M_PI) / 2.0);
+  pt = b.isBoundaryPoint (cloud, cloud.points[indices.size () / 3], indices, u, v,
+                          float(M_PI) / 2.0);
   EXPECT_EQ (pt, false);
-  pt = b.isBoundaryPoint (cloud, cloud.points[indices.size () / 2], indices, u, v, float (M_PI) / 2.0);
+  pt = b.isBoundaryPoint (cloud, cloud.points[indices.size () / 2], indices, u, v,
+                          float(M_PI) / 2.0);
   EXPECT_EQ (pt, false);
-  pt = b.isBoundaryPoint (cloud, cloud.points[indices.size () - 1], indices, u, v, float (M_PI) / 2.0);
+  pt = b.isBoundaryPoint (cloud, cloud.points[indices.size () - 1], indices, u, v,
+                          float(M_PI) / 2.0);
   EXPECT_EQ (pt, true);
 
   // Object
@@ -132,17 +137,19 @@ TEST (PCL, BoundaryEstimation)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
-  if (loadPCDFile<PointXYZ> (argv[1], cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (loadPCDFile<PointXYZ> (argv[1], cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
 

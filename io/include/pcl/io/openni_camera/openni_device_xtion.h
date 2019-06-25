@@ -47,7 +47,8 @@ namespace openni_wrapper
 {
 
   /**
-   * @brief Concrete implementation of the interface OpenNIDevice for a Asus Xtion Pro device.
+   * @brief Concrete implementation of the interface OpenNIDevice for a Asus Xtion Pro
+   * device.
    * @author Suat Gedikli
    * @date 02.january 2011
    * @ingroup io
@@ -55,18 +56,27 @@ namespace openni_wrapper
   class DeviceXtionPro : public OpenNIDevice
   {
     friend class OpenNIDriver;
-  public:
-    DeviceXtionPro (xn::Context& context, const xn::NodeInfo& device_node, const xn::NodeInfo& depth_node, const xn::NodeInfo& ir_node);
+
+    public:
+    DeviceXtionPro (xn::Context &context, const xn::NodeInfo &device_node,
+                    const xn::NodeInfo &depth_node, const xn::NodeInfo &ir_node);
     ~DeviceXtionPro () throw ();
-    //virtual void setImageOutputMode (const XnMapOutputMode& output_mode);
+    // virtual void setImageOutputMode (const XnMapOutputMode& output_mode);
 
-  protected:
-    boost::shared_ptr<Image> getCurrentImage (boost::shared_ptr<xn::ImageMetaData> image_meta_data) const throw () override;
-    void enumAvailableModes () throw ();
-    bool isImageResizeSupported (unsigned input_width, unsigned input_height, unsigned output_width, unsigned output_height) const throw () override;
+    protected:
+    boost::shared_ptr<Image>
+    getCurrentImage (boost::shared_ptr<xn::ImageMetaData> image_meta_data) const
+        throw () override;
+    void
+    enumAvailableModes () throw ();
+    bool
+    isImageResizeSupported (unsigned input_width, unsigned input_height,
+                            unsigned output_width, unsigned output_height) const
+        throw () override;
 
-    void startDepthStream () override;
-  } ;
-} // namespace
+    void
+    startDepthStream () override;
+  };
+} // namespace openni_wrapper
 
 #endif

@@ -45,75 +45,83 @@
 
 namespace pcl
 {
-  /** \brief @b RandomizedRandomSampleConsensus represents an implementation of the RRANSAC (Randomized RAndom SAmple 
-    * Consensus), as described in "Randomized RANSAC with Td,d test", O. Chum and J. Matas, Proc. British Machine Vision 
-    * Conf. (BMVC '02), vol. 2, BMVA, pp. 448-457, 2002.
-    * \note RRANSAC is useful in situations where most of the data samples belong to the model, and a fast outlier rejection algorithm is needed.
-    * \author Radu B. Rusu
-    * \ingroup sample_consensus
-    */
+  /** \brief @b RandomizedRandomSampleConsensus represents an implementation of the
+   * RRANSAC (Randomized RAndom SAmple Consensus), as described in "Randomized RANSAC
+   * with Td,d test", O. Chum and J. Matas, Proc. British Machine Vision Conf. (BMVC
+   * '02), vol. 2, BMVA, pp. 448-457, 2002. \note RRANSAC is useful in situations where
+   * most of the data samples belong to the model, and a fast outlier rejection
+   * algorithm is needed. \author Radu B. Rusu \ingroup sample_consensus
+   */
   template <typename PointT>
   class RandomizedRandomSampleConsensus : public SampleConsensus<PointT>
   {
     using SampleConsensusModelPtr = typename SampleConsensusModel<PointT>::Ptr;
 
     public:
-      using Ptr = boost::shared_ptr<RandomizedRandomSampleConsensus<PointT> >;
-      using ConstPtr = boost::shared_ptr<const RandomizedRandomSampleConsensus<PointT> >;
+    using Ptr = boost::shared_ptr<RandomizedRandomSampleConsensus<PointT>>;
+    using ConstPtr = boost::shared_ptr<const RandomizedRandomSampleConsensus<PointT>>;
 
-      using SampleConsensus<PointT>::max_iterations_;
-      using SampleConsensus<PointT>::threshold_;
-      using SampleConsensus<PointT>::iterations_;
-      using SampleConsensus<PointT>::sac_model_;
-      using SampleConsensus<PointT>::model_;
-      using SampleConsensus<PointT>::model_coefficients_;
-      using SampleConsensus<PointT>::inliers_;
-      using SampleConsensus<PointT>::probability_;
+    using SampleConsensus<PointT>::max_iterations_;
+    using SampleConsensus<PointT>::threshold_;
+    using SampleConsensus<PointT>::iterations_;
+    using SampleConsensus<PointT>::sac_model_;
+    using SampleConsensus<PointT>::model_;
+    using SampleConsensus<PointT>::model_coefficients_;
+    using SampleConsensus<PointT>::inliers_;
+    using SampleConsensus<PointT>::probability_;
 
-      /** \brief RANSAC (Randomized RAndom SAmple Consensus) main constructor
-        * \param[in] model a Sample Consensus model
-        */
-      RandomizedRandomSampleConsensus (const SampleConsensusModelPtr &model) 
-        : SampleConsensus<PointT> (model)
-        , fraction_nr_pretest_ (10.0) // Number of samples to try randomly in percents
-      {
-        // Maximum number of trials before we give up.
-        max_iterations_ = 10000;
-      }
+    /** \brief RANSAC (Randomized RAndom SAmple Consensus) main constructor
+     * \param[in] model a Sample Consensus model
+     */
+    RandomizedRandomSampleConsensus (const SampleConsensusModelPtr &model)
+        : SampleConsensus<PointT> (model),
+          fraction_nr_pretest_ (10.0) // Number of samples to try randomly in percents
+    {
+      // Maximum number of trials before we give up.
+      max_iterations_ = 10000;
+    }
 
-      /** \brief RRANSAC (RAndom SAmple Consensus) main constructor
-        * \param[in] model a Sample Consensus model
-        * \param[in] threshold distance to model threshold
-        */
-      RandomizedRandomSampleConsensus (const SampleConsensusModelPtr &model, double threshold) 
-        : SampleConsensus<PointT> (model, threshold)
-        , fraction_nr_pretest_ (10.0) // Number of samples to try randomly in percents
-      {
-        // Maximum number of trials before we give up.
-        max_iterations_ = 10000;
-      }
+    /** \brief RRANSAC (RAndom SAmple Consensus) main constructor
+     * \param[in] model a Sample Consensus model
+     * \param[in] threshold distance to model threshold
+     */
+    RandomizedRandomSampleConsensus (const SampleConsensusModelPtr &model,
+                                     double threshold)
+        : SampleConsensus<PointT> (model, threshold),
+          fraction_nr_pretest_ (10.0) // Number of samples to try randomly in percents
+    {
+      // Maximum number of trials before we give up.
+      max_iterations_ = 10000;
+    }
 
-      /** \brief Compute the actual model and find the inliers
-        * \param[in] debug_verbosity_level enable/disable on-screen debug information and set the verbosity level
-        */
-      bool 
-      computeModel (int debug_verbosity_level = 0) override;
+    /** \brief Compute the actual model and find the inliers
+     * \param[in] debug_verbosity_level enable/disable on-screen debug information and
+     * set the verbosity level
+     */
+    bool
+    computeModel (int debug_verbosity_level = 0) override;
 
-      /** \brief Set the percentage of points to pre-test.
-        * \param[in] nr_pretest percentage of points to pre-test
-        */
-      inline void 
-      setFractionNrPretest (double nr_pretest) { fraction_nr_pretest_ = nr_pretest; }
+    /** \brief Set the percentage of points to pre-test.
+     * \param[in] nr_pretest percentage of points to pre-test
+     */
+    inline void
+    setFractionNrPretest (double nr_pretest)
+    {
+      fraction_nr_pretest_ = nr_pretest;
+    }
 
-      /** \brief Get the percentage of points to pre-test. */
-      inline double 
-      getFractionNrPretest () const { return (fraction_nr_pretest_); }
+    /** \brief Get the percentage of points to pre-test. */
+    inline double
+    getFractionNrPretest () const
+    {
+      return (fraction_nr_pretest_);
+    }
 
     private:
-      /** \brief Number of samples to randomly pre-test, in percents. */
-      double fraction_nr_pretest_;
+    /** \brief Number of samples to randomly pre-test, in percents. */
+    double fraction_nr_pretest_;
   };
-}
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/sample_consensus/impl/rransac.hpp>

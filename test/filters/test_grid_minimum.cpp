@@ -57,9 +57,15 @@ TEST (Grid, Minimum)
   cloud_in.is_dense = true;
   cloud_in.resize (3);
 
-  cloud_in[0].x = 0; cloud_in[0].y = 0; cloud_in[0].z = 0.25;
-  cloud_in[1].x = 0.5; cloud_in[1].y = 0.5; cloud_in[1].z = 1;
-  cloud_in[2].x = 1.5; cloud_in[2].y = 1.5; cloud_in[2].z = 0.0;
+  cloud_in[0].x = 0;
+  cloud_in[0].y = 0;
+  cloud_in[0].z = 0.25;
+  cloud_in[1].x = 0.5;
+  cloud_in[1].y = 0.5;
+  cloud_in[1].z = 1;
+  cloud_in[2].x = 1.5;
+  cloud_in[2].y = 1.5;
+  cloud_in[2].z = 0.0;
 
   GridMinimum<PointXYZ> gm (1.0f);
   gm.setInputCloud (cloud_in.makeShared ());
@@ -80,10 +86,9 @@ TEST (Grid, Minimum)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());
 }
 /* ]--- */
-

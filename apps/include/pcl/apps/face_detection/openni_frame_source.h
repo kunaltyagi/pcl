@@ -16,8 +16,8 @@ namespace OpenNIFrameSource
   /* A simple class for capturing data from an OpenNI camera */
   class PCL_EXPORTS OpenNIFrameSource
   {
-  public:
-    OpenNIFrameSource (const std::string& device_id = "");
+    public:
+    OpenNIFrameSource (const std::string &device_id = "");
     ~OpenNIFrameSource ();
 
     const PointCloudPtr
@@ -25,9 +25,9 @@ namespace OpenNIFrameSource
     bool
     isActive ();
     void
-    onKeyboardEvent (const pcl::visualization::KeyboardEvent & event);
+    onKeyboardEvent (const pcl::visualization::KeyboardEvent &event);
 
-  protected:
+    protected:
     void
     onNewFrame (const PointCloudConstPtr &cloud);
 
@@ -38,4 +38,4 @@ namespace OpenNIFrameSource
     bool active_;
   };
 
-}
+} // namespace OpenNIFrameSource

@@ -48,25 +48,26 @@ namespace pcl
   class Keypoint
   {
     private:
-      Edge edge_detection;
-      Convolution conv_2d;
-    public:
-      Keypoint  ()
-      {
-      }
-      
-      void 
-      harrisCorner  (ImageType &output, ImageType &input, const float sigma_d, const float sigma_i, const float alpha, const float thresh);
-      
-      void 
-      hessianBlob  (ImageType &output, ImageType &input, const float sigma, bool SCALE);
-      
-      void 
-      hessianBlob  (ImageType &output, ImageType &input, const float start_scale, const float scaling_factor, const int num_scales);
+    Edge edge_detection;
+    Convolution conv_2d;
 
-      void 
-      imageElementMultiply  (ImageType &output, ImageType &input1, ImageType &input2);
+    public:
+    Keypoint () {}
+
+    void
+    harrisCorner (ImageType &output, ImageType &input, const float sigma_d,
+                  const float sigma_i, const float alpha, const float thresh);
+
+    void
+    hessianBlob (ImageType &output, ImageType &input, const float sigma, bool SCALE);
+
+    void
+    hessianBlob (ImageType &output, ImageType &input, const float start_scale,
+                 const float scaling_factor, const int num_scales);
+
+    void
+    imageElementMultiply (ImageType &output, ImageType &input1, ImageType &input2);
   };
-}
+} // namespace pcl
 
 #include <pcl/2d/impl/keypoint.hpp>

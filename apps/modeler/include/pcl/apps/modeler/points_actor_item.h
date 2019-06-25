@@ -48,32 +48,33 @@ namespace pcl
     class PointsActorItem : public ChannelActorItem
     {
       public:
-        PointsActorItem(QTreeWidgetItem* parent,
-                        const CloudMesh::Ptr& cloud_mesh,
-                        const vtkSmartPointer<vtkRenderWindow>& render_window);
-        ~PointsActorItem ();
+      PointsActorItem (QTreeWidgetItem *parent, const CloudMesh::Ptr &cloud_mesh,
+                       const vtkSmartPointer<vtkRenderWindow> &render_window);
+      ~PointsActorItem ();
 
-        std::string
-        getItemName() const override {return "Points Actor Item";}
+      std::string
+      getItemName () const override
+      {
+        return "Points Actor Item";
+      }
 
       protected:
-        void
-        initImpl() override;
+      void
+      initImpl () override;
 
-        void
-        updateImpl() override;
+      void
+      updateImpl () override;
 
-        void
-        prepareContextMenu(QMenu* menu) const override;
+      void
+      prepareContextMenu (QMenu *menu) const override;
 
-        void
-        prepareProperties(ParameterDialog* parameter_dialog) override;
+      void
+      prepareProperties (ParameterDialog *parameter_dialog) override;
 
-        void
-        setProperties() override;
+      void
+      setProperties () override;
 
       private:
-
     };
-  }
-}
+  } // namespace modeler
+} // namespace pcl

@@ -44,26 +44,26 @@
 #include <pcl/sample_consensus/sac_model_normal_parallel_plane.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT, typename PointNT> bool
-pcl::SampleConsensusModelNormalParallelPlane<PointT, PointNT>::isModelValid (const Eigen::VectorXf &model_coefficients) const
+template <typename PointT, typename PointNT>
+bool
+pcl::SampleConsensusModelNormalParallelPlane<PointT, PointNT>::isModelValid (
+    const Eigen::VectorXf &model_coefficients) const
 {
   if (!SampleConsensusModel<PointT>::isModelValid (model_coefficients))
     return (false);
 
   // Check against template, if given
-  if (eps_angle_ > 0.0)
-  {
+  if (eps_angle_ > 0.0) {
     // Obtain the plane normal
     Eigen::Vector4f coeff = model_coefficients;
     coeff[3] = 0;
     coeff.normalize ();
 
     if (fabs (axis_.dot (coeff)) < cos_angle_)
-      return  (false);
+      return (false);
   }
 
-  if (eps_dist_ > 0.0)
-  {
+  if (eps_dist_ > 0.0) {
     if (fabs (-model_coefficients[3] - distance_from_origin_) > eps_dist_)
       return (false);
   }
@@ -71,8 +71,8 @@ pcl::SampleConsensusModelNormalParallelPlane<PointT, PointNT>::isModelValid (con
   return (true);
 }
 
-#define PCL_INSTANTIATE_SampleConsensusModelNormalParallelPlane(PointT, PointNT) template class PCL_EXPORTS pcl::SampleConsensusModelNormalParallelPlane<PointT, PointNT>;
+#define PCL_INSTANTIATE_SampleConsensusModelNormalParallelPlane(PointT, PointNT)       \
+  template class PCL_EXPORTS                                                           \
+      pcl::SampleConsensusModelNormalParallelPlane<PointT, PointNT>;
 
-#endif    // PCL_SAMPLE_CONSENSUS_IMPL_SAC_MODEL_NORMAL_PARALLEL_PLANE_H_
-
-
+#endif // PCL_SAMPLE_CONSENSUS_IMPL_SAC_MODEL_NORMAL_PARALLEL_PLANE_H_

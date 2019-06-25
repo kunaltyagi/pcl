@@ -31,7 +31,7 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *
- * 
+ *
  *
  */
 
@@ -41,16 +41,14 @@
 using namespace pcl;
 using namespace on_nurbs;
 
-FittingCurve2dSDM::FittingCurve2dSDM (int order, NurbsDataCurve2d *data) :
-  FittingCurve2dPDM (order, data)
+FittingCurve2dSDM::FittingCurve2dSDM (int order, NurbsDataCurve2d *data)
+    : FittingCurve2dPDM (order, data)
 {
-
 }
 
-FittingCurve2dSDM::FittingCurve2dSDM (NurbsDataCurve2d *data, const ON_NurbsCurve &ns) :
-  FittingCurve2dPDM (data, ns)
+FittingCurve2dSDM::FittingCurve2dSDM (NurbsDataCurve2d *data, const ON_NurbsCurve &ns)
+    : FittingCurve2dPDM (data, ns)
 {
-
 }
 
 void
@@ -59,7 +57,7 @@ FittingCurve2dSDM::assemble (const FittingCurve2dPDM::Parameter &parameter)
   int cp_red = m_nurbs.m_order - 2;
   int ncp = m_nurbs.m_cv_count - 2 * cp_red;
   int nCageReg = m_nurbs.m_cv_count - 2 * cp_red;
-  int nInt = int (m_data->interior.size ());
+  int nInt = int(m_data->interior.size ());
 
   double wInt = 1.0;
   if (!m_data->interior_weight.empty ())
@@ -77,11 +75,11 @@ FittingCurve2dSDM::assemble (const FittingCurve2dPDM::Parameter &parameter)
   if (parameter.smoothness > 0.0)
     addCageRegularisation (parameter.smoothness, row);
 
-  if (row < nrows)
-  {
+  if (row < nrows) {
     m_solver.resize (row);
     if (!m_quiet)
-      printf ("[FittingCurve2dSDM::assemble] Warning: rows do not match: %d %d\n", row, nrows);
+      printf ("[FittingCurve2dSDM::assemble] Warning: rows do not match: %d %d\n", row,
+              nrows);
   }
 }
 
@@ -104,10 +102,10 @@ FittingCurve2dSDM::updateCurve (double damp)
 
   double cps_diff (0.0);
 
-  // TODO this implementation rotates the control points, look up fitting_curve_2d_apdm for correct implementation
+  // TODO this implementation rotates the control points, look up fitting_curve_2d_apdm
+  // for correct implementation
 
-  for (int j = 0; j < ncp; j++)
-  {
+  for (int j = 0; j < ncp; j++) {
 
     ON_3dPoint cp_prev;
     m_nurbs.GetCV (j + cp_red, cp_prev);
@@ -115,7 +113,8 @@ FittingCurve2dSDM::updateCurve (double damp)
     double x = m_solver.x (2 * j + 0, 0);
     double y = m_solver.x (2 * j + 1, 0);
 
-    cps_diff += sqrt ((x - cp_prev.x) * (x - cp_prev.x) + (y - cp_prev.y) * (y - cp_prev.y));
+    cps_diff +=
+        sqrt ((x - cp_prev.x) * (x - cp_prev.x) + (y - cp_prev.y) * (y - cp_prev.y));
 
     ON_3dPoint cp;
     cp.x = cp_prev.x + damp * (x - cp_prev.x);
@@ -125,8 +124,7 @@ FittingCurve2dSDM::updateCurve (double damp)
     m_nurbs.SetCV (j + cp_red, cp);
   }
 
-  for (int j = 0; j < cp_red; j++)
-  {
+  for (int j = 0; j < cp_red; j++) {
 
     ON_3dPoint cp;
     m_nurbs.GetCV (m_nurbs.m_cv_count - 1 - cp_red + j, cp);
@@ -139,37 +137,38 @@ FittingCurve2dSDM::updateCurve (double damp)
 }
 
 void
-FittingCurve2dSDM::addPointConstraint (const double &param, const Eigen::Vector2d &point,
-                                       const Eigen::Vector2d &normal, const Eigen::Vector2d &tangent, double rho,
+FittingCurve2dSDM::addPointConstraint (const double &param,
+                                       const Eigen::Vector2d &point,
+                                       const Eigen::Vector2d &normal,
+                                       const Eigen::Vector2d &tangent, double rho,
                                        double d, double weight, unsigned &row)
 {
   int cp_red = m_nurbs.m_order - 2;
   int ncp = m_nurbs.m_cv_count - 2 * cp_red;
   double *N = new double[m_nurbs.m_order * m_nurbs.m_order];
 
-  int E = ON_NurbsSpanIndex (m_nurbs.m_order, m_nurbs.m_cv_count, m_nurbs.m_knot, param, 0, 0);
+  int E = ON_NurbsSpanIndex (m_nurbs.m_order, m_nurbs.m_cv_count, m_nurbs.m_knot, param,
+                             0, 0);
 
   ON_EvaluateNurbsBasis (m_nurbs.m_order, m_nurbs.m_knot + E, param, N);
 
   m_solver.f (row, 0, normal (0) * point (0) * weight);
-  for (int i = 0; i < m_nurbs.m_order; i++)
-  {
+  for (int i = 0; i < m_nurbs.m_order; i++) {
     m_solver.K (row, 2 * ((E + i) % ncp) + 0, weight * normal (0) * N[i]);
   }
   row++;
 
   m_solver.f (row, 0, normal (1) * point (1) * weight);
-  for (int i = 0; i < m_nurbs.m_order; i++)
-  {
+  for (int i = 0; i < m_nurbs.m_order; i++) {
     m_solver.K (row, 2 * ((E + i) % ncp) + 1, weight * normal (1) * N[i]);
   }
   row++;
 
   //  if (d >= 0.0 && d > rho)
-  //    printf("[FittingCurve2dSDM::addPointConstraint] Warning d > rho: %f > %f\n", d, rho);
+  //    printf("[FittingCurve2dSDM::addPointConstraint] Warning d > rho: %f > %f\n", d,
+  //    rho);
 
-  if (d < 0.0)
-  {
+  if (d < 0.0) {
 
     double a = d / (d - rho);
 
@@ -182,10 +181,9 @@ FittingCurve2dSDM::addPointConstraint (const double &param, const Eigen::Vector2
     for (int i = 0; i < m_nurbs.m_order; i++)
       m_solver.K (row, 2 * ((E + i) % ncp) + 1, a * a * weight * tangent (1) * N[i]);
     row++;
-
   }
 
-  delete [] N;
+  delete[] N;
 }
 
 void
@@ -194,8 +192,7 @@ FittingCurve2dSDM::addCageRegularisation (double weight, unsigned &row)
   int cp_red = (m_nurbs.m_order - 2);
   int ncp = (m_nurbs.m_cv_count - 2 * cp_red);
 
-  for (int j = 1; j < ncp + 1; j++)
-  {
+  for (int j = 1; j < ncp + 1; j++) {
     m_solver.K (row, 2 * ((j + 0) % ncp) + 0, -2.0 * weight);
     m_solver.K (row, 2 * ((j - 1) % ncp) + 0, 1.0 * weight);
     m_solver.K (row, 2 * ((j + 1) % ncp) + 0, 1.0 * weight);
@@ -211,15 +208,14 @@ FittingCurve2dSDM::addCageRegularisation (double weight, unsigned &row)
 void
 FittingCurve2dSDM::assembleInterior (double wInt, double rScale, unsigned &row)
 {
-  unsigned nInt = int (m_data->interior.size ());
+  unsigned nInt = int(m_data->interior.size ());
   m_data->interior_line_start.clear ();
   m_data->interior_line_end.clear ();
   m_data->interior_error.clear ();
   m_data->interior_normals.clear ();
 
   unsigned updateTNR (false);
-  if (m_data->interior_ncps_prev != m_nurbs.CVCount ())
-  {
+  if (m_data->interior_ncps_prev != m_nurbs.CVCount ()) {
     if (!m_quiet)
       printf ("[FittingCurve2dSDM::assembleInterior] updating T, N, rho\n");
     m_data->interior_tangents.clear ();
@@ -229,24 +225,22 @@ FittingCurve2dSDM::assembleInterior (double wInt, double rScale, unsigned &row)
     updateTNR = true;
   }
 
-  for (unsigned p = 0; p < nInt; p++)
-  {
+  for (unsigned p = 0; p < nInt; p++) {
     Eigen::Vector2d &pcp = m_data->interior[p];
 
     // inverse mapping
     double param;
     Eigen::Vector2d pt, t, n;
     double error;
-    if (p < int (m_data->interior_param.size ()))
-    {
+    if (p < int(m_data->interior_param.size ())) {
       param = findClosestElementMidPoint (m_nurbs, pcp, m_data->interior_param[p]);
-      param = inverseMapping (m_nurbs, pcp, param, error, pt, t, rScale, in_max_steps, in_accuracy, m_quiet);
+      param = inverseMapping (m_nurbs, pcp, param, error, pt, t, rScale, in_max_steps,
+                              in_accuracy, m_quiet);
       m_data->interior_param[p] = param;
-    }
-    else
-    {
+    } else {
       param = findClosestElementMidPoint (m_nurbs, pcp);
-      param = inverseMapping (m_nurbs, pcp, param, error, pt, t, rScale, in_max_steps, in_accuracy, m_quiet);
+      param = inverseMapping (m_nurbs, pcp, param, error, pt, t, rScale, in_max_steps,
+                              in_accuracy, m_quiet);
       m_data->interior_param.push_back (param);
     }
 
@@ -274,17 +268,14 @@ FittingCurve2dSDM::assembleInterior (double wInt, double rScale, unsigned &row)
     rho = (1.0 / kappa);
     n *= rho;
 
-    if (!updateTNR && m_data->interior_rho.size () == nInt)
-    {
+    if (!updateTNR && m_data->interior_rho.size () == nInt) {
       n_prev = m_data->interior_normals[p];
       t_prev = m_data->interior_tangents[p];
       rho_prev = m_data->interior_rho[p];
       //        m_data->interior_normals[p] = n;
       //        m_data->interior_tangents[p] = t;
       //        m_data->interior_rho[p] = rho;
-    }
-    else
-    {
+    } else {
       m_data->interior_tangents.push_back (t);
       m_data->interior_normals.push_back (n);
       m_data->interior_rho.push_back (rho);
@@ -306,7 +297,8 @@ FittingCurve2dSDM::assembleInterior (double wInt, double rScale, unsigned &row)
     m_data->interior_line_start.push_back (pt);
     m_data->interior_line_end.push_back (pcp);
 
-    addPointConstraint (m_data->interior_param[p], m_data->interior[p], n_prev, t_prev, rho_prev, d, wInt, row);
+    addPointConstraint (m_data->interior_param[p], m_data->interior[p], n_prev, t_prev,
+                        rho_prev, d, wInt, row);
   }
 
   //  printf("[FittingCurve2dSDM::assembleInterior] d>0: %d d<0: %d\n", i1, i2);

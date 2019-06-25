@@ -45,128 +45,142 @@
 namespace pcl
 {
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /** \brief Decompose a region of space into clusters based on the Euclidean distance between points
-    * \param[in] cloud the point cloud message
-    * \param[in] tree the spatial locator (e.g., kd-tree) used for nearest neighbors searching
-    * \note the tree has to be created as a spatial locator on \a cloud
-    * \param[in] tolerance the spatial cluster tolerance as a measure in L2 Euclidean space
-    * \param[in] indices_in the cluster containing the seed point indices (as a vector of PointIndices)
-    * \param[out] indices_out 
-    * \param[in] delta_hue
-    * \todo look how to make this templated!
-    * \ingroup segmentation
-    */
-  void 
-  seededHueSegmentation (const PointCloud<PointXYZRGB>            &cloud,
-                         const search::Search<PointXYZRGB>::Ptr   &tree,
-                         float                                    tolerance,
-                         PointIndices                             &indices_in,
-                         PointIndices                             &indices_out,
-                         float                                    delta_hue = 0.0);
+  /** \brief Decompose a region of space into clusters based on the Euclidean distance
+   * between points \param[in] cloud the point cloud message \param[in] tree the spatial
+   * locator (e.g., kd-tree) used for nearest neighbors searching \note the tree has to
+   * be created as a spatial locator on \a cloud \param[in] tolerance the spatial
+   * cluster tolerance as a measure in L2 Euclidean space \param[in] indices_in the
+   * cluster containing the seed point indices (as a vector of PointIndices) \param[out]
+   * indices_out \param[in] delta_hue \todo look how to make this templated! \ingroup
+   * segmentation
+   */
+  void
+  seededHueSegmentation (const PointCloud<PointXYZRGB> &cloud,
+                         const search::Search<PointXYZRGB>::Ptr &tree, float tolerance,
+                         PointIndices &indices_in, PointIndices &indices_out,
+                         float delta_hue = 0.0);
 
-  /** \brief Decompose a region of space into clusters based on the Euclidean distance between points
-    * \param[in] cloud the point cloud message
-    * \param[in] tree the spatial locator (e.g., kd-tree) used for nearest neighbors searching
-    * \note the tree has to be created as a spatial locator on \a cloud
-    * \param[in] tolerance the spatial cluster tolerance as a measure in L2 Euclidean space
-    * \param[in] indices_in the cluster containing the seed point indices (as a vector of PointIndices)
-    * \param[out] indices_out 
-    * \param[in] delta_hue
-    * \todo look how to make this templated!
-    * \ingroup segmentation
-    */
-  void 
-  seededHueSegmentation (const PointCloud<PointXYZRGB>            &cloud,
-                         const search::Search<PointXYZRGBL>::Ptr  &tree,
-                         float                                    tolerance,
-                         PointIndices                             &indices_in,
-                         PointIndices                             &indices_out,
-                         float                                    delta_hue = 0.0);
+  /** \brief Decompose a region of space into clusters based on the Euclidean distance
+   * between points \param[in] cloud the point cloud message \param[in] tree the spatial
+   * locator (e.g., kd-tree) used for nearest neighbors searching \note the tree has to
+   * be created as a spatial locator on \a cloud \param[in] tolerance the spatial
+   * cluster tolerance as a measure in L2 Euclidean space \param[in] indices_in the
+   * cluster containing the seed point indices (as a vector of PointIndices) \param[out]
+   * indices_out \param[in] delta_hue \todo look how to make this templated! \ingroup
+   * segmentation
+   */
+  void
+  seededHueSegmentation (const PointCloud<PointXYZRGB> &cloud,
+                         const search::Search<PointXYZRGBL>::Ptr &tree, float tolerance,
+                         PointIndices &indices_in, PointIndices &indices_out,
+                         float delta_hue = 0.0);
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /** \brief SeededHueSegmentation 
-    * \author Koen Buys
-    * \ingroup segmentation
-    */
-  class SeededHueSegmentation: public PCLBase<PointXYZRGB>
+  /** \brief SeededHueSegmentation
+   * \author Koen Buys
+   * \ingroup segmentation
+   */
+  class SeededHueSegmentation : public PCLBase<PointXYZRGB>
   {
     using BasePCLBase = PCLBase<PointXYZRGB>;
 
     public:
-      using PointCloud = pcl::PointCloud<PointXYZRGB>;
-      using PointCloudPtr = PointCloud::Ptr;
-      using PointCloudConstPtr = PointCloud::ConstPtr;
+    using PointCloud = pcl::PointCloud<PointXYZRGB>;
+    using PointCloudPtr = PointCloud::Ptr;
+    using PointCloudConstPtr = PointCloud::ConstPtr;
 
-      using KdTree = pcl::search::Search<PointXYZRGB>;
-      using KdTreePtr = pcl::search::Search<PointXYZRGB>::Ptr;
+    using KdTree = pcl::search::Search<PointXYZRGB>;
+    using KdTreePtr = pcl::search::Search<PointXYZRGB>::Ptr;
 
-      using PointIndicesPtr = PointIndices::Ptr;
-      using PointIndicesConstPtr = PointIndices::ConstPtr;
+    using PointIndicesPtr = PointIndices::Ptr;
+    using PointIndicesConstPtr = PointIndices::ConstPtr;
 
-      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      /** \brief Empty constructor. */
-      SeededHueSegmentation () : cluster_tolerance_ (0), delta_hue_ (0.0)
-      {};
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /** \brief Empty constructor. */
+    SeededHueSegmentation () : cluster_tolerance_ (0), delta_hue_ (0.0){};
 
-      /** \brief Provide a pointer to the search object.
-        * \param[in] tree a pointer to the spatial search object.
-        */
-      inline void 
-      setSearchMethod (const KdTreePtr &tree) { tree_ = tree; }
+    /** \brief Provide a pointer to the search object.
+     * \param[in] tree a pointer to the spatial search object.
+     */
+    inline void
+    setSearchMethod (const KdTreePtr &tree)
+    {
+      tree_ = tree;
+    }
 
-      /** \brief Get a pointer to the search method used. */
-      inline KdTreePtr 
-      getSearchMethod () const { return (tree_); }
+    /** \brief Get a pointer to the search method used. */
+    inline KdTreePtr
+    getSearchMethod () const
+    {
+      return (tree_);
+    }
 
-      /** \brief Set the spatial cluster tolerance as a measure in the L2 Euclidean space
-        * \param[in] tolerance the spatial cluster tolerance as a measure in the L2 Euclidean space
-        */
-      inline void 
-      setClusterTolerance (double tolerance) { cluster_tolerance_ = tolerance; }
+    /** \brief Set the spatial cluster tolerance as a measure in the L2 Euclidean space
+     * \param[in] tolerance the spatial cluster tolerance as a measure in the L2
+     * Euclidean space
+     */
+    inline void
+    setClusterTolerance (double tolerance)
+    {
+      cluster_tolerance_ = tolerance;
+    }
 
-      /** \brief Get the spatial cluster tolerance as a measure in the L2 Euclidean space. */
-      inline double 
-      getClusterTolerance () const { return (cluster_tolerance_); }
+    /** \brief Get the spatial cluster tolerance as a measure in the L2 Euclidean space.
+     */
+    inline double
+    getClusterTolerance () const
+    {
+      return (cluster_tolerance_);
+    }
 
-      /** \brief Set the tollerance on the hue
-        * \param[in] delta_hue the new delta hue
-        */
-      inline void 
-      setDeltaHue (float delta_hue) { delta_hue_ = delta_hue; }
+    /** \brief Set the tollerance on the hue
+     * \param[in] delta_hue the new delta hue
+     */
+    inline void
+    setDeltaHue (float delta_hue)
+    {
+      delta_hue_ = delta_hue;
+    }
 
-      /** \brief Get the tolerance on the hue */
-      inline float 
-      getDeltaHue () const { return (delta_hue_); }
+    /** \brief Get the tolerance on the hue */
+    inline float
+    getDeltaHue () const
+    {
+      return (delta_hue_);
+    }
 
-      /** \brief Cluster extraction in a PointCloud given by <setInputCloud (), setIndices ()>
-        * \param[in] indices_in
-        * \param[out] indices_out
-        */
-      void 
-      segment (PointIndices &indices_in, PointIndices &indices_out);
+    /** \brief Cluster extraction in a PointCloud given by <setInputCloud (), setIndices
+     * ()> \param[in] indices_in \param[out] indices_out
+     */
+    void
+    segment (PointIndices &indices_in, PointIndices &indices_out);
 
     protected:
-      // Members derived from the base class
-      using BasePCLBase::input_;
-      using BasePCLBase::indices_;
-      using BasePCLBase::initCompute;
-      using BasePCLBase::deinitCompute;
+    // Members derived from the base class
+    using BasePCLBase::deinitCompute;
+    using BasePCLBase::indices_;
+    using BasePCLBase::initCompute;
+    using BasePCLBase::input_;
 
-      /** \brief A pointer to the spatial search object. */
-      KdTreePtr tree_;
+    /** \brief A pointer to the spatial search object. */
+    KdTreePtr tree_;
 
-      /** \brief The spatial cluster tolerance as a measure in the L2 Euclidean space. */
-      double cluster_tolerance_;
+    /** \brief The spatial cluster tolerance as a measure in the L2 Euclidean space. */
+    double cluster_tolerance_;
 
-      /** \brief The allowed difference on the hue*/
-      float delta_hue_;
+    /** \brief The allowed difference on the hue*/
+    float delta_hue_;
 
-      /** \brief Class getName method. */
-      virtual std::string getClassName () const { return ("seededHueSegmentation"); }
+    /** \brief Class getName method. */
+    virtual std::string
+    getClassName () const
+    {
+      return ("seededHueSegmentation");
+    }
   };
-}
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/segmentation/impl/seeded_hue_segmentation.hpp>

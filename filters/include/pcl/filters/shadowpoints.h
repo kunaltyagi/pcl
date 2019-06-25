@@ -1,15 +1,15 @@
 /*
  * Software License Agreement (BSD License)
- * 
+ *
  * Point Cloud Library (PCL) - www.pointclouds.org
  * Copyright (c) 2009-2011, Willow Garage, Inc.
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
- * are met: 
- * 
+ * are met:
+ *
  *  * Redistributions of source code must retain the above copyright
  *    notice, this list of conditions and the following disclaimer.
  *  * Redistributions in binary form must reproduce the above
@@ -19,7 +19,7 @@
  *  * Neither the name of the copyright holder(s) nor the names of its
  *    contributors may be used to endorse or promote products derived
  *    from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -37,18 +37,18 @@
 
 #pragma once
 
-#include <pcl/filters/filter_indices.h>
-#include <ctime>
 #include <climits>
+#include <ctime>
+#include <pcl/filters/filter_indices.h>
 
 namespace pcl
 {
   /** \brief @b ShadowPoints removes the ghost points appearing on edge discontinuties
    *
-   *  \author Aravindhan K Krishnan. This code is ported from libpointmatcher (https://github.com/ethz-asl/libpointmatcher)
-   * \ingroup filters
+   *  \author Aravindhan K Krishnan. This code is ported from libpointmatcher
+   * (https://github.com/ethz-asl/libpointmatcher) \ingroup filters
    */
-  template<typename PointT, typename NormalT>
+  template <typename PointT, typename NormalT>
   class ShadowPoints : public FilterIndices<PointT>
   {
     using FilterIndices<PointT>::filter_name_;
@@ -67,63 +67,71 @@ namespace pcl
     using NormalsPtr = typename pcl::PointCloud<NormalT>::Ptr;
 
     public:
+    using Ptr = boost::shared_ptr<ShadowPoints<PointT, NormalT>>;
+    using ConstPtr = boost::shared_ptr<const ShadowPoints<PointT, NormalT>>;
 
-      using Ptr = boost::shared_ptr< ShadowPoints<PointT, NormalT> >;
-      using ConstPtr = boost::shared_ptr< const ShadowPoints<PointT, NormalT> >;
+    /** \brief Empty constructor. */
+    ShadowPoints (bool extract_removed_indices = false)
+        : FilterIndices<PointT> (extract_removed_indices), input_normals_ (),
+          threshold_ (0.1f)
+    {
+      filter_name_ = "ShadowPoints";
+    }
 
-      /** \brief Empty constructor. */
-      ShadowPoints (bool extract_removed_indices = false) : 
-        FilterIndices<PointT> (extract_removed_indices),
-        input_normals_ (), 
-        threshold_ (0.1f) 
-      {
-        filter_name_ = "ShadowPoints";
-      }
+    /** \brief Set the normals computed on the input point cloud
+     * \param[in] normals the normals computed for the input cloud
+     */
+    inline void
+    setNormals (const NormalsPtr &normals)
+    {
+      input_normals_ = normals;
+    }
 
-      /** \brief Set the normals computed on the input point cloud
-        * \param[in] normals the normals computed for the input cloud
-        */
-      inline void 
-      setNormals (const NormalsPtr &normals) { input_normals_ = normals; }
+    /** \brief Get the normals computed on the input point cloud */
+    inline NormalsPtr
+    getNormals () const
+    {
+      return (input_normals_);
+    }
 
-      /** \brief Get the normals computed on the input point cloud */
-      inline NormalsPtr
-      getNormals () const { return (input_normals_); }
+    /** \brief Set the threshold for shadow points rejection
+     * \param[in] threshold the threshold
+     */
+    inline void
+    setThreshold (float threshold)
+    {
+      threshold_ = threshold;
+    }
 
-      /** \brief Set the threshold for shadow points rejection
-        * \param[in] threshold the threshold
-        */
-      inline void
-      setThreshold (float threshold) { threshold_ = threshold; }
-
-      /** \brief Get the threshold for shadow points rejection */
-      inline float 
-      getThreshold () const { return threshold_; }
+    /** \brief Get the threshold for shadow points rejection */
+    inline float
+    getThreshold () const
+    {
+      return threshold_;
+    }
 
     protected:
-     
-      /** \brief The normals computed at each point in the input cloud */
-      NormalsPtr input_normals_; 
+    /** \brief The normals computed at each point in the input cloud */
+    NormalsPtr input_normals_;
 
-      /** \brief Sample of point indices into a separate PointCloud
-        * \param[out] output the resultant point cloud
-        */
-      void
-      applyFilter (PointCloud &output) override;
+    /** \brief Sample of point indices into a separate PointCloud
+     * \param[out] output the resultant point cloud
+     */
+    void
+    applyFilter (PointCloud &output) override;
 
-      /** \brief Sample of point indices
-        * \param[out] indices the resultant point cloud indices
-        */
-      void
-      applyFilter (std::vector<int> &indices) override;
+    /** \brief Sample of point indices
+     * \param[out] indices the resultant point cloud indices
+     */
+    void
+    applyFilter (std::vector<int> &indices) override;
 
     private:
-
-      /** \brief Threshold for shadow point rejection
-        */
-      float threshold_;
+    /** \brief Threshold for shadow point rejection
+     */
+    float threshold_;
   };
-}
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/filters/impl/shadowpoints.hpp>

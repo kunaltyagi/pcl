@@ -37,8 +37,8 @@
  *
  */
 
-#include <pcl/point_types.h>
 #include <pcl/impl/instantiate.hpp>
+#include <pcl/point_types.h>
 #include <pcl/segmentation/crf_normal_segmentation.h>
 #include <pcl/segmentation/impl/crf_normal_segmentation.hpp>
 

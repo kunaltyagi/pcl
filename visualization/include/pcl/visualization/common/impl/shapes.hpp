@@ -37,28 +37,30 @@
  */
 
 #pragma once
-#include <vtkSmartPointer.h>
 #include <vtkPoints.h>
 #include <vtkPolygon.h>
+#include <vtkSmartPointer.h>
 #include <vtkUnstructuredGrid.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> vtkSmartPointer<vtkDataSet> 
-pcl::visualization::createPolygon (const typename pcl::PointCloud<PointT>::ConstPtr &cloud)
+template <typename PointT>
+vtkSmartPointer<vtkDataSet>
+pcl::visualization::createPolygon (
+    const typename pcl::PointCloud<PointT>::ConstPtr &cloud)
 {
   vtkSmartPointer<vtkUnstructuredGrid> poly_grid;
   if (cloud->points.empty ())
     return (poly_grid);
 
   vtkSmartPointer<vtkPoints> poly_points = vtkSmartPointer<vtkPoints>::New ();
-  vtkSmartPointer<vtkPolygon> polygon    = vtkSmartPointer<vtkPolygon>::New ();
+  vtkSmartPointer<vtkPolygon> polygon = vtkSmartPointer<vtkPolygon>::New ();
 
   poly_points->SetNumberOfPoints (cloud->points.size ());
   polygon->GetPointIds ()->SetNumberOfIds (cloud->points.size ());
 
-  for (size_t i = 0; i < cloud->points.size (); ++i)
-  {
-    poly_points->SetPoint (i, cloud->points[i].x, cloud->points[i].y, cloud->points[i].z);
+  for (size_t i = 0; i < cloud->points.size (); ++i) {
+    poly_points->SetPoint (i, cloud->points[i].x, cloud->points[i].y,
+                           cloud->points[i].z);
     polygon->GetPointIds ()->SetId (i, i);
   }
 
@@ -71,7 +73,8 @@ pcl::visualization::createPolygon (const typename pcl::PointCloud<PointT>::Const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> vtkSmartPointer<vtkDataSet> 
+template <typename PointT>
+vtkSmartPointer<vtkDataSet>
 pcl::visualization::createPolygon (const pcl::PlanarPolygon<PointT> &planar_polygon)
 {
   vtkSmartPointer<vtkUnstructuredGrid> poly_grid;
@@ -79,26 +82,24 @@ pcl::visualization::createPolygon (const pcl::PlanarPolygon<PointT> &planar_poly
     return (poly_grid);
 
   vtkSmartPointer<vtkPoints> poly_points = vtkSmartPointer<vtkPoints>::New ();
-  vtkSmartPointer<vtkPolygon> polygon    = vtkSmartPointer<vtkPolygon>::New ();
+  vtkSmartPointer<vtkPolygon> polygon = vtkSmartPointer<vtkPolygon>::New ();
 
   poly_points->SetNumberOfPoints (planar_polygon.getContour ().size () + 1);
   polygon->GetPointIds ()->SetNumberOfIds (planar_polygon.getContour ().size () + 1);
 
-  for (size_t i = 0; i < planar_polygon.getContour ().size (); ++i)
-  {
-    poly_points->SetPoint (i, planar_polygon.getContour ()[i].x, 
-                              planar_polygon.getContour ()[i].y, 
-                              planar_polygon.getContour ()[i].z);
+  for (size_t i = 0; i < planar_polygon.getContour ().size (); ++i) {
+    poly_points->SetPoint (i, planar_polygon.getContour ()[i].x,
+                           planar_polygon.getContour ()[i].y,
+                           planar_polygon.getContour ()[i].z);
     polygon->GetPointIds ()->SetId (i, i);
   }
 
   size_t closingContourId = planar_polygon.getContour ().size ();
   auto firstContour = planar_polygon.getContour ()[0];
-  poly_points->SetPoint (closingContourId, firstContour.x, 
-                                           firstContour.y, 
-                                           firstContour.z);
+  poly_points->SetPoint (closingContourId, firstContour.x, firstContour.y,
+                         firstContour.z);
   polygon->GetPointIds ()->SetId (closingContourId, closingContourId);
-  
+
   allocVtkUnstructuredGrid (poly_grid);
   poly_grid->Allocate (1, 1);
   poly_grid->InsertNextCell (polygon->GetCellType (), polygon->GetPointIds ());
@@ -106,4 +107,3 @@ pcl::visualization::createPolygon (const pcl::PlanarPolygon<PointT> &planar_poly
 
   return (poly_grid);
 }
-

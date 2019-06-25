@@ -38,21 +38,21 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_cloud.h>
 #include <pcl/features/cppf.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
 
 using PointT = pcl::PointXYZRGBNormal;
 static pcl::PointCloud<PointT>::Ptr cloud (new pcl::PointCloud<PointT> ());
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TEST (PCL, CPPFEstimation)
 {
-  pcl::CPPFEstimation <PointT, PointT, pcl::CPPFSignature> cppf_estimation;
+  pcl::CPPFEstimation<PointT, PointT, pcl::CPPFSignature> cppf_estimation;
   cppf_estimation.setInputCloud (cloud);
   cppf_estimation.setInputNormals (cloud);
-  pcl::PointCloud<pcl::CPPFSignature>::Ptr feature_cloud (new pcl::PointCloud<pcl::CPPFSignature> ());
+  pcl::PointCloud<pcl::CPPFSignature>::Ptr feature_cloud (
+      new pcl::PointCloud<pcl::CPPFSignature> ());
   cppf_estimation.compute (*feature_cloud);
 
   // Check for size of output
@@ -86,17 +86,19 @@ TEST (PCL, CPPFEstimation)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `colored_cloud.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `colored_cloud.pcd` and pass its "
+                 "path to the test."
+              << std::endl;
     return (1);
   }
 
-  if (pcl::io::loadPCDFile<PointT> (argv[1], *cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `colored_cloud.pcd` and pass its path to the test." << std::endl;
+  if (pcl::io::loadPCDFile<PointT> (argv[1], *cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `colored_cloud.pcd` and "
+                 "pass its path to the test."
+              << std::endl;
     return (1);
   }
 

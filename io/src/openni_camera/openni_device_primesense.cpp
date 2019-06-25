@@ -42,21 +42,21 @@
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
 
+#include <pcl/io/boost.h>
 #include <pcl/io/openni_camera/openni_device_primesense.h>
 #include <pcl/io/openni_camera/openni_image_yuv_422.h>
-#include <pcl/io/boost.h>
 
 #include <iostream>
 #include <mutex>
 #include <sstream>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-openni_wrapper::DevicePrimesense::DevicePrimesense (
-    xn::Context& context, 
-    const xn::NodeInfo& device_node, 
-    const xn::NodeInfo& image_node, 
-    const xn::NodeInfo& depth_node, 
-    const xn::NodeInfo& ir_node) : OpenNIDevice (context, device_node, image_node, depth_node, ir_node)
+openni_wrapper::DevicePrimesense::DevicePrimesense (xn::Context &context,
+                                                    const xn::NodeInfo &device_node,
+                                                    const xn::NodeInfo &image_node,
+                                                    const xn::NodeInfo &depth_node,
+                                                    const xn::NodeInfo &ir_node)
+    : OpenNIDevice (context, device_node, image_node, depth_node, ir_node)
 {
   // setup stream modes
   enumAvailableModes ();
@@ -67,18 +67,22 @@ openni_wrapper::DevicePrimesense::DevicePrimesense (
   std::unique_lock<std::mutex> image_lock (image_mutex_);
   XnStatus status = image_generator_.SetIntProperty ("InputFormat", 5);
   if (status != XN_STATUS_OK)
-    THROW_OPENNI_EXCEPTION ("Error setting the image input format to Uncompressed YUV422. Reason: %s", xnGetStatusString (status));
+    THROW_OPENNI_EXCEPTION (
+        "Error setting the image input format to Uncompressed YUV422. Reason: %s",
+        xnGetStatusString (status));
 
   status = image_generator_.SetPixelFormat (XN_PIXEL_FORMAT_YUV422);
   if (status != XN_STATUS_OK)
-    THROW_OPENNI_EXCEPTION ("Failed to set image pixel format to YUV422. Reason: %s", xnGetStatusString (status));
+    THROW_OPENNI_EXCEPTION ("Failed to set image pixel format to YUV422. Reason: %s",
+                            xnGetStatusString (status));
 
   image_lock.unlock ();
 
   std::lock_guard<std::mutex> depth_lock (depth_mutex_);
   status = depth_generator_.SetIntProperty ("RegistrationType", 1);
   if (status != XN_STATUS_OK)
-    THROW_OPENNI_EXCEPTION ("Error setting the registration type. Reason: %s", xnGetStatusString (status));
+    THROW_OPENNI_EXCEPTION ("Error setting the registration type. Reason: %s",
+                            xnGetStatusString (status));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,18 +101,19 @@ openni_wrapper::DevicePrimesense::~DevicePrimesense () throw ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool 
-openni_wrapper::DevicePrimesense::isImageResizeSupported (
-    unsigned input_width, 
-    unsigned input_height, 
-    unsigned output_width, 
-    unsigned output_height) const throw ()
+bool
+openni_wrapper::DevicePrimesense::isImageResizeSupported (unsigned input_width,
+                                                          unsigned input_height,
+                                                          unsigned output_width,
+                                                          unsigned output_height) const
+    throw ()
 {
-  return (ImageYUV422::resizingSupported (input_width, input_height, output_width, output_height));
+  return (ImageYUV422::resizingSupported (input_width, input_height, output_width,
+                                          output_height));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void 
+void
 openni_wrapper::DevicePrimesense::enumAvailableModes () throw ()
 {
   XnMapOutputMode output_mode;
@@ -169,30 +174,30 @@ openni_wrapper::DevicePrimesense::enumAvailableModes () throw ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-boost::shared_ptr<openni_wrapper::Image> 
-openni_wrapper::DevicePrimesense::getCurrentImage (boost::shared_ptr<xn::ImageMetaData> image_data) const throw ()
+boost::shared_ptr<openni_wrapper::Image>
+openni_wrapper::DevicePrimesense::getCurrentImage (
+    boost::shared_ptr<xn::ImageMetaData> image_data) const throw ()
 {
   return (boost::shared_ptr<openni_wrapper::Image> (new ImageYUV422 (image_data)));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void 
+void
 openni_wrapper::DevicePrimesense::startImageStream ()
 {
-  // Suat: Ugly workaround... but on some usb-ports its not possible to start the image stream after the depth stream.
-  // turning on and off registration solves for some reason the problem!
+  // Suat: Ugly workaround... but on some usb-ports its not possible to start the image
+  // stream after the depth stream. turning on and off registration solves for some
+  // reason the problem!
 
-  if (isDepthStreamRunning ())
-  {
-    if (isDepthRegistered ())
-    {
-     // Reset the view point
+  if (isDepthStreamRunning ()) {
+    if (isDepthRegistered ()) {
+      // Reset the view point
       setDepthRegistration (false);
 
       // Reset the view point
       setDepthRegistration (true);
 
-     // Reset the view point
+      // Reset the view point
       setDepthRegistration (false);
 
       // Start the stream
@@ -200,9 +205,7 @@ openni_wrapper::DevicePrimesense::startImageStream ()
 
       // Register the stream
       setDepthRegistration (true);
-    }
-    else
-    {
+    } else {
       // Reset the view point
       setDepthRegistration (true);
       // Reset the view point
@@ -211,18 +214,16 @@ openni_wrapper::DevicePrimesense::startImageStream ()
       // Start the stream
       OpenNIDevice::startImageStream ();
     }
-  }
-  else
+  } else
     // Start the stream
     OpenNIDevice::startImageStream ();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void 
+void
 openni_wrapper::DevicePrimesense::startDepthStream ()
 {
-  if (isDepthRegistered ())
-  {
+  if (isDepthRegistered ()) {
     // Reset the view point
     setDepthRegistration (false);
 
@@ -231,8 +232,7 @@ openni_wrapper::DevicePrimesense::startDepthStream ()
 
     // Register the stream
     setDepthRegistration (true);
-  }
-  else
+  } else
     // Start the stream
     OpenNIDevice::startDepthStream ();
 }

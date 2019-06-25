@@ -12,22 +12,15 @@
 
 class Geometry : public Object
 {
-protected:
-
+  protected:
   // Operators
   // -----------------------------------------------------------------------------
-  Geometry (std::string name) :
-      Object (name)
-  {
-  }
+  Geometry (std::string name) : Object (name) {}
 
-public:
+  public:
+  ~Geometry () {}
 
-  
-  ~Geometry () { }
-
-public:
-
+  public:
   // Accessors
   // -----------------------------------------------------------------------------
   virtual vtkSmartPointer<vtkActor>
@@ -36,5 +29,4 @@ public:
     std::cout << "Get Geometry Actor" << std::endl;
     return nullptr;
   }
-
 };

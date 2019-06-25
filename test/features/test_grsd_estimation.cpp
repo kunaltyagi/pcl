@@ -39,10 +39,10 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_cloud.h>
 #include <pcl/features/grsd.h>
 #include <pcl/features/normal_3d.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -68,7 +68,7 @@ TEST (PCL, GRSDEstimation)
   EXPECT_NEAR (normals->points[103].normal_x, 0.694, 0.1);
   EXPECT_NEAR (normals->points[103].normal_y, -0.562, 0.1);
   EXPECT_NEAR (normals->points[103].normal_z, -0.448, 0.1);
-  
+
   // GRSDEstimation
   double rsd_radius = 0.03;
   GRSDEstimation<PointXYZ, Normal, GRSDSignature21> grsd;
@@ -78,7 +78,7 @@ TEST (PCL, GRSDEstimation)
   grsd.setSearchMethod (tree);
   grsd.setRadiusSearch (rsd_radius);
   grsd.compute (*grsd_desc);
-  
+
   EXPECT_EQ (12, grsd_desc->points[0].histogram[2]);
   EXPECT_EQ (104, grsd_desc->points[0].histogram[4]);
   EXPECT_EQ (0, grsd_desc->points[0].histogram[6]);
@@ -89,25 +89,26 @@ TEST (PCL, GRSDEstimation)
   EXPECT_EQ (68, grsd_desc->points[0].histogram[16]);
   EXPECT_EQ (204, grsd_desc->points[0].histogram[18]);
   EXPECT_EQ (0, grsd_desc->points[0].histogram[20]);
-  
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
-  if (loadPCDFile<PointXYZ> (argv[1], *cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (loadPCDFile<PointXYZ> (argv[1], *cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
-  
+
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());
 }

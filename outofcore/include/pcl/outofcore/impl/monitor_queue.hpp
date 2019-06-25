@@ -1,4 +1,4 @@
-//http://www.paulbridger.com/monitor_object/#ixzz2CeN1rr4P
+// http://www.paulbridger.com/monitor_object/#ixzz2CeN1rr4P
 
 #ifndef PCL_OUTOFCORE_MONITOR_QUEUE_IMPL_H_
 #define PCL_OUTOFCORE_MONITOR_QUEUE_IMPL_H_
@@ -7,12 +7,12 @@
 #include <mutex>
 #include <queue>
 
-template<typename DataT>
+template <typename DataT>
 class MonitorQueue : boost::noncopyable
 {
-public:
+  public:
   void
-  push (const DataT& newData)
+  push (const DataT &newData)
   {
     std::lock_guard<std::mutex> lock (monitor_mutex_);
     queue_.push (newData);
@@ -24,8 +24,7 @@ public:
   {
     std::unique_lock<std::mutex> lock (monitor_mutex_);
 
-    if (queue_.empty ())
-    {
+    if (queue_.empty ()) {
       item_available_.wait (lock);
     }
 
@@ -35,10 +34,10 @@ public:
     return temp;
   }
 
-private:
+  private:
   std::queue<DataT> queue_;
   std::mutex monitor_mutex_;
   std::condition_variable item_available_;
 };
 
-#endif //PCL_OUTOFCORE_MONITOR_QUEUE_IMPL_H_
+#endif // PCL_OUTOFCORE_MONITOR_QUEUE_IMPL_H_

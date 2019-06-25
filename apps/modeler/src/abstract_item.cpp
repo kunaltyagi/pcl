@@ -39,46 +39,40 @@
 #include <pcl/apps/modeler/main_window.h>
 #include <pcl/apps/modeler/parameter_dialog.h>
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+pcl::modeler::AbstractItem::AbstractItem () {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::modeler::AbstractItem::AbstractItem()
-{
-
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-pcl::modeler::AbstractItem::~AbstractItem()
-{
-
-}
+pcl::modeler::AbstractItem::~AbstractItem () {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::AbstractItem::showContextMenu(const QPoint* position)
+pcl::modeler::AbstractItem::showContextMenu (const QPoint *position)
 {
-  QMenu menu(&MainWindow::getInstance());
-  prepareContextMenu(&menu);
-  menu.exec(*position);
+  QMenu menu (&MainWindow::getInstance ());
+  prepareContextMenu (&menu);
+  menu.exec (*position);
 
   return;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-Ui::MainWindow*
-pcl::modeler::AbstractItem::ui() const
+Ui::MainWindow *
+pcl::modeler::AbstractItem::ui () const
 {
-  return MainWindow::getInstance().ui_;
+  return MainWindow::getInstance ().ui_;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::AbstractItem::showPropertyEditor()
+pcl::modeler::AbstractItem::showPropertyEditor ()
 {
-  ParameterDialog* parameter_dialog = new ParameterDialog(getItemName() + " Properties", &MainWindow::getInstance());
-  prepareProperties(parameter_dialog);
+  ParameterDialog *parameter_dialog =
+      new ParameterDialog (getItemName () + " Properties", &MainWindow::getInstance ());
+  prepareProperties (parameter_dialog);
 
-  if (parameter_dialog->exec() == QDialog::Accepted)
-    setProperties();
+  if (parameter_dialog->exec () == QDialog::Accepted)
+    setProperties ();
 
-  parameter_dialog->deleteLater();
+  parameter_dialog->deleteLater ();
 }

@@ -39,12 +39,12 @@
 
 #include <gtest/gtest.h>
 
-#include <pcl/point_types.h>
+#include <pcl/common/common.h>
+#include <pcl/features/normal_3d.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/vtk_io.h>
-#include <pcl/features/normal_3d.h>
+#include <pcl/point_types.h>
 #include <pcl/surface/organized_fast_mesh.h>
-#include <pcl/common/common.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -64,28 +64,29 @@ search::KdTree<PointNormal>::Ptr tree4;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TEST (PCL, Organized)
 {
-  //construct dataset
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_organized (new pcl::PointCloud<pcl::PointXYZ> ());
+  // construct dataset
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_organized (
+      new pcl::PointCloud<pcl::PointXYZ> ());
   cloud_organized->width = 5;
   cloud_organized->height = 10;
   cloud_organized->points.resize (cloud_organized->width * cloud_organized->height);
 
   int npoints = 0;
-  for (size_t i = 0; i < cloud_organized->height; i++)
-  {
-    for (size_t j = 0; j < cloud_organized->width; j++)
-    {
+  for (size_t i = 0; i < cloud_organized->height; i++) {
+    for (size_t j = 0; j < cloud_organized->width; j++) {
       cloud_organized->points[npoints].x = static_cast<float> (i);
       cloud_organized->points[npoints].y = static_cast<float> (j);
-      cloud_organized->points[npoints].z = static_cast<float> (cloud_organized->points.size ()); // to avoid shadowing
+      cloud_organized->points[npoints].z =
+          static_cast<float> (cloud_organized->points.size ()); // to avoid shadowing
       npoints++;
     }
   }
-  int nan_idx = cloud_organized->width*cloud_organized->height - 2*cloud_organized->width + 1;
+  int nan_idx =
+      cloud_organized->width * cloud_organized->height - 2 * cloud_organized->width + 1;
   cloud_organized->points[nan_idx].x = numeric_limits<float>::quiet_NaN ();
   cloud_organized->points[nan_idx].y = numeric_limits<float>::quiet_NaN ();
   cloud_organized->points[nan_idx].z = numeric_limits<float>::quiet_NaN ();
-  
+
   // Init objects
   PolygonMesh triangles;
   OrganizedFastMesh<PointXYZ> ofm;
@@ -98,25 +99,27 @@ TEST (PCL, Organized)
 
   // Reconstruct
   ofm.reconstruct (triangles);
-  //saveVTKFile ("./test/organized.vtk", triangles);
+  // saveVTKFile ("./test/organized.vtk", triangles);
 
   // Check triangles
   EXPECT_EQ (triangles.cloud.width, cloud_organized->width);
   EXPECT_EQ (triangles.cloud.height, cloud_organized->height);
-  EXPECT_EQ (int (triangles.polygons.size ()), 2*(triangles.cloud.width-1)*(triangles.cloud.height-1) - 4);
-  EXPECT_EQ (int (triangles.polygons.at (0).vertices.size ()), 3);
-  EXPECT_EQ (int (triangles.polygons.at (0).vertices.at (0)), 0);
-  EXPECT_EQ (int (triangles.polygons.at (0).vertices.at (1)), triangles.cloud.width+1);
-  EXPECT_EQ (int (triangles.polygons.at (0).vertices.at (2)), 1);
+  EXPECT_EQ (int(triangles.polygons.size ()),
+             2 * (triangles.cloud.width - 1) * (triangles.cloud.height - 1) - 4);
+  EXPECT_EQ (int(triangles.polygons.at (0).vertices.size ()), 3);
+  EXPECT_EQ (int(triangles.polygons.at (0).vertices.at (0)), 0);
+  EXPECT_EQ (int(triangles.polygons.at (0).vertices.at (1)), triangles.cloud.width + 1);
+  EXPECT_EQ (int(triangles.polygons.at (0).vertices.at (2)), 1);
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
@@ -133,24 +136,24 @@ main (int argc, char** argv)
   NormalEstimation<PointXYZ, Normal> n;
   PointCloud<Normal>::Ptr normals (new PointCloud<Normal> ());
   n.setInputCloud (cloud);
-  //n.setIndices (indices[B);
+  // n.setIndices (indices[B);
   n.setSearchMethod (tree);
   n.setKSearch (20);
   n.compute (*normals);
 
   // Concatenate XYZ and normal information
   pcl::concatenateFields (*cloud, *normals, *cloud_with_normals);
-      
+
   // Create search tree
   tree2.reset (new search::KdTree<PointNormal>);
   tree2->setInputCloud (cloud_with_normals);
 
   // Process for update cloud
-  if(argc == 3){
+  if (argc == 3) {
     pcl::PCLPointCloud2 cloud_blob1;
     loadPCDFile (argv[2], cloud_blob1);
     fromPCLPointCloud2 (cloud_blob1, *cloud1);
-        // Create search tree
+    // Create search tree
     tree3.reset (new search::KdTree<PointXYZ> (false));
     tree3->setInputCloud (cloud1);
 

@@ -41,19 +41,18 @@
 #ifndef PCL_SAMPLE_CONSENSUS_IMPL_SAC_MODEL_STICK_H_
 #define PCL_SAMPLE_CONSENSUS_IMPL_SAC_MODEL_STICK_H_
 
-#include <pcl/sample_consensus/sac_model_stick.h>
 #include <pcl/common/centroid.h>
 #include <pcl/common/concatenate.h>
+#include <pcl/sample_consensus/sac_model_stick.h>
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
-pcl::SampleConsensusModelStick<PointT>::isSampleGood (const std::vector<int> &samples) const
+template <typename PointT>
+bool
+pcl::SampleConsensusModelStick<PointT>::isSampleGood (
+    const std::vector<int> &samples) const
 {
-  if (
-      (input_->points[samples[0]].x != input_->points[samples[1]].x)
-    &&
-      (input_->points[samples[0]].y != input_->points[samples[1]].y)
-    &&
+  if ((input_->points[samples[0]].x != input_->points[samples[1]].x) &&
+      (input_->points[samples[0]].y != input_->points[samples[1]].y) &&
       (input_->points[samples[0]].z != input_->points[samples[1]].z))
     return (true);
 
@@ -61,14 +60,16 @@ pcl::SampleConsensusModelStick<PointT>::isSampleGood (const std::vector<int> &sa
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
+template <typename PointT>
+bool
 pcl::SampleConsensusModelStick<PointT>::computeModelCoefficients (
-      const std::vector<int> &samples, Eigen::VectorXf &model_coefficients) const
+    const std::vector<int> &samples, Eigen::VectorXf &model_coefficients) const
 {
   // Need 2 samples
-  if (samples.size () != 2)
-  {
-    PCL_ERROR ("[pcl::SampleConsensusModelStick::computeModelCoefficients] Invalid set of samples given (%lu)!\n", samples.size ());
+  if (samples.size () != 2) {
+    PCL_ERROR ("[pcl::SampleConsensusModelStick::computeModelCoefficients] Invalid set "
+               "of samples given (%lu)!\n",
+               samples.size ());
     return (false);
   }
 
@@ -81,20 +82,21 @@ pcl::SampleConsensusModelStick<PointT>::computeModelCoefficients (
   model_coefficients[4] = input_->points[samples[1]].y;
   model_coefficients[5] = input_->points[samples[1]].z;
 
-//  model_coefficients[3] = input_->points[samples[1]].x - model_coefficients[0];
-//  model_coefficients[4] = input_->points[samples[1]].y - model_coefficients[1];
-//  model_coefficients[5] = input_->points[samples[1]].z - model_coefficients[2];
+  //  model_coefficients[3] = input_->points[samples[1]].x - model_coefficients[0];
+  //  model_coefficients[4] = input_->points[samples[1]].y - model_coefficients[1];
+  //  model_coefficients[5] = input_->points[samples[1]].z - model_coefficients[2];
 
-//  model_coefficients.template segment<3> (3).normalize ();
+  //  model_coefficients.template segment<3> (3).normalize ();
   // We don't care about model_coefficients[6] which is the width (radius) of the stick
 
   return (true);
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::SampleConsensusModelStick<PointT>::getDistancesToModel (
-      const Eigen::VectorXf &model_coefficients, std::vector<double> &distances) const
+    const Eigen::VectorXf &model_coefficients, std::vector<double> &distances) const
 {
   // Needs a valid set of model coefficients
   if (!isModelValid (model_coefficients))
@@ -104,16 +106,19 @@ pcl::SampleConsensusModelStick<PointT>::getDistancesToModel (
   distances.resize (indices_->size ());
 
   // Obtain the line point and direction
-  Eigen::Vector4f line_pt  (model_coefficients[0], model_coefficients[1], model_coefficients[2], 0);
-  Eigen::Vector4f line_dir (model_coefficients[3], model_coefficients[4], model_coefficients[5], 0);
+  Eigen::Vector4f line_pt (model_coefficients[0], model_coefficients[1],
+                           model_coefficients[2], 0);
+  Eigen::Vector4f line_dir (model_coefficients[3], model_coefficients[4],
+                            model_coefficients[5], 0);
   line_dir.normalize ();
 
   // Iterate through the 3d points and calculate the distances from them to the line
-  for (size_t i = 0; i < indices_->size (); ++i)
-  {
+  for (size_t i = 0; i < indices_->size (); ++i) {
     // Calculate the distance from the point to the line
     // D = ||(P2-P1) x (P1-P0)|| / ||P2-P1|| = norm (cross (p2-p1, p2-p0)) / norm(p2-p1)
-    float sqr_distance = (line_pt - input_->points[(*indices_)[i]].getVector4fMap ()).cross3 (line_dir).squaredNorm ();
+    float sqr_distance = (line_pt - input_->points[(*indices_)[i]].getVector4fMap ())
+                             .cross3 (line_dir)
+                             .squaredNorm ();
 
     if (sqr_distance < sqr_threshold)
       // Need to estimate sqrt here to keep MSAC and friends general
@@ -125,9 +130,11 @@ pcl::SampleConsensusModelStick<PointT>::getDistancesToModel (
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::SampleConsensusModelStick<PointT>::selectWithinDistance (
-      const Eigen::VectorXf &model_coefficients, const double threshold, std::vector<int> &inliers)
+    const Eigen::VectorXf &model_coefficients, const double threshold,
+    std::vector<int> &inliers)
 {
   // Needs a valid set of model coefficients
   if (!isModelValid (model_coefficients))
@@ -140,30 +147,33 @@ pcl::SampleConsensusModelStick<PointT>::selectWithinDistance (
   error_sqr_dists_.resize (indices_->size ());
 
   // Obtain the line point and direction
-  Eigen::Vector4f line_pt1 (model_coefficients[0], model_coefficients[1], model_coefficients[2], 0);
-  Eigen::Vector4f line_pt2 (model_coefficients[3], model_coefficients[4], model_coefficients[5], 0);
+  Eigen::Vector4f line_pt1 (model_coefficients[0], model_coefficients[1],
+                            model_coefficients[2], 0);
+  Eigen::Vector4f line_pt2 (model_coefficients[3], model_coefficients[4],
+                            model_coefficients[5], 0);
   Eigen::Vector4f line_dir = line_pt2 - line_pt1;
-  //Eigen::Vector4f line_dir (model_coefficients[3], model_coefficients[4], model_coefficients[5], 0);
-  //Eigen::Vector4f line_dir (model_coefficients[3] - model_coefficients[0], model_coefficients[4] - model_coefficients[1], model_coefficients[5] - model_coefficients[2], 0);
+  // Eigen::Vector4f line_dir (model_coefficients[3], model_coefficients[4],
+  // model_coefficients[5], 0); Eigen::Vector4f line_dir (model_coefficients[3] -
+  // model_coefficients[0], model_coefficients[4] - model_coefficients[1],
+  // model_coefficients[5] - model_coefficients[2], 0);
   line_dir.normalize ();
-  //float norm = line_dir.squaredNorm ();
+  // float norm = line_dir.squaredNorm ();
 
   // Iterate through the 3d points and calculate the distances from them to the line
-  for (size_t i = 0; i < indices_->size (); ++i)
-  {
+  for (size_t i = 0; i < indices_->size (); ++i) {
     // Calculate the distance from the point to the line
     // D = ||(P2-P1) x (P1-P0)|| / ||P2-P1|| = norm (cross (p2-p1, p2-p0)) / norm(p2-p1)
     Eigen::Vector4f dir = input_->points[(*indices_)[i]].getVector4fMap () - line_pt1;
-    //float u = dir.dot (line_dir);
+    // float u = dir.dot (line_dir);
 
     // If the point falls outside of the segment, ignore it
-    //if (u < 0.0f || u > 1.0f)
+    // if (u < 0.0f || u > 1.0f)
     //  continue;
 
     float sqr_distance = dir.cross3 (line_dir).squaredNorm ();
-    if (sqr_distance < sqr_threshold)
-    {
-      // Returns the indices of the points whose squared distances are smaller than the threshold
+    if (sqr_distance < sqr_threshold) {
+      // Returns the indices of the points whose squared distances are smaller than the
+      // threshold
       inliers[nr_p] = (*indices_)[i];
       error_sqr_dists_[nr_p] = static_cast<double> (sqr_distance);
       ++nr_p;
@@ -174,9 +184,10 @@ pcl::SampleConsensusModelStick<PointT>::selectWithinDistance (
 }
 
 ///////////////////////////////////////////////////////////////////////////
-template <typename PointT> int
+template <typename PointT>
+int
 pcl::SampleConsensusModelStick<PointT>::countWithinDistance (
-      const Eigen::VectorXf &model_coefficients, const double threshold) const
+    const Eigen::VectorXf &model_coefficients, const double threshold) const
 {
   // Needs a valid set of model coefficients
   if (!isModelValid (model_coefficients))
@@ -187,24 +198,27 @@ pcl::SampleConsensusModelStick<PointT>::countWithinDistance (
   int nr_i = 0, nr_o = 0;
 
   // Obtain the line point and direction
-  Eigen::Vector4f line_pt1 (model_coefficients[0], model_coefficients[1], model_coefficients[2], 0);
-  Eigen::Vector4f line_pt2 (model_coefficients[3], model_coefficients[4], model_coefficients[5], 0);
+  Eigen::Vector4f line_pt1 (model_coefficients[0], model_coefficients[1],
+                            model_coefficients[2], 0);
+  Eigen::Vector4f line_pt2 (model_coefficients[3], model_coefficients[4],
+                            model_coefficients[5], 0);
   Eigen::Vector4f line_dir = line_pt2 - line_pt1;
   line_dir.normalize ();
 
-  //Eigen::Vector4f line_dir (model_coefficients[3] - model_coefficients[0], model_coefficients[4] - model_coefficients[1], model_coefficients[5] - model_coefficients[2], 0);
-  //Eigen::Vector4f line_dir (model_coefficients[3], model_coefficients[4], model_coefficients[5], 0);
+  // Eigen::Vector4f line_dir (model_coefficients[3] - model_coefficients[0],
+  // model_coefficients[4] - model_coefficients[1], model_coefficients[5] -
+  // model_coefficients[2], 0); Eigen::Vector4f line_dir (model_coefficients[3],
+  // model_coefficients[4], model_coefficients[5], 0);
 
   // Iterate through the 3d points and calculate the distances from them to the line
-  for (size_t i = 0; i < indices_->size (); ++i)
-  {
+  for (size_t i = 0; i < indices_->size (); ++i) {
     // Calculate the distance from the point to the line
     // D = ||(P2-P1) x (P1-P0)|| / ||P2-P1|| = norm (cross (p2-p1, p2-p0)) / norm(p2-p1)
     Eigen::Vector4f dir = input_->points[(*indices_)[i]].getVector4fMap () - line_pt1;
-    //float u = dir.dot (line_dir);
+    // float u = dir.dot (line_dir);
 
     // If the point falls outside of the segment, ignore it
-    //if (u < 0.0f || u > 1.0f)
+    // if (u < 0.0f || u > 1.0f)
     //  continue;
 
     float sqr_distance = dir.cross3 (line_dir).squaredNorm ();
@@ -219,21 +233,24 @@ pcl::SampleConsensusModelStick<PointT>::countWithinDistance (
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::SampleConsensusModelStick<PointT>::optimizeModelCoefficients (
-      const std::vector<int> &inliers, const Eigen::VectorXf &model_coefficients, Eigen::VectorXf &optimized_coefficients) const
+    const std::vector<int> &inliers, const Eigen::VectorXf &model_coefficients,
+    Eigen::VectorXf &optimized_coefficients) const
 {
   // Needs a valid set of model coefficients
-  if (!isModelValid (model_coefficients))
-  {
+  if (!isModelValid (model_coefficients)) {
     optimized_coefficients = model_coefficients;
     return;
   }
 
   // Need at least 2 points to estimate a line
-  if (inliers.size () <= 2)
-  {
-    PCL_ERROR ("[pcl::SampleConsensusModelStick::optimizeModelCoefficients] Not enough inliers found to support a model (%lu)! Returning the same coefficients.\n", inliers.size ());
+  if (inliers.size () <= 2) {
+    PCL_ERROR (
+        "[pcl::SampleConsensusModelStick::optimizeModelCoefficients] Not enough "
+        "inliers found to support a model (%lu)! Returning the same coefficients.\n",
+        inliers.size ());
     optimized_coefficients = model_coefficients;
     return;
   }
@@ -254,45 +271,50 @@ pcl::SampleConsensusModelStick<PointT>::optimizeModelCoefficients (
   Eigen::Vector3f eigen_values;
   Eigen::Vector3f eigen_vector;
   pcl::eigen33 (covariance_matrix, eigen_values);
-  pcl::computeCorrespondingEigenVector (covariance_matrix, eigen_values [2], eigen_vector);
+  pcl::computeCorrespondingEigenVector (covariance_matrix, eigen_values[2],
+                                        eigen_vector);
 
   optimized_coefficients.template segment<3> (3).matrix () = eigen_vector;
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::SampleConsensusModelStick<PointT>::projectPoints (
-      const std::vector<int> &inliers, const Eigen::VectorXf &model_coefficients, PointCloud &projected_points, bool copy_data_fields) const
+    const std::vector<int> &inliers, const Eigen::VectorXf &model_coefficients,
+    PointCloud &projected_points, bool copy_data_fields) const
 {
   // Needs a valid model coefficients
   if (!isModelValid (model_coefficients))
     return;
 
   // Obtain the line point and direction
-  Eigen::Vector4f line_pt  (model_coefficients[0], model_coefficients[1], model_coefficients[2], 0);
-  Eigen::Vector4f line_dir (model_coefficients[3], model_coefficients[4], model_coefficients[5], 0);
+  Eigen::Vector4f line_pt (model_coefficients[0], model_coefficients[1],
+                           model_coefficients[2], 0);
+  Eigen::Vector4f line_dir (model_coefficients[3], model_coefficients[4],
+                            model_coefficients[5], 0);
 
   projected_points.header = input_->header;
   projected_points.is_dense = input_->is_dense;
 
   // Copy all the data fields from the input cloud to the projected one?
-  if (copy_data_fields)
-  {
+  if (copy_data_fields) {
     // Allocate enough space and copy the basics
     projected_points.points.resize (input_->points.size ());
-    projected_points.width    = input_->width;
-    projected_points.height   = input_->height;
+    projected_points.width = input_->width;
+    projected_points.height = input_->height;
 
     using FieldList = typename pcl::traits::fieldList<PointT>::type;
     // Iterate over each point
     for (size_t i = 0; i < projected_points.points.size (); ++i)
       // Iterate over each dimension
-      pcl::for_each_type <FieldList> (NdConcatenateFunctor <PointT, PointT> (input_->points[i], projected_points.points[i]));
+      pcl::for_each_type<FieldList> (NdConcatenateFunctor<PointT, PointT> (
+          input_->points[i], projected_points.points[i]));
 
     // Iterate through the 3d points and calculate the distances from them to the line
-    for (const int &inlier : inliers)
-    {
-      Eigen::Vector4f pt (input_->points[inlier].x, input_->points[inlier].y, input_->points[inlier].z, 0);
+    for (const int &inlier : inliers) {
+      Eigen::Vector4f pt (input_->points[inlier].x, input_->points[inlier].y,
+                          input_->points[inlier].z, 0);
       // double k = (DOT_PROD_3D (points[i], p21) - dotA_B) / dotB_B;
       float k = (pt.dot (line_dir) - line_pt.dot (line_dir)) / line_dir.dot (line_dir);
 
@@ -302,24 +324,23 @@ pcl::SampleConsensusModelStick<PointT>::projectPoints (
       projected_points.points[inlier].y = pp[1];
       projected_points.points[inlier].z = pp[2];
     }
-  }
-  else
-  {
+  } else {
     // Allocate enough space and copy the basics
     projected_points.points.resize (inliers.size ());
-    projected_points.width    = static_cast<uint32_t> (inliers.size ());
-    projected_points.height   = 1;
+    projected_points.width = static_cast<uint32_t> (inliers.size ());
+    projected_points.height = 1;
 
     using FieldList = typename pcl::traits::fieldList<PointT>::type;
     // Iterate over each point
     for (size_t i = 0; i < inliers.size (); ++i)
       // Iterate over each dimension
-      pcl::for_each_type <FieldList> (NdConcatenateFunctor <PointT, PointT> (input_->points[inliers[i]], projected_points.points[i]));
+      pcl::for_each_type<FieldList> (NdConcatenateFunctor<PointT, PointT> (
+          input_->points[inliers[i]], projected_points.points[i]));
 
     // Iterate through the 3d points and calculate the distances from them to the line
-    for (size_t i = 0; i < inliers.size (); ++i)
-    {
-      Eigen::Vector4f pt (input_->points[inliers[i]].x, input_->points[inliers[i]].y, input_->points[inliers[i]].z, 0);
+    for (size_t i = 0; i < inliers.size (); ++i) {
+      Eigen::Vector4f pt (input_->points[inliers[i]].x, input_->points[inliers[i]].y,
+                          input_->points[inliers[i]].z, 0);
       // double k = (DOT_PROD_3D (points[i], p21) - dotA_B) / dotB_B;
       float k = (pt.dot (line_dir) - line_pt.dot (line_dir)) / line_dir.dot (line_dir);
 
@@ -333,34 +354,41 @@ pcl::SampleConsensusModelStick<PointT>::projectPoints (
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
+template <typename PointT>
+bool
 pcl::SampleConsensusModelStick<PointT>::doSamplesVerifyModel (
-      const std::set<int> &indices, const Eigen::VectorXf &model_coefficients, const double threshold) const
+    const std::set<int> &indices, const Eigen::VectorXf &model_coefficients,
+    const double threshold) const
 {
   // Needs a valid set of model coefficients
   if (!isModelValid (model_coefficients))
     return (false);
 
   // Obtain the line point and direction
-  Eigen::Vector4f line_pt  (model_coefficients[0], model_coefficients[1], model_coefficients[2], 0);
-  Eigen::Vector4f line_dir (model_coefficients[3] - model_coefficients[0], model_coefficients[4] - model_coefficients[1], model_coefficients[5] - model_coefficients[2], 0);
-  //Eigen::Vector4f line_dir (model_coefficients[3], model_coefficients[4], model_coefficients[5], 0);
+  Eigen::Vector4f line_pt (model_coefficients[0], model_coefficients[1],
+                           model_coefficients[2], 0);
+  Eigen::Vector4f line_dir (model_coefficients[3] - model_coefficients[0],
+                            model_coefficients[4] - model_coefficients[1],
+                            model_coefficients[5] - model_coefficients[2], 0);
+  // Eigen::Vector4f line_dir (model_coefficients[3], model_coefficients[4],
+  // model_coefficients[5], 0);
   line_dir.normalize ();
 
   float sqr_threshold = static_cast<float> (threshold * threshold);
   // Iterate through the 3d points and calculate the distances from them to the line
-  for (const int &index : indices)
-  {
+  for (const int &index : indices) {
     // Calculate the distance from the point to the line
     // D = ||(P2-P1) x (P1-P0)|| / ||P2-P1|| = norm (cross (p2-p1, p2-p0)) / norm(p2-p1)
-    if ((line_pt - input_->points[index].getVector4fMap ()).cross3 (line_dir).squaredNorm () > sqr_threshold)
+    if ((line_pt - input_->points[index].getVector4fMap ())
+            .cross3 (line_dir)
+            .squaredNorm () > sqr_threshold)
       return (false);
   }
 
   return (true);
 }
 
-#define PCL_INSTANTIATE_SampleConsensusModelStick(T) template class PCL_EXPORTS pcl::SampleConsensusModelStick<T>;
+#define PCL_INSTANTIATE_SampleConsensusModelStick(T)                                   \
+  template class PCL_EXPORTS pcl::SampleConsensusModelStick<T>;
 
-#endif    // PCL_SAMPLE_CONSENSUS_IMPL_SAC_MODEL_STICK_H_
-
+#endif // PCL_SAMPLE_CONSENSUS_IMPL_SAC_MODEL_STICK_H_

@@ -46,13 +46,16 @@
 
 using namespace pcl;
 
-void example_edge ()
+void
+example_edge ()
 {
   Edge<pcl::PointXYZRGB> edge;
 
   /*dummy clouds*/
-  pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
-  pcl::PointCloud<pcl::PointXYZRGB>::Ptr output_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud (
+      new pcl::PointCloud<pcl::PointXYZRGB>);
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr output_cloud (
+      new pcl::PointCloud<pcl::PointXYZRGB>);
 
   /*example 1*/
   edge.output_type_ = Edge<pcl::PointXYZRGB>::OUTPUT_X_Y;
@@ -77,15 +80,19 @@ void example_edge ()
   edge.detectEdge (*output_cloud, *input_cloud);
 }
 
-void example_convolution ()
+void
+example_convolution ()
 {
   Kernel<pcl::PointXYZRGB> kernel;
   Convolution<pcl::PointXYZRGB> convolution;
 
   /*dummy clouds*/
-  pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
-  pcl::PointCloud<pcl::PointXYZRGB>::Ptr kernel_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
-  pcl::PointCloud<pcl::PointXYZRGB>::Ptr output_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud (
+      new pcl::PointCloud<pcl::PointXYZRGB>);
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr kernel_cloud (
+      new pcl::PointCloud<pcl::PointXYZRGB>);
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr output_cloud (
+      new pcl::PointCloud<pcl::PointXYZRGB>);
 
   /*example 1 : Gaussian Smoothing*/
   kernel.sigma_ = 2.0;
@@ -106,14 +113,18 @@ void example_convolution ()
   convolution.convolve (*output_cloud, *input_cloud);
 }
 
-void example_morphology ()
+void
+example_morphology ()
 {
   Morphology<pcl::PointXYZRGB> morphology;
 
   /*dummy clouds*/
-  pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
-  pcl::PointCloud<pcl::PointXYZRGB>::Ptr structuring_element_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
-  pcl::PointCloud<pcl::PointXYZRGB>::Ptr output_cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud (
+      new pcl::PointCloud<pcl::PointXYZRGB>);
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr structuring_element_cloud (
+      new pcl::PointCloud<pcl::PointXYZRGB>);
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr output_cloud (
+      new pcl::PointCloud<pcl::PointXYZRGB>);
 
   /*example 1 : Gaussian Smoothing*/
   morphology.structuringElementCircular (*structuring_element_cloud, 3);
@@ -125,10 +136,10 @@ void example_morphology ()
   morphology.structuringElementCircular (morphology.structuring_element_, 3);
   morphology.operator_type_ = Morphology<pcl::PointXYZRGB>::EROSION_GRAY;
   morphology.applyMorphologicalOperation (*output_cloud, *input_cloud);
-
 }
 
-int main(char *args, int argv)
+int
+main (char *args, int argv)
 {
   return 0;
 }

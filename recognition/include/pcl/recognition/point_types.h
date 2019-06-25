@@ -4,7 +4,7 @@
  *  Point Cloud Library (PCL) - www.pointclouds.org
  *  Copyright (c) 2010-2011, Willow Garage, Inc.
  *
- *  All rights reserved. 
+ *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
@@ -41,18 +41,14 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 
-
 namespace pcl
 {
-  /** \brief A point structure representing Euclidean xyz coordinates, and the intensity value.
-    * \ingroup common
-    */
-  struct EIGEN_ALIGN16 GradientXY
-  {
-    union
-    {
-      struct
-      {
+  /** \brief A point structure representing Euclidean xyz coordinates, and the intensity
+   * value. \ingroup common
+   */
+  struct EIGEN_ALIGN16 GradientXY {
+    union {
+      struct {
         float x;
         float y;
         float angle;
@@ -62,15 +58,17 @@ namespace pcl
     };
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-    inline bool operator< (const GradientXY & rhs)
+    inline bool
+    operator< (const GradientXY &rhs)
     {
       return (magnitude > rhs.magnitude);
     }
   };
-  inline std::ostream & operator << (std::ostream & os, const GradientXY & p)
+  inline std::ostream &
+  operator<< (std::ostream &os, const GradientXY &p)
   {
     os << "(" << p.x << "," << p.y << " - " << p.magnitude << ")";
     return (os);
   }
 
-}
+} // namespace pcl

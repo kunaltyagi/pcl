@@ -37,10 +37,10 @@
  *
  */
 
-#include <pcl/point_types.h>
 #include <pcl/impl/instantiate.hpp>
-#include <pcl/recognition/implicit_shape_model.h>
+#include <pcl/point_types.h>
 #include <pcl/recognition/impl/implicit_shape_model.hpp>
+#include <pcl/recognition/implicit_shape_model.h>
 
 // Instantiations of specific point types
 template class pcl::features::ISMVoteList<pcl::PointXYZ>;

@@ -41,5 +41,5 @@
 #include <pcl/gpu/segmentation/impl/gpu_extract_labeled_clusters.hpp>
 
 // Instantiations of specific point types
-PCL_INSTANTIATE(extractLabeledEuclideanClusters, PCL_XYZL_POINT_TYPES);
-PCL_INSTANTIATE(EuclideanLabeledClusterExtraction, PCL_XYZL_POINT_TYPES);
+PCL_INSTANTIATE (extractLabeledEuclideanClusters, PCL_XYZL_POINT_TYPES);
+PCL_INSTANTIATE (EuclideanLabeledClusterExtraction, PCL_XYZL_POINT_TYPES);

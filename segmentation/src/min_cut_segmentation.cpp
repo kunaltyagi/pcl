@@ -38,10 +38,10 @@
 
 #include <boost/version.hpp>
 
-#include <pcl/point_types.h>
 #include <pcl/impl/instantiate.hpp>
-#include <pcl/segmentation/min_cut_segmentation.h>
+#include <pcl/point_types.h>
 #include <pcl/segmentation/impl/min_cut_segmentation.hpp>
+#include <pcl/segmentation/min_cut_segmentation.h>
 
 // Instantiations of specific point types
-PCL_INSTANTIATE(MinCutSegmentation, PCL_XYZ_POINT_TYPES)
+PCL_INSTANTIATE (MinCutSegmentation, PCL_XYZ_POINT_TYPES)

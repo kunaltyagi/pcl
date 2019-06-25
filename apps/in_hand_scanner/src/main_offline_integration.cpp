@@ -44,11 +44,11 @@
 #include <pcl/apps/in_hand_scanner/offline_integration.h>
 
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   QApplication app (argc, argv);
   pcl::ihs::OfflineIntegration oi;
-  QTimer::singleShot(0, &oi, SLOT (start ()));
+  QTimer::singleShot (0, &oi, SLOT (start ()));
   oi.show ();
   return (QApplication::exec ());
 }

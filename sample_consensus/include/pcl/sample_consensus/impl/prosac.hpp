@@ -42,20 +42,21 @@
 #define PCL_SAMPLE_CONSENSUS_IMPL_PROSAC_H_
 
 #if defined __GNUC__
-#  pragma GCC system_header 
+#pragma GCC system_header
 #endif
 
 #include <boost/math/distributions/binomial.hpp>
 #include <pcl/sample_consensus/prosac.h>
 
 //////////////////////////////////////////////////////////////////////////
-// Variable naming uses capital letters to make the comparison with the original paper easier
-template<typename PointT> bool 
+// Variable naming uses capital letters to make the comparison with the original paper
+// easier
+template <typename PointT>
+bool
 pcl::ProgressiveSampleConsensus<PointT>::computeModel (int debug_verbosity_level)
 {
   // Warn and exit if no threshold was set
-  if (threshold_ == DBL_MAX)
-  {
+  if (threshold_ == DBL_MAX) {
     PCL_ERROR ("[pcl::ProgressiveSampleConsensus::computeModel] No threshold set!\n");
     return (false);
   }
@@ -86,29 +87,30 @@ pcl::ProgressiveSampleConsensus<PointT>::computeModel (int debug_verbosity_level
   std::vector<int> selection;
   Eigen::VectorXf model_coefficients;
 
-  // We will increase the pool so the indices_ vector can only contain m elements at first
+  // We will increase the pool so the indices_ vector can only contain m elements at
+  // first
   std::vector<int> index_pool;
   index_pool.reserve (N);
   for (unsigned int i = 0; i < n; ++i)
-    index_pool.push_back (sac_model_->indices_->operator[](i));
+    index_pool.push_back (sac_model_->indices_->operator[] (i));
 
   // Iterate
-  while (static_cast<unsigned int> (iterations_) < k_n_star)
-  {
+  while (static_cast<unsigned int> (iterations_) < k_n_star) {
     // Choose the samples
 
     // Step 1
     // According to Equation 5 in the text text, not the algorithm
-    if ((iterations_ == T_prime_n) && (n < n_star))
-    {
+    if ((iterations_ == T_prime_n) && (n < n_star)) {
       // Increase the pool
       ++n;
       if (n >= N)
         break;
-      index_pool.push_back (sac_model_->indices_->at(static_cast<unsigned int> (n - 1)));
+      index_pool.push_back (
+          sac_model_->indices_->at (static_cast<unsigned int> (n - 1)));
       // Update other variables
       float T_n_minus_1 = T_n;
-      T_n *= (static_cast<float>(n) + 1.0f) / (static_cast<float>(n) + 1.0f - static_cast<float>(m));
+      T_n *= (static_cast<float> (n) + 1.0f) /
+             (static_cast<float> (n) + 1.0f - static_cast<float> (m));
       T_prime_n += ceilf (T_n - T_n_minus_1);
     }
 
@@ -116,24 +118,23 @@ pcl::ProgressiveSampleConsensus<PointT>::computeModel (int debug_verbosity_level
     sac_model_->indices_->swap (index_pool);
     selection.clear ();
     sac_model_->getSamples (iterations_, selection);
-    if (T_prime_n < iterations_)
-    {
+    if (T_prime_n < iterations_) {
       selection.pop_back ();
-      selection.push_back (sac_model_->indices_->at(static_cast<unsigned int> (n - 1)));
+      selection.push_back (
+          sac_model_->indices_->at (static_cast<unsigned int> (n - 1)));
     }
 
     // Make sure we use the right indices for testing
     sac_model_->indices_->swap (index_pool);
 
-    if (selection.empty ())
-    {
-      PCL_ERROR ("[pcl::ProgressiveSampleConsensus::computeModel] No samples could be selected!\n");
+    if (selection.empty ()) {
+      PCL_ERROR ("[pcl::ProgressiveSampleConsensus::computeModel] No samples could be "
+                 "selected!\n");
       break;
     }
 
     // Search for inliers in the point cloud for the current model
-    if (!sac_model_->computeModelCoefficients (selection, model_coefficients))
-    {
+    if (!sac_model_->computeModelCoefficients (selection, model_coefficients)) {
       ++iterations_;
       continue;
     }
@@ -145,8 +146,7 @@ pcl::ProgressiveSampleConsensus<PointT>::computeModel (int debug_verbosity_level
     size_t I_N = inliers.size ();
 
     // If we find more inliers than before
-    if (I_N > I_N_best)
-    {
+    if (I_N > I_N_best) {
       I_N_best = I_N;
 
       // Save the current model/inlier/coefficients selection as being the best so far
@@ -154,34 +154,41 @@ pcl::ProgressiveSampleConsensus<PointT>::computeModel (int debug_verbosity_level
       model_ = selection;
       model_coefficients_ = model_coefficients;
 
-      // We estimate I_n_star for different possible values of n_star by using the inliers
+      // We estimate I_n_star for different possible values of n_star by using the
+      // inliers
       std::sort (inliers.begin (), inliers.end ());
 
       // Try to find a better n_star
       // We minimize k_n_star and therefore maximize epsilon_n_star = I_n_star / n_star
       size_t possible_n_star_best = N, I_possible_n_star_best = I_N;
-      float epsilon_possible_n_star_best = static_cast<float>(I_possible_n_star_best) / static_cast<float>(possible_n_star_best);
+      float epsilon_possible_n_star_best = static_cast<float> (I_possible_n_star_best) /
+                                           static_cast<float> (possible_n_star_best);
 
-      // We only need to compute possible better epsilon_n_star for when _n is just about to be removed an inlier
+      // We only need to compute possible better epsilon_n_star for when _n is just
+      // about to be removed an inlier
       size_t I_possible_n_star = I_N;
-      for (std::vector<int>::const_reverse_iterator last_inlier = inliers.rbegin (), 
-                                                    inliers_end = inliers.rend (); 
-           last_inlier != inliers_end; 
-           ++last_inlier, --I_possible_n_star)
-      {
-        // The best possible_n_star for a given I_possible_n_star is the index of the last inlier
+      for (std::vector<int>::const_reverse_iterator last_inlier = inliers.rbegin (),
+                                                    inliers_end = inliers.rend ();
+           last_inlier != inliers_end; ++last_inlier, --I_possible_n_star) {
+        // The best possible_n_star for a given I_possible_n_star is the index of the
+        // last inlier
         unsigned int possible_n_star = (*last_inlier) + 1;
         if (possible_n_star <= m)
           break;
 
         // If we find a better epsilon_n_star
-        float epsilon_possible_n_star = static_cast<float>(I_possible_n_star) / static_cast<float>(possible_n_star);
+        float epsilon_possible_n_star = static_cast<float> (I_possible_n_star) /
+                                        static_cast<float> (possible_n_star);
         // Make sure we have a better epsilon_possible_n_star
-        if ((epsilon_possible_n_star > epsilon_n_star) && (epsilon_possible_n_star > epsilon_possible_n_star_best))
-        {
+        if ((epsilon_possible_n_star > epsilon_n_star) &&
+            (epsilon_possible_n_star > epsilon_possible_n_star_best)) {
           // Typo in Equation 7, not (n-m choose i-m) but (n choose i-m)
-          size_t I_possible_n_star_min = m
-                           + static_cast<size_t> (ceil (boost::math::quantile (boost::math::complement (boost::math::binomial_distribution<float>(static_cast<float> (possible_n_star), 0.1f), 0.05))));
+          size_t I_possible_n_star_min =
+              m + static_cast<size_t> (
+                      ceil (boost::math::quantile (boost::math::complement (
+                          boost::math::binomial_distribution<float> (
+                              static_cast<float> (possible_n_star), 0.1f),
+                          0.05))));
           // If Equation 9 is not verified, exit
           if (I_possible_n_star < I_possible_n_star_min)
             break;
@@ -193,40 +200,43 @@ pcl::ProgressiveSampleConsensus<PointT>::computeModel (int debug_verbosity_level
       }
 
       // Check if we get a better epsilon
-      if (epsilon_possible_n_star_best > epsilon_n_star)
-      {
+      if (epsilon_possible_n_star_best > epsilon_n_star) {
         // update the best value
         epsilon_n_star = epsilon_possible_n_star_best;
 
         // Compute the new k_n_star
-        float bottom_log = 1 - std::pow (epsilon_n_star, static_cast<float>(m));
+        float bottom_log = 1 - std::pow (epsilon_n_star, static_cast<float> (m));
         if (bottom_log == 0)
           k_n_star = 1;
         else if (bottom_log == 1)
           k_n_star = T_N;
         else
           k_n_star = static_cast<int> (ceil (log (0.05) / log (bottom_log)));
-        // It seems weird to have very few iterations, so do have a few (totally empirical)
-        k_n_star = (std::max)(k_n_star, 2 * m);
+        // It seems weird to have very few iterations, so do have a few (totally
+        // empirical)
+        k_n_star = (std::max) (k_n_star, 2 * m);
       }
     }
 
     ++iterations_;
     if (debug_verbosity_level > 1)
-      PCL_DEBUG ("[pcl::ProgressiveSampleConsensus::computeModel] Trial %d out of %d: %d inliers (best is: %d so far).\n", iterations_, k_n_star, I_N, I_N_best);
-    if (iterations_ > max_iterations_)
-    {
+      PCL_DEBUG ("[pcl::ProgressiveSampleConsensus::computeModel] Trial %d out of %d: "
+                 "%d inliers (best is: %d so far).\n",
+                 iterations_, k_n_star, I_N, I_N_best);
+    if (iterations_ > max_iterations_) {
       if (debug_verbosity_level > 0)
-        PCL_DEBUG ("[pcl::ProgressiveSampleConsensus::computeModel] RANSAC reached the maximum number of trials.\n");
+        PCL_DEBUG ("[pcl::ProgressiveSampleConsensus::computeModel] RANSAC reached the "
+                   "maximum number of trials.\n");
       break;
     }
   }
 
   if (debug_verbosity_level > 0)
-    PCL_DEBUG ("[pcl::ProgressiveSampleConsensus::computeModel] Model: %lu size, %d inliers.\n", model_.size (), I_N_best);
+    PCL_DEBUG ("[pcl::ProgressiveSampleConsensus::computeModel] Model: %lu size, %d "
+               "inliers.\n",
+               model_.size (), I_N_best);
 
-  if (model_.empty ())
-  {
+  if (model_.empty ()) {
     inliers_.clear ();
     return (false);
   }
@@ -234,6 +244,7 @@ pcl::ProgressiveSampleConsensus<PointT>::computeModel (int debug_verbosity_level
   return (true);
 }
 
-#define PCL_INSTANTIATE_ProgressiveSampleConsensus(T) template class PCL_EXPORTS pcl::ProgressiveSampleConsensus<T>;
+#define PCL_INSTANTIATE_ProgressiveSampleConsensus(T)                                  \
+  template class PCL_EXPORTS pcl::ProgressiveSampleConsensus<T>;
 
-#endif    // PCL_SAMPLE_CONSENSUS_IMPL_PROSAC_H_
+#endif // PCL_SAMPLE_CONSENSUS_IMPL_PROSAC_H_

@@ -37,11 +37,11 @@
 
 #pragma once
 
-#include <pcl/pcl_macros.h>
-#include <pcl/gpu/containers/device_array.h>
-#include <pcl/point_types.h>
-#include <pcl/point_cloud.h>
 #include <Eigen/Core>
+#include <pcl/gpu/containers/device_array.h>
+#include <pcl/pcl_macros.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
 
 namespace pcl
 {
@@ -50,43 +50,44 @@ namespace pcl
     class TsdfVolume;
 
     /** \brief ColorVolume class
-      * \author Anatoly Baskeheev, Itseez Ltd, (myname.mysurname@mycompany.com)
-      */
+     * \author Anatoly Baskeheev, Itseez Ltd, (myname.mysurname@mycompany.com)
+     */
     class PCL_EXPORTS ColorVolume
     {
-    public:
+      public:
       using PointType = PointXYZ;
       using Ptr = boost::shared_ptr<ColorVolume>;
 
       /** \brief Constructor
-        * \param[in] tsdf tsdf volume to get parameters from
-        * \param[in] max_weight max weight for running average. Can be less than 255. Negative means default.
-        */
-      ColorVolume(const TsdfVolume& tsdf, int max_weight = -1);
+       * \param[in] tsdf tsdf volume to get parameters from
+       * \param[in] max_weight max weight for running average. Can be less than 255.
+       * Negative means default.
+       */
+      ColorVolume (const TsdfVolume &tsdf, int max_weight = -1);
 
       /** \brief Destructor */
-      ~ColorVolume();
+      ~ColorVolume ();
 
       /** \brief Resets color volume to uninitialized state */
       void
-      reset();
+      reset ();
 
       /** \brief Returns running average length */
       int
-      getMaxWeight() const;
+      getMaxWeight () const;
 
       /** \brief Returns container with color volume in GPU memory */
       DeviceArray2D<int>
-      data() const;
+      data () const;
 
       /** \brief Computes colors from color volume
-        * \param[in] cloud Points for which colors are to be computed.
-        * \param[out] colors output array for colors
-        */
+       * \param[in] cloud Points for which colors are to be computed.
+       * \param[out] colors output array for colors
+       */
       void
-      fetchColors (const DeviceArray<PointType>& cloud, DeviceArray<RGB>& colors) const; 
+      fetchColors (const DeviceArray<PointType> &cloud, DeviceArray<RGB> &colors) const;
 
-    private:
+      private:
       /** \brief Volume resolution */
       Eigen::Vector3i resolution_;
 
@@ -94,14 +95,13 @@ namespace pcl
       Eigen::Vector3f volume_size_;
 
       /** \brief Length of running average */
-      int max_weight_;     
+      int max_weight_;
 
       /** \brief color volume data */
       DeviceArray2D<int> color_volume_;
 
-public:
-	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-
+      public:
+      EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     };
-  }
-}
+  } // namespace gpu
+} // namespace pcl

@@ -2,11 +2,11 @@
 
 /////////// MAIN ////////////////////
 int
-main (int argc, char ** argv)
+main (int argc, char **argv)
 {
   // Initialize QT
   QApplication app (argc, argv);
-  
+
   pcl::cloud_composer::ComposerMainWindow cc;
   cc.show ();
   return (QApplication::exec ());

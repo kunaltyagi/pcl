@@ -38,74 +38,87 @@
 
 namespace pcl
 {
-  /** \brief @b RangeImageSpherical is derived from the original range image and uses a slightly different
-    * spherical projection. In the original range image, the image will appear more and more
-    * "scaled down" along the y axis, the further away from the mean line of the image a point is.
-    * This class removes this scaling, which makes it especially suitable for spinning LIDAR sensors
-    * that capure a 360° view, since a rotation of the sensor will now simply correspond to a shift of the
-    * range image. (This class is similar to RangeImagePlanar, but changes less of the behaviour of the base class.)
-    * \author Andreas Muetzel
-    * \ingroup range_image
-    */
+  /** \brief @b RangeImageSpherical is derived from the original range image and uses a
+   * slightly different spherical projection. In the original range image, the image
+   * will appear more and more "scaled down" along the y axis, the further away from the
+   * mean line of the image a point is. This class removes this scaling, which makes it
+   * especially suitable for spinning LIDAR sensors that capure a 360° view, since a
+   * rotation of the sensor will now simply correspond to a shift of the range image.
+   * (This class is similar to RangeImagePlanar, but changes less of the behaviour of
+   * the base class.) \author Andreas Muetzel \ingroup range_image
+   */
   class RangeImageSpherical : public RangeImage
   {
     public:
-      // =====TYPEDEFS=====
-      using BaseClass = RangeImage;
-      using Ptr = boost::shared_ptr<RangeImageSpherical>;
-      using ConstPtr = boost::shared_ptr<const RangeImageSpherical>;
+    // =====TYPEDEFS=====
+    using BaseClass = RangeImage;
+    using Ptr = boost::shared_ptr<RangeImageSpherical>;
+    using ConstPtr = boost::shared_ptr<const RangeImageSpherical>;
 
-      // =====CONSTRUCTOR & DESTRUCTOR=====
-      /** Constructor */
-      PCL_EXPORTS RangeImageSpherical () {}
-      /** Destructor */
-      PCL_EXPORTS virtual ~RangeImageSpherical () {}
+    // =====CONSTRUCTOR & DESTRUCTOR=====
+    /** Constructor */
+    PCL_EXPORTS
+    RangeImageSpherical ()
+    {
+    }
+    /** Destructor */
+    PCL_EXPORTS virtual ~RangeImageSpherical () {}
 
-      /** Return a newly created RangeImagePlanar.
-       *  Reimplementation to return an image of the same type. */
-      virtual RangeImage*
-      getNew () const { return new RangeImageSpherical; }
+    /** Return a newly created RangeImagePlanar.
+     *  Reimplementation to return an image of the same type. */
+    virtual RangeImage *
+    getNew () const
+    {
+      return new RangeImageSpherical;
+    }
 
-      // =====PUBLIC METHODS=====
-      /** \brief Get a boost shared pointer of a copy of this */
-      inline Ptr
-      makeShared () { return Ptr (new RangeImageSpherical (*this)); }
+    // =====PUBLIC METHODS=====
+    /** \brief Get a boost shared pointer of a copy of this */
+    inline Ptr
+    makeShared ()
+    {
+      return Ptr (new RangeImageSpherical (*this));
+    }
 
+    // Since we reimplement some of these overloaded functions, we have to do the
+    // following:
+    using RangeImage::calculate3DPoint;
+    using RangeImage::getImagePoint;
 
-      // Since we reimplement some of these overloaded functions, we have to do the following:
-      using RangeImage::calculate3DPoint;
-      using RangeImage::getImagePoint;
+    /** \brief Calculate the 3D point according to the given image point and range
+     * \param image_x the x image position
+     * \param image_y the y image position
+     * \param range the range
+     * \param point the resulting 3D point
+     * \note Implementation according to planar range images (compared to spherical as
+     * in the original)
+     */
+    virtual inline void
+    calculate3DPoint (float image_x, float image_y, float range,
+                      Eigen::Vector3f &point) const;
 
-      /** \brief Calculate the 3D point according to the given image point and range
-        * \param image_x the x image position
-        * \param image_y the y image position
-        * \param range the range
-        * \param point the resulting 3D point
-        * \note Implementation according to planar range images (compared to spherical as in the original)
-        */
-      virtual inline void
-      calculate3DPoint (float image_x, float image_y, float range, Eigen::Vector3f& point) const;
+    /** \brief Calculate the image point and range from the given 3D point
+     * \param point the resulting 3D point
+     * \param image_x the resulting x image position
+     * \param image_y the resulting y image position
+     * \param range the resulting range
+     * \note Implementation according to planar range images (compared to spherical as
+     * in the original)
+     */
+    virtual inline void
+    getImagePoint (const Eigen::Vector3f &point, float &image_x, float &image_y,
+                   float &range) const;
 
-      /** \brief Calculate the image point and range from the given 3D point
-        * \param point the resulting 3D point
-        * \param image_x the resulting x image position
-        * \param image_y the resulting y image position
-        * \param range the resulting range
-        * \note Implementation according to planar range images (compared to spherical as in the original)
-        */
-      virtual inline void
-      getImagePoint (const Eigen::Vector3f& point, float& image_x, float& image_y, float& range) const;
+    /** Get the angles corresponding to the given image point */
+    inline void
+    getAnglesFromImagePoint (float image_x, float image_y, float &angle_x,
+                             float &angle_y) const;
 
-      /** Get the angles corresponding to the given image point */
-      inline void
-      getAnglesFromImagePoint (float image_x, float image_y, float& angle_x, float& angle_y) const;
-
-      /** Get the image point corresponding to the given ranges */
-      inline void
-      getImagePointFromAngles (float angle_x, float angle_y, float& image_x, float& image_y) const;
-
+    /** Get the image point corresponding to the given ranges */
+    inline void
+    getImagePointFromAngles (float angle_x, float angle_y, float &image_x,
+                             float &image_y) const;
   };
-}  // namespace end
+} // namespace pcl
 
-
-#include <pcl/range_image/impl/range_image_spherical.hpp>  // Definitions of templated and inline functions
+#include <pcl/range_image/impl/range_image_spherical.hpp> // Definitions of templated and inline functions

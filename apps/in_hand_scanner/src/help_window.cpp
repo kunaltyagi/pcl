@@ -38,24 +38,19 @@
  *
  */
 
-
-#include <pcl/apps/in_hand_scanner/help_window.h>
 #include "ui_help_window.h"
+#include <pcl/apps/in_hand_scanner/help_window.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 
 pcl::ihs::HelpWindow::HelpWindow (QWidget *parent)
-  : QDialog (parent),
-    ui (new Ui::HelpWindow)
+    : QDialog (parent), ui (new Ui::HelpWindow)
 {
-  ui->setupUi(this);
+  ui->setupUi (this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-pcl::ihs::HelpWindow::~HelpWindow()
-{
-  delete ui;
-}
+pcl::ihs::HelpWindow::~HelpWindow () { delete ui; }
 
 ////////////////////////////////////////////////////////////////////////////////

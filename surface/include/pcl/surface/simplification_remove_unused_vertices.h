@@ -37,9 +37,9 @@
 
 #pragma once
 
-#include <pcl/surface/boost.h>
 #include <pcl/PolygonMesh.h>
 #include <pcl/pcl_macros.h>
+#include <pcl/surface/boost.h>
 
 namespace pcl
 {
@@ -48,33 +48,33 @@ namespace pcl
     class PCL_EXPORTS SimplificationRemoveUnusedVertices
     {
       public:
-        using Ptr = boost::shared_ptr<SimplificationRemoveUnusedVertices>;
-        using ConstPtr = boost::shared_ptr<const SimplificationRemoveUnusedVertices>;
+      using Ptr = boost::shared_ptr<SimplificationRemoveUnusedVertices>;
+      using ConstPtr = boost::shared_ptr<const SimplificationRemoveUnusedVertices>;
 
-        /** \brief Constructor. */
-        SimplificationRemoveUnusedVertices () {};
-        /** \brief Destructor. */
-        ~SimplificationRemoveUnusedVertices () {};
+      /** \brief Constructor. */
+      SimplificationRemoveUnusedVertices (){};
+      /** \brief Destructor. */
+      ~SimplificationRemoveUnusedVertices (){};
 
-        /** \brief Simply a polygonal mesh.
-          * \param[in] input the input mesh
-          * \param[out] output the output mesh
-          */
-        inline void
-        simplify (const pcl::PolygonMesh& input, pcl::PolygonMesh& output)
-        {
-          std::vector<int> indices;
-          simplify (input, output, indices);
-        }
+      /** \brief Simply a polygonal mesh.
+       * \param[in] input the input mesh
+       * \param[out] output the output mesh
+       */
+      inline void
+      simplify (const pcl::PolygonMesh &input, pcl::PolygonMesh &output)
+      {
+        std::vector<int> indices;
+        simplify (input, output, indices);
+      }
 
-        /** \brief Perform simplification (remove unused vertices).
-          * \param[in] input the input mesh
-          * \param[out] output the output mesh
-          * \param[out] indices the resultant vector of indices
-          */
-        void
-        simplify (const pcl::PolygonMesh& input, pcl::PolygonMesh& output, std::vector<int>& indices);
-
+      /** \brief Perform simplification (remove unused vertices).
+       * \param[in] input the input mesh
+       * \param[out] output the output mesh
+       * \param[out] indices the resultant vector of indices
+       */
+      void
+      simplify (const pcl::PolygonMesh &input, pcl::PolygonMesh &output,
+                std::vector<int> &indices);
     };
-  }
-}
+  } // namespace surface
+} // namespace pcl

@@ -42,7 +42,6 @@
 #include <vtkVersion.h>
 #include <vtkWindowedSincPolyDataFilter.h>
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::MeshSmoothingWindowedSincVTK::performProcessing (pcl::PolygonMesh &output)
@@ -51,7 +50,8 @@ pcl::MeshSmoothingWindowedSincVTK::performProcessing (pcl::PolygonMesh &output)
   VTKUtils::convertToVTK (*input_mesh_, vtk_polygons_);
 
   // Apply the VTK algorithm
-  vtkSmartPointer<vtkWindowedSincPolyDataFilter> vtk_smoother = vtkWindowedSincPolyDataFilter::New ();
+  vtkSmartPointer<vtkWindowedSincPolyDataFilter> vtk_smoother =
+      vtkWindowedSincPolyDataFilter::New ();
   vtk_smoother->SetInputData (vtk_polygons_);
   vtk_smoother->SetNumberOfIterations (num_iter_);
   vtk_smoother->SetPassBand (pass_band_);

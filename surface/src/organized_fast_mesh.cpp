@@ -35,11 +35,11 @@
  *
  */
 
-#include <pcl/surface/impl/marching_cubes.hpp>
-#include <pcl/surface/impl/organized_fast_mesh.hpp>
 #include <pcl/impl/instantiate.hpp>
 #include <pcl/point_types.h>
+#include <pcl/surface/impl/marching_cubes.hpp>
+#include <pcl/surface/impl/organized_fast_mesh.hpp>
 
 // Instantiations of specific point types
-PCL_INSTANTIATE(OrganizedFastMesh, (pcl::PointXYZ)(pcl::PointXYZRGB)(pcl::PointXYZRGBA))
-
+PCL_INSTANTIATE (OrganizedFastMesh,
+                 (pcl::PointXYZ) (pcl::PointXYZRGB) (pcl::PointXYZRGBA))

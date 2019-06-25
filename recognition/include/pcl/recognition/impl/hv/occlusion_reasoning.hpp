@@ -40,40 +40,45 @@
 #include <pcl/recognition/hv/occlusion_reasoning.h>
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template<typename ModelT, typename SceneT>
-pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::ZBuffering (int resx, int resy, float f) :
-  f_ (f), cx_ (resx), cy_ (resy), depth_ (nullptr)
+template <typename ModelT, typename SceneT>
+pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::ZBuffering (int resx, int resy,
+                                                                  float f)
+    : f_ (f), cx_ (resx), cy_ (resy), depth_ (nullptr)
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template<typename ModelT, typename SceneT>
-pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::ZBuffering () :
-  f_ (), cx_ (), cy_ (), depth_ (nullptr)
+template <typename ModelT, typename SceneT>
+pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::ZBuffering ()
+    : f_ (), cx_ (), cy_ (), depth_ (nullptr)
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template<typename ModelT, typename SceneT>
+template <typename ModelT, typename SceneT>
 pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::~ZBuffering ()
 {
   delete[] depth_;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template<typename ModelT, typename SceneT> void
-pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::filter (typename pcl::PointCloud<ModelT>::ConstPtr & model,
-                                                              typename pcl::PointCloud<ModelT>::Ptr & filtered, float thres)
+template <typename ModelT, typename SceneT>
+void
+pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::filter (
+    typename pcl::PointCloud<ModelT>::ConstPtr &model,
+    typename pcl::PointCloud<ModelT>::Ptr &filtered, float thres)
 {
   std::vector<int> indices_to_keep;
-  filter(model, indices_to_keep, thres);
+  filter (model, indices_to_keep, thres);
   pcl::copyPointCloud (*model, indices_to_keep, *filtered);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template<typename ModelT, typename SceneT> void
-pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::filter (typename pcl::PointCloud<ModelT>::ConstPtr & model,
-                                                                      std::vector<int> & indices_to_keep, float thres)
+template <typename ModelT, typename SceneT>
+void
+pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::filter (
+    typename pcl::PointCloud<ModelT>::ConstPtr &model,
+    std::vector<int> &indices_to_keep, float thres)
 {
 
   float cx, cy;
@@ -82,8 +87,7 @@ pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::filter (typename pcl::Poin
 
   indices_to_keep.resize (model->points.size ());
   int keep = 0;
-  for (size_t i = 0; i < model->points.size (); i++)
-  {
+  for (size_t i = 0; i < model->points.size (); i++) {
     float x = model->points[i].x;
     float y = model->points[i].y;
     float z = model->points[i].z;
@@ -93,8 +97,9 @@ pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::filter (typename pcl::Poin
     if (u >= cx_ || v >= cy_ || u < 0 || v < 0)
       continue;
 
-    //Check if point depth (distance to camera) is greater than the (u,v) meaning that the point is not visible
-    if ((z - thres) > depth_[u * cy_ + v] || !std::isfinite(depth_[u * cy_ + v]))
+    // Check if point depth (distance to camera) is greater than the (u,v) meaning that
+    // the point is not visible
+    if ((z - thres) > depth_[u * cy_ + v] || !std::isfinite (depth_[u * cy_ + v]))
       continue;
 
     indices_to_keep[keep] = static_cast<int> (i);
@@ -105,24 +110,24 @@ pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::filter (typename pcl::Poin
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template<typename ModelT, typename SceneT> void
-pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::computeDepthMap (typename pcl::PointCloud<SceneT>::ConstPtr & scene, bool compute_focal,
-                                                                       bool smooth, int wsize)
+template <typename ModelT, typename SceneT>
+void
+pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::computeDepthMap (
+    typename pcl::PointCloud<SceneT>::ConstPtr &scene, bool compute_focal, bool smooth,
+    int wsize)
 {
   float cx, cy;
   cx = static_cast<float> (cx_) / 2.f - 0.5f;
   cy = static_cast<float> (cy_) / 2.f - 0.5f;
 
-  //compute the focal length
-  if (compute_focal)
-  {
+  // compute the focal length
+  if (compute_focal) {
 
     float max_u, max_v, min_u, min_v;
     max_u = max_v = std::numeric_limits<float>::max () * -1;
     min_u = min_v = std::numeric_limits<float>::max ();
 
-    for (size_t i = 0; i < scene->points.size (); i++)
-    {
+    for (size_t i = 0; i < scene->points.size (); i++) {
       float b_x = scene->points[i].x / scene->points[i].z;
       if (b_x > max_u)
         max_u = b_x;
@@ -136,7 +141,8 @@ pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::computeDepthMap (typename 
         min_v = b_y;
     }
 
-    float maxC = std::max (std::max (std::abs (max_u), std::abs (max_v)), std::max (std::abs (min_u), std::abs (min_v)));
+    float maxC = std::max (std::max (std::abs (max_u), std::abs (max_v)),
+                           std::max (std::abs (min_u), std::abs (min_v)));
     f_ = (cx) / maxC;
   }
 
@@ -144,8 +150,7 @@ pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::computeDepthMap (typename 
   for (int i = 0; i < (cx_ * cy_); i++)
     depth_[i] = std::numeric_limits<float>::quiet_NaN ();
 
-  for (size_t i = 0; i < scene->points.size (); i++)
-  {
+  for (size_t i = 0; i < scene->points.size (); i++) {
     float x = scene->points[i].x;
     float y = scene->points[i].y;
     float z = scene->points[i].z;
@@ -155,45 +160,38 @@ pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::computeDepthMap (typename 
     if (u >= cx_ || v >= cy_ || u < 0 || v < 0)
       continue;
 
-    if ((z < depth_[u * cy_ + v]) || (!std::isfinite(depth_[u * cy_ + v])))
+    if ((z < depth_[u * cy_ + v]) || (!std::isfinite (depth_[u * cy_ + v])))
       depth_[u * cx_ + v] = z;
   }
 
-  if (smooth)
-  {
-    //Dilate and smooth the depth map
+  if (smooth) {
+    // Dilate and smooth the depth map
     int ws = wsize;
-    int ws2 = int (std::floor (static_cast<float> (ws) / 2.f));
-    float * depth_smooth = new float[cx_ * cy_];
+    int ws2 = int(std::floor (static_cast<float> (ws) / 2.f));
+    float *depth_smooth = new float[cx_ * cy_];
     for (int i = 0; i < (cx_ * cy_); i++)
       depth_smooth[i] = std::numeric_limits<float>::quiet_NaN ();
 
-    for (int u = ws2; u < (cx_ - ws2); u++)
-    {
-      for (int v = ws2; v < (cy_ - ws2); v++)
-      {
+    for (int u = ws2; u < (cx_ - ws2); u++) {
+      for (int v = ws2; v < (cy_ - ws2); v++) {
         float min = std::numeric_limits<float>::max ();
-        for (int j = (u - ws2); j <= (u + ws2); j++)
-        {
-          for (int i = (v - ws2); i <= (v + ws2); i++)
-          {
-            if (std::isfinite(depth_[j * cx_ + i]) && (depth_[j * cx_ + i] < min))
-            {
+        for (int j = (u - ws2); j <= (u + ws2); j++) {
+          for (int i = (v - ws2); i <= (v + ws2); i++) {
+            if (std::isfinite (depth_[j * cx_ + i]) && (depth_[j * cx_ + i] < min)) {
               min = depth_[j * cx_ + i];
             }
           }
         }
 
-        if (min < (std::numeric_limits<float>::max () - 0.1))
-        {
+        if (min < (std::numeric_limits<float>::max () - 0.1)) {
           depth_smooth[u * cx_ + v] = min;
         }
       }
     }
 
-    memcpy (depth_, depth_smooth, sizeof(float) * cx_ * cy_);
+    memcpy (depth_, depth_smooth, sizeof (float) * cx_ * cy_);
     delete[] depth_smooth;
   }
 }
 
-#endif    // PCL_RECOGNITION_OCCLUSION_REASONING_HPP_
+#endif // PCL_RECOGNITION_OCCLUSION_REASONING_HPP_

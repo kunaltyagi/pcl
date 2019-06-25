@@ -43,10 +43,10 @@
 #ifndef PCL_NO_PRECOMPILE
 #include <pcl/impl/instantiate.hpp>
 #include <pcl/point_types.h>
-PCL_INSTANTIATE(ApproxNearestPairPointCloudCoherence, PCL_XYZ_POINT_TYPES)
-PCL_INSTANTIATE(DistanceCoherence, PCL_XYZ_POINT_TYPES)
-PCL_INSTANTIATE(HSVColorCoherence, (pcl::PointXYZRGB)(pcl::PointXYZRGBNormal)(pcl::PointXYZRGBA))
-PCL_INSTANTIATE(NearestPairPointCloudCoherence, PCL_XYZ_POINT_TYPES)
-PCL_INSTANTIATE(NormalCoherence, PCL_NORMAL_POINT_TYPES)
-#endif    // PCL_NO_PRECOMPILE
-
+PCL_INSTANTIATE (ApproxNearestPairPointCloudCoherence, PCL_XYZ_POINT_TYPES)
+PCL_INSTANTIATE (DistanceCoherence, PCL_XYZ_POINT_TYPES)
+PCL_INSTANTIATE (HSVColorCoherence,
+                 (pcl::PointXYZRGB) (pcl::PointXYZRGBNormal) (pcl::PointXYZRGBA))
+PCL_INSTANTIATE (NearestPairPointCloudCoherence, PCL_XYZ_POINT_TYPES)
+PCL_INSTANTIATE (NormalCoherence, PCL_NORMAL_POINT_TYPES)
+#endif // PCL_NO_PRECOMPILE

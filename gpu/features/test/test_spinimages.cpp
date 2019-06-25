@@ -36,10 +36,10 @@
 
 #include "gtest/gtest.h"
 
-#include <pcl/point_types.h>
+#include <pcl/common/time.h>
 #include <pcl/features/spin_image.h>
 #include <pcl/gpu/features/features.hpp>
-#include <pcl/common/time.h>
+#include <pcl/point_types.h>
 
 #include "data_source.hpp"
 
@@ -49,360 +49,354 @@ using namespace pcl::gpu;
 
 using SpinImage = pcl::Histogram<153>;
 
-//TEST(PCL_FeaturesGPU, DISABLED_spinImages_rectangular)
-TEST(PCL_FeaturesGPU, spinImages_rectangular)
-{   
-    DataSource source;
-    	
-    source.estimateNormals();
-    source.generateIndices(5);
-	//source.indices->resize(1);
-	source.radius *= 2;
+// TEST(PCL_FeaturesGPU, DISABLED_spinImages_rectangular)
+TEST (PCL_FeaturesGPU, spinImages_rectangular)
+{
+  DataSource source;
 
-	const int min_beighbours = 15;
-                   
-    vector<PointXYZ> normals_for_gpu(source.normals->points.size());    
-    std::transform(source.normals->points.begin(), source.normals->points.end(), normals_for_gpu.begin(), DataSource::Normal2PointXYZ());        
-    
-    //uploading data to GPU
-    pcl::gpu::VFHEstimation::PointCloud cloud_gpu;
-    cloud_gpu.upload(source.cloud->points);
+  source.estimateNormals ();
+  source.generateIndices (5);
+  // source.indices->resize(1);
+  source.radius *= 2;
 
-    pcl::gpu::VFHEstimation::Normals normals_gpu;
-    normals_gpu.upload(normals_for_gpu);             
+  const int min_beighbours = 15;
 
-    pcl::gpu::VFHEstimation::Indices indices_gpu;
-    indices_gpu.upload(*source.indices);
-    	
-	//////////// GPU ////////////
-	gpu::SpinImageEstimation se_gpu;        
-    se_gpu.setInputWithNormals(cloud_gpu, normals_gpu);
-    se_gpu.setIndices(indices_gpu);
-    se_gpu.setRadiusSearch(source.radius, source.max_elements*10);
-    se_gpu.setMinPointCountInNeighbourhood(min_beighbours);
-	//se_gpu.setRadialStructure();
-	//se_gpu.setAngularDomain();	
+  vector<PointXYZ> normals_for_gpu (source.normals->points.size ());
+  std::transform (source.normals->points.begin (), source.normals->points.end (),
+                  normals_for_gpu.begin (), DataSource::Normal2PointXYZ ());
 
-	DeviceArray2D<SpinImage> spin_images_device;
-	DeviceArray<unsigned char> mask_device;
-    
-    {
-        ScopeTime up("gpu");
-        se_gpu.compute(spin_images_device, mask_device);
+  // uploading data to GPU
+  pcl::gpu::VFHEstimation::PointCloud cloud_gpu;
+  cloud_gpu.upload (source.cloud->points);
+
+  pcl::gpu::VFHEstimation::Normals normals_gpu;
+  normals_gpu.upload (normals_for_gpu);
+
+  pcl::gpu::VFHEstimation::Indices indices_gpu;
+  indices_gpu.upload (*source.indices);
+
+  //////////// GPU ////////////
+  gpu::SpinImageEstimation se_gpu;
+  se_gpu.setInputWithNormals (cloud_gpu, normals_gpu);
+  se_gpu.setIndices (indices_gpu);
+  se_gpu.setRadiusSearch (source.radius, source.max_elements * 10);
+  se_gpu.setMinPointCountInNeighbourhood (min_beighbours);
+  // se_gpu.setRadialStructure();
+  // se_gpu.setAngularDomain();
+
+  DeviceArray2D<SpinImage> spin_images_device;
+  DeviceArray<unsigned char> mask_device;
+
+  {
+    ScopeTime up ("gpu");
+    se_gpu.compute (spin_images_device, mask_device);
+  }
+
+  int c;
+  vector<SpinImage> downloaded;
+  vector<unsigned char> downloaded_mask;
+  spin_images_device.download (downloaded, c);
+  mask_device.download (downloaded_mask);
+
+  //////////// CPU ////////////
+  pcl::SpinImageEstimation<PointXYZ, Normal, SpinImage> se (8, 0.0, 16);
+  se.setInputCloud (source.cloud);
+  se.setInputNormals (source.normals);
+  se.setIndices (source.indices);
+  se.setRadiusSearch (source.radius);
+  se.setMinPointCountInNeighbourhood (min_beighbours);
+  // se.setRadialStructure();
+  // se.setAngularDomain();
+
+  PointCloud<SpinImage>::Ptr spin_images (new PointCloud<SpinImage> ());
+  {
+    ScopeTime up ("cpu");
+    se.compute (*spin_images);
+  }
+
+  for (size_t i = 0; i < downloaded.size (); ++i) {
+    if (!downloaded_mask[i]) // less than min neighbours, so spinimage wasn't computed
+      continue;
+
+    SpinImage &gpu = downloaded[i];
+    SpinImage &cpu = spin_images->points[i];
+
+    size_t FSize = sizeof (SpinImage) / sizeof (gpu.histogram[0]);
+
+    float norm = 0, norm_diff = 0;
+    for (size_t j = 0; j < FSize; ++j) {
+      norm_diff +=
+          (gpu.histogram[j] - cpu.histogram[j]) * (gpu.histogram[j] - cpu.histogram[j]);
+      norm += cpu.histogram[j] * cpu.histogram[j];
+
+      // ASSERT_NEAR(gpu.histogram[j], cpu.histogram[j], 0.03f);
     }
 
-	int c;
-    vector<SpinImage> downloaded;
-	vector<unsigned char> downloaded_mask;
-    spin_images_device.download(downloaded, c);
-	mask_device.download(downloaded_mask);
-
-	//////////// CPU ////////////
-	pcl::SpinImageEstimation<PointXYZ, Normal, SpinImage> se(8, 0.0, 16);   
-	se.setInputCloud (source.cloud);
-	se.setInputNormals (source.normals);
-	se.setIndices (source.indices);	
-	se.setRadiusSearch (source.radius);    
-	se.setMinPointCountInNeighbourhood(min_beighbours);
-	//se.setRadialStructure();
-	//se.setAngularDomain();	
-	  
-	PointCloud<SpinImage>::Ptr spin_images (new PointCloud<SpinImage> ());
-	{
-        ScopeTime up("cpu");
-		se.compute (*spin_images);
-	}
-	
-    for(size_t i = 0; i < downloaded.size(); ++i)
-    {
-		if(!downloaded_mask[i]) // less than min neighbours, so spinimage wasn't computed
-			continue;  
-
-        SpinImage& gpu = downloaded[i];
-        SpinImage& cpu = spin_images->points[i];
-        
-        size_t FSize = sizeof(SpinImage)/sizeof(gpu.histogram[0]);                                
-        
-        float norm = 0, norm_diff = 0;
-        for(size_t j = 0; j < FSize; ++j)
-        {
-            norm_diff += (gpu.histogram[j] - cpu.histogram[j]) * (gpu.histogram[j] - cpu.histogram[j]);
-            norm += cpu.histogram[j] * cpu.histogram[j];
-
-            //ASSERT_NEAR(gpu.histogram[j], cpu.histogram[j], 0.03f);        
-        }        
-
-        if (norm != 0)
-            ASSERT_LE(norm_diff/norm, 0.01f/FSize);
-    }
+    if (norm != 0)
+      ASSERT_LE (norm_diff / norm, 0.01f / FSize);
+  }
 }
 
+// TEST(PCL_FeaturesGPU, DISABLED_spinImages_radial)
+TEST (PCL_FeaturesGPU, spinImages_radial)
+{
+  DataSource source;
 
-//TEST(PCL_FeaturesGPU, DISABLED_spinImages_radial)
-TEST(PCL_FeaturesGPU, spinImages_radial)
-{   
-    DataSource source;
-    	
-    source.estimateNormals();
-    source.generateIndices(5);
-	//source.indices->resize(1);
-	source.radius *= 2;
+  source.estimateNormals ();
+  source.generateIndices (5);
+  // source.indices->resize(1);
+  source.radius *= 2;
 
-	const int min_beighbours = 15;
-                   
-    vector<PointXYZ> normals_for_gpu(source.normals->points.size());    
-    std::transform(source.normals->points.begin(), source.normals->points.end(), normals_for_gpu.begin(), DataSource::Normal2PointXYZ());        
-    
+  const int min_beighbours = 15;
 
-    //uploading data to GPU
-    pcl::gpu::VFHEstimation::PointCloud cloud_gpu;
-    cloud_gpu.upload(source.cloud->points);
+  vector<PointXYZ> normals_for_gpu (source.normals->points.size ());
+  std::transform (source.normals->points.begin (), source.normals->points.end (),
+                  normals_for_gpu.begin (), DataSource::Normal2PointXYZ ());
 
-    pcl::gpu::VFHEstimation::Normals normals_gpu;
-    normals_gpu.upload(normals_for_gpu);             
+  // uploading data to GPU
+  pcl::gpu::VFHEstimation::PointCloud cloud_gpu;
+  cloud_gpu.upload (source.cloud->points);
 
-    pcl::gpu::VFHEstimation::Indices indices_gpu;
-    indices_gpu.upload(*source.indices);
-    	
-	//////////// GPU ////////////
-	gpu::SpinImageEstimation se_gpu;        
-    se_gpu.setInputWithNormals(cloud_gpu, normals_gpu);
-    se_gpu.setIndices(indices_gpu);
-    se_gpu.setRadiusSearch(source.radius, source.max_elements*10);
-    se_gpu.setMinPointCountInNeighbourhood(min_beighbours);
-	se_gpu.setRadialStructure();
-	//se_gpu.setAngularDomain();	
+  pcl::gpu::VFHEstimation::Normals normals_gpu;
+  normals_gpu.upload (normals_for_gpu);
 
-	DeviceArray2D<SpinImage> spin_images_device;
-	DeviceArray<unsigned char> mask_device;
-    
-    {
-        ScopeTime up("gpu");
-        se_gpu.compute(spin_images_device, mask_device);
+  pcl::gpu::VFHEstimation::Indices indices_gpu;
+  indices_gpu.upload (*source.indices);
+
+  //////////// GPU ////////////
+  gpu::SpinImageEstimation se_gpu;
+  se_gpu.setInputWithNormals (cloud_gpu, normals_gpu);
+  se_gpu.setIndices (indices_gpu);
+  se_gpu.setRadiusSearch (source.radius, source.max_elements * 10);
+  se_gpu.setMinPointCountInNeighbourhood (min_beighbours);
+  se_gpu.setRadialStructure ();
+  // se_gpu.setAngularDomain();
+
+  DeviceArray2D<SpinImage> spin_images_device;
+  DeviceArray<unsigned char> mask_device;
+
+  {
+    ScopeTime up ("gpu");
+    se_gpu.compute (spin_images_device, mask_device);
+  }
+
+  int c;
+  vector<SpinImage> downloaded;
+  vector<unsigned char> downloaded_mask;
+  spin_images_device.download (downloaded, c);
+  mask_device.download (downloaded_mask);
+
+  //////////// CPU ////////////
+  pcl::SpinImageEstimation<PointXYZ, Normal, SpinImage> se (8, 0.0, 16);
+  se.setInputCloud (source.cloud);
+  se.setInputNormals (source.normals);
+  se.setIndices (source.indices);
+  se.setRadiusSearch (source.radius);
+  se.setMinPointCountInNeighbourhood (min_beighbours);
+  se.setRadialStructure ();
+  // se.setAngularDomain();
+
+  PointCloud<SpinImage>::Ptr spin_images (new PointCloud<SpinImage> ());
+  {
+    ScopeTime up ("cpu");
+    se.compute (*spin_images);
+  }
+
+  for (size_t i = 0; i < downloaded.size (); ++i) {
+    if (!downloaded_mask[i]) // less than min neighbours, so spinimage wasn't computed
+      continue;
+
+    SpinImage &gpu = downloaded[i];
+    SpinImage &cpu = spin_images->points[i];
+
+    size_t FSize = sizeof (SpinImage) / sizeof (gpu.histogram[0]);
+
+    float norm = 0, norm_diff = 0;
+    for (size_t j = 0; j < FSize; ++j) {
+      norm_diff +=
+          (gpu.histogram[j] - cpu.histogram[j]) * (gpu.histogram[j] - cpu.histogram[j]);
+      norm += cpu.histogram[j] * cpu.histogram[j];
+
+      // ASSERT_NEAR(gpu.histogram[j], cpu.histogram[j], 0.03f);
     }
 
-	int c;
-    vector<SpinImage> downloaded;
-	vector<unsigned char> downloaded_mask;
-    spin_images_device.download(downloaded, c);
-	mask_device.download(downloaded_mask);
-
-	//////////// CPU ////////////
-	pcl::SpinImageEstimation<PointXYZ, Normal, SpinImage> se(8, 0.0, 16);   
-	se.setInputCloud (source.cloud);
-	se.setInputNormals (source.normals);
-	se.setIndices (source.indices);	
-	se.setRadiusSearch (source.radius);    
-	se.setMinPointCountInNeighbourhood(min_beighbours);
-	se.setRadialStructure();
-	//se.setAngularDomain();	
-	  
-	PointCloud<SpinImage>::Ptr spin_images (new PointCloud<SpinImage> ());
-	{
-        ScopeTime up("cpu");
-		se.compute (*spin_images);
-	}
-	
-    for(size_t i = 0; i < downloaded.size(); ++i)
-    {
-		if(!downloaded_mask[i]) // less than min neighbours, so spinimage wasn't computed
-			continue;  
-
-        SpinImage& gpu = downloaded[i];
-        SpinImage& cpu = spin_images->points[i];
-        
-        size_t FSize = sizeof(SpinImage)/sizeof(gpu.histogram[0]);                                
-        
-        float norm = 0, norm_diff = 0;
-        for(size_t j = 0; j < FSize; ++j)
-        {
-            norm_diff += (gpu.histogram[j] - cpu.histogram[j]) * (gpu.histogram[j] - cpu.histogram[j]);
-            norm += cpu.histogram[j] * cpu.histogram[j];
-
-            //ASSERT_NEAR(gpu.histogram[j], cpu.histogram[j], 0.03f);        
-        }        
-
-        if (norm != 0)
-            ASSERT_LE(norm_diff/norm, 0.01f/FSize);
-    }
+    if (norm != 0)
+      ASSERT_LE (norm_diff / norm, 0.01f / FSize);
+  }
 }
 
+// TEST(PCL_FeaturesGPU, DISABLED_spinImages_rectangular_angular)
+TEST (PCL_FeaturesGPU, spinImages_rectangular_angular)
+{
+  DataSource source;
 
-//TEST(PCL_FeaturesGPU, DISABLED_spinImages_rectangular_angular)
-TEST(PCL_FeaturesGPU, spinImages_rectangular_angular)
-{   
-    DataSource source;
-    	
-    source.estimateNormals();
-    source.generateIndices(5);
-	//source.indices->resize(1);
-	source.radius *= 2;
+  source.estimateNormals ();
+  source.generateIndices (5);
+  // source.indices->resize(1);
+  source.radius *= 2;
 
-	const int min_beighbours = 15;
-                   
-    vector<PointXYZ> normals_for_gpu(source.normals->points.size());    
-    std::transform(source.normals->points.begin(), source.normals->points.end(), normals_for_gpu.begin(), DataSource::Normal2PointXYZ());        
-    
+  const int min_beighbours = 15;
 
-    //uploading data to GPU
-    pcl::gpu::VFHEstimation::PointCloud cloud_gpu;
-    cloud_gpu.upload(source.cloud->points);
+  vector<PointXYZ> normals_for_gpu (source.normals->points.size ());
+  std::transform (source.normals->points.begin (), source.normals->points.end (),
+                  normals_for_gpu.begin (), DataSource::Normal2PointXYZ ());
 
-    pcl::gpu::VFHEstimation::Normals normals_gpu;
-    normals_gpu.upload(normals_for_gpu);             
+  // uploading data to GPU
+  pcl::gpu::VFHEstimation::PointCloud cloud_gpu;
+  cloud_gpu.upload (source.cloud->points);
 
-    pcl::gpu::VFHEstimation::Indices indices_gpu;
-    indices_gpu.upload(*source.indices);
-    	
-	//////////// GPU ////////////
-	gpu::SpinImageEstimation se_gpu;        
-    se_gpu.setInputWithNormals(cloud_gpu, normals_gpu);
-    se_gpu.setIndices(indices_gpu);
-    se_gpu.setRadiusSearch(source.radius, source.max_elements*10);
-    se_gpu.setMinPointCountInNeighbourhood(min_beighbours);
-	//se_gpu.setRadialStructure();
-	se_gpu.setAngularDomain();
+  pcl::gpu::VFHEstimation::Normals normals_gpu;
+  normals_gpu.upload (normals_for_gpu);
 
-	DeviceArray2D<SpinImage> spin_images_device;
-	DeviceArray<unsigned char> mask_device;
-    
-    {
-        ScopeTime up("gpu");
-        se_gpu.compute(spin_images_device, mask_device);
+  pcl::gpu::VFHEstimation::Indices indices_gpu;
+  indices_gpu.upload (*source.indices);
+
+  //////////// GPU ////////////
+  gpu::SpinImageEstimation se_gpu;
+  se_gpu.setInputWithNormals (cloud_gpu, normals_gpu);
+  se_gpu.setIndices (indices_gpu);
+  se_gpu.setRadiusSearch (source.radius, source.max_elements * 10);
+  se_gpu.setMinPointCountInNeighbourhood (min_beighbours);
+  // se_gpu.setRadialStructure();
+  se_gpu.setAngularDomain ();
+
+  DeviceArray2D<SpinImage> spin_images_device;
+  DeviceArray<unsigned char> mask_device;
+
+  {
+    ScopeTime up ("gpu");
+    se_gpu.compute (spin_images_device, mask_device);
+  }
+
+  int c;
+  vector<SpinImage> downloaded;
+  vector<unsigned char> downloaded_mask;
+  spin_images_device.download (downloaded, c);
+  mask_device.download (downloaded_mask);
+
+  //////////// CPU ////////////
+  pcl::SpinImageEstimation<PointXYZ, Normal, SpinImage> se (8, 0.0, 16);
+  se.setInputCloud (source.cloud);
+  se.setInputNormals (source.normals);
+  se.setIndices (source.indices);
+  se.setRadiusSearch (source.radius);
+  se.setMinPointCountInNeighbourhood (min_beighbours);
+  // se.setRadialStructure();
+  se.setAngularDomain ();
+
+  PointCloud<SpinImage>::Ptr spin_images (new PointCloud<SpinImage> ());
+  {
+    ScopeTime up ("cpu");
+    se.compute (*spin_images);
+  }
+
+  for (size_t i = 0; i < downloaded.size (); ++i) {
+    if (!downloaded_mask[i]) // less than min neighbours, so spinimage wasn't computed
+      continue;
+
+    SpinImage &gpu = downloaded[i];
+    SpinImage &cpu = spin_images->points[i];
+
+    size_t FSize = sizeof (SpinImage) / sizeof (gpu.histogram[0]);
+
+    float norm = 0, norm_diff = 0;
+    for (size_t j = 0; j < FSize; ++j) {
+      norm_diff +=
+          (gpu.histogram[j] - cpu.histogram[j]) * (gpu.histogram[j] - cpu.histogram[j]);
+      norm += cpu.histogram[j] * cpu.histogram[j];
+
+      // ASSERT_NEAR(gpu.histogram[j], cpu.histogram[j], 0.03f);
     }
 
-	int c;
-    vector<SpinImage> downloaded;
-	vector<unsigned char> downloaded_mask;
-    spin_images_device.download(downloaded, c);
-	mask_device.download(downloaded_mask);
-
-	//////////// CPU ////////////
-	pcl::SpinImageEstimation<PointXYZ, Normal, SpinImage> se(8, 0.0, 16);   
-	se.setInputCloud (source.cloud);
-	se.setInputNormals (source.normals);
-	se.setIndices (source.indices);	
-	se.setRadiusSearch (source.radius);    
-	se.setMinPointCountInNeighbourhood(min_beighbours);
-	//se.setRadialStructure();
-	se.setAngularDomain();
-	  
-	PointCloud<SpinImage>::Ptr spin_images (new PointCloud<SpinImage> ());
-	{
-        ScopeTime up("cpu");
-		se.compute (*spin_images);
-	}
-	
-    for(size_t i = 0; i < downloaded.size(); ++i)
-    {
-		if(!downloaded_mask[i]) // less than min neighbours, so spinimage wasn't computed
-			continue;  
-
-        SpinImage& gpu = downloaded[i];
-        SpinImage& cpu = spin_images->points[i];
-        
-        size_t FSize = sizeof(SpinImage)/sizeof(gpu.histogram[0]);                                
-        
-        float norm = 0, norm_diff = 0;
-        for(size_t j = 0; j < FSize; ++j)
-        {
-            norm_diff += (gpu.histogram[j] - cpu.histogram[j]) * (gpu.histogram[j] - cpu.histogram[j]);
-            norm += cpu.histogram[j] * cpu.histogram[j];
-
-            //ASSERT_NEAR(gpu.histogram[j], cpu.histogram[j], 0.03f);        
-        }        
-
-        if (norm != 0)
-            ASSERT_LE(norm_diff/norm, 0.02f/FSize);
-    }
+    if (norm != 0)
+      ASSERT_LE (norm_diff / norm, 0.02f / FSize);
+  }
 }
 
+// TEST(PCL_FeaturesGPU, DISABLED_spinImages_radial_angular)
+TEST (PCL_FeaturesGPU, spinImages_radial_angular)
+{
+  DataSource source;
 
-//TEST(PCL_FeaturesGPU, DISABLED_spinImages_radial_angular)
-TEST(PCL_FeaturesGPU, spinImages_radial_angular)
-{   
-    DataSource source;
-    	
-    source.estimateNormals();
-    source.generateIndices(5);
-	//source.indices->resize(1);
-	source.radius *= 2;
+  source.estimateNormals ();
+  source.generateIndices (5);
+  // source.indices->resize(1);
+  source.radius *= 2;
 
-	const int min_beighbours = 15;
-                   
-    vector<PointXYZ> normals_for_gpu(source.normals->points.size());    
-    std::transform(source.normals->points.begin(), source.normals->points.end(), normals_for_gpu.begin(), DataSource::Normal2PointXYZ());        
-    
+  const int min_beighbours = 15;
 
-    //uploading data to GPU
-    pcl::gpu::VFHEstimation::PointCloud cloud_gpu;
-    cloud_gpu.upload(source.cloud->points);
+  vector<PointXYZ> normals_for_gpu (source.normals->points.size ());
+  std::transform (source.normals->points.begin (), source.normals->points.end (),
+                  normals_for_gpu.begin (), DataSource::Normal2PointXYZ ());
 
-    pcl::gpu::VFHEstimation::Normals normals_gpu;
-    normals_gpu.upload(normals_for_gpu);             
+  // uploading data to GPU
+  pcl::gpu::VFHEstimation::PointCloud cloud_gpu;
+  cloud_gpu.upload (source.cloud->points);
 
-    pcl::gpu::VFHEstimation::Indices indices_gpu;
-    indices_gpu.upload(*source.indices);
-    	
-	//////////// GPU ////////////
-	gpu::SpinImageEstimation se_gpu;        
-    se_gpu.setInputWithNormals(cloud_gpu, normals_gpu);
-    se_gpu.setIndices(indices_gpu);
-    se_gpu.setRadiusSearch(source.radius, source.max_elements*10);
-    se_gpu.setMinPointCountInNeighbourhood(min_beighbours);
-	se_gpu.setRadialStructure();
-	se_gpu.setAngularDomain();
+  pcl::gpu::VFHEstimation::Normals normals_gpu;
+  normals_gpu.upload (normals_for_gpu);
 
-	DeviceArray2D<SpinImage> spin_images_device;
-	DeviceArray<unsigned char> mask_device;
-    
-    {
-        ScopeTime up("gpu");
-        se_gpu.compute(spin_images_device, mask_device);
+  pcl::gpu::VFHEstimation::Indices indices_gpu;
+  indices_gpu.upload (*source.indices);
+
+  //////////// GPU ////////////
+  gpu::SpinImageEstimation se_gpu;
+  se_gpu.setInputWithNormals (cloud_gpu, normals_gpu);
+  se_gpu.setIndices (indices_gpu);
+  se_gpu.setRadiusSearch (source.radius, source.max_elements * 10);
+  se_gpu.setMinPointCountInNeighbourhood (min_beighbours);
+  se_gpu.setRadialStructure ();
+  se_gpu.setAngularDomain ();
+
+  DeviceArray2D<SpinImage> spin_images_device;
+  DeviceArray<unsigned char> mask_device;
+
+  {
+    ScopeTime up ("gpu");
+    se_gpu.compute (spin_images_device, mask_device);
+  }
+
+  int c;
+  vector<SpinImage> downloaded;
+  vector<unsigned char> downloaded_mask;
+  spin_images_device.download (downloaded, c);
+  mask_device.download (downloaded_mask);
+
+  //////////// CPU ////////////
+  pcl::SpinImageEstimation<PointXYZ, Normal, SpinImage> se (8, 0.0, 16);
+  se.setInputCloud (source.cloud);
+  se.setInputNormals (source.normals);
+  se.setIndices (source.indices);
+  se.setRadiusSearch (source.radius);
+  se.setMinPointCountInNeighbourhood (min_beighbours);
+  se.setRadialStructure ();
+  se.setAngularDomain ();
+
+  PointCloud<SpinImage>::Ptr spin_images (new PointCloud<SpinImage> ());
+  {
+    ScopeTime up ("cpu");
+    se.compute (*spin_images);
+  }
+
+  for (size_t i = 0; i < downloaded.size (); ++i) {
+    if (!downloaded_mask[i]) // less than min neighbours, so spinimage wasn't computed
+      continue;
+
+    SpinImage &gpu = downloaded[i];
+    SpinImage &cpu = spin_images->points[i];
+
+    size_t FSize = sizeof (SpinImage) / sizeof (gpu.histogram[0]);
+
+    float norm = 0, norm_diff = 0;
+    for (size_t j = 0; j < FSize; ++j) {
+      norm_diff +=
+          (gpu.histogram[j] - cpu.histogram[j]) * (gpu.histogram[j] - cpu.histogram[j]);
+      norm += cpu.histogram[j] * cpu.histogram[j];
+
+      // ASSERT_NEAR(gpu.histogram[j], cpu.histogram[j], 0.03f);
     }
 
-	int c;
-    vector<SpinImage> downloaded;
-	vector<unsigned char> downloaded_mask;
-    spin_images_device.download(downloaded, c);
-	mask_device.download(downloaded_mask);
-
-	//////////// CPU ////////////
-	pcl::SpinImageEstimation<PointXYZ, Normal, SpinImage> se(8, 0.0, 16);   
-	se.setInputCloud (source.cloud);
-	se.setInputNormals (source.normals);
-	se.setIndices (source.indices);	
-	se.setRadiusSearch (source.radius);    
-	se.setMinPointCountInNeighbourhood(min_beighbours);
-	se.setRadialStructure();
-	se.setAngularDomain();
-	  
-	PointCloud<SpinImage>::Ptr spin_images (new PointCloud<SpinImage> ());
-	{
-        ScopeTime up("cpu");
-		se.compute (*spin_images);
-	}
-	
-    for(size_t i = 0; i < downloaded.size(); ++i)
-    {
-		if(!downloaded_mask[i]) // less than min neighbours, so spinimage wasn't computed
-			continue;  
-
-        SpinImage& gpu = downloaded[i];
-        SpinImage& cpu = spin_images->points[i];
-        
-        size_t FSize = sizeof(SpinImage)/sizeof(gpu.histogram[0]);                                
-        
-        float norm = 0, norm_diff = 0;
-        for(size_t j = 0; j < FSize; ++j)
-        {
-            norm_diff += (gpu.histogram[j] - cpu.histogram[j]) * (gpu.histogram[j] - cpu.histogram[j]);
-            norm += cpu.histogram[j] * cpu.histogram[j];
-
-            //ASSERT_NEAR(gpu.histogram[j], cpu.histogram[j], 0.03f);        
-        }        
-
-        if (norm != 0)
-            ASSERT_LE(norm_diff/norm, 0.01f/FSize);
-    }
+    if (norm != 0)
+      ASSERT_LE (norm_diff / norm, 0.01f / FSize);
+  }
 }

@@ -35,12 +35,12 @@
  *
  *
  */
-#include <pcl/octree/octree_pointcloud_adjacency.h>
+#include <gtest/gtest.h>
+#include <pcl/common/projection_matrix.h>
 #include <pcl/octree/octree_base.h>
 #include <pcl/octree/octree_iterator.h>
-#include <pcl/common/projection_matrix.h>
+#include <pcl/octree/octree_pointcloud_adjacency.h>
 #include <pcl/point_types.h>
-#include <gtest/gtest.h>
 
 using pcl::octree::OctreeBase;
 using pcl::octree::OctreeIteratorBase;
@@ -50,17 +50,16 @@ using pcl::octree::OctreeKey;
 //                  OctreeIteratorBase
 ////////////////////////////////////////////////////////
 
-struct OctreeIteratorBaseTest : public testing::Test
-{
+struct OctreeIteratorBaseTest : public testing::Test {
   // types
   using OctreeBaseT = OctreeBase<int>;
   using OctreeIteratorBaseT = OctreeIteratorBase<OctreeBaseT>;
 
-
   // methods
-  void SetUp () override
+  void
+  SetUp () override
   {
-    octree_.setTreeDepth (2); //can have at most 8^2 leaves
+    octree_.setTreeDepth (2); // can have at most 8^2 leaves
   }
 
   // members
@@ -71,7 +70,7 @@ TEST_F (OctreeIteratorBaseTest, CopyConstructor)
 {
   OctreeIteratorBaseT it_a;
   OctreeIteratorBaseT it_b (&octree_, 0);
-  OctreeIteratorBaseT it_c (it_b); //Our copy constructor
+  OctreeIteratorBaseT it_c (it_b); // Our copy constructor
 
   EXPECT_NE (it_a, it_c);
   EXPECT_EQ (it_b, it_c);
@@ -86,11 +85,11 @@ TEST_F (OctreeIteratorBaseTest, CopyAssignment)
   EXPECT_EQ (it_a, it_c);
   EXPECT_NE (it_b, it_c);
 
-  it_c = it_a; //Our copy assignment
+  it_c = it_a; // Our copy assignment
   EXPECT_EQ (it_a, it_c);
   EXPECT_NE (it_b, it_c);
 
-  it_c = it_b; //Our copy assignment
+  it_c = it_b; // Our copy assignment
   EXPECT_NE (it_a, it_c);
   EXPECT_EQ (it_b, it_c);
 }
@@ -99,19 +98,19 @@ TEST_F (OctreeIteratorBaseTest, CopyAssignment)
 //        Iterator fixture setup
 ////////////////////////////////////////////////////////
 
-template<typename T>
-struct OctreeIteratorTest : public OctreeIteratorBaseTest
-{
+template <typename T>
+struct OctreeIteratorTest : public OctreeIteratorBaseTest {
   // types
   using OctreeKeyT = OctreeKey;
 
   // methods
   OctreeIteratorTest () : it_ (&octree_, tree_depth_) {}
 
-  void SetUp () override
+  void
+  SetUp () override
   {
     // Set up my octree
-    octree_.setTreeDepth (tree_depth_); //can have at most 8 leaves
+    octree_.setTreeDepth (tree_depth_); // can have at most 8 leaves
 
     // Generate the unique key for our leaves
     keys_[0] = OctreeKeyT (0b0u, 0b0u, 0b0u);
@@ -131,7 +130,8 @@ struct OctreeIteratorTest : public OctreeIteratorBaseTest
     it_.reset ();
 
     // increment the iterator 4 times
-    for (uint8_t i = 0; i < 4; ++it_, ++i);
+    for (uint8_t i = 0; i < 4; ++it_, ++i)
+      ;
   }
 
   // members
@@ -142,18 +142,18 @@ struct OctreeIteratorTest : public OctreeIteratorBaseTest
   T it_;
 };
 
-using pcl::octree::OctreeDepthFirstIterator;
 using pcl::octree::OctreeBreadthFirstIterator;
-using pcl::octree::OctreeLeafNodeDepthFirstIterator;
+using pcl::octree::OctreeDepthFirstIterator;
 using pcl::octree::OctreeFixedDepthIterator;
 using pcl::octree::OctreeLeafNodeBreadthFirstIterator;
+using pcl::octree::OctreeLeafNodeDepthFirstIterator;
 
-using OctreeIteratorTypes = testing::Types
-        <OctreeDepthFirstIterator<OctreeBase<int> >,
-         OctreeBreadthFirstIterator<OctreeBase<int> >,
-         OctreeLeafNodeDepthFirstIterator<OctreeBase<int> >,
-         OctreeFixedDepthIterator<OctreeBase<int> >,
-         OctreeLeafNodeBreadthFirstIterator<OctreeBase<int> > >;
+using OctreeIteratorTypes =
+    testing::Types<OctreeDepthFirstIterator<OctreeBase<int>>,
+                   OctreeBreadthFirstIterator<OctreeBase<int>>,
+                   OctreeLeafNodeDepthFirstIterator<OctreeBase<int>>,
+                   OctreeFixedDepthIterator<OctreeBase<int>>,
+                   OctreeLeafNodeBreadthFirstIterator<OctreeBase<int>>>;
 TYPED_TEST_CASE (OctreeIteratorTest, OctreeIteratorTypes);
 
 TYPED_TEST (OctreeIteratorTest, CopyConstructor)
@@ -189,14 +189,14 @@ TYPED_TEST (OctreeIteratorTest, CopyAssignment)
   EXPECT_EQ (it_a, it_c);
   EXPECT_NE (it_b, it_c);
 
-  it_c = it_b; //Our copy assignment
+  it_c = it_b; // Our copy assignment
   EXPECT_NE (it_a, it_c);
   EXPECT_EQ (it_b, it_c);
   EXPECT_EQ (*it_b, *it_c);
   EXPECT_EQ (it_b.getNodeID (), it_c.getNodeID ());
   EXPECT_EQ (it_b == it_c, !(it_b != it_c));
 
-  it_c = it_a; //Our copy assignment
+  it_c = it_a; // Our copy assignment
   EXPECT_EQ (it_a, it_c);
   EXPECT_NE (it_b, it_c);
 }
@@ -205,13 +205,13 @@ TYPED_TEST (OctreeIteratorTest, CopyAssignment)
 //        OctreeBase Begin/End Iterator Construction
 ////////////////////////////////////////////////////////
 
-struct OctreeBaseBeginEndIteratorsTest : public testing::Test
-{
+struct OctreeBaseBeginEndIteratorsTest : public testing::Test {
   // Types
   using OctreeT = OctreeBase<int>;
 
   // Methods
-  void SetUp () override
+  void
+  SetUp () override
   {
     // Set tree depth
     oct_a_.setTreeDepth (2);
@@ -222,11 +222,10 @@ struct OctreeBaseBeginEndIteratorsTest : public testing::Test
     // 2 bits per key
     // The 3 LSBs of the id match the 1 LSB of the x, y and z keys
     // The 3 MSBs of the id match the 1 MSB of the x, y and z keys
-    for (size_t i = 0; i < 64u; ++i)
-    {
+    for (size_t i = 0; i < 64u; ++i) {
       const OctreeKey key (((i >> 4) & 0b10u) | ((i >> 2) & 1u), // x
                            ((i >> 3) & 0b10u) | ((i >> 1) & 1u), // y
-                           ((i >> 2) & 0b10u) | (i & 1u));// z
+                           ((i >> 2) & 0b10u) | (i & 1u));       // z
       oct_a_.createLeaf (key.x, key.y, key.z);
       oct_b_.createLeaf (key.x, key.y, key.z);
     }
@@ -410,8 +409,7 @@ TEST_F (OctreeBaseBeginEndIteratorsTest, LeafBreadthEnd)
 //        OctreeBase Iterator For Loop Case
 ////////////////////////////////////////////////////////
 
-struct OctreeBaseIteratorsForLoopTest : public OctreeBaseBeginEndIteratorsTest
-{
+struct OctreeBaseIteratorsForLoopTest : public OctreeBaseBeginEndIteratorsTest {
 };
 
 TEST_F (OctreeBaseIteratorsForLoopTest, DefaultIterator)
@@ -421,16 +419,13 @@ TEST_F (OctreeBaseIteratorsForLoopTest, DefaultIterator)
   unsigned int leaf_count = 0;
 
   // Iterate over every node of the octree oct_a_.
-  for (auto it_a = oct_a_.begin (), it_a_end = oct_a_.end (); it_a != it_a_end; ++it_a)
-  {
+  for (auto it_a = oct_a_.begin (), it_a_end = oct_a_.end (); it_a != it_a_end;
+       ++it_a) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it_a.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it_a.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
     node_count++;
@@ -450,16 +445,13 @@ TEST_F (OctreeBaseIteratorsForLoopTest, DefaultIterator)
   branch_count = 0;
   leaf_count = 0;
   unsigned int max_depth = 1;
-  for (auto it_a = oct_a_.begin (max_depth), it_a_end = oct_a_.end (); it_a != it_a_end; ++it_a)
-  {
+  for (auto it_a = oct_a_.begin (max_depth), it_a_end = oct_a_.end (); it_a != it_a_end;
+       ++it_a) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it_a.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it_a.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
     node_count++;
@@ -478,16 +470,13 @@ TEST_F (OctreeBaseIteratorsForLoopTest, LeafNodeDepthFirstIterator)
   unsigned int leaf_count = 0;
 
   // Iterate over every node of the octree oct_a_.
-  for (auto it_a = oct_a_.leaf_depth_begin (), it_a_end = oct_a_.leaf_depth_end (); it_a != it_a_end; ++it_a)
-  {
+  for (auto it_a = oct_a_.leaf_depth_begin (), it_a_end = oct_a_.leaf_depth_end ();
+       it_a != it_a_end; ++it_a) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it_a.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it_a.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
   }
@@ -503,16 +492,14 @@ TEST_F (OctreeBaseIteratorsForLoopTest, LeafNodeDepthFirstIterator)
   branch_count = 0;
   leaf_count = 0;
   unsigned int max_depth = 1;
-  for (auto it_a = oct_a_.leaf_depth_begin (max_depth), it_a_end = oct_a_.leaf_depth_end (); it_a != it_a_end; ++it_a)
-  {
+  for (auto it_a = oct_a_.leaf_depth_begin (max_depth),
+            it_a_end = oct_a_.leaf_depth_end ();
+       it_a != it_a_end; ++it_a) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it_a.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it_a.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
   }
@@ -529,16 +516,13 @@ TEST_F (OctreeBaseIteratorsForLoopTest, DepthFirstIterator)
   unsigned int leaf_count = 0;
 
   // Iterate over every node of the octree oct_a_.
-  for (auto it_a = oct_a_.depth_begin (), it_a_end = oct_a_.depth_end (); it_a != it_a_end; ++it_a)
-  {
+  for (auto it_a = oct_a_.depth_begin (), it_a_end = oct_a_.depth_end ();
+       it_a != it_a_end; ++it_a) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it_a.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it_a.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
     node_count++;
@@ -558,16 +542,13 @@ TEST_F (OctreeBaseIteratorsForLoopTest, DepthFirstIterator)
   branch_count = 0;
   leaf_count = 0;
   unsigned int max_depth = 1;
-  for (auto it_a = oct_a_.depth_begin (max_depth), it_a_end = oct_a_.depth_end (); it_a != it_a_end; ++it_a)
-  {
+  for (auto it_a = oct_a_.depth_begin (max_depth), it_a_end = oct_a_.depth_end ();
+       it_a != it_a_end; ++it_a) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it_a.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it_a.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
     node_count++;
@@ -587,16 +568,13 @@ TEST_F (OctreeBaseIteratorsForLoopTest, BreadthFirstIterator)
   unsigned int leaf_count = 0;
 
   // Iterate over every node of the octree oct_a_.
-  for (auto it_a = oct_a_.breadth_begin (), it_a_end = oct_a_.breadth_end (); it_a != it_a_end; ++it_a)
-  {
+  for (auto it_a = oct_a_.breadth_begin (), it_a_end = oct_a_.breadth_end ();
+       it_a != it_a_end; ++it_a) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it_a.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it_a.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
     node_count++;
@@ -616,16 +594,13 @@ TEST_F (OctreeBaseIteratorsForLoopTest, BreadthFirstIterator)
   branch_count = 0;
   leaf_count = 0;
   unsigned int max_depth = 1;
-  for (auto it_a = oct_a_.breadth_begin (max_depth), it_a_end = oct_a_.breadth_end (); it_a != it_a_end; ++it_a)
-  {
+  for (auto it_a = oct_a_.breadth_begin (max_depth), it_a_end = oct_a_.breadth_end ();
+       it_a != it_a_end; ++it_a) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it_a.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it_a.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
     node_count++;
@@ -644,19 +619,16 @@ TEST_F (OctreeBaseIteratorsForLoopTest, FixedDepthIterator)
   unsigned int branch_count = 0;
   unsigned int leaf_count = 0;
 
-  for (unsigned int depth = 0; depth <= oct_a_.getTreeDepth (); ++depth)
-  {
+  for (unsigned int depth = 0; depth <= oct_a_.getTreeDepth (); ++depth) {
     // Iterate over every node of the octree oct_a_.
-    for (auto it_a = oct_a_.fixed_depth_begin (depth), it_a_end = oct_a_.fixed_depth_end (); it_a != it_a_end; ++it_a)
-    {
+    for (auto it_a = oct_a_.fixed_depth_begin (depth),
+              it_a_end = oct_a_.fixed_depth_end ();
+         it_a != it_a_end; ++it_a) {
       // store node, branch and leaf count
-      const pcl::octree::OctreeNode* node = it_a.getCurrentOctreeNode ();
-      if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-      {
+      const pcl::octree::OctreeNode *node = it_a.getCurrentOctreeNode ();
+      if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
         branch_count++;
-      }
-      else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-      {
+      } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
         leaf_count++;
       }
       node_count++;
@@ -677,16 +649,14 @@ TEST_F (OctreeBaseIteratorsForLoopTest, FixedDepthIterator)
   branch_count = 0;
   leaf_count = 0;
   unsigned int fixed_depth = 1;
-  for (auto it_a = oct_a_.fixed_depth_begin (fixed_depth), it_a_end = oct_a_.fixed_depth_end (); it_a != it_a_end; ++it_a)
-  {
+  for (auto it_a = oct_a_.fixed_depth_begin (fixed_depth),
+            it_a_end = oct_a_.fixed_depth_end ();
+       it_a != it_a_end; ++it_a) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it_a.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it_a.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
     node_count++;
@@ -706,16 +676,13 @@ TEST_F (OctreeBaseIteratorsForLoopTest, LeafNodeBreadthFirstIterator)
   unsigned int leaf_count = 0;
 
   // Iterate over every node of the octree oct_a_.
-  for (auto it_a = oct_a_.leaf_breadth_begin (), it_a_end = oct_a_.leaf_breadth_end (); it_a != it_a_end; ++it_a)
-  {
+  for (auto it_a = oct_a_.leaf_breadth_begin (), it_a_end = oct_a_.leaf_breadth_end ();
+       it_a != it_a_end; ++it_a) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it_a.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it_a.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
     node_count++;
@@ -734,16 +701,14 @@ TEST_F (OctreeBaseIteratorsForLoopTest, LeafNodeBreadthFirstIterator)
   branch_count = 0;
   leaf_count = 0;
   unsigned int max_depth = 1;
-  for (auto it_a = oct_a_.leaf_breadth_begin (max_depth), it_a_end = oct_a_.leaf_breadth_end (); it_a != it_a_end; ++it_a)
-  {
+  for (auto it_a = oct_a_.leaf_breadth_begin (max_depth),
+            it_a_end = oct_a_.leaf_breadth_end ();
+       it_a != it_a_end; ++it_a) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it_a.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it_a.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
     node_count++;
@@ -759,13 +724,13 @@ TEST_F (OctreeBaseIteratorsForLoopTest, LeafNodeBreadthFirstIterator)
 //        OctreeBase Walk Through Iterator Test
 ////////////////////////////////////////////////////////
 
-struct OctreeBaseWalkThroughIteratorsTest : public testing::Test
-{
+struct OctreeBaseWalkThroughIteratorsTest : public testing::Test {
   // Types
   using OctreeT = OctreeBase<int>;
 
   // Methods
-  void SetUp () override
+  void
+  SetUp () override
   {
     // Create manually an irregular octree.
     // Graphically, this octree appears as follows:
@@ -980,8 +945,7 @@ TEST_F (OctreeBaseWalkThroughIteratorsTest, FixedDepthIterator)
 //        OctreeBase Iterator Pre/Post increment
 ////////////////////////////////////////////////////////
 
-struct OctreeBaseIteratorsPrePostTest : public OctreeBaseBeginEndIteratorsTest
-{
+struct OctreeBaseIteratorsPrePostTest : public OctreeBaseBeginEndIteratorsTest {
 };
 
 TEST_F (OctreeBaseIteratorsPrePostTest, DefaultIterator)
@@ -996,8 +960,7 @@ TEST_F (OctreeBaseIteratorsPrePostTest, DefaultIterator)
 
   // Iterate over every node of the octree oct_a_.
   for (it_a_pre = oct_a_.begin (), it_a_post = oct_a_.begin ();
-       ((it_a_pre != it_a_end) && (it_a_post != it_a_end)); )
-  {
+       ((it_a_pre != it_a_end) && (it_a_post != it_a_end));) {
     EXPECT_EQ (it_a_pre, it_a_post++);
     EXPECT_EQ (++it_a_pre, it_a_post);
   }
@@ -1018,8 +981,7 @@ TEST_F (OctreeBaseIteratorsPrePostTest, LeafNodeDepthFirstIterator)
 
   // Iterate over every node of the octree oct_a_.
   for (it_a_pre = oct_a_.leaf_depth_begin (), it_a_post = oct_a_.leaf_depth_begin ();
-       ((it_a_pre != it_a_end) && (it_a_post != it_a_end)); )
-  {
+       ((it_a_pre != it_a_end) && (it_a_post != it_a_end));) {
     EXPECT_EQ (it_a_pre, it_a_post++);
     EXPECT_EQ (++it_a_pre, it_a_post);
   }
@@ -1040,8 +1002,7 @@ TEST_F (OctreeBaseIteratorsPrePostTest, DepthFirstIterator)
 
   // Iterate over every node of the octree oct_a_.
   for (it_a_pre = oct_a_.depth_begin (), it_a_post = oct_a_.depth_begin ();
-       ((it_a_pre != it_a_end) && (it_a_post != it_a_end)); )
-  {
+       ((it_a_pre != it_a_end) && (it_a_post != it_a_end));) {
     EXPECT_EQ (it_a_pre, it_a_post++);
     EXPECT_EQ (++it_a_pre, it_a_post);
   }
@@ -1062,8 +1023,7 @@ TEST_F (OctreeBaseIteratorsPrePostTest, BreadthFirstIterator)
 
   // Iterate over every node of the octree oct_a_.
   for (it_a_pre = oct_a_.breadth_begin (), it_a_post = oct_a_.breadth_begin ();
-       ((it_a_pre != it_a_end) && (it_a_post != it_a_end)); )
-  {
+       ((it_a_pre != it_a_end) && (it_a_post != it_a_end));) {
     EXPECT_EQ (it_a_pre, it_a_post++);
     EXPECT_EQ (++it_a_pre, it_a_post);
   }
@@ -1082,16 +1042,14 @@ TEST_F (OctreeBaseIteratorsPrePostTest, FixedDepthIterator)
   IteratorT it_a_post;
   IteratorT it_a_end = oct_a_.fixed_depth_end ();
 
-  for (unsigned int depth = 0; depth <= oct_a_.getTreeDepth (); ++depth)
-  {
+  for (unsigned int depth = 0; depth <= oct_a_.getTreeDepth (); ++depth) {
     auto it_a_pre = oct_a_.fixed_depth_begin (depth);
     auto it_a_post = oct_a_.fixed_depth_begin (depth);
 
-
     // Iterate over every node at a given depth of the octree oct_a_.
-    for (it_a_pre = oct_a_.fixed_depth_begin (depth), it_a_post = oct_a_.fixed_depth_begin (depth);
-         ((it_a_pre != it_a_end) && (it_a_post != it_a_end)); )
-    {
+    for (it_a_pre = oct_a_.fixed_depth_begin (depth),
+        it_a_post = oct_a_.fixed_depth_begin (depth);
+         ((it_a_pre != it_a_end) && (it_a_post != it_a_end));) {
       EXPECT_EQ (it_a_pre, it_a_post++);
       EXPECT_EQ (++it_a_pre, it_a_post);
     }
@@ -1112,9 +1070,9 @@ TEST_F (OctreeBaseIteratorsPrePostTest, LeafNodeBreadthFirstIterator)
   IteratorT it_a_end = oct_a_.leaf_breadth_end ();
 
   // Iterate over every node of the octree oct_a_.
-  for (it_a_pre = oct_a_.leaf_breadth_begin (), it_a_post = oct_a_.leaf_breadth_begin ();
-       ((it_a_pre != it_a_end) && (it_a_post != it_a_end)); )
-  {
+  for (it_a_pre = oct_a_.leaf_breadth_begin (),
+      it_a_post = oct_a_.leaf_breadth_begin ();
+       ((it_a_pre != it_a_end) && (it_a_post != it_a_end));) {
     EXPECT_EQ (it_a_pre, it_a_post++);
     EXPECT_EQ (++it_a_pre, it_a_post);
   }
@@ -1127,33 +1085,28 @@ TEST_F (OctreeBaseIteratorsPrePostTest, LeafNodeBreadthFirstIterator)
 //     OctreePointCloudAdjacency Begin/End Iterator Construction
 ////////////////////////////////////////////////////////
 
-struct OctreePointCloudAdjacencyBeginEndIteratorsTest
-  : public testing::Test
-{
+struct OctreePointCloudAdjacencyBeginEndIteratorsTest : public testing::Test {
   // Types
   using PointT = pcl::PointXYZ;
   using PointCloudT = pcl::PointCloud<PointT>;
   using OctreeT = pcl::octree::OctreePointCloudAdjacency<PointT>;
 
   // Methods
-  OctreePointCloudAdjacencyBeginEndIteratorsTest ()
-    : oct_a_ (1)
-    , oct_b_ (1)
-  {}
+  OctreePointCloudAdjacencyBeginEndIteratorsTest () : oct_a_ (1), oct_b_ (1) {}
 
-  void SetUp () override
+  void
+  SetUp () override
   {
     // Replicable results
     std::srand (42);
 
     // Generate Point Cloud
     typename PointCloudT::Ptr cloud (new PointCloudT (100, 1));
-    const float max_inv = 1.f / float (RAND_MAX);
-    for (size_t i = 0; i < 100; ++i)
-    {
-      const PointT pt (10.f * (float (std::rand ()) * max_inv - .5f),
-                       10.f * (float (std::rand ()) * max_inv - .5f),
-                       10.f * (float (std::rand ()) * max_inv - .5f));
+    const float max_inv = 1.f / float(RAND_MAX);
+    for (size_t i = 0; i < 100; ++i) {
+      const PointT pt (10.f * (float(std::rand ()) * max_inv - .5f),
+                       10.f * (float(std::rand ()) * max_inv - .5f),
+                       10.f * (float(std::rand ()) * max_inv - .5f));
       (*cloud)[i] = pt;
     }
 
@@ -1345,24 +1298,20 @@ TEST_F (OctreePointCloudAdjacencyBeginEndIteratorsTest, LeafBreadthEnd)
 //     OctreePointCloudSierpinski Iterator Traversal Test
 ////////////////////////////////////////////////////////
 
-struct OctreePointCloudSierpinskiTest
-  : public testing::Test
-{
+struct OctreePointCloudSierpinskiTest : public testing::Test {
   // Types
   using PointT = pcl::PointXYZ;
   using PointCloudT = pcl::PointCloud<PointT>;
   using OctreeT = pcl::octree::OctreePointCloud<PointT>;
 
   // Methods
-  OctreePointCloudSierpinskiTest ()
-    : oct_ (1)
-    , depth_ (7)
-  {}
+  OctreePointCloudSierpinskiTest () : oct_ (1), depth_ (7) {}
 
-  void SetUp () override
+  void
+  SetUp () override
   {
-    // Create a point cloud which points are inside Sierpinski fractal voxel at the deepest level
-    // https://en.wikipedia.org/wiki/Sierpinski_triangle
+    // Create a point cloud which points are inside Sierpinski fractal voxel at the
+    // deepest level https://en.wikipedia.org/wiki/Sierpinski_triangle
     typename PointCloudT::Ptr cloud (new PointCloudT);
 
     // The voxels will be generate between the points (0, 0, 0) and (1, 1, 1)
@@ -1370,7 +1319,8 @@ struct OctreePointCloudSierpinskiTest
     Eigen::Vector3f v_max (1, 1, 1);
 
     // Generate Sierpinski fractal voxel at the deepest level
-    std::vector<std::pair<Eigen::Vector3f, Eigen::Vector3f> > voxels (generateSierpinskiVoxelExtremities (v_min, v_max, depth_));
+    std::vector<std::pair<Eigen::Vector3f, Eigen::Vector3f>> voxels (
+        generateSierpinskiVoxelExtremities (v_min, v_max, depth_));
 
     // The number of points in each voxel
     unsigned int total_nb_pt = 100000;
@@ -1380,10 +1330,9 @@ struct OctreePointCloudSierpinskiTest
     std::srand (42);
 
     // Fill the point cloud
-    for (std::vector<std::pair<Eigen::Vector3f, Eigen::Vector3f> >::const_iterator it = voxels.begin ();
-        it != voxels.end ();
-        ++it)
-    {
+    for (std::vector<std::pair<Eigen::Vector3f, Eigen::Vector3f>>::const_iterator it =
+             voxels.begin ();
+         it != voxels.end (); ++it) {
       const static float eps = std::numeric_limits<float>::epsilon ();
       double x_min = it->first.x () + eps;
       double y_min = it->first.y () + eps;
@@ -1392,13 +1341,12 @@ struct OctreePointCloudSierpinskiTest
       double y_max = it->second.y () - eps;
       double z_max = it->second.z () - eps;
 
-      for (unsigned int i = 0; i < nb_pt_in_voxel; ++i)
-      {
+      for (unsigned int i = 0; i < nb_pt_in_voxel; ++i) {
         float x = x_min + (rand () / ((float)(RAND_MAX) + 1)) * (x_max - x_min);
         float y = y_min + (rand () / ((float)(RAND_MAX) + 1)) * (y_max - y_min);
         float z = z_min + (rand () / ((float)(RAND_MAX) + 1)) * (z_max - z_min);
 
-        cloud->points.emplace_back(x, y, z);
+        cloud->points.emplace_back (x, y, z);
       }
     }
 
@@ -1417,16 +1365,16 @@ struct OctreePointCloudSierpinskiTest
   }
 
   // Generate a vector of Sierpinski voxels at a given 'depth_arg'
-  std::vector<std::pair<Eigen::Vector3f, Eigen::Vector3f> >
-  generateSierpinskiVoxelExtremities (const Eigen::Vector3f & v_min, const Eigen::Vector3f & v_max,
-                                      const unsigned int & depth_arg)
+  std::vector<std::pair<Eigen::Vector3f, Eigen::Vector3f>>
+  generateSierpinskiVoxelExtremities (const Eigen::Vector3f &v_min,
+                                      const Eigen::Vector3f &v_max,
+                                      const unsigned int &depth_arg)
   {
     std::pair<Eigen::Vector3f, Eigen::Vector3f> voxel (v_min, v_max);
-    std::vector<std::pair<Eigen::Vector3f, Eigen::Vector3f> > voxels;
+    std::vector<std::pair<Eigen::Vector3f, Eigen::Vector3f>> voxels;
     voxels.push_back (voxel);
 
-    for (unsigned int i = 0; i < depth_arg; ++i)
-    {
+    for (unsigned int i = 0; i < depth_arg; ++i) {
       voxels = generateSierpinskiVoxelExtremitiesAux (voxels);
     }
 
@@ -1435,50 +1383,50 @@ struct OctreePointCloudSierpinskiTest
 
   // Apply a recursion step to a vector of macro Sierpinski voxel
   // For each voxel in the input vector 'voxels_in', 4 sub-voxels are generated
-  std::vector<std::pair<Eigen::Vector3f, Eigen::Vector3f> >
-  generateSierpinskiVoxelExtremitiesAux (const std::vector<std::pair<Eigen::Vector3f, Eigen::Vector3f> > & voxels_in)
+  std::vector<std::pair<Eigen::Vector3f, Eigen::Vector3f>>
+  generateSierpinskiVoxelExtremitiesAux (
+      const std::vector<std::pair<Eigen::Vector3f, Eigen::Vector3f>> &voxels_in)
   {
-    std::vector<std::pair<Eigen::Vector3f, Eigen::Vector3f> > voxels_out;
+    std::vector<std::pair<Eigen::Vector3f, Eigen::Vector3f>> voxels_out;
 
-    for (const auto &voxel : voxels_in)
-      {
-        Eigen::Vector3f v_min = voxel.first;
-        Eigen::Vector3f v_max = voxel.second;
-        Eigen::Vector3f v_mid = 0.5 * (v_min + v_max);
+    for (const auto &voxel : voxels_in) {
+      Eigen::Vector3f v_min = voxel.first;
+      Eigen::Vector3f v_max = voxel.second;
+      Eigen::Vector3f v_mid = 0.5 * (v_min + v_max);
 
-        std::pair<Eigen::Vector3f, Eigen::Vector3f> voxel_0;
-        std::pair<Eigen::Vector3f, Eigen::Vector3f> voxel_1;
-        std::pair<Eigen::Vector3f, Eigen::Vector3f> voxel_2;
-        std::pair<Eigen::Vector3f, Eigen::Vector3f> voxel_3;
+      std::pair<Eigen::Vector3f, Eigen::Vector3f> voxel_0;
+      std::pair<Eigen::Vector3f, Eigen::Vector3f> voxel_1;
+      std::pair<Eigen::Vector3f, Eigen::Vector3f> voxel_2;
+      std::pair<Eigen::Vector3f, Eigen::Vector3f> voxel_3;
 
-        voxel_0.first  = v_min;
-        voxel_0.second = v_mid;
-        voxel_1.first  = Eigen::Vector3f (v_min.x (), v_mid.y (), v_mid.z ());
-        voxel_1.second = Eigen::Vector3f (v_mid.x (), v_max.y (), v_max.z ());
-        voxel_2.first  = Eigen::Vector3f (v_mid.x (), v_min.y (), v_mid.z ());
-        voxel_2.second = Eigen::Vector3f (v_max.x (), v_mid.y (), v_max.z ());
-        voxel_3.first  = Eigen::Vector3f (v_mid.x (), v_mid.y (), v_min.z ());
-        voxel_3.second = Eigen::Vector3f (v_max.x (), v_max.y (), v_mid.z ());
+      voxel_0.first = v_min;
+      voxel_0.second = v_mid;
+      voxel_1.first = Eigen::Vector3f (v_min.x (), v_mid.y (), v_mid.z ());
+      voxel_1.second = Eigen::Vector3f (v_mid.x (), v_max.y (), v_max.z ());
+      voxel_2.first = Eigen::Vector3f (v_mid.x (), v_min.y (), v_mid.z ());
+      voxel_2.second = Eigen::Vector3f (v_max.x (), v_mid.y (), v_max.z ());
+      voxel_3.first = Eigen::Vector3f (v_mid.x (), v_mid.y (), v_min.z ());
+      voxel_3.second = Eigen::Vector3f (v_max.x (), v_max.y (), v_mid.z ());
 
-        voxels_out.push_back (voxel_0);
-        voxels_out.push_back (voxel_1);
-        voxels_out.push_back (voxel_2);
-        voxels_out.push_back (voxel_3);
-      }
+      voxels_out.push_back (voxel_0);
+      voxels_out.push_back (voxel_1);
+      voxels_out.push_back (voxel_2);
+      voxels_out.push_back (voxel_3);
+    }
 
     return voxels_out;
   }
 
   /** \brief Computes the total number of parent nodes at the specified depth
-    *
-    * The octree is built such that the number of the leaf nodes is equal to
-    * 4^depth and the number of branch nodes is egal to (4^depth -1)/(4 - 1),
-    * where depth is the detph of the octree. The details of the expression
-    * provided for the number of branch nodes could be found at:
-    * https://en.wikipedia.org/wiki/Geometric_progression#Geometric_series
-    * \param[in] depth - The depth of the octree
-    * \return The total number of parent nodes at the specified depth level.
-    */
+   *
+   * The octree is built such that the number of the leaf nodes is equal to
+   * 4^depth and the number of branch nodes is egal to (4^depth -1)/(4 - 1),
+   * where depth is the detph of the octree. The details of the expression
+   * provided for the number of branch nodes could be found at:
+   * https://en.wikipedia.org/wiki/Geometric_progression#Geometric_series
+   * \param[in] depth - The depth of the octree
+   * \return The total number of parent nodes at the specified depth level.
+   */
   static unsigned
   computeTotalParentNodeCount (const unsigned depth)
   {
@@ -1504,16 +1452,12 @@ TEST_F (OctreePointCloudSierpinskiTest, DefaultIterator)
   unsigned int branch_count = 0;
   unsigned int leaf_count = 0;
 
-  for (auto it = oct_.begin (), it_end = oct_.end (); it != it_end; ++it)
-  {
+  for (auto it = oct_.begin (), it_end = oct_.end (); it != it_end; ++it) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
     node_count++;
@@ -1524,13 +1468,12 @@ TEST_F (OctreePointCloudSierpinskiTest, DefaultIterator)
   EXPECT_EQ (node_count, computeTotalParentNodeCount (depth_ + 1));
 
   // Check the specific key/child_idx value for this octree
-  for (auto it = oct_.begin (), it_end = oct_.end (); it != it_end; ++it)
-  {
-    for (unsigned int i = 0; i < depth_; ++i)
-    {
+  for (auto it = oct_.begin (), it_end = oct_.end (); it != it_end; ++it) {
+    for (unsigned int i = 0; i < depth_; ++i) {
       // The binary representation child_idx can only contain an even number of 1
       int child_idx = it.getCurrentOctreeKey ().getChildIdxWithDepthMask (1 << i);
-      EXPECT_TRUE ((child_idx == 0) || (child_idx == 3) || (child_idx == 5) || (child_idx == 6));
+      EXPECT_TRUE ((child_idx == 0) || (child_idx == 3) || (child_idx == 5) ||
+                   (child_idx == 6));
     }
   }
 }
@@ -1546,16 +1489,13 @@ TEST_F (OctreePointCloudSierpinskiTest, LeafNodeDepthFirstIterator)
   unsigned int branch_count = 0;
   unsigned int leaf_count = 0;
 
-  for (auto it = oct_.leaf_depth_begin (), it_end = oct_.leaf_depth_end (); it != it_end; ++it)
-  {
+  for (auto it = oct_.leaf_depth_begin (), it_end = oct_.leaf_depth_end ();
+       it != it_end; ++it) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
     node_count++;
@@ -1566,13 +1506,13 @@ TEST_F (OctreePointCloudSierpinskiTest, LeafNodeDepthFirstIterator)
   EXPECT_EQ (node_count, pow (4, depth_));
 
   // Check the specific key/child_idx value for this octree
-  for (auto it = oct_.leaf_depth_begin (), it_end = oct_.leaf_depth_end (); it != it_end; ++it)
-  {
-    for (unsigned int i = 0; i < depth_; ++i)
-    {
+  for (auto it = oct_.leaf_depth_begin (), it_end = oct_.leaf_depth_end ();
+       it != it_end; ++it) {
+    for (unsigned int i = 0; i < depth_; ++i) {
       // The binary representation child_idx can only contain an even number of 1
       int child_idx = it.getCurrentOctreeKey ().getChildIdxWithDepthMask (1 << i);
-      EXPECT_TRUE ((child_idx == 0) || (child_idx == 3) || (child_idx == 5) || (child_idx == 6));
+      EXPECT_TRUE ((child_idx == 0) || (child_idx == 3) || (child_idx == 5) ||
+                   (child_idx == 6));
     }
   }
 }
@@ -1588,16 +1528,12 @@ TEST_F (OctreePointCloudSierpinskiTest, DepthFirstIterator)
   unsigned int branch_count = 0;
   unsigned int leaf_count = 0;
 
-  for (auto it = oct_.depth_begin (), it_end = oct_.depth_end (); it != it_end; ++it)
-  {
+  for (auto it = oct_.depth_begin (), it_end = oct_.depth_end (); it != it_end; ++it) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
     node_count++;
@@ -1608,13 +1544,12 @@ TEST_F (OctreePointCloudSierpinskiTest, DepthFirstIterator)
   EXPECT_EQ (node_count, computeTotalParentNodeCount (depth_ + 1));
 
   // Check the specific key/child_idx value for this octree
-  for (auto it = oct_.depth_begin (), it_end = oct_.depth_end (); it != it_end; ++it)
-  {
-    for (unsigned int i = 0; i < depth_; ++i)
-    {
+  for (auto it = oct_.depth_begin (), it_end = oct_.depth_end (); it != it_end; ++it) {
+    for (unsigned int i = 0; i < depth_; ++i) {
       // The binary representation child_idx can only contain an even number of 1
       int child_idx = it.getCurrentOctreeKey ().getChildIdxWithDepthMask (1 << i);
-      EXPECT_TRUE ((child_idx == 0) || (child_idx == 3) || (child_idx == 5) || (child_idx == 6));
+      EXPECT_TRUE ((child_idx == 0) || (child_idx == 3) || (child_idx == 5) ||
+                   (child_idx == 6));
     }
   }
 }
@@ -1630,16 +1565,13 @@ TEST_F (OctreePointCloudSierpinskiTest, BreadthFirstIterator)
   unsigned int branch_count = 0;
   unsigned int leaf_count = 0;
 
-  for (auto it = oct_.breadth_begin (), it_end = oct_.breadth_end (); it != it_end; ++it)
-  {
+  for (auto it = oct_.breadth_begin (), it_end = oct_.breadth_end (); it != it_end;
+       ++it) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
     node_count++;
@@ -1650,13 +1582,13 @@ TEST_F (OctreePointCloudSierpinskiTest, BreadthFirstIterator)
   EXPECT_EQ (node_count, computeTotalParentNodeCount (depth_ + 1));
 
   // Check the specific key/child_idx value for this octree
-  for (auto it = oct_.breadth_begin (), it_end = oct_.breadth_end (); it != it_end; ++it)
-  {
-    for (unsigned int i = 0; i < depth_; ++i)
-    {
+  for (auto it = oct_.breadth_begin (), it_end = oct_.breadth_end (); it != it_end;
+       ++it) {
+    for (unsigned int i = 0; i < depth_; ++i) {
       // The binary representation child_idx can only contain an even number of 1
       int child_idx = it.getCurrentOctreeKey ().getChildIdxWithDepthMask (1 << i);
-      EXPECT_TRUE ((child_idx == 0) || (child_idx == 3) || (child_idx == 5) || (child_idx == 6));
+      EXPECT_TRUE ((child_idx == 0) || (child_idx == 3) || (child_idx == 5) ||
+                   (child_idx == 6));
     }
   }
 }
@@ -1668,11 +1600,10 @@ TEST_F (OctreePointCloudSierpinskiTest, FixedDepthIterator)
   ASSERT_EQ (oct_.getBranchCount (), computeTotalParentNodeCount (depth_));
 
   // Check the number of nodes at each level of the octree
-  for (unsigned int idx_depth = 1; idx_depth <= depth_; ++idx_depth)
-  {
+  for (unsigned int idx_depth = 1; idx_depth <= depth_; ++idx_depth) {
     unsigned int nb_nodes = 0;
-    for (auto it = oct_.fixed_depth_begin (idx_depth),  it_end = oct_.fixed_depth_end (); it != it_end; ++it)
-    {
+    for (auto it = oct_.fixed_depth_begin (idx_depth), it_end = oct_.fixed_depth_end ();
+         it != it_end; ++it) {
       ASSERT_EQ (it.getCurrentOctreeDepth (), idx_depth);
       ++nb_nodes;
     }
@@ -1681,13 +1612,13 @@ TEST_F (OctreePointCloudSierpinskiTest, FixedDepthIterator)
   }
 
   // Check the specific key/child_idx value for this octree
-  for (auto it = oct_.fixed_depth_begin (depth_ + 1), it_end = oct_.fixed_depth_end (); it != it_end; ++it)
-  {
-    for (unsigned int i = 0; i < depth_; ++i)
-    {
+  for (auto it = oct_.fixed_depth_begin (depth_ + 1), it_end = oct_.fixed_depth_end ();
+       it != it_end; ++it) {
+    for (unsigned int i = 0; i < depth_; ++i) {
       // The binary representation child_idx can only contain an even number of 1
       int child_idx = it.getCurrentOctreeKey ().getChildIdxWithDepthMask (1 << i);
-      ASSERT_TRUE ((child_idx == 0) || (child_idx == 3) || (child_idx == 5) || (child_idx == 6));
+      ASSERT_TRUE ((child_idx == 0) || (child_idx == 3) || (child_idx == 5) ||
+                   (child_idx == 6));
     }
   }
 }
@@ -1703,16 +1634,13 @@ TEST_F (OctreePointCloudSierpinskiTest, LeafNodeBreadthFirstIterator)
   unsigned int branch_count = 0;
   unsigned int leaf_count = 0;
 
-  for (auto it = oct_.leaf_breadth_begin (), it_end = oct_.leaf_breadth_end (); it != it_end; ++it)
-  {
+  for (auto it = oct_.leaf_breadth_begin (), it_end = oct_.leaf_breadth_end ();
+       it != it_end; ++it) {
     // store node, branch and leaf count
-    const pcl::octree::OctreeNode* node = it.getCurrentOctreeNode ();
-    if (node->getNodeType () == pcl::octree::BRANCH_NODE)
-    {
+    const pcl::octree::OctreeNode *node = it.getCurrentOctreeNode ();
+    if (node->getNodeType () == pcl::octree::BRANCH_NODE) {
       branch_count++;
-    }
-    else if (node->getNodeType () == pcl::octree::LEAF_NODE)
-    {
+    } else if (node->getNodeType () == pcl::octree::LEAF_NODE) {
       leaf_count++;
     }
     node_count++;
@@ -1723,19 +1651,19 @@ TEST_F (OctreePointCloudSierpinskiTest, LeafNodeBreadthFirstIterator)
   EXPECT_EQ (node_count, pow (4, depth_));
 
   // Check the specific key/child_idx value for this octree
-  for (auto it = oct_.leaf_breadth_begin (), it_end = oct_.leaf_breadth_end (); it != it_end; ++it)
-  {
-    for (unsigned int i = 0; i < depth_; ++i)
-    {
+  for (auto it = oct_.leaf_breadth_begin (), it_end = oct_.leaf_breadth_end ();
+       it != it_end; ++it) {
+    for (unsigned int i = 0; i < depth_; ++i) {
       // The binary representation child_idx can only contain an even number of 1
       int child_idx = it.getCurrentOctreeKey ().getChildIdxWithDepthMask (1 << i);
-      EXPECT_TRUE ((child_idx == 0) || (child_idx == 3) || (child_idx == 5) || (child_idx == 6));
+      EXPECT_TRUE ((child_idx == 0) || (child_idx == 3) || (child_idx == 5) ||
+                   (child_idx == 6));
     }
   }
 }
 
 int
-main (int argc, char** const argv)
+main (int argc, char **const argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

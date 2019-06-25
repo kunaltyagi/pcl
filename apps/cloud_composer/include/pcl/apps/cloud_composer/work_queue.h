@@ -47,38 +47,36 @@ namespace pcl
   {
     class AbstractTool;
     class CloudComposerItem;
-    
-    struct ActionPair
-    {
-      CloudCommand* command;  
-      AbstractTool* tool;
+
+    struct ActionPair {
+      CloudCommand *command;
+      AbstractTool *tool;
     };
-    
+
     class WorkQueue : public QObject
     {
       Q_OBJECT
       public:
-        WorkQueue (QObject* parent = nullptr);  
-        ~WorkQueue();  
+      WorkQueue (QObject *parent = nullptr);
+      ~WorkQueue ();
       public Q_SLOTS:
-        void
-        enqueueNewAction (AbstractTool* new_tool, ConstItemList input_data);
-        
-        void 
-        actionFinished (ActionPair finished_action);
-        
-        void 
-        checkQueue ();
-      Q_SIGNALS:
-        void 
-        commandProgress (QString command_text, double progress);
+      void
+      enqueueNewAction (AbstractTool *new_tool, ConstItemList input_data);
 
-        void
-        commandComplete (CloudCommand* completed_command);
-        
+      void
+      actionFinished (ActionPair finished_action);
+
+      void
+      checkQueue ();
+      Q_SIGNALS:
+      void
+      commandProgress (QString command_text, double progress);
+
+      void
+      commandComplete (CloudCommand *completed_command);
+
       private:
-        QQueue <ActionPair> work_queue_;
-        
+      QQueue<ActionPair> work_queue_;
     };
-  }
-}
+  } // namespace cloud_composer
+} // namespace pcl

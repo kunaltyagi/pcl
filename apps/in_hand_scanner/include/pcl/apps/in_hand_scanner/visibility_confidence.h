@@ -42,8 +42,8 @@
 
 #include <cstdint>
 
-#include <pcl/pcl_exports.h>
 #include <pcl/apps/in_hand_scanner/eigen.h>
+#include <pcl/pcl_exports.h>
 
 namespace pcl
 {
@@ -57,28 +57,24 @@ namespace pcl
     class PCL_EXPORTS Dome
     {
       public:
+      static const int num_directions = 31;
+      using Vertices = Eigen::Matrix<float, 4, num_directions>;
 
-        static const int num_directions = 31;
-        using Vertices = Eigen::Matrix <float, 4, num_directions>;
+      Dome ();
 
-        Dome ();
-
-        Vertices
-        getVertices () const;
+      Vertices
+      getVertices () const;
 
       private:
-
-        Vertices vertices_;
+      Vertices vertices_;
 
       public:
-
-        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+      EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     };
 
     PCL_EXPORTS void
-    addDirection (const Eigen::Vector4f& normal,
-                  const Eigen::Vector4f& direction,
-                  uint32_t&              directions);
+    addDirection (const Eigen::Vector4f &normal, const Eigen::Vector4f &direction,
+                  uint32_t &directions);
 
     PCL_EXPORTS unsigned int
     countDirections (const uint32_t directions);

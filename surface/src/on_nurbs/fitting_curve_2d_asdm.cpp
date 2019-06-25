@@ -31,7 +31,7 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *
- * 
+ *
  *
  */
 
@@ -41,15 +41,14 @@
 using namespace pcl;
 using namespace on_nurbs;
 
-FittingCurve2dASDM::FittingCurve2dASDM (int order, NurbsDataCurve2d *data) :
-  FittingCurve2dAPDM (order, data)
+FittingCurve2dASDM::FittingCurve2dASDM (int order, NurbsDataCurve2d *data)
+    : FittingCurve2dAPDM (order, data)
 {
 }
 
-FittingCurve2dASDM::FittingCurve2dASDM (NurbsDataCurve2d *data, const ON_NurbsCurve &ns) :
-  FittingCurve2dAPDM (data, ns)
+FittingCurve2dASDM::FittingCurve2dASDM (NurbsDataCurve2d *data, const ON_NurbsCurve &ns)
+    : FittingCurve2dAPDM (data, ns)
 {
-
 }
 
 void
@@ -58,16 +57,15 @@ FittingCurve2dASDM::assemble (const FittingCurve2dAPDM::Parameter &parameter)
   int cp_red = m_nurbs.m_order - 2;
   int ncp = m_nurbs.m_cv_count - 2 * cp_red;
   int nCageReg = m_nurbs.m_cv_count - 2 * cp_red;
-  int nInt = int (m_data->interior.size ());
+  int nInt = int(m_data->interior.size ());
   //  int nCommon = m_data->common.size();
   //  int nClosestP = parameter.closest_point_resolution;
 
   std::vector<double> elements = getElementVector (m_nurbs);
-  int nClosestP = int (elements.size ());
+  int nClosestP = int(elements.size ());
 
   double wInt = 1.0;
-  if (!m_data->interior_weight.empty ())
-  {
+  if (!m_data->interior_weight.empty ()) {
     wInt = m_data->interior_weight[0];
   }
 
@@ -82,16 +80,17 @@ FittingCurve2dASDM::assemble (const FittingCurve2dAPDM::Parameter &parameter)
   if (wInt > 0.0)
     assembleInterior (wInt, parameter.interior_sigma2, parameter.rScale, row);
 
-  assembleClosestPoints (elements, parameter.closest_point_weight, parameter.closest_point_sigma2, row);
+  assembleClosestPoints (elements, parameter.closest_point_weight,
+                         parameter.closest_point_sigma2, row);
 
   if (wCageReg > 0.0)
     addCageRegularisation (wCageReg, row, elements, parameter.smooth_concavity);
 
-  if (row < nrows)
-  {
+  if (row < nrows) {
     m_solver.resize (row);
     if (!m_quiet)
-      printf ("[FittingCurve2dASDM::assemble] Warning: rows do not match: %d %d\n", row, nrows);
+      printf ("[FittingCurve2dASDM::assemble] Warning: rows do not match: %d %d\n", row,
+              nrows);
   }
 }
 
@@ -114,8 +113,7 @@ FittingCurve2dASDM::updateCurve (double damp)
 
   double cps_diff (0.0);
 
-  for (int j = 0; j < ncp; j++)
-  {
+  for (int j = 0; j < ncp; j++) {
 
     ON_3dPoint cp_prev;
     m_nurbs.GetCV (j, cp_prev);
@@ -123,7 +121,8 @@ FittingCurve2dASDM::updateCurve (double damp)
     double x = m_solver.x (2 * j + 0, 0);
     double y = m_solver.x (2 * j + 1, 0);
 
-    cps_diff += sqrt ((x - cp_prev.x) * (x - cp_prev.x) + (y - cp_prev.y) * (y - cp_prev.y));
+    cps_diff +=
+        sqrt ((x - cp_prev.x) * (x - cp_prev.x) + (y - cp_prev.y) * (y - cp_prev.y));
 
     ON_3dPoint cp;
     cp.x = cp_prev.x + damp * (x - cp_prev.x);
@@ -133,8 +132,7 @@ FittingCurve2dASDM::updateCurve (double damp)
     m_nurbs.SetCV (j, cp);
   }
 
-  for (int j = 0; j < 2 * cp_red; j++)
-  {
+  for (int j = 0; j < 2 * cp_red; j++) {
     ON_3dPoint cp;
     m_nurbs.GetCV (2 * cp_red - 1 - j, cp);
     m_nurbs.SetCV (m_nurbs.m_cv_count - 1 - j, cp);
@@ -144,37 +142,38 @@ FittingCurve2dASDM::updateCurve (double damp)
 }
 
 void
-FittingCurve2dASDM::addPointConstraint (const double &param, const Eigen::Vector2d &point,
-                                        const Eigen::Vector2d &normal, const Eigen::Vector2d &tangent, double rho,
+FittingCurve2dASDM::addPointConstraint (const double &param,
+                                        const Eigen::Vector2d &point,
+                                        const Eigen::Vector2d &normal,
+                                        const Eigen::Vector2d &tangent, double rho,
                                         double d, double weight, unsigned &row)
 {
   int cp_red = m_nurbs.m_order - 2;
   int ncp = m_nurbs.m_cv_count - 2 * cp_red;
   double *N = new double[m_nurbs.m_order * m_nurbs.m_order];
 
-  int E = ON_NurbsSpanIndex (m_nurbs.m_order, m_nurbs.m_cv_count, m_nurbs.m_knot, param, 0, 0);
+  int E = ON_NurbsSpanIndex (m_nurbs.m_order, m_nurbs.m_cv_count, m_nurbs.m_knot, param,
+                             0, 0);
 
   ON_EvaluateNurbsBasis (m_nurbs.m_order, m_nurbs.m_knot + E, param, N);
 
   m_solver.f (row, 0, normal (0) * point (0) * weight);
-  for (int i = 0; i < m_nurbs.m_order; i++)
-  {
+  for (int i = 0; i < m_nurbs.m_order; i++) {
     m_solver.K (row, 2 * ((E + i) % ncp) + 0, weight * normal (0) * N[i]);
   }
   row++;
 
   m_solver.f (row, 0, normal (1) * point (1) * weight);
-  for (int i = 0; i < m_nurbs.m_order; i++)
-  {
+  for (int i = 0; i < m_nurbs.m_order; i++) {
     m_solver.K (row, 2 * ((E + i) % ncp) + 1, weight * normal (1) * N[i]);
   }
   row++;
 
   //  if (d >= 0.0 && d > rho)
-  //    printf("[FittingCurve2dASDM::addPointConstraint] Warning d > rho: %f > %f\n", d, rho);
+  //    printf("[FittingCurve2dASDM::addPointConstraint] Warning d > rho: %f > %f\n", d,
+  //    rho);
 
-  if (d < 0.0)
-  {
+  if (d < 0.0) {
 
     double a = d / (d - rho);
 
@@ -187,14 +186,14 @@ FittingCurve2dASDM::addPointConstraint (const double &param, const Eigen::Vector
     for (int i = 0; i < m_nurbs.m_order; i++)
       m_solver.K (row, 2 * ((E + i) % ncp) + 1, a * a * weight * tangent (1) * N[i]);
     row++;
-
   }
 
-  delete [] N;
+  delete[] N;
 }
 
 void
-FittingCurve2dASDM::addCageRegularisation (double weight, unsigned &row, const std::vector<double> &elements,
+FittingCurve2dASDM::addCageRegularisation (double weight, unsigned &row,
+                                           const std::vector<double> &elements,
                                            double wConcav)
 {
   int cp_red = (m_nurbs.m_order - 2);
@@ -202,22 +201,16 @@ FittingCurve2dASDM::addCageRegularisation (double weight, unsigned &row, const s
 
   //  m_data->interior_line_start.clear();
   //  m_data->interior_line_end.clear();
-  for (int j = 1; j < ncp + 1; j++)
-  {
+  for (int j = 1; j < ncp + 1; j++) {
 
-    if (wConcav == 0.0)
-    {
-    }
-    else
-    {
+    if (wConcav == 0.0) {
+    } else {
       int i = j % ncp;
 
-      if (i >= int (m_data->closest_points_error.size () - 1))
-      {
-        printf ("[FittingCurve2dASDM::addCageRegularisation] Warning, index for closest_points_error out of bounds\n");
-      }
-      else
-      {
+      if (i >= int(m_data->closest_points_error.size () - 1)) {
+        printf ("[FittingCurve2dASDM::addCageRegularisation] Warning, index for "
+                "closest_points_error out of bounds\n");
+      } else {
         Eigen::Vector2d t, n;
         double pt[4];
 
@@ -229,8 +222,9 @@ FittingCurve2dASDM::addCageRegularisation (double weight, unsigned &row, const s
         n (1) = t (0);
         n.normalize ();
 
-        double err = m_data->closest_points_error[i] + 0.5 * (m_data->closest_points_error[i + 1]
-            - m_data->closest_points_error[i]);
+        double err = m_data->closest_points_error[i] +
+                     0.5 * (m_data->closest_points_error[i + 1] -
+                            m_data->closest_points_error[i]);
         m_solver.f (row + 0, 0, err * wConcav * n (0));
         m_solver.f (row + 1, 0, err * wConcav * n (1));
 
@@ -256,9 +250,10 @@ FittingCurve2dASDM::addCageRegularisation (double weight, unsigned &row, const s
 }
 
 void
-FittingCurve2dASDM::assembleInterior (double wInt, double sigma2, double rScale, unsigned &row)
+FittingCurve2dASDM::assembleInterior (double wInt, double sigma2, double rScale,
+                                      unsigned &row)
 {
-  unsigned nInt = unsigned (m_data->interior.size ());
+  unsigned nInt = unsigned(m_data->interior.size ());
   bool wFunction (true);
   double ds = 1.0 / (2.0 * sigma2);
   m_data->interior_line_start.clear ();
@@ -267,8 +262,7 @@ FittingCurve2dASDM::assembleInterior (double wInt, double sigma2, double rScale,
   m_data->interior_normals.clear ();
 
   unsigned updateTNR (false);
-  if (m_data->interior_ncps_prev != m_nurbs.CVCount ())
-  {
+  if (m_data->interior_ncps_prev != m_nurbs.CVCount ()) {
     if (!m_quiet)
       printf ("[FittingCurve2dASDM::assembleInterior] updating T, N, rho\n");
     m_data->interior_tangents.clear ();
@@ -278,27 +272,25 @@ FittingCurve2dASDM::assembleInterior (double wInt, double sigma2, double rScale,
     updateTNR = true;
   }
 
-  //unsigned i1 (0);
-  //unsigned i2 (0);
+  // unsigned i1 (0);
+  // unsigned i2 (0);
 
-  for (unsigned p = 0; p < nInt; p++)
-  {
+  for (unsigned p = 0; p < nInt; p++) {
     Eigen::Vector2d &pcp = m_data->interior[p];
 
     // inverse mapping
     double param;
     Eigen::Vector2d pt, t, n;
     double error;
-    if (p < int (m_data->interior_param.size ()))
-    {
+    if (p < int(m_data->interior_param.size ())) {
       param = findClosestElementMidPoint (m_nurbs, pcp, m_data->interior_param[p]);
-      param = inverseMapping (m_nurbs, pcp, param, error, pt, t, rScale, in_max_steps, in_accuracy, m_quiet);
+      param = inverseMapping (m_nurbs, pcp, param, error, pt, t, rScale, in_max_steps,
+                              in_accuracy, m_quiet);
       m_data->interior_param[p] = param;
-    }
-    else
-    {
+    } else {
       param = findClosestElementMidPoint (m_nurbs, pcp);
-      param = inverseMapping (m_nurbs, pcp, param, error, pt, t, rScale, in_max_steps, in_accuracy, m_quiet);
+      param = inverseMapping (m_nurbs, pcp, param, error, pt, t, rScale, in_max_steps,
+                              in_accuracy, m_quiet);
       m_data->interior_param.push_back (param);
     }
 
@@ -326,17 +318,14 @@ FittingCurve2dASDM::assembleInterior (double wInt, double sigma2, double rScale,
     rho = (1.0 / kappa);
     n *= rho;
 
-    if (!updateTNR && m_data->interior_rho.size () == nInt)
-    {
+    if (!updateTNR && m_data->interior_rho.size () == nInt) {
       n_prev = m_data->interior_normals[p];
       t_prev = m_data->interior_tangents[p];
       rho_prev = m_data->interior_rho[p];
       //        m_data->interior_normals[p] = n;
       //        m_data->interior_tangents[p] = t;
       //        m_data->interior_rho[p] = rho;
-    }
-    else
-    {
+    } else {
       m_data->interior_tangents.push_back (t);
       m_data->interior_normals.push_back (n);
       m_data->interior_rho.push_back (rho);
@@ -346,15 +335,12 @@ FittingCurve2dASDM::assembleInterior (double wInt, double sigma2, double rScale,
     }
 
     double d;
-    if ((pcp - pt).dot (n) >= 0.0)
-    {
+    if ((pcp - pt).dot (n) >= 0.0) {
       d = (pcp - pt).norm ();
-      //i1++;
-    }
-    else
-    {
+      // i1++;
+    } else {
       d = -(pcp - pt).norm ();
-      //i2++;
+      // i2++;
     }
 
     // evaluate if point lies inside or outside the closed curve
@@ -376,15 +362,16 @@ FittingCurve2dASDM::assembleInterior (double wInt, double sigma2, double rScale,
       w = wInt * exp (-(error * error) * ds);
 
     if (w > 1e-6) // avoids ill-conditioned matrix
-      addPointConstraint (m_data->interior_param[p], m_data->interior[p], n_prev, t_prev, rho_prev, d, w, row);
+      addPointConstraint (m_data->interior_param[p], m_data->interior[p], n_prev,
+                          t_prev, rho_prev, d, w, row);
   }
 
   //  printf("[FittingCurve2dASDM::assembleInterior] d>0: %d d<0: %d\n", i1, i2);
 }
 
 void
-FittingCurve2dASDM::assembleClosestPoints (const std::vector<double> &elements, double weight, double sigma2,
-                                           unsigned &row)
+FittingCurve2dASDM::assembleClosestPoints (const std::vector<double> &elements,
+                                           double weight, double sigma2, unsigned &row)
 {
   m_data->closest_points.clear ();
   m_data->closest_points_param.clear ();
@@ -393,8 +380,7 @@ FittingCurve2dASDM::assembleClosestPoints (const std::vector<double> &elements, 
   //  m_data->interior_line_end.clear();
 
   unsigned updateTNR (false);
-  if (m_data->closest_ncps_prev != m_nurbs.CVCount ())
-  {
+  if (m_data->closest_ncps_prev != m_nurbs.CVCount ()) {
     if (!m_quiet)
       printf ("[FittingCurve2dASDM::assembleClosestPoints] updating T, N, rho\n");
     m_data->closest_tangents.clear ();
@@ -406,10 +392,9 @@ FittingCurve2dASDM::assembleClosestPoints (const std::vector<double> &elements, 
 
   double ds = 1.0 / (2.0 * sigma2);
 
-  for (size_t i = 0; i < elements.size (); i++)
-  {
+  for (size_t i = 0; i < elements.size (); i++) {
 
-    int j = (i + 1) % int (elements.size ());
+    int j = (i + 1) % int(elements.size ());
 
     double dxi = elements[j] - elements[i];
     double xi = elements[i] + 0.5 * dxi;
@@ -438,15 +423,12 @@ FittingCurve2dASDM::assembleClosestPoints (const std::vector<double> &elements, 
     rho = (1.0 / kappa);
     n *= rho;
 
-    if (!updateTNR)
-    {
-      if (m_data->closest_rho.size () != elements.size ())
-      {
-        printf ("[FittingCurve2dASDM::assembleClosestPoints] ERROR: size does not match %d %d\n",
-                int (m_data->closest_rho.size ()), int (elements.size ()));
-      }
-      else
-      {
+    if (!updateTNR) {
+      if (m_data->closest_rho.size () != elements.size ()) {
+        printf ("[FittingCurve2dASDM::assembleClosestPoints] ERROR: size does not "
+                "match %d %d\n",
+                int(m_data->closest_rho.size ()), int(elements.size ()));
+      } else {
         n_prev = m_data->closest_normals[i];
         t_prev = m_data->closest_tangents[i];
         rho_prev = m_data->closest_rho[i];
@@ -454,9 +436,7 @@ FittingCurve2dASDM::assembleClosestPoints (const std::vector<double> &elements, 
         //        m_data->closest_tangents[i] = t;
         //        m_data->closest_rho[i] = rho;
       }
-    }
-    else
-    {
+    } else {
       m_data->closest_tangents.push_back (t);
       m_data->closest_normals.push_back (n);
       m_data->closest_rho.push_back (rho);
@@ -479,7 +459,7 @@ FittingCurve2dASDM::assembleClosestPoints (const std::vector<double> &elements, 
     m_data->closest_points_error.push_back ((p3 - p1).squaredNorm ());
 
     double w (weight);
-    w = 0.5 * weight * exp (-(error2) * ds);
+    w = 0.5 * weight * exp (-(error2)*ds);
     //    w = weight * std::fabs(in.dot(p2-p1));
 
     double d;
@@ -489,13 +469,10 @@ FittingCurve2dASDM::assembleClosestPoints (const std::vector<double> &elements, 
       d = -(p2 - p1).norm ();
 
     //    if (weight > 0.0 && (std::fabs(xi2 - xi) < std::fabs(dxi)))
-    if (w > 0.0)
-    {
+    if (w > 0.0) {
       addPointConstraint (xi, p2, n_prev, t_prev, rho_prev, d, w, row);
       //      m_data->interior_line_start.push_back(p1);
       //      m_data->interior_line_end.push_back(p2);
     }
-
   }
 }
-

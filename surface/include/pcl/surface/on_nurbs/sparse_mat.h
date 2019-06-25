@@ -31,15 +31,15 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *
- * 
+ *
  *
  */
 
 #pragma once
 
-#include <vector>
-#include <map>
 #include <cstdio>
+#include <map>
+#include <vector>
 
 namespace pcl
 {
@@ -49,15 +49,12 @@ namespace pcl
     /** \brief Sparse matrix implementation. */
     class SparseMat
     {
-    protected:
-      std::map<int, std::map<int, double> > m_mat;
+      protected:
+      std::map<int, std::map<int, double>> m_mat;
 
-    public:
+      public:
       /** \brief Constructor clearing memory of matrix (=set to zero) */
-      SparseMat ()
-      {
-        m_mat.clear ();
-      }
+      SparseMat () { m_mat.clear (); }
 
       /** \brief Get a set of values defined by index vectors
        *  \param[in] i vector of row indices
@@ -103,8 +100,7 @@ namespace pcl
       /** \brief Print indices and values of non-zero entries. */
       void
       print ();
-
     };
 
-  }
-}
+  } // namespace on_nurbs
+} // namespace pcl

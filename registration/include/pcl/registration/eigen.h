@@ -40,10 +40,10 @@
 #pragma once
 
 #if defined __GNUC__
-#  pragma GCC system_header 
+#pragma GCC system_header
 #endif
 
 #include <Eigen/Core>
+#include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include <unsupported/Eigen/Polynomials>
-#include <Eigen/Dense>

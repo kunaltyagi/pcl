@@ -37,7 +37,7 @@
 #include <pcl/common/distances.h>
 
 void
-pcl::lineToLineSegment (const Eigen::VectorXf &line_a, const Eigen::VectorXf &line_b, 
+pcl::lineToLineSegment (const Eigen::VectorXf &line_a, const Eigen::VectorXf &line_b,
                         Eigen::Vector4f &pt1_seg, Eigen::Vector4f &pt2_seg)
 {
   // point + direction = 2nd point
@@ -68,18 +68,16 @@ pcl::lineToLineSegment (const Eigen::VectorXf &line_a, const Eigen::VectorXf &li
   float c = v.dot (v);
   float d = u.dot (w);
   float e = v.dot (w);
-  float denominator = a*c - b*b;
+  float denominator = a * c - b * b;
   float sc, tc;
   // Compute the line parameters of the two closest points
-  if (denominator < 1e-5)          // The lines are almost parallel
+  if (denominator < 1e-5) // The lines are almost parallel
   {
     sc = 0.0;
-    tc = (b > c ? d / b : e / c);  // Use the largest denominator
-  }
-  else
-  {
-    sc = (b*e - c*d) / denominator;
-    tc = (a*e - b*d) / denominator;
+    tc = (b > c ? d / b : e / c); // Use the largest denominator
+  } else {
+    sc = (b * e - c * d) / denominator;
+    tc = (a * e - b * d) / denominator;
   }
   // Get the closest points
   pt1_seg = Eigen::Vector4f::Zero ();
@@ -88,4 +86,3 @@ pcl::lineToLineSegment (const Eigen::VectorXf &line_a, const Eigen::VectorXf &li
   pt2_seg = Eigen::Vector4f::Zero ();
   pt2_seg = q1 + tc * v;
 }
-

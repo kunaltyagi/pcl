@@ -57,16 +57,21 @@ TEST (Morphological, Dilate)
   cloud_in.is_dense = true;
   cloud_in.resize (2);
 
-  cloud_in[0].x = 0; cloud_in[0].y = 0; cloud_in[0].z = 0;
-  cloud_in[1].x = 1; cloud_in[1].y = 1; cloud_in[1].z = 1;
+  cloud_in[0].x = 0;
+  cloud_in[0].y = 0;
+  cloud_in[0].z = 0;
+  cloud_in[1].x = 1;
+  cloud_in[1].y = 1;
+  cloud_in[1].z = 1;
 
   float resolution = 5.0f;
 
-  applyMorphologicalOperator<PointXYZ> (cloud_in.makeShared (), resolution, MORPH_DILATE, cloud_out);
+  applyMorphologicalOperator<PointXYZ> (cloud_in.makeShared (), resolution,
+                                        MORPH_DILATE, cloud_out);
 
   EXPECT_EQ (cloud_out[0].z, 1.0f);
   EXPECT_EQ (cloud_out[1].z, 1.0f);
-  EXPECT_EQ (cloud_in.size(), cloud_out.size());
+  EXPECT_EQ (cloud_in.size (), cloud_out.size ());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,16 +84,21 @@ TEST (Morphological, Erode)
   cloud_in.is_dense = true;
   cloud_in.resize (2);
 
-  cloud_in[0].x = 0; cloud_in[0].y = 0; cloud_in[0].z = 0;
-  cloud_in[1].x = 1; cloud_in[1].y = 1; cloud_in[1].z = 1;
+  cloud_in[0].x = 0;
+  cloud_in[0].y = 0;
+  cloud_in[0].z = 0;
+  cloud_in[1].x = 1;
+  cloud_in[1].y = 1;
+  cloud_in[1].z = 1;
 
   float resolution = 5.0f;
 
-  applyMorphologicalOperator<PointXYZ> (cloud_in.makeShared (), resolution, MORPH_ERODE, cloud_out);
+  applyMorphologicalOperator<PointXYZ> (cloud_in.makeShared (), resolution, MORPH_ERODE,
+                                        cloud_out);
 
   EXPECT_EQ (cloud_out[0].z, 0.0f);
   EXPECT_EQ (cloud_out[1].z, 0.0f);
-  EXPECT_EQ (cloud_in.size(), cloud_out.size());
+  EXPECT_EQ (cloud_in.size (), cloud_out.size ());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,12 +111,17 @@ TEST (Morphological, Open)
   cloud_in.is_dense = true;
   cloud_in.resize (2);
 
-  cloud_in[0].x = 0; cloud_in[0].y = 0; cloud_in[0].z = 0;
-  cloud_in[1].x = 1; cloud_in[1].y = 1; cloud_in[1].z = 1;
+  cloud_in[0].x = 0;
+  cloud_in[0].y = 0;
+  cloud_in[0].z = 0;
+  cloud_in[1].x = 1;
+  cloud_in[1].y = 1;
+  cloud_in[1].z = 1;
 
   float resolution = 5.0f;
 
-  applyMorphologicalOperator<PointXYZ> (cloud_in.makeShared (), resolution, MORPH_OPEN, cloud_out);
+  applyMorphologicalOperator<PointXYZ> (cloud_in.makeShared (), resolution, MORPH_OPEN,
+                                        cloud_out);
 
   EXPECT_EQ (cloud_out[0].z, 0.0f);
   EXPECT_EQ (cloud_out[1].z, 0.0f);
@@ -123,12 +138,17 @@ TEST (Morphological, Close)
   cloud_in.is_dense = true;
   cloud_in.resize (2);
 
-  cloud_in[0].x = 0; cloud_in[0].y = 0; cloud_in[0].z = 0;
-  cloud_in[1].x = 1; cloud_in[1].y = 1; cloud_in[1].z = 1;
+  cloud_in[0].x = 0;
+  cloud_in[0].y = 0;
+  cloud_in[0].z = 0;
+  cloud_in[1].x = 1;
+  cloud_in[1].y = 1;
+  cloud_in[1].z = 1;
 
   float resolution = 5.0f;
 
-  applyMorphologicalOperator<PointXYZ> (cloud_in.makeShared (), resolution, MORPH_CLOSE, cloud_out);
+  applyMorphologicalOperator<PointXYZ> (cloud_in.makeShared (), resolution, MORPH_CLOSE,
+                                        cloud_out);
 
   EXPECT_EQ (cloud_out[0].z, 1.0f);
   EXPECT_EQ (cloud_out[1].z, 1.0f);
@@ -145,25 +165,28 @@ TEST (Morphological, Unsupported)
   cloud_in.is_dense = true;
   cloud_in.resize (2);
 
-  cloud_in[0].x = 0; cloud_in[0].y = 0; cloud_in[0].z = 0;
-  cloud_in[1].x = 1; cloud_in[1].y = 1; cloud_in[1].z = 1;
+  cloud_in[0].x = 0;
+  cloud_in[0].y = 0;
+  cloud_in[0].z = 0;
+  cloud_in[1].x = 1;
+  cloud_in[1].y = 1;
+  cloud_in[1].z = 1;
 
   float resolution = 5.0f;
 
-  applyMorphologicalOperator<PointXYZ> (cloud_in.makeShared (), resolution, 99, cloud_out);
+  applyMorphologicalOperator<PointXYZ> (cloud_in.makeShared (), resolution, 99,
+                                        cloud_out);
 
   EXPECT_EQ (cloud_out[0].z, 0.0f);
   EXPECT_EQ (cloud_out[1].z, 1.0f);
   EXPECT_EQ (cloud_in.size (), cloud_out.size ());
 }
 
-
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());
 }
 /* ]--- */
-

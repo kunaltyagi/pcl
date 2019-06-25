@@ -38,16 +38,16 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_types.h>
-#include <pcl/point_cloud.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl/search/search.h>
-#include <pcl/features/normal_3d.h>
 #include <pcl/features/feature.h>
 #include <pcl/features/fpfh.h>
 #include <pcl/features/impl/fpfh.hpp>
-#include <pcl/recognition/implicit_shape_model.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
 #include <pcl/recognition/impl/implicit_shape_model.hpp>
+#include <pcl/recognition/implicit_shape_model.h>
+#include <pcl/search/search.h>
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr training_cloud;
 pcl::PointCloud<pcl::PointXYZ>::Ptr testing_cloud;
@@ -58,22 +58,23 @@ pcl::PointCloud<pcl::Normal>::Ptr testing_normals;
 TEST (ISM, TrainRecognize)
 {
   std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> clouds;
-  std::vector<pcl::PointCloud<pcl::Normal>::Ptr > normals;
+  std::vector<pcl::PointCloud<pcl::Normal>::Ptr> normals;
   std::vector<unsigned int> classes;
 
   clouds.push_back (training_cloud);
   normals.push_back (training_normals);
   classes.push_back (0);
 
-  pcl::FPFHEstimation<pcl::PointXYZ, pcl::Normal, pcl::Histogram<153> >::Ptr fpfh
-    (new pcl::FPFHEstimation<pcl::PointXYZ, pcl::Normal, pcl::Histogram<153> >);
+  pcl::FPFHEstimation<pcl::PointXYZ, pcl::Normal, pcl::Histogram<153>>::Ptr fpfh (
+      new pcl::FPFHEstimation<pcl::PointXYZ, pcl::Normal, pcl::Histogram<153>>);
   fpfh->setRadiusSearch (30.0);
-  pcl::Feature< pcl::PointXYZ, pcl::Histogram<153> >::Ptr feature_estimator(fpfh);
+  pcl::Feature<pcl::PointXYZ, pcl::Histogram<153>>::Ptr feature_estimator (fpfh);
 
-  pcl::ism::ImplicitShapeModelEstimation<153, pcl::PointXYZ, pcl::Normal>::ISMModelPtr model (new pcl::features::ISMModel);
+  pcl::ism::ImplicitShapeModelEstimation<153, pcl::PointXYZ, pcl::Normal>::ISMModelPtr
+      model (new pcl::features::ISMModel);
 
   pcl::ism::ImplicitShapeModelEstimation<153, pcl::PointXYZ, pcl::Normal> ism;
-  ism.setFeatureEstimator(feature_estimator);
+  ism.setFeatureEstimator (feature_estimator);
   ism.setTrainingClouds (clouds);
   ism.setTrainingClasses (classes);
   ism.setTrainingNormals (normals);
@@ -86,7 +87,7 @@ TEST (ISM, TrainRecognize)
 
   auto vote_list = ism.findObjects (model, testing_cloud, testing_normals, _class);
   EXPECT_NE (vote_list->getNumberOfVotes (), 0);
-  std::vector<pcl::ISMPeak, Eigen::aligned_allocator<pcl::ISMPeak> > strongest_peaks;
+  std::vector<pcl::ISMPeak, Eigen::aligned_allocator<pcl::ISMPeak>> strongest_peaks;
   vote_list->findStrongestPeaks (strongest_peaks, _class, radius, sigma);
 
   EXPECT_NE (strongest_peaks.size (), 0);
@@ -112,36 +113,40 @@ TEST (ISM, TrainWithWrongParameters)
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "This test requires two point clouds (one for training and one for testing)." << std::endl;
-    std::cerr << "You can use these two clouds 'ism_train.pcd' and 'ism_test.pcd'." << std::endl;
+  if (argc < 2) {
+    std::cerr
+        << "This test requires two point clouds (one for training and one for testing)."
+        << std::endl;
+    std::cerr << "You can use these two clouds 'ism_train.pcd' and 'ism_test.pcd'."
+              << std::endl;
     return (-1);
   }
 
-  training_cloud = (new pcl::PointCloud<pcl::PointXYZ>)->makeShared();
-  if (pcl::io::loadPCDFile (argv[1], *training_cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `ism_train.pcd` and pass its path to the test." << std::endl;
+  training_cloud = (new pcl::PointCloud<pcl::PointXYZ>)->makeShared ();
+  if (pcl::io::loadPCDFile (argv[1], *training_cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `ism_train.pcd` and pass "
+                 "its path to the test."
+              << std::endl;
     return (-1);
   }
-  testing_cloud = (new pcl::PointCloud<pcl::PointXYZ>)->makeShared();
-  if (pcl::io::loadPCDFile (argv[2], *testing_cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `ism_test.pcd` and pass its path to the test." << std::endl;
+  testing_cloud = (new pcl::PointCloud<pcl::PointXYZ>)->makeShared ();
+  if (pcl::io::loadPCDFile (argv[2], *testing_cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `ism_test.pcd` and pass "
+                 "its path to the test."
+              << std::endl;
     return (-1);
   }
 
-  training_normals = (new pcl::PointCloud<pcl::Normal>)->makeShared();
-  testing_normals = (new pcl::PointCloud<pcl::Normal>)->makeShared();
+  training_normals = (new pcl::PointCloud<pcl::Normal>)->makeShared ();
+  testing_normals = (new pcl::PointCloud<pcl::Normal>)->makeShared ();
   pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normal_estimator;
   normal_estimator.setRadiusSearch (25.0);
-  normal_estimator.setInputCloud(training_cloud);
-  normal_estimator.compute(*training_normals);
-  normal_estimator.setInputCloud(testing_cloud);
-  normal_estimator.compute(*testing_normals);
+  normal_estimator.setInputCloud (training_cloud);
+  normal_estimator.compute (*training_normals);
+  normal_estimator.setInputCloud (testing_cloud);
+  normal_estimator.compute (*testing_normals);
 
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

@@ -41,9 +41,9 @@
 #include <pcl/registration/transformation_estimation_lm.h>
 #include <pcl/registration/warp_point_rigid_3d.h>
 
-#include <string>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <string>
 #include <vector>
 
 using PointType = pcl::PointXYZ;
@@ -51,34 +51,33 @@ using Cloud = pcl::PointCloud<PointType>;
 using CloudConstPtr = Cloud::ConstPtr;
 using CloudPtr = Cloud::Ptr;
 
-
 void
 selfTest ()
 {
   CloudPtr model (new Cloud);
-  model->points.emplace_back(1,1,0);  
-  model->points.emplace_back(4,4,0); 
-  model->points.emplace_back(5,6,0);
-  model->points.emplace_back(3,3,0);
-  model->points.emplace_back(6,7,0);
-  model->points.emplace_back(7,11,0);
-  model->points.emplace_back(12,15,0);
-  model->points.emplace_back(7,12,0);
+  model->points.emplace_back (1, 1, 0);
+  model->points.emplace_back (4, 4, 0);
+  model->points.emplace_back (5, 6, 0);
+  model->points.emplace_back (3, 3, 0);
+  model->points.emplace_back (6, 7, 0);
+  model->points.emplace_back (7, 11, 0);
+  model->points.emplace_back (12, 15, 0);
+  model->points.emplace_back (7, 12, 0);
 
   CloudPtr data (new Cloud);
-  data->points.emplace_back(3,1,0);
-  data->points.emplace_back(7,4,0);
-  data->points.emplace_back(9,6,0);
+  data->points.emplace_back (3, 1, 0);
+  data->points.emplace_back (7, 4, 0);
+  data->points.emplace_back (9, 6, 0);
 
-  pcl::console::setVerbosityLevel (pcl::console::L_DEBUG);  
-  
+  pcl::console::setVerbosityLevel (pcl::console::L_DEBUG);
+
   pcl::NormalDistributionsTransform2D<PointType, PointType> ndt;
 
   ndt.setMaximumIterations (40);
-  ndt.setGridCentre (Eigen::Vector2f (0,0));
-  ndt.setGridExtent (Eigen::Vector2f (20,20));
-  ndt.setGridStep (Eigen::Vector2f (20,20));
-  ndt.setOptimizationStepSize (Eigen::Vector3d (0.4,0.4,0.1));
+  ndt.setGridCentre (Eigen::Vector2f (0, 0));
+  ndt.setGridExtent (Eigen::Vector2f (20, 20));
+  ndt.setGridStep (Eigen::Vector2f (20, 20));
+  ndt.setOptimizationStepSize (Eigen::Vector3d (0.4, 0.4, 0.1));
   ndt.setTransformationEpsilon (1e-9);
 
   ndt.setInputTarget (model);
@@ -88,7 +87,6 @@ selfTest ()
   ndt.align (*tmp);
   std::cout << ndt.getFinalTransformation () << std::endl;
 }
-
 
 int
 main (int argc, char **argv)
@@ -107,45 +105,41 @@ main (int argc, char **argv)
   pcd_indices = pcl::console::parse_file_extension_argument (argc, argv, ".pcd");
 
   CloudPtr model (new Cloud);
-  if (pcl::io::loadPCDFile (argv[pcd_indices[0]], *model) == -1)
-  {
+  if (pcl::io::loadPCDFile (argv[pcd_indices[0]], *model) == -1) {
     std::cout << "Could not read file" << std::endl;
     return -1;
   }
-  std::cout << argv[pcd_indices[0]] << " width: " << model->width << " height: " << model->height << std::endl;
+  std::cout << argv[pcd_indices[0]] << " width: " << model->width
+            << " height: " << model->height << std::endl;
 
   std::string result_filename (argv[pcd_indices[0]]);
   result_filename = result_filename.substr (result_filename.rfind ('/') + 1);
-  try
-  {
+  try {
     pcl::io::savePCDFile (result_filename.c_str (), *model);
     std::cout << "saving first model to " << result_filename << std::endl;
-  }
-  catch(pcl::IOException& e)
-  {
-    std::cerr << e.what() << std::endl;
+  } catch (pcl::IOException &e) {
+    std::cerr << e.what () << std::endl;
   }
 
   Eigen::Matrix4f t (Eigen::Matrix4f::Identity ());
 
-  for (size_t i = 1; i < pcd_indices.size (); i++)
-  {
+  for (size_t i = 1; i < pcd_indices.size (); i++) {
     CloudPtr data (new Cloud);
-    if (pcl::io::loadPCDFile (argv[pcd_indices[i]], *data) == -1)
-    {
+    if (pcl::io::loadPCDFile (argv[pcd_indices[i]], *data) == -1) {
       std::cout << "Could not read file" << std::endl;
       return -1;
     }
-    std::cout << argv[pcd_indices[i]] << " width: " << data->width << " height: " << data->height << std::endl;
+    std::cout << argv[pcd_indices[i]] << " width: " << data->width
+              << " height: " << data->height << std::endl;
 
-    //pcl::console::setVerbosityLevel(pcl::console::L_DEBUG);
+    // pcl::console::setVerbosityLevel(pcl::console::L_DEBUG);
 
     pcl::NormalDistributionsTransform2D<PointType, PointType> ndt;
 
     ndt.setMaximumIterations (iter);
-    ndt.setGridCentre (Eigen::Vector2f (15,0));
-    ndt.setGridExtent (Eigen::Vector2f (grid_extent,grid_extent));
-    ndt.setGridStep (Eigen::Vector2f (grid_step,grid_step));
+    ndt.setGridCentre (Eigen::Vector2f (15, 0));
+    ndt.setGridExtent (Eigen::Vector2f (grid_extent, grid_extent));
+    ndt.setGridStep (Eigen::Vector2f (grid_step, grid_step));
     ndt.setOptimizationStepSize (optim_step);
     ndt.setTransformationEpsilon (1e-5);
 
@@ -163,16 +157,13 @@ main (int argc, char **argv)
 
     *model = *data;
 
-    try
-    {
+    try {
       std::string result_filename (argv[pcd_indices[i]]);
       result_filename = result_filename.substr (result_filename.rfind ('/') + 1);
       pcl::io::savePCDFileBinary (result_filename.c_str (), *tmp);
       std::cout << "saving result to " << result_filename << std::endl;
-    }
-    catch(pcl::IOException& e)
-    {
-      std::cerr << e.what() << std::endl;
+    } catch (pcl::IOException &e) {
+      std::cerr << e.what () << std::endl;
     }
   }
 

@@ -40,9 +40,9 @@
 #include <pcl/console/print.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-void 
-pcl::getMinMax (const pcl::PCLPointCloud2 &cloud, int,
-                const std::string &field_name, float &min_p, float &max_p)
+void
+pcl::getMinMax (const pcl::PCLPointCloud2 &cloud, int, const std::string &field_name,
+                float &min_p, float &max_p)
 {
   min_p = FLT_MAX;
   max_p = -FLT_MAX;
@@ -50,21 +50,20 @@ pcl::getMinMax (const pcl::PCLPointCloud2 &cloud, int,
   int field_idx = -1;
   for (size_t d = 0; d < cloud.fields.size (); ++d)
     if (cloud.fields[d].name == field_name)
-      field_idx = static_cast<int>(d);
+      field_idx = static_cast<int> (d);
 
-  if (field_idx == -1)
-  {
+  if (field_idx == -1) {
     PCL_ERROR ("[getMinMax] Invalid field (%s) given!\n", field_name.c_str ());
     return;
   }
 
-  for (unsigned int i = 0; i < cloud.fields[field_idx].count; ++i)
-  {
+  for (unsigned int i = 0; i < cloud.fields[field_idx].count; ++i) {
     float data;
     // TODO: replace float with the real data type
-    memcpy (&data, &cloud.data[cloud.fields[field_idx].offset + i * sizeof (float)], sizeof (float));
-    min_p = (data > min_p) ? min_p : data; 
-    max_p = (data < max_p) ? max_p : data; 
+    memcpy (&data, &cloud.data[cloud.fields[field_idx].offset + i * sizeof (float)],
+            sizeof (float));
+    min_p = (data > min_p) ? min_p : data;
+    max_p = (data < max_p) ? max_p : data;
   }
 }
 
@@ -74,13 +73,12 @@ pcl::getMeanStdDev (const std::vector<float> &values, double &mean, double &stdd
 {
   double sum = 0, sq_sum = 0;
 
-  for (const float &value : values)
-  {
+  for (const float &value : values) {
     sum += value;
     sq_sum += value * value;
   }
-  mean = sum / static_cast<double>(values.size ());
-  double variance = (sq_sum - sum * sum / static_cast<double>(values.size ())) / (static_cast<double>(values.size ()) - 1);
+  mean = sum / static_cast<double> (values.size ());
+  double variance = (sq_sum - sum * sum / static_cast<double> (values.size ())) /
+                    (static_cast<double> (values.size ()) - 1);
   stddev = sqrt (variance);
 }
-

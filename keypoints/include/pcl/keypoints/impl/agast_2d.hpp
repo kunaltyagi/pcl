@@ -42,18 +42,18 @@
 #include <pcl/common/io.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointOutT, typename IntensityT> bool
+template <typename PointInT, typename PointOutT, typename IntensityT>
+bool
 pcl::AgastKeypoint2DBase<PointInT, PointOutT, IntensityT>::initCompute ()
 {
-  if (!pcl::Keypoint<PointInT, PointOutT>::initCompute ())
-  {
+  if (!pcl::Keypoint<PointInT, PointOutT>::initCompute ()) {
     PCL_ERROR ("[pcl::%s::initCompute] init failed.!\n", name_.c_str ());
     return (false);
   }
 
-  if (!input_->isOrganized ())
-  {    
-    PCL_ERROR ("[pcl::%s::initCompute] %s doesn't support non organized clouds!\n", name_.c_str ());
+  if (!input_->isOrganized ()) {
+    PCL_ERROR ("[pcl::%s::initCompute] %s doesn't support non organized clouds!\n",
+               name_.c_str ());
     return (false);
   }
 
@@ -61,7 +61,8 @@ pcl::AgastKeypoint2DBase<PointInT, PointOutT, IntensityT>::initCompute ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointOutT> void
+template <typename PointInT, typename PointOutT>
+void
 pcl::AgastKeypoint2D<PointInT, PointOutT>::detectKeypoints (PointCloudOut &output)
 {
   // image size
@@ -69,34 +70,31 @@ pcl::AgastKeypoint2D<PointInT, PointOutT>::detectKeypoints (PointCloudOut &outpu
   const size_t height = input_->height;
 
   // destination for intensity data; will be forwarded to AGAST
-  std::vector<unsigned char> image_data (width*height);
+  std::vector<unsigned char> image_data (width * height);
 
   for (size_t i = 0; i < image_data.size (); ++i)
     image_data[i] = static_cast<unsigned char> (intensity_ ((*input_)[i]));
 
   if (!detector_)
-    detector_.reset (new pcl::keypoints::agast::AgastDetector7_12s (width, height, threshold_, bmax_));
+    detector_.reset (new pcl::keypoints::agast::AgastDetector7_12s (width, height,
+                                                                    threshold_, bmax_));
 
   detector_->setMaxKeypoints (nr_max_keypoints_);
 
-  if (apply_non_max_suppression_)
-  {
+  if (apply_non_max_suppression_) {
     pcl::PointCloud<pcl::PointUV> tmp_cloud;
     detector_->detectKeypoints (image_data, tmp_cloud);
 
     pcl::keypoints::internal::AgastApplyNonMaxSuppresion<PointOutT> anms (
         image_data, tmp_cloud, detector_, output);
-  }
-  else
-  {
-    pcl::keypoints::internal::AgastDetector<PointOutT> dec (
-        image_data, detector_, output);
+  } else {
+    pcl::keypoints::internal::AgastDetector<PointOutT> dec (image_data, detector_,
+                                                            output);
   }
 
   // we do not change the denseness
   output.is_dense = true;
 }
 
-
-#define AgastKeypoint2D(T,I) template class PCL_EXPORTS pcl::AgastKeypoint2D<T,I>;
-#endif 
+#define AgastKeypoint2D(T, I) template class PCL_EXPORTS pcl::AgastKeypoint2D<T, I>;
+#endif

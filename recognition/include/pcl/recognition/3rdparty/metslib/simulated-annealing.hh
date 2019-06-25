@@ -34,7 +34,8 @@
 #ifndef METS_SIMULATED_ANNEALING_HH_
 #define METS_SIMULATED_ANNEALING_HH_
 
-namespace mets {
+namespace mets
+{
 
   /// @defgroup simulated_annealing Simulated Annealing
   /// @{
@@ -44,19 +45,16 @@ namespace mets {
   /// @see mets::simulated_annealing
   ///
   /// An abstract annealing schedule. Implementations
-  /// should decide the new temperature every time the 
+  /// should decide the new temperature every time the
   /// subscript operator is called (every search iteration)
   class abstract_cooling_schedule
   {
-  public:
+    public:
     /// @brief Constructor
-    abstract_cooling_schedule() 
-    { }
+    abstract_cooling_schedule () {}
 
     /// @brief Virtual destructor
-    virtual
-    ~abstract_cooling_schedule() 
-    { }
+    virtual ~abstract_cooling_schedule () {}
 
     /// @brief The function that updates the SA temperature.
     ///
@@ -64,14 +62,14 @@ namespace mets {
     /// @param fs The current working solution.
     /// @return The new scheduled temperature.
     virtual double
-    operator()(double temp, feasible_solution& fs) = 0;
+    operator() (double temp, feasible_solution &fs) = 0;
   };
 
   /// @brief Search by Simulated Annealing.
-  template<typename move_manager_type>
+  template <typename move_manager_type>
   class simulated_annealing : public mets::abstract_search<move_manager_type>
   {
-  public:
+    public:
     using search_type = simulated_annealing<move_manager_type>;
     /// @brief Creates a search by simulated annealing instance.
     ///
@@ -102,178 +100,176 @@ namespace mets {
     /// influence the search quality and duration).
     ///
     /// @param K The "Boltzmann" constant that we want ot use (default is 1).
-    simulated_annealing(evaluable_solution& starting_point,
-			solution_recorder& recorder,
-			move_manager_type& moveman,
-			termination_criteria_chain& tc,
-			abstract_cooling_schedule& cs,
-			double starting_temp,
-			double stop_temp = 1e-7,
-			double K = 1.0);
-    
+    simulated_annealing (evaluable_solution &starting_point,
+                         solution_recorder &recorder, move_manager_type &moveman,
+                         termination_criteria_chain &tc, abstract_cooling_schedule &cs,
+                         double starting_temp, double stop_temp = 1e-7, double K = 1.0);
+
     /// purposely not implemented (see Effective C++)
-    simulated_annealing(const simulated_annealing&);
-    simulated_annealing& operator=(const simulated_annealing&);
-    
+    simulated_annealing (const simulated_annealing &);
+    simulated_annealing &
+    operator= (const simulated_annealing &);
+
     /// @brief This method starts the simulated annealing search
     /// process.
     ///
     /// Remember that this is a minimization process.
     ///
     virtual void
-    search()
-      throw(no_moves_error);
+    search () throw (no_moves_error);
 
-    void setApplyAndEvaluate(bool b) {
+    void
+    setApplyAndEvaluate (bool b)
+    {
       apply_and_evaluate = b;
     }
 
     /// @brief The current annealing temperature.
     ///
     /// @return The current temperature of the algorithm.
-    double 
-    current_temp() const 
-    { return current_temp_m; }
+    double
+    current_temp () const
+    {
+      return current_temp_m;
+    }
 
     /// @brief The annealing schedule instance.
     ///
     /// @return The cooling schedule used by this search process.
-    const abstract_cooling_schedule& 
-    cooling_schedule() const
-    { return cooling_schedule_m; }
+    const abstract_cooling_schedule &
+    cooling_schedule () const
+    {
+      return cooling_schedule_m;
+    }
 
-  protected:
-    termination_criteria_chain& termination_criteria_m;
-    abstract_cooling_schedule& cooling_schedule_m;
+    protected:
+    termination_criteria_chain &termination_criteria_m;
+    abstract_cooling_schedule &cooling_schedule_m;
     double starting_temp_m;
     double stop_temp_m;
     double current_temp_m;
     double K_m;
 
-#if defined (METSLIB_TR1_BOOST)
+#if defined(METSLIB_TR1_BOOST)
     boost::uniform_real<double> ureal;
     boost::mt19937 rng;
-    boost::variate_generator< boost::mt19937, boost::uniform_real<double> > gen;
-#elif defined (METSLIB_HAVE_UNORDERED_MAP) && !defined (METSLIB_TR1_MIXED_NAMESPACE)
+    boost::variate_generator<boost::mt19937, boost::uniform_real<double>> gen;
+#elif defined(METSLIB_HAVE_UNORDERED_MAP) && !defined(METSLIB_TR1_MIXED_NAMESPACE)
     std::uniform_real<double> ureal;
     std::mt19937 rng;
-    std::variate_generator< std::mt19937, std::uniform_real<double> > gen;
+    std::variate_generator<std::mt19937, std::uniform_real<double>> gen;
 #else
     std::tr1::uniform_real<double> ureal;
     std::tr1::mt19937 rng;
-    std::tr1::variate_generator< std::tr1::mt19937, std::tr1::uniform_real<double> > gen;
+    std::tr1::variate_generator<std::tr1::mt19937, std::tr1::uniform_real<double>> gen;
 #endif
 
     bool apply_and_evaluate;
   };
-    
+
   /// @brief Original ECS proposed by Kirkpatrick
-  class exponential_cooling
-    : public abstract_cooling_schedule
+  class exponential_cooling : public abstract_cooling_schedule
   {
-  public:
-    exponential_cooling(double alpha = 0.95)
-      : abstract_cooling_schedule(), factor_m(alpha) 
-    { if(alpha >= 1) throw std::runtime_error("alpha must be < 1"); }
+    public:
+    exponential_cooling (double alpha = 0.95)
+        : abstract_cooling_schedule (), factor_m (alpha)
+    {
+      if (alpha >= 1)
+        throw std::runtime_error ("alpha must be < 1");
+    }
     double
-    operator()(double temp, feasible_solution& /*fs*/)
-    { return temp*factor_m; }
-  protected:
+    operator() (double temp, feasible_solution & /*fs*/)
+    {
+      return temp * factor_m;
+    }
+
+    protected:
     double factor_m;
   };
 
   /// @brief Alternative LCS proposed by Randelman and Grest
-  class linear_cooling
-    : public abstract_cooling_schedule
+  class linear_cooling : public abstract_cooling_schedule
   {
-  public:
-    linear_cooling(double delta = 0.1)
-      : abstract_cooling_schedule(), decrement_m(delta)
-    { if(delta <= 0) throw std::runtime_error("delta must be > 0"); }
+    public:
+    linear_cooling (double delta = 0.1)
+        : abstract_cooling_schedule (), decrement_m (delta)
+    {
+      if (delta <= 0)
+        throw std::runtime_error ("delta must be > 0");
+    }
     double
-    operator()(double temp, feasible_solution& /*fs*/)
-    { return std::max(0.0, temp-decrement_m); }
-  protected:
+    operator() (double temp, feasible_solution & /*fs*/)
+    {
+      return std::max (0.0, temp - decrement_m);
+    }
+
+    protected:
     double decrement_m;
   };
 
   /// @}
+} // namespace mets
+
+template <typename move_manager_t>
+mets::simulated_annealing<move_manager_t>::simulated_annealing (
+    evaluable_solution &working, solution_recorder &recorder, move_manager_t &moveman,
+    termination_criteria_chain &tc, abstract_cooling_schedule &cs, double starting_temp,
+    double stop_temp, double K)
+    : abstract_search<move_manager_t> (working, recorder, moveman),
+      termination_criteria_m (tc), cooling_schedule_m (cs),
+      starting_temp_m (starting_temp), stop_temp_m (stop_temp), current_temp_m (),
+      K_m (K), ureal (0.0, 1.0), rng (), gen (rng, ureal), apply_and_evaluate (false)
+{
 }
 
-template<typename move_manager_t>
-mets::simulated_annealing<move_manager_t>::
-simulated_annealing(evaluable_solution& working,
-		    solution_recorder& recorder,
-		    move_manager_t& moveman,
-		    termination_criteria_chain& tc,
-		    abstract_cooling_schedule& cs,
-		    double starting_temp, 
-		    double stop_temp,
-		    double K)
-  : abstract_search<move_manager_t>(working, recorder, moveman),
-    termination_criteria_m(tc), cooling_schedule_m(cs),
-    starting_temp_m(starting_temp), stop_temp_m(stop_temp),
-    current_temp_m(), K_m(K),
-    ureal(0.0,1.0), rng(), gen(rng, ureal), apply_and_evaluate(false)
-{ 
-}
-
-template<typename move_manager_t>
+template <typename move_manager_t>
 void
-mets::simulated_annealing<move_manager_t>::search()
-  throw(no_moves_error)
+mets::simulated_annealing<move_manager_t>::search () throw (no_moves_error)
 {
   using base_t = abstract_search<move_manager_t>;
 
   current_temp_m = starting_temp_m;
-  while(!termination_criteria_m(base_t::working_solution_m) 
-        && current_temp_m > stop_temp_m)
-    {
-      gol_type actual_cost = 
-	static_cast<mets::evaluable_solution&>(base_t::working_solution_m)
-	.cost_function();
-      /*gol_type best_cost =
-	static_cast<mets::evaluable_solution&>(base_t::working_solution_m)
-	.cost_function();*/
+  while (!termination_criteria_m (base_t::working_solution_m) &&
+         current_temp_m > stop_temp_m) {
+    gol_type actual_cost =
+        static_cast<mets::evaluable_solution &> (base_t::working_solution_m)
+            .cost_function ();
+    /*gol_type best_cost =
+static_cast<mets::evaluable_solution&>(base_t::working_solution_m)
+.cost_function();*/
 
-      base_t::moves_m.refresh(base_t::working_solution_m);
-      for(typename move_manager_t::iterator movit = base_t::moves_m.begin(); 
-          movit != base_t::moves_m.end(); ++movit)
-      {
-        // apply move and record proposed cost function
-        gol_type cost;
-        if(apply_and_evaluate) {
-          cost = (*movit)->apply_and_evaluate(base_t::working_solution_m);
-        } else {
-          cost = (*movit)->evaluate(base_t::working_solution_m);
+    base_t::moves_m.refresh (base_t::working_solution_m);
+    for (typename move_manager_t::iterator movit = base_t::moves_m.begin ();
+         movit != base_t::moves_m.end (); ++movit) {
+      // apply move and record proposed cost function
+      gol_type cost;
+      if (apply_and_evaluate) {
+        cost = (*movit)->apply_and_evaluate (base_t::working_solution_m);
+      } else {
+        cost = (*movit)->evaluate (base_t::working_solution_m);
+      }
+
+      double delta = (static_cast<double> (cost - actual_cost));
+      if (delta < 0 || gen () < exp (-delta / (K_m * current_temp_m))) {
+        // accepted: apply, record, exit for and lower temperature
+        if (!apply_and_evaluate)
+          (*movit)->apply (base_t::working_solution_m);
+
+        base_t::current_move_m = movit;
+        if (base_t::solution_recorder_m.accept (base_t::working_solution_m)) {
+          base_t::step_m = base_t::IMPROVEMENT_MADE;
+          this->notify ();
         }
 
-        double delta = (static_cast<double>(cost-actual_cost));
-        if(delta < 0 || gen() < exp(-delta/(K_m*current_temp_m)))
-        {
-          // accepted: apply, record, exit for and lower temperature
-          if(!apply_and_evaluate)
-            (*movit)->apply(base_t::working_solution_m);
+        base_t::step_m = base_t::MOVE_MADE;
+        this->notify ();
+        break;
+      } else if (apply_and_evaluate) {
+        (*movit)->unapply (base_t::working_solution_m);
+      }
+    } // end for each move
 
-          base_t::current_move_m = movit;
-          if(base_t::solution_recorder_m.accept(base_t::working_solution_m))
-          {
-            base_t::step_m = base_t::IMPROVEMENT_MADE;
-            this->notify();
-          }
-
-          base_t::step_m = base_t::MOVE_MADE;
-          this->notify();
-          break;
-        }
-        else if(apply_and_evaluate)
-        {
-          (*movit)->unapply(base_t::working_solution_m);
-        }
-      } // end for each move
-      
-      current_temp_m = 
-      cooling_schedule_m(current_temp_m, base_t::working_solution_m);
-    }
+    current_temp_m = cooling_schedule_m (current_temp_m, base_t::working_solution_m);
+  }
 }
 #endif

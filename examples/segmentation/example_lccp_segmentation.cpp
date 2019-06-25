@@ -36,13 +36,12 @@
  */
 
 // Stdlib
-#include <cstdlib>
-#include <cmath>
 #include <climits>
+#include <cmath>
+#include <cstdlib>
 #include <thread>
 
 #include <boost/format.hpp>
-
 
 // PCL input/output
 #include <pcl/console/parse.h>
@@ -50,7 +49,7 @@
 #include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/visualization/point_cloud_color_handlers.h>
 
-//PCL other
+// PCL other
 #include <pcl/filters/passthrough.h>
 #include <pcl/segmentation/supervoxel_clustering.h>
 
@@ -58,17 +57,17 @@
 #include <pcl/segmentation/lccp_segmentation.h>
 
 // VTK
-#include <vtkImageReader2Factory.h>
-#include <vtkImageReader2.h>
 #include <vtkImageData.h>
 #include <vtkImageFlip.h>
+#include <vtkImageReader2.h>
+#include <vtkImageReader2Factory.h>
 #include <vtkPolyLine.h>
 
 using namespace std::chrono_literals;
 
 /// *****  Type Definitions ***** ///
 
-using PointT = pcl::PointXYZRGBA;  // The point type used for input
+using PointT = pcl::PointXYZRGBA; // The point type used for input
 using SuperVoxelAdjacencyList = pcl::LCCPSegmentation<PointT>::SupervoxelAdjacencyList;
 
 /// Callback and variables
@@ -82,38 +81,36 @@ float normals_scale;
 /** \brief Callback for setting options in the visualizer via keyboard.
  *  \param[in] event_arg Registered keyboard event  */
 void
-keyboardEventOccurred (const pcl::visualization::KeyboardEvent& event_arg,
-                       void*)
+keyboardEventOccurred (const pcl::visualization::KeyboardEvent &event_arg, void *)
 {
   int key = event_arg.getKeyCode ();
 
   if (event_arg.keyUp ())
-    switch (key)
-    {
-      case (int) '1':
-        show_normals = !show_normals;
-        normals_changed = true;
-        break;
-      case (int) '2':
-        show_adjacency = !show_adjacency;
-        break;
-      case (int) '3':
-        show_supervoxels = !show_supervoxels;
-        break;
-      case (int) '4':
-        normals_scale *= 1.25;
-        normals_changed = true;
-        break;
-      case (int) '5':
-        normals_scale *= 0.8;
-        normals_changed = true;
-        break;
-      case (int) 'd':
-      case (int) 'D':
-        show_help = !show_help;
-        break;
-      default:
-        break;
+    switch (key) {
+    case (int)'1':
+      show_normals = !show_normals;
+      normals_changed = true;
+      break;
+    case (int)'2':
+      show_adjacency = !show_adjacency;
+      break;
+    case (int)'3':
+      show_supervoxels = !show_supervoxels;
+      break;
+    case (int)'4':
+      normals_scale *= 1.25;
+      normals_changed = true;
+      break;
+    case (int)'5':
+      normals_scale *= 0.8;
+      normals_changed = true;
+      break;
+    case (int)'d':
+    case (int)'D':
+      show_help = !show_help;
+      break;
+    default:
+      break;
     }
 }
 
@@ -129,16 +126,14 @@ printText (pcl::visualization::PCLVisualizer::Ptr viewer_arg);
 void
 removeText (pcl::visualization::PCLVisualizer::Ptr viewer_arg);
 
-
 /// ---- main ---- ///
 int
-main (int argc,
-      char ** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)  /// Print Info
+  if (argc < 2) /// Print Info
   {
     pcl::console::print_info (
-\
+
         "\n\
 -- pcl::LCCPSegmentation example -- :\n\
 \n\
@@ -176,62 +171,60 @@ LCCPSegmentation Parameters: \n\
     return (1);
   }
 
-  /// -----------------------------------|  Preparations  |-----------------------------------
+  /// -----------------------------------|  Preparations
+  /// |-----------------------------------
 
   bool sv_output_specified = pcl::console::find_switch (argc, argv, "-so");
   bool show_visualization = (!pcl::console::find_switch (argc, argv, "-novis"));
   bool ignore_provided_normals = pcl::console::find_switch (argc, argv, "-nonormals");
   bool add_label_field = pcl::console::find_switch (argc, argv, "-add");
   bool save_binary_pcd = pcl::console::find_switch (argc, argv, "-bin");
-  
+
   /// Create variables needed for preparations
   std::string outputname;
   pcl::PointCloud<PointT>::Ptr input_cloud_ptr (new pcl::PointCloud<PointT>);
-  pcl::PointCloud<pcl::Normal>::Ptr input_normals_ptr (new pcl::PointCloud<pcl::Normal>);
+  pcl::PointCloud<pcl::Normal>::Ptr input_normals_ptr (
+      new pcl::PointCloud<pcl::Normal>);
   bool has_normals = false;
-  
+
   /// Get pcd path from command line
   std::string pcd_filename = argv[1];
   PCL_INFO ("Loading pointcloud\n");
-  
+
   /// check if the provided pcd file contains normals
   pcl::PCLPointCloud2 input_pointcloud2;
-  if (pcl::io::loadPCDFile (pcd_filename, input_pointcloud2))
-  {
+  if (pcl::io::loadPCDFile (pcd_filename, input_pointcloud2)) {
     PCL_ERROR ("ERROR: Could not read input point cloud %s.\n", pcd_filename.c_str ());
     return (3);
   }
   pcl::fromPCLPointCloud2 (input_pointcloud2, *input_cloud_ptr);
-  if (!ignore_provided_normals)
-  {
-    if (pcl::getFieldIndex (input_pointcloud2,"normal_x") >= 0)
-    {
+  if (!ignore_provided_normals) {
+    if (pcl::getFieldIndex (input_pointcloud2, "normal_x") >= 0) {
       pcl::fromPCLPointCloud2 (input_pointcloud2, *input_normals_ptr);
       has_normals = true;
 
-      //NOTE Supposedly there was a bug in old PCL versions that the orientation was not set correctly when recording clouds. This is just a workaround.
-      if (input_normals_ptr->sensor_orientation_.w () == 0)
-      {
+      // NOTE Supposedly there was a bug in old PCL versions that the orientation was
+      // not set correctly when recording clouds. This is just a workaround.
+      if (input_normals_ptr->sensor_orientation_.w () == 0) {
         input_normals_ptr->sensor_orientation_.w () = 1;
         input_normals_ptr->sensor_orientation_.x () = 0;
         input_normals_ptr->sensor_orientation_.y () = 0;
         input_normals_ptr->sensor_orientation_.z () = 0;
       }
-    }
-    else
-      PCL_WARN ("Could not find normals in pcd file. Normals will be calculated. This only works for single-camera-view pointclouds.\n");
+    } else
+      PCL_WARN ("Could not find normals in pcd file. Normals will be calculated. This "
+                "only works for single-camera-view pointclouds.\n");
   }
   PCL_INFO ("Done making cloud\n");
 
   ///  Create outputname if not given
   bool output_specified = pcl::console::find_switch (argc, argv, "-o");
-  if (output_specified)
-  {
+  if (output_specified) {
     pcl::console::parse (argc, argv, "-o", outputname);
 
-    // If no filename is given, get output filename from inputname (strip separators and file extension)
-    if (outputname.empty () || (outputname.at (0) == '-'))
-    {
+    // If no filename is given, get output filename from inputname (strip separators and
+    // file extension)
+    if (outputname.empty () || (outputname.at (0) == '-')) {
       outputname = pcd_filename;
       size_t sep = outputname.find_last_of ('/');
       if (sep != std::string::npos)
@@ -243,7 +236,8 @@ LCCPSegmentation Parameters: \n\
     }
   }
 
-/// -----------------------------------|  Main Computation  |-----------------------------------
+  /// -----------------------------------|  Main Computation
+  /// |-----------------------------------
 
   ///  Default values of parameters before parsing
   // Supervoxel Stuff
@@ -261,9 +255,9 @@ LCCPSegmentation Parameters: \n\
   uint32_t min_segment_size = 0;
   bool use_extended_convexity = false;
   bool use_sanity_criterion = false;
-  
+
   ///  Parse Arguments needed for computation
-  //Supervoxel Stuff
+  // Supervoxel Stuff
   use_single_cam_transform = pcl::console::find_switch (argc, argv, "-tvoxel");
   use_supervoxel_refinement = pcl::console::find_switch (argc, argv, "-refine");
 
@@ -274,7 +268,7 @@ LCCPSegmentation Parameters: \n\
   pcl::console::parse (argc, argv, "-n", normal_importance);
 
   normals_scale = seed_resolution / 2.0;
-  
+
   // Segmentation Stuff
   pcl::console::parse (argc, argv, "-ct", concavity_tolerance_threshold);
   pcl::console::parse (argc, argv, "-st", smoothness_threshold);
@@ -300,8 +294,7 @@ LCCPSegmentation Parameters: \n\
   PCL_INFO ("Extracting supervoxels\n");
   super.extract (supervoxel_clusters);
 
-  if (use_supervoxel_refinement)
-  {
+  if (use_supervoxel_refinement) {
     PCL_INFO ("Refining supervoxels\n");
     super.refineSupervoxels (2, supervoxel_clusters);
   }
@@ -313,8 +306,11 @@ LCCPSegmentation Parameters: \n\
   std::multimap<uint32_t, uint32_t> supervoxel_adjacency;
   super.getSupervoxelAdjacency (supervoxel_adjacency);
 
-  /// Get the cloud of supervoxel centroid with normals and the colored cloud with supervoxel coloring (this is used for visulization)
-  pcl::PointCloud<pcl::PointNormal>::Ptr sv_centroid_normal_cloud = pcl::SupervoxelClustering<PointT>::makeSupervoxelNormalCloud (supervoxel_clusters);
+  /// Get the cloud of supervoxel centroid with normals and the colored cloud with
+  /// supervoxel coloring (this is used for visulization)
+  pcl::PointCloud<pcl::PointNormal>::Ptr sv_centroid_normal_cloud =
+      pcl::SupervoxelClustering<PointT>::makeSupervoxelNormalCloud (
+          supervoxel_clusters);
 
   /// The Main Step: Perform LCCPSegmentation
 
@@ -322,7 +318,8 @@ LCCPSegmentation Parameters: \n\
   pcl::LCCPSegmentation<PointT> lccp;
   lccp.setConcavityToleranceThreshold (concavity_tolerance_threshold);
   lccp.setSanityCheck (use_sanity_criterion);
-  lccp.setSmoothnessCheck (true, voxel_resolution, seed_resolution, smoothness_threshold);
+  lccp.setSmoothnessCheck (true, voxel_resolution, seed_resolution,
+                           smoothness_threshold);
   lccp.setKFactor (k_factor);
   lccp.setInputSupervoxels (supervoxel_clusters, supervoxel_adjacency);
   lccp.setMinSegmentSize (min_segment_size);
@@ -330,47 +327,49 @@ LCCPSegmentation Parameters: \n\
 
   PCL_INFO ("Interpolation voxel cloud -> input cloud and relabeling\n");
   pcl::PointCloud<pcl::PointXYZL>::Ptr sv_labeled_cloud = super.getLabeledCloud ();
-  pcl::PointCloud<pcl::PointXYZL>::Ptr lccp_labeled_cloud = sv_labeled_cloud->makeShared ();
+  pcl::PointCloud<pcl::PointXYZL>::Ptr lccp_labeled_cloud =
+      sv_labeled_cloud->makeShared ();
   lccp.relabelCloud (*lccp_labeled_cloud);
   SuperVoxelAdjacencyList sv_adjacency_list;
-  lccp.getSVAdjacencyList (sv_adjacency_list);  // Needed for visualization
+  lccp.getSVAdjacencyList (sv_adjacency_list); // Needed for visualization
 
   /// Creating Colored Clouds and Output
-  if (lccp_labeled_cloud->size () == input_cloud_ptr->size ())
-  {
-    if (output_specified)
-    {
+  if (lccp_labeled_cloud->size () == input_cloud_ptr->size ()) {
+    if (output_specified) {
       PCL_INFO ("Saving output\n");
-      if (add_label_field)
-      {
+      if (add_label_field) {
         if (pcl::getFieldIndex (input_pointcloud2, "label") >= 0)
-          PCL_WARN ("Input cloud already has a label field. It will be overwritten by the lccp segmentation output.\n");
+          PCL_WARN ("Input cloud already has a label field. It will be overwritten by "
+                    "the lccp segmentation output.\n");
         pcl::PCLPointCloud2 output_label_cloud2, output_concat_cloud2;
         pcl::toPCLPointCloud2 (*lccp_labeled_cloud, output_label_cloud2);
-        pcl::concatenateFields (input_pointcloud2, output_label_cloud2, output_concat_cloud2);
-        pcl::io::savePCDFile (outputname + "_out.pcd", output_concat_cloud2, Eigen::Vector4f::Zero (), Eigen::Quaternionf::Identity (), save_binary_pcd);
-      }
-      else
-        pcl::io::savePCDFile (outputname + "_out.pcd", *lccp_labeled_cloud, save_binary_pcd);
+        pcl::concatenateFields (input_pointcloud2, output_label_cloud2,
+                                output_concat_cloud2);
+        pcl::io::savePCDFile (outputname + "_out.pcd", output_concat_cloud2,
+                              Eigen::Vector4f::Zero (), Eigen::Quaternionf::Identity (),
+                              save_binary_pcd);
+      } else
+        pcl::io::savePCDFile (outputname + "_out.pcd", *lccp_labeled_cloud,
+                              save_binary_pcd);
 
-      if (sv_output_specified)
-      {
-        pcl::io::savePCDFile (outputname + "_svcloud.pcd", *sv_centroid_normal_cloud, save_binary_pcd);
+      if (sv_output_specified) {
+        pcl::io::savePCDFile (outputname + "_svcloud.pcd", *sv_centroid_normal_cloud,
+                              save_binary_pcd);
       }
     }
-  }
-  else
-  {
-    PCL_ERROR ("ERROR:: Sizes of input cloud and labeled supervoxel cloud do not match. No output is produced.\n");
+  } else {
+    PCL_ERROR ("ERROR:: Sizes of input cloud and labeled supervoxel cloud do not "
+               "match. No output is produced.\n");
   }
 
-  /// -----------------------------------|  Visualization  |-----------------------------------
+  /// -----------------------------------|  Visualization
+  /// |-----------------------------------
 
-  if (show_visualization)
-  {
+  if (show_visualization) {
     /// Calculate visualization of adjacency graph
-    // Using lines this would be VERY slow right now, because one actor is created for every line (may be fixed in future versions of PCL)
-    // Currently this is a work-around creating a polygon mesh consisting of two triangles for each edge
+    // Using lines this would be VERY slow right now, because one actor is created for
+    // every line (may be fixed in future versions of PCL) Currently this is a
+    // work-around creating a polygon mesh consisting of two triangles for each edge
     using namespace pcl;
 
     using VertexIterator = LCCPSegmentation<PointT>::VertexIterator;
@@ -379,129 +378,130 @@ LCCPSegmentation Parameters: \n\
 
     std::set<EdgeID> edge_drawn;
 
-    const unsigned char convex_color [3] = {255, 255, 255};
-    const unsigned char concave_color [3] = {255, 0, 0};
-    const unsigned char* color;
-    
-    //The vertices in the supervoxel adjacency list are the supervoxel centroids
-    //This iterates through them, finding the edges
+    const unsigned char convex_color[3] = {255, 255, 255};
+    const unsigned char concave_color[3] = {255, 0, 0};
+    const unsigned char *color;
+
+    // The vertices in the supervoxel adjacency list are the supervoxel centroids
+    // This iterates through them, finding the edges
     std::pair<VertexIterator, VertexIterator> vertex_iterator_range;
     vertex_iterator_range = boost::vertices (sv_adjacency_list);
 
-    /// Create a cloud of the voxelcenters and map: VertexID in adjacency graph -> Point index in cloud
+    /// Create a cloud of the voxelcenters and map: VertexID in adjacency graph -> Point
+    /// index in cloud
 
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New ();
     vtkSmartPointer<vtkCellArray> cells = vtkSmartPointer<vtkCellArray>::New ();
-    vtkSmartPointer<vtkUnsignedCharArray> colors = vtkSmartPointer<vtkUnsignedCharArray>::New ();
+    vtkSmartPointer<vtkUnsignedCharArray> colors =
+        vtkSmartPointer<vtkUnsignedCharArray>::New ();
     colors->SetNumberOfComponents (3);
     colors->SetName ("Colors");
-    
+
     // Create a polydata to store everything in
     vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New ();
-    for (VertexIterator itr = vertex_iterator_range.first; itr != vertex_iterator_range.second; ++itr)
-    {
+    for (VertexIterator itr = vertex_iterator_range.first;
+         itr != vertex_iterator_range.second; ++itr) {
       const uint32_t sv_label = sv_adjacency_list[*itr];
-      std::pair<AdjacencyIterator, AdjacencyIterator> neighbors = boost::adjacent_vertices (*itr, sv_adjacency_list);
+      std::pair<AdjacencyIterator, AdjacencyIterator> neighbors =
+          boost::adjacent_vertices (*itr, sv_adjacency_list);
 
-      for (AdjacencyIterator itr_neighbor = neighbors.first; itr_neighbor != neighbors.second; ++itr_neighbor)
-      {
-        EdgeID connecting_edge = boost::edge (*itr, *itr_neighbor, sv_adjacency_list).first;  //Get the edge connecting these supervoxels
+      for (AdjacencyIterator itr_neighbor = neighbors.first;
+           itr_neighbor != neighbors.second; ++itr_neighbor) {
+        EdgeID connecting_edge =
+            boost::edge (*itr, *itr_neighbor, sv_adjacency_list)
+                .first; // Get the edge connecting these supervoxels
         if (sv_adjacency_list[connecting_edge].is_convex)
           color = convex_color;
         else
           color = concave_color;
-        
-        // two times since we add also two points per edge
+
+          // two times since we add also two points per edge
 #if (VTK_MAJOR_VERSION < 7) || (VTK_MAJOR_VERSION == 7 && VTK_MINOR_VERSION == 0)
         colors->InsertNextTupleValue (color);
         colors->InsertNextTupleValue (color);
-#else       
+#else
         colors->InsertNextTypedTuple (color);
         colors->InsertNextTypedTuple (color);
-#endif      
-        
+#endif
+
         pcl::Supervoxel<PointT>::Ptr supervoxel = supervoxel_clusters.at (sv_label);
         pcl::PointXYZRGBA vert_curr = supervoxel->centroid_;
-        
-        
+
         const uint32_t sv_neighbor_label = sv_adjacency_list[*itr_neighbor];
-        pcl::Supervoxel<PointT>::Ptr supervoxel_neigh = supervoxel_clusters.at (sv_neighbor_label);
+        pcl::Supervoxel<PointT>::Ptr supervoxel_neigh =
+            supervoxel_clusters.at (sv_neighbor_label);
         pcl::PointXYZRGBA vert_neigh = supervoxel_neigh->centroid_;
-        
+
         points->InsertNextPoint (vert_curr.data);
         points->InsertNextPoint (vert_neigh.data);
-          
+
         // Add the points to the dataset
         vtkSmartPointer<vtkPolyLine> polyLine = vtkSmartPointer<vtkPolyLine>::New ();
         polyLine->GetPointIds ()->SetNumberOfIds (2);
-        polyLine->GetPointIds ()->SetId (0, points->GetNumberOfPoints ()-2);
-        polyLine->GetPointIds ()->SetId (1, points->GetNumberOfPoints ()-1);
+        polyLine->GetPointIds ()->SetId (0, points->GetNumberOfPoints () - 2);
+        polyLine->GetPointIds ()->SetId (1, points->GetNumberOfPoints () - 1);
         cells->InsertNextCell (polyLine);
       }
     }
     polyData->SetPoints (points);
     // Add the lines to the dataset
     polyData->SetLines (cells);
-    
+
     polyData->GetPointData ()->SetScalars (colors);
-        
+
     /// END: Calculate visualization of adjacency graph
 
     /// Configure Visualizer
-    pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
+    pcl::visualization::PCLVisualizer::Ptr viewer (
+        new pcl::visualization::PCLVisualizer ("3D Viewer"));
     viewer->setBackgroundColor (0, 0, 0);
     viewer->registerKeyboardCallback (keyboardEventOccurred, nullptr);
     viewer->addPointCloud (lccp_labeled_cloud, "maincloud");
 
     /// Visualization Loop
     PCL_INFO ("Loading viewer\n");
-    while (!viewer->wasStopped ())
-    {
+    while (!viewer->wasStopped ()) {
       viewer->spinOnce (100);
 
       /// Show Segmentation or Supervoxels
-      viewer->updatePointCloud ( (show_supervoxels) ? sv_labeled_cloud : lccp_labeled_cloud, "maincloud");
+      viewer->updatePointCloud (
+          (show_supervoxels) ? sv_labeled_cloud : lccp_labeled_cloud, "maincloud");
 
       /// Show Normals
-      if (normals_changed)
-      {
+      if (normals_changed) {
         viewer->removePointCloud ("normals");
-        if (show_normals)
-        {
-          viewer->addPointCloudNormals<pcl::PointNormal> (sv_centroid_normal_cloud, 1, normals_scale, "normals");
+        if (show_normals) {
+          viewer->addPointCloudNormals<pcl::PointNormal> (sv_centroid_normal_cloud, 1,
+                                                          normals_scale, "normals");
           normals_changed = false;
         }
       }
       /// Show Adjacency
-      if (show_adjacency)
-      {
+      if (show_adjacency) {
         viewer->removeShape ("adjacency_graph");
         viewer->addModelFromPolyData (polyData, "adjacency_graph");
-      }
-      else
-      {
+      } else {
         viewer->removeShape ("adjacency_graph");
       }
 
-      if (show_help)
-      {
+      if (show_help) {
         viewer->removeShape ("help_text");
         printText (viewer);
-      }
-      else
-      {
+      } else {
         removeText (viewer);
-        if (!viewer->updateText ("Press d to show help", 5, 10, 12, 1.0, 1.0, 1.0, "help_text"))
-          viewer->addText ("Press d to show help", 5, 10, 12, 1.0, 1.0, 1.0, "help_text");
+        if (!viewer->updateText ("Press d to show help", 5, 10, 12, 1.0, 1.0, 1.0,
+                                 "help_text"))
+          viewer->addText ("Press d to show help", 5, 10, 12, 1.0, 1.0, 1.0,
+                           "help_text");
       }
 
-      std::this_thread::sleep_for(100ms);
+      std::this_thread::sleep_for (100ms);
     }
-  }  /// END if (show_visualization)
+  } /// END if (show_visualization)
 
   return (0);
 
-}  /// END main
+} /// END main
 
 /// -------------------------| Definitions of helper functions|-------------------------
 
@@ -510,24 +510,31 @@ printText (pcl::visualization::PCLVisualizer::Ptr viewer_arg)
 {
   std::string on_str = "ON";
   std::string off_str = "OFF";
-  if (!viewer_arg->updateText ("Press (1-n) to show different elements (d) to disable this", 5, 72, 12, 1.0, 1.0, 1.0, "hud_text"))
-        viewer_arg->addText ("Press (1-n) to show different elements", 5, 72, 12, 1.0, 1.0, 1.0, "hud_text");
+  if (!viewer_arg->updateText (
+          "Press (1-n) to show different elements (d) to disable this", 5, 72, 12, 1.0,
+          1.0, 1.0, "hud_text"))
+    viewer_arg->addText ("Press (1-n) to show different elements", 5, 72, 12, 1.0, 1.0,
+                         1.0, "hud_text");
 
-  std::string temp = "(1) Supervoxel Normals, currently " + ( (show_normals) ? on_str : off_str);
+  std::string temp =
+      "(1) Supervoxel Normals, currently " + ((show_normals) ? on_str : off_str);
   if (!viewer_arg->updateText (temp, 5, 60, 10, 1.0, 1.0, 1.0, "normals_text"))
-        viewer_arg->addText (temp, 5, 60, 10, 1.0, 1.0, 1.0, "normals_text");
+    viewer_arg->addText (temp, 5, 60, 10, 1.0, 1.0, 1.0, "normals_text");
 
-  temp = "(2) Adjacency Graph, currently " + ( (show_adjacency) ? on_str : off_str) + "\n      White: convex; Red: concave";
+  temp = "(2) Adjacency Graph, currently " + ((show_adjacency) ? on_str : off_str) +
+         "\n      White: convex; Red: concave";
   if (!viewer_arg->updateText (temp, 5, 38, 10, 1.0, 1.0, 1.0, "graph_text"))
-        viewer_arg->addText (temp, 5, 38, 10, 1.0, 1.0, 1.0, "graph_text");
+    viewer_arg->addText (temp, 5, 38, 10, 1.0, 1.0, 1.0, "graph_text");
 
-  temp = "(3) Press to show " + ( (show_supervoxels) ? std::string ("SEGMENTATION") : std::string ("SUPERVOXELS"));
+  temp = "(3) Press to show " + ((show_supervoxels) ? std::string ("SEGMENTATION")
+                                                    : std::string ("SUPERVOXELS"));
   if (!viewer_arg->updateText (temp, 5, 26, 10, 1.0, 1.0, 1.0, "supervoxel_text"))
-        viewer_arg->addText (temp, 5, 26, 10, 1.0, 1.0, 1.0, "supervoxel_text");
-  
-  temp = "(4/5) Press to increase/decrease normals scale, currently " + boost::str (boost::format ("%.3f") % normals_scale);
+    viewer_arg->addText (temp, 5, 26, 10, 1.0, 1.0, 1.0, "supervoxel_text");
+
+  temp = "(4/5) Press to increase/decrease normals scale, currently " +
+         boost::str (boost::format ("%.3f") % normals_scale);
   if (!viewer_arg->updateText (temp, 5, 14, 10, 1.0, 1.0, 1.0, "normals_scale_text"))
-        viewer_arg->addText (temp, 5, 14, 10, 1.0, 1.0, 1.0, "normals_scale_text");
+    viewer_arg->addText (temp, 5, 14, 10, 1.0, 1.0, 1.0, "normals_scale_text");
 }
 
 void

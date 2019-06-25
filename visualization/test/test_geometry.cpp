@@ -1,20 +1,20 @@
-#include <pcl/io/pcd_io.h>
-#include <pcl/filters/passthrough.h>
 #include <pcl/features/normal_3d.h>
+#include <pcl/filters/passthrough.h>
+#include <pcl/io/pcd_io.h>
 #include <pcl/visualization/pcl_visualizer.h>
 
+using pcl::Normal;
 using pcl::PointCloud;
 using pcl::PointXYZRGB;
-using pcl::Normal;
 using pcl::PointXYZRGBNormal;
 
-using pcl::PCDReader;
-using pcl::PassThrough;
-using pcl::NormalEstimation;
 using pcl::KdTreeFLANN;
+using pcl::NormalEstimation;
+using pcl::PassThrough;
+using pcl::PCDReader;
 
-int 
-  main (int argc, char **argv)
+int
+main (int argc, char **argv)
 {
   srand (time (0));
 
@@ -50,11 +50,13 @@ int
   p.setBackgroundColor (1, 1, 1);
   p.addCoordinateSystem (0.1);
 
-  pcl::visualization::PointCloudColorHandlerRGBField<PointXYZRGBNormal> color_handler (cloud_normals);
+  pcl::visualization::PointCloudColorHandlerRGBField<PointXYZRGBNormal> color_handler (
+      cloud_normals);
   // Geometry handler demo
   {
     std::cerr << "PointCloudGeometryHandlerSurfaceNormal demo." << std::endl;
-    pcl::visualization::PointCloudGeometryHandlerSurfaceNormal<PointXYZRGBNormal> geometry_handler (cloud_normals);
+    pcl::visualization::PointCloudGeometryHandlerSurfaceNormal<PointXYZRGBNormal>
+        geometry_handler (cloud_normals);
     p.addPointCloud (cloud_normals, geometry_handler, "cloud_normal");
     p.spin ();
     p.removePointCloud ("cloud_normal");
@@ -66,7 +68,8 @@ int
 
   {
     std::cerr << "PointCloudGeometryHandlerXYZ demo." << std::endl;
-    pcl::visualization::PointCloudGeometryHandlerXYZ<PointXYZRGBNormal> geometry_handler (cloud_normals);
+    pcl::visualization::PointCloudGeometryHandlerXYZ<PointXYZRGBNormal>
+        geometry_handler (cloud_normals);
     p.addPointCloud (cloud_normals, color_handler, geometry_handler, "cloud_xyz");
     p.spin ();
     p.removePointCloud ("cloud_xyz");
@@ -74,15 +77,18 @@ int
 
   {
     std::cerr << "PointCloudGeometryHandlerXYZ demo." << std::endl;
-    pcl::visualization::PointCloudGeometryHandlerCustom<PointXYZRGBNormal> geometry_handler (cloud_normals, "x", "y", "z");
+    pcl::visualization::PointCloudGeometryHandlerCustom<PointXYZRGBNormal>
+        geometry_handler (cloud_normals, "x", "y", "z");
     p.addPointCloud (cloud_normals, color_handler, geometry_handler, "cloud_xyz");
     p.spin ();
     p.removePointCloud ("cloud_xyz");
-    
-    geometry_handler = pcl::visualization::PointCloudGeometryHandlerCustom<PointXYZRGBNormal> (cloud_normals, "x", "x", "y");
+
+    geometry_handler =
+        pcl::visualization::PointCloudGeometryHandlerCustom<PointXYZRGBNormal> (
+            cloud_normals, "x", "x", "y");
     p.addPointCloud (cloud_normals, color_handler, geometry_handler, "cloud_xyz");
     p.spin ();
     p.removePointCloud ("cloud_xyz");
-   }
+  }
   p.spin ();
 }

@@ -44,53 +44,50 @@
 #include <QThread>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::modeler::ThreadController::ThreadController()
-{
-
-}
+pcl::modeler::ThreadController::ThreadController () {}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::modeler::ThreadController::~ThreadController()
+pcl::modeler::ThreadController::~ThreadController ()
 {
-  MainWindow::getInstance().slotOnWorkerFinished();
+  MainWindow::getInstance ().slotOnWorkerFinished ();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::modeler::ThreadController::runWorker(AbstractWorker* worker)
+pcl::modeler::ThreadController::runWorker (AbstractWorker *worker)
 {
-  if (worker->exec() != QDialog::Accepted)
-  {
+  if (worker->exec () != QDialog::Accepted) {
     delete worker;
-    deleteLater();
+    deleteLater ();
 
     return (false);
   }
-  
-  QThread* thread = new QThread;
 
-  connect(this, SIGNAL(prepared()), worker, SLOT(process()));
+  QThread *thread = new QThread;
 
-  connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
+  connect (this, SIGNAL (prepared ()), worker, SLOT (process ()));
 
-  connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
-  connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+  connect (worker, SIGNAL (finished ()), worker, SLOT (deleteLater ()));
 
-  connect(worker, SIGNAL(finished()), this, SLOT(deleteLater()));
+  connect (worker, SIGNAL (finished ()), thread, SLOT (quit ()));
+  connect (thread, SIGNAL (finished ()), thread, SLOT (deleteLater ()));
 
-  worker->moveToThread(thread);
-  thread->start();
+  connect (worker, SIGNAL (finished ()), this, SLOT (deleteLater ()));
 
-  MainWindow::getInstance().slotOnWorkerStarted();
+  worker->moveToThread (thread);
+  thread->start ();
 
-  emit prepared();
+  MainWindow::getInstance ().slotOnWorkerStarted ();
 
-   return (true);
+  emit prepared ();
+
+  return (true);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::ThreadController::slotOnCloudMeshItemUpdate(CloudMeshItem* cloud_mesh_item)
+pcl::modeler::ThreadController::slotOnCloudMeshItemUpdate (
+    CloudMeshItem *cloud_mesh_item)
 {
-  cloud_mesh_item->updateChannels();
+  cloud_mesh_item->updateChannels ();
 }

@@ -35,10 +35,10 @@
  *
  */
 
-#include <pcl/io/pcd_io.h>
-#include <pcl/console/print.h>
 #include <pcl/console/parse.h>
+#include <pcl/console/print.h>
 #include <pcl/console/time.h>
+#include <pcl/io/pcd_io.h>
 #include <pcl/io/png_io.h>
 
 using namespace pcl;
@@ -55,13 +55,19 @@ bool
 loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
 {
   TicToc tt;
-  print_highlight ("Loading "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Loading ");
+  print_value ("%s ", filename.c_str ());
 
   tt.tic ();
   if (loadPCDFile (filename, cloud) < 0)
     return (false);
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", cloud.width * cloud.height); print_info (" points]\n");
-  print_info ("Available dimensions: "); print_value ("%s\n", pcl::getFieldsList (cloud).c_str ());
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", cloud.width * cloud.height);
+  print_info (" points]\n");
+  print_info ("Available dimensions: ");
+  print_value ("%s\n", pcl::getFieldsList (cloud).c_str ());
 
   return (true);
 }
@@ -72,36 +78,42 @@ saveImage (const std::string &filename, const PointCloud<RGB> &image)
   TicToc tt;
   tt.tic ();
 
-  print_highlight ("Saving "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Saving ");
+  print_value ("%s ", filename.c_str ());
   io::savePNGFile (filename, image, "rgb");
 
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", image.width * image.height); print_info (" points]\n");
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", image.width * image.height);
+  print_info (" points]\n");
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   print_error ("This tool is deprecated, please use \"pcl_pcd2png\" instead!\n");
-  print_info ("Convert the RGB information of an organized PCD file to a PNG image. For more information, use: %s -h\n", argv[0]);
+  print_info ("Convert the RGB information of an organized PCD file to a PNG image. "
+              "For more information, use: %s -h\n",
+              argv[0]);
 
-  if (argc < 3)
-  {
+  if (argc < 3) {
     printHelp (argc, argv);
     return (-1);
   }
 
   // Parse the command line arguments for .pcd files
-  std::vector<int> pcd_file_indices = parse_file_extension_argument (argc, argv, ".pcd");
-  if (pcd_file_indices.size () != 1)
-  {
+  std::vector<int> pcd_file_indices =
+      parse_file_extension_argument (argc, argv, ".pcd");
+  if (pcd_file_indices.size () != 1) {
     print_error ("Need one input PCD file and one output PNG file.\n");
     return (-1);
   }
 
-  std::vector<int> png_file_indices = parse_file_extension_argument (argc, argv, ".png");
-  if (png_file_indices.size () != 1)
-  {
+  std::vector<int> png_file_indices =
+      parse_file_extension_argument (argc, argv, ".png");
+  if (png_file_indices.size () != 1) {
     print_error ("Need one input PCD file and one output PNG file.\n");
     return (-1);
   }
@@ -111,14 +123,11 @@ main (int argc, char** argv)
   if (!loadCloud (argv[pcd_file_indices[0]], cloud))
     return (-1);
 
-
   PointCloud<RGB> image;
   fromPCLPointCloud2 (cloud, image);
 
-
   // Check if the cloud is organized
-  if (!image.isOrganized ())
-  {
+  if (!image.isOrganized ()) {
     PCL_ERROR ("Input cloud is not organized.\n");
     return (-1);
   }
@@ -128,4 +137,3 @@ main (int argc, char** argv)
 
   return (0);
 }
-

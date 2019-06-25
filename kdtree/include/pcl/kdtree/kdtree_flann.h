@@ -40,197 +40,213 @@
 
 #pragma once
 
-#include <pcl/kdtree/kdtree.h>
 #include <flann/util/params.h>
+#include <pcl/kdtree/kdtree.h>
 
 #include <boost/shared_array.hpp>
 
 // Forward declarations
 namespace flann
 {
-  template <typename T> struct L2_Simple;
-  template <typename T> class Index;
-}
+  template <typename T>
+  struct L2_Simple;
+  template <typename T>
+  class Index;
+} // namespace flann
 
 namespace pcl
 {
   // Forward declarations
-  template <typename T> class PointRepresentation;
+  template <typename T>
+  class PointRepresentation;
 
-  /** \brief KdTreeFLANN is a generic type of 3D spatial locator using kD-tree structures. The class is making use of
-    * the FLANN (Fast Library for Approximate Nearest Neighbor) project by Marius Muja and David Lowe.
-    *
-    * \author Radu B. Rusu, Marius Muja
-    * \ingroup kdtree 
-    */
-  template <typename PointT, typename Dist = ::flann::L2_Simple<float> >
+  /** \brief KdTreeFLANN is a generic type of 3D spatial locator using kD-tree
+   * structures. The class is making use of the FLANN (Fast Library for Approximate
+   * Nearest Neighbor) project by Marius Muja and David Lowe.
+   *
+   * \author Radu B. Rusu, Marius Muja
+   * \ingroup kdtree
+   */
+  template <typename PointT, typename Dist = ::flann::L2_Simple<float>>
   class KdTreeFLANN : public pcl::KdTree<PointT>
   {
     public:
-      using KdTree<PointT>::input_;
-      using KdTree<PointT>::indices_;
-      using KdTree<PointT>::epsilon_;
-      using KdTree<PointT>::sorted_;
-      using KdTree<PointT>::point_representation_;
-      using KdTree<PointT>::nearestKSearch;
-      using KdTree<PointT>::radiusSearch;
+    using KdTree<PointT>::input_;
+    using KdTree<PointT>::indices_;
+    using KdTree<PointT>::epsilon_;
+    using KdTree<PointT>::sorted_;
+    using KdTree<PointT>::point_representation_;
+    using KdTree<PointT>::nearestKSearch;
+    using KdTree<PointT>::radiusSearch;
 
-      using PointCloud = typename KdTree<PointT>::PointCloud;
-      using PointCloudConstPtr = typename KdTree<PointT>::PointCloudConstPtr;
+    using PointCloud = typename KdTree<PointT>::PointCloud;
+    using PointCloudConstPtr = typename KdTree<PointT>::PointCloudConstPtr;
 
-      using IndicesPtr = boost::shared_ptr<std::vector<int> >;
-      using IndicesConstPtr = boost::shared_ptr<const std::vector<int> >;
+    using IndicesPtr = boost::shared_ptr<std::vector<int>>;
+    using IndicesConstPtr = boost::shared_ptr<const std::vector<int>>;
 
-      using FLANNIndex = ::flann::Index<Dist>;
+    using FLANNIndex = ::flann::Index<Dist>;
 
-      // Boost shared pointers
-      using Ptr = boost::shared_ptr<KdTreeFLANN<PointT, Dist> >;
-      using ConstPtr = boost::shared_ptr<const KdTreeFLANN<PointT, Dist> >;
+    // Boost shared pointers
+    using Ptr = boost::shared_ptr<KdTreeFLANN<PointT, Dist>>;
+    using ConstPtr = boost::shared_ptr<const KdTreeFLANN<PointT, Dist>>;
 
-      /** \brief Default Constructor for KdTreeFLANN.
-        * \param[in] sorted set to true if the application that the tree will be used for requires sorted nearest neighbor indices (default). False otherwise. 
-        *
-        * By setting sorted to false, the \ref radiusSearch operations will be faster.
-        */
-      KdTreeFLANN (bool sorted = true);
+    /** \brief Default Constructor for KdTreeFLANN.
+     * \param[in] sorted set to true if the application that the tree will be used for
+     * requires sorted nearest neighbor indices (default). False otherwise.
+     *
+     * By setting sorted to false, the \ref radiusSearch operations will be faster.
+     */
+    KdTreeFLANN (bool sorted = true);
 
-      /** \brief Copy constructor
-        * \param[in] k the tree to copy into this
-        */
-      KdTreeFLANN (const KdTreeFLANN<PointT, Dist> &k);
+    /** \brief Copy constructor
+     * \param[in] k the tree to copy into this
+     */
+    KdTreeFLANN (const KdTreeFLANN<PointT, Dist> &k);
 
-      /** \brief Copy operator
-        * \param[in] k the tree to copy into this
-        */ 
-      inline KdTreeFLANN<PointT, Dist>&
-      operator = (const KdTreeFLANN<PointT, Dist>& k)
-      {
-        KdTree<PointT>::operator=(k);
-        flann_index_ = k.flann_index_;
-        cloud_ = k.cloud_;
-        index_mapping_ = k.index_mapping_;
-        identity_mapping_ = k.identity_mapping_;
-        dim_ = k.dim_;
-        total_nr_points_ = k.total_nr_points_;
-        param_k_ = k.param_k_;
-        param_radius_ = k.param_radius_;
-        return (*this);
-      }
+    /** \brief Copy operator
+     * \param[in] k the tree to copy into this
+     */
+    inline KdTreeFLANN<PointT, Dist> &
+    operator= (const KdTreeFLANN<PointT, Dist> &k)
+    {
+      KdTree<PointT>::operator= (k);
+      flann_index_ = k.flann_index_;
+      cloud_ = k.cloud_;
+      index_mapping_ = k.index_mapping_;
+      identity_mapping_ = k.identity_mapping_;
+      dim_ = k.dim_;
+      total_nr_points_ = k.total_nr_points_;
+      param_k_ = k.param_k_;
+      param_radius_ = k.param_radius_;
+      return (*this);
+    }
 
-      /** \brief Set the search epsilon precision (error bound) for nearest neighbors searches.
-        * \param[in] eps precision (error bound) for nearest neighbors searches
-        */
-      void
-      setEpsilon (float eps) override;
+    /** \brief Set the search epsilon precision (error bound) for nearest neighbors
+     * searches. \param[in] eps precision (error bound) for nearest neighbors searches
+     */
+    void
+    setEpsilon (float eps) override;
 
-      void 
-      setSortedResults (bool sorted);
-      
-      inline Ptr makeShared () { return Ptr (new KdTreeFLANN<PointT, Dist> (*this)); } 
+    void
+    setSortedResults (bool sorted);
 
-      /** \brief Destructor for KdTreeFLANN. 
-        * Deletes all allocated data arrays and destroys the kd-tree structures. 
-        */
-      ~KdTreeFLANN ()
-      {
-        cleanup ();
-      }
+    inline Ptr
+    makeShared ()
+    {
+      return Ptr (new KdTreeFLANN<PointT, Dist> (*this));
+    }
 
-      /** \brief Provide a pointer to the input dataset.
-        * \param[in] cloud the const boost shared pointer to a PointCloud message
-        * \param[in] indices the point indices subset that is to be used from \a cloud - if NULL the whole cloud is used
-        */
-      void 
-      setInputCloud (const PointCloudConstPtr &cloud, const IndicesConstPtr &indices = IndicesConstPtr ()) override;
+    /** \brief Destructor for KdTreeFLANN.
+     * Deletes all allocated data arrays and destroys the kd-tree structures.
+     */
+    ~KdTreeFLANN () { cleanup (); }
 
-      /** \brief Search for k-nearest neighbors for the given query point.
-        * 
-        * \attention This method does not do any bounds checking for the input index
-        * (i.e., index >= cloud.points.size () || index < 0), and assumes valid (i.e., finite) data.
-        * 
-        * \param[in] point a given \a valid (i.e., finite) query point
-        * \param[in] k the number of neighbors to search for
-        * \param[out] k_indices the resultant indices of the neighboring points (must be resized to \a k a priori!)
-        * \param[out] k_sqr_distances the resultant squared distances to the neighboring points (must be resized to \a k 
-        * a priori!)
-        * \return number of neighbors found
-        * 
-        * \exception asserts in debug mode if the index is not between 0 and the maximum number of points
-        */
-      int 
-      nearestKSearch (const PointT &point, int k, 
-                      std::vector<int> &k_indices, std::vector<float> &k_sqr_distances) const override;
+    /** \brief Provide a pointer to the input dataset.
+     * \param[in] cloud the const boost shared pointer to a PointCloud message
+     * \param[in] indices the point indices subset that is to be used from \a cloud - if
+     * NULL the whole cloud is used
+     */
+    void
+    setInputCloud (const PointCloudConstPtr &cloud,
+                   const IndicesConstPtr &indices = IndicesConstPtr ()) override;
 
-      /** \brief Search for all the nearest neighbors of the query point in a given radius.
-        * 
-        * \attention This method does not do any bounds checking for the input index
-        * (i.e., index >= cloud.points.size () || index < 0), and assumes valid (i.e., finite) data.
-        * 
-        * \param[in] point a given \a valid (i.e., finite) query point
-        * \param[in] radius the radius of the sphere bounding all of p_q's neighbors
-        * \param[out] k_indices the resultant indices of the neighboring points
-        * \param[out] k_sqr_distances the resultant squared distances to the neighboring points
-        * \param[in] max_nn if given, bounds the maximum returned neighbors to this value. If \a max_nn is set to
-        * 0 or to a number higher than the number of points in the input cloud, all neighbors in \a radius will be
-        * returned.
-        * \return number of neighbors found in radius
-        *
-        * \exception asserts in debug mode if the index is not between 0 and the maximum number of points
-        */
-      int 
-      radiusSearch (const PointT &point, double radius, std::vector<int> &k_indices,
-                    std::vector<float> &k_sqr_distances, unsigned int max_nn = 0) const override;
+    /** \brief Search for k-nearest neighbors for the given query point.
+     *
+     * \attention This method does not do any bounds checking for the input index
+     * (i.e., index >= cloud.points.size () || index < 0), and assumes valid (i.e.,
+     * finite) data.
+     *
+     * \param[in] point a given \a valid (i.e., finite) query point
+     * \param[in] k the number of neighbors to search for
+     * \param[out] k_indices the resultant indices of the neighboring points (must be
+     * resized to \a k a priori!) \param[out] k_sqr_distances the resultant squared
+     * distances to the neighboring points (must be resized to \a k a priori!) \return
+     * number of neighbors found
+     *
+     * \exception asserts in debug mode if the index is not between 0 and the maximum
+     * number of points
+     */
+    int
+    nearestKSearch (const PointT &point, int k, std::vector<int> &k_indices,
+                    std::vector<float> &k_sqr_distances) const override;
 
-    private:
-      /** \brief Internal cleanup method. */
-      void 
-      cleanup ();
-
-      /** \brief Converts a PointCloud to the internal FLANN point array representation. Returns the number
-        * of points.
-        * \param cloud the PointCloud 
-        */
-      void 
-      convertCloudToArray (const PointCloud &cloud);
-
-      /** \brief Converts a PointCloud with a given set of indices to the internal FLANN point array
-        * representation. Returns the number of points.
-        * \param[in] cloud the PointCloud data
-        * \param[in] indices the point cloud indices
-       */
-      void 
-      convertCloudToArray (const PointCloud &cloud, const std::vector<int> &indices);
+    /** \brief Search for all the nearest neighbors of the query point in a given
+     * radius.
+     *
+     * \attention This method does not do any bounds checking for the input index
+     * (i.e., index >= cloud.points.size () || index < 0), and assumes valid (i.e.,
+     * finite) data.
+     *
+     * \param[in] point a given \a valid (i.e., finite) query point
+     * \param[in] radius the radius of the sphere bounding all of p_q's neighbors
+     * \param[out] k_indices the resultant indices of the neighboring points
+     * \param[out] k_sqr_distances the resultant squared distances to the neighboring
+     * points \param[in] max_nn if given, bounds the maximum returned neighbors to this
+     * value. If \a max_nn is set to 0 or to a number higher than the number of points
+     * in the input cloud, all neighbors in \a radius will be returned. \return number
+     * of neighbors found in radius
+     *
+     * \exception asserts in debug mode if the index is not between 0 and the maximum
+     * number of points
+     */
+    int
+    radiusSearch (const PointT &point, double radius, std::vector<int> &k_indices,
+                  std::vector<float> &k_sqr_distances,
+                  unsigned int max_nn = 0) const override;
 
     private:
-      /** \brief Class getName method. */
-      std::string 
-      getName () const override { return ("KdTreeFLANN"); }
+    /** \brief Internal cleanup method. */
+    void
+    cleanup ();
 
-      /** \brief A FLANN index object. */
-      boost::shared_ptr<FLANNIndex> flann_index_;
+    /** \brief Converts a PointCloud to the internal FLANN point array representation.
+     * Returns the number of points. \param cloud the PointCloud
+     */
+    void
+    convertCloudToArray (const PointCloud &cloud);
 
-      /** \brief Internal pointer to data. */
-      boost::shared_array<float> cloud_;
-      
-      /** \brief mapping between internal and external indices. */
-      std::vector<int> index_mapping_;
-      
-      /** \brief whether the mapping between internal and external indices is identity */
-      bool identity_mapping_;
+    /** \brief Converts a PointCloud with a given set of indices to the internal FLANN
+     * point array representation. Returns the number of points. \param[in] cloud the
+     * PointCloud data \param[in] indices the point cloud indices
+     */
+    void
+    convertCloudToArray (const PointCloud &cloud, const std::vector<int> &indices);
 
-      /** \brief Tree dimensionality (i.e. the number of dimensions per point). */
-      int dim_;
+    private:
+    /** \brief Class getName method. */
+    std::string
+    getName () const override
+    {
+      return ("KdTreeFLANN");
+    }
 
-      /** \brief The total size of the data (either equal to the number of points in the input cloud or to the number of indices - if passed). */
-      int total_nr_points_;
+    /** \brief A FLANN index object. */
+    boost::shared_ptr<FLANNIndex> flann_index_;
 
-      /** \brief The KdTree search parameters for K-nearest neighbors. */
-      ::flann::SearchParams param_k_;
+    /** \brief Internal pointer to data. */
+    boost::shared_array<float> cloud_;
 
-      /** \brief The KdTree search parameters for radius search. */
-      ::flann::SearchParams param_radius_;
+    /** \brief mapping between internal and external indices. */
+    std::vector<int> index_mapping_;
+
+    /** \brief whether the mapping between internal and external indices is identity */
+    bool identity_mapping_;
+
+    /** \brief Tree dimensionality (i.e. the number of dimensions per point). */
+    int dim_;
+
+    /** \brief The total size of the data (either equal to the number of points in the
+     * input cloud or to the number of indices - if passed). */
+    int total_nr_points_;
+
+    /** \brief The KdTree search parameters for K-nearest neighbors. */
+    ::flann::SearchParams param_k_;
+
+    /** \brief The KdTree search parameters for radius search. */
+    ::flann::SearchParams param_radius_;
   };
-}
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/kdtree/impl/kdtree_flann.hpp>

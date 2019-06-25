@@ -45,31 +45,30 @@ using PointT = pcl::PointXYZRGBA;
 using PointCloudT = pcl::PointCloud<PointT>;
 
 int
-main (int argc,
-      char** argv)
+main (int argc, char **argv)
 {
-  if (argc != 3 && argc != 4)
-  {
-    PCL_ERROR ("Usage: %s cloud_in.pcd cloud_out_ascii.pcd percentage_of_NaN \n", argv[0]);
+  if (argc != 3 && argc != 4) {
+    PCL_ERROR ("Usage: %s cloud_in.pcd cloud_out_ascii.pcd percentage_of_NaN \n",
+               argv[0]);
     return (-1);
   }
 
   int percentage_of_NaN = 20;
   if (argc == 4)
-    percentage_of_NaN = boost::lexical_cast<int>(argv[3]);
+    percentage_of_NaN = boost::lexical_cast<int> (argv[3]);
 
-  PCL_INFO ("Replacing approximately %d%% of the cloud with NaN values (already existing NaN values are conserved)\n", percentage_of_NaN);
+  PCL_INFO ("Replacing approximately %d%% of the cloud with NaN values (already "
+            "existing NaN values are conserved)\n",
+            percentage_of_NaN);
   PointCloudT::Ptr cloud (new PointCloudT);
   if (pcl::io::loadPCDFile (argv[1], *cloud) != 0)
     return (-1);
 
-  for (auto &point : *cloud)
-  {
-    int random = 1 + (rand () % (int) (100));
-    int random_xyz = 1 + (rand () % (int) (3 - 1 + 1));
+  for (auto &point : *cloud) {
+    int random = 1 + (rand () % (int)(100));
+    int random_xyz = 1 + (rand () % (int)(3 - 1 + 1));
 
-    if (random < percentage_of_NaN)
-    {
+    if (random < percentage_of_NaN) {
       if (random_xyz == 1)
         point.x = std::numeric_limits<double>::quiet_NaN ();
       else if (random_xyz == 2)
@@ -82,4 +81,3 @@ main (int argc,
   pcl::io::savePCDFile (argv[2], *cloud);
   return (0);
 }
-

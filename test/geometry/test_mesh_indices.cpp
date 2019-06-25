@@ -38,8 +38,8 @@
  *
  */
 
-#include <string>
 #include <sstream>
+#include <string>
 
 #include <gtest/gtest.h>
 
@@ -58,10 +58,10 @@ template <class MeshIndexT>
 class TestMeshIndicesTyped : public testing::Test
 {
   protected:
-    using MeshIndex = MeshIndexT;
+  using MeshIndex = MeshIndexT;
 };
 
-using MeshIndexTypes = testing::Types <VertexIndex, HalfEdgeIndex, EdgeIndex, FaceIndex>;
+using MeshIndexTypes = testing::Types<VertexIndex, HalfEdgeIndex, EdgeIndex, FaceIndex>;
 
 TYPED_TEST_CASE (TestMeshIndicesTyped, MeshIndexTypes);
 
@@ -74,9 +74,9 @@ TYPED_TEST (TestMeshIndicesTyped, General)
 
   EXPECT_FALSE (vi0.isValid ());
   EXPECT_FALSE (vi1.isValid ());
-  EXPECT_TRUE  (vi2.isValid ());
-  EXPECT_TRUE  (vi3.isValid ());
-  EXPECT_TRUE  (vi4.isValid ());
+  EXPECT_TRUE (vi2.isValid ());
+  EXPECT_TRUE (vi3.isValid ());
+  EXPECT_TRUE (vi4.isValid ());
   vi2.invalidate ();
   EXPECT_FALSE (vi2.isValid ());
 
@@ -98,18 +98,18 @@ TYPED_TEST (TestMeshIndicesTyped, General)
 TEST (TestMeshIndices, Conversions)
 {
   HalfEdgeIndex he0, he1 (-9), he2 (4), he3 (5);
-  EdgeIndex     e0 , e1  (-9), e2  (4), e3  (5);
+  EdgeIndex e0, e1 (-9), e2 (4), e3 (5);
 
   EXPECT_FALSE (pcl::geometry::toEdgeIndex (he0).isValid ());
   EXPECT_FALSE (pcl::geometry::toEdgeIndex (he1).isValid ());
   EXPECT_EQ (2, pcl::geometry::toEdgeIndex (he2).get ());
   EXPECT_EQ (2, pcl::geometry::toEdgeIndex (he3).get ());
 
-  EXPECT_FALSE  (pcl::geometry::toHalfEdgeIndex (e0).isValid ());
-  EXPECT_FALSE  (pcl::geometry::toHalfEdgeIndex (e1).isValid ());
-  EXPECT_EQ (8 , pcl::geometry::toHalfEdgeIndex (e2).get ());
+  EXPECT_FALSE (pcl::geometry::toHalfEdgeIndex (e0).isValid ());
+  EXPECT_FALSE (pcl::geometry::toHalfEdgeIndex (e1).isValid ());
+  EXPECT_EQ (8, pcl::geometry::toHalfEdgeIndex (e2).get ());
   EXPECT_EQ (10, pcl::geometry::toHalfEdgeIndex (e3).get ());
-  EXPECT_EQ (9 , pcl::geometry::toHalfEdgeIndex (e2, false).get ());
+  EXPECT_EQ (9, pcl::geometry::toHalfEdgeIndex (e2, false).get ());
   EXPECT_EQ (11, pcl::geometry::toHalfEdgeIndex (e3, false).get ());
 }
 
@@ -119,25 +119,25 @@ TEST (TestMeshIndices, Streams)
 {
   // Output
   std::ostringstream oss;
-  oss << "VertexIndex "   << VertexIndex   (1) << " "
+  oss << "VertexIndex " << VertexIndex (1) << " "
       << "HalfEdgeIndex " << HalfEdgeIndex (2) << " "
-      << "EdgeIndex "     << EdgeIndex     (3) << " "
-      << "FaceIndex "     << FaceIndex     (4) << ".";
+      << "EdgeIndex " << EdgeIndex (3) << " "
+      << "FaceIndex " << FaceIndex (4) << ".";
 
   EXPECT_EQ ("VertexIndex 1 HalfEdgeIndex 2 EdgeIndex 3 FaceIndex 4.", oss.str ());
 
   // Input
-  VertexIndex   vi;
+  VertexIndex vi;
   HalfEdgeIndex hei;
-  EdgeIndex     ei;
-  FaceIndex     fi;
+  EdgeIndex ei;
+  FaceIndex fi;
   std::istringstream iss ("1 2 3 4");
   iss >> vi >> hei >> ei >> fi;
 
-  EXPECT_EQ (1, vi.get  ());
+  EXPECT_EQ (1, vi.get ());
   EXPECT_EQ (2, hei.get ());
-  EXPECT_EQ (3, ei.get  ());
-  EXPECT_EQ (4, fi.get  ());
+  EXPECT_EQ (3, ei.get ());
+  EXPECT_EQ (4, fi.get ());
 
   EXPECT_FALSE (iss.good ());
 }
@@ -145,7 +145,7 @@ TEST (TestMeshIndices, Streams)
 ////////////////////////////////////////////////////////////////////////////////
 
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

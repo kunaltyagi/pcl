@@ -37,8 +37,8 @@
 
 #pragma once
 
-#include <pcl/point_types.h>
 #include <pcl/features/feature.h>
+#include <pcl/point_types.h>
 
 namespace pcl
 {
@@ -46,57 +46,61 @@ namespace pcl
   class RangeImage;
 
   /** @b Computes NARF feature descriptors for points in a range image
-    * See B. Steder, R. B. Rusu, K. Konolige, and W. Burgard
-    *     Point Feature Extraction on 3D Range Scans Taking into Account Object Boundaries
-    *     In Proc. of the IEEE Int. Conf. on Robotics &Automation (ICRA). 2011. 
-    * \author Bastian Steder
-    * \ingroup features
-    */
-  class PCL_EXPORTS NarfDescriptor : public Feature<PointWithRange,Narf36>
+   * See B. Steder, R. B. Rusu, K. Konolige, and W. Burgard
+   *     Point Feature Extraction on 3D Range Scans Taking into Account Object
+   * Boundaries In Proc. of the IEEE Int. Conf. on Robotics &Automation (ICRA). 2011.
+   * \author Bastian Steder
+   * \ingroup features
+   */
+  class PCL_EXPORTS NarfDescriptor : public Feature<PointWithRange, Narf36>
   {
     public:
-      using Ptr = boost::shared_ptr<NarfDescriptor>;
-      using ConstPtr = boost::shared_ptr<const NarfDescriptor>;
-      // =====TYPEDEFS=====
-      using BaseClass = Feature<PointWithRange,Narf36>;
-      
-      // =====STRUCTS/CLASSES=====
-      struct Parameters
-      {
-        Parameters() : support_size(-1.0f), rotation_invariant(true) {}
-        float support_size;
-        bool rotation_invariant;
-      };
-      
-      // =====CONSTRUCTOR & DESTRUCTOR=====
-      /** Constructor */
-      NarfDescriptor (const RangeImage* range_image=nullptr, const std::vector<int>* indices=nullptr);
-      /** Destructor */
-      ~NarfDescriptor();
-      
-      // =====METHODS=====
-      //! Set input data
-      void 
-      setRangeImage (const RangeImage* range_image, const std::vector<int>* indices=nullptr);
-      
-      //! Overwrite the compute function of the base class
-      void 
-      compute (PointCloudOut& output);
-      
-      // =====GETTER=====
-      //! Get a reference to the parameters struct
-      Parameters& 
-      getParameters () { return parameters_;}
-      
+    using Ptr = boost::shared_ptr<NarfDescriptor>;
+    using ConstPtr = boost::shared_ptr<const NarfDescriptor>;
+    // =====TYPEDEFS=====
+    using BaseClass = Feature<PointWithRange, Narf36>;
+
+    // =====STRUCTS/CLASSES=====
+    struct Parameters {
+      Parameters () : support_size (-1.0f), rotation_invariant (true) {}
+      float support_size;
+      bool rotation_invariant;
+    };
+
+    // =====CONSTRUCTOR & DESTRUCTOR=====
+    /** Constructor */
+    NarfDescriptor (const RangeImage *range_image = nullptr,
+                    const std::vector<int> *indices = nullptr);
+    /** Destructor */
+    ~NarfDescriptor ();
+
+    // =====METHODS=====
+    //! Set input data
+    void
+    setRangeImage (const RangeImage *range_image,
+                   const std::vector<int> *indices = nullptr);
+
+    //! Overwrite the compute function of the base class
+    void
+    compute (PointCloudOut &output);
+
+    // =====GETTER=====
+    //! Get a reference to the parameters struct
+    Parameters &
+    getParameters ()
+    {
+      return parameters_;
+    }
+
     protected:
-      // =====PROTECTED MEMBER VARIABLES=====
-      const RangeImage* range_image_;
-      Parameters parameters_;
-      
-      // =====PROTECTED METHODS=====
-      /** Implementation of abstract derived function */
-      void 
-      computeFeature (PointCloudOut& output) override;
+    // =====PROTECTED MEMBER VARIABLES=====
+    const RangeImage *range_image_;
+    Parameters parameters_;
+
+    // =====PROTECTED METHODS=====
+    /** Implementation of abstract derived function */
+    void
+    computeFeature (PointCloudOut &output) override;
   };
 
-}  // namespace end
+} // namespace pcl

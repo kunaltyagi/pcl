@@ -5,8 +5,8 @@
 #include <string>
 
 // PCL
-#include <pcl/outofcore/visualization/object.h>
 #include <pcl/common/eigen.h>
+#include <pcl/outofcore/visualization/object.h>
 
 // VTK
 #include <vtkActor.h>
@@ -17,18 +17,16 @@
 
 class Camera : public Object
 {
-public:
-
+  public:
   // Operators
   // -----------------------------------------------------------------------------
   Camera (std::string name);
   Camera (std::string name, vtkSmartPointer<vtkCamera> camera);
 
-private:
-//  friend std::ostream & operator<<(std::ostream &os, const Camera& camera);
+  private:
+  //  friend std::ostream & operator<<(std::ostream &os, const Camera& camera);
 
-public:
-
+  public:
   // Accessors
   // -----------------------------------------------------------------------------
   inline vtkSmartPointer<vtkCamera>
@@ -101,11 +99,10 @@ public:
   Eigen::Vector3d
   getPosition ()
   {
-    //Compute eye or position from model view matrix
+    // Compute eye or position from model view matrix
     Eigen::Matrix4d inverse_model_view_matrix = model_view_matrix_.inverse ();
     Eigen::Vector3d position;
-    for (int i = 0; i < 3; i++)
-    {
+    for (int i = 0; i < 3; i++) {
       position (i) = inverse_model_view_matrix (i, 3);
     }
 
@@ -119,19 +116,18 @@ public:
   }
 
   void
-  render (vtkRenderer* renderer) override;
+  render (vtkRenderer *renderer) override;
 
   // Methods
   // -----------------------------------------------------------------------------
-  //void computeFrustum(double aspect);
+  // void computeFrustum(double aspect);
   void
   computeFrustum ();
-  //computeFrustum(double aspect);
+  // computeFrustum(double aspect);
   void
   printFrustum ();
 
-private:
-
+  private:
   // Members
   // -----------------------------------------------------------------------------
   vtkSmartPointer<vtkCamera> camera_;

@@ -59,7 +59,8 @@ TEST (CopyPointTest, SameTypeWithColor)
 {
   {
     pcl::PointXYZRGBA p1, p2;
-    p1.getVector3fMap () << 1, 2, 3; p1.rgba = 0xFF0000FF;
+    p1.getVector3fMap () << 1, 2, 3;
+    p1.rgba = 0xFF0000FF;
     pcl::copyPoint (p1, p2);
     EXPECT_FLOAT_EQ (p1.x, p2.x);
     EXPECT_FLOAT_EQ (p1.y, p2.y);
@@ -73,7 +74,8 @@ TEST (CopyPointTest, DifferentTypesWithoutColor)
   {
     pcl::PointXYZ p1 (1, 2, 3);
     pcl::PointXYZL p2;
-    p2.getVector3fMap () << 4, 5, 5; p2.label = 1;
+    p2.getVector3fMap () << 4, 5, 5;
+    p2.label = 1;
     pcl::copyPoint (p1, p2);
     EXPECT_FLOAT_EQ (p1.x, p2.x);
     EXPECT_FLOAT_EQ (p1.y, p2.y);
@@ -81,8 +83,12 @@ TEST (CopyPointTest, DifferentTypesWithoutColor)
     EXPECT_EQ (1, p2.label);
   }
   {
-    pcl::PointXY p1; p1.x = 1; p1.y = 2;
-    pcl::PointWithRange p2; p2.getVector3fMap () << 4, 5, 6; p2.range = 8;
+    pcl::PointXY p1;
+    p1.x = 1;
+    p1.y = 2;
+    pcl::PointWithRange p2;
+    p2.getVector3fMap () << 4, 5, 6;
+    p2.range = 8;
     pcl::copyPoint (p1, p2);
     EXPECT_FLOAT_EQ (p1.x, p2.x);
     EXPECT_FLOAT_EQ (p1.y, p2.y);
@@ -97,7 +103,8 @@ TEST (CopyPointTest, DifferentTypesOneWithColorAnotherWithout)
   {
     pcl::PointXYZ p1 (1, 2, 3);
     pcl::PointXYZRGB p2;
-    p2.getVector3fMap () << 4, 5, 5; p2.rgba = 0xFFFF00;
+    p2.getVector3fMap () << 4, 5, 5;
+    p2.rgba = 0xFFFF00;
     pcl::copyPoint (p1, p2);
     EXPECT_FLOAT_EQ (p1.x, p2.x);
     EXPECT_FLOAT_EQ (p1.y, p2.y);
@@ -106,8 +113,12 @@ TEST (CopyPointTest, DifferentTypesOneWithColorAnotherWithout)
   }
   // Target without color
   {
-    pcl::PointXYZRGBNormal p1; p1.getVector3fMap () << 1, 2, 3; p1.rgba = 0xFF0000;
-    pcl::PointWithRange p2; p2.getVector3fMap () << 4, 5, 6; p2.range = 8;
+    pcl::PointXYZRGBNormal p1;
+    p1.getVector3fMap () << 1, 2, 3;
+    p1.rgba = 0xFF0000;
+    pcl::PointWithRange p2;
+    p2.getVector3fMap () << 4, 5, 6;
+    p2.range = 8;
     pcl::copyPoint (p1, p2);
     EXPECT_FLOAT_EQ (p1.x, p2.x);
     EXPECT_FLOAT_EQ (p1.y, p2.y);
@@ -120,7 +131,11 @@ TEST (CopyPointTest, DifferentTypesWithDifferentColor)
 {
   {
     pcl::RGB p1;
-    pcl::PointXYZRGB p2; p2.getVector3fMap () << 4, 5, 6; p2.r = 7; p2.g = 8; p2.b = 9, p2.a = 10;
+    pcl::PointXYZRGB p2;
+    p2.getVector3fMap () << 4, 5, 6;
+    p2.r = 7;
+    p2.g = 8;
+    p2.b = 9, p2.a = 10;
     pcl::copyPoint (p1, p2);
     EXPECT_EQ (p1.rgba, p2.rgba);
     EXPECT_FLOAT_EQ (4, p2.x);
@@ -128,8 +143,17 @@ TEST (CopyPointTest, DifferentTypesWithDifferentColor)
     EXPECT_FLOAT_EQ (6, p2.z);
   }
   {
-    pcl::PointXYZRGBNormal p1; p1.getVector3fMap () << 1, 2, 3; p1.r = 7; p1.g = 8; p1.b = 9;
-    pcl::PointXYZRGBL p2; p2.getVector3fMap () << 4, 5, 6; p2.r = 3; p2.g = 2; p2.b = 1; p2.label = 8;
+    pcl::PointXYZRGBNormal p1;
+    p1.getVector3fMap () << 1, 2, 3;
+    p1.r = 7;
+    p1.g = 8;
+    p1.b = 9;
+    pcl::PointXYZRGBL p2;
+    p2.getVector3fMap () << 4, 5, 6;
+    p2.r = 3;
+    p2.g = 2;
+    p2.b = 1;
+    p2.label = 8;
     pcl::copyPoint (p1, p2);
     EXPECT_FLOAT_EQ (p1.x, p2.x);
     EXPECT_FLOAT_EQ (p1.y, p2.y);
@@ -138,8 +162,12 @@ TEST (CopyPointTest, DifferentTypesWithDifferentColor)
     EXPECT_EQ (8, p2.label);
   }
   {
-    pcl::PointXYZRGBA p1; p1.getVector3fMap () << 1, 2, 3; p1.rgba = 0xFF00FF;
-    pcl::PointXYZRGB p2; p2.getVector3fMap () << 4, 5, 6; p2.rgba = 0x00FF00;
+    pcl::PointXYZRGBA p1;
+    p1.getVector3fMap () << 1, 2, 3;
+    p1.rgba = 0xFF00FF;
+    pcl::PointXYZRGB p2;
+    p2.getVector3fMap () << 4, 5, 6;
+    p2.rgba = 0x00FF00;
     pcl::copyPoint (p1, p2);
     EXPECT_FLOAT_EQ (p1.x, p2.x);
     EXPECT_FLOAT_EQ (p1.y, p2.y);
@@ -152,7 +180,11 @@ TEST (CopyPointTest, DifferentTypesWithSameColor)
 {
   {
     pcl::RGB p1;
-    pcl::PointXYZRGBA p2; p2.getVector3fMap () << 4, 5, 6; p2.r = 7; p2.g = 8; p2.b = 9, p2.a = 10;
+    pcl::PointXYZRGBA p2;
+    p2.getVector3fMap () << 4, 5, 6;
+    p2.r = 7;
+    p2.g = 8;
+    p2.b = 9, p2.a = 10;
     pcl::copyPoint (p1, p2);
     EXPECT_EQ (p1.rgba, p2.rgba);
     EXPECT_FLOAT_EQ (4, p2.x);
@@ -160,8 +192,16 @@ TEST (CopyPointTest, DifferentTypesWithSameColor)
     EXPECT_FLOAT_EQ (6, p2.z);
   }
   {
-    pcl::PointXYZRGBNormal p1; p1.getVector3fMap () << 1, 2, 3; p1.r = 7; p1.g = 8; p1.b = 9;
-    pcl::PointXYZRGB p2; p2.getVector3fMap () << 4, 5, 6; p2.r = 3; p2.g = 2; p2.b = 1;
+    pcl::PointXYZRGBNormal p1;
+    p1.getVector3fMap () << 1, 2, 3;
+    p1.r = 7;
+    p1.g = 8;
+    p1.b = 9;
+    pcl::PointXYZRGB p2;
+    p2.getVector3fMap () << 4, 5, 6;
+    p2.r = 3;
+    p2.g = 2;
+    p2.b = 1;
     pcl::copyPoint (p1, p2);
     EXPECT_FLOAT_EQ (p1.x, p2.x);
     EXPECT_FLOAT_EQ (p1.y, p2.y);
@@ -173,16 +213,12 @@ TEST (CopyPointTest, DifferentTypesWithSameColor)
 int
 main (int argc, char **argv)
 {
-  try
-  {
+  try {
     ::testing::InitGoogleTest (&argc, argv);
     ::testing::FLAGS_gtest_death_test_style = "threadsafe";
     return RUN_ALL_TESTS ();
-  }
-  catch (std::exception& e)
-  {
+  } catch (std::exception &e) {
     std::cerr << "Unhandled exception: " << e.what () << "\n";
   }
   return 1;
 }
-

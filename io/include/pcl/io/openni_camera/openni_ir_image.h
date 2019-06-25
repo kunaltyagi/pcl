@@ -36,71 +36,82 @@
 #ifndef __OPENNI_IR_IMAGE__
 #define __OPENNI_IR_IMAGE__
 
-#include <pcl/pcl_macros.h>
 #include "openni.h"
 #include "openni_exception.h"
 #include <pcl/io/boost.h>
+#include <pcl/pcl_macros.h>
 
 namespace openni_wrapper
 {
 
-/**
- * @brief Class containing just a reference to IR meta data.
- * @author Patrick Mihelich <mihelich@willowgarage.com>, Suat Gedikli <gedikli@willowgarage.com>
- */
-class PCL_EXPORTS IRImage
-{
-public:
-  using Ptr = boost::shared_ptr<IRImage>;
-  using ConstPtr = boost::shared_ptr<const IRImage>;
+  /**
+   * @brief Class containing just a reference to IR meta data.
+   * @author Patrick Mihelich <mihelich@willowgarage.com>, Suat Gedikli
+   * <gedikli@willowgarage.com>
+   */
+  class PCL_EXPORTS IRImage
+  {
+    public:
+    using Ptr = boost::shared_ptr<IRImage>;
+    using ConstPtr = boost::shared_ptr<const IRImage>;
 
-  inline IRImage (boost::shared_ptr<xn::IRMetaData> ir_meta_data) throw ();
-  inline virtual ~IRImage () throw ();
+    inline IRImage (boost::shared_ptr<xn::IRMetaData> ir_meta_data) throw ();
+    inline virtual ~IRImage () throw ();
 
-  void fillRaw (unsigned width, unsigned height, unsigned short* ir_buffer, unsigned line_step = 0) const;
+    void
+    fillRaw (unsigned width, unsigned height, unsigned short *ir_buffer,
+             unsigned line_step = 0) const;
 
-  inline unsigned getWidth () const throw ();
-  inline unsigned getHeight () const throw ();
-  inline unsigned getFrameID () const throw ();
-  inline unsigned long getTimeStamp () const throw ();
-  inline const xn::IRMetaData& getMetaData () const throw ();
+    inline unsigned
+    getWidth () const throw ();
+    inline unsigned
+    getHeight () const throw ();
+    inline unsigned
+    getFrameID () const throw ();
+    inline unsigned long
+    getTimeStamp () const throw ();
+    inline const xn::IRMetaData &
+    getMetaData () const throw ();
 
-protected:
-  boost::shared_ptr<xn::IRMetaData> ir_md_;
-};
+    protected:
+    boost::shared_ptr<xn::IRMetaData> ir_md_;
+  };
 
-IRImage::IRImage (boost::shared_ptr<xn::IRMetaData> ir_meta_data) throw ()
-: ir_md_ (ir_meta_data)
-{
-}
+  IRImage::IRImage (boost::shared_ptr<xn::IRMetaData> ir_meta_data) throw ()
+      : ir_md_ (ir_meta_data)
+  {
+  }
 
-IRImage::~IRImage () throw ()
-{
-}
+  IRImage::~IRImage () throw () {}
 
-unsigned IRImage::getWidth () const throw ()
-{
-  return ir_md_->XRes ();
-}
+  unsigned
+  IRImage::getWidth () const throw ()
+  {
+    return ir_md_->XRes ();
+  }
 
-unsigned IRImage::getHeight () const throw ()
-{
-  return ir_md_->YRes ();
-}
+  unsigned
+  IRImage::getHeight () const throw ()
+  {
+    return ir_md_->YRes ();
+  }
 
-unsigned IRImage::getFrameID () const throw ()
-{
-  return ir_md_->FrameID ();
-}
+  unsigned
+  IRImage::getFrameID () const throw ()
+  {
+    return ir_md_->FrameID ();
+  }
 
-unsigned long IRImage::getTimeStamp () const throw ()
-{
-  return static_cast<unsigned long> (ir_md_->Timestamp ());
-}
+  unsigned long
+  IRImage::getTimeStamp () const throw ()
+  {
+    return static_cast<unsigned long> (ir_md_->Timestamp ());
+  }
 
-const xn::IRMetaData& IRImage::getMetaData () const throw ()
-{
-	return *ir_md_;
-}
-} // namespace
+  const xn::IRMetaData &
+  IRImage::getMetaData () const throw ()
+  {
+    return *ir_md_;
+  }
+} // namespace openni_wrapper
 #endif //__OPENNI_IR_IMAGE__

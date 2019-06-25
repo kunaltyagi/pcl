@@ -39,47 +39,46 @@
 
 #include <QTabWidget>
 
-#include <pcl/visualization/pcl_visualizer.h>
-#include <pcl/apps/cloud_composer/project_model.h>
 #include <pcl/apps/cloud_composer/cloud_view.h>
+#include <pcl/apps/cloud_composer/project_model.h>
+#include <pcl/visualization/pcl_visualizer.h>
 
 namespace pcl
 {
   namespace cloud_composer
   {
-   
+
     /** \brief Tabbed widget for containing CloudView widgets
      * \author Jeremie Papon
      * \ingroup cloud_composer
      */
     class CloudViewer : public QTabWidget
     {
-        Q_OBJECT
+      Q_OBJECT
 
       public:
-        
-        CloudViewer (QWidget* parent = nullptr);
-        ~CloudViewer();
-        ProjectModel* getModel () const;
+      CloudViewer (QWidget *parent = nullptr);
+      ~CloudViewer ();
+      ProjectModel *
+      getModel () const;
 
       public Q_SLOTS:
-        void 
-        addModel (ProjectModel* new_model);
-        
-        void 
-        modelChanged (int index);
-        
-        void
-        addNewProject (ProjectModel* new_model);
-        
+      void
+      addModel (ProjectModel *new_model);
+
+      void
+      modelChanged (int index);
+
+      void
+      addNewProject (ProjectModel *new_model);
+
       Q_SIGNALS:
-        void
-        newModelSelected (ProjectModel *new_model);
+      void
+      newModelSelected (ProjectModel *new_model);
 
       private:
-        
-        pcl::visualization::PCLVisualizer::Ptr vis_;
-        QMap <ProjectModel*, CloudView*> model_view_map_;
+      pcl::visualization::PCLVisualizer::Ptr vis_;
+      QMap<ProjectModel *, CloudView *> model_view_map_;
     };
-  }
-}
+  } // namespace cloud_composer
+} // namespace pcl

@@ -42,23 +42,24 @@
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::registration::CorrespondenceRejectorFeatures::getRemainingCorrespondences (
-    const pcl::Correspondences& original_correspondences,
-    pcl::Correspondences& remaining_correspondences)
+    const pcl::Correspondences &original_correspondences,
+    pcl::Correspondences &remaining_correspondences)
 {
   unsigned int number_valid_correspondences = 0;
   remaining_correspondences.resize (original_correspondences.size ());
   // For each set of features, go over each correspondence from input_correspondences_
-  for (size_t i = 0; i < input_correspondences_->size (); ++i)
-  {
+  for (size_t i = 0; i < input_correspondences_->size (); ++i) {
     // Go over the map of features
-    for (FeaturesMap::const_iterator it = features_map_.begin (); it != features_map_.end (); ++it)
-    {
+    for (FeaturesMap::const_iterator it = features_map_.begin ();
+         it != features_map_.end (); ++it) {
       // Check if the score in feature space is above the given threshold
-      // (assume that the number of feature correspondenecs is the same as the number of point correspondences)
+      // (assume that the number of feature correspondenecs is the same as the number of
+      // point correspondences)
       if (!it->second->isCorrespondenceValid (static_cast<int> (i)))
         break;
 
-      remaining_correspondences[number_valid_correspondences] = original_correspondences[i];
+      remaining_correspondences[number_valid_correspondences] =
+          original_correspondences[i];
       ++number_valid_correspondences;
     }
   }

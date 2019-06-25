@@ -41,15 +41,17 @@
 #ifndef PCL_SAMPLE_CONSENSUS_IMPL_SAC_MODEL_PLANE_H_
 #define PCL_SAMPLE_CONSENSUS_IMPL_SAC_MODEL_PLANE_H_
 
-#include <pcl/sample_consensus/sac_model_plane.h>
 #include <pcl/common/centroid.h>
-#include <pcl/common/eigen.h>
 #include <pcl/common/concatenate.h>
+#include <pcl/common/eigen.h>
 #include <pcl/point_types.h>
+#include <pcl/sample_consensus/sac_model_plane.h>
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
-pcl::SampleConsensusModelPlane<PointT>::isSampleGood (const std::vector<int> &samples) const
+template <typename PointT>
+bool
+pcl::SampleConsensusModelPlane<PointT>::isSampleGood (
+    const std::vector<int> &samples) const
 {
   // Need an extra check in case the sample selection is empty
   if (samples.empty ())
@@ -59,20 +61,22 @@ pcl::SampleConsensusModelPlane<PointT>::isSampleGood (const std::vector<int> &sa
   pcl::Array4fMapConst p1 = input_->points[samples[1]].getArray4fMap ();
   pcl::Array4fMapConst p2 = input_->points[samples[2]].getArray4fMap ();
 
-  Eigen::Array4f dy1dy2 = (p1-p0) / (p2-p0);
+  Eigen::Array4f dy1dy2 = (p1 - p0) / (p2 - p0);
 
-  return ( (dy1dy2[0] != dy1dy2[1]) || (dy1dy2[2] != dy1dy2[1]) );
+  return ((dy1dy2[0] != dy1dy2[1]) || (dy1dy2[2] != dy1dy2[1]));
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
+template <typename PointT>
+bool
 pcl::SampleConsensusModelPlane<PointT>::computeModelCoefficients (
-      const std::vector<int> &samples, Eigen::VectorXf &model_coefficients) const
+    const std::vector<int> &samples, Eigen::VectorXf &model_coefficients) const
 {
   // Need 3 samples
-  if (samples.size () != sample_size_)
-  {
-    PCL_ERROR ("[pcl::SampleConsensusModelPlane::computeModelCoefficients] Invalid set of samples given (%lu)!\n", samples.size ());
+  if (samples.size () != sample_size_) {
+    PCL_ERROR ("[pcl::SampleConsensusModelPlane::computeModelCoefficients] Invalid set "
+               "of samples given (%lu)!\n",
+               samples.size ());
     return (false);
   }
 
@@ -87,7 +91,7 @@ pcl::SampleConsensusModelPlane<PointT>::computeModelCoefficients (
 
   // Avoid some crashes by checking for collinearity here
   Eigen::Array4f dy1dy2 = p1p0 / p2p0;
-  if ( (dy1dy2[0] == dy1dy2[1]) && (dy1dy2[2] == dy1dy2[1]) )          // Check for collinearity
+  if ((dy1dy2[0] == dy1dy2[1]) && (dy1dy2[2] == dy1dy2[1])) // Check for collinearity
     return (false);
 
   // Compute the plane coefficients from the 3 given points in a straightforward manner
@@ -102,28 +106,30 @@ pcl::SampleConsensusModelPlane<PointT>::computeModelCoefficients (
   model_coefficients.normalize ();
 
   // ... + d = 0
-  model_coefficients[3] = -1 * (model_coefficients.template head<4>().dot (p0.matrix ()));
+  model_coefficients[3] =
+      -1 * (model_coefficients.template head<4> ().dot (p0.matrix ()));
 
   return (true);
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::SampleConsensusModelPlane<PointT>::getDistancesToModel (
-      const Eigen::VectorXf &model_coefficients, std::vector<double> &distances) const
+    const Eigen::VectorXf &model_coefficients, std::vector<double> &distances) const
 {
   // Needs a valid set of model coefficients
-  if (model_coefficients.size () != model_size_)
-  {
-    PCL_ERROR ("[pcl::SampleConsensusModelPlane::getDistancesToModel] Invalid number of model coefficients given (%lu)!\n", model_coefficients.size ());
+  if (model_coefficients.size () != model_size_) {
+    PCL_ERROR ("[pcl::SampleConsensusModelPlane::getDistancesToModel] Invalid number "
+               "of model coefficients given (%lu)!\n",
+               model_coefficients.size ());
     return;
   }
 
   distances.resize (indices_->size ());
 
   // Iterate through the 3d points and calculate the distances from them to the plane
-  for (size_t i = 0; i < indices_->size (); ++i)
-  {
+  for (size_t i = 0; i < indices_->size (); ++i) {
     // Calculate the distance from the point to the plane normal as the dot product
     // D = (P-A).N/|N|
     /*distances[i] = fabs (model_coefficients[0] * input_->points[(*indices_)[i]].x +
@@ -132,21 +138,23 @@ pcl::SampleConsensusModelPlane<PointT>::getDistancesToModel (
                          model_coefficients[3]);*/
     Eigen::Vector4f pt (input_->points[(*indices_)[i]].x,
                         input_->points[(*indices_)[i]].y,
-                        input_->points[(*indices_)[i]].z,
-                        1);
+                        input_->points[(*indices_)[i]].z, 1);
     distances[i] = fabs (model_coefficients.dot (pt));
   }
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::SampleConsensusModelPlane<PointT>::selectWithinDistance (
-      const Eigen::VectorXf &model_coefficients, const double threshold, std::vector<int> &inliers)
+    const Eigen::VectorXf &model_coefficients, const double threshold,
+    std::vector<int> &inliers)
 {
   // Needs a valid set of model coefficients
-  if (model_coefficients.size () != model_size_)
-  {
-    PCL_ERROR ("[pcl::SampleConsensusModelPlane::selectWithinDistance] Invalid number of model coefficients given (%lu)!\n", model_coefficients.size ());
+  if (model_coefficients.size () != model_size_) {
+    PCL_ERROR ("[pcl::SampleConsensusModelPlane::selectWithinDistance] Invalid number "
+               "of model coefficients given (%lu)!\n",
+               model_coefficients.size ());
     return;
   }
 
@@ -155,20 +163,18 @@ pcl::SampleConsensusModelPlane<PointT>::selectWithinDistance (
   error_sqr_dists_.resize (indices_->size ());
 
   // Iterate through the 3d points and calculate the distances from them to the plane
-  for (size_t i = 0; i < indices_->size (); ++i)
-  {
+  for (size_t i = 0; i < indices_->size (); ++i) {
     // Calculate the distance from the point to the plane normal as the dot product
     // D = (P-A).N/|N|
     Eigen::Vector4f pt (input_->points[(*indices_)[i]].x,
                         input_->points[(*indices_)[i]].y,
-                        input_->points[(*indices_)[i]].z,
-                        1);
-    
+                        input_->points[(*indices_)[i]].z, 1);
+
     float distance = fabsf (model_coefficients.dot (pt));
-    
-    if (distance < threshold)
-    {
-      // Returns the indices of the points whose distances are smaller than the threshold
+
+    if (distance < threshold) {
+      // Returns the indices of the points whose distances are smaller than the
+      // threshold
       inliers[nr_p] = (*indices_)[i];
       error_sqr_dists_[nr_p] = static_cast<double> (distance);
       ++nr_p;
@@ -179,28 +185,28 @@ pcl::SampleConsensusModelPlane<PointT>::selectWithinDistance (
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> int
+template <typename PointT>
+int
 pcl::SampleConsensusModelPlane<PointT>::countWithinDistance (
-      const Eigen::VectorXf &model_coefficients, const double threshold) const
+    const Eigen::VectorXf &model_coefficients, const double threshold) const
 {
   // Needs a valid set of model coefficients
-  if (model_coefficients.size () != model_size_)
-  {
-    PCL_ERROR ("[pcl::SampleConsensusModelPlane::countWithinDistance] Invalid number of model coefficients given (%lu)!\n", model_coefficients.size ());
+  if (model_coefficients.size () != model_size_) {
+    PCL_ERROR ("[pcl::SampleConsensusModelPlane::countWithinDistance] Invalid number "
+               "of model coefficients given (%lu)!\n",
+               model_coefficients.size ());
     return (0);
   }
 
   int nr_p = 0;
 
   // Iterate through the 3d points and calculate the distances from them to the plane
-  for (size_t i = 0; i < indices_->size (); ++i)
-  {
+  for (size_t i = 0; i < indices_->size (); ++i) {
     // Calculate the distance from the point to the plane normal as the dot product
     // D = (P-A).N/|N|
     Eigen::Vector4f pt (input_->points[(*indices_)[i]].x,
                         input_->points[(*indices_)[i]].y,
-                        input_->points[(*indices_)[i]].z,
-                        1);
+                        input_->points[(*indices_)[i]].z, 1);
     if (fabs (model_coefficients.dot (pt)) < threshold)
       nr_p++;
   }
@@ -208,29 +214,35 @@ pcl::SampleConsensusModelPlane<PointT>::countWithinDistance (
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::SampleConsensusModelPlane<PointT>::optimizeModelCoefficients (
-      const std::vector<int> &inliers, const Eigen::VectorXf &model_coefficients, Eigen::VectorXf &optimized_coefficients) const
+    const std::vector<int> &inliers, const Eigen::VectorXf &model_coefficients,
+    Eigen::VectorXf &optimized_coefficients) const
 {
   // Needs a valid set of model coefficients
-  if (model_coefficients.size () != model_size_)
-  {
-    PCL_ERROR ("[pcl::SampleConsensusModelPlane::optimizeModelCoefficients] Invalid number of model coefficients given (%lu)!\n", model_coefficients.size ());
+  if (model_coefficients.size () != model_size_) {
+    PCL_ERROR ("[pcl::SampleConsensusModelPlane::optimizeModelCoefficients] Invalid "
+               "number of model coefficients given (%lu)!\n",
+               model_coefficients.size ());
     optimized_coefficients = model_coefficients;
     return;
   }
 
   // Need more than the minimum sample size to make a difference
-  if (inliers.size () <= sample_size_)
-  {
-    PCL_ERROR ("[pcl::SampleConsensusModelPlane::optimizeModelCoefficients] Not enough inliers found to optimize model coefficients (%lu)! Returning the same coefficients.\n", inliers.size ());
+  if (inliers.size () <= sample_size_) {
+    PCL_ERROR ("[pcl::SampleConsensusModelPlane::optimizeModelCoefficients] Not enough "
+               "inliers found to optimize model coefficients (%lu)! Returning the same "
+               "coefficients.\n",
+               inliers.size ());
     optimized_coefficients = model_coefficients;
     return;
   }
 
   Eigen::Vector4f plane_parameters;
 
-  // Use Least-Squares to fit the plane through all the given sample points and find out its coefficients
+  // Use Least-Squares to fit the plane through all the given sample points and find out
+  // its coefficients
   EIGEN_ALIGN16 Eigen::Matrix3f covariance_matrix;
   Eigen::Vector4f xyz_centroid;
 
@@ -243,35 +255,38 @@ pcl::SampleConsensusModelPlane<PointT>::optimizeModelCoefficients (
 
   // Hessian form (D = nc . p_plane (centroid here) + p)
   optimized_coefficients.resize (4);
-  optimized_coefficients[0] = eigen_vector [0];
-  optimized_coefficients[1] = eigen_vector [1];
-  optimized_coefficients[2] = eigen_vector [2];
+  optimized_coefficients[0] = eigen_vector[0];
+  optimized_coefficients[1] = eigen_vector[1];
+  optimized_coefficients[2] = eigen_vector[2];
   optimized_coefficients[3] = 0;
   optimized_coefficients[3] = -1 * optimized_coefficients.dot (xyz_centroid);
 
   // Make sure it results in a valid model
-  if (!isModelValid (optimized_coefficients))
-  {
+  if (!isModelValid (optimized_coefficients)) {
     optimized_coefficients = model_coefficients;
   }
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::SampleConsensusModelPlane<PointT>::projectPoints (
-      const std::vector<int> &inliers, const Eigen::VectorXf &model_coefficients, PointCloud &projected_points, bool copy_data_fields) const
+    const std::vector<int> &inliers, const Eigen::VectorXf &model_coefficients,
+    PointCloud &projected_points, bool copy_data_fields) const
 {
   // Needs a valid set of model coefficients
-  if (model_coefficients.size () != model_size_)
-  {
-    PCL_ERROR ("[pcl::SampleConsensusModelPlane::projectPoints] Invalid number of model coefficients given (%lu)!\n", model_coefficients.size ());
+  if (model_coefficients.size () != model_size_) {
+    PCL_ERROR ("[pcl::SampleConsensusModelPlane::projectPoints] Invalid number of "
+               "model coefficients given (%lu)!\n",
+               model_coefficients.size ());
     return;
   }
 
   projected_points.header = input_->header;
   projected_points.is_dense = input_->is_dense;
 
-  Eigen::Vector4f mc (model_coefficients[0], model_coefficients[1], model_coefficients[2], 0);
+  Eigen::Vector4f mc (model_coefficients[0], model_coefficients[1],
+                      model_coefficients[2], 0);
 
   // normalize the vector perpendicular to the plane...
   mc.normalize ();
@@ -282,82 +297,77 @@ pcl::SampleConsensusModelPlane<PointT>::projectPoints (
   tmp_mc[2] = mc[2];
 
   // Copy all the data fields from the input cloud to the projected one?
-  if (copy_data_fields)
-  {
+  if (copy_data_fields) {
     // Allocate enough space and copy the basics
     projected_points.points.resize (input_->points.size ());
-    projected_points.width    = input_->width;
-    projected_points.height   = input_->height;
+    projected_points.width = input_->width;
+    projected_points.height = input_->height;
 
     using FieldList = typename pcl::traits::fieldList<PointT>::type;
     // Iterate over each point
     for (size_t i = 0; i < input_->points.size (); ++i)
       // Iterate over each dimension
-      pcl::for_each_type <FieldList> (NdConcatenateFunctor <PointT, PointT> (input_->points[i], projected_points.points[i]));
+      pcl::for_each_type<FieldList> (NdConcatenateFunctor<PointT, PointT> (
+          input_->points[i], projected_points.points[i]));
 
     // Iterate through the 3d points and calculate the distances from them to the plane
-    for (const int &inlier : inliers)
-    {
+    for (const int &inlier : inliers) {
       // Calculate the distance from the point to the plane
-      Eigen::Vector4f p (input_->points[inlier].x,
-                         input_->points[inlier].y,
-                         input_->points[inlier].z,
-                         1);
+      Eigen::Vector4f p (input_->points[inlier].x, input_->points[inlier].y,
+                         input_->points[inlier].z, 1);
       // use normalized coefficients to calculate the scalar projection
       float distance_to_plane = tmp_mc.dot (p);
 
       pcl::Vector4fMap pp = projected_points.points[inlier].getVector4fMap ();
-      pp.matrix () = p - mc * distance_to_plane;        // mc[3] = 0, therefore the 3rd coordinate is safe
+      pp.matrix () =
+          p - mc * distance_to_plane; // mc[3] = 0, therefore the 3rd coordinate is safe
     }
-  }
-  else
-  {
+  } else {
     // Allocate enough space and copy the basics
     projected_points.points.resize (inliers.size ());
-    projected_points.width    = static_cast<uint32_t> (inliers.size ());
-    projected_points.height   = 1;
+    projected_points.width = static_cast<uint32_t> (inliers.size ());
+    projected_points.height = 1;
 
     using FieldList = typename pcl::traits::fieldList<PointT>::type;
     // Iterate over each point
     for (size_t i = 0; i < inliers.size (); ++i)
       // Iterate over each dimension
-      pcl::for_each_type <FieldList> (NdConcatenateFunctor <PointT, PointT> (input_->points[inliers[i]], projected_points.points[i]));
+      pcl::for_each_type<FieldList> (NdConcatenateFunctor<PointT, PointT> (
+          input_->points[inliers[i]], projected_points.points[i]));
 
     // Iterate through the 3d points and calculate the distances from them to the plane
-    for (size_t i = 0; i < inliers.size (); ++i)
-    {
+    for (size_t i = 0; i < inliers.size (); ++i) {
       // Calculate the distance from the point to the plane
-      Eigen::Vector4f p (input_->points[inliers[i]].x,
-                         input_->points[inliers[i]].y,
-                         input_->points[inliers[i]].z,
-                         1);
+      Eigen::Vector4f p (input_->points[inliers[i]].x, input_->points[inliers[i]].y,
+                         input_->points[inliers[i]].z, 1);
       // use normalized coefficients to calculate the scalar projection
       float distance_to_plane = tmp_mc.dot (p);
 
       pcl::Vector4fMap pp = projected_points.points[i].getVector4fMap ();
-      pp.matrix () = p - mc * distance_to_plane;        // mc[3] = 0, therefore the 3rd coordinate is safe
+      pp.matrix () =
+          p - mc * distance_to_plane; // mc[3] = 0, therefore the 3rd coordinate is safe
     }
   }
 }
 
 //////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
+template <typename PointT>
+bool
 pcl::SampleConsensusModelPlane<PointT>::doSamplesVerifyModel (
-      const std::set<int> &indices, const Eigen::VectorXf &model_coefficients, const double threshold) const
+    const std::set<int> &indices, const Eigen::VectorXf &model_coefficients,
+    const double threshold) const
 {
   // Needs a valid set of model coefficients
-  if (model_coefficients.size () != model_size_)
-  {
-    PCL_ERROR ("[pcl::SampleConsensusModelPlane::doSamplesVerifyModel] Invalid number of model coefficients given (%lu)!\n", model_coefficients.size ());
+  if (model_coefficients.size () != model_size_) {
+    PCL_ERROR ("[pcl::SampleConsensusModelPlane::doSamplesVerifyModel] Invalid number "
+               "of model coefficients given (%lu)!\n",
+               model_coefficients.size ());
     return (false);
   }
 
-  for (const int &index : indices)
-  {
-    Eigen::Vector4f pt (input_->points[index].x,
-                        input_->points[index].y,
-                        input_->points[index].z,
-                        1);
+  for (const int &index : indices) {
+    Eigen::Vector4f pt (input_->points[index].x, input_->points[index].y,
+                        input_->points[index].z, 1);
     if (fabs (model_coefficients.dot (pt)) > threshold)
       return (false);
   }
@@ -365,7 +375,7 @@ pcl::SampleConsensusModelPlane<PointT>::doSamplesVerifyModel (
   return (true);
 }
 
-#define PCL_INSTANTIATE_SampleConsensusModelPlane(T) template class PCL_EXPORTS pcl::SampleConsensusModelPlane<T>;
+#define PCL_INSTANTIATE_SampleConsensusModelPlane(T)                                   \
+  template class PCL_EXPORTS pcl::SampleConsensusModelPlane<T>;
 
-#endif    // PCL_SAMPLE_CONSENSUS_IMPL_SAC_MODEL_PLANE_H_
-
+#endif // PCL_SAMPLE_CONSENSUS_IMPL_SAC_MODEL_PLANE_H_

@@ -44,31 +44,42 @@
 using namespace pcl;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename T> class XYZPointTypesTest : public ::testing::Test { };
-using XYZPointTypes = ::testing::Types<BOOST_PP_SEQ_ENUM(PCL_XYZ_POINT_TYPES)>;
-TYPED_TEST_CASE(XYZPointTypesTest, XYZPointTypes);
+template <typename T>
+class XYZPointTypesTest : public ::testing::Test
+{
+};
+using XYZPointTypes = ::testing::Types<BOOST_PP_SEQ_ENUM (PCL_XYZ_POINT_TYPES)>;
+TYPED_TEST_CASE (XYZPointTypesTest, XYZPointTypes);
 
-TYPED_TEST(XYZPointTypesTest, Distance)
+TYPED_TEST (XYZPointTypesTest, Distance)
 {
   TypeParam p1, p2;
-  p1.x = 3; p1.y = 4; p1.z = 5;
-  p2.y = 1; p2.x = 1; p2.z = 1.5;
+  p1.x = 3;
+  p1.y = 4;
+  p1.z = 5;
+  p2.y = 1;
+  p2.x = 1;
+  p2.z = 1.5;
   double distance = geometry::distance (p1, p2);
   EXPECT_NEAR (distance, 5.024938, 1e-4);
 }
 
-TYPED_TEST(XYZPointTypesTest, SquaredDistance)
+TYPED_TEST (XYZPointTypesTest, SquaredDistance)
 {
   TypeParam p1, p2;
-  p1.x = 3; p1.y = 4; p1.z = 5;
-  p2.y = 1; p2.x = 1; p2.z = 1.5;
+  p1.x = 3;
+  p1.y = 4;
+  p1.z = 5;
+  p2.y = 1;
+  p2.x = 1;
+  p2.z = 1.5;
   double distance = geometry::squaredDistance (p1, p2);
   EXPECT_NEAR (distance, 25.25, 1e-4);
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

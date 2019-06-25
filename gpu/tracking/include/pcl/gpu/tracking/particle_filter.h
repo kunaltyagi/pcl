@@ -1,12 +1,12 @@
 #pragma once
 
-#include <pcl/pcl_macros.h>
 #include <pcl/gpu/containers/device_array.h>
+#include <pcl/pcl_macros.h>
 
-#include <pcl/point_types.h>
-#include <pcl/point_cloud.h>
 #include <pcl/PointIndices.h>
 #include <pcl/pcl_macros.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
 
 #include <pcl/gpu/kinfu/pixel_rgb.h>
 #include <pcl/tracking/particle_filter.h>
@@ -18,132 +18,144 @@
 namespace pcl
 {
   namespace gpu
-  {	
+  {
     class ParticleFilterGPUTracker
     {
-    public:
-    	/** \brief Point type supported */
-    	using PointType = pcl::PointXYZ;
-			//using NormalType = pcl::Normal;
-			using PixelRGB = pcl::RGB;
-			
-			using StateXYZ = pcl::PointXYZ;
-			using StateRPY = pcl::PointXYZ;
-			
-			using StateType = pcl::tracking::ParticleXYZRPY;
+      public:
+      /** \brief Point type supported */
+      using PointType = pcl::PointXYZ;
+      // using NormalType = pcl::Normal;
+      using PixelRGB = pcl::RGB;
 
-			/** \brief Empty constructor. */
-			ParticleFilterGPUTracker ()
-			//: ParticleFilterTracker<PointInT, StateT> ()
-			{
-				tracker_name_ = "ParticleFilterGPUTracker";
-			}
-			
-			/** \brief set the number of the particles.
-			* \param particle_num the number of the particles.
-			*/
-			inline void
-				setParticleNum (const int particle_num) { particle_num_ = particle_num; }
-			
-			/** \brief get the number of the particles. */
-			inline int
-				getParticleNum () const { return particle_num_; }
+      using StateXYZ = pcl::PointXYZ;
+      using StateRPY = pcl::PointXYZ;
 
-			 /** \brief set a pointer to a reference dataset to be tracked.
-			 * \param ref a pointer to a PointCloud message
-			 */
-			inline void
-				setReferenceCloud (const DeviceArray2D<PointType> &ref) { ref_ = ref; }
-			
-			/** \brief get a pointer to a reference dataset to be tracked. */
-			inline DeviceArray2D<PointType> const
-				getReferenceCloud () { return ref_; }
+      using StateType = pcl::tracking::ParticleXYZRPY;
 
-			int
-				cols ();
+      /** \brief Empty constructor. */
+      ParticleFilterGPUTracker ()
+      //: ParticleFilterTracker<PointInT, StateT> ()
+      {
+        tracker_name_ = "ParticleFilterGPUTracker";
+      }
 
-			int
-				rows ();
+      /** \brief set the number of the particles.
+       * \param particle_num the number of the particles.
+       */
+      inline void
+      setParticleNum (const int particle_num)
+      {
+        particle_num_ = particle_num;
+      }
 
-			virtual bool 
-				operator() (const DeviceArray2D<PointType>& input, const DeviceArray2D<PixelRGB>& input_colors)
-			{
+      /** \brief get the number of the particles. */
+      inline int
+      getParticleNum () const
+      {
+        return particle_num_;
+      }
 
-			}
+      /** \brief set a pointer to a reference dataset to be tracked.
+       * \param ref a pointer to a PointCloud message
+       */
+      inline void
+      setReferenceCloud (const DeviceArray2D<PointType> &ref)
+      {
+        ref_ = ref;
+      }
 
-			virtual void
-				setMotion (StateType motion)
-			{ motion_ = motion; }
-						
-			virtual StateType
-				getResult();						
+      /** \brief get a pointer to a reference dataset to be tracked. */
+      inline DeviceArray2D<PointType> const
+      getReferenceCloud ()
+      {
+        return ref_;
+      }
 
-    protected:
-			std::string tracker_name_;
+      int
+      cols ();
 
-			virtual bool 
-			initCompute()
-			{
+      int
+      rows ();
 
-				//pcl::device::initParticles(particle_num_, particle_xyz_, particle_rpy_, particle_weight_ );
-			}
-			
-			virtual void 
-			computeTracking()
-			{
+      virtual bool
+      operator() (const DeviceArray2D<PointType> &input,
+                  const DeviceArray2D<PixelRGB> &input_colors)
+      {
+      }
 
-			}						
-			
-			virtual void
-				allocateBuffers()
-			{
-				particles_.create( particle_num_ );				
+      virtual void
+      setMotion (StateType motion)
+      {
+        motion_ = motion;
+      }
 
-				random_number_generator_.create( particle_num_ );
-				
-			}
-			
-			// reference point cloud
-			DeviceArray2D<PointType> ref_;
+      virtual StateType
+      getResult ();
 
-			DeviceArray2D<PixelRGB> ref_colors_;
+      protected:
+      std::string tracker_name_;
 
-			//DeviceArray2D<NormalType> ref_normals_;
+      virtual bool
+      initCompute ()
+      {
 
-			// input point cloud
-			DeviceArray2D<PointType> input_;
+        // pcl::device::initParticles(particle_num_, particle_xyz_, particle_rpy_,
+        // particle_weight_ );
+      }
 
-			DeviceArray2D<PixelRGB> input_colors_;
+      virtual void
+      computeTracking ()
+      {
+      }
 
-			//DeviceArray2D<NormalType> input_normals_;
-						
-			//StateCloud particles_;
-			DeviceArray<StateType> particles_;
+      virtual void
+      allocateBuffers ()
+      {
+        particles_.create (particle_num_);
 
-			// random number generate state
-			DeviceArray<curandState> rng_states;
-						
-			int particle_num_;
+        random_number_generator_.create (particle_num_);
+      }
 
-			std::vector<float> step_noise_covariance_;
+      // reference point cloud
+      DeviceArray2D<PointType> ref_;
+
+      DeviceArray2D<PixelRGB> ref_colors_;
+
+      // DeviceArray2D<NormalType> ref_normals_;
+
+      // input point cloud
+      DeviceArray2D<PointType> input_;
+
+      DeviceArray2D<PixelRGB> input_colors_;
+
+      // DeviceArray2D<NormalType> input_normals_;
+
+      // StateCloud particles_;
+      DeviceArray<StateType> particles_;
+
+      // random number generate state
+      DeviceArray<curandState> rng_states;
+
+      int particle_num_;
+
+      std::vector<float> step_noise_covariance_;
 
       std::vector<float> initial_noise_covariance_;
-        
+
       std::vector<float> initial_noise_mean_;
 
-			StateType motion_;
+      StateType motion_;
 
-			float motion_ratio_;
+      float motion_ratio_;
 
-			bool use_colors_;
+      bool use_colors_;
 
-			StateType representative_state_;			
+      StateType representative_state_;
 
-			/** \brief Height of input depth image. */
-			int rows_;
-			/** \brief Width of input depth image. */
-			int cols_;
-
-		};
-  }
-}
+      /** \brief Height of input depth image. */
+      int rows_;
+      /** \brief Width of input depth image. */
+      int cols_;
+    };
+  } // namespace gpu
+} // namespace pcl

@@ -45,9 +45,9 @@
 #include <pcl/registration/transformation_estimation_lm.h>
 #include <pcl/registration/warp_point_rigid_3d.h>
 
-#include <string>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <string>
 #include <vector>
 
 using PointType = pcl::PointXYZ;
@@ -71,12 +71,12 @@ main (int argc, char **argv)
   pcd_indices = pcl::console::parse_file_extension_argument (argc, argv, ".pcd");
 
   CloudPtr model (new Cloud);
-  if (pcl::io::loadPCDFile (argv[pcd_indices[0]], *model) == -1)
-  {
+  if (pcl::io::loadPCDFile (argv[pcd_indices[0]], *model) == -1) {
     std::cout << "Could not read file" << std::endl;
     return -1;
   }
-  std::cout << argv[pcd_indices[0]] << " width: " << model->width << " height: " << model->height << std::endl;
+  std::cout << argv[pcd_indices[0]] << " width: " << model->width
+            << " height: " << model->height << std::endl;
 
   std::string result_filename (argv[pcd_indices[0]]);
   result_filename = result_filename.substr (result_filename.rfind ('/') + 1);
@@ -85,23 +85,23 @@ main (int argc, char **argv)
 
   Eigen::Matrix4f t (Eigen::Matrix4f::Identity ());
 
-  for (size_t i = 1; i < pcd_indices.size (); i++)
-  {
+  for (size_t i = 1; i < pcd_indices.size (); i++) {
     CloudPtr data (new Cloud);
-    if (pcl::io::loadPCDFile (argv[pcd_indices[i]], *data) == -1)
-    {
+    if (pcl::io::loadPCDFile (argv[pcd_indices[i]], *data) == -1) {
       std::cout << "Could not read file" << std::endl;
       return -1;
     }
-    std::cout << argv[pcd_indices[i]] << " width: " << data->width << " height: " << data->height << std::endl;
+    std::cout << argv[pcd_indices[i]] << " width: " << data->width
+              << " height: " << data->height << std::endl;
 
     pcl::IterativeClosestPointNonLinear<PointType, PointType> icp;
 
-    pcl::registration::WarpPointRigid3D<PointType, PointType>::Ptr warp_fcn 
-      (new pcl::registration::WarpPointRigid3D<PointType, PointType>);
+    pcl::registration::WarpPointRigid3D<PointType, PointType>::Ptr warp_fcn (
+        new pcl::registration::WarpPointRigid3D<PointType, PointType>);
 
     // Create a TransformationEstimationLM object, and set the warp to it
-    pcl::registration::TransformationEstimationLM<PointType, PointType>::Ptr te (new pcl::registration::TransformationEstimationLM<PointType, PointType>);
+    pcl::registration::TransformationEstimationLM<PointType, PointType>::Ptr te (
+        new pcl::registration::TransformationEstimationLM<PointType, PointType>);
     te->setWarpFunction (warp_fcn);
 
     // Pass the TransformationEstimation objec to the ICP algorithm

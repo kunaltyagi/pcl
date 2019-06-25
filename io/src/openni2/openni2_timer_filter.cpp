@@ -32,7 +32,6 @@
 #include "pcl/io/openni2/openni2_timer_filter.h"
 #include <algorithm>
 
-
 namespace pcl
 {
   namespace io
@@ -40,29 +39,30 @@ namespace pcl
     namespace openni2
     {
 
-      OpenNI2TimerFilter::OpenNI2TimerFilter (std::size_t filter_len):
-        filter_len_(filter_len)
-      {}
+      OpenNI2TimerFilter::OpenNI2TimerFilter (std::size_t filter_len)
+          : filter_len_ (filter_len)
+      {
+      }
 
-      OpenNI2TimerFilter::~OpenNI2TimerFilter ()
-      {}
+      OpenNI2TimerFilter::~OpenNI2TimerFilter () {}
 
-      void OpenNI2TimerFilter::addSample (double sample)
+      void
+      OpenNI2TimerFilter::addSample (double sample)
       {
         buffer_.push_back (sample);
-        if (buffer_.size ()>filter_len_)
+        if (buffer_.size () > filter_len_)
           buffer_.pop_front ();
       }
 
-      double OpenNI2TimerFilter::getMedian ()
+      double
+      OpenNI2TimerFilter::getMedian ()
       {
-        if (!buffer_.empty ())
-        {
+        if (!buffer_.empty ()) {
           std::deque<double> sort_buffer = buffer_;
 
           std::sort (sort_buffer.begin (), sort_buffer.end ());
 
-          return sort_buffer[sort_buffer.size ()/2];
+          return sort_buffer[sort_buffer.size () / 2];
         } else
           return (0.0);
       }
@@ -70,29 +70,27 @@ namespace pcl
       double
       OpenNI2TimerFilter::getMovingAvg ()
       {
-        if (!buffer_.empty ())
-        {
+        if (!buffer_.empty ()) {
           double sum = 0;
 
           std::deque<double>::const_iterator it = buffer_.begin ();
           std::deque<double>::const_iterator it_end = buffer_.end ();
 
-          while (it != it_end)
-          {
+          while (it != it_end) {
             sum += *(it++);
           }
 
-          return sum / static_cast<double>(buffer_.size ());
+          return sum / static_cast<double> (buffer_.size ());
         } else
           return (0.0);
       }
 
-
-      void OpenNI2TimerFilter::clear ()
+      void
+      OpenNI2TimerFilter::clear ()
       {
         buffer_.clear ();
       }
 
-    } //namespace
-  }
-}
+    } // namespace openni2
+  }   // namespace io
+} // namespace pcl

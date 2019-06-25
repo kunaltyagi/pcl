@@ -42,15 +42,14 @@
 int
 main (int argc, char **argv)
 {
-  if (argc != 3)
-  {
+  if (argc != 3) {
     std::cout << "call with " << argv[0] << " input.pcd output.pcd" << std::endl;
     return 0;
   }
 
-  if (!strcmp (argv[1], argv[2]))
-  {
-    std::cout << "called with same name for input and output! (done nothing)" << std::endl;
+  if (!strcmp (argv[1], argv[2])) {
+    std::cout << "called with same name for input and output! (done nothing)"
+              << std::endl;
     return 1;
   }
 
@@ -64,8 +63,7 @@ main (int argc, char **argv)
   std::ofstream output (argv[2]);
   std::string str;
 
-  while (input >> str)
-  {
+  while (input >> str) {
     if (str == nanStr)
       output << "nan";
     else

@@ -49,38 +49,37 @@ class BuffersTest : public ::testing::Test
 {
 
   public:
+  BuffersTest ()
+  {
+    if (std::numeric_limits<T>::has_quiet_NaN)
+      invalid_ = std::numeric_limits<T>::quiet_NaN ();
+    else
+      invalid_ = 0;
+  }
 
-    BuffersTest ()
-    {
-      if (std::numeric_limits<T>::has_quiet_NaN)
-        invalid_ = std::numeric_limits<T>::quiet_NaN ();
-      else
-        invalid_ = 0;
+  template <typename Buffer>
+  void
+  checkBuffer (Buffer &buffer, const T *data, const T *expected, size_t size)
+  {
+    const T *dptr = data;
+    const T *eptr = expected;
+    for (size_t i = 0; i < size; ++i) {
+      std::vector<T> d (buffer.size ());
+      memcpy (d.data (), dptr, buffer.size () * sizeof (T));
+      buffer.push (d);
+      for (size_t j = 0; j < buffer.size (); ++j)
+        // MSVC is missing bool std::isnan(IntegralType arg); variant, so we need to
+        // cast ourself to double
+        if (std::isnan (static_cast<double> (eptr[j])))
+          EXPECT_TRUE (std::isnan (static_cast<double> (buffer[j])));
+        else
+          EXPECT_EQ (eptr[j], buffer[j]);
+      dptr += buffer.size ();
+      eptr += buffer.size ();
     }
+  }
 
-    template <typename Buffer> void
-    checkBuffer (Buffer& buffer, const T* data, const T* expected, size_t size)
-    {
-      const T* dptr = data;
-      const T* eptr = expected;
-      for (size_t i = 0; i < size; ++i)
-      {
-        std::vector<T> d (buffer.size ());
-        memcpy (d.data (), dptr, buffer.size () * sizeof (T));
-        buffer.push (d);
-        for (size_t j = 0; j < buffer.size (); ++j)
-          //MSVC is missing bool std::isnan(IntegralType arg); variant, so we need to cast ourself to double
-          if (std::isnan (static_cast<double>(eptr[j])))
-            EXPECT_TRUE (std::isnan (static_cast<double>(buffer[j])));
-          else
-            EXPECT_EQ (eptr[j], buffer[j]);
-        dptr += buffer.size ();
-        eptr += buffer.size ();
-      }
-    }
-
-    T invalid_;
-
+  T invalid_;
 };
 
 using DataTypes = ::testing::Types<int8_t, int32_t, float>;
@@ -156,7 +155,7 @@ TYPED_TEST (BuffersTest, MedianBufferWindow4)
 
 TYPED_TEST (BuffersTest, MedianBufferPushInvalid)
 {
-  const TypeParam& invalid = this->invalid_;
+  const TypeParam &invalid = this->invalid_;
   MedianBuffer<TypeParam> mb (1, 3);
   const TypeParam data[] = {5, 4, 3, invalid, 1, invalid, invalid, invalid, 9, 3, 1};
   const TypeParam median[] = {5, 5, 4, 4, 3, 1, 1, invalid, 9, 9, 3};
@@ -169,13 +168,15 @@ TYPED_TEST (BuffersTest, MedianBufferSize3Window3)
     MedianBuffer<TypeParam> mb (3, 3);
     const TypeParam data[] = {3, 3, 3, 1, 1, 1, -1, -1, -1};
     const TypeParam median[] = {3, 3, 3, 3, 3, 3, 1, 1, 1};
-    this->checkBuffer (mb, data, median, sizeof (data) / sizeof (TypeParam) / mb.size ());
+    this->checkBuffer (mb, data, median,
+                       sizeof (data) / sizeof (TypeParam) / mb.size ());
   }
   {
     MedianBuffer<TypeParam> mb (3, 3);
     const TypeParam data[] = {3, 2, 1, 1, 1, 1, 3, 2, 1, 1, 2, 3};
     const TypeParam median[] = {3, 2, 1, 3, 2, 1, 3, 2, 1, 1, 2, 1};
-    this->checkBuffer (mb, data, median, sizeof (data) / sizeof (TypeParam) / mb.size ());
+    this->checkBuffer (mb, data, median,
+                       sizeof (data) / sizeof (TypeParam) / mb.size ());
   }
 }
 
@@ -220,16 +221,16 @@ TYPED_TEST (BuffersTest, AverageBufferWindow3)
 
 TYPED_TEST (BuffersTest, AverageBufferPushInvalid)
 {
-  const TypeParam& invalid = this->invalid_;
+  const TypeParam &invalid = this->invalid_;
   AverageBuffer<TypeParam> ab (1, 3);
   const TypeParam data[] = {5, 3, 7, invalid, 1, invalid, invalid, invalid, 9, 3, -3};
   const TypeParam median[] = {5, 4, 5, 5, 4, 1, 1, invalid, 9, 6, 3};
   this->checkBuffer (ab, data, median, sizeof (data) / sizeof (TypeParam));
 }
 
-int main (int argc, char **argv)
+int
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return RUN_ALL_TESTS ();
 }
-

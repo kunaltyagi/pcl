@@ -41,18 +41,19 @@
 #ifndef PCL_FEATURES_IMPL_VFH_H_
 #define PCL_FEATURES_IMPL_VFH_H_
 
-#include <pcl/features/vfh.h>
-#include <pcl/features/pfh_tools.h>
-#include <pcl/common/common.h>
 #include <pcl/common/centroid.h>
+#include <pcl/common/common.h>
+#include <pcl/features/pfh_tools.h>
+#include <pcl/features/vfh.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template<typename PointInT, typename PointNT, typename PointOutT> bool
+template <typename PointInT, typename PointNT, typename PointOutT>
+bool
 pcl::VFHEstimation<PointInT, PointNT, PointOutT>::initCompute ()
 {
-  if (input_->points.size () < 2 || (surface_ && surface_->points.size () < 2))
-  {
-    PCL_ERROR ("[pcl::VFHEstimation::initCompute] Input dataset must have at least 2 points!\n");
+  if (input_->points.size () < 2 || (surface_ && surface_->points.size () < 2)) {
+    PCL_ERROR ("[pcl::VFHEstimation::initCompute] Input dataset must have at least 2 "
+               "points!\n");
     return (false);
   }
   if (search_radius_ == 0 && k_ == 0)
@@ -61,11 +62,11 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::initCompute ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template<typename PointInT, typename PointNT, typename PointOutT> void
+template <typename PointInT, typename PointNT, typename PointOutT>
+void
 pcl::VFHEstimation<PointInT, PointNT, PointOutT>::compute (PointCloudOut &output)
 {
-  if (!initCompute ())
-  {
+  if (!initCompute ()) {
     output.width = output.height = 0;
     output.points.clear ();
     return;
@@ -74,8 +75,8 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::compute (PointCloudOut &output
   output.header = input_->header;
 
   // Resize the output dataset
-  // Important! We should only allocate precisely how many elements we will need, otherwise
-  // we risk at pre-allocating too much memory which could lead to bad_alloc 
+  // Important! We should only allocate precisely how many elements we will need,
+  // otherwise we risk at pre-allocating too much memory which could lead to bad_alloc
   // (see http://dev.pointclouds.org/issues/657)
   output.width = output.height = 1;
   output.is_dense = input_->is_dense;
@@ -88,12 +89,12 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::compute (PointCloudOut &output
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template<typename PointInT, typename PointNT, typename PointOutT> void
-pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computePointSPFHSignature (const Eigen::Vector4f &centroid_p,
-                                                                             const Eigen::Vector4f &centroid_n,
-                                                                             const pcl::PointCloud<PointInT> &cloud,
-                                                                             const pcl::PointCloud<PointNT> &normals,
-                                                                             const std::vector<int> &indices)
+template <typename PointInT, typename PointNT, typename PointOutT>
+void
+pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computePointSPFHSignature (
+    const Eigen::Vector4f &centroid_p, const Eigen::Vector4f &centroid_n,
+    const pcl::PointCloud<PointInT> &cloud, const pcl::PointCloud<PointNT> &normals,
+    const std::vector<int> &indices)
 {
   Eigen::Vector4f pfh_tuple;
   // Reset the whole thing
@@ -103,17 +104,18 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computePointSPFHSignature (con
   hist_f4_.setZero (nr_bins_f4_);
 
   // Get the bounding box of the current cluster
-  //Eigen::Vector4f min_pt, max_pt;
-  //pcl::getMinMax3D (cloud, indices, min_pt, max_pt);
-  //double distance_normalization_factor = (std::max)((centroid_p - min_pt).norm (), (centroid_p - max_pt).norm ());
+  // Eigen::Vector4f min_pt, max_pt;
+  // pcl::getMinMax3D (cloud, indices, min_pt, max_pt);
+  // double distance_normalization_factor = (std::max)((centroid_p - min_pt).norm (),
+  // (centroid_p - max_pt).norm ());
 
-  //Instead of using the bounding box to normalize the VFH distance component, it is better to use the max_distance
-  //from any point to centroid. VFH is invariant to rotation about the roll axis but the bounding box is not,
-  //resulting in different normalization factors for point clouds that are just rotated about that axis.
+  // Instead of using the bounding box to normalize the VFH distance component, it is
+  // better to use the max_distance from any point to centroid. VFH is invariant to
+  // rotation about the roll axis but the bounding box is not, resulting in different
+  // normalization factors for point clouds that are just rotated about that axis.
 
   double distance_normalization_factor = 1.0;
-  if (normalize_distances_) 
-  {
+  if (normalize_distances_) {
     Eigen::Vector4f max_pt;
     pcl::getMaxDistance (cloud, indices, centroid_p, max_pt);
     max_pt[3] = 0;
@@ -134,16 +136,17 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computePointSPFHSignature (con
     hist_incr_size_component = 0.0;
 
   // Iterate over all the points in the neighborhood
-  for (const int &index : indices)
-  {
+  for (const int &index : indices) {
     // Compute the pair P to NNi
-    if (!computePairFeatures (centroid_p, centroid_n, cloud.points[index].getVector4fMap (),
-                              normals.points[index].getNormalVector4fMap (), pfh_tuple[0], pfh_tuple[1],
-                              pfh_tuple[2], pfh_tuple[3]))
+    if (!computePairFeatures (centroid_p, centroid_n,
+                              cloud.points[index].getVector4fMap (),
+                              normals.points[index].getNormalVector4fMap (),
+                              pfh_tuple[0], pfh_tuple[1], pfh_tuple[2], pfh_tuple[3]))
       continue;
 
     // Normalize the f1, f2, f3, f4 features and push them in the histogram
-    int h_index = static_cast<int> (floor (nr_bins_f1_ * ((pfh_tuple[0] + M_PI) * d_pi_)));
+    int h_index =
+        static_cast<int> (floor (nr_bins_f1_ * ((pfh_tuple[0] + M_PI) * d_pi_)));
     if (h_index < 0)
       h_index = 0;
     if (h_index >= nr_bins_f1_)
@@ -165,7 +168,8 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computePointSPFHSignature (con
     hist_f3_ (h_index) += hist_incr;
 
     if (normalize_distances_)
-      h_index = static_cast<int> (floor (nr_bins_f4_ * (pfh_tuple[3] / distance_normalization_factor)));
+      h_index = static_cast<int> (
+          floor (nr_bins_f4_ * (pfh_tuple[3] / distance_normalization_factor)));
     else
       h_index = static_cast<int> (pcl_round (pfh_tuple[3] * 100));
 
@@ -178,16 +182,17 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computePointSPFHSignature (con
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointNT, typename PointOutT> void
+template <typename PointInT, typename PointNT, typename PointOutT>
+void
 pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut &output)
 {
   // ---[ Step 1a : compute the centroid in XYZ space
   Eigen::Vector4f xyz_centroid (0, 0, 0, 0);
 
-  if (use_given_centroid_) 
+  if (use_given_centroid_)
     xyz_centroid = centroid_to_use_;
   else
-    compute3DCentroid (*surface_, *indices_, xyz_centroid);          // Estimate the XYZ centroid
+    compute3DCentroid (*surface_, *indices_, xyz_centroid); // Estimate the XYZ centroid
 
   // ---[ Step 1b : compute the centroid in normal space
   Eigen::Vector4f normal_centroid = Eigen::Vector4f::Zero ();
@@ -196,25 +201,18 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
   // If the data is dense, we don't need to check for NaN
   if (use_given_normal_)
     normal_centroid = normal_to_use_;
-  else
-  {
-    if (normals_->is_dense)
-    {
-      for (size_t i = 0; i < indices_->size (); ++i)
-      {
+  else {
+    if (normals_->is_dense) {
+      for (size_t i = 0; i < indices_->size (); ++i) {
         normal_centroid += normals_->points[(*indices_)[i]].getNormalVector4fMap ();
         cp++;
       }
     }
     // NaN or Inf values could exist => check for them
-    else
-    {
-      for (size_t i = 0; i < indices_->size (); ++i)
-      {
-        if (!std::isfinite (normals_->points[(*indices_)[i]].normal[0])
-            ||
-            !std::isfinite (normals_->points[(*indices_)[i]].normal[1])
-            ||
+    else {
+      for (size_t i = 0; i < indices_->size (); ++i) {
+        if (!std::isfinite (normals_->points[(*indices_)[i]].normal[0]) ||
+            !std::isfinite (normals_->points[(*indices_)[i]].normal[1]) ||
             !std::isfinite (normals_->points[(*indices_)[i]].normal[2]))
           continue;
         normal_centroid += normals_->points[(*indices_)[i]].getNormalVector4fMap ();
@@ -230,14 +228,16 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
   d_vp_p.normalize ();
 
   // Estimate the SPFH at nn_indices[0] using the entire cloud
-  computePointSPFHSignature (xyz_centroid, normal_centroid, *surface_, *normals_, *indices_);
+  computePointSPFHSignature (xyz_centroid, normal_centroid, *surface_, *normals_,
+                             *indices_);
 
   // We only output _1_ signature
   output.points.resize (1);
   output.width = 1;
   output.height = 1;
 
-  // Estimate the FPFH at nn_indices[0] using the entire cloud and copy the resultant signature
+  // Estimate the FPFH at nn_indices[0] using the entire cloud and copy the resultant
+  // signature
   for (Eigen::Index d = 0; d < hist_f1_.size (); ++d)
     output.points[0].histogram[d + 0] = hist_f1_[d];
 
@@ -262,8 +262,7 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
   else
     hist_incr = 1.0;
 
-  for (size_t i = 0; i < indices_->size (); ++i)
-  {
+  for (size_t i = 0; i < indices_->size (); ++i) {
     Eigen::Vector4f normal (normals_->points[(*indices_)[i]].normal[0],
                             normals_->points[(*indices_)[i]].normal[1],
                             normals_->points[(*indices_)[i]].normal[2], 0);
@@ -275,7 +274,7 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
     if (fi > (static_cast<int> (hist_vp_.size ()) - 1))
       fi = static_cast<int> (hist_vp_.size ()) - 1;
     // Bin into the histogram
-    hist_vp_ [fi] += static_cast<float> (hist_incr);
+    hist_vp_[fi] += static_cast<float> (hist_incr);
   }
   data_size += hist_f4_.size ();
   // Copy the resultant signature
@@ -283,6 +282,7 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
     output.points[0].histogram[d + data_size] = hist_vp_[d];
 }
 
-#define PCL_INSTANTIATE_VFHEstimation(T,NT,OutT) template class PCL_EXPORTS pcl::VFHEstimation<T,NT,OutT>;
+#define PCL_INSTANTIATE_VFHEstimation(T, NT, OutT)                                     \
+  template class PCL_EXPORTS pcl::VFHEstimation<T, NT, OutT>;
 
-#endif    // PCL_FEATURES_IMPL_VFH_H_
+#endif // PCL_FEATURES_IMPL_VFH_H_

@@ -39,10 +39,10 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/point_cloud.h>
-#include <pcl/features/rsd.h>
 #include <pcl/features/normal_3d.h>
+#include <pcl/features/rsd.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -68,7 +68,7 @@ TEST (PCL, RSDEstimation)
   EXPECT_NEAR (normals->points[103].normal_x, 0.694, 0.1);
   EXPECT_NEAR (normals->points[103].normal_y, -0.562, 0.1);
   EXPECT_NEAR (normals->points[103].normal_z, -0.448, 0.1);
-  
+
   // RSDEstimation
   double max_plane_radius = 0.1;
   double rsd_radius = 0.03;
@@ -82,7 +82,7 @@ TEST (PCL, RSDEstimation)
   rsd.setSaveHistograms (true);
   rsd.compute (*rsds);
 
-  auto mat = rsd.getHistograms();
+  auto mat = rsd.getHistograms ();
 
   EXPECT_EQ (1, (*mat)[140](0, 0));
   EXPECT_EQ (3, (*mat)[140](0, 1));
@@ -115,25 +115,26 @@ TEST (PCL, RSDEstimation)
   EXPECT_EQ (1, (*mat)[103](2, 2));
   EXPECT_EQ (5, (*mat)[103](2, 3));
   EXPECT_EQ (3, (*mat)[103](2, 4));
-  
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
-  if (loadPCDFile<PointXYZ> (argv[1], *cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (loadPCDFile<PointXYZ> (argv[1], *cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
-  
+
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());
 }

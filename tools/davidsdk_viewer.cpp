@@ -57,7 +57,7 @@ pcl::DavidSDKGrabber::Ptr davidsdk_ptr;
 /** @brief Process and/or display DavidSDK grabber clouds
  * @param[in] cloud DavidSDK cloud */
 void
-grabberCallback (const PointCloudXYZ::Ptr& cloud)
+grabberCallback (const PointCloudXYZ::Ptr &cloud)
 {
   if (!viewer_ptr->wasStopped ())
     viewer_ptr->showCloud (cloud);
@@ -68,11 +68,9 @@ grabberCallback (const PointCloudXYZ::Ptr& cloud)
  * @param[in] argv
  * @return Exit status */
 int
-main (int argc,
-      char *argv[])
+main (int argc, char *argv[])
 {
-  if (argc != 2)
-  {
+  if (argc != 2) {
     PCL_ERROR ("Usage:\n%s 192.168.100.65\n", argv[0]);
     return (-1);
   }
@@ -85,26 +83,26 @@ main (int argc,
     return (-1);
   PCL_WARN ("davidSDK connected\n");
 
-#ifndef _WIN32// || _WIN64
-  PCL_WARN ("Linux / Mac OSX detected, setting local_path_ to /var/tmp/davidsdk/ and remote_path_ to \\\\m6700\\davidsdk\\\n");
+#ifndef _WIN32 // || _WIN64
+  PCL_WARN ("Linux / Mac OSX detected, setting local_path_ to /var/tmp/davidsdk/ and "
+            "remote_path_ to \\\\m6700\\davidsdk\\\n");
   davidsdk_ptr->setLocalAndRemotePaths ("/var/tmp/davidsdk/", "\\\\m6700\\davidsdk\\");
 #endif
 
-  //davidsdk_ptr->setFileFormatToPLY();
-  std::cout << "Using " << davidsdk_ptr->getFileFormat () << " file format" << std::endl;
+  // davidsdk_ptr->setFileFormatToPLY();
+  std::cout << "Using " << davidsdk_ptr->getFileFormat () << " file format"
+            << std::endl;
 
-  std::function<void
-  (const PointCloudXYZ::Ptr&)> f = boost::bind (&grabberCallback, _1);
+  std::function<void(const PointCloudXYZ::Ptr &)> f =
+      boost::bind (&grabberCallback, _1);
   davidsdk_ptr->registerCallback (f);
   davidsdk_ptr->start ();
 
-  while (!viewer_ptr->wasStopped ())
-  {
-    std::this_thread::sleep_for(20s);
+  while (!viewer_ptr->wasStopped ()) {
+    std::this_thread::sleep_for (20s);
     std::cout << "FPS: " << davidsdk_ptr->getFramesPerSecond () << std::endl;
   }
 
   davidsdk_ptr->stop ();
   return (0);
 }
-

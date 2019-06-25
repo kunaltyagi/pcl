@@ -38,22 +38,22 @@
 
 #pragma once
 
-#include <pcl/pcl_macros.h>
 #include <pcl/outofcore/boost.h>
 #include <pcl/outofcore/cJSON.h>
+#include <pcl/pcl_macros.h>
 
 #include <pcl/common/eigen.h>
 
 #include <pcl/outofcore/metadata.h>
 
-//standard library
+// standard library
 #include <string>
 
 namespace pcl
 {
   namespace outofcore
   {
-    /** \class OutofcoreOctreeBaseMetadata 
+    /** \class OutofcoreOctreeBaseMetadata
      *
      *  \brief Encapsulated class to read JSON metadata into memory,
      *  and write the JSON metadata associated with the octree root
@@ -96,127 +96,137 @@ namespace pcl
     class PCL_EXPORTS OutofcoreOctreeBaseMetadata : public OutofcoreAbstractMetadata
     {
       public:
-        using Ptr = boost::shared_ptr<OutofcoreOctreeBaseMetadata>;
+      using Ptr = boost::shared_ptr<OutofcoreOctreeBaseMetadata>;
 
-        /** \brief Empty constructor */
-        OutofcoreOctreeBaseMetadata ();
-        /** \brief Load metadata from disk 
-         *
-         *  \param[in] path_arg Location of JSON metadata file to load from disk
-         */
-        OutofcoreOctreeBaseMetadata (const boost::filesystem::path& path_arg);
-        /** \brief Default destructor*/
-        ~OutofcoreOctreeBaseMetadata ();
+      /** \brief Empty constructor */
+      OutofcoreOctreeBaseMetadata ();
+      /** \brief Load metadata from disk
+       *
+       *  \param[in] path_arg Location of JSON metadata file to load from disk
+       */
+      OutofcoreOctreeBaseMetadata (const boost::filesystem::path &path_arg);
+      /** \brief Default destructor*/
+      ~OutofcoreOctreeBaseMetadata ();
 
-        /** \brief Copy constructor */
-        OutofcoreOctreeBaseMetadata (const OutofcoreOctreeBaseMetadata& orig);
+      /** \brief Copy constructor */
+      OutofcoreOctreeBaseMetadata (const OutofcoreOctreeBaseMetadata &orig);
 
-        /** \brief et the outofcore version read from the "version" field of the JSON object */
-        int 
-        getOutofcoreVersion () const;
-        /** \brief Set the outofcore version stored in the "version" field of the JSON object */
-        void 
-        setOutofcoreVersion (const int version);
+      /** \brief et the outofcore version read from the "version" field of the JSON
+       * object */
+      int
+      getOutofcoreVersion () const;
+      /** \brief Set the outofcore version stored in the "version" field of the JSON
+       * object */
+      void
+      setOutofcoreVersion (const int version);
 
-        /** \brief Gets the name of the JSON file */
-        boost::filesystem::path 
-        getMetadataFilename () const;
-        /** \brief Sets the name of the JSON file */
-        void 
-        setMetadataFilename (const boost::filesystem::path& path_to_metadata);
-                
-        /** \brief Writes the data to a JSON file located at \ref metadata_filename_ */
-        void 
-        serializeMetadataToDisk () override;
+      /** \brief Gets the name of the JSON file */
+      boost::filesystem::path
+      getMetadataFilename () const;
+      /** \brief Sets the name of the JSON file */
+      void
+      setMetadataFilename (const boost::filesystem::path &path_to_metadata);
 
-        /** \brief Loads the data from a JSON file located at \ref metadata_filename_ */
-        virtual int
-        loadMetadataFromDisk ();
-        /** \brief Loads the data from a JSON file located at \ref metadata_filename_ */
-        
-        int
-        loadMetadataFromDisk (const boost::filesystem::path& path_to_metadata) override;
+      /** \brief Writes the data to a JSON file located at \ref metadata_filename_ */
+      void
+      serializeMetadataToDisk () override;
 
-        /** \brief Returns the name of the tree; this is not the same as the filename */
-        virtual std::string
-        getOctreeName ();
-        /** \brief Sets the name of the tree */
-        virtual void
-        setOctreeName (const std::string& name_arg);
+      /** \brief Loads the data from a JSON file located at \ref metadata_filename_ */
+      virtual int
+      loadMetadataFromDisk ();
+      /** \brief Loads the data from a JSON file located at \ref metadata_filename_ */
 
-        virtual std::string
-        getPointType ();
-        /** \brief Sets a single string identifying the point type of this tree */
-        virtual void
-        setPointType (const std::string& point_type_arg);
+      int
+      loadMetadataFromDisk (const boost::filesystem::path &path_to_metadata) override;
 
-        virtual std::vector<boost::uint64_t>&
-        getLODPoints ();
-        virtual std::vector<boost::uint64_t>
-        getLODPoints () const;
-        /** \brief Get the number of points at the given depth */
-        virtual boost::uint64_t
-        getLODPoints (const boost::uint64_t& depth_index) const;
-        
-        /** \brief Initialize the LOD vector with points all 0 */
-        virtual void
-        setLODPoints (const boost::uint64_t& depth);
-        /** \brief Copy a vector of LOD points into this metadata (dangerous!)*/
-        virtual void
-        setLODPoints (std::vector<boost::uint64_t>& lod_points_arg);
+      /** \brief Returns the name of the tree; this is not the same as the filename */
+      virtual std::string
+      getOctreeName ();
+      /** \brief Sets the name of the tree */
+      virtual void
+      setOctreeName (const std::string &name_arg);
 
-        /** \brief Set the number of points at lod_index_arg manually 
-         *  \param[in] lod_index_arg the depth at which this increments the number of LOD points
-         *  \param[in] num_points_arg The number of points to store at that LOD
-         *  \param[in] increment If true, increments the number of points at the LOD rather than overwriting the number of points
-         */
-        virtual void
-        setLODPoints (const boost::uint64_t& lod_index_arg, const boost::uint64_t& num_points_arg, const bool increment=true);
-        
-        /** \brief Set information about the coordinate system */
-        virtual void
-        setCoordinateSystem (const std::string& coordinate_system);
-        /** \brief Get metadata information about the coordinate system */
-        virtual std::string
-        getCoordinateSystem () const;
+      virtual std::string
+      getPointType ();
+      /** \brief Sets a single string identifying the point type of this tree */
+      virtual void
+      setPointType (const std::string &point_type_arg);
 
-        /** \brief Set the depth of the tree corresponding to JSON "lod:number". This should always be equal to LOD_num_points_.size()-1 */
-        virtual void
-        setDepth (const boost::uint64_t& depth_arg);
-        virtual boost::uint64_t
-        getDepth () const;
+      virtual std::vector<boost::uint64_t> &
+      getLODPoints ();
+      virtual std::vector<boost::uint64_t>
+      getLODPoints () const;
+      /** \brief Get the number of points at the given depth */
+      virtual boost::uint64_t
+      getLODPoints (const boost::uint64_t &depth_index) const;
 
-        /** \brief Provide operator overload to stream ascii file data*/
-        friend std::ostream& 
-        operator<<(std::ostream& os, const OutofcoreOctreeBaseMetadata& metadata_arg);
+      /** \brief Initialize the LOD vector with points all 0 */
+      virtual void
+      setLODPoints (const boost::uint64_t &depth);
+      /** \brief Copy a vector of LOD points into this metadata (dangerous!)*/
+      virtual void
+      setLODPoints (std::vector<boost::uint64_t> &lod_points_arg);
+
+      /** \brief Set the number of points at lod_index_arg manually
+       *  \param[in] lod_index_arg the depth at which this increments the number of LOD
+       * points \param[in] num_points_arg The number of points to store at that LOD
+       *  \param[in] increment If true, increments the number of points at the LOD
+       * rather than overwriting the number of points
+       */
+      virtual void
+      setLODPoints (const boost::uint64_t &lod_index_arg,
+                    const boost::uint64_t &num_points_arg, const bool increment = true);
+
+      /** \brief Set information about the coordinate system */
+      virtual void
+      setCoordinateSystem (const std::string &coordinate_system);
+      /** \brief Get metadata information about the coordinate system */
+      virtual std::string
+      getCoordinateSystem () const;
+
+      /** \brief Set the depth of the tree corresponding to JSON "lod:number". This
+       * should always be equal to LOD_num_points_.size()-1 */
+      virtual void
+      setDepth (const boost::uint64_t &depth_arg);
+      virtual boost::uint64_t
+      getDepth () const;
+
+      /** \brief Provide operator overload to stream ascii file data*/
+      friend std::ostream &
+      operator<< (std::ostream &os, const OutofcoreOctreeBaseMetadata &metadata_arg);
 
       protected:
-        /** \brief Metadata (JSON) file pathname (octree extension JSON file) */
-        boost::filesystem::path metadata_filename_;
+      /** \brief Metadata (JSON) file pathname (octree extension JSON file) */
+      boost::filesystem::path metadata_filename_;
 
-        /** \brief Outofcore library version identifier; maps to JSON "version":int */
-        int outofcore_version_;
+      /** \brief Outofcore library version identifier; maps to JSON "version":int */
+      int outofcore_version_;
 
-        /** \brief Coordinate system; maps to JSON "coord_sys":string */
-        std::string coordinate_system_;
+      /** \brief Coordinate system; maps to JSON "coord_sys":string */
+      std::string coordinate_system_;
 
-        /** \brief Name of the tree (which could be used, for example, as the name of a layer); maps to JSON "name":string*/
-        std::string tree_name_;
+      /** \brief Name of the tree (which could be used, for example, as the name of a
+       * layer); maps to JSON "name":string*/
+      std::string tree_name_;
 
-        /** \brief Delineates the point types of the field; maps to JSON "pointtype":string:
-         *  \note This is inconsistent with "point type" fields used in PCLPointCloud2 and in other places in PCL
-         */
-        std::string point_type_;
-        
-        /** \brief Depth of the tree (which is the number of levels of depth); maps to JSON "lod":int*/
-        boost::uint64_t levels_of_depth_;
-        
-        /** \brief Vector of number of points at each LOD. For a tree with no LOD, all fields will be zero except for the field indexed by LOD_points_[levels_of_depth]; maps to JSON "numpts":int array*/
-        std::vector<boost::uint64_t> LOD_num_points_;
+      /** \brief Delineates the point types of the field; maps to JSON
+       * "pointtype":string: \note This is inconsistent with "point type" fields used in
+       * PCLPointCloud2 and in other places in PCL
+       */
+      std::string point_type_;
 
-        /** \brief Writes the JSON metadata to a string */
-        void
-        writeMetadataString (std::vector<char>& buf) override;
+      /** \brief Depth of the tree (which is the number of levels of depth); maps to
+       * JSON "lod":int*/
+      boost::uint64_t levels_of_depth_;
+
+      /** \brief Vector of number of points at each LOD. For a tree with no LOD, all
+       * fields will be zero except for the field indexed by
+       * LOD_points_[levels_of_depth]; maps to JSON "numpts":int array*/
+      std::vector<boost::uint64_t> LOD_num_points_;
+
+      /** \brief Writes the JSON metadata to a string */
+      void
+      writeMetadataString (std::vector<char> &buf) override;
     };
-  }//namespace outofcore
-}//namespace pcl
+  } // namespace outofcore
+} // namespace pcl

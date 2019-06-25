@@ -35,12 +35,11 @@
  *
  */
 
-
 #include <gtest/gtest.h>
-#include <pcl/point_types.h>
+#include <pcl/features/brisk_2d.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/keypoints/brisk_2d.h>
-#include <pcl/features/brisk_2d.h>
+#include <pcl/point_types.h>
 #include <set>
 
 using namespace pcl;
@@ -50,18 +49,19 @@ using namespace std;
 using PointT = PointXYZRGBA;
 using KeyPointT = PointWithScale;
 
-
 PointCloud<PointT>::Ptr cloud_image (new PointCloud<PointT>);
 PointCloud<PointWithScale>::Ptr cloud_keypoints (new PointCloud<PointWithScale>);
-PointCloud<BRISKSignature512>::Ptr cloud_descriptors (new PointCloud<BRISKSignature512>);
+PointCloud<BRISKSignature512>::Ptr
+    cloud_descriptors (new PointCloud<BRISKSignature512>);
 PointCloud<PointWithScale>::Ptr cloud_keypoints_gt (new PointCloud<PointWithScale>);
-PointCloud<BRISKSignature512>::Ptr cloud_descriptors_gt (new PointCloud<BRISKSignature512>);
+PointCloud<BRISKSignature512>::Ptr
+    cloud_descriptors_gt (new PointCloud<BRISKSignature512>);
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 TEST (PCL, BRISK_2D)
 {
 #if defined(__SSSE3__) && !defined(__i386__)
-  // Compute BRISK keypoints 
+  // Compute BRISK keypoints
   BriskKeypoint2D<PointT> brisk_keypoint_estimation;
   brisk_keypoint_estimation.setThreshold (60);
   brisk_keypoint_estimation.setOctaves (4);
@@ -70,22 +70,20 @@ TEST (PCL, BRISK_2D)
   cloud_keypoints.reset (new PointCloud<KeyPointT>);
   brisk_keypoint_estimation.compute (*cloud_keypoints);
 
-  //io::savePCDFileBinary ("brisk_keypoints.pcd", *cloud_keypoints);
+  // io::savePCDFileBinary ("brisk_keypoints.pcd", *cloud_keypoints);
 
-  const int num_of_keypoints = int (cloud_keypoints->size ());
-  const int num_of_keypoints_gt = int (cloud_keypoints_gt->size ());
+  const int num_of_keypoints = int(cloud_keypoints->size ());
+  const int num_of_keypoints_gt = int(cloud_keypoints_gt->size ());
   EXPECT_EQ (num_of_keypoints_gt, num_of_keypoints);
 
-
-  for (size_t point_index = 0; point_index < cloud_keypoints->size (); ++point_index)
-  {
-    PointWithScale & point = (*cloud_keypoints) [point_index];
+  for (size_t point_index = 0; point_index < cloud_keypoints->size (); ++point_index) {
+    PointWithScale &point = (*cloud_keypoints)[point_index];
 
     const float dx = point.x - point.x;
     const float dy = point.y - point.y;
     const float dz = point.z - point.z;
 
-    const float sqr_distance = (dx*dx + dy*dy + dz*dz);
+    const float sqr_distance = (dx * dx + dy * dy + dz * dz);
 
     EXPECT_NEAR (0.0f, sqr_distance, 1e-4);
   }
@@ -94,26 +92,24 @@ TEST (PCL, BRISK_2D)
   brisk_descriptor_estimation.setInputCloud (cloud_image);
   brisk_descriptor_estimation.setKeypoints (cloud_keypoints);
 
-
   cloud_descriptors.reset (new PointCloud<BRISKSignature512>);
   brisk_descriptor_estimation.compute (*cloud_descriptors);
 
-  const int num_of_descriptors = int (cloud_descriptors->size ());
-  const int num_of_descriptors_gt = int (cloud_descriptors_gt->size ());
+  const int num_of_descriptors = int(cloud_descriptors->size ());
+  const int num_of_descriptors_gt = int(cloud_descriptors_gt->size ());
   EXPECT_EQ (num_of_descriptors_gt, num_of_descriptors);
 
-
-  //io::savePCDFileBinary ("brisk_descriptors.pcd", *cloud_descriptors);
-  //for (size_t point_index = 0; point_index < cloud_keypoints->size (); ++point_index)
-  for (size_t point_index = 0; point_index < cloud_descriptors->size (); ++point_index)
-  {
-    BRISKSignature512 & descriptor = (*cloud_descriptors) [point_index];
-    BRISKSignature512 & descriptor_gt = (*cloud_descriptors_gt) [point_index];
+  // io::savePCDFileBinary ("brisk_descriptors.pcd", *cloud_descriptors);
+  // for (size_t point_index = 0; point_index < cloud_keypoints->size (); ++point_index)
+  for (size_t point_index = 0; point_index < cloud_descriptors->size ();
+       ++point_index) {
+    BRISKSignature512 &descriptor = (*cloud_descriptors)[point_index];
+    BRISKSignature512 &descriptor_gt = (*cloud_descriptors_gt)[point_index];
 
     float sqr_dist = 0.0f;
-    for (size_t index = 0; index < 33; ++index)
-    {
-      const float dist = float (descriptor.descriptor[index] - descriptor_gt.descriptor[index]);
+    for (size_t index = 0; index < 33; ++index) {
+      const float dist =
+          float(descriptor.descriptor[index] - descriptor_gt.descriptor[index]);
       sqr_dist += dist * dist;
     }
 
@@ -124,34 +120,40 @@ TEST (PCL, BRISK_2D)
 #endif
 }
 
-
-
 /* ---[ */
 int
-  main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `image_gt.pcd`, `keypoints_gt.pcd`, as well as `descriptors_gt.pcd`, and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr
+        << "No test file given. Please download `image_gt.pcd`, `keypoints_gt.pcd`, as "
+           "well as `descriptors_gt.pcd`, and pass its path to the test."
+        << std::endl;
     return (-1);
   }
 
   // Load a sample point cloud
-  if (io::loadPCDFile (argv[1], *cloud_image) < 0)
-  {
-    std::cerr << "Failed to read test file.  Please download `image_gt.pcd`, `keypoints_gt.pcd`, as well as `descriptors_gt.pcd`, and pass its path to the test." << std::endl;
+  if (io::loadPCDFile (argv[1], *cloud_image) < 0) {
+    std::cerr << "Failed to read test file.  Please download `image_gt.pcd`, "
+                 "`keypoints_gt.pcd`, as well as `descriptors_gt.pcd`, and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
 
-  if (io::loadPCDFile (argv[2], *cloud_keypoints_gt) < 0)
-  {
-    std::cerr << "Failed to read test file.  Please download `image_gt.pcd`, `keypoints_gt.pcd`, as well as `descriptors_gt.pcd`, and pass its path to the test." << std::endl;
+  if (io::loadPCDFile (argv[2], *cloud_keypoints_gt) < 0) {
+    std::cerr << "Failed to read test file.  Please download `image_gt.pcd`, "
+                 "`keypoints_gt.pcd`, as well as `descriptors_gt.pcd`, and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
 
-  if (io::loadPCDFile (argv[3], *cloud_descriptors_gt) < 0)
-  {
-    std::cerr << "Failed to read test file.  Please download `image_gt.pcd`, `keypoints_gt.pcd`, as well as `descriptors_gt.pcd`, and pass its path to the test." << std::endl;
+  if (io::loadPCDFile (argv[3], *cloud_descriptors_gt) < 0) {
+    std::cerr << "Failed to read test file.  Please download `image_gt.pcd`, "
+                 "`keypoints_gt.pcd`, as well as `descriptors_gt.pcd`, and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
 

@@ -31,15 +31,15 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *
- * 
+ *
  *
  */
 
 #pragma once
 
-#include <vector>
-#include <list>
 #include <cstdio>
+#include <list>
+#include <vector>
 
 #undef Success
 #include <Eigen/StdVector>
@@ -50,32 +50,35 @@ namespace pcl
   {
 
     // http://eigen.tuxfamily.org/dox-devel/TopicStlContainers.html
-    typedef std::vector<Eigen::Vector2i, Eigen::aligned_allocator<Eigen::Vector2i> > vector_vec2i;
-    typedef std::vector<Eigen::Vector2d, Eigen::aligned_allocator<Eigen::Vector2d> > vector_vec2d;
-    typedef std::vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d> > vector_vec3d;
+    typedef std::vector<Eigen::Vector2i, Eigen::aligned_allocator<Eigen::Vector2i>>
+        vector_vec2i;
+    typedef std::vector<Eigen::Vector2d, Eigen::aligned_allocator<Eigen::Vector2d>>
+        vector_vec2d;
+    typedef std::vector<Eigen::Vector3d, Eigen::aligned_allocator<Eigen::Vector3d>>
+        vector_vec3d;
 
     /** \brief Data structure for NURBS surface fitting
-     * (FittingSurface, FittingSurfaceTDM, FittingCylinder, GlobalOptimization, GlobalOptimizationTDM) */
-    struct NurbsDataSurface
-    {
+     * (FittingSurface, FittingSurfaceTDM, FittingCylinder, GlobalOptimization,
+     * GlobalOptimizationTDM) */
+    struct NurbsDataSurface {
       Eigen::Matrix3d eigenvectors;
       Eigen::Vector3d mean;
 
-      vector_vec3d interior; ///<< input
+      vector_vec3d interior;               ///<< input
       std::vector<double> interior_weight; ///<< input
-      std::vector<double> interior_error; ///>> output
-      vector_vec2d interior_param; ///>> output
-      vector_vec3d interior_line_start; ///>> output
-      vector_vec3d interior_line_end; ///>> output
-      vector_vec3d interior_normals; ///>> output
+      std::vector<double> interior_error;  ///>> output
+      vector_vec2d interior_param;         ///>> output
+      vector_vec3d interior_line_start;    ///>> output
+      vector_vec3d interior_line_end;      ///>> output
+      vector_vec3d interior_normals;       ///>> output
 
-      vector_vec3d boundary; ///<< input
+      vector_vec3d boundary;               ///<< input
       std::vector<double> boundary_weight; ///<< input
-      std::vector<double> boundary_error; ///>> output
-      vector_vec2d boundary_param; ///>> output
-      vector_vec3d boundary_line_start; ///>> output
-      vector_vec3d boundary_line_end; ///>> output
-      vector_vec3d boundary_normals; ///>> output
+      std::vector<double> boundary_error;  ///>> output
+      vector_vec2d boundary_param;         ///>> output
+      vector_vec3d boundary_line_start;    ///>> output
+      vector_vec3d boundary_line_end;      ///>> output
+      vector_vec3d boundary_normals;       ///>> output
 
       vector_vec3d common_boundary_point;
       std::vector<unsigned> common_boundary_idx;
@@ -112,11 +115,11 @@ namespace pcl
       }
 
       inline void
-      clear_common()
+      clear_common ()
       {
-        common_idx.clear();
-        common_param1.clear();
-        common_param2.clear();
+        common_idx.clear ();
+        common_param1.clear ();
+        common_param2.clear ();
       }
 
       /** \brief Clear all common data */
@@ -133,17 +136,16 @@ namespace pcl
 
     /** \brief Data structure for 3D NURBS curve fitting
      * (FittingCurve) */
-    struct NurbsDataCurve
-    {
+    struct NurbsDataCurve {
       Eigen::Matrix3d eigenvectors;
       Eigen::Vector3d mean;
 
-      vector_vec3d interior; ///<< input
+      vector_vec3d interior;              ///<< input
       std::vector<double> interior_error; ///>> output
       std::vector<double> interior_param; ///>> output
-      vector_vec3d interior_line_start; ///>> output
-      vector_vec3d interior_line_end; ///>> output
-      vector_vec3d interior_normals; ///>> output
+      vector_vec3d interior_line_start;   ///>> output
+      vector_vec3d interior_line_end;     ///>> output
+      vector_vec3d interior_normals;      ///>> output
 
       /** \brief Clear all interior data */
       inline void
@@ -162,17 +164,16 @@ namespace pcl
 
     /** \brief Data structure for 2D NURBS curve fitting
      * (FittingCurve2d, FittingCurve2dTDM, FittingCurve2dSDM) */
-    struct NurbsDataCurve2d
-    {
+    struct NurbsDataCurve2d {
       Eigen::Matrix2d eigenvectors;
       Eigen::Vector2d mean;
 
-      vector_vec2d interior; ///<< input
+      vector_vec2d interior;              ///<< input
       std::vector<double> interior_error; ///>> output
       std::vector<double> interior_param; ///>> output
-      vector_vec2d interior_line_start; ///>> output
-      vector_vec2d interior_line_end; ///>> output
-      vector_vec2d interior_normals; ///>> output
+      vector_vec2d interior_line_start;   ///>> output
+      vector_vec2d interior_line_end;     ///>> output
+      vector_vec2d interior_normals;      ///>> output
 
       std::vector<double> interior_weight;
       std::vector<bool> interior_weight_function;
@@ -206,5 +207,5 @@ namespace pcl
       EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     };
 
-  }
-}
+  } // namespace on_nurbs
+} // namespace pcl

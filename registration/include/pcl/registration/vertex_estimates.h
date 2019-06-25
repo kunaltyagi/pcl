@@ -47,25 +47,27 @@ namespace pcl
   namespace registration
   {
     /** \brief @b NullEstimate struct
-      * \author Nicola Fioraio
-      * \ingroup registration
-      */
-    struct NullEstimate
-    {};
+     * \author Nicola Fioraio
+     * \ingroup registration
+     */
+    struct NullEstimate {
+    };
 
     /** \brief @b PoseEstimate struct
-      * \author Nicola Fioraio
-      * \ingroup registration
-      */
+     * \author Nicola Fioraio
+     * \ingroup registration
+     */
     template <typename PointT>
-    struct PoseEstimate
-    {
+    struct PoseEstimate {
       Eigen::Matrix4f pose;
       typename pcl::PointCloud<PointT>::ConstPtr cloud;
 
-      PoseEstimate (const Eigen::Matrix4f& p = Eigen::Matrix4f::Identity(),
-                    const typename pcl::PointCloud<PointT>::ConstPtr& c = typename pcl::PointCloud<PointT>::ConstPtr())
-        : pose (p), cloud (c) {}
+      PoseEstimate (const Eigen::Matrix4f &p = Eigen::Matrix4f::Identity (),
+                    const typename pcl::PointCloud<PointT>::ConstPtr &c =
+                        typename pcl::PointCloud<PointT>::ConstPtr ())
+          : pose (p), cloud (c)
+      {
+      }
     };
-  }
-}
+  } // namespace registration
+} // namespace pcl

@@ -39,12 +39,12 @@
 
 #include <gtest/gtest.h>
 
-#include <pcl/point_types.h>
+#include <pcl/common/common.h>
+#include <pcl/features/normal_3d.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/vtk_io.h>
-#include <pcl/features/normal_3d.h>
+#include <pcl/point_types.h>
 #include <pcl/surface/grid_projection.h>
-#include <pcl/common/common.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -76,20 +76,21 @@ TEST (PCL, GridProjection)
 
   // Reconstruct
   gp.reconstruct (grid);
-  //saveVTKFile ("./test/bun0-grid.vtk", grid);
+  // saveVTKFile ("./test/bun0-grid.vtk", grid);
   EXPECT_GE (grid.cloud.width, 5180);
-  EXPECT_GE (int (grid.polygons.size ()), 1295);
-  EXPECT_EQ (int (grid.polygons.at (0).vertices.size ()), 4);
-  EXPECT_EQ (int (grid.polygons.at (0).vertices.at (0)), 0);
+  EXPECT_GE (int(grid.polygons.size ()), 1295);
+  EXPECT_EQ (int(grid.polygons.at (0).vertices.size ()), 4);
+  EXPECT_EQ (int(grid.polygons.at (0).vertices.at (0)), 0);
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
@@ -106,24 +107,24 @@ main (int argc, char** argv)
   NormalEstimation<PointXYZ, Normal> n;
   PointCloud<Normal>::Ptr normals (new PointCloud<Normal> ());
   n.setInputCloud (cloud);
-  //n.setIndices (indices[B);
+  // n.setIndices (indices[B);
   n.setSearchMethod (tree);
   n.setKSearch (20);
   n.compute (*normals);
 
   // Concatenate XYZ and normal information
   pcl::concatenateFields (*cloud, *normals, *cloud_with_normals);
-      
+
   // Create search tree
   tree2.reset (new search::KdTree<PointNormal>);
   tree2->setInputCloud (cloud_with_normals);
 
   // Process for update cloud
-  if(argc == 3){
+  if (argc == 3) {
     pcl::PCLPointCloud2 cloud_blob1;
     loadPCDFile (argv[2], cloud_blob1);
     fromPCLPointCloud2 (cloud_blob1, *cloud1);
-        // Create search tree
+    // Create search tree
     tree3.reset (new search::KdTree<PointXYZ> (false));
     tree3->setInputCloud (cloud1);
 

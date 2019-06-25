@@ -45,12 +45,12 @@ namespace pcl
   namespace cuda
   {
     /** \brief @b RandomSampleConsensus represents an implementation of the
-      * RANSAC (RAndom SAmple Consensus) algorithm, as described in: "Random
-      * Sample Consensus: A Paradigm for Model Fitting with Applications to Image
-      * Analysis and Automated Cartography", Martin A. Fischler and Robert C. Bolles, 
-      * Comm. Of the ACM 24: 381–395, June 1981.
-      * \author Radu Bogdan Rusu
-      */
+     * RANSAC (RAndom SAmple Consensus) algorithm, as described in: "Random
+     * Sample Consensus: A Paradigm for Model Fitting with Applications to Image
+     * Analysis and Automated Cartography", Martin A. Fischler and Robert C. Bolles,
+     * Comm. Of the ACM 24: 381–395, June 1981.
+     * \author Radu Bogdan Rusu
+     */
     template <template <typename> class Storage>
     class RandomSampleConsensus : public SampleConsensus<Storage>
     {
@@ -70,33 +70,33 @@ namespace pcl
       using Hypotheses = typename SampleConsensusModel<Storage>::Hypotheses;
 
       public:
-        /** \brief RANSAC (RAndom SAmple Consensus) main constructor
-          * \param model a Sample Consensus model
-          */
-        RandomSampleConsensus (const SampleConsensusModelPtr &model) : 
-          SampleConsensus<Storage> (model)
-        {
-          // Maximum number of trials before we give up.
-          max_iterations_ = 10000;
-        }
+      /** \brief RANSAC (RAndom SAmple Consensus) main constructor
+       * \param model a Sample Consensus model
+       */
+      RandomSampleConsensus (const SampleConsensusModelPtr &model)
+          : SampleConsensus<Storage> (model)
+      {
+        // Maximum number of trials before we give up.
+        max_iterations_ = 10000;
+      }
 
-        /** \brief RANSAC (RAndom SAmple Consensus) main constructor
-          * \param model a Sample Consensus model
-          * \param threshold distance to model threshold
-          */
-        RandomSampleConsensus (const SampleConsensusModelPtr &model, float threshold) : 
-          SampleConsensus<Storage> (model, threshold)
-        {
-          // Maximum number of trials before we give up.
-          max_iterations_ = 10000;
-        }
+      /** \brief RANSAC (RAndom SAmple Consensus) main constructor
+       * \param model a Sample Consensus model
+       * \param threshold distance to model threshold
+       */
+      RandomSampleConsensus (const SampleConsensusModelPtr &model, float threshold)
+          : SampleConsensus<Storage> (model, threshold)
+      {
+        // Maximum number of trials before we give up.
+        max_iterations_ = 10000;
+      }
 
-        /** \brief Compute the actual model and find the inliers
-          * \param debug_verbosity_level enable/disable on-screen debug
-          * information and set the verbosity level
-          */
-        bool 
-        computeModel (int debug_verbosity_level = 0);
+      /** \brief Compute the actual model and find the inliers
+       * \param debug_verbosity_level enable/disable on-screen debug
+       * information and set the verbosity level
+       */
+      bool
+      computeModel (int debug_verbosity_level = 0);
     };
-  } // namespace
-} // namespace
+  } // namespace cuda
+} // namespace pcl

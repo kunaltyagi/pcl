@@ -45,17 +45,20 @@ namespace pcl
     class DockWidget : public QDockWidget
     {
       public:
-        explicit DockWidget(const QString &title, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags()); 
-        explicit DockWidget(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags()); 
-        ~DockWidget();
+      explicit DockWidget (const QString &title, QWidget *parent = nullptr,
+                           Qt::WindowFlags flags = Qt::WindowFlags ());
+      explicit DockWidget (QWidget *parent = nullptr,
+                           Qt::WindowFlags flags = Qt::WindowFlags ());
+      ~DockWidget ();
 
-        void
-        setFocusBasedStyle(bool focused);
+      void
+      setFocusBasedStyle (bool focused);
+
       protected:
-        void
-        focusInEvent ( QFocusEvent * event ) override;
+      void
+      focusInEvent (QFocusEvent *event) override;
 
       private:
     };
-  }
-}
+  } // namespace modeler
+} // namespace pcl

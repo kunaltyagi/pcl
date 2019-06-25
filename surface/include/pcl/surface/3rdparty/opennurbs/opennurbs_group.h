@@ -8,7 +8,7 @@
 // THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY.
 // ALL IMPLIED WARRANTIES OF FITNESS FOR ANY PARTICULAR PURPOSE AND OF
 // MERCHANTABILITY ARE HEREBY DISCLAIMED.
-//				
+//
 // For complete openNURBS copyright information see <http://www.opennurbs.org>.
 //
 ////////////////////////////////////////////////////////////////
@@ -19,10 +19,11 @@
 
 class ON_CLASS ON_Group : public ON_Object
 {
-  ON_OBJECT_DECLARE(ON_Group);
-public:
-  ON_Group();
-  ~ON_Group();
+  ON_OBJECT_DECLARE (ON_Group);
+
+  public:
+  ON_Group ();
+  ~ON_Group ();
   // C++ default copy construction and operator= work fine.
   // Do not add custom versions.
 
@@ -38,9 +39,9 @@ public:
     text_log - [in] if the object is not valid and text_log
         is not NULL, then a brief englis description of the
         reason the object is not valid is appened to the log.
-        The information appended to text_log is suitable for 
-        low-level debugging purposes by programmers and is 
-        not intended to be useful as a high level user 
+        The information appended to text_log is suitable for
+        low-level debugging purposes by programmers and is
+        not intended to be useful as a high level user
         interface tool.
   Returns:
     @untitled table
@@ -49,31 +50,39 @@ public:
   Remarks:
     Overrides virtual ON_Object::IsValid
   */
-  ON_BOOL32 IsValid( ON_TextLog* text_log = NULL ) const;
+  ON_BOOL32
+  IsValid (ON_TextLog *text_log = NULL) const;
 
-  void Dump( ON_TextLog& ) const; // for debugging
+  void
+  Dump (ON_TextLog &) const; // for debugging
 
-  ON_BOOL32 Write(
-         ON_BinaryArchive&  // serialize definition to binary archive
-       ) const;
+  ON_BOOL32
+  Write (ON_BinaryArchive & // serialize definition to binary archive
+         ) const;
 
-  ON_BOOL32 Read(
-         ON_BinaryArchive&  // restore definition from binary archive
-       );
+  ON_BOOL32
+  Read (ON_BinaryArchive & // restore definition from binary archive
+  );
 
   //////////////////////////////////////////////////////////////////////
   //
   // Obsolete interface - just work on the public members
-  void SetGroupName( const wchar_t* );
-  void SetGroupName( const char* );
-  
-  void GetGroupName( ON_wString& ) const;
-  const wchar_t* GroupName() const;
+  void
+  SetGroupName (const wchar_t *);
+  void
+  SetGroupName (const char *);
 
-  void SetGroupIndex(int);
-  int GroupIndex() const;
+  void
+  GetGroupName (ON_wString &) const;
+  const wchar_t *
+  GroupName () const;
 
-public:
+  void
+  SetGroupIndex (int);
+  int
+  GroupIndex () const;
+
+  public:
   ON_wString m_group_name;
   int m_group_index;
   ON_UUID m_group_id;

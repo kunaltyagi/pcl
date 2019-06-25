@@ -42,16 +42,17 @@
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::registration::CorrespondenceRejectorTrimmed::getRemainingCorrespondences (
-    const pcl::Correspondences& original_correspondences,
-    pcl::Correspondences& remaining_correspondences)
+    const pcl::Correspondences &original_correspondences,
+    pcl::Correspondences &remaining_correspondences)
 {
   // not really an efficient implementation
   remaining_correspondences = original_correspondences;
-  unsigned int number_valid_correspondences = (int (std::floor (overlap_ratio_ * static_cast<float> (remaining_correspondences.size ()))));
-  number_valid_correspondences = std::max (number_valid_correspondences, nr_min_correspondences_);
+  unsigned int number_valid_correspondences = (int(std::floor (
+      overlap_ratio_ * static_cast<float> (remaining_correspondences.size ()))));
+  number_valid_correspondences =
+      std::max (number_valid_correspondences, nr_min_correspondences_);
 
-  if (number_valid_correspondences < remaining_correspondences.size ())
-  {
+  if (number_valid_correspondences < remaining_correspondences.size ()) {
     std::sort (remaining_correspondences.begin (), remaining_correspondences.end (),
                pcl::registration::sortCorrespondencesByDistance ());
     remaining_correspondences.resize (number_valid_correspondences);

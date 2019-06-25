@@ -40,38 +40,38 @@
 
 #pragma once
 
-#include <pcl/point_types.h>
-#include <pcl/sample_consensus/sac_model_plane.h>
-#include <pcl/sample_consensus/ransac.h>
+#include <pcl/common/transforms.h>
 #include <pcl/filters/extract_indices.h>
-#include <pcl/segmentation/extract_clusters.h>
-#include <pcl/kdtree/kdtree.h>
 #include <pcl/filters/voxel_grid.h>
-#include <pcl/people/person_cluster.h>
+#include <pcl/kdtree/kdtree.h>
 #include <pcl/people/head_based_subcluster.h>
 #include <pcl/people/person_classifier.h>
-#include <pcl/common/transforms.h>
+#include <pcl/people/person_cluster.h>
+#include <pcl/point_types.h>
+#include <pcl/sample_consensus/ransac.h>
+#include <pcl/sample_consensus/sac_model_plane.h>
+#include <pcl/segmentation/extract_clusters.h>
 
 namespace pcl
 {
   namespace people
   {
-    /** \brief GroundBasedPeopleDetectionApp performs people detection on RGB-D data having as input the ground plane coefficients.
-     * It implements the people detection algorithm described here:
-     * M. Munaro, F. Basso and E. Menegatti,
-     * Tracking people within groups with RGB-D data,
-     * In Proceedings of the International Conference on Intelligent Robots and Systems (IROS) 2012, Vilamoura (Portugal), 2012.
+    /** \brief GroundBasedPeopleDetectionApp performs people detection on RGB-D data
+     * having as input the ground plane coefficients. It implements the people detection
+     * algorithm described here: M. Munaro, F. Basso and E. Menegatti, Tracking people
+     * within groups with RGB-D data, In Proceedings of the International Conference on
+     * Intelligent Robots and Systems (IROS) 2012, Vilamoura (Portugal), 2012.
      *
      * \author Matteo Munaro
      * \ingroup people
      */
-    template <typename PointT> class GroundBasedPeopleDetectionApp;
+    template <typename PointT>
+    class GroundBasedPeopleDetectionApp;
 
     template <typename PointT>
     class GroundBasedPeopleDetectionApp
     {
-    public:
-
+      public:
       using PointCloud = pcl::PointCloud<PointT>;
       using PointCloudPtr = boost::shared_ptr<PointCloud>;
       using PointCloudConstPtr = boost::shared_ptr<const PointCloud>;
@@ -88,7 +88,7 @@ namespace pcl
        * \param[in] cloud A pointer to the input cloud.
        */
       void
-      setInputCloud (PointCloudPtr& cloud);
+      setInputCloud (PointCloudPtr &cloud);
 
       /**
        * \brief Set the ground coefficients.
@@ -96,25 +96,27 @@ namespace pcl
        * \param[in] ground_coeffs Vector containing the four plane coefficients.
        */
       void
-      setGround (Eigen::VectorXf& ground_coeffs);
+      setGround (Eigen::VectorXf &ground_coeffs);
 
       /**
-       * \brief Set the transformation matrix, which is used in order to transform the given point cloud, the ground plane and the intrinsics matrix to the internal coordinate frame.
-       * \param[in] transformation
+       * \brief Set the transformation matrix, which is used in order to transform the
+       * given point cloud, the ground plane and the intrinsics matrix to the internal
+       * coordinate frame. \param[in] transformation
        */
       void
-      setTransformation (const Eigen::Matrix3f& transformation);
+      setTransformation (const Eigen::Matrix3f &transformation);
 
       /**
-       * \brief Set sampling factor. 
+       * \brief Set sampling factor.
        *
-       * \param[in] sampling_factor Value of the downsampling factor (in each dimension) which is applied to the raw point cloud (default = 1.).
+       * \param[in] sampling_factor Value of the downsampling factor (in each dimension)
+       * which is applied to the raw point cloud (default = 1.).
        */
       void
       setSamplingFactor (int sampling_factor);
-      
+
       /**
-       * \brief Set voxel size. 
+       * \brief Set voxel size.
        *
        * \param[in] voxel_size Value of the voxel dimension (default = 0.06m.).
        */
@@ -140,24 +142,29 @@ namespace pcl
       /**
        * \brief Set the field of view of the point cloud in z direction.
        *
-       * \param[in] min The beginning of the field of view in z-direction, should be usually set to zero.
-       * \param[in] max The end of the field of view in z-direction.
+       * \param[in] min The beginning of the field of view in z-direction, should be
+       * usually set to zero. \param[in] max The end of the field of view in
+       * z-direction.
        */
       void
       setFOV (float min, float max);
 
       /**
-       * \brief Set sensor orientation (vertical = true means portrait mode, vertical = false means landscape mode).
+       * \brief Set sensor orientation (vertical = true means portrait mode, vertical =
+       * false means landscape mode).
        *
-       * \param[in] vertical Set landscape/portrait camera orientation (default = false).
+       * \param[in] vertical Set landscape/portrait camera orientation (default =
+       * false).
        */
       void
       setSensorPortraitOrientation (bool vertical);
 
       /**
-       * \brief Set head_centroid_ to true (person centroid is in the head) or false (person centroid is the whole body centroid).
+       * \brief Set head_centroid_ to true (person centroid is in the head) or false
+       * (person centroid is the whole body centroid).
        *
-       * \param[in] head_centroid Set the location of the person centroid (head or body center) (default = true).
+       * \param[in] head_centroid Set the location of the person centroid (head or body
+       * center) (default = true).
        */
       void
       setHeadCentroid (bool head_centroid);
@@ -165,24 +172,28 @@ namespace pcl
       /**
        * \brief Set minimum and maximum allowed height and width for a person cluster.
        *
-       * \param[in] min_height Minimum allowed height for a person cluster (default = 1.3).
-       * \param[in] max_height Maximum allowed height for a person cluster (default = 2.3).
-       * \param[in] min_width Minimum width for a person cluster (default = 0.1).
-       * \param[in] max_width Maximum width for a person cluster (default = 8.0).
+       * \param[in] min_height Minimum allowed height for a person cluster (default
+       * = 1.3). \param[in] max_height Maximum allowed height for a person cluster
+       * (default = 2.3). \param[in] min_width Minimum width for a person cluster
+       * (default = 0.1). \param[in] max_width Maximum width for a person cluster
+       * (default = 8.0).
        */
       void
-      setPersonClusterLimits (float min_height, float max_height, float min_width, float max_width);
+      setPersonClusterLimits (float min_height, float max_height, float min_width,
+                              float max_width);
 
       /**
        * \brief Set minimum distance between persons' heads.
        *
-       * \param[in] heads_minimum_distance Minimum allowed distance between persons' heads (default = 0.3).
+       * \param[in] heads_minimum_distance Minimum allowed distance between persons'
+       * heads (default = 0.3).
        */
       void
       setMinimumDistanceBetweenHeads (float heads_minimum_distance);
 
       /**
-       * \brief Get the minimum and maximum allowed height and width for a person cluster.
+       * \brief Get the minimum and maximum allowed height and width for a person
+       * cluster.
        *
        * \param[out] min_height Minimum allowed height for a person cluster.
        * \param[out] max_height Maximum allowed height for a person cluster.
@@ -190,7 +201,8 @@ namespace pcl
        * \param[out] max_width Maximum width for a person cluster.
        */
       void
-      getPersonClusterLimits (float& min_height, float& max_height, float& min_width, float& max_width);
+      getPersonClusterLimits (float &min_height, float &max_height, float &min_width,
+                              float &max_width);
 
       /**
        * \brief Get minimum and maximum allowed number of points for a person cluster.
@@ -199,7 +211,7 @@ namespace pcl
        * \param[out] max_points Maximum allowed number of points for a person cluster.
        */
       void
-      getDimensionLimits (int& min_points, int& max_points);
+      getDimensionLimits (int &min_points, int &max_points);
 
       /**
        * \brief Get minimum distance between persons' heads.
@@ -226,24 +238,28 @@ namespace pcl
       getNoGroundCloud ();
 
       /**
-       * \brief Extract RGB information from a point cloud and output the corresponding RGB point cloud.
+       * \brief Extract RGB information from a point cloud and output the corresponding
+       * RGB point cloud.
        *
-       * \param[in] input_cloud A pointer to a point cloud containing also RGB information.
-       * \param[out] output_cloud A pointer to a RGB point cloud.
+       * \param[in] input_cloud A pointer to a point cloud containing also RGB
+       * information. \param[out] output_cloud A pointer to a RGB point cloud.
        */
       void
-      extractRGBFromPointCloud (PointCloudPtr input_cloud, pcl::PointCloud<pcl::RGB>::Ptr& output_cloud);
+      extractRGBFromPointCloud (PointCloudPtr input_cloud,
+                                pcl::PointCloud<pcl::RGB>::Ptr &output_cloud);
 
       /**
-       * \brief Swap rows/cols dimensions of a RGB point cloud (90 degrees counterclockwise rotation).
+       * \brief Swap rows/cols dimensions of a RGB point cloud (90 degrees
+       * counterclockwise rotation).
        *
        * \param[in,out] cloud A pointer to a RGB point cloud.
        */
       void
-      swapDimensions (pcl::PointCloud<pcl::RGB>::Ptr& cloud);
+      swapDimensions (pcl::PointCloud<pcl::RGB>::Ptr &cloud);
 
-     /**
-       * \brief Estimates min_points_ and max_points_ based on the minimal and maximal cluster size and the voxel size.
+      /**
+       * \brief Estimates min_points_ and max_points_ based on the minimal and maximal
+       * cluster size and the voxel size.
        */
       void
       updateMinMaxPoints ();
@@ -267,28 +283,30 @@ namespace pcl
       applyTransformationIntrinsics ();
 
       /**
-       * \brief Reduces the input cloud to one point per voxel and limits the field of view.
+       * \brief Reduces the input cloud to one point per voxel and limits the field of
+       * view.
        */
       void
       filter ();
 
       /**
-       * \brief Perform people detection on the input data and return people clusters information.
-       * 
+       * \brief Perform people detection on the input data and return people clusters
+       * information.
+       *
        * \param[out] clusters Vector of PersonCluster.
-       * 
+       *
        * \return true if the compute operation is successful, false otherwise.
        */
       bool
-      compute (std::vector<pcl::people::PersonCluster<PointT> >& clusters);
+      compute (std::vector<pcl::people::PersonCluster<PointT>> &clusters);
 
-    protected:
+      protected:
       /** \brief sampling factor used to downsample the point cloud */
-      int sampling_factor_; 
-      
+      int sampling_factor_;
+
       /** \brief voxel size */
-      float voxel_size_;                  
-      
+      float voxel_size_;
+
       /** \brief ground plane coefficients */
       Eigen::VectorXf ground_coeffs_;
 
@@ -301,7 +319,8 @@ namespace pcl
       /** \brief ground plane normalization factor */
       float sqrt_ground_coeffs_;
 
-      /** \brief rotation matrix which transforms input point cloud to internal people tracker coordinate frame */
+      /** \brief rotation matrix which transforms input point cloud to internal people
+       * tracker coordinate frame */
       Eigen::Matrix3f transformation_;
 
       /** \brief flag stating whether the transformation matrix has been set or not */
@@ -314,45 +333,53 @@ namespace pcl
       PointCloudPtr cloud_filtered_;
 
       /** \brief pointer to the cloud after voxel grid filtering and ground removal */
-      PointCloudPtr no_ground_cloud_;              
-      
+      PointCloudPtr no_ground_cloud_;
+
       /** \brief pointer to a RGB cloud corresponding to cloud_ */
-      pcl::PointCloud<pcl::RGB>::Ptr rgb_image_;      
-      
+      pcl::PointCloud<pcl::RGB>::Ptr rgb_image_;
+
       /** \brief person clusters maximum height from the ground plane */
-      float max_height_;                  
-      
+      float max_height_;
+
       /** \brief person clusters minimum height from the ground plane */
       float min_height_;
 
-      /** \brief person clusters maximum width, used to estimate how many points maximally represent a person cluster */
+      /** \brief person clusters maximum width, used to estimate how many points
+       * maximally represent a person cluster */
       float max_width_;
 
-      /** \brief person clusters minimum width, used to estimate how many points minimally represent a person cluster */
+      /** \brief person clusters minimum width, used to estimate how many points
+       * minimally represent a person cluster */
       float min_width_;
 
-      /** \brief the beginning of the field of view in z-direction, should be usually set to zero */
+      /** \brief the beginning of the field of view in z-direction, should be usually
+       * set to zero */
       float min_fov_;
 
       /** \brief the end of the field of view in z-direction */
       float max_fov_;
 
-      /** \brief if true, the sensor is considered to be vertically placed (portrait mode) */
-      bool vertical_;                    
-      
-      /** \brief if true, the person centroid is computed as the centroid of the cluster points belonging to the head;  
-       * if false, the person centroid is computed as the centroid of the whole cluster points (default = true) */
-      bool head_centroid_;    // if true, the person centroid is computed as the centroid of the cluster points belonging to the head (default = true)
-                              // if false, the person centroid is computed as the centroid of the whole cluster points 
+      /** \brief if true, the sensor is considered to be vertically placed (portrait
+       * mode) */
+      bool vertical_;
+
+      /** \brief if true, the person centroid is computed as the centroid of the cluster
+       * points belonging to the head;
+       * if false, the person centroid is computed as the centroid of the whole cluster
+       * points (default = true) */
+      bool head_centroid_; // if true, the person centroid is computed as the centroid
+                           // of the cluster points belonging to the head (default =
+                           // true) if false, the person centroid is computed as the
+                           // centroid of the whole cluster points
       /** \brief maximum number of points for a person cluster */
-      int max_points_;                  
-      
+      int max_points_;
+
       /** \brief minimum number of points for a person cluster */
-      int min_points_;                  
-      
+      int min_points_;
+
       /** \brief minimum distance between persons' heads */
-      float heads_minimum_distance_;            
-      
+      float heads_minimum_distance_;
+
       /** \brief intrinsic parameters matrix of the RGB camera */
       Eigen::Matrix3f intrinsics_matrix_;
 
@@ -363,8 +390,8 @@ namespace pcl
       Eigen::Matrix3f intrinsics_matrix_transformed_;
 
       /** \brief SVM-based person classifier */
-      pcl::people::PersonClassifier<pcl::RGB> person_classifier_;  
-      
+      pcl::people::PersonClassifier<pcl::RGB> person_classifier_;
+
       /** \brief flag stating if the classifier has been set or not */
       bool person_classifier_set_flag_;
     };

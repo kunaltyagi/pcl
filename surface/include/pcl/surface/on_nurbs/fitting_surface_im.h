@@ -31,15 +31,15 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *
- * 
+ *
  *
  */
 
 #pragma once
 
-#include <pcl/surface/on_nurbs/nurbs_tools.h>
 #include <pcl/surface/on_nurbs/nurbs_data.h>
 #include <pcl/surface/on_nurbs/nurbs_solve.h>
+#include <pcl/surface/on_nurbs/nurbs_tools.h>
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -52,19 +52,14 @@ namespace pcl
     /** \brief      */
     class FittingSurfaceIM
     {
-    public:
-
+      public:
       /** \brief Parameters for fitting */
-      struct Parameter
-      {
+      struct Parameter {
         double smoothness;
-        Parameter () :
-          smoothness (0.1)
-        {
-        }
+        Parameter () : smoothness (0.1) {}
       };
 
-    protected:
+      protected:
       pcl::PointCloud<pcl::PointXYZRGB>::Ptr m_cloud;
       std::vector<int> m_indices;
       Eigen::Matrix3d m_intrinsic;
@@ -78,17 +73,16 @@ namespace pcl
       pcl::PointXYZRGB
       computeMean () const;
 
-    public:
-
+      public:
       EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-      inline ON_NurbsSurface&
+      inline ON_NurbsSurface &
       getSurface ()
       {
         return m_nurbs;
       }
 
-    public:
+      public:
       void
       setInputCloud (pcl::PointCloud<pcl::PointXYZRGB>::Ptr _cloud);
 
@@ -109,11 +103,12 @@ namespace pcl
 
       /** compute bounding box of cloud in index space */
       static Eigen::Vector4d
-      computeIndexBoundingBox (pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, const std::vector<int> &indices);
+      computeIndexBoundingBox (pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,
+                               const std::vector<int> &indices);
       //      void
       //      compute (int nurbs_order, double damp = 1.0);
 
-    public:
+      public:
       void
       initSurface (int order, const Eigen::Vector4d &bb);
 
@@ -127,15 +122,18 @@ namespace pcl
       updateSurf (double damp);
 
       Eigen::Vector2d
-      findClosestElementMidPoint (const ON_NurbsSurface &nurbs, const Eigen::Vector3d &pt);
+      findClosestElementMidPoint (const ON_NurbsSurface &nurbs,
+                                  const Eigen::Vector3d &pt);
 
       Eigen::Vector2d
-      inverseMapping (const ON_NurbsSurface &nurbs, const Eigen::Vector3d &pt, const Eigen::Vector2d &hint,
-                      double &error, Eigen::Vector3d &p, Eigen::Vector3d &tu, Eigen::Vector3d &tv, int maxSteps,
+      inverseMapping (const ON_NurbsSurface &nurbs, const Eigen::Vector3d &pt,
+                      const Eigen::Vector2d &hint, double &error, Eigen::Vector3d &p,
+                      Eigen::Vector3d &tu, Eigen::Vector3d &tv, int maxSteps,
                       double accuracy, bool quiet);
 
       void
-      addPointConstraint (const Eigen::Vector2i &params, double z, double weight, unsigned &row);
+      addPointConstraint (const Eigen::Vector2i &params, double z, double weight,
+                          unsigned &row);
 
       void
       addCageInteriorRegularisation (double weight, unsigned &row);
@@ -167,7 +165,6 @@ namespace pcl
       {
         return (static_cast<int> (A % m_nurbs.CVCount (1)));
       } // global lexicographic in global col index
-
     };
-  }
-}
+  } // namespace on_nurbs
+} // namespace pcl

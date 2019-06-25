@@ -45,18 +45,19 @@ using namespace pcl::io;
 
 /** Helper function to release a RealSense resource.
     Useful as a deleter for a shared pointer holding RealSense resource. */
-template <typename T> void
-releasePXCResource (T* resource)
+template <typename T>
+void
+releasePXCResource (T *resource)
 {
-  if (resource)
-  {
+  if (resource) {
     resource->Release ();
     resource = 0;
   }
 }
 
-template <typename T> boost::shared_ptr<T>
-makePXCSharedPtr (T* resource)
+template <typename T>
+boost::shared_ptr<T>
+makePXCSharedPtr (T *resource)
 {
   return boost::shared_ptr<T> (resource, releasePXCResource<T>);
 }
@@ -64,34 +65,34 @@ makePXCSharedPtr (T* resource)
 boost::shared_ptr<PXCSession>
 createPXCSession ()
 {
-  PXCSession* s = PXCSession::CreateInstance ();
+  PXCSession *s = PXCSession::CreateInstance ();
   if (!s)
     THROW_IO_EXCEPTION ("failed to create RealSense session");
   return makePXCSharedPtr (s);
 }
 
 boost::shared_ptr<PXCCaptureManager>
-createPXCCaptureManager (PXCSession& session)
+createPXCCaptureManager (PXCSession &session)
 {
-  PXCCaptureManager* cm = session.CreateCaptureManager ();
+  PXCCaptureManager *cm = session.CreateCaptureManager ();
   if (!cm)
     THROW_IO_EXCEPTION ("failed to create RealSense capture manager");
   return makePXCSharedPtr (cm);
 }
 
 boost::shared_ptr<PXCCapture>
-createPXCCapture (PXCSession& session, pxcUID iuid)
+createPXCCapture (PXCSession &session, pxcUID iuid)
 {
-  PXCCapture* c;
+  PXCCapture *c;
   if (session.CreateImpl (iuid, &c) < PXC_STATUS_NO_ERROR)
     THROW_IO_EXCEPTION ("unable to create RealSense capture");
   return makePXCSharedPtr (c);
 }
 
 boost::shared_ptr<PXCCapture::Device>
-createPXCCaptureDevice (PXCCapture& capture, pxcI32 didx)
+createPXCCaptureDevice (PXCCapture &capture, pxcI32 didx)
 {
-  PXCCapture::Device* d;
+  PXCCapture::Device *d;
   d = capture.CreateDevice (didx);
   if (!d)
     THROW_IO_EXCEPTION ("unable to create RealSense capture device");
@@ -99,9 +100,9 @@ createPXCCaptureDevice (PXCCapture& capture, pxcI32 didx)
 }
 
 /** Utility function to convert RealSense-style strings (which happen to
-  * consist of 2-byte chars) into standard library strings. */
+ * consist of 2-byte chars) into standard library strings. */
 std::string
-toString (const pxcCHAR* pxc_string, size_t max_length)
+toString (const pxcCHAR *pxc_string, size_t max_length)
 {
   size_t i = 0;
   while (i + 1 < max_length && pxc_string[i])
@@ -119,9 +120,7 @@ pcl::io::real_sense::RealSenseDeviceManager::RealSenseDeviceManager ()
   populateDeviceList ();
 }
 
-pcl::io::real_sense::RealSenseDeviceManager::~RealSenseDeviceManager ()
-{
-}
+pcl::io::real_sense::RealSenseDeviceManager::~RealSenseDeviceManager () {}
 
 pcl::io::real_sense::RealSenseDevice::Ptr
 pcl::io::real_sense::RealSenseDeviceManager::captureDevice ()
@@ -133,7 +132,8 @@ pcl::io::real_sense::RealSenseDeviceManager::captureDevice ()
     if (!device_list_[i].isCaptured ())
       return (capture (device_list_[i]));
   THROW_IO_EXCEPTION ("all connected devices are captured by other grabbers");
-  return (RealSenseDevice::Ptr ());  // never reached, needed just to silence -Wreturn-type warning
+  return (RealSenseDevice::Ptr ()); // never reached, needed just to silence
+                                    // -Wreturn-type warning
 }
 
 pcl::io::real_sense::RealSenseDevice::Ptr
@@ -143,25 +143,26 @@ pcl::io::real_sense::RealSenseDeviceManager::captureDevice (size_t index)
   if (index >= device_list_.size ())
     THROW_IO_EXCEPTION ("device with index %i is not connected", index + 1);
   if (device_list_[index].isCaptured ())
-    THROW_IO_EXCEPTION ("device with index %i is captured by another grabber", index + 1);
+    THROW_IO_EXCEPTION ("device with index %i is captured by another grabber",
+                        index + 1);
   return (capture (device_list_[index]));
 }
 
 pcl::io::real_sense::RealSenseDevice::Ptr
-pcl::io::real_sense::RealSenseDeviceManager::captureDevice (const std::string& sn)
+pcl::io::real_sense::RealSenseDeviceManager::captureDevice (const std::string &sn)
 {
   std::lock_guard<std::mutex> lock (mutex_);
-  for (size_t i = 0; i < device_list_.size (); ++i)
-  {
-    if (device_list_[i].serial == sn)
-    {
+  for (size_t i = 0; i < device_list_.size (); ++i) {
+    if (device_list_[i].serial == sn) {
       if (device_list_[i].isCaptured ())
-        THROW_IO_EXCEPTION ("device with serial number %s is captured by another grabber", sn.c_str ());
+        THROW_IO_EXCEPTION (
+            "device with serial number %s is captured by another grabber", sn.c_str ());
       return (capture (device_list_[i]));
     }
   }
   THROW_IO_EXCEPTION ("device with serial number %s is not connected", sn.c_str ());
-  return (RealSenseDevice::Ptr ());  // never reached, needed just to silence -Wreturn-type warning
+  return (RealSenseDevice::Ptr ()); // never reached, needed just to silence
+                                    // -Wreturn-type warning
 }
 
 void
@@ -174,22 +175,20 @@ pcl::io::real_sense::RealSenseDeviceManager::populateDeviceList ()
   module_desc.group = PXCSession::IMPL_GROUP_SENSOR;
   module_desc.subgroup = PXCSession::IMPL_SUBGROUP_VIDEO_CAPTURE;
 
-  for (int m = 0;; m++)
-  {
+  for (int m = 0;; m++) {
     PXCSession::ImplDesc desc;
     if (session_->QueryImpl (&module_desc, m, &desc) < PXC_STATUS_NO_ERROR)
       break;
-    PXCCapture* capture;
+    PXCCapture *capture;
     if (session_->CreateImpl<PXCCapture> (&desc, &capture) < PXC_STATUS_NO_ERROR)
       continue;
-    for (int j = 0;; j++)
-    {
+    for (int j = 0;; j++) {
       PXCCapture::DeviceInfo device_info;
       if (capture->QueryDeviceInfo (j, &device_info) < PXC_STATUS_NO_ERROR)
         break;
-      if (device_info.streams & PXCCapture::STREAM_TYPE_DEPTH)
-      {
-        const size_t MAX_SERIAL_LENGTH = sizeof (device_info.serial) / sizeof (device_info.serial[0]);
+      if (device_info.streams & PXCCapture::STREAM_TYPE_DEPTH) {
+        const size_t MAX_SERIAL_LENGTH =
+            sizeof (device_info.serial) / sizeof (device_info.serial[0]);
         std::string serial = toString (device_info.serial, MAX_SERIAL_LENGTH);
         device_list_.push_back (DeviceInfo ());
         device_list_.back ().serial = serial;
@@ -202,16 +201,13 @@ pcl::io::real_sense::RealSenseDeviceManager::populateDeviceList ()
 }
 
 pcl::io::real_sense::RealSenseDevice::Ptr
-pcl::io::real_sense::RealSenseDeviceManager::capture (DeviceInfo& device_info)
+pcl::io::real_sense::RealSenseDeviceManager::capture (DeviceInfo &device_info)
 {
   // This is called from public captureDevice() functions and should already be
   // under scoped lock
-  if (!device_info.device_ptr.expired ())
-  {
+  if (!device_info.device_ptr.expired ()) {
     return device_info.device_ptr.lock ();
-  }
-  else
-  {
+  } else {
     RealSenseDevice::Ptr device (new RealSenseDevice (device_info.serial));
     device->capture_ = createPXCCapture (*session_, device_info.iuid);
     device->device_ = createPXCCaptureDevice (*device->capture_, device_info.didx);
@@ -219,4 +215,3 @@ pcl::io::real_sense::RealSenseDeviceManager::capture (DeviceInfo& device_info)
     return device;
   }
 }
-

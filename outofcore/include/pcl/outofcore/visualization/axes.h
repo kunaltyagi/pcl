@@ -8,25 +8,23 @@
 #include "object.h"
 
 // VTK
-#include <vtkVersion.h>
 #include <vtkActor.h>
-#include <vtkTubeFilter.h>
 #include <vtkAxes.h>
+#include <vtkTubeFilter.h>
+#include <vtkVersion.h>
 //#include <vtkDataSetMapper.h>
 #include <vtkFloatArray.h>
-#include <vtkProperty.h>
 #include <vtkPolyData.h>
 #include <vtkPolyDataMapper.h>
+#include <vtkProperty.h>
 #include <vtkSmartPointer.h>
 
 class Axes : public Object
 {
-public:
-
+  public:
   // Operators
   // -----------------------------------------------------------------------------
-  Axes (std::string name, float size = 1.0) :
-      Object (name)
+  Axes (std::string name, float size = 1.0) : Object (name)
   {
     axes_ = vtkSmartPointer<vtkAxes>::New ();
     axes_->SetOrigin (0, 0, 0);
@@ -50,7 +48,8 @@ public:
     axes_tubes->SetRadius (axes_->GetScaleFactor () / 100.0);
     axes_tubes->SetNumberOfSides (6);
 
-    vtkSmartPointer<vtkPolyDataMapper> axes_mapper = vtkSmartPointer<vtkPolyDataMapper>::New ();
+    vtkSmartPointer<vtkPolyDataMapper> axes_mapper =
+        vtkSmartPointer<vtkPolyDataMapper>::New ();
     axes_mapper->SetScalarModeToUsePointData ();
     axes_mapper->SetInputData (axes_tubes->GetOutput ());
 
@@ -76,11 +75,9 @@ public:
     return axes_actor_;
   }
 
-private:
-
+  private:
   // Members
   // -----------------------------------------------------------------------------
   vtkSmartPointer<vtkAxes> axes_;
   vtkSmartPointer<vtkActor> axes_actor_;
-
 };

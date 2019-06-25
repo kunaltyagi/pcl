@@ -47,12 +47,9 @@ pcl::RandomSample<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
   unsigned N = input_->width * input_->height;
   // If sample size is 0 or if the sample size is greater then input cloud size
   //   then return entire copy of cloud
-  if (sample_ >= N)
-  {
+  if (sample_ >= N) {
     output = *input_;
-  }
-  else
-  {
+  } else {
     // Resize output cloud to sample size
     output.data.resize (sample_ * input_->point_step);
 
@@ -71,25 +68,25 @@ pcl::RandomSample<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
     unsigned index = 0;
 
     // Algorithm A
-    for (size_t n = sample_; n >= 2; n--)
-    {
+    for (size_t n = sample_; n >= 2; n--) {
       float V = unifRand ();
       unsigned S = 0;
-      float quot = float (top) / float (N);
-      while (quot > V)
-      {
+      float quot = float(top) / float(N);
+      while (quot > V) {
         S++;
         top--;
         N--;
-        quot *= float (top) / float (N);
+        quot *= float(top) / float(N);
       }
       index += S;
-      memcpy (&output.data[i++ * output.point_step], &input_->data[index++ * output.point_step], output.point_step);
+      memcpy (&output.data[i++ * output.point_step],
+              &input_->data[index++ * output.point_step], output.point_step);
       N--;
     }
 
     index += N * static_cast<unsigned> (unifRand ());
-    memcpy (&output.data[i++ * output.point_step], &input_->data[index++ * output.point_step], output.point_step);
+    memcpy (&output.data[i++ * output.point_step],
+            &input_->data[index++ * output.point_step], output.point_step);
 
     output.width = sample_;
     output.row_step = output.point_step * output.width;
@@ -103,12 +100,9 @@ pcl::RandomSample<pcl::PCLPointCloud2>::applyFilter (std::vector<int> &indices)
   unsigned N = input_->width * input_->height;
   // If sample size is 0 or if the sample size is greater then input cloud size
   //   then return all indices
-  if (sample_ >= N)
-  {
+  if (sample_ >= N) {
     indices = *indices_;
-  }
-  else
-  {
+  } else {
     // Resize output indices to sample size
     indices.resize (sample_);
 
@@ -120,17 +114,15 @@ pcl::RandomSample<pcl::PCLPointCloud2>::applyFilter (std::vector<int> &indices)
     unsigned index = 0;
 
     // Algorithm A
-    for (size_t n = sample_; n >= 2; n--)
-    {
+    for (size_t n = sample_; n >= 2; n--) {
       float V = unifRand ();
       unsigned S = 0;
-      float quot = float (top) / float (N);
-      while (quot > V)
-      {
+      float quot = float(top) / float(N);
+      while (quot > V) {
         S++;
         top--;
         N--;
-        quot *= float (top) / float (N);
+        quot *= float(top) / float(N);
       }
       index += S;
       indices[i++] = (*indices_)[index++];
@@ -146,7 +138,6 @@ pcl::RandomSample<pcl::PCLPointCloud2>::applyFilter (std::vector<int> &indices)
 #include <pcl/impl/instantiate.hpp>
 #include <pcl/point_types.h>
 
-PCL_INSTANTIATE(RandomSample, PCL_POINT_TYPES)
+PCL_INSTANTIATE (RandomSample, PCL_POINT_TYPES)
 
-#endif    // PCL_NO_PRECOMPILE
-
+#endif // PCL_NO_PRECOMPILE

@@ -47,41 +47,42 @@ namespace pcl
      *
      *  \ingroup outofcore
      *  \author Stephen Fox (foxstephend@gmail.com)
-     *  \note Code adapted from \ref octree_iterator.h in Module \ref pcl::octree written by Julius Kammerl
+     *  \note Code adapted from \ref octree_iterator.h in Module \ref pcl::octree
+     * written by Julius Kammerl
      */
-    template<typename PointT=pcl::PointXYZ, typename ContainerT=OutofcoreOctreeDiskContainer<pcl::PointXYZ> >
+    template <typename PointT = pcl::PointXYZ,
+              typename ContainerT = OutofcoreOctreeDiskContainer<pcl::PointXYZ>>
     class OutofcoreDepthFirstIterator : public OutofcoreIteratorBase<PointT, ContainerT>
     {
       public:
-        using OctreeDisk = pcl::outofcore::OutofcoreOctreeBase<ContainerT, PointT>;
-        using OctreeDiskNode = pcl::outofcore::OutofcoreOctreeBaseNode<ContainerT, PointT>;
+      using OctreeDisk = pcl::outofcore::OutofcoreOctreeBase<ContainerT, PointT>;
+      using OctreeDiskNode =
+          pcl::outofcore::OutofcoreOctreeBaseNode<ContainerT, PointT>;
 
-        using LeafNode = pcl::outofcore::OutofcoreOctreeBaseNode<ContainerT, PointT>;
-        using BranchNode = pcl::outofcore::OutofcoreOctreeBaseNode<ContainerT, PointT>;
+      using LeafNode = pcl::outofcore::OutofcoreOctreeBaseNode<ContainerT, PointT>;
+      using BranchNode = pcl::outofcore::OutofcoreOctreeBaseNode<ContainerT, PointT>;
 
-        explicit
-        OutofcoreDepthFirstIterator (OctreeDisk& octree_arg);
+      explicit OutofcoreDepthFirstIterator (OctreeDisk &octree_arg);
 
-        
-        ~OutofcoreDepthFirstIterator ();
-      
-        OutofcoreDepthFirstIterator&
-        operator++ ();
-      
-        inline OutofcoreDepthFirstIterator
-        operator++ (int)
-        {
-          OutofcoreDepthFirstIterator _Tmp = *this;
-          ++*this;
-          return (_Tmp);
-        }
-      
-        void
-        skipChildVoxels ();
-      
+      ~OutofcoreDepthFirstIterator ();
+
+      OutofcoreDepthFirstIterator &
+      operator++ ();
+
+      inline OutofcoreDepthFirstIterator
+      operator++ (int)
+      {
+        OutofcoreDepthFirstIterator _Tmp = *this;
+        ++*this;
+        return (_Tmp);
+      }
+
+      void
+      skipChildVoxels ();
+
       protected:
-        unsigned char currentChildIdx_;
-        std::vector<std::pair<OctreeDiskNode*, unsigned char> > stack_;
+      unsigned char currentChildIdx_;
+      std::vector<std::pair<OctreeDiskNode *, unsigned char>> stack_;
     };
-  }
-}
+  } // namespace outofcore
+} // namespace pcl

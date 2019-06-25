@@ -1,6 +1,6 @@
 /*
  * Software License Agreement (BSD License)
- * 
+ *
  *  Point Cloud Library (PCL) - www.pointclouds.org
  *  Copyright (c) 2009-2012, Willow Garage, Inc.
  *  Copyright (c) 2012-, Open Perception, Inc.
@@ -42,19 +42,20 @@
 #ifndef PCL_FILTERS_IMPL_LOCAL_MAXIMUM_H_
 #define PCL_FILTERS_IMPL_LOCAL_MAXIMUM_H_
 
+#include <pcl/ModelCoefficients.h>
 #include <pcl/common/io.h>
 #include <pcl/filters/local_maximum.h>
 #include <pcl/filters/project_inliers.h>
-#include <pcl/ModelCoefficients.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::LocalMaximum<PointT>::applyFilter (PointCloud &output)
 {
   // Has the input dataset been set already?
-  if (!input_)
-  {
-    PCL_WARN ("[pcl::%s::applyFilter] No input dataset given!\n", getClassName ().c_str ());
+  if (!input_) {
+    PCL_WARN ("[pcl::%s::applyFilter] No input dataset given!\n",
+              getClassName ().c_str ());
     output.width = output.height = 0;
     output.points.clear ();
     return;
@@ -68,7 +69,8 @@ pcl::LocalMaximum<PointT>::applyFilter (PointCloud &output)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::LocalMaximum<PointT>::applyFilterIndices (std::vector<int> &indices)
 {
   typename PointCloud::Ptr cloud_projected (new PointCloud);
@@ -79,7 +81,7 @@ pcl::LocalMaximum<PointT>::applyFilterIndices (std::vector<int> &indices)
   coefficients->values[0] = coefficients->values[1] = 0;
   coefficients->values[2] = 1.0;
   coefficients->values[3] = 0;
-  
+
   // Create the filtering object and project input into xy plane
   pcl::ProjectInliers<PointT> proj;
   proj.setModelType (pcl::SACMODEL_PLANE);
@@ -88,8 +90,7 @@ pcl::LocalMaximum<PointT>::applyFilterIndices (std::vector<int> &indices)
   proj.filter (*cloud_projected);
 
   // Initialize the search class
-  if (!searcher_)
-  {
+  if (!searcher_) {
     if (input_->isOrganized ())
       searcher_.reset (new pcl::search::OrganizedNeighbor<PointT> ());
     else
@@ -100,7 +101,7 @@ pcl::LocalMaximum<PointT>::applyFilterIndices (std::vector<int> &indices)
   // The arrays to be used
   indices.resize (indices_->size ());
   removed_indices_->resize (indices_->size ());
-  int oii = 0, rii = 0;  // oii = output indices iterator, rii = removed indices iterator
+  int oii = 0, rii = 0; // oii = output indices iterator, rii = removed indices iterator
 
   std::vector<bool> point_is_max (indices_->size (), false);
   std::vector<bool> point_is_visited (indices_->size (), false);
@@ -108,17 +109,14 @@ pcl::LocalMaximum<PointT>::applyFilterIndices (std::vector<int> &indices)
   // Find all points within xy radius (i.e., a vertical cylinder) of the query
   // point, removing those that are locally maximal (i.e., highest z within the
   // cylinder)
-  for (int iii = 0; iii < static_cast<int> (indices_->size ()); ++iii)
-  {
-    if (!isFinite (input_->points[(*indices_)[iii]]))
-    {
+  for (int iii = 0; iii < static_cast<int> (indices_->size ()); ++iii) {
+    if (!isFinite (input_->points[(*indices_)[iii]])) {
       continue;
     }
 
     // Points in the neighborhood of a previously identified local max, will
     // not be maximal in their own neighborhood
-    if (point_is_visited[(*indices_)[iii]] && !point_is_max[(*indices_)[iii]])
-    {
+    if (point_is_visited[(*indices_)[iii]] && !point_is_max[(*indices_)[iii]]) {
       continue;
     }
 
@@ -130,24 +128,23 @@ pcl::LocalMaximum<PointT>::applyFilterIndices (std::vector<int> &indices)
     std::vector<int> radius_indices;
     std::vector<float> radius_dists;
     PointT p = cloud_projected->points[(*indices_)[iii]];
-    if (searcher_->radiusSearch (p, radius_, radius_indices, radius_dists) == 0)
-    {
-      PCL_WARN ("[pcl::%s::applyFilter] Searching for neighbors within radius %f failed.\n", getClassName ().c_str (), radius_);
+    if (searcher_->radiusSearch (p, radius_, radius_indices, radius_dists) == 0) {
+      PCL_WARN (
+          "[pcl::%s::applyFilter] Searching for neighbors within radius %f failed.\n",
+          getClassName ().c_str (), radius_);
       continue;
     }
 
     // If query point is alone, we retain it regardless
-    if (radius_indices.size () == 1)
-    {
-        point_is_max[(*indices_)[iii]] = false;
+    if (radius_indices.size () == 1) {
+      point_is_max[(*indices_)[iii]] = false;
     }
 
     // Check to see if a neighbor is higher than the query point
     float query_z = input_->points[(*indices_)[iii]].z;
-    for (size_t k = 1; k < radius_indices.size (); ++k)  // k = 1 is the first neighbor
+    for (size_t k = 1; k < radius_indices.size (); ++k) // k = 1 is the first neighbor
     {
-      if (input_->points[radius_indices[k]].z > query_z)
-      {
+      if (input_->points[radius_indices[k]].z > query_z) {
         // Query point is not the local max, no need to check others
         point_is_max[(*indices_)[iii]] = false;
         break;
@@ -156,9 +153,8 @@ pcl::LocalMaximum<PointT>::applyFilterIndices (std::vector<int> &indices)
 
     // If the query point was a local max, all neighbors can be marked as
     // visited, excluding them from future consideration as local maxima
-    if (point_is_max[(*indices_)[iii]])
-    {
-      for (size_t k = 1; k < radius_indices.size (); ++k)  // k = 1 is the first neighbor
+    if (point_is_max[(*indices_)[iii]]) {
+      for (size_t k = 1; k < radius_indices.size (); ++k) // k = 1 is the first neighbor
       {
         point_is_visited[radius_indices[k]] = true;
       }
@@ -166,10 +162,9 @@ pcl::LocalMaximum<PointT>::applyFilterIndices (std::vector<int> &indices)
 
     // Points that are local maxima are passed to removed indices
     // Unless negative was set, then it's the opposite condition
-    if ((!negative_ && point_is_max[(*indices_)[iii]]) || (negative_ && !point_is_max[(*indices_)[iii]]))
-    {
-      if (extract_removed_indices_)
-      {
+    if ((!negative_ && point_is_max[(*indices_)[iii]]) ||
+        (negative_ && !point_is_max[(*indices_)[iii]])) {
+      if (extract_removed_indices_) {
         (*removed_indices_)[rii++] = (*indices_)[iii];
       }
 
@@ -187,5 +182,4 @@ pcl::LocalMaximum<PointT>::applyFilterIndices (std::vector<int> &indices)
 
 #define PCL_INSTANTIATE_LocalMaximum(T) template class PCL_EXPORTS pcl::LocalMaximum<T>;
 
-#endif    // PCL_FILTERS_IMPL_LOCAL_MAXIMUM_H_
-
+#endif // PCL_FILTERS_IMPL_LOCAL_MAXIMUM_H_

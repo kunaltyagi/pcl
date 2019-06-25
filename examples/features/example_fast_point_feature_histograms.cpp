@@ -37,20 +37,18 @@
  *
  */
 
-
 #include <iostream>
 #include <vector>
 
-#include <pcl/io/pcd_io.h>
-#include <pcl/point_types.h>
 #include <pcl/features/fpfh.h>
 #include <pcl/features/normal_3d.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
 
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
+  if (argc < 2) {
     throw std::runtime_error ("Required arguments: filename.pcd");
   }
 
@@ -74,7 +72,8 @@ main (int argc, char** argv)
   pcl::search::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZ>);
   normal_estimation.setSearchMethod (tree);
 
-  pcl::PointCloud<pcl::Normal>::Ptr cloud_with_normals (new pcl::PointCloud<pcl::Normal>);
+  pcl::PointCloud<pcl::Normal>::Ptr cloud_with_normals (
+      new pcl::PointCloud<pcl::Normal>);
 
   normal_estimation.setRadiusSearch (0.03);
 
@@ -88,11 +87,12 @@ main (int argc, char** argv)
   // Provide the point cloud with normals
   fpfh_estimation.setInputNormals (cloud_with_normals);
 
-  // fpfhEstimation.setInputWithNormals(cloud, cloudWithNormals); PFHEstimation does not have this function
-  // Use the same KdTree from the normal estimation
+  // fpfhEstimation.setInputWithNormals(cloud, cloudWithNormals); PFHEstimation does not
+  // have this function Use the same KdTree from the normal estimation
   fpfh_estimation.setSearchMethod (tree);
 
-  pcl::PointCloud<pcl::FPFHSignature33>::Ptr pfh_features (new pcl::PointCloud<pcl::FPFHSignature33>);
+  pcl::PointCloud<pcl::FPFHSignature33>::Ptr pfh_features (
+      new pcl::PointCloud<pcl::FPFHSignature33>);
 
   fpfh_estimation.setRadiusSearch (0.2);
 

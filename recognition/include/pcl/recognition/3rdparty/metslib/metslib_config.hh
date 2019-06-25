@@ -31,17 +31,17 @@
  */
 #ifndef METSLIB_CONFIG_HH_
 #define METSLIB_CONFIG_HH_
-#  if defined (_WIN32)
-#    define METSLIB_HAVE_UNORDERED_MAP 1
-#    define METSLIB_TR1_MIXED_NAMESPACE 1
-#  elif defined (__GXX_EXPERIMENTAL_CXX0X__)
-#    define METSLIB_HAVE_UNORDERED_MAP 1
-#  else
-#    define METSLIB_HAVE_TR1_UNORDERED_MAP 1
-#  endif
+#if defined(_WIN32)
+#define METSLIB_HAVE_UNORDERED_MAP 1
+#define METSLIB_TR1_MIXED_NAMESPACE 1
+#elif defined(__GXX_EXPERIMENTAL_CXX0X__)
+#define METSLIB_HAVE_UNORDERED_MAP 1
+#else
+#define METSLIB_HAVE_TR1_UNORDERED_MAP 1
+#endif
 
-//Within PCL, force always to use boost unordered_map and random generators
-//Other options give problems with Clang... needs further investigation...
+// Within PCL, force always to use boost unordered_map and random generators
+// Other options give problems with Clang... needs further investigation...
 #define METSLIB_TR1_BOOST 1
 
 #endif

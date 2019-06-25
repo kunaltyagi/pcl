@@ -57,34 +57,30 @@ pcl::CropBox<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
   int indices_count = 0;
   int removed_indices_count = 0;
 
-  Eigen::Affine3f transform = Eigen::Affine3f::Identity();
-  Eigen::Affine3f inverse_transform = Eigen::Affine3f::Identity();
+  Eigen::Affine3f transform = Eigen::Affine3f::Identity ();
+  Eigen::Affine3f inverse_transform = Eigen::Affine3f::Identity ();
 
-  if (rotation_ != Eigen::Vector3f::Zero ())
-  {
-    pcl::getTransformation (0, 0, 0,
-                            rotation_ (0), rotation_ (1), rotation_ (2),
+  if (rotation_ != Eigen::Vector3f::Zero ()) {
+    pcl::getTransformation (0, 0, 0, rotation_ (0), rotation_ (1), rotation_ (2),
                             transform);
-    inverse_transform = transform.inverse();
+    inverse_transform = transform.inverse ();
   }
 
-  //PointXYZ local_pt;
+  // PointXYZ local_pt;
   Eigen::Vector3f local_pt (Eigen::Vector3f::Zero ());
 
   bool transform_matrix_is_identity = transform_.matrix ().isIdentity ();
   bool translation_is_zero = (translation_ != Eigen::Vector3f::Zero ());
   bool inverse_transform_matrix_is_identity = inverse_transform.matrix ().isIdentity ();
 
-  for (size_t index = 0; index < indices_->size (); ++index)
-  {
+  for (size_t index = 0; index < indices_->size (); ++index) {
     // Get local point
     int point_offset = ((*indices_)[index] * input_->point_step);
     int offset = point_offset + input_->fields[x_idx_].offset;
-    memcpy (&local_pt, &input_->data[offset], sizeof (float)*3);
+    memcpy (&local_pt, &input_->data[offset], sizeof (float) * 3);
 
     // Check if the point is invalid
-    if (!std::isfinite (local_pt.x ()) ||
-        !std::isfinite (local_pt.y ()) ||
+    if (!std::isfinite (local_pt.x ()) || !std::isfinite (local_pt.y ()) ||
         !std::isfinite (local_pt.z ()))
       continue;
 
@@ -92,8 +88,7 @@ pcl::CropBox<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
     if (!transform_matrix_is_identity)
       local_pt = transform_ * local_pt;
 
-    if (translation_is_zero)
-    {
+    if (translation_is_zero) {
       local_pt.x () = local_pt.x () - translation_ (0);
       local_pt.y () = local_pt.y () - translation_ (1);
       local_pt.z () = local_pt.z () - translation_ (2);
@@ -104,27 +99,22 @@ pcl::CropBox<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
       local_pt = inverse_transform * local_pt;
 
     // If outside the cropbox
-    if ( (local_pt.x () < min_pt_[0] || local_pt.y () < min_pt_[1] || local_pt.z () < min_pt_[2]) ||
-         (local_pt.x () > max_pt_[0] || local_pt.y () > max_pt_[1] || local_pt.z () > max_pt_[2]))
-    {
-      if (negative_)
-      {
+    if ((local_pt.x () < min_pt_[0] || local_pt.y () < min_pt_[1] ||
+         local_pt.z () < min_pt_[2]) ||
+        (local_pt.x () > max_pt_[0] || local_pt.y () > max_pt_[1] ||
+         local_pt.z () > max_pt_[2])) {
+      if (negative_) {
         memcpy (&output.data[indices_count++ * output.point_step],
                 &input_->data[index * output.point_step], output.point_step);
-      }
-      else if (extract_removed_indices_)
-      {
+      } else if (extract_removed_indices_) {
         (*removed_indices_)[removed_indices_count++] = static_cast<int> (index);
       }
     }
     // If inside the cropbox
-    else
-    {
-      if (negative_ && extract_removed_indices_)
-      {
+    else {
+      if (negative_ && extract_removed_indices_) {
         (*removed_indices_)[removed_indices_count++] = static_cast<int> (index);
-      }
-      else if (!negative_) {
+      } else if (!negative_) {
         memcpy (&output.data[indices_count++ * output.point_step],
                 &input_->data[index * output.point_step], output.point_step);
       }
@@ -147,37 +137,33 @@ pcl::CropBox<pcl::PCLPointCloud2>::applyFilter (std::vector<int> &indices)
   int indices_count = 0;
   int removed_indices_count = 0;
 
-  Eigen::Affine3f transform = Eigen::Affine3f::Identity();
-  Eigen::Affine3f inverse_transform = Eigen::Affine3f::Identity();
+  Eigen::Affine3f transform = Eigen::Affine3f::Identity ();
+  Eigen::Affine3f inverse_transform = Eigen::Affine3f::Identity ();
 
-  if (rotation_ != Eigen::Vector3f::Zero ())
-  {
-    pcl::getTransformation (0, 0, 0,
-                            rotation_ (0), rotation_ (1), rotation_ (2),
+  if (rotation_ != Eigen::Vector3f::Zero ()) {
+    pcl::getTransformation (0, 0, 0, rotation_ (0), rotation_ (1), rotation_ (2),
                             transform);
-    inverse_transform = transform.inverse();
+    inverse_transform = transform.inverse ();
   }
 
-  //PointXYZ local_pt;
+  // PointXYZ local_pt;
   Eigen::Vector3f local_pt (Eigen::Vector3f::Zero ());
 
   bool transform_matrix_is_identity = transform_.matrix ().isIdentity ();
   bool translation_is_zero = (translation_ != Eigen::Vector3f::Zero ());
   bool inverse_transform_matrix_is_identity = inverse_transform.matrix ().isIdentity ();
 
-  for (size_t index = 0; index < indices_->size (); index++)
-  {
+  for (size_t index = 0; index < indices_->size (); index++) {
     // Get local point
     int point_offset = ((*indices_)[index] * input_->point_step);
     int offset = point_offset + input_->fields[x_idx_].offset;
-    memcpy (&local_pt, &input_->data[offset], sizeof (float)*3);
+    memcpy (&local_pt, &input_->data[offset], sizeof (float) * 3);
 
     // Transform point to world space
     if (!transform_matrix_is_identity)
       local_pt = transform_ * local_pt;
 
-    if (translation_is_zero)
-    {
+    if (translation_is_zero) {
       local_pt.x () -= translation_ (0);
       local_pt.y () -= translation_ (1);
       local_pt.z () -= translation_ (2);
@@ -188,26 +174,21 @@ pcl::CropBox<pcl::PCLPointCloud2>::applyFilter (std::vector<int> &indices)
       local_pt = inverse_transform * local_pt;
 
     // If outside the cropbox
-    if ( (local_pt.x () < min_pt_[0] || local_pt.y () < min_pt_[1] || local_pt.z () < min_pt_[2]) ||
-         (local_pt.x () > max_pt_[0] || local_pt.y () > max_pt_[1] || local_pt.z () > max_pt_[2]))
-    {
-      if (negative_)
-      {
+    if ((local_pt.x () < min_pt_[0] || local_pt.y () < min_pt_[1] ||
+         local_pt.z () < min_pt_[2]) ||
+        (local_pt.x () > max_pt_[0] || local_pt.y () > max_pt_[1] ||
+         local_pt.z () > max_pt_[2])) {
+      if (negative_) {
         indices[indices_count++] = (*indices_)[index];
-      }
-      else if (extract_removed_indices_)
-      {
+      } else if (extract_removed_indices_) {
         (*removed_indices_)[removed_indices_count++] = static_cast<int> (index);
       }
     }
     // If inside the cropbox
-    else
-    {
-      if (negative_ && extract_removed_indices_)
-      {
+    else {
+      if (negative_ && extract_removed_indices_) {
         (*removed_indices_)[removed_indices_count++] = static_cast<int> (index);
-      }
-      else if (!negative_) {
+      } else if (!negative_) {
         indices[indices_count++] = (*indices_)[index];
       }
     }
@@ -221,7 +202,6 @@ pcl::CropBox<pcl::PCLPointCloud2>::applyFilter (std::vector<int> &indices)
 #include <pcl/impl/instantiate.hpp>
 #include <pcl/point_types.h>
 
-PCL_INSTANTIATE(CropBox, PCL_XYZ_POINT_TYPES)
+PCL_INSTANTIATE (CropBox, PCL_XYZ_POINT_TYPES)
 
-#endif    // PCL_NO_PRECOMPILE
-
+#endif // PCL_NO_PRECOMPILE

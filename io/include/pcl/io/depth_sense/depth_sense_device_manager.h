@@ -37,8 +37,8 @@
 
 #pragma once
 
-#include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/utility.hpp>
 
 #include <pcl/pcl_exports.h>
 
@@ -58,96 +58,91 @@ namespace pcl
       struct DepthSenseGrabberImpl;
 
       /** A helper class for enumerating and managing access to DepthSense
-        * devices. */
+       * devices. */
       class PCL_EXPORTS DepthSenseDeviceManager : boost::noncopyable
       {
 
         public:
+        using Ptr = boost::shared_ptr<DepthSenseDeviceManager>;
 
-          using Ptr = boost::shared_ptr<DepthSenseDeviceManager>;
-
-          static Ptr&
-          getInstance ()
-          {
-            static Ptr instance;
+        static Ptr &
+        getInstance ()
+        {
+          static Ptr instance;
+          if (!instance) {
+            std::lock_guard<std::mutex> lock (mutex_);
             if (!instance)
-            {
-              std::lock_guard<std::mutex> lock (mutex_);
-              if (!instance)
-                instance.reset (new DepthSenseDeviceManager);
-            }
-            return (instance);
+              instance.reset (new DepthSenseDeviceManager);
           }
+          return (instance);
+        }
 
-          /** Get the number of connected DepthSense devices. */
-          inline size_t
-          getNumDevices ()
-          {
-            return (context_.getDevices ().size ());
-          }
+        /** Get the number of connected DepthSense devices. */
+        inline size_t
+        getNumDevices ()
+        {
+          return (context_.getDevices ().size ());
+        }
 
-          /** Capture first available device and associate it with a given
-            * grabber instance. */
-          std::string
-          captureDevice (DepthSenseGrabberImpl* grabber);
+        /** Capture first available device and associate it with a given
+         * grabber instance. */
+        std::string
+        captureDevice (DepthSenseGrabberImpl *grabber);
 
-          /** Capture the device with given index and associate it with a given
-            * grabber instance. */
-          std::string
-          captureDevice (DepthSenseGrabberImpl* grabber, size_t index);
+        /** Capture the device with given index and associate it with a given
+         * grabber instance. */
+        std::string
+        captureDevice (DepthSenseGrabberImpl *grabber, size_t index);
 
-          /** Capture the device with given serial number and associate it with
-            * a given grabber instance. */
-          std::string
-          captureDevice (DepthSenseGrabberImpl* grabber, const std::string& sn);
+        /** Capture the device with given serial number and associate it with
+         * a given grabber instance. */
+        std::string
+        captureDevice (DepthSenseGrabberImpl *grabber, const std::string &sn);
 
-          /** Release DepthSense device with given serial number. */
-          void
-          releaseDevice (const std::string& sn);
+        /** Release DepthSense device with given serial number. */
+        void
+        releaseDevice (const std::string &sn);
 
-          /** Reconfigure DepthSense device with given serial number. */
-          void
-          reconfigureDevice (const std::string& sn);
+        /** Reconfigure DepthSense device with given serial number. */
+        void
+        reconfigureDevice (const std::string &sn);
 
-          /** Start data capturing for a given device. */
-          void
-          startDevice (const std::string& sn);
+        /** Start data capturing for a given device. */
+        void
+        startDevice (const std::string &sn);
 
-          /** Stop data capturing for a given device. */
-          void
-          stopDevice (const std::string& sn);
+        /** Stop data capturing for a given device. */
+        void
+        stopDevice (const std::string &sn);
 
-          ~DepthSenseDeviceManager ();
+        ~DepthSenseDeviceManager ();
 
         private:
+        DepthSenseDeviceManager ();
 
-          DepthSenseDeviceManager ();
+        std::string
+        captureDevice (DepthSenseGrabberImpl *grabber, DepthSense::Device device);
 
-          std::string
-          captureDevice (DepthSenseGrabberImpl* grabber, DepthSense::Device device);
+        inline bool
+        isCaptured (const std::string &sn) const
+        {
+          return (captured_devices_.count (sn) != 0);
+        }
 
-          inline bool
-          isCaptured (const std::string& sn) const
-          {
-            return (captured_devices_.count (sn) != 0);
-          }
+        DepthSense::Context context_;
 
-          DepthSense::Context context_;
+        static std::mutex mutex_;
 
-          static std::mutex mutex_;
+        /// Thread where the grabbing takes place.
+        std::thread depth_sense_thread_;
 
-          /// Thread where the grabbing takes place.
-          std::thread depth_sense_thread_;
+        struct CapturedDevice {
+          DepthSenseGrabberImpl *grabber;
+          DepthSense::DepthNode depth_node;
+          DepthSense::ColorNode color_node;
+        };
 
-          struct CapturedDevice
-          {
-            DepthSenseGrabberImpl* grabber;
-            DepthSense::DepthNode depth_node;
-            DepthSense::ColorNode color_node;
-          };
-
-          std::map<std::string, CapturedDevice> captured_devices_;
-
+        std::map<std::string, CapturedDevice> captured_devices_;
       };
 
     } // namespace depth_sense

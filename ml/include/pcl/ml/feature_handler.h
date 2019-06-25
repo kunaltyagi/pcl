@@ -34,73 +34,67 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *
  */
-  
+
 #pragma once
 
 #include <pcl/common/common.h>
 
-#include <vector>
 #include <ostream>
+#include <vector>
 
 namespace pcl
 {
 
-  /** \brief Utility class interface which is used for creating and evaluating features. */
-  template <
-    class FeatureType,
-    class DataSet,
-    class ExampleIndex >
+  /** \brief Utility class interface which is used for creating and evaluating features.
+   */
+  template <class FeatureType, class DataSet, class ExampleIndex>
   class PCL_EXPORTS FeatureHandler
   {
     public:
+    /** \brief Destructor. */
+    virtual ~FeatureHandler (){};
 
-      /** \brief Destructor. */
-      virtual 
-      ~FeatureHandler () {};
+    /** \brief Creates random features.
+     * \param[in] num_of_features The number of random features to create.
+     * \param[out] features The destination for the created features.
+     */
+    virtual void
+    createRandomFeatures (const size_t num_of_features,
+                          std::vector<FeatureType> &features) = 0;
 
-      /** \brief Creates random features.
-        * \param[in] num_of_features The number of random features to create.
-        * \param[out] features The destination for the created features.
-        */
-      virtual void 
-      createRandomFeatures (const size_t num_of_features, std::vector<FeatureType> & features) = 0;
+    /** \brief Evaluates a feature on the specified data.
+     * \param[in] feature The features to evaluate.
+     * \param[in] data_set The data set on which the feature is evaluated.
+     * \param[in] examples The examples which specify on which parts of the data set the
+     * feature is evaluated. \param[out] results The destination for the results of the
+     * feature evaluation. \param[out] flags Flags that are supplied together with the
+     * results.
+     */
+    virtual void
+    evaluateFeature (const FeatureType &feature, DataSet &data_set,
+                     std::vector<ExampleIndex> &examples, std::vector<float> &results,
+                     std::vector<unsigned char> &flags) const = 0;
 
-      /** \brief Evaluates a feature on the specified data. 
-        * \param[in] feature The features to evaluate.
-        * \param[in] data_set The data set on which the feature is evaluated.
-        * \param[in] examples The examples which specify on which parts of the data set the feature is evaluated.
-        * \param[out] results The destination for the results of the feature evaluation.
-        * \param[out] flags Flags that are supplied together with the results.
-        */
-      virtual void 
-      evaluateFeature (const FeatureType & feature,
-                       DataSet & data_set,
-                       std::vector<ExampleIndex> & examples,
-                       std::vector<float> & results,
-                       std::vector<unsigned char> & flags) const = 0;
+    /** \brief Evaluates a feature on the specified data.
+     * \param[in] feature The features to evaluate.
+     * \param[in] data_set The data set on which the feature is evaluated.
+     * \param[in] example The examples which specify on which parts of the data set the
+     * feature is evaluated. \param[out] result The destination for the results of the
+     * feature evaluation. \param[out] flag Flags that are supplied together with the
+     * results.
+     */
+    virtual void
+    evaluateFeature (const FeatureType &feature, DataSet &data_set,
+                     const ExampleIndex &example, float &result,
+                     unsigned char &flag) const = 0;
 
-      /** \brief Evaluates a feature on the specified data. 
-        * \param[in] feature The features to evaluate.
-        * \param[in] data_set The data set on which the feature is evaluated.
-        * \param[in] example The examples which specify on which parts of the data set the feature is evaluated.
-        * \param[out] result The destination for the results of the feature evaluation.
-        * \param[out] flag Flags that are supplied together with the results.
-        */
-      virtual void 
-      evaluateFeature (const FeatureType & feature,
-                       DataSet & data_set,
-                       const ExampleIndex & example,
-                       float & result,
-                       unsigned char & flag) const = 0;
-
-      /** \brief Generates evaluation code for the specified feature and writes it to the specified stream.
-        * \param[in] feature The feature for which code is generated.
-        * \param[out] stream The destination for the code.
-        */
-      virtual void 
-      generateCodeForEvaluation (const FeatureType & feature,
-                                 ::std::ostream & stream) const = 0;
-
+    /** \brief Generates evaluation code for the specified feature and writes it to the
+     * specified stream. \param[in] feature The feature for which code is generated.
+     * \param[out] stream The destination for the code.
+     */
+    virtual void
+    generateCodeForEvaluation (const FeatureType &feature,
+                               ::std::ostream &stream) const = 0;
   };
 
-}
+} // namespace pcl

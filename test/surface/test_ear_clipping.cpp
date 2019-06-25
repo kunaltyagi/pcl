@@ -39,12 +39,12 @@
 
 #include <gtest/gtest.h>
 
-#include <pcl/point_types.h>
+#include <pcl/common/common.h>
+#include <pcl/features/normal_3d.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/vtk_io.h>
-#include <pcl/features/normal_3d.h>
+#include <pcl/point_types.h>
 #include <pcl/surface/ear_clipping.h>
-#include <pcl/common/common.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -64,14 +64,14 @@ search::KdTree<PointNormal>::Ptr tree4;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TEST (PCL, EarClipping)
 {
-  PointCloud<PointXYZ>::Ptr cloud (new PointCloud<PointXYZ>());
+  PointCloud<PointXYZ>::Ptr cloud (new PointCloud<PointXYZ> ());
   cloud->height = 1;
-  cloud->points.emplace_back( 0.f, 0.f, 0.5f);
-  cloud->points.emplace_back( 5.f, 0.f, 0.6f);
-  cloud->points.emplace_back( 9.f, 4.f, 0.5f);
-  cloud->points.emplace_back( 4.f, 7.f, 0.5f);
-  cloud->points.emplace_back( 2.f, 5.f, 0.5f);
-  cloud->points.emplace_back(-1.f, 8.f, 0.5f);
+  cloud->points.emplace_back (0.f, 0.f, 0.5f);
+  cloud->points.emplace_back (5.f, 0.f, 0.6f);
+  cloud->points.emplace_back (9.f, 4.f, 0.5f);
+  cloud->points.emplace_back (4.f, 7.f, 0.5f);
+  cloud->points.emplace_back (2.f, 5.f, 0.5f);
+  cloud->points.emplace_back (-1.f, 8.f, 0.5f);
   cloud->width = static_cast<uint32_t> (cloud->points.size ());
 
   Vertices vertices;
@@ -94,62 +94,44 @@ TEST (PCL, EarClipping)
   for (const auto &polygon : triangulated_mesh.polygons)
     EXPECT_EQ (polygon.vertices.size (), 3);
 
-  const int truth[][3] = { {5, 0, 1},
-                           {2, 3, 4},
-                           {4, 5, 1},
-                           {1, 2, 4} };
+  const int truth[][3] = {{5, 0, 1}, {2, 3, 4}, {4, 5, 1}, {1, 2, 4}};
 
   for (int pi = 0; pi < static_cast<int> (triangulated_mesh.polygons.size ()); ++pi)
-  for (int vi = 0; vi < 3; ++vi)
-  {
-    EXPECT_EQ (triangulated_mesh.polygons[pi].vertices[vi], truth[pi][vi]);
-  }
+    for (int vi = 0; vi < 3; ++vi) {
+      EXPECT_EQ (triangulated_mesh.polygons[pi].vertices[vi], truth[pi][vi]);
+    }
 }
 
 TEST (PCL, EarClippingCubeTest)
 {
-  PointCloud<PointXYZ>::Ptr cloud (new PointCloud<PointXYZ>());
+  PointCloud<PointXYZ>::Ptr cloud (new PointCloud<PointXYZ> ());
   cloud->height = 1;
-  //bottom of cube (z=0)
-  cloud->points.emplace_back( 0.f, 0.f, 0.f);
-  cloud->points.emplace_back( 1.f, 0.f, 0.f);
-  cloud->points.emplace_back( 1.f, 1.f, 0.f);
-  cloud->points.emplace_back( 0.f, 1.f, 0.f);
-  //top of cube (z=1.0)
-  cloud->points.emplace_back( 0.f, 0.f, 1.f);
-  cloud->points.emplace_back( 1.f, 0.f, 1.f);
-  cloud->points.emplace_back( 1.f, 1.f, 1.f);
-  cloud->points.emplace_back( 0.f, 1.f, 1.f);
+  // bottom of cube (z=0)
+  cloud->points.emplace_back (0.f, 0.f, 0.f);
+  cloud->points.emplace_back (1.f, 0.f, 0.f);
+  cloud->points.emplace_back (1.f, 1.f, 0.f);
+  cloud->points.emplace_back (0.f, 1.f, 0.f);
+  // top of cube (z=1.0)
+  cloud->points.emplace_back (0.f, 0.f, 1.f);
+  cloud->points.emplace_back (1.f, 0.f, 1.f);
+  cloud->points.emplace_back (1.f, 1.f, 1.f);
+  cloud->points.emplace_back (0.f, 1.f, 1.f);
   cloud->width = static_cast<uint32_t> (cloud->points.size ());
 
   Vertices vertices;
-  vertices.vertices.resize(4);
+  vertices.vertices.resize (4);
 
-  const int squares[][4] = { {1, 5, 6, 2},
-                           {2, 6, 7, 3},
-                           {3, 7, 4, 0},
-                           {0, 4, 5, 1},
-                           {4, 7, 6, 5},       
-                           {0, 1, 2, 3} };
+  const int squares[][4] = {{1, 5, 6, 2}, {2, 6, 7, 3}, {3, 7, 4, 0},
+                            {0, 4, 5, 1}, {4, 7, 6, 5}, {0, 1, 2, 3}};
 
-  const int truth[][3] = { {2, 1, 5},
-                           {6, 2, 5},
-                           {3, 2, 6}, 
-                           {7, 3, 6},
-                           {0, 3, 7}, 
-                           {4, 0, 7},
-                           {1, 0, 4}, 
-                           {5, 1, 4},
-                           {5, 4, 7}, 
-                           {6, 5, 7},       
-                           {3, 0, 1}, 
-                           {2, 3, 1} };
+  const int truth[][3] = {{2, 1, 5}, {6, 2, 5}, {3, 2, 6}, {7, 3, 6},
+                          {0, 3, 7}, {4, 0, 7}, {1, 0, 4}, {5, 1, 4},
+                          {5, 4, 7}, {6, 5, 7}, {3, 0, 1}, {2, 3, 1}};
 
   PolygonMesh::Ptr mesh (new PolygonMesh);
   toPCLPointCloud2 (*cloud, mesh->cloud);
 
-  for (const auto &square : squares)
-  {
+  for (const auto &square : squares) {
     vertices.vertices[0] = square[0];
     vertices.vertices[1] = square[1];
     vertices.vertices[2] = square[2];
@@ -168,24 +150,21 @@ TEST (PCL, EarClippingCubeTest)
   for (const auto &polygon : triangulated_mesh.polygons)
     EXPECT_EQ (polygon.vertices.size (), 3);
 
-  
-
-  for (int pi = 0; pi < static_cast<int> (triangulated_mesh.polygons.size ()); ++pi)
-  {
-      for (int vi = 0; vi < 3; ++vi)
-      {
-        EXPECT_EQ (triangulated_mesh.polygons[pi].vertices[vi], truth[pi][vi]);
-      }
+  for (int pi = 0; pi < static_cast<int> (triangulated_mesh.polygons.size ()); ++pi) {
+    for (int vi = 0; vi < 3; ++vi) {
+      EXPECT_EQ (triangulated_mesh.polygons[pi].vertices[vi], truth[pi][vi]);
+    }
   }
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
@@ -202,24 +181,24 @@ main (int argc, char** argv)
   NormalEstimation<PointXYZ, Normal> n;
   PointCloud<Normal>::Ptr normals (new PointCloud<Normal> ());
   n.setInputCloud (cloud);
-  //n.setIndices (indices[B);
+  // n.setIndices (indices[B);
   n.setSearchMethod (tree);
   n.setKSearch (20);
   n.compute (*normals);
 
   // Concatenate XYZ and normal information
   pcl::concatenateFields (*cloud, *normals, *cloud_with_normals);
-      
+
   // Create search tree
   tree2.reset (new search::KdTree<PointNormal>);
   tree2->setInputCloud (cloud_with_normals);
 
   // Process for update cloud
-  if(argc == 3){
+  if (argc == 3) {
     pcl::PCLPointCloud2 cloud_blob1;
     loadPCDFile (argv[2], cloud_blob1);
     fromPCLPointCloud2 (cloud_blob1, *cloud1);
-        // Create search tree
+    // Create search tree
     tree3.reset (new search::KdTree<PointXYZ> (false));
     tree3->setInputCloud (cloud1);
 

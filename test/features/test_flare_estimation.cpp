@@ -1,48 +1,48 @@
 /*
-* Software License Agreement (BSD License)
-*
-*  Point Cloud Library (PCL) - www.pointclouds.org
-*  Copyright (c) 2016-, Open Perception, Inc.
-*
-*  All rights reserved.
-*
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions
-*  are met:
-*
-*   * Redistributions of source code must retain the above copyright
-*     notice, this list of conditions and the following disclaimer.
-*   * Redistributions in binary form must reproduce the above
-*     copyright notice, this list of conditions and the following
-*     disclaimer in the documentation and/or other materials provided
-*     with the distribution.
-*   * Neither the name of the copyright holder(s) nor the names of its
-*     contributors may be used to endorse or promote products derived
-*     from this software without specific prior written permission.
-*
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-*  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-*  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-*  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-*  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-*  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-*  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-*  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-*  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-*  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-*  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*
-* $Id$
-*
-*/
+ * Software License Agreement (BSD License)
+ *
+ *  Point Cloud Library (PCL) - www.pointclouds.org
+ *  Copyright (c) 2016-, Open Perception, Inc.
+ *
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above
+ *     copyright notice, this list of conditions and the following
+ *     disclaimer in the documentation and/or other materials provided
+ *     with the distribution.
+ *   * Neither the name of the copyright holder(s) nor the names of its
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ *  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *
+ * $Id$
+ *
+ */
 
 #include <gtest/gtest.h>
-#include <pcl/point_cloud.h>
-#include <pcl/pcl_tests.h>
+#include <pcl/features/flare.h>
 #include <pcl/features/normal_3d.h>
 #include <pcl/io/pcd_io.h>
-#include <pcl/features/flare.h>
+#include <pcl/pcl_tests.h>
+#include <pcl/point_cloud.h>
 
 using KdTreePtr = pcl::search::KdTree<pcl::PointXYZ>::Ptr;
 using PointCloudPtr = pcl::PointCloud<pcl::PointXYZ>::Ptr;
@@ -50,11 +50,9 @@ using PointCloudPtr = pcl::PointCloud<pcl::PointXYZ>::Ptr;
 PointCloudPtr cloud;
 KdTreePtr tree;
 
-//sampled surface for the computation of tangent X axis
+// sampled surface for the computation of tangent X axis
 PointCloudPtr sampled_cloud;
 KdTreePtr sampled_tree;
-
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TEST (PCL, FLARELocalReferenceFrameEstimation)
@@ -67,7 +65,7 @@ TEST (PCL, FLARELocalReferenceFrameEstimation)
   // Compute normals
   pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> ne;
 
-  ne.setRadiusSearch (2.0f*mesh_res);
+  ne.setRadiusSearch (2.0f * mesh_res);
   ne.setViewPoint (1, 1, 10);
   ne.setInputCloud (cloud);
   ne.setSearchMethod (tree);
@@ -75,7 +73,9 @@ TEST (PCL, FLARELocalReferenceFrameEstimation)
   ne.compute (*normals);
 
   // Compute FLARE LRF
-  pcl::FLARELocalReferenceFrameEstimation<pcl::PointXYZ, pcl::Normal, pcl::ReferenceFrame> lrf_estimator;
+  pcl::FLARELocalReferenceFrameEstimation<pcl::PointXYZ, pcl::Normal,
+                                          pcl::ReferenceFrame>
+      lrf_estimator;
 
   lrf_estimator.setRadiusSearch (5 * mesh_res);
   lrf_estimator.setTangentRadius (20 * mesh_res);
@@ -110,10 +110,8 @@ TEST (PCL, FLARELocalReferenceFrameEstimation)
   Eigen::Vector3f point_253_y (0.19853911f, 0.95840079f, 0.20506138f);
   Eigen::Vector3f point_253_z (-0.42654046f, -0.10388060f, 0.89848322f);
 
-
-  //Test Results
-  for (int d = 0; d < 3; ++d)
-  {
+  // Test Results
+  for (int d = 0; d < 3; ++d) {
     EXPECT_NEAR (point_15_x[d], bunny_LRF.at (15).x_axis[d], 1E-3);
     EXPECT_NEAR (point_15_y[d], bunny_LRF.at (15).y_axis[d], 1E-3);
     EXPECT_NEAR (point_15_z[d], bunny_LRF.at (15).z_axis[d], 1E-3);
@@ -130,35 +128,40 @@ TEST (PCL, FLARELocalReferenceFrameEstimation)
     EXPECT_NEAR (point_253_y[d], bunny_LRF.at (253).y_axis[d], 1E-3);
     EXPECT_NEAR (point_253_z[d], bunny_LRF.at (253).z_axis[d], 1E-3);
   }
-  EXPECT_NEAR (score_15, lrf_estimator.getSignedDistancesFromHighestPoints ()[15], 1E-4);
-  EXPECT_NEAR (score_45, lrf_estimator.getSignedDistancesFromHighestPoints ()[45], 1E-4);
-  EXPECT_NEAR (score_163, lrf_estimator.getSignedDistancesFromHighestPoints ()[163], 1E-4);
-  EXPECT_NEAR (score_253, lrf_estimator.getSignedDistancesFromHighestPoints ()[253], 1E-4);
+  EXPECT_NEAR (score_15, lrf_estimator.getSignedDistancesFromHighestPoints ()[15],
+               1E-4);
+  EXPECT_NEAR (score_45, lrf_estimator.getSignedDistancesFromHighestPoints ()[45],
+               1E-4);
+  EXPECT_NEAR (score_163, lrf_estimator.getSignedDistancesFromHighestPoints ()[163],
+               1E-4);
+  EXPECT_NEAR (score_253, lrf_estimator.getSignedDistancesFromHighestPoints ()[253],
+               1E-4);
 }
-
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download `bun0.pcd` and pass its path to "
+                 "the test."
+              << std::endl;
     return (-1);
   }
 
   cloud.reset (new pcl::PointCloud<pcl::PointXYZ> ());
 
-  if (pcl::io::loadPCDFile<pcl::PointXYZ> (argv[1], *cloud) < 0)
-  {
-    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its path to the test." << std::endl;
+  if (pcl::io::loadPCDFile<pcl::PointXYZ> (argv[1], *cloud) < 0) {
+    std::cerr << "Failed to read test file. Please download `bun0.pcd` and pass its "
+                 "path to the test."
+              << std::endl;
     return (-1);
   }
 
   tree.reset (new pcl::search::KdTree<pcl::PointXYZ> (false));
   tree->setInputCloud (cloud);
 
-  //create and set sampled point cloud for computation of X axis
+  // create and set sampled point cloud for computation of X axis
   const float sampling_perc = 0.2f;
   const float sampling_incr = 1.0f / sampling_perc;
 
@@ -172,7 +175,7 @@ main (int argc, char** argv)
   sampled_tree.reset (new pcl::search::KdTree<pcl::PointXYZ> (false));
   sampled_tree->setInputCloud (sampled_cloud);
 
-  //start tests
+  // start tests
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());
 }

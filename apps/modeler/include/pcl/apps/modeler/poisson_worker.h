@@ -45,33 +45,39 @@ namespace pcl
     class IntParameter;
     class DoubleParameter;
 
-    class PoissonReconstructionWorker : public AbstractWorker 
+    class PoissonReconstructionWorker : public AbstractWorker
     {
       public:
-        PoissonReconstructionWorker(const QList<CloudMeshItem*>& cloud_mesh_items, QWidget* parent=nullptr);
-        ~PoissonReconstructionWorker();
+      PoissonReconstructionWorker (const QList<CloudMeshItem *> &cloud_mesh_items,
+                                   QWidget *parent = nullptr);
+      ~PoissonReconstructionWorker ();
 
       protected:
-        std::string
-        getName () const override {return ("Poisson Reconstruction");}
+      std::string
+      getName () const override
+      {
+        return ("Poisson Reconstruction");
+      }
 
-        void
-        initParameters (CloudMeshItem*) override {}
+      void
+      initParameters (CloudMeshItem *) override
+      {
+      }
 
-        void
-        setupParameters() override;
+      void
+      setupParameters () override;
 
-        void
-        processImpl(CloudMeshItem* cloud_mesh_item) override;
+      void
+      processImpl (CloudMeshItem *cloud_mesh_item) override;
 
       private:
-        IntParameter*     depth_;
-        IntParameter*     solver_divide_;
-        IntParameter*     iso_divide_;
-        IntParameter*     degree_;
-        DoubleParameter*  scale_;
-        DoubleParameter*  samples_per_node_;
+      IntParameter *depth_;
+      IntParameter *solver_divide_;
+      IntParameter *iso_divide_;
+      IntParameter *degree_;
+      DoubleParameter *scale_;
+      DoubleParameter *samples_per_node_;
     };
 
-  }
-}
+  } // namespace modeler
+} // namespace pcl

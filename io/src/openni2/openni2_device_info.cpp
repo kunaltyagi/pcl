@@ -29,8 +29,8 @@
  *      Author: Julius Kammerl (jkammerl@willowgarage.com)
  */
 
-#include <string>
 #include "pcl/io/openni2/openni2_device_info.h"
+#include <string>
 
 namespace pcl
 {
@@ -39,16 +39,16 @@ namespace pcl
     namespace openni2
     {
 
-      std::ostream& operator << (std::ostream& stream, const OpenNI2DeviceInfo& device_info)
+      std::ostream &
+      operator<< (std::ostream &stream, const OpenNI2DeviceInfo &device_info)
       {
-        stream << "Uri: " << device_info.uri_ << " (Vendor: " << device_info.vendor_ <<
-                                                 ", Name: " << device_info.name_ <<
-                                                 ", Vendor ID: " << device_info.vendor_id_ <<
-                                                 ", Product ID: " << device_info.product_id_ <<
-                                                   ")" << std::endl;
+        stream << "Uri: " << device_info.uri_ << " (Vendor: " << device_info.vendor_
+               << ", Name: " << device_info.name_
+               << ", Vendor ID: " << device_info.vendor_id_
+               << ", Product ID: " << device_info.product_id_ << ")" << std::endl;
         return stream;
       }
 
-    } //namespace
-  }
-}
+    } // namespace openni2
+  }   // namespace io
+} // namespace pcl

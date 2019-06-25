@@ -41,54 +41,60 @@
 #include <iostream>
 
 // PCL
-#include <pcl/filters/filter.h>
-#include <pcl/features/normal_3d.h>
-#include <pcl/point_types.h>
-#include <pcl/point_cloud.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl/segmentation/region_growing.h>
-#include <pcl/kdtree/kdtree.h>
 #include <pcl/common/time.h>
 #include <pcl/console/parse.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/filters/filter.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/kdtree/kdtree.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+#include <pcl/segmentation/region_growing.h>
 
 int
-main (int argc, char** av)
+main (int argc, char **av)
 {
-  if (argc < 2)
-  {
+  if (argc < 2) {
     pcl::console::print_info ("Syntax is: %s <source-pcd-file> [-dump]\n\n", av[0]);
-    pcl::console::print_info ("If -dump is provided write the extracted clusters to cluster.dat\n\n");
+    pcl::console::print_info (
+        "If -dump is provided write the extracted clusters to cluster.dat\n\n");
     return (1);
   }
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_ptr (new pcl::PointCloud<pcl::PointXYZ>());
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_no_nans (new pcl::PointCloud<pcl::PointXYZ>());
-  pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>());
-  pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_segmented (new pcl::PointCloud<pcl::PointXYZRGB>());
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_ptr (new pcl::PointCloud<pcl::PointXYZ> ());
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_no_nans (
+      new pcl::PointCloud<pcl::PointXYZ> ());
+  pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal> ());
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_segmented (
+      new pcl::PointCloud<pcl::PointXYZRGB> ());
 
   pcl::PCDWriter writer;
-  if (pcl::io::loadPCDFile(av[1], *cloud_ptr)==-1)
-  {
+  if (pcl::io::loadPCDFile (av[1], *cloud_ptr) == -1) {
     return -1;
   }
 
-  pcl::console::print_highlight ("Loaded cloud %s of size %lu\n", av[1], cloud_ptr->points.size ());
+  pcl::console::print_highlight ("Loaded cloud %s of size %lu\n", av[1],
+                                 cloud_ptr->points.size ());
 
   // Remove the nans
   cloud_ptr->is_dense = false;
   cloud_no_nans->is_dense = false;
   std::vector<int> indices;
   pcl::removeNaNFromPointCloud (*cloud_ptr, *cloud_no_nans, indices);
-  pcl::console::print_highlight ("Removed nans from %lu to %lu\n", cloud_ptr->points.size (), cloud_no_nans->points.size ());
+  pcl::console::print_highlight ("Removed nans from %lu to %lu\n",
+                                 cloud_ptr->points.size (),
+                                 cloud_no_nans->points.size ());
 
   // Estimate the normals
   pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> ne;
   ne.setInputCloud (cloud_no_nans);
-  pcl::search::KdTree<pcl::PointXYZ>::Ptr tree_n (new pcl::search::KdTree<pcl::PointXYZ>());
+  pcl::search::KdTree<pcl::PointXYZ>::Ptr tree_n (
+      new pcl::search::KdTree<pcl::PointXYZ> ());
   ne.setSearchMethod (tree_n);
   ne.setRadiusSearch (0.03);
   ne.compute (*cloud_normals);
-  pcl::console::print_highlight ("Normals are computed and size is %lu\n", cloud_normals->points.size ());
+  pcl::console::print_highlight ("Normals are computed and size is %lu\n",
+                                 cloud_normals->points.size ());
 
   // Region growing
   pcl::RegionGrowing<pcl::PointXYZ, pcl::Normal> rg;
@@ -96,23 +102,21 @@ main (int argc, char** av)
   rg.setInputCloud (cloud_no_nans);
   rg.setInputNormals (cloud_normals);
 
-  std::vector <pcl::PointIndices> clusters;
+  std::vector<pcl::PointIndices> clusters;
   pcl::StopWatch watch;
   rg.extract (clusters);
-  pcl::console::print_highlight ("Extraction time: %f\n", watch.getTimeSeconds());
+  pcl::console::print_highlight ("Extraction time: %f\n", watch.getTimeSeconds ());
   cloud_segmented = rg.getColoredCloud ();
 
   // Writing the resulting cloud into a pcd file
   pcl::console::print_highlight ("Number of segments done is %lu\n", clusters.size ());
   writer.write<pcl::PointXYZRGB> ("segment_result.pcd", *cloud_segmented, false);
 
-  if (pcl::console::find_switch (argc, av, "-dump"))
-  {
+  if (pcl::console::find_switch (argc, av, "-dump")) {
     pcl::console::print_highlight ("Writing clusters to clusters.dat\n");
     std::ofstream clusters_file;
     clusters_file.open ("clusters.dat");
-    for (std::size_t i = 0; i < clusters.size (); ++i)
-    {
+    for (std::size_t i = 0; i < clusters.size (); ++i) {
       clusters_file << i << "#" << clusters[i].indices.size () << ": ";
       std::vector<int>::const_iterator pit = clusters[i].indices.begin ();
       clusters_file << *pit;

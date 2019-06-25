@@ -35,11 +35,11 @@
  *
  */
 
-#include <pcl/io/pcd_io.h>
-#include <pcl/io/lzf_image_io.h>
-#include <pcl/console/print.h>
 #include <pcl/console/parse.h>
+#include <pcl/console/print.h>
 #include <pcl/console/time.h>
+#include <pcl/io/lzf_image_io.h>
+#include <pcl/io/pcd_io.h>
 
 using namespace pcl;
 using namespace pcl::io;
@@ -48,17 +48,18 @@ using namespace pcl::console;
 void
 printHelp (int, char **argv)
 {
-  print_error ("Syntax is: %s depth.pclzf rgb.pclzf parameters.xml output.pcd\n", argv[0]);
+  print_error ("Syntax is: %s depth.pclzf rgb.pclzf parameters.xml output.pcd\n",
+               argv[0]);
 }
 
 bool
-loadPCLZF (const std::string &filename_rgb, 
-           const std::string &filename_depth,
+loadPCLZF (const std::string &filename_rgb, const std::string &filename_depth,
            const std::string &filename_params,
            pcl::PointCloud<pcl::PointXYZRGBA> &cloud)
 {
   TicToc tt;
-  print_highlight ("Loading "); print_value ("%s ", filename_rgb.c_str ());
+  print_highlight ("Loading ");
+  print_value ("%s ", filename_rgb.c_str ());
   tt.tic ();
 
   pcl::io::LZFRGB24ImageReader rgb;
@@ -77,53 +78,70 @@ loadPCLZF (const std::string &filename_rgb,
 
   depth.read (filename_depth, cloud);
 
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", cloud.width * cloud.height); print_info (" points]\n");
-  print_info ("Available dimensions: "); print_value ("%s\n", pcl::getFieldsList (cloud).c_str ());
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", cloud.width * cloud.height);
+  print_info (" points]\n");
+  print_info ("Available dimensions: ");
+  print_value ("%s\n", pcl::getFieldsList (cloud).c_str ());
 
   return (true);
 }
 
 bool
-loadPCLZF (const std::string &filename_depth,
-           const std::string &filename_params,
+loadPCLZF (const std::string &filename_depth, const std::string &filename_params,
            pcl::PointCloud<pcl::PointXYZ> &cloud)
 {
   TicToc tt;
-  print_highlight ("Loading "); print_value ("%s ", filename_depth.c_str ());
+  print_highlight ("Loading ");
+  print_value ("%s ", filename_depth.c_str ());
   tt.tic ();
 
   pcl::io::LZFDepth16ImageReader depth;
   depth.readParameters (filename_params);
   depth.read (filename_depth, cloud);
 
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", cloud.width * cloud.height); print_info (" points]\n");
-  print_info ("Available dimensions: "); print_value ("%s\n", pcl::getFieldsList (cloud).c_str ());
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", cloud.width * cloud.height);
+  print_info (" points]\n");
+  print_info ("Available dimensions: ");
+  print_value ("%s\n", pcl::getFieldsList (cloud).c_str ());
 
   return (true);
 }
 
-template <typename T> void
+template <typename T>
+void
 saveCloud (const std::string &filename, const pcl::PointCloud<T> &cloud)
 {
   TicToc tt;
   tt.tic ();
 
-  print_highlight ("Saving "); print_value ("%s ", filename.c_str ());
-  
+  print_highlight ("Saving ");
+  print_value ("%s ", filename.c_str ());
+
   pcl::PCDWriter writer;
   writer.writeBinaryCompressed (filename, cloud);
-  
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", cloud.width * cloud.height); print_info (" points]\n");
+
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", cloud.width * cloud.height);
+  print_info (" points]\n");
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  print_info ("Convert a pair of PCLZF files (depth, rgb) to PCD format. For more information, use: %s -h\n", argv[0]);
+  print_info ("Convert a pair of PCLZF files (depth, rgb) to PCD format. For more "
+              "information, use: %s -h\n",
+              argv[0]);
 
-  if (argc < 3)
-  {
+  if (argc < 3) {
     printHelp (argc, argv);
     return (-1);
   }
@@ -134,37 +152,37 @@ main (int argc, char** argv)
     pcl::console::setVerbosityLevel (pcl::console::L_DEBUG);
 
   // Parse the command line arguments for .pcd and .ply files
-  std::vector<int> pcd_file_indices = parse_file_extension_argument (argc, argv, ".pcd");
-  std::vector<int> pclzf_file_indices = parse_file_extension_argument (argc, argv, ".pclzf");
-  std::vector<int> xml_file_indices = parse_file_extension_argument (argc, argv, ".xml");
-  if (pcd_file_indices.size () != 1 || pclzf_file_indices.empty () || xml_file_indices.size () != 1)
-  {
-    print_error ("Need at least 1 input PCLZF file, one input XML file, and one output PCD file.\n");
+  std::vector<int> pcd_file_indices =
+      parse_file_extension_argument (argc, argv, ".pcd");
+  std::vector<int> pclzf_file_indices =
+      parse_file_extension_argument (argc, argv, ".pclzf");
+  std::vector<int> xml_file_indices =
+      parse_file_extension_argument (argc, argv, ".xml");
+  if (pcd_file_indices.size () != 1 || pclzf_file_indices.empty () ||
+      xml_file_indices.size () != 1) {
+    print_error ("Need at least 1 input PCLZF file, one input XML file, and one output "
+                 "PCD file.\n");
     return (-1);
   }
 
   std::string filename_depth (argv[pclzf_file_indices[0]]);
-  if (pclzf_file_indices.size () > 1)
-  {
+  if (pclzf_file_indices.size () > 1) {
     std::string filename_rgb (argv[pclzf_file_indices[1]]);
 
     // Load the data
     pcl::PointCloud<pcl::PointXYZRGBA> cloud;
-    if (!loadPCLZF (filename_rgb, filename_depth, argv[xml_file_indices[0]], cloud)) 
+    if (!loadPCLZF (filename_rgb, filename_depth, argv[xml_file_indices[0]], cloud))
       return (-1);
 
     // Convert to PCD and save
     saveCloud (argv[pcd_file_indices[0]], cloud);
-  }
-  else
-  {
+  } else {
     // Load the data
     pcl::PointCloud<pcl::PointXYZ> cloud;
-    if (!loadPCLZF (filename_depth, argv[xml_file_indices[0]], cloud)) 
+    if (!loadPCLZF (filename_depth, argv[xml_file_indices[0]], cloud))
       return (-1);
 
     // Convert to PCD and save
     saveCloud (argv[pcd_file_indices[0]], cloud);
   }
 }
-

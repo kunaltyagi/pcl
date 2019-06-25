@@ -44,98 +44,99 @@
 
 namespace pcl
 {
-  /** \brief CRHEstimation estimates the Camera Roll Histogram (CRH) descriptor for a given
-   * point cloud dataset containing XYZ data and normals, as presented in:
+  /** \brief CRHEstimation estimates the Camera Roll Histogram (CRH) descriptor for a
+   * given point cloud dataset containing XYZ data and normals, as presented in:
    *   - CAD-Model Recognition and 6 DOF Pose Estimation
-   *     A. Aldoma, N. Blodow, D. Gossow, S. Gedikli, R.B. Rusu, M. Vincze and G. Bradski
-   *     ICCV 2011, 3D Representation and Recognition (3dRR11) workshop
-   *     Barcelona, Spain, (2011)
+   *     A. Aldoma, N. Blodow, D. Gossow, S. Gedikli, R.B. Rusu, M. Vincze and G.
+   * Bradski ICCV 2011, 3D Representation and Recognition (3dRR11) workshop Barcelona,
+   * Spain, (2011)
    *
-   * The suggested PointOutT is pcl::Histogram<90>. //dc (real) + 44 complex numbers (real, imaginary) + nyquist (real)
+   * The suggested PointOutT is pcl::Histogram<90>. //dc (real) + 44 complex numbers
+   * (real, imaginary) + nyquist (real)
    *
    * \author Aitor Aldoma
    * \ingroup features
    */
-  template<typename PointInT, typename PointNT, typename PointOutT = pcl::Histogram<90> >
+  template <typename PointInT, typename PointNT,
+            typename PointOutT = pcl::Histogram<90>>
   class CRHEstimation : public FeatureFromNormals<PointInT, PointNT, PointOutT>
   {
     public:
-      using Ptr = boost::shared_ptr<CRHEstimation<PointInT, PointNT, PointOutT> >;
-      using ConstPtr = boost::shared_ptr<const CRHEstimation<PointInT, PointNT, PointOutT> >;
+    using Ptr = boost::shared_ptr<CRHEstimation<PointInT, PointNT, PointOutT>>;
+    using ConstPtr =
+        boost::shared_ptr<const CRHEstimation<PointInT, PointNT, PointOutT>>;
 
-      using Feature<PointInT, PointOutT>::feature_name_;
-      using Feature<PointInT, PointOutT>::getClassName;
-      using Feature<PointInT, PointOutT>::indices_;
-      using Feature<PointInT, PointOutT>::k_;
-      using Feature<PointInT, PointOutT>::search_radius_;
-      using Feature<PointInT, PointOutT>::surface_;
-      using FeatureFromNormals<PointInT, PointNT, PointOutT>::normals_;
+    using Feature<PointInT, PointOutT>::feature_name_;
+    using Feature<PointInT, PointOutT>::getClassName;
+    using Feature<PointInT, PointOutT>::indices_;
+    using Feature<PointInT, PointOutT>::k_;
+    using Feature<PointInT, PointOutT>::search_radius_;
+    using Feature<PointInT, PointOutT>::surface_;
+    using FeatureFromNormals<PointInT, PointNT, PointOutT>::normals_;
 
-      using PointCloudOut = typename Feature<PointInT, PointOutT>::PointCloudOut;
+    using PointCloudOut = typename Feature<PointInT, PointOutT>::PointCloudOut;
 
-      /** \brief Constructor. */
-      CRHEstimation () :
-        vpx_ (0), vpy_ (0), vpz_ (0), nbins_ (90)
-      {
-        k_ = 1;
-        feature_name_ = "CRHEstimation";
-      }
-      ;
+    /** \brief Constructor. */
+    CRHEstimation () : vpx_ (0), vpy_ (0), vpz_ (0), nbins_ (90)
+    {
+      k_ = 1;
+      feature_name_ = "CRHEstimation";
+    };
 
-      /** \brief Set the viewpoint.
-       * \param[in] vpx the X coordinate of the viewpoint
-       * \param[in] vpy the Y coordinate of the viewpoint
-       * \param[in] vpz the Z coordinate of the viewpoint
-       */
-      inline void
-      setViewPoint (float vpx, float vpy, float vpz)
-      {
-        vpx_ = vpx;
-        vpy_ = vpy;
-        vpz_ = vpz;
-      }
+    /** \brief Set the viewpoint.
+     * \param[in] vpx the X coordinate of the viewpoint
+     * \param[in] vpy the Y coordinate of the viewpoint
+     * \param[in] vpz the Z coordinate of the viewpoint
+     */
+    inline void
+    setViewPoint (float vpx, float vpy, float vpz)
+    {
+      vpx_ = vpx;
+      vpy_ = vpy;
+      vpz_ = vpz;
+    }
 
-      /** \brief Get the viewpoint. 
-       * \param[out] vpx the X coordinate of the viewpoint
-       * \param[out] vpy the Y coordinate of the viewpoint
-       * \param[out] vpz the Z coordinate of the viewpoint
-       */
-      inline void
-      getViewPoint (float &vpx, float &vpy, float &vpz)
-      {
-        vpx = vpx_;
-        vpy = vpy_;
-        vpz = vpz_;
-      }
+    /** \brief Get the viewpoint.
+     * \param[out] vpx the X coordinate of the viewpoint
+     * \param[out] vpy the Y coordinate of the viewpoint
+     * \param[out] vpz the Z coordinate of the viewpoint
+     */
+    inline void
+    getViewPoint (float &vpx, float &vpy, float &vpz)
+    {
+      vpx = vpx_;
+      vpy = vpy_;
+      vpz = vpz_;
+    }
 
-      inline void
-      setCentroid (Eigen::Vector4f & centroid)
-      {
-        centroid_ = centroid;
-      }
+    inline void
+    setCentroid (Eigen::Vector4f &centroid)
+    {
+      centroid_ = centroid;
+    }
 
     private:
-      /** \brief Values describing the viewpoint ("pinhole" camera model assumed). 
-       * By default, the viewpoint is set to 0,0,0.
-       */
-      float vpx_, vpy_, vpz_;
+    /** \brief Values describing the viewpoint ("pinhole" camera model assumed).
+     * By default, the viewpoint is set to 0,0,0.
+     */
+    float vpx_, vpy_, vpz_;
 
-      /** \brief Number of bins, this should match the Output type */
-      int nbins_;
+    /** \brief Number of bins, this should match the Output type */
+    int nbins_;
 
-      /** \brief Centroid to be used */
-      Eigen::Vector4f centroid_;
+    /** \brief Centroid to be used */
+    Eigen::Vector4f centroid_;
 
-      /** \brief Estimate the CRH histogram at
-       * a set of points given by <setInputCloud (), setIndices ()> using the surface in
-       * setSearchSurface ()
-       *
-       * \param[out] output the resultant point cloud with a CRH histogram
-       */
-      void
-      computeFeature (PointCloudOut &output) override;
+    /** \brief Estimate the CRH histogram at
+     * a set of points given by <setInputCloud (), setIndices ()> using the surface in
+     * setSearchSurface ()
+     *
+     * \param[out] output the resultant point cloud with a CRH histogram
+     */
+    void
+    computeFeature (PointCloudOut &output) override;
   };
-}
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/features/impl/crh.hpp>

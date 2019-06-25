@@ -60,7 +60,7 @@ pcl::EnsensoGrabber::Ptr ensenso_ptr;
 /** @brief Process and/or display Ensenso grabber clouds
  * @param[in] cloud Ensenso cloud */
 void
-grabberCallback (const PointCloudXYZ::Ptr& cloud)
+grabberCallback (const PointCloudXYZ::Ptr &cloud)
 {
   if (!viewer_ptr->wasStopped ())
     viewer_ptr->showCloud (cloud);
@@ -76,18 +76,16 @@ main (void)
   ensenso_ptr->openTcpPort ();
   ensenso_ptr->openDevice ();
 
-  std::function<void
-  (const PointCloudXYZ::Ptr&)> f = boost::bind (&grabberCallback, _1);
+  std::function<void(const PointCloudXYZ::Ptr &)> f =
+      boost::bind (&grabberCallback, _1);
   ensenso_ptr->registerCallback (f);
   ensenso_ptr->start ();
 
-  while (!viewer_ptr->wasStopped ())
-  {
-    std::this_thread::sleep_for(1s);
+  while (!viewer_ptr->wasStopped ()) {
+    std::this_thread::sleep_for (1s);
     std::cout << "FPS: " << ensenso_ptr->getFramesPerSecond () << std::endl;
   }
 
   ensenso_ptr->closeDevice ();
   return (0);
 }
-

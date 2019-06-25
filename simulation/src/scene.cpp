@@ -10,33 +10,33 @@
 namespace pcl
 {
 
-namespace simulation
-{
+  namespace simulation
+  {
 
-void
-Scene::add (Model::Ptr model)
-{
-  models_.push_back(model);
-}
+    void
+    Scene::add (Model::Ptr model)
+    {
+      models_.push_back (model);
+    }
 
-void
-Scene::addCompleteModel (std::vector<Model::Ptr> model)
-{
-  models_.push_back (model[0]);
-}
+    void
+    Scene::addCompleteModel (std::vector<Model::Ptr> model)
+    {
+      models_.push_back (model[0]);
+    }
 
-void
-Scene::draw ()
-{
-  for (auto &model : models_)
-    model->draw ();
-}
+    void
+    Scene::draw ()
+    {
+      for (auto &model : models_)
+        model->draw ();
+    }
 
-void
-Scene::clear ()
-{
-  models_.clear();
-}
+    void
+    Scene::clear ()
+    {
+      models_.clear ();
+    }
 
-} // namespace - simulation
-} // namespace - pcl
+  } // namespace simulation
+} // namespace pcl

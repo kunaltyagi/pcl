@@ -34,22 +34,20 @@
  */
 
 #include <pcl/console/parse.h>
+#include <pcl/filters/approximate_voxel_grid.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 #include <pcl/registration/ndt.h>
-#include <pcl/filters/approximate_voxel_grid.h>
 
-#include <string>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <string>
 #include <vector>
-
 
 using PointType = pcl::PointXYZ;
 using Cloud = pcl::PointCloud<PointType>;
 using CloudConstPtr = Cloud::ConstPtr;
 using CloudPtr = Cloud::Ptr;
-
 
 int
 main (int argc, char **argv)
@@ -73,15 +71,20 @@ main (int argc, char **argv)
   bool display_help = false;
   pcl::console::parse_argument (argc, argv, "--help", display_help);
 
-  if (display_help || argc <= 1)
-  {
+  if (display_help || argc <= 1) {
     std::cout << "Usage: ndt3d [OPTION]... [FILE]..." << std::endl;
-    std::cout << "Registers PCD files using 3D Normal Distributions Transform algorithm" << std::endl << std::endl;
+    std::cout << "Registers PCD files using 3D Normal Distributions Transform algorithm"
+              << std::endl
+              << std::endl;
     std::cout << "  -i          maximum number of iterations" << std::endl;
     std::cout << "  -r          resolution (in meters) of NDT grid" << std::endl;
-    std::cout << "  -s          maximum step size (in meters) of newton optimizer" << std::endl;
-    std::cout << "  -t          transformation epsilon used for termination condition" << std::endl;
-    std::cout << "  -f          voxel filter resolution (in meters) used on source cloud" << std::endl;
+    std::cout << "  -s          maximum step size (in meters) of newton optimizer"
+              << std::endl;
+    std::cout << "  -t          transformation epsilon used for termination condition"
+              << std::endl;
+    std::cout
+        << "  -f          voxel filter resolution (in meters) used on source cloud"
+        << std::endl;
     std::cout << "     --help   display this help and exit" << std::endl;
 
     return (0);
@@ -91,12 +94,12 @@ main (int argc, char **argv)
   pcd_indices = pcl::console::parse_file_extension_argument (argc, argv, ".pcd");
 
   CloudPtr model (new Cloud);
-  if (pcl::io::loadPCDFile (argv[pcd_indices[0]], *model) == -1)
-  {
+  if (pcl::io::loadPCDFile (argv[pcd_indices[0]], *model) == -1) {
     std::cout << "Could not read file" << std::endl;
     return -1;
   }
-  std::cout << argv[pcd_indices[0]] << " width: " << model->width << " height: " << model->height << std::endl;
+  std::cout << argv[pcd_indices[0]] << " width: " << model->width
+            << " height: " << model->height << std::endl;
 
   std::string result_filename (argv[pcd_indices[0]]);
   result_filename = result_filename.substr (result_filename.rfind ('/') + 1);
@@ -108,17 +111,17 @@ main (int argc, char **argv)
   pcl::ApproximateVoxelGrid<PointType> voxel_filter;
   voxel_filter.setLeafSize (filter_res, filter_res, filter_res);
 
-  for (size_t i = 1; i < pcd_indices.size (); i++)
-  {
+  for (size_t i = 1; i < pcd_indices.size (); i++) {
     CloudPtr data (new Cloud);
-    if (pcl::io::loadPCDFile (argv[pcd_indices[i]], *data) == -1)
-    {
+    if (pcl::io::loadPCDFile (argv[pcd_indices[i]], *data) == -1) {
       std::cout << "Could not read file" << std::endl;
       return -1;
     }
-    std::cout << argv[pcd_indices[i]] << " width: " << data->width << " height: " << data->height << std::endl;
+    std::cout << argv[pcd_indices[i]] << " width: " << data->width
+              << " height: " << data->height << std::endl;
 
-    pcl::NormalDistributionsTransform<PointType, PointType> * ndt = new pcl::NormalDistributionsTransform<PointType, PointType>();
+    pcl::NormalDistributionsTransform<PointType, PointType> *ndt =
+        new pcl::NormalDistributionsTransform<PointType, PointType> ();
 
     ndt->setMaximumIterations (iter);
     ndt->setResolution (ndt_res);

@@ -41,22 +41,27 @@
 #include <pcl/cloud_iterator.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointSource, typename PointTarget, typename Scalar> inline void
-pcl::registration::TransformationEstimationPointToPlaneLLSWeighted<PointSource, PointTarget, Scalar>::
-estimateRigidTransformation (const pcl::PointCloud<PointSource> &cloud_src,
-                             const pcl::PointCloud<PointTarget> &cloud_tgt,
-                             Matrix4 &transformation_matrix) const
+template <typename PointSource, typename PointTarget, typename Scalar>
+inline void
+pcl::registration::TransformationEstimationPointToPlaneLLSWeighted<
+    PointSource, PointTarget,
+    Scalar>::estimateRigidTransformation (const pcl::PointCloud<PointSource> &cloud_src,
+                                          const pcl::PointCloud<PointTarget> &cloud_tgt,
+                                          Matrix4 &transformation_matrix) const
 {
   size_t nr_points = cloud_src.points.size ();
-  if (cloud_tgt.points.size () != nr_points)
-  {
-    PCL_ERROR ("[pcl::TransformationEstimationPointToPlaneLLSWeighted::estimateRigidTransformation] Number or points in source (%lu) differs than target (%lu)!\n", nr_points, cloud_tgt.points.size ());
+  if (cloud_tgt.points.size () != nr_points) {
+    PCL_ERROR ("[pcl::TransformationEstimationPointToPlaneLLSWeighted::"
+               "estimateRigidTransformation] Number or points in source (%lu) differs "
+               "than target (%lu)!\n",
+               nr_points, cloud_tgt.points.size ());
     return;
   }
 
-  if (weights_.size () != nr_points)
-  {
-    PCL_ERROR ("[pcl::TransformationEstimationPointToPlaneLLSWeighted::estimateRigidTransformation] Number or weights from the number of correspondences! Use setWeights () to set them.\n");
+  if (weights_.size () != nr_points) {
+    PCL_ERROR ("[pcl::TransformationEstimationPointToPlaneLLSWeighted::"
+               "estimateRigidTransformation] Number or weights from the number of "
+               "correspondences! Use setWeights () to set them.\n");
     return;
   }
 
@@ -67,26 +72,30 @@ estimateRigidTransformation (const pcl::PointCloud<PointSource> &cloud_src,
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointSource, typename PointTarget, typename Scalar> void
-pcl::registration::TransformationEstimationPointToPlaneLLSWeighted<PointSource, PointTarget, Scalar>::
-estimateRigidTransformation (const pcl::PointCloud<PointSource> &cloud_src,
-                             const std::vector<int> &indices_src,
-                             const pcl::PointCloud<PointTarget> &cloud_tgt,
-                             Matrix4 &transformation_matrix) const
+template <typename PointSource, typename PointTarget, typename Scalar>
+void
+pcl::registration::TransformationEstimationPointToPlaneLLSWeighted<
+    PointSource, PointTarget,
+    Scalar>::estimateRigidTransformation (const pcl::PointCloud<PointSource> &cloud_src,
+                                          const std::vector<int> &indices_src,
+                                          const pcl::PointCloud<PointTarget> &cloud_tgt,
+                                          Matrix4 &transformation_matrix) const
 {
   size_t nr_points = indices_src.size ();
-  if (cloud_tgt.points.size () != nr_points)
-  {
-    PCL_ERROR ("[pcl::TransformationEstimationPointToPlaneLLSWeighted::estimateRigidTransformation] Number or points in source (%lu) differs than target (%lu)!\n", indices_src.size (), cloud_tgt.points.size ());
+  if (cloud_tgt.points.size () != nr_points) {
+    PCL_ERROR ("[pcl::TransformationEstimationPointToPlaneLLSWeighted::"
+               "estimateRigidTransformation] Number or points in source (%lu) differs "
+               "than target (%lu)!\n",
+               indices_src.size (), cloud_tgt.points.size ());
     return;
   }
 
-  if (weights_.size () != nr_points)
-  {
-    PCL_ERROR ("[pcl::TransformationEstimationPointToPlaneLLSWeighted::estimateRigidTransformation] Number or weights from the number of correspondences! Use setWeights () to set them.\n");
+  if (weights_.size () != nr_points) {
+    PCL_ERROR ("[pcl::TransformationEstimationPointToPlaneLLSWeighted::"
+               "estimateRigidTransformation] Number or weights from the number of "
+               "correspondences! Use setWeights () to set them.\n");
     return;
   }
-
 
   ConstCloudIterator<PointSource> source_it (cloud_src, indices_src);
   ConstCloudIterator<PointTarget> target_it (cloud_tgt);
@@ -94,26 +103,30 @@ estimateRigidTransformation (const pcl::PointCloud<PointSource> &cloud_src,
   estimateRigidTransformation (source_it, target_it, weights_it, transformation_matrix);
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointSource, typename PointTarget, typename Scalar> inline void
-pcl::registration::TransformationEstimationPointToPlaneLLSWeighted<PointSource, PointTarget, Scalar>::
-estimateRigidTransformation (const pcl::PointCloud<PointSource> &cloud_src,
-                             const std::vector<int> &indices_src,
-                             const pcl::PointCloud<PointTarget> &cloud_tgt,
-                             const std::vector<int> &indices_tgt,
-                             Matrix4 &transformation_matrix) const
+template <typename PointSource, typename PointTarget, typename Scalar>
+inline void
+pcl::registration::TransformationEstimationPointToPlaneLLSWeighted<
+    PointSource, PointTarget,
+    Scalar>::estimateRigidTransformation (const pcl::PointCloud<PointSource> &cloud_src,
+                                          const std::vector<int> &indices_src,
+                                          const pcl::PointCloud<PointTarget> &cloud_tgt,
+                                          const std::vector<int> &indices_tgt,
+                                          Matrix4 &transformation_matrix) const
 {
   size_t nr_points = indices_src.size ();
-  if (indices_tgt.size () != nr_points)
-  {
-    PCL_ERROR ("[pcl::TransformationEstimationPointToPlaneLLSWeighted::estimateRigidTransformation] Number or points in source (%lu) differs than target (%lu)!\n", indices_src.size (), indices_tgt.size ());
+  if (indices_tgt.size () != nr_points) {
+    PCL_ERROR ("[pcl::TransformationEstimationPointToPlaneLLSWeighted::"
+               "estimateRigidTransformation] Number or points in source (%lu) differs "
+               "than target (%lu)!\n",
+               indices_src.size (), indices_tgt.size ());
     return;
   }
 
-  if (weights_.size () != nr_points)
-  {
-    PCL_ERROR ("[pcl::TransformationEstimationPointToPlaneLLSWeighted::estimateRigidTransformation] Number or weights from the number of correspondences! Use setWeights () to set them.\n");
+  if (weights_.size () != nr_points) {
+    PCL_ERROR ("[pcl::TransformationEstimationPointToPlaneLLSWeighted::"
+               "estimateRigidTransformation] Number or weights from the number of "
+               "correspondences! Use setWeights () to set them.\n");
     return;
   }
 
@@ -124,12 +137,14 @@ estimateRigidTransformation (const pcl::PointCloud<PointSource> &cloud_src,
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointSource, typename PointTarget, typename Scalar> inline void
-pcl::registration::TransformationEstimationPointToPlaneLLSWeighted<PointSource, PointTarget, Scalar>::
-estimateRigidTransformation (const pcl::PointCloud<PointSource> &cloud_src,
-                             const pcl::PointCloud<PointTarget> &cloud_tgt,
-                             const pcl::Correspondences &correspondences,
-                             Matrix4 &transformation_matrix) const
+template <typename PointSource, typename PointTarget, typename Scalar>
+inline void
+pcl::registration::TransformationEstimationPointToPlaneLLSWeighted<
+    PointSource, PointTarget,
+    Scalar>::estimateRigidTransformation (const pcl::PointCloud<PointSource> &cloud_src,
+                                          const pcl::PointCloud<PointTarget> &cloud_tgt,
+                                          const pcl::Correspondences &correspondences,
+                                          Matrix4 &transformation_matrix) const
 {
   ConstCloudIterator<PointSource> source_it (cloud_src, correspondences, true);
   ConstCloudIterator<PointTarget> target_it (cloud_tgt, correspondences, false);
@@ -141,23 +156,30 @@ estimateRigidTransformation (const pcl::PointCloud<PointSource> &cloud_src,
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointSource, typename PointTarget, typename Scalar> inline void
-pcl::registration::TransformationEstimationPointToPlaneLLSWeighted<PointSource, PointTarget, Scalar>::
-constructTransformationMatrix (const double & alpha, const double & beta, const double & gamma,
-                               const double & tx,    const double & ty,   const double & tz,
-                               Matrix4 &transformation_matrix) const
+template <typename PointSource, typename PointTarget, typename Scalar>
+inline void
+pcl::registration::TransformationEstimationPointToPlaneLLSWeighted<
+    PointSource, PointTarget,
+    Scalar>::constructTransformationMatrix (const double &alpha, const double &beta,
+                                            const double &gamma, const double &tx,
+                                            const double &ty, const double &tz,
+                                            Matrix4 &transformation_matrix) const
 {
-  // Construct the transformation matrix from rotation and translation 
+  // Construct the transformation matrix from rotation and translation
   transformation_matrix = Eigen::Matrix<Scalar, 4, 4>::Zero ();
-  transformation_matrix (0, 0) = static_cast<Scalar> ( cos (gamma) * cos (beta));
-  transformation_matrix (0, 1) = static_cast<Scalar> (-sin (gamma) * cos (alpha) + cos (gamma) * sin (beta) * sin (alpha));
-  transformation_matrix (0, 2) = static_cast<Scalar> ( sin (gamma) * sin (alpha) + cos (gamma) * sin (beta) * cos (alpha));
-  transformation_matrix (1, 0) = static_cast<Scalar> ( sin (gamma) * cos (beta));
-  transformation_matrix (1, 1) = static_cast<Scalar> ( cos (gamma) * cos (alpha) + sin (gamma) * sin (beta) * sin (alpha));
-  transformation_matrix (1, 2) = static_cast<Scalar> (-cos (gamma) * sin (alpha) + sin (gamma) * sin (beta) * cos (alpha));
+  transformation_matrix (0, 0) = static_cast<Scalar> (cos (gamma) * cos (beta));
+  transformation_matrix (0, 1) = static_cast<Scalar> (
+      -sin (gamma) * cos (alpha) + cos (gamma) * sin (beta) * sin (alpha));
+  transformation_matrix (0, 2) = static_cast<Scalar> (
+      sin (gamma) * sin (alpha) + cos (gamma) * sin (beta) * cos (alpha));
+  transformation_matrix (1, 0) = static_cast<Scalar> (sin (gamma) * cos (beta));
+  transformation_matrix (1, 1) = static_cast<Scalar> (
+      cos (gamma) * cos (alpha) + sin (gamma) * sin (beta) * sin (alpha));
+  transformation_matrix (1, 2) = static_cast<Scalar> (
+      -cos (gamma) * sin (alpha) + sin (gamma) * sin (beta) * cos (alpha));
   transformation_matrix (2, 0) = static_cast<Scalar> (-sin (beta));
-  transformation_matrix (2, 1) = static_cast<Scalar> ( cos (beta) * sin (alpha));
-  transformation_matrix (2, 2) = static_cast<Scalar> ( cos (beta) * cos (alpha));
+  transformation_matrix (2, 1) = static_cast<Scalar> (cos (beta) * sin (alpha));
+  transformation_matrix (2, 2) = static_cast<Scalar> (cos (beta) * cos (alpha));
 
   transformation_matrix (0, 3) = static_cast<Scalar> (tx);
   transformation_matrix (1, 3) = static_cast<Scalar> (ty);
@@ -166,12 +188,15 @@ constructTransformationMatrix (const double & alpha, const double & beta, const 
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointSource, typename PointTarget, typename Scalar> inline void
-pcl::registration::TransformationEstimationPointToPlaneLLSWeighted<PointSource, PointTarget, Scalar>::
-estimateRigidTransformation (ConstCloudIterator<PointSource>& source_it,
-                             ConstCloudIterator<PointTarget>& target_it,
-                             typename std::vector<Scalar>::const_iterator& weights_it,
-                             Matrix4 &transformation_matrix) const
+template <typename PointSource, typename PointTarget, typename Scalar>
+inline void
+pcl::registration::TransformationEstimationPointToPlaneLLSWeighted<
+    PointSource, PointTarget,
+    Scalar>::estimateRigidTransformation (ConstCloudIterator<PointSource> &source_it,
+                                          ConstCloudIterator<PointTarget> &target_it,
+                                          typename std::vector<Scalar>::const_iterator
+                                              &weights_it,
+                                          Matrix4 &transformation_matrix) const
 {
   using Vector6d = Eigen::Matrix<double, 6, 1>;
   using Matrix6d = Eigen::Matrix<double, 6, 6>;
@@ -181,37 +206,31 @@ estimateRigidTransformation (ConstCloudIterator<PointSource>& source_it,
   ATA.setZero ();
   ATb.setZero ();
 
-  while (source_it.isValid () && target_it.isValid ())
-  {
-    if (!std::isfinite (source_it->x) ||
-        !std::isfinite (source_it->y) ||
-        !std::isfinite (source_it->z) ||
-        !std::isfinite (target_it->x) ||
-        !std::isfinite (target_it->y) ||
-        !std::isfinite (target_it->z) ||
-        !std::isfinite (target_it->normal_x) ||
-        !std::isfinite (target_it->normal_y) ||
-        !std::isfinite (target_it->normal_z))
-    {
-      ++ source_it;
-      ++ target_it;
-      ++ weights_it;
+  while (source_it.isValid () && target_it.isValid ()) {
+    if (!std::isfinite (source_it->x) || !std::isfinite (source_it->y) ||
+        !std::isfinite (source_it->z) || !std::isfinite (target_it->x) ||
+        !std::isfinite (target_it->y) || !std::isfinite (target_it->z) ||
+        !std::isfinite (target_it->normal_x) || !std::isfinite (target_it->normal_y) ||
+        !std::isfinite (target_it->normal_z)) {
+      ++source_it;
+      ++target_it;
+      ++weights_it;
       continue;
     }
 
-    const float & sx = source_it->x;
-    const float & sy = source_it->y;
-    const float & sz = source_it->z;
-    const float & dx = target_it->x;
-    const float & dy = target_it->y;
-    const float & dz = target_it->z;
-    const float & nx = target_it->normal[0] * (*weights_it);
-    const float & ny = target_it->normal[1] * (*weights_it);
-    const float & nz = target_it->normal[2] * (*weights_it);
+    const float &sx = source_it->x;
+    const float &sy = source_it->y;
+    const float &sz = source_it->z;
+    const float &dx = target_it->x;
+    const float &dy = target_it->y;
+    const float &dz = target_it->z;
+    const float &nx = target_it->normal[0] * (*weights_it);
+    const float &ny = target_it->normal[1] * (*weights_it);
+    const float &nz = target_it->normal[2] * (*weights_it);
 
-    double a = nz*sy - ny*sz;
-    double b = nx*sz - nz*sx;
-    double c = ny*sx - nx*sy;
+    double a = nz * sy - ny * sz;
+    double b = nx * sz - nz * sx;
+    double c = ny * sx - nx * sy;
 
     //    0  1  2  3  4  5
     //    6  7  8  9 10 11
@@ -242,7 +261,7 @@ estimateRigidTransformation (ConstCloudIterator<PointSource>& source_it,
     ATA.coeffRef (29) += ny * nz;
     ATA.coeffRef (35) += nz * nz;
 
-    double d = nx*dx + ny*dy + nz*dz - nx*sx - ny*sy - nz*sz;
+    double d = nx * dx + ny * dy + nz * dz - nx * sx - ny * sy - nz * sz;
     ATb.coeffRef (0) += a * d;
     ATb.coeffRef (1) += b * d;
     ATb.coeffRef (2) += c * d;
@@ -250,9 +269,9 @@ estimateRigidTransformation (ConstCloudIterator<PointSource>& source_it,
     ATb.coeffRef (4) += ny * d;
     ATb.coeffRef (5) += nz * d;
 
-    ++ source_it;
-    ++ target_it;
-    ++ weights_it;
+    ++source_it;
+    ++target_it;
+    ++weights_it;
   }
 
   ATA.coeffRef (6) = ATA.coeff (1);
@@ -275,6 +294,8 @@ estimateRigidTransformation (ConstCloudIterator<PointSource>& source_it,
   Vector6d x = static_cast<Vector6d> (ATA.inverse () * ATb);
 
   // Construct the transformation matrix from x
-  constructTransformationMatrix (x (0), x (1), x (2), x (3), x (4), x (5), transformation_matrix);
+  constructTransformationMatrix (x (0), x (1), x (2), x (3), x (4), x (5),
+                                 transformation_matrix);
 }
-#endif /* PCL_REGISTRATION_TRANSFORMATION_ESTIMATION_POINT_TO_PLANE_LLS_WEIGHTED_HPP_ */
+#endif /* PCL_REGISTRATION_TRANSFORMATION_ESTIMATION_POINT_TO_PLANE_LLS_WEIGHTED_HPP_  \
+        */

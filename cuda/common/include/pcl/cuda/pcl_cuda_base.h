@@ -40,43 +40,44 @@
 
 namespace pcl
 {
-namespace cuda
-{
-  ///////////////////////////////////////////////////////////////////////////////////////////
-  /** \brief PCL base class. Implements methods that are used by all PCL objects. 
-    */
-  template <typename CloudT>
-  class PCLCUDABase
+  namespace cuda
   {
-    public:
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    /** \brief PCL base class. Implements methods that are used by all PCL objects.
+     */
+    template <typename CloudT>
+    class PCLCUDABase
+    {
+      public:
       using PointCloud = CloudT;
       using PointCloudPtr = typename PointCloud::Ptr;
       using PointCloudConstPtr = typename PointCloud::ConstPtr;
 
       /** \brief Empty constructor. */
-      PCLCUDABase () : input_() {};
+      PCLCUDABase () : input_ (){};
 
       /** \brief Provide a pointer to the input dataset
-        * \param cloud the const boost shared pointer to a PointCloud message
-        */
-      virtual inline void 
-      setInputCloud (const PointCloudConstPtr &cloud) 
-      { 
-        input_ = cloud; 
+       * \param cloud the const boost shared pointer to a PointCloud message
+       */
+      virtual inline void
+      setInputCloud (const PointCloudConstPtr &cloud)
+      {
+        input_ = cloud;
       }
 
       /** \brief Get a pointer to the input host point cloud dataset. */
-      inline PointCloudConstPtr const 
-      getInputCloud () 
-      { 
-        return (input_); 
+      inline PointCloudConstPtr const
+      getInputCloud ()
+      {
+        return (input_);
       }
 
-    protected:
+      protected:
       /** \brief The input point cloud dataset. */
       PointCloudConstPtr input_;
 
-      /** \brief This method should get called before starting the actual computation. */
+      /** \brief This method should get called before starting the actual computation.
+       */
       bool
       initCompute ()
       {
@@ -86,12 +87,13 @@ namespace cuda
         return (true);
       }
 
-      /** \brief This method should get called after finishing the actual computation. */
+      /** \brief This method should get called after finishing the actual computation.
+       */
       bool
       deinitCompute ()
       {
         return (true);
       }
-  };
-} // namespace
-} // namespace
+    };
+  } // namespace cuda
+} // namespace pcl

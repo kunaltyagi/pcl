@@ -50,13 +50,16 @@ namespace pcl
   {
 
     template <template <typename> class Storage, template <typename> class OtherStorage>
-    typename PointCloudAOS<OtherStorage>::Ptr toStorage (const PointCloudAOS<Storage> &input);
-  
-    template <template <typename> class Storage>
-    void toHost (const PointCloudAOS<Storage> &input, PointCloudAOS<Host> &output);
-  
-    template <template <typename> class Storage>
-    void toDevice (const PointCloudAOS<Storage> &input, PointCloudAOS<Device> &output);
+    typename PointCloudAOS<OtherStorage>::Ptr
+    toStorage (const PointCloudAOS<Storage> &input);
 
-  } // namespace
-} // namespace
+    template <template <typename> class Storage>
+    void
+    toHost (const PointCloudAOS<Storage> &input, PointCloudAOS<Host> &output);
+
+    template <template <typename> class Storage>
+    void
+    toDevice (const PointCloudAOS<Storage> &input, PointCloudAOS<Device> &output);
+
+  } // namespace cuda
+} // namespace pcl

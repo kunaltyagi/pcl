@@ -4,7 +4,7 @@
  *  Point Cloud Library (PCL) - www.pointclouds.org
  *  Copyright (c) 2010-2011, Willow Garage, Inc.
  *
- *  All rights reserved. 
+ *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
@@ -37,29 +37,26 @@
 
 #pragma once
 
-#include <vector>
 #include <pcl/pcl_macros.h>
-#include <pcl/recognition/quantized_map.h>
 #include <pcl/recognition/mask_map.h>
+#include <pcl/recognition/quantized_map.h>
 #include <pcl/recognition/region_xy.h>
+#include <vector>
 
 namespace pcl
 {
   class PCL_EXPORTS DOTModality
   {
     public:
+    virtual ~DOTModality (){};
 
-      virtual ~DOTModality () {};
+    // virtual QuantizedMap &
+    // getDominantQuantizedMap () = 0;
 
-      //virtual QuantizedMap &
-      //getDominantQuantizedMap () = 0;
+    virtual QuantizedMap &
+    getDominantQuantizedMap () = 0;
 
-      virtual QuantizedMap &
-      getDominantQuantizedMap () = 0;
-
-      virtual QuantizedMap
-      computeInvariantQuantizedMap (const MaskMap & mask,
-                                    const RegionXY & region) = 0;
-
+    virtual QuantizedMap
+    computeInvariantQuantizedMap (const MaskMap &mask, const RegionXY &region) = 0;
   };
-}
+} // namespace pcl

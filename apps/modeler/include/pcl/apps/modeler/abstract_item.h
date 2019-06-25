@@ -54,30 +54,31 @@ namespace pcl
     class AbstractItem
     {
       public:
-        AbstractItem();
-        ~AbstractItem();
+      AbstractItem ();
+      ~AbstractItem ();
 
-        void
-        showContextMenu(const QPoint* position);
+      void
+      showContextMenu (const QPoint *position);
 
-        virtual std::string
-        getItemName() const = 0;
+      virtual std::string
+      getItemName () const = 0;
 
-        void
-        showPropertyEditor();
+      void
+      showPropertyEditor ();
 
       protected:
-        Ui::MainWindow* ui() const;
+      Ui::MainWindow *
+      ui () const;
 
-        virtual void
-        prepareContextMenu(QMenu* menu) const = 0;
+      virtual void
+      prepareContextMenu (QMenu *menu) const = 0;
 
-        virtual void
-        prepareProperties(ParameterDialog* parameter_dialog) = 0;
+      virtual void
+      prepareProperties (ParameterDialog *parameter_dialog) = 0;
 
-        virtual void
-        setProperties() = 0;
+      virtual void
+      setProperties () = 0;
     };
 
-  }
-}
+  } // namespace modeler
+} // namespace pcl

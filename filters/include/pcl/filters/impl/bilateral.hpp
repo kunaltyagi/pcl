@@ -43,19 +43,20 @@
 #include <pcl/filters/bilateral.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> double
-pcl::BilateralFilter<PointT>::computePointWeight (const int pid, 
+template <typename PointT>
+double
+pcl::BilateralFilter<PointT>::computePointWeight (const int pid,
                                                   const std::vector<int> &indices,
                                                   const std::vector<float> &distances)
 {
   double BF = 0, W = 0;
 
   // For each neighbor
-  for (size_t n_id = 0; n_id < indices.size (); ++n_id)
-  {
+  for (size_t n_id = 0; n_id < indices.size (); ++n_id) {
     int id = indices[n_id];
     // Compute the difference in intensity
-    double intensity_dist = fabs (input_->points[pid].intensity - input_->points[id].intensity);
+    double intensity_dist =
+        fabs (input_->points[pid].intensity - input_->points[id].intensity);
 
     // Compute the Gaussian intensity weights both in Euclidean and in intensity space
     double dist = std::sqrt (distances[n_id]);
@@ -69,18 +70,18 @@ pcl::BilateralFilter<PointT>::computePointWeight (const int pid,
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::BilateralFilter<PointT>::applyFilter (PointCloud &output)
 {
   // Check if sigma_s has been given by the user
-  if (sigma_s_ == 0)
-  {
-    PCL_ERROR ("[pcl::BilateralFilter::applyFilter] Need a sigma_s value given before continuing.\n");
+  if (sigma_s_ == 0) {
+    PCL_ERROR ("[pcl::BilateralFilter::applyFilter] Need a sigma_s value given before "
+               "continuing.\n");
     return;
   }
   // In case a search method has not been given, initialize it using some defaults
-  if (!tree_)
-  {
+  if (!tree_) {
     // For organized datasets, use an OrganizedNeighbor
     if (input_->isOrganized ())
       tree_.reset (new pcl::search::OrganizedNeighbor<PointT> ());
@@ -97,17 +98,17 @@ pcl::BilateralFilter<PointT>::applyFilter (PointCloud &output)
   output = *input_;
 
   // For all the indices given (equal to the entire cloud if none given)
-  for (size_t i = 0; i < indices_->size (); ++i)
-  {
+  for (size_t i = 0; i < indices_->size (); ++i) {
     // Perform a radius search to find the nearest neighbors
     tree_->radiusSearch ((*indices_)[i], sigma_s_ * 2, k_indices, k_distances);
 
     // Overwrite the intensity value with the computed average
-    output.points[(*indices_)[i]].intensity = static_cast<float> (computePointWeight ((*indices_)[i], k_indices, k_distances));
+    output.points[(*indices_)[i]].intensity = static_cast<float> (
+        computePointWeight ((*indices_)[i], k_indices, k_distances));
   }
 }
- 
-#define PCL_INSTANTIATE_BilateralFilter(T) template class PCL_EXPORTS pcl::BilateralFilter<T>;
+
+#define PCL_INSTANTIATE_BilateralFilter(T)                                             \
+  template class PCL_EXPORTS pcl::BilateralFilter<T>;
 
 #endif // PCL_FILTERS_BILATERAL_IMPL_H_
-

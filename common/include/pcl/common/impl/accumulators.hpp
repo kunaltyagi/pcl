@@ -40,11 +40,11 @@
 
 #include <map>
 
-#include <boost/mpl/filter_view.hpp>
-#include <boost/fusion/include/mpl.hpp>
-#include <boost/fusion/include/for_each.hpp>
 #include <boost/fusion/include/as_vector.hpp>
 #include <boost/fusion/include/filter_if.hpp>
+#include <boost/fusion/include/for_each.hpp>
+#include <boost/fusion/include/mpl.hpp>
+#include <boost/mpl/filter_view.hpp>
 
 #include <pcl/point_types.h>
 
@@ -63,8 +63,7 @@ namespace pcl
      * responsibility of the user to make sure that points have corresponding
      * fields. */
 
-    struct AccumulatorXYZ
-    {
+    struct AccumulatorXYZ {
 
       // Requires that point type has x, y, and z fields
       using IsCompatible = pcl::traits::has_xyz<boost::mpl::_1>;
@@ -72,20 +71,26 @@ namespace pcl
       // Storage
       Eigen::Vector3f xyz;
 
-      AccumulatorXYZ () : xyz (Eigen::Vector3f::Zero ()) { }
+      AccumulatorXYZ () : xyz (Eigen::Vector3f::Zero ()) {}
 
-      template <typename PointT> void
-      add (const PointT& t) { xyz += t.getVector3fMap (); }
+      template <typename PointT>
+      void
+      add (const PointT &t)
+      {
+        xyz += t.getVector3fMap ();
+      }
 
-      template <typename PointT> void
-      get (PointT& t, size_t n) const { t.getVector3fMap () = xyz / n; }
+      template <typename PointT>
+      void
+      get (PointT &t, size_t n) const
+      {
+        t.getVector3fMap () = xyz / n;
+      }
 
       EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-
     };
 
-    struct AccumulatorNormal
-    {
+    struct AccumulatorNormal {
 
       // Requires that point type has normal_x, normal_y, and normal_z fields
       using IsCompatible = pcl::traits::has_normal<boost::mpl::_1>;
@@ -93,20 +98,25 @@ namespace pcl
       // Storage
       Eigen::Vector4f normal;
 
-      AccumulatorNormal () : normal (Eigen::Vector4f::Zero ()) { }
+      AccumulatorNormal () : normal (Eigen::Vector4f::Zero ()) {}
 
       // Requires that the normal of the given point is normalized, otherwise it
       // does not make sense to sum it up with the accumulated value.
-      template <typename PointT> void
-      add (const PointT& t) { normal += t.getNormalVector4fMap (); }
-
-      template <typename PointT> void
-      get (PointT& t, size_t) const
+      template <typename PointT>
+      void
+      add (const PointT &t)
       {
-#if EIGEN_VERSION_AT_LEAST (3, 3, 0)
+        normal += t.getNormalVector4fMap ();
+      }
+
+      template <typename PointT>
+      void
+      get (PointT &t, size_t) const
+      {
+#if EIGEN_VERSION_AT_LEAST(3, 3, 0)
         t.getNormalVector4fMap () = normal.normalized ();
 #else
-        if (normal.squaredNorm() > 0)
+        if (normal.squaredNorm () > 0)
           t.getNormalVector4fMap () = normal.normalized ();
         else
           t.getNormalVector4fMap () = Eigen::Vector4f::Zero ();
@@ -114,11 +124,9 @@ namespace pcl
       }
 
       EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-
     };
 
-    struct AccumulatorCurvature
-    {
+    struct AccumulatorCurvature {
 
       // Requires that point type has curvature field
       using IsCompatible = pcl::traits::has_curvature<boost::mpl::_1>;
@@ -126,18 +134,24 @@ namespace pcl
       // Storage
       float curvature;
 
-      AccumulatorCurvature () : curvature (0) { }
+      AccumulatorCurvature () : curvature (0) {}
 
-      template <typename PointT> void
-      add (const PointT& t) { curvature += t.curvature; }
+      template <typename PointT>
+      void
+      add (const PointT &t)
+      {
+        curvature += t.curvature;
+      }
 
-      template <typename PointT> void
-      get (PointT& t, size_t n) const { t.curvature = curvature / n; }
-
+      template <typename PointT>
+      void
+      get (PointT &t, size_t n) const
+      {
+        t.curvature = curvature / n;
+      }
     };
 
-    struct AccumulatorRGBA
-    {
+    struct AccumulatorRGBA {
 
       // Requires that point type has rgb or rgba field
       using IsCompatible = pcl::traits::has_color<boost::mpl::_1>;
@@ -145,10 +159,11 @@ namespace pcl
       // Storage
       float r, g, b, a;
 
-      AccumulatorRGBA () : r (0), g (0), b (0), a (0) { }
+      AccumulatorRGBA () : r (0), g (0), b (0), a (0) {}
 
-      template <typename PointT> void
-      add (const PointT& t)
+      template <typename PointT>
+      void
+      add (const PointT &t)
       {
         r += static_cast<float> (t.r);
         g += static_cast<float> (t.g);
@@ -156,19 +171,17 @@ namespace pcl
         a += static_cast<float> (t.a);
       }
 
-      template <typename PointT> void
-      get (PointT& t, size_t n) const
+      template <typename PointT>
+      void
+      get (PointT &t, size_t n) const
       {
         t.rgba = static_cast<uint32_t> (a / n) << 24 |
                  static_cast<uint32_t> (r / n) << 16 |
-                 static_cast<uint32_t> (g / n) <<  8 |
-                 static_cast<uint32_t> (b / n);
+                 static_cast<uint32_t> (g / n) << 8 | static_cast<uint32_t> (b / n);
       }
-
     };
 
-    struct AccumulatorIntensity
-    {
+    struct AccumulatorIntensity {
 
       // Requires that point type has intensity field
       using IsCompatible = pcl::traits::has_intensity<boost::mpl::_1>;
@@ -176,18 +189,24 @@ namespace pcl
       // Storage
       float intensity;
 
-      AccumulatorIntensity () : intensity (0) { }
+      AccumulatorIntensity () : intensity (0) {}
 
-      template <typename PointT> void
-      add (const PointT& t) { intensity += t.intensity; }
+      template <typename PointT>
+      void
+      add (const PointT &t)
+      {
+        intensity += t.intensity;
+      }
 
-      template <typename PointT> void
-      get (PointT& t, size_t n) const { t.intensity = intensity / n; }
-
+      template <typename PointT>
+      void
+      get (PointT &t, size_t n) const
+      {
+        t.intensity = intensity / n;
+      }
     };
 
-    struct AccumulatorLabel
-    {
+    struct AccumulatorLabel {
 
       // Requires that point type has label field
       using IsCompatible = pcl::traits::has_label<boost::mpl::_1>;
@@ -196,10 +215,11 @@ namespace pcl
       // A better performance may be achieved with a heap structure
       std::map<uint32_t, size_t> labels;
 
-      AccumulatorLabel () { }
+      AccumulatorLabel () {}
 
-      template <typename PointT> void
-      add (const PointT& t)
+      template <typename PointT>
+      void
+      add (const PointT &t)
       {
         auto itr = labels.find (t.label);
         if (itr == labels.end ())
@@ -208,18 +228,17 @@ namespace pcl
           ++itr->second;
       }
 
-      template <typename PointT> void
-      get (PointT& t, size_t) const
+      template <typename PointT>
+      void
+      get (PointT &t, size_t) const
       {
         size_t max = 0;
         for (const auto &label : labels)
-          if (label.second > max)
-          {
+          if (label.second > max) {
             max = label.second;
             t.label = label.first;
           }
       }
-
     };
 
     /* Meta-function that checks if an accumulator is compatible with given
@@ -228,73 +247,62 @@ namespace pcl
     struct IsAccumulatorCompatible {
 
       template <typename AccumulatorT>
-      struct apply : boost::mpl::and_<
-                       boost::mpl::apply<typename AccumulatorT::IsCompatible, Point1T>,
-                       boost::mpl::apply<typename AccumulatorT::IsCompatible, Point2T>
-                     > {};
+      struct apply
+          : boost::mpl::and_<
+                boost::mpl::apply<typename AccumulatorT::IsCompatible, Point1T>,
+                boost::mpl::apply<typename AccumulatorT::IsCompatible, Point2T>> {
+      };
     };
 
     /* Meta-function that creates a Fusion vector of accumulator types that are
      * compatible with a given point type. */
     template <typename PointT>
-    struct Accumulators
-    {
+    struct Accumulators {
       using type =
-        typename boost::fusion::result_of::as_vector<
-          typename boost::mpl::filter_view<
-            boost::mpl::vector<
-              AccumulatorXYZ
-            , AccumulatorNormal
-            , AccumulatorCurvature
-            , AccumulatorRGBA
-            , AccumulatorIntensity
-            , AccumulatorLabel
-            >
-          , IsAccumulatorCompatible<PointT>
-          >
-        >::type;
+          typename boost::fusion::result_of::as_vector<typename boost::mpl::filter_view<
+              boost::mpl::vector<AccumulatorXYZ, AccumulatorNormal,
+                                 AccumulatorCurvature, AccumulatorRGBA,
+                                 AccumulatorIntensity, AccumulatorLabel>,
+              IsAccumulatorCompatible<PointT>>>::type;
     };
 
     /* Fusion function object to invoke point addition on every accumulator in
      * a fusion sequence. */
     template <typename PointT>
-    struct AddPoint
-    {
+    struct AddPoint {
 
-      const PointT& p;
+      const PointT &p;
 
-      AddPoint (const PointT& point) : p (point) { }
+      AddPoint (const PointT &point) : p (point) {}
 
-      template <typename AccumulatorT> void
-      operator () (AccumulatorT& accumulator) const
+      template <typename AccumulatorT>
+      void
+      operator() (AccumulatorT &accumulator) const
       {
         accumulator.add (p);
       }
-
     };
 
     /* Fusion function object to invoke get point on every accumulator in a
      * fusion sequence. */
     template <typename PointT>
-    struct GetPoint
-    {
+    struct GetPoint {
 
-      PointT& p;
+      PointT &p;
       size_t n;
 
-      GetPoint (PointT& point, size_t num) : p (point), n (num) { }
+      GetPoint (PointT &point, size_t num) : p (point), n (num) {}
 
-      template <typename AccumulatorT> void
-      operator () (AccumulatorT& accumulator) const
+      template <typename AccumulatorT>
+      void
+      operator() (AccumulatorT &accumulator) const
       {
         accumulator.get (p, n);
       }
-
     };
 
-  }
+  } // namespace detail
 
-}
+} // namespace pcl
 
 #endif /* PCL_COMMON_IMPL_DETAIL_ACCUMULATORS_HPP */
-

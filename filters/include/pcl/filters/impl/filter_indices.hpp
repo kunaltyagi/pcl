@@ -38,10 +38,11 @@
 #ifndef PCL_FILTERS_IMPL_FILTER_INDICES_H_
 #define PCL_FILTERS_IMPL_FILTER_INDICES_H_
 
-#include <pcl/pcl_macros.h>
 #include <pcl/filters/filter_indices.h>
+#include <pcl/pcl_macros.h>
 
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::removeNaNFromPointCloud (const pcl::PointCloud<PointT> &cloud_in,
                               std::vector<int> &index)
 {
@@ -49,32 +50,28 @@ pcl::removeNaNFromPointCloud (const pcl::PointCloud<PointT> &cloud_in,
   index.resize (cloud_in.points.size ());
 
   // If the data is dense, we don't need to check for NaN
-  if (cloud_in.is_dense)
-  {
+  if (cloud_in.is_dense) {
     for (int j = 0; j < static_cast<int> (cloud_in.points.size ()); ++j)
       index[j] = j;
-  }
-  else
-  {
+  } else {
     int j = 0;
-    for (int i = 0; i < static_cast<int> (cloud_in.points.size ()); ++i)
-    {
-      if (!std::isfinite (cloud_in.points[i].x) || 
-          !std::isfinite (cloud_in.points[i].y) || 
+    for (int i = 0; i < static_cast<int> (cloud_in.points.size ()); ++i) {
+      if (!std::isfinite (cloud_in.points[i].x) ||
+          !std::isfinite (cloud_in.points[i].y) ||
           !std::isfinite (cloud_in.points[i].z))
         continue;
       index[j] = i;
       j++;
     }
-    if (j != static_cast<int> (cloud_in.points.size ()))
-    {
+    if (j != static_cast<int> (cloud_in.points.size ())) {
       // Resize to the correct size
       index.resize (j);
     }
   }
 }
 
-#define PCL_INSTANTIATE_removeNanFromPointCloud(T) template PCL_EXPORTS void pcl::removeNaNFromPointCloud<T>(const pcl::PointCloud<T>&, std::vector<int>&);
+#define PCL_INSTANTIATE_removeNanFromPointCloud(T)                                     \
+  template PCL_EXPORTS void pcl::removeNaNFromPointCloud<T> (                          \
+      const pcl::PointCloud<T> &, std::vector<int> &);
 
-#endif    // PCL_FILTERS_IMPL_FILTER_INDICES_H_
-
+#endif // PCL_FILTERS_IMPL_FILTER_INDICES_H_

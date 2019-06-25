@@ -36,49 +36,60 @@ class vtkVertexBufferObject;
 
 class PCL_EXPORTS vtkVertexBufferObjectMapper : public vtkMapper
 {
-public:
-  static vtkVertexBufferObjectMapper *New();
-  vtkTypeMacro(vtkVertexBufferObjectMapper, vtkMapper);
-//  void PrintSelf(ostream& os, vtkIndent indent);
+  public:
+  static vtkVertexBufferObjectMapper *
+  New ();
+  vtkTypeMacro (vtkVertexBufferObjectMapper, vtkMapper);
+  //  void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description:
   // Implemented by sub classes. Actual rendering is done here.
-//  virtual void RenderPiece(vtkRenderer *ren, vtkActor *act);
+  //  virtual void RenderPiece(vtkRenderer *ren, vtkActor *act);
 
   // Description:
   // This calls RenderPiece (in a for loop is streaming is necessary).
-  void Render(vtkRenderer *ren, vtkActor *act) override;
+  void
+  Render (vtkRenderer *ren, vtkActor *act) override;
 
   // Description:
   // Specify the input data to map.
-  //void SetInputData(vtkPolyData *in);
-  void SetInput(vtkPolyData *input);
-  void SetInput(vtkDataSet *input);
-  vtkPolyData *GetInput();
-  
-  void SetProgram(vtkSmartPointer<vtkShaderProgram2> program)
+  // void SetInputData(vtkPolyData *in);
+  void
+  SetInput (vtkPolyData *input);
+  void
+  SetInput (vtkDataSet *input);
+  vtkPolyData *
+  GetInput ();
+
+  void
+  SetProgram (vtkSmartPointer<vtkShaderProgram2> program)
   {
     this->program = program;
   }
 
   // Description:
   // Update that sets the update piece first.
-  void Update() override;
+  void
+  Update () override;
 
   // Description:
   // Return bounding box (array of six doubles) of data expressed as
   // (xmin,xmax, ymin,ymax, zmin,zmax).
-  double *GetBounds() override;
-  void GetBounds(double bounds[6]) override 
-    {this->Superclass::GetBounds(bounds);};
-  
+  double *
+  GetBounds () override;
+  void
+  GetBounds (double bounds[6]) override
+  {
+    this->Superclass::GetBounds (bounds);
+  };
+
   // Description:
   // Make a shallow copy of this mapper.
-//  void ShallowCopy(vtkAbstractMapper *m);
+  //  void ShallowCopy(vtkAbstractMapper *m);
 
   // Description:
   // Select a data array from the point/cell data
-  // and map it to a generic vertex attribute. 
+  // and map it to a generic vertex attribute.
   // vertexAttributeName is the name of the vertex attribute.
   // dataArrayName is the name of the data array.
   // fieldAssociation indicates when the data array is a point data array or
@@ -86,49 +97,54 @@ public:
   // (vtkDataObject::FIELD_ASSOCIATION_CELLS).
   // componentno indicates which component from the data array must be passed as
   // the attribute. If -1, then all components are passed.
-//  virtual void MapDataArrayToVertexAttribute(
-//    const char* vertexAttributeName,
-//    const char* dataArrayName, int fieldAssociation, int componentno=-1);
-//
-//  virtual void MapDataArrayToMultiTextureAttribute(
-//    int unit,
-//    const char* dataArrayName, int fieldAssociation, int componentno=-1);
+  //  virtual void MapDataArrayToVertexAttribute(
+  //    const char* vertexAttributeName,
+  //    const char* dataArrayName, int fieldAssociation, int componentno=-1);
+  //
+  //  virtual void MapDataArrayToMultiTextureAttribute(
+  //    int unit,
+  //    const char* dataArrayName, int fieldAssociation, int componentno=-1);
 
   // Description:
   // Remove a vertex attribute mapping.
-//  virtual void RemoveVertexAttributeMapping(const char* vertexAttributeName);
-//
-//  // Description:
-//  // Remove all vertex attributes.
-//  virtual void RemoveAllVertexAttributeMappings();
+  //  virtual void RemoveVertexAttributeMapping(const char* vertexAttributeName);
+  //
+  //  // Description:
+  //  // Remove all vertex attributes.
+  //  virtual void RemoveAllVertexAttributeMappings();
 
-protected:  
-  vtkVertexBufferObjectMapper();
-  ~vtkVertexBufferObjectMapper() {};
+  protected:
+  vtkVertexBufferObjectMapper ();
+  ~vtkVertexBufferObjectMapper (){};
 
   // Description:
   // Called in GetBounds(). When this method is called, the consider the input
   // to be updated depending on whether this->Static is set or not. This method
   // simply obtains the bounds from the data-object and returns it.
-  virtual void ComputeBounds();
+  virtual void
+  ComputeBounds ();
 
   vtkVertexBufferObject *vertexVbo;
   vtkVertexBufferObject *indiceVbo;
   vtkVertexBufferObject *colorVbo;
   vtkVertexBufferObject *normalVbo;
-//  vtkVertexBufferObject *normalIndiceVbo;
+  //  vtkVertexBufferObject *normalIndiceVbo;
 
   vtkSmartPointer<vtkShaderProgram2> program;
 
-  int FillInputPortInformation(int, vtkInformation*) override;
+  int
+  FillInputPortInformation (int, vtkInformation *) override;
 
-  void createShaders(vtkOpenGLRenderWindow* win);
-  void createVBOs(vtkRenderWindow* win);
+  void
+  createShaders (vtkOpenGLRenderWindow *win);
+  void
+  createVBOs (vtkRenderWindow *win);
 
   bool initialized;
   bool shadersInitialized;
 
-private:
-  vtkVertexBufferObjectMapper(const vtkVertexBufferObjectMapper&);  // Not implemented.
-  void operator=(const vtkVertexBufferObjectMapper&);  // Not implemented.
+  private:
+  vtkVertexBufferObjectMapper (const vtkVertexBufferObjectMapper &); // Not implemented.
+  void
+  operator= (const vtkVertexBufferObjectMapper &); // Not implemented.
 };

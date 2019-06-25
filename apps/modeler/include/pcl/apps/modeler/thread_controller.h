@@ -50,20 +50,20 @@ namespace pcl
       Q_OBJECT
 
       public:
-        ThreadController();
-        ~ThreadController();
+      ThreadController ();
+      ~ThreadController ();
 
-        bool
-        runWorker(AbstractWorker* worker);
+      bool
+      runWorker (AbstractWorker *worker);
 
       Q_SIGNALS:
-        void
-        prepared();
+      void
+      prepared ();
 
       private Q_SLOTS:
-        void
-        slotOnCloudMeshItemUpdate(CloudMeshItem* cloud_mesh_item);
+      void
+      slotOnCloudMeshItemUpdate (CloudMeshItem *cloud_mesh_item);
     };
 
-  }
-}
+  } // namespace modeler
+} // namespace pcl

@@ -33,45 +33,43 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
- *	
+ *
  */
 
+#include <pcl/common/time.h> //fps calculations
+#include <pcl/console/parse.h>
+#include <pcl/io/openni_camera/openni_driver.h>
+#include <pcl/io/pcd_io.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
-#include <pcl/common/time.h> //fps calculations
-#include <pcl/io/pcd_io.h>
 #include <pcl/visualization/cloud_viewer.h>
 #include <pcl/visualization/image_viewer.h>
-#include <pcl/io/openni_camera/openni_driver.h>
-#include <pcl/console/parse.h>
 #include <pcl/visualization/mouse_event.h>
-#include <vector>
 #include <string>
+#include <vector>
 
 using namespace std;
 
 int
-main (int, char ** argv)
+main (int, char **argv)
 {
   pcl::PCDReader reader;
   pcl::PCLPointCloud2 cloud;
   reader.read (argv[1], cloud);
-  
+
   pcl::PointCloud<pcl::PointXYZ> xyz;
   pcl::fromPCLPointCloud2 (cloud, xyz);
-  
+
   pcl::visualization::ImageViewer depth_image_viewer_;
-  float* img = new float[cloud.width * cloud.height];
+  float *img = new float[cloud.width * cloud.height];
 
   for (int i = 0; i < static_cast<int> (xyz.points.size ()); ++i)
     img[i] = xyz.points[i].z;
-  
-  depth_image_viewer_.showFloatImage (img, 
-                                      cloud.width, cloud.height,
-                                      std::numeric_limits<float>::min (), 
+
+  depth_image_viewer_.showFloatImage (img, cloud.width, cloud.height,
+                                      std::numeric_limits<float>::min (),
                                       // Scale so that the colors look brigher on screen
-                                      std::numeric_limits<float>::max () / 10, 
-                                      true);
+                                      std::numeric_limits<float>::max () / 10, true);
   depth_image_viewer_.spin ();
   return (0);
 }

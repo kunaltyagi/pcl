@@ -5,14 +5,15 @@
  *      Author: Aitor Aldoma
  */
 
-#include "pcl/recognition/face_detection/rf_face_detector_trainer.h"
-#include "pcl/apps/face_detection/openni_frame_source.h"
 #include "pcl/apps/face_detection/face_detection_apps_utils.h"
+#include "pcl/apps/face_detection/openni_frame_source.h"
+#include "pcl/recognition/face_detection/rf_face_detector_trainer.h"
 #include <pcl/common/time.h>
 #include <pcl/console/parse.h>
 #include <pcl/features/integral_image_normal.h>
 
-void run(pcl::RFFaceDetectorTrainer & fdrf, bool heat_map = false, bool show_votes = false)
+void
+run (pcl::RFFaceDetectorTrainer &fdrf, bool heat_map = false, bool show_votes = false)
 {
   OpenNIFrameSource::OpenNIFrameSource camera;
   OpenNIFrameSource::PointCloudPtr scene_vis;
@@ -20,13 +21,12 @@ void run(pcl::RFFaceDetectorTrainer & fdrf, bool heat_map = false, bool show_vot
   pcl::visualization::PCLVisualizer vis ("Face dection");
   vis.addCoordinateSystem (0.1, "global");
 
-  //keyboard callback to stop getting frames and finalize application
-  std::function<void(const pcl::visualization::KeyboardEvent&)> keyboard_cb = boost::bind (&OpenNIFrameSource::OpenNIFrameSource::onKeyboardEvent, &camera,
-      _1);
+  // keyboard callback to stop getting frames and finalize application
+  std::function<void(const pcl::visualization::KeyboardEvent &)> keyboard_cb =
+      boost::bind (&OpenNIFrameSource::OpenNIFrameSource::onKeyboardEvent, &camera, _1);
   vis.registerKeyboardCallback (keyboard_cb);
 
-  while (camera.isActive ())
-  {
+  while (camera.isActive ()) {
     scene_vis = camera.snap ();
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr scene (new pcl::PointCloud<pcl::PointXYZ> ());
@@ -34,9 +34,9 @@ void run(pcl::RFFaceDetectorTrainer & fdrf, bool heat_map = false, bool show_vot
 
     fdrf.setInputCloud (scene);
 
-    if (heat_map)
-    {
-      pcl::PointCloud<pcl::PointXYZI>::Ptr intensity_cloud (new pcl::PointCloud<pcl::PointXYZI>);
+    if (heat_map) {
+      pcl::PointCloud<pcl::PointXYZI>::Ptr intensity_cloud (
+          new pcl::PointCloud<pcl::PointXYZI>);
       fdrf.setFaceHeatMapCloud (intensity_cloud);
     }
 
@@ -44,27 +44,35 @@ void run(pcl::RFFaceDetectorTrainer & fdrf, bool heat_map = false, bool show_vot
       pcl::ScopeTime t ("Detect faces...");
       fdrf.detectFaces ();
     }
-    pcl::visualization::PointCloudColorHandlerRGBField<OpenNIFrameSource::PointT> handler_keypoints (scene_vis);
-    vis.addPointCloud < OpenNIFrameSource::PointT > (scene_vis, handler_keypoints, "scene_cloud");
+    pcl::visualization::PointCloudColorHandlerRGBField<OpenNIFrameSource::PointT>
+        handler_keypoints (scene_vis);
+    vis.addPointCloud<OpenNIFrameSource::PointT> (scene_vis, handler_keypoints,
+                                                  "scene_cloud");
 
-    if (heat_map)
-    {
-      pcl::PointCloud<pcl::PointXYZI>::Ptr intensity_cloud (new pcl::PointCloud<pcl::PointXYZI>);
+    if (heat_map) {
+      pcl::PointCloud<pcl::PointXYZI>::Ptr intensity_cloud (
+          new pcl::PointCloud<pcl::PointXYZI>);
       fdrf.getFaceHeatMap (intensity_cloud);
-      pcl::visualization::PointCloudColorHandlerGenericField < pcl::PointXYZI > handler_keypoints (intensity_cloud, "intensity");
-      vis.addPointCloud < pcl::PointXYZI > (intensity_cloud, handler_keypoints, "heat_map");
+      pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI>
+          handler_keypoints (intensity_cloud, "intensity");
+      vis.addPointCloud<pcl::PointXYZI> (intensity_cloud, handler_keypoints,
+                                         "heat_map");
     }
 
-    if (show_votes)
-    {
-      //display votes_
-      pcl::PointCloud<pcl::PointXYZ>::Ptr votes_cloud (new pcl::PointCloud<pcl::PointXYZ> ());
+    if (show_votes) {
+      // display votes_
+      pcl::PointCloud<pcl::PointXYZ>::Ptr votes_cloud (
+          new pcl::PointCloud<pcl::PointXYZ> ());
       fdrf.getVotes (votes_cloud);
-      pcl::visualization::PointCloudColorHandlerCustom < pcl::PointXYZ > handler_votes (votes_cloud, 255, 0, 0);
-      vis.addPointCloud < pcl::PointXYZ > (votes_cloud, handler_votes, "votes_cloud");
-      vis.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 14, "votes_cloud");
-      vis.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_OPACITY, 0.5, "votes_cloud");
-      vis.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_OPACITY, 0.75, "votes_cloud");
+      pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> handler_votes (
+          votes_cloud, 255, 0, 0);
+      vis.addPointCloud<pcl::PointXYZ> (votes_cloud, handler_votes, "votes_cloud");
+      vis.setPointCloudRenderingProperties (
+          pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 14, "votes_cloud");
+      vis.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_OPACITY,
+                                            0.5, "votes_cloud");
+      vis.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_OPACITY,
+                                            0.75, "votes_cloud");
     }
 
     std::vector<Eigen::VectorXf> heads;
@@ -80,8 +88,11 @@ void run(pcl::RFFaceDetectorTrainer & fdrf, bool heat_map = false, bool show_vot
   }
 }
 
-//./bin/pcl_openni_face_detector -face_threshold 0.99 -max_variance 2400 -min_votes_size 300 -stride_sw 4 -heat_map 0 -show_votes 1 -pose_refinement 1 -icp_iterations 5 -model_path face_model.pcd -forest_fn forest.txt
-int main(int argc, char ** argv)
+//./bin/pcl_openni_face_detector -face_threshold 0.99 -max_variance 2400 -min_votes_size
+//300 -stride_sw 4 -heat_map 0 -show_votes 1 -pose_refinement 1 -icp_iterations 5
+//-model_path face_model.pcd -forest_fn forest.txt
+int
+main (int argc, char **argv)
 {
   int STRIDE_SW = 4;
   int use_normals = 0;
@@ -117,13 +128,12 @@ int main(int argc, char ** argv)
   fdrf.setLeavesFaceThreshold (face_threshold);
   fdrf.setFaceMinVotes (min_votes_size);
 
-  if (pose_refinement_)
-  {
+  if (pose_refinement_) {
     fdrf.setPoseRefinement (true, icp_iterations);
     fdrf.setModelPath (model_path_);
   }
 
-//load forest from file and pass it to the detector
+  // load forest from file and pass it to the detector
   std::filebuf fb;
   fb.open (forest_fn.c_str (), std::ios::in);
   std::istream os (&fb);
@@ -137,4 +147,3 @@ int main(int argc, char ** argv)
 
   run (fdrf, heat_map, show_votes);
 }
-

@@ -1,10 +1,10 @@
 #include <iostream>
+#include <pcl/common/common.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
-#include <pcl/common/common.h>
 
-int 
-main (int, char**)
+int
+main (int, char **)
 {
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
   cloud = pcl::PointCloud<pcl::PointXYZ>::Ptr (new pcl::PointCloud<pcl::PointXYZ>);

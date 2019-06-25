@@ -1,15 +1,15 @@
 /*
  * Software License Agreement (BSD License)
- * 
+ *
  * Point Cloud Library (PCL) - www.pointclouds.org
  * Copyright (c) 2009-2011, Willow Garage, Inc.
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
- * are met: 
- * 
+ * are met:
+ *
  *  * Redistributions of source code must retain the above copyright
  *    notice, this list of conditions and the following disclaimer.
  *  * Redistributions in binary form must reproduce the above
@@ -19,7 +19,7 @@
  *  * Neither the name of the copyright holder(s) nor the names of its
  *    contributors may be used to endorse or promote products derived
  *    from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -43,7 +43,8 @@
 #include <vector>
 
 ///////////////////////////////////////////////////////////////////////////////
-template<typename PointT, typename NormalT> void
+template <typename PointT, typename NormalT>
+void
 pcl::ShadowPoints<PointT, NormalT>::applyFilter (PointCloud &output)
 {
   assert (input_normals_ != NULL);
@@ -53,25 +54,22 @@ pcl::ShadowPoints<PointT, NormalT>::applyFilter (PointCloud &output)
 
   size_t cp = 0;
   size_t ri = 0;
-  for (size_t i = 0; i < input_->points.size (); i++)
-  {
+  for (size_t i = 0; i < input_->points.size (); i++) {
     const NormalT &normal = input_normals_->points[i];
     const PointT &pt = input_->points[i];
-    const float val = fabsf (normal.normal_x * pt.x + normal.normal_y * pt.y + normal.normal_z * pt.z);
+    const float val = fabsf (normal.normal_x * pt.x + normal.normal_y * pt.y +
+                             normal.normal_z * pt.z);
 
-    if ( (val >= threshold_) ^ negative_)
+    if ((val >= threshold_) ^ negative_)
       output.points[cp++] = pt;
-    else 
-    {
+    else {
       if (extract_removed_indices_)
         (*removed_indices_)[ri++] = i;
-      if (keep_organized_)
-      {
+      if (keep_organized_) {
         PointT &pt_new = output.points[cp++] = pt;
         pt_new.x = pt_new.y = pt_new.z = user_filter_value_;
       }
-
-    }  
+    }
   }
   output.points.resize (cp);
   removed_indices_->resize (ri);
@@ -80,7 +78,8 @@ pcl::ShadowPoints<PointT, NormalT>::applyFilter (PointCloud &output)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-template<typename PointT, typename NormalT> void
+template <typename PointT, typename NormalT>
+void
 pcl::ShadowPoints<PointT, NormalT>::applyFilter (std::vector<int> &indices)
 {
   assert (input_normals_ != NULL);
@@ -90,14 +89,15 @@ pcl::ShadowPoints<PointT, NormalT>::applyFilter (std::vector<int> &indices)
 
   unsigned int k = 0;
   unsigned int z = 0;
-  for (std::vector<int>::const_iterator idx = indices_->begin (); idx != indices_->end (); ++idx)
-  {
+  for (std::vector<int>::const_iterator idx = indices_->begin ();
+       idx != indices_->end (); ++idx) {
     const NormalT &normal = input_normals_->points[*idx];
     const PointT &pt = input_->points[*idx];
-    
-    float val = fabsf (normal.normal_x * pt.x + normal.normal_y * pt.y + normal.normal_z * pt.z);
 
-    if ( (val >= threshold_) ^ negative_)
+    float val = fabsf (normal.normal_x * pt.x + normal.normal_y * pt.y +
+                       normal.normal_z * pt.z);
+
+    if ((val >= threshold_) ^ negative_)
       indices[k++] = *idx;
     else if (extract_removed_indices_)
       (*removed_indices_)[z++] = *idx;
@@ -106,6 +106,7 @@ pcl::ShadowPoints<PointT, NormalT>::applyFilter (std::vector<int> &indices)
   removed_indices_->resize (z);
 }
 
-#define PCL_INSTANTIATE_ShadowPoints(T,NT) template class PCL_EXPORTS pcl::ShadowPoints<T,NT>;
+#define PCL_INSTANTIATE_ShadowPoints(T, NT)                                            \
+  template class PCL_EXPORTS pcl::ShadowPoints<T, NT>;
 
-#endif    // PCL_FILTERS_IMPL_NORMAL_SPACE_SAMPLE_H_
+#endif // PCL_FILTERS_IMPL_NORMAL_SPACE_SAMPLE_H_

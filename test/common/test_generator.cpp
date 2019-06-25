@@ -36,15 +36,15 @@
  */
 
 #include <gtest/gtest.h>
+#include <pcl/common/generate.h>
+#include <pcl/common/random.h>
 #include <pcl/pcl_tests.h>
 #include <pcl/point_types.h>
-#include <pcl/common/random.h>
-#include <pcl/common/generate.h>
 
 TEST (UniformCloudGenerator, PointXYZ)
 {
   using namespace pcl::common;
-  CloudGenerator<pcl::PointXYZ,  UniformGenerator<float> > generator;
+  CloudGenerator<pcl::PointXYZ, UniformGenerator<float>> generator;
   UniformGenerator<float>::Parameters x_params;
   generator.setParametersForX (x_params);
   UniformGenerator<float>::Parameters y_params (-1.f, 1.f);
@@ -57,11 +57,9 @@ TEST (UniformCloudGenerator, PointXYZ)
   EXPECT_EQ (result, 0);
   EXPECT_EQ (output.height, 640);
   EXPECT_EQ (output.width, 480);
-  EXPECT_EQ (output.size (), 480*640);
-  for(pcl::PointCloud<pcl::PointXYZ>::const_iterator points_it = output.begin ();
-      points_it != output.end ();
-      ++points_it)
-  {
+  EXPECT_EQ (output.size (), 480 * 640);
+  for (pcl::PointCloud<pcl::PointXYZ>::const_iterator points_it = output.begin ();
+       points_it != output.end (); ++points_it) {
     EXPECT_GE (points_it->x, 0);
     EXPECT_LT (points_it->x, 1);
     EXPECT_GE (points_it->y, -1);
@@ -74,7 +72,7 @@ TEST (UniformCloudGenerator, PointXYZ)
 TEST (UniformCloudGenerator, PointXY)
 {
   using namespace pcl::common;
-  CloudGenerator<pcl::PointXY,  UniformGenerator<float> > generator;
+  CloudGenerator<pcl::PointXY, UniformGenerator<float>> generator;
   UniformGenerator<float>::Parameters x_params;
   generator.setParametersForX (x_params);
   UniformGenerator<float>::Parameters y_params (-1.f, 1.f);
@@ -85,11 +83,9 @@ TEST (UniformCloudGenerator, PointXY)
   EXPECT_EQ (result, 0);
   EXPECT_EQ (output.height, 640);
   EXPECT_EQ (output.width, 480);
-  EXPECT_EQ (output.size (), 480*640);
-  for(pcl::PointCloud<pcl::PointXY>::const_iterator points_it = output.begin ();
-      points_it != output.end ();
-      ++points_it)
-  {
+  EXPECT_EQ (output.size (), 480 * 640);
+  for (pcl::PointCloud<pcl::PointXY>::const_iterator points_it = output.begin ();
+       points_it != output.end (); ++points_it) {
     EXPECT_GE (points_it->x, 0);
     EXPECT_LT (points_it->x, 1);
     EXPECT_GE (points_it->y, -1);
@@ -100,7 +96,7 @@ TEST (UniformCloudGenerator, PointXY)
 TEST (UniformCloudGenerator, Cube)
 {
   using namespace pcl::common;
-  CloudGenerator<pcl::PointXYZ,  UniformGenerator<float> > generator;
+  CloudGenerator<pcl::PointXYZ, UniformGenerator<float>> generator;
   UniformGenerator<float>::Parameters params (-3, 3, 1);
   generator.setParameters (params);
 
@@ -109,11 +105,9 @@ TEST (UniformCloudGenerator, Cube)
   EXPECT_EQ (result, 0);
   EXPECT_EQ (output.height, 640);
   EXPECT_EQ (output.width, 480);
-  EXPECT_EQ (output.size (), 480*640);
-  for(pcl::PointCloud<pcl::PointXYZ>::const_iterator points_it = output.begin ();
-      points_it != output.end ();
-      ++points_it)
-  {
+  EXPECT_EQ (output.size (), 480 * 640);
+  for (pcl::PointCloud<pcl::PointXYZ>::const_iterator points_it = output.begin ();
+       points_it != output.end (); ++points_it) {
     EXPECT_GE (points_it->x, -3);
     EXPECT_LT (points_it->x, 3);
     EXPECT_GE (points_it->y, -3);
@@ -126,7 +120,7 @@ TEST (UniformCloudGenerator, Cube)
 TEST (UniformCloudGenerator, Square)
 {
   using namespace pcl::common;
-  CloudGenerator<pcl::PointXY,  UniformGenerator<float> > generator;
+  CloudGenerator<pcl::PointXY, UniformGenerator<float>> generator;
   UniformGenerator<float>::Parameters params (-3, 3, 1);
   generator.setParameters (params);
 
@@ -135,11 +129,9 @@ TEST (UniformCloudGenerator, Square)
   EXPECT_EQ (result, 0);
   EXPECT_EQ (output.height, 640);
   EXPECT_EQ (output.width, 480);
-  EXPECT_EQ (output.size (), 480*640);
-  for(pcl::PointCloud<pcl::PointXY>::const_iterator points_it = output.begin ();
-      points_it != output.end ();
-      ++points_it)
-  {
+  EXPECT_EQ (output.size (), 480 * 640);
+  for (pcl::PointCloud<pcl::PointXY>::const_iterator points_it = output.begin ();
+       points_it != output.end (); ++points_it) {
     EXPECT_GE (points_it->x, -3);
     EXPECT_LT (points_it->x, 3);
     EXPECT_GE (points_it->y, -3);
@@ -148,7 +140,7 @@ TEST (UniformCloudGenerator, Square)
 }
 
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

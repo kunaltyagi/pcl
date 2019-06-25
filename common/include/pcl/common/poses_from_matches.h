@@ -37,93 +37,101 @@
 
 #pragma once
 
-#include <pcl/pcl_macros.h>
 #include <pcl/correspondence.h>
+#include <pcl/pcl_macros.h>
 
 namespace pcl
 {
   /**
-    * \brief calculate 3D transformation based on point correspondences
-    * \author Bastian Steder
-    * \ingroup common
-    */
+   * \brief calculate 3D transformation based on point correspondences
+   * \author Bastian Steder
+   * \ingroup common
+   */
   class PCL_EXPORTS PosesFromMatches
   {
     public:
-      // =====CONSTRUCTOR & DESTRUCTOR=====
-      //! Constructor
-      PosesFromMatches();
-      //! Destructor
-      ~PosesFromMatches();
-      
-      // =====STRUCTS=====
-      //! Parameters used in this class
-      struct PCL_EXPORTS Parameters
+    // =====CONSTRUCTOR & DESTRUCTOR=====
+    //! Constructor
+    PosesFromMatches ();
+    //! Destructor
+    ~PosesFromMatches ();
+
+    // =====STRUCTS=====
+    //! Parameters used in this class
+    struct PCL_EXPORTS Parameters {
+      Parameters () : max_correspondence_distance_error (0.2f) {}
+      float max_correspondence_distance_error; // As a fraction
+    };
+
+    //! A result of the pose estimation process
+    struct PoseEstimate {
+      PoseEstimate ()
+          : transformation (Eigen::Affine3f::Identity ()), score (0),
+            correspondence_indices (0)
       {
-        Parameters() : max_correspondence_distance_error(0.2f) {}
-        float max_correspondence_distance_error;  // As a fraction
-      };
+      }
 
-      //! A result of the pose estimation process
-      struct PoseEstimate
-      {
-        PoseEstimate () : 
-          transformation (Eigen::Affine3f::Identity ()),
-          score (0),
-          correspondence_indices (0) 
-        {}
+      Eigen::Affine3f transformation; //!< The estimated transformation between the two
+                                      //!< coordinate systems
+      float score; //!< An estimate in [0,1], how good the estimated pose is
+      std::vector<int>
+          correspondence_indices; //!< The indices of the used correspondences
 
-        Eigen::Affine3f transformation;   //!< The estimated transformation between the two coordinate systems
-        float score;                         //!< An estimate in [0,1], how good the estimated pose is 
-        std::vector<int> correspondence_indices;  //!< The indices of the used correspondences
-
-        struct IsBetter 
+      struct IsBetter {
+        bool
+        operator() (const PoseEstimate &pe1, const PoseEstimate &pe2) const
         {
-          bool operator()(const PoseEstimate& pe1, const PoseEstimate& pe2) const { return pe1.score>pe2.score;}
-        };
-        public:
-          EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+          return pe1.score > pe2.score;
+        }
       };
-      
-      // =====TYPEDEFS=====
-      using PoseEstimatesVector = std::vector<PoseEstimate, Eigen::aligned_allocator<PoseEstimate> >;
 
-      
-      // =====STATIC METHODS=====
-      
-      // =====PUBLIC METHODS=====
-      /** Use single 6DOF correspondences to estimate transformations between the coordinate systems.
-       *  Use max_no_of_results=-1 to use all.
-       *  It is assumed, that the correspondences are sorted from good to bad. */
-      void 
-      estimatePosesUsing1Correspondence (
-          const PointCorrespondences6DVector& correspondences,
-          int max_no_of_results, PoseEstimatesVector& pose_estimates) const;
+      public:
+      EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+    };
 
-      /** Use pairs of 6DOF correspondences to estimate transformations between the coordinate systems.
-       *  It is assumed, that the correspondences are sorted from good to bad. */
-      void 
-      estimatePosesUsing2Correspondences (
-          const PointCorrespondences6DVector& correspondences,
-          int max_no_of_tested_combinations, int max_no_of_results,
-          PoseEstimatesVector& pose_estimates) const;
-      
-      /** Use triples of 6DOF correspondences to estimate transformations between the coordinate systems.
-       *  It is assumed, that the correspondences are sorted from good to bad. */
-      void 
-      estimatePosesUsing3Correspondences (
-          const PointCorrespondences6DVector& correspondences,
-          int max_no_of_tested_combinations, int max_no_of_results,
-          PoseEstimatesVector& pose_estimates) const;
+    // =====TYPEDEFS=====
+    using PoseEstimatesVector =
+        std::vector<PoseEstimate, Eigen::aligned_allocator<PoseEstimate>>;
 
-      /// Get a reference to the parameters struct
-      Parameters& 
-      getParameters () { return parameters_; }
+    // =====STATIC METHODS=====
+
+    // =====PUBLIC METHODS=====
+    /** Use single 6DOF correspondences to estimate transformations between the
+     * coordinate systems. Use max_no_of_results=-1 to use all.
+     *  It is assumed, that the correspondences are sorted from good to bad. */
+    void
+    estimatePosesUsing1Correspondence (
+        const PointCorrespondences6DVector &correspondences, int max_no_of_results,
+        PoseEstimatesVector &pose_estimates) const;
+
+    /** Use pairs of 6DOF correspondences to estimate transformations between the
+     * coordinate systems.
+     *  It is assumed, that the correspondences are sorted from good to bad. */
+    void
+    estimatePosesUsing2Correspondences (
+        const PointCorrespondences6DVector &correspondences,
+        int max_no_of_tested_combinations, int max_no_of_results,
+        PoseEstimatesVector &pose_estimates) const;
+
+    /** Use triples of 6DOF correspondences to estimate transformations between the
+     * coordinate systems.
+     *  It is assumed, that the correspondences are sorted from good to bad. */
+    void
+    estimatePosesUsing3Correspondences (
+        const PointCorrespondences6DVector &correspondences,
+        int max_no_of_tested_combinations, int max_no_of_results,
+        PoseEstimatesVector &pose_estimates) const;
+
+    /// Get a reference to the parameters struct
+    Parameters &
+    getParameters ()
+    {
+      return parameters_;
+    }
 
     protected:
-      // =====PROTECTED MEMBER VARIABLES=====
-      Parameters parameters_;
-
+    // =====PROTECTED MEMBER VARIABLES=====
+    Parameters parameters_;
   };
 
-}  // end namespace pcl
+} // end namespace pcl

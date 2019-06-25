@@ -4,7 +4,7 @@
  *  Point Cloud Library (PCL) - www.pointclouds.org
  *  Copyright (c) 2009-2010, Willow Garage, Inc.
  *  Copyright (c) 2012-, Open Perception, Inc.
- *  
+ *
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -44,20 +44,21 @@
 #include <pcl/sample_consensus/sac_model_normal_plane.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT, typename PointNT> void
+template <typename PointT, typename PointNT>
+void
 pcl::SampleConsensusModelNormalPlane<PointT, PointNT>::selectWithinDistance (
-      const Eigen::VectorXf &model_coefficients, const double threshold, std::vector<int> &inliers)
+    const Eigen::VectorXf &model_coefficients, const double threshold,
+    std::vector<int> &inliers)
 {
-  if (!normals_)
-  {
-    PCL_ERROR ("[pcl::SampleConsensusModelNormalPlane::selectWithinDistance] No input dataset containing normals was given!\n");
+  if (!normals_) {
+    PCL_ERROR ("[pcl::SampleConsensusModelNormalPlane::selectWithinDistance] No input "
+               "dataset containing normals was given!\n");
     inliers.clear ();
     return;
   }
 
   // Check if the model is valid given the user constraints
-  if (!isModelValid (model_coefficients))
-  {
+  if (!isModelValid (model_coefficients)) {
     inliers.clear ();
     return;
   }
@@ -71,9 +72,8 @@ pcl::SampleConsensusModelNormalPlane<PointT, PointNT>::selectWithinDistance (
   error_sqr_dists_.resize (indices_->size ());
 
   // Iterate through the 3d points and calculate the distances from them to the plane
-  for (size_t i = 0; i < indices_->size (); ++i)
-  {
-    const PointT  &pt = input_->points[(*indices_)[i]];
+  for (size_t i = 0; i < indices_->size (); ++i) {
+    const PointT &pt = input_->points[(*indices_)[i]];
     const PointNT &nt = normals_->points[(*indices_)[i]];
     // Calculate the distance from the point to the plane normal as the dot product
     // D = (P-A).N/|N|
@@ -85,13 +85,14 @@ pcl::SampleConsensusModelNormalPlane<PointT, PointNT>::selectWithinDistance (
     double d_normal = fabs (getAngle3D (n, coeff));
     d_normal = (std::min) (d_normal, M_PI - d_normal);
 
-    // Weight with the point curvature. On flat surfaces, curvature -> 0, which means the normal will have a higher influence
+    // Weight with the point curvature. On flat surfaces, curvature -> 0, which means
+    // the normal will have a higher influence
     double weight = normal_distance_weight_ * (1.0 - nt.curvature);
 
-    double distance = fabs (weight * d_normal + (1.0 - weight) * d_euclid); 
-    if (distance < threshold)
-    {
-      // Returns the indices of the points whose distances are smaller than the threshold
+    double distance = fabs (weight * d_normal + (1.0 - weight) * d_euclid);
+    if (distance < threshold) {
+      // Returns the indices of the points whose distances are smaller than the
+      // threshold
       inliers[nr_p] = (*indices_)[i];
       error_sqr_dists_[nr_p] = distance;
       ++nr_p;
@@ -102,13 +103,14 @@ pcl::SampleConsensusModelNormalPlane<PointT, PointNT>::selectWithinDistance (
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT, typename PointNT> int
+template <typename PointT, typename PointNT>
+int
 pcl::SampleConsensusModelNormalPlane<PointT, PointNT>::countWithinDistance (
-      const Eigen::VectorXf &model_coefficients, const double threshold) const
+    const Eigen::VectorXf &model_coefficients, const double threshold) const
 {
-  if (!normals_)
-  {
-    PCL_ERROR ("[pcl::SampleConsensusModelNormalPlane::countWithinDistance] No input dataset containing normals was given!\n");
+  if (!normals_) {
+    PCL_ERROR ("[pcl::SampleConsensusModelNormalPlane::countWithinDistance] No input "
+               "dataset containing normals was given!\n");
     return (0);
   }
 
@@ -123,9 +125,8 @@ pcl::SampleConsensusModelNormalPlane<PointT, PointNT>::countWithinDistance (
   int nr_p = 0;
 
   // Iterate through the 3d points and calculate the distances from them to the plane
-  for (size_t i = 0; i < indices_->size (); ++i)
-  {
-    const PointT  &pt = input_->points[(*indices_)[i]];
+  for (size_t i = 0; i < indices_->size (); ++i) {
+    const PointT &pt = input_->points[(*indices_)[i]];
     const PointNT &nt = normals_->points[(*indices_)[i]];
     // Calculate the distance from the point to the plane normal as the dot product
     // D = (P-A).N/|N|
@@ -137,7 +138,8 @@ pcl::SampleConsensusModelNormalPlane<PointT, PointNT>::countWithinDistance (
     double d_normal = fabs (getAngle3D (n, coeff));
     d_normal = (std::min) (d_normal, M_PI - d_normal);
 
-    // Weight with the point curvature. On flat surfaces, curvature -> 0, which means the normal will have a higher influence
+    // Weight with the point curvature. On flat surfaces, curvature -> 0, which means
+    // the normal will have a higher influence
     double weight = normal_distance_weight_ * (1.0 - nt.curvature);
 
     if (fabs (weight * d_normal + (1.0 - weight) * d_euclid) < threshold)
@@ -147,19 +149,19 @@ pcl::SampleConsensusModelNormalPlane<PointT, PointNT>::countWithinDistance (
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT, typename PointNT> void
+template <typename PointT, typename PointNT>
+void
 pcl::SampleConsensusModelNormalPlane<PointT, PointNT>::getDistancesToModel (
-      const Eigen::VectorXf &model_coefficients, std::vector<double> &distances) const
+    const Eigen::VectorXf &model_coefficients, std::vector<double> &distances) const
 {
-  if (!normals_)
-  {
-    PCL_ERROR ("[pcl::SampleConsensusModelNormalPlane::getDistancesToModel] No input dataset containing normals was given!\n");
+  if (!normals_) {
+    PCL_ERROR ("[pcl::SampleConsensusModelNormalPlane::getDistancesToModel] No input "
+               "dataset containing normals was given!\n");
     return;
   }
 
   // Check if the model is valid given the user constraints
-  if (!isModelValid (model_coefficients))
-  {
+  if (!isModelValid (model_coefficients)) {
     distances.clear ();
     return;
   }
@@ -171,9 +173,8 @@ pcl::SampleConsensusModelNormalPlane<PointT, PointNT>::getDistancesToModel (
   distances.resize (indices_->size ());
 
   // Iterate through the 3d points and calculate the distances from them to the plane
-  for (size_t i = 0; i < indices_->size (); ++i)
-  {
-    const PointT  &pt = input_->points[(*indices_)[i]];
+  for (size_t i = 0; i < indices_->size (); ++i) {
+    const PointT &pt = input_->points[(*indices_)[i]];
     const PointNT &nt = normals_->points[(*indices_)[i]];
     // Calculate the distance from the point to the plane normal as the dot product
     // D = (P-A).N/|N|
@@ -185,14 +186,15 @@ pcl::SampleConsensusModelNormalPlane<PointT, PointNT>::getDistancesToModel (
     double d_normal = fabs (getAngle3D (n, coeff));
     d_normal = (std::min) (d_normal, M_PI - d_normal);
 
-    // Weight with the point curvature. On flat surfaces, curvature -> 0, which means the normal will have a higher influence
+    // Weight with the point curvature. On flat surfaces, curvature -> 0, which means
+    // the normal will have a higher influence
     double weight = normal_distance_weight_ * (1.0 - nt.curvature);
 
     distances[i] = fabs (weight * d_normal + (1.0 - weight) * d_euclid);
   }
 }
 
-#define PCL_INSTANTIATE_SampleConsensusModelNormalPlane(PointT, PointNT) template class PCL_EXPORTS pcl::SampleConsensusModelNormalPlane<PointT, PointNT>;
+#define PCL_INSTANTIATE_SampleConsensusModelNormalPlane(PointT, PointNT)               \
+  template class PCL_EXPORTS pcl::SampleConsensusModelNormalPlane<PointT, PointNT>;
 
-#endif    // PCL_SAMPLE_CONSENSUS_IMPL_SAC_MODEL_NORMAL_PLANE_H_
-
+#endif // PCL_SAMPLE_CONSENSUS_IMPL_SAC_MODEL_NORMAL_PLANE_H_

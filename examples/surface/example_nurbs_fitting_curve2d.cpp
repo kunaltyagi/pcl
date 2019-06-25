@@ -1,19 +1,19 @@
 #include <pcl/surface/on_nurbs/fitting_curve_2d.h>
 #include <pcl/surface/on_nurbs/triangulation.h>
 
+#include <pcl/io/pcd_io.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
-#include <pcl/io/pcd_io.h>
 
 #include <pcl/visualization/pcl_visualizer.h>
 
 pcl::visualization::PCLVisualizer viewer ("Curve Fitting 2D");
 
 void
-PointCloud2Vector2d (pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, pcl::on_nurbs::vector_vec2d &data)
+PointCloud2Vector2d (pcl::PointCloud<pcl::PointXYZ>::Ptr cloud,
+                     pcl::on_nurbs::vector_vec2d &data)
 {
-  for (const auto &p : *cloud)
-  {
+  for (const auto &p : *cloud) {
     if (!std::isnan (p.x) && !std::isnan (p.y))
       data.emplace_back (p.x, p.y);
   }
@@ -25,8 +25,7 @@ VisualizeCurve (ON_NurbsCurve &curve, double r, double g, double b, bool show_cp
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
   pcl::on_nurbs::Triangulation::convertCurve2PointCloud (curve, cloud, 8);
 
-  for (size_t i = 0; i < cloud->size () - 1; i++)
-  {
+  for (size_t i = 0; i < cloud->size () - 1; i++) {
     pcl::PointXYZRGB &p1 = cloud->at (i);
     pcl::PointXYZRGB &p2 = cloud->at (i + 1);
     std::ostringstream os;
@@ -34,21 +33,20 @@ VisualizeCurve (ON_NurbsCurve &curve, double r, double g, double b, bool show_cp
     viewer.addLine<pcl::PointXYZRGB> (p1, p2, r, g, b, os.str ());
   }
 
-  if (show_cps)
-  {
+  if (show_cps) {
     pcl::PointCloud<pcl::PointXYZ>::Ptr cps (new pcl::PointCloud<pcl::PointXYZ>);
-    for (int i = 0; i < curve.CVCount (); i++)
-    {
+    for (int i = 0; i < curve.CVCount (); i++) {
       ON_3dPoint cp;
       curve.GetCV (i, cp);
 
       pcl::PointXYZ p;
-      p.x = float (cp.x);
-      p.y = float (cp.y);
-      p.z = float (cp.z);
+      p.x = float(cp.x);
+      p.y = float(cp.y);
+      p.z = float(cp.z);
       cps->push_back (p);
     }
-    pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> handler (cps, 255 * r, 255 * g, 255 * b);
+    pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> handler (
+        cps, 255 * r, 255 * g, 255 * b);
     viewer.addPointCloud<pcl::PointXYZ> (cps, handler, "cloud_cps");
   }
 }
@@ -58,12 +56,9 @@ main (int argc, char *argv[])
 {
   std::string pcd_file;
 
-  if (argc > 1)
-  {
+  if (argc > 1) {
     pcd_file = argv[1];
-  }
-  else
-  {
+  } else {
     printf ("\nUsage: pcl_example_nurbs_fitting_curve pcd-file \n\n");
     printf ("  pcd-file    point-cloud file\n");
     exit (0);
@@ -95,15 +90,16 @@ main (int argc, char *argv[])
   curve_params.rScale = 1.0;
 
   // #################### CURVE FITTING #########################
-  ON_NurbsCurve curve = pcl::on_nurbs::FittingCurve2d::initNurbsPCA (order, &data, n_control_points);
+  ON_NurbsCurve curve =
+      pcl::on_nurbs::FittingCurve2d::initNurbsPCA (order, &data, n_control_points);
 
   pcl::on_nurbs::FittingCurve2d fit (&data, curve);
   fit.assemble (curve_params);
 
   Eigen::Vector2d fix1 (0.1, 0.1);
   Eigen::Vector2d fix2 (1.0, 0.0);
-//  fit.addControlPointConstraint (0, fix1, 100.0);
-//  fit.addControlPointConstraint (curve.CVCount () - 1, fix2, 100.0);
+  //  fit.addControlPointConstraint (0, fix1, 100.0);
+  //  fit.addControlPointConstraint (curve.CVCount () - 1, fix2, 100.0);
 
   fit.solve ();
 
@@ -113,4 +109,3 @@ main (int argc, char *argv[])
 
   return 0;
 }
-

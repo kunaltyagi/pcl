@@ -41,19 +41,18 @@
 #include <iostream>
 
 // PCL
-#include <pcl/point_types.h>
 #include <pcl/filters/extract_indices.h>
+#include <pcl/point_types.h>
 
 int
-main (int, char**)
+main (int, char **)
 {
   using PointType = pcl::PointXYZ;
   using CloudType = pcl::PointCloud<PointType>;
   CloudType::Ptr cloud (new CloudType);
   cloud->is_dense = false;
   PointType p;
-  for (unsigned int i = 0; i < 5; ++i)
-  {
+  for (unsigned int i = 0; i < 5; ++i) {
     p.x = p.y = p.z = static_cast<float> (i);
     cloud->push_back (p);
   }

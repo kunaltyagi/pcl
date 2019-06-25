@@ -41,5 +41,4 @@
 #include <pcl/search/octree.h>
 
 // Instantiations of specific point types
-PCL_INSTANTIATE(Octree, PCL_XYZ_POINT_TYPES)
-
+PCL_INSTANTIATE (Octree, PCL_XYZ_POINT_TYPES)

@@ -34,7 +34,7 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *
  */
-  
+
 #pragma once
 
 #include <pcl/common/common.h>
@@ -46,8 +46,7 @@ namespace pcl
 {
 
   /** \brief Example index for a set of 2D data blocks. */
-  struct MultipleData2DExampleIndex
-  {
+  struct MultipleData2DExampleIndex {
     /** \brief The data set index. */
     int data_set_id;
 
@@ -57,4 +56,4 @@ namespace pcl
     int y;
   };
 
-}
+} // namespace pcl

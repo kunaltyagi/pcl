@@ -3,7 +3,7 @@
  *
  *  Point Cloud Library (PCL) - www.pointclouds.org
  *  Copyright (c) 2012-, Open Perception, Inc.
- *  
+ *
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -35,16 +35,16 @@
  *
  */
 
-#include <pcl/PCLPointCloud2.h>
-#include <pcl/io/auto_io.h>
-#include <pcl/filters/uniform_sampling.h>
-#include <pcl/console/print.h>
-#include <pcl/console/parse.h>
-#include <pcl/console/time.h>
-#include <boost/filesystem.hpp>
 #include <algorithm>
-#include <string>
+#include <boost/filesystem.hpp>
+#include <pcl/PCLPointCloud2.h>
+#include <pcl/console/parse.h>
+#include <pcl/console/print.h>
+#include <pcl/console/time.h>
+#include <pcl/filters/uniform_sampling.h>
+#include <pcl/io/auto_io.h>
 #include <pcl/io/vtk_io.h>
+#include <string>
 
 using namespace std;
 using namespace pcl;
@@ -56,28 +56,37 @@ double default_radius = 0.01;
 void
 printHelp (int, char **argv)
 {
-  print_error ("Syntax is: %s <input_point_cloud> <output_point_cloud> <options>\n", argv[0]);
-  print_info ("This tool rely on the file extensions to guess the good reader/writer.\n");
+  print_error ("Syntax is: %s <input_point_cloud> <output_point_cloud> <options>\n",
+               argv[0]);
+  print_info (
+      "This tool rely on the file extensions to guess the good reader/writer.\n");
   print_info ("The supported extension for the point cloud are .pcd .ply and .vtk\n");
   print_info ("  where options are:\n");
-  print_info ("                     -radius X = use a leaf size of X,X,X to uniformly select 1 point per leaf (default: "); 
-  print_value ("%f", default_radius); print_info (")\n");
+  print_info ("                     -radius X = use a leaf size of X,X,X to uniformly "
+              "select 1 point per leaf (default: ");
+  print_value ("%f", default_radius);
+  print_info (")\n");
 }
 
 bool
 loadCloud (const string &filename, pcl::PCLPointCloud2 &cloud)
 {
   TicToc tt;
-  print_highlight ("Loading "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Loading ");
+  print_value ("%s ", filename.c_str ());
 
   tt.tic ();
   if (pcl::io::load (filename, cloud)) {
     print_error ("Cannot found input file name (%s).\n", filename.c_str ());
     return (false);
   }
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : ");
-  print_value ("%d", cloud.width * cloud.height); print_info (" points]\n");
-  print_info ("Available dimensions: "); print_value ("%s\n", getFieldsList (cloud).c_str ());
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", cloud.width * cloud.height);
+  print_info (" points]\n");
+  print_info ("Available dimensions: ");
+  print_value ("%s\n", getFieldsList (cloud).c_str ());
 
   return (true);
 }
@@ -93,7 +102,7 @@ compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output
   // Estimate
   TicToc tt;
   tt.tic ();
-  
+
   print_highlight (stderr, "Computing ");
 
   UniformSampling<PointXYZ> us;
@@ -102,8 +111,11 @@ compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output
   PointCloud<PointXYZ> output_;
   us.filter (output_);
 
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : ");
-  print_value ("%d", output_.size()); print_info (" points]\n");
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", output_.size ());
+  print_info (" points]\n");
 
   // Convert data back
   toPCLPointCloud2 (output_, output);
@@ -115,37 +127,39 @@ saveCloud (const string &filename, const pcl::PCLPointCloud2 &output)
   TicToc tt;
   tt.tic ();
 
-  print_highlight ("Saving "); print_value ("%s ", filename.c_str ());
+  print_highlight ("Saving ");
+  print_value ("%s ", filename.c_str ());
 
   PCDWriter w_pcd;
   PLYWriter w_ply;
   std::string output_ext = boost::filesystem::extension (filename);
-  std::transform (output_ext.begin (), output_ext.end (), output_ext.begin (), ::tolower);
+  std::transform (output_ext.begin (), output_ext.end (), output_ext.begin (),
+                  ::tolower);
 
-  if (output_ext == ".pcd")
-  {
+  if (output_ext == ".pcd") {
     w_pcd.writeBinaryCompressed (filename, output);
-  }
-  else if (output_ext == ".ply")
-  {
+  } else if (output_ext == ".ply") {
+    w_ply.writeBinary (filename, output);
+  } else if (output_ext == ".vtk") {
     w_ply.writeBinary (filename, output);
   }
-  else if (output_ext == ".vtk")
-  {
-    w_ply.writeBinary (filename, output);
-  }
-  
-  print_info ("[done, "); print_value ("%g", tt.toc ()); print_info (" ms : "); print_value ("%d", output.width * output.height); print_info (" points]\n");
+
+  print_info ("[done, ");
+  print_value ("%g", tt.toc ());
+  print_info (" ms : ");
+  print_value ("%d", output.width * output.height);
+  print_info (" points]\n");
 }
 
 /* ---[ */
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
-  print_info ("Uniform subsampling using UniformSampling. For more information, use: %s -h\n", argv[0]);
+  print_info (
+      "Uniform subsampling using UniformSampling. For more information, use: %s -h\n",
+      argv[0]);
 
-  if (argc < 3)
-  {
+  if (argc < 3) {
     printHelp (argc, argv);
     return (-1);
   }
@@ -153,13 +167,12 @@ main (int argc, char** argv)
   // Parse the command line arguments for .pcd files
   vector<int> p_file_indices;
   vector<std::string> extension;
-  extension.emplace_back(".pcd");
-  extension.emplace_back(".ply");
-  extension.emplace_back(".vtk");
+  extension.emplace_back (".pcd");
+  extension.emplace_back (".ply");
+  extension.emplace_back (".vtk");
   p_file_indices = parse_file_extension_argument (argc, argv, extension);
 
-  if (p_file_indices.size () != 2)
-  {
+  if (p_file_indices.size () != 2) {
     print_error ("Need one input file and one output file to continue.\n");
     return (-1);
   }
@@ -170,8 +183,8 @@ main (int argc, char** argv)
   // Command line parsing
   double radius = default_radius;
   parse_argument (argc, argv, "-radius", radius);
-  print_info ("Extracting uniform points with a leaf size of: "); 
-  print_value ("%f\n", radius); 
+  print_info ("Extracting uniform points with a leaf size of: ");
+  print_value ("%f\n", radius);
 
   // Load the first file
   pcl::PCLPointCloud2::Ptr cloud (new pcl::PCLPointCloud2);

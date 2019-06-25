@@ -34,12 +34,12 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <pcl/point_types.h>
 #include <pcl/impl/instantiate.hpp>
+#include <pcl/point_types.h>
 #include <pcl/recognition/hv/hv_papazov.h>
 #include <pcl/recognition/impl/hv/hv_papazov.hpp>
 
 // Instantiations of specific point types
-PCL_INSTANTIATE_PRODUCT(PapazovHV, ((pcl::PointXYZ))((pcl::PointXYZ)))
-PCL_INSTANTIATE_PRODUCT(PapazovHV, ((pcl::PointXYZRGB))((pcl::PointXYZRGB)))
-PCL_INSTANTIATE_PRODUCT(PapazovHV, ((pcl::PointXYZRGBA))((pcl::PointXYZRGBA)))
+PCL_INSTANTIATE_PRODUCT (PapazovHV, ((pcl::PointXYZ)) ((pcl::PointXYZ)))
+PCL_INSTANTIATE_PRODUCT (PapazovHV, ((pcl::PointXYZRGB)) ((pcl::PointXYZRGB)))
+PCL_INSTANTIATE_PRODUCT (PapazovHV, ((pcl::PointXYZRGBA)) ((pcl::PointXYZRGBA)))

@@ -34,27 +34,22 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *
  */
- 
+
 #pragma once
 
 #include <iostream>
-#include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
 
-struct EIGEN_ALIGN16 PointIntensity
-{
+struct EIGEN_ALIGN16 PointIntensity {
 
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
-  union
-  {
-    struct
-    {
+  union {
+    struct {
       float intensity;
     };
     float data[4];
   };
 };
 
-POINT_CLOUD_REGISTER_POINT_STRUCT(
-    PointIntensity,
-    (float, intensity, intensity) )
+POINT_CLOUD_REGISTER_POINT_STRUCT (PointIntensity, (float, intensity, intensity))

@@ -49,39 +49,39 @@ namespace pcl
     class TicToc
     {
       public:
+      TicToc () {}
 
-        TicToc () {}
+      void
+      tic ()
+      {
+        tictic_ = std::chrono::steady_clock::now ();
+      };
 
-        void 
-        tic ()
-        {
-          tictic_ = std::chrono::steady_clock::now();
-        };
+      inline double
+      toc () const
+      {
+        auto end_time = std::chrono::steady_clock::now ();
+        return std::chrono::duration<double, std::ratio<1, 1000>> (end_time - tictic_)
+            .count ();
+      };
 
-        inline double 
-        toc () const
-        {
-          auto end_time = std::chrono::steady_clock::now();
-          return std::chrono::duration<double, std::ratio<1, 1000>>(end_time - tictic_).count();
-        };
-        
-        inline void 
-        toc_print () const
-        {
-          double milliseconds = toc ();
-          //int minutes = (int) floor ( seconds / 60.0 );
-          //seconds -= minutes * 60.0;
-          //if (minutes != 0)
-          //{
-          //  print_value ("%i", minutes);
-          //  print_info (" minutes, ");
-          //}
-          print_value ("%g", milliseconds);
-          print_info (" ms\n");
-        };
-      
+      inline void
+      toc_print () const
+      {
+        double milliseconds = toc ();
+        // int minutes = (int) floor ( seconds / 60.0 );
+        // seconds -= minutes * 60.0;
+        // if (minutes != 0)
+        //{
+        //  print_value ("%i", minutes);
+        //  print_info (" minutes, ");
+        //}
+        print_value ("%g", milliseconds);
+        print_info (" ms\n");
+      };
+
       private:
-        std::chrono::time_point<std::chrono::steady_clock> tictic_;
+      std::chrono::time_point<std::chrono::steady_clock> tictic_;
     };
-  } 
-}
+  } // namespace console
+} // namespace pcl

@@ -51,172 +51,175 @@ namespace pcl
 {
   namespace recognition
   {
-    template<class NodeData>
+    template <class NodeData>
     class ORRGraph
     {
       public:
-        class Node
+      class Node
+      {
+        public:
+        enum State { ON, OFF, UNDEF };
+
+        Node (int id) : id_ (id), state_ (UNDEF) {}
+
+        virtual ~Node () {}
+
+        inline const std::set<Node *> &
+        getNeighbors () const
         {
-          public:
-            enum State {ON, OFF, UNDEF};
+          return (neighbors_);
+        }
 
-            Node (int id)
-            : id_ (id),
-              state_(UNDEF)
-            {}
+        inline const NodeData &
+        getData () const
+        {
+          return (data_);
+        }
 
-            virtual ~Node (){}
+        inline void
+        setData (const NodeData &data)
+        {
+          data_ = data;
+        }
 
-            inline const std::set<Node*>&
-            getNeighbors () const
-            {
-              return (neighbors_);
-            }
+        inline int
+        getId () const
+        {
+          return (id_);
+        }
 
-            inline const NodeData&
-            getData () const
-            {
-              return (data_);
-            }
+        inline void
+        setId (int id)
+        {
+          id_ = id;
+        }
 
-            inline void
-            setData (const NodeData& data)
-            {
-              data_ = data;
-            }
+        inline void
+        setFitness (int fitness)
+        {
+          fitness_ = fitness;
+        }
 
-            inline int
-            getId () const
-            {
-              return (id_);
-            }
+        static inline bool
+        compare (const Node *a, const Node *b)
+        {
+          return a->fitness_ > b->fitness_;
+        }
 
-            inline void
-            setId (int id)
-            {
-              id_ = id;
-            }
+        friend class ORRGraph;
 
-            inline void
-            setFitness (int fitness)
-            {
-              fitness_ = fitness;
-            }
-
-            static inline bool
-            compare (const Node* a, const Node* b)
-            {
-              return a->fitness_ > b->fitness_;
-            }
-
-            friend class ORRGraph;
-
-          protected:
-            std::set<Node*> neighbors_;
-            NodeData data_;
-            int id_;
-            int fitness_;
-            State state_;
-        };
+        protected:
+        std::set<Node *> neighbors_;
+        NodeData data_;
+        int id_;
+        int fitness_;
+        State state_;
+      };
 
       public:
-        ORRGraph (){}
-        virtual ~ORRGraph (){ this->clear ();}
+      ORRGraph () {}
+      virtual ~ORRGraph () { this->clear (); }
 
-        inline void
-        clear ()
-        {
-          for ( typename std::vector<Node*>::iterator nit = nodes_.begin () ; nit != nodes_.end () ; ++nit )
-            delete *nit;
+      inline void
+      clear ()
+      {
+        for (typename std::vector<Node *>::iterator nit = nodes_.begin ();
+             nit != nodes_.end (); ++nit)
+          delete *nit;
 
-          nodes_.clear ();
+        nodes_.clear ();
+      }
+
+      /** \brief Drops all existing graph nodes and creates 'n' new ones. */
+      inline void
+      resize (int n)
+      {
+        if (!n)
+          return;
+
+        for (typename std::vector<Node *>::iterator nit = nodes_.begin ();
+             nit != nodes_.end (); ++nit)
+          delete *nit;
+
+        nodes_.resize (static_cast<size_t> (n));
+
+        for (int i = 0; i < n; ++i)
+          nodes_[i] = new Node (i);
+      }
+
+      inline void
+      computeMaximalOnOffPartition (std::list<Node *> &on_nodes,
+                                    std::list<Node *> &off_nodes)
+      {
+        std::vector<Node *> sorted_nodes (nodes_.size ());
+        int i = 0;
+
+        // Set all nodes to undefined
+        for (typename std::vector<Node *>::iterator it = nodes_.begin ();
+             it != nodes_.end (); ++it) {
+          sorted_nodes[i++] = *it;
+          (*it)->state_ = Node::UNDEF;
         }
 
-        /** \brief Drops all existing graph nodes and creates 'n' new ones. */
-        inline void
-        resize (int n)
-        {
-          if ( !n )
-            return;
+        // Now sort the nodes according to the fitness
+        std::sort (sorted_nodes.begin (), sorted_nodes.end (), Node::compare);
 
-          for ( typename std::vector<Node*>::iterator nit = nodes_.begin () ; nit != nodes_.end () ; ++nit )
-            delete *nit;
+        // Now run through the array and start switching nodes on and off
+        for (typename std::vector<Node *>::iterator it = sorted_nodes.begin ();
+             it != sorted_nodes.end (); ++it) {
+          // Ignore graph nodes which are already OFF
+          if ((*it)->state_ == Node::OFF)
+            continue;
 
-          nodes_.resize (static_cast<size_t> (n));
+          // Set the node to ON
+          (*it)->state_ = Node::ON;
 
-          for ( int i = 0 ; i < n ; ++i )
-            nodes_[i] = new Node (i);
-        }
-
-        inline void
-        computeMaximalOnOffPartition (std::list<Node*>& on_nodes, std::list<Node*>& off_nodes)
-        {
-          std::vector<Node*> sorted_nodes (nodes_.size ());
-          int i = 0;
-
-          // Set all nodes to undefined
-          for ( typename std::vector<Node*>::iterator it = nodes_.begin () ; it != nodes_.end () ; ++it )
-          {
-            sorted_nodes[i++] = *it;
-            (*it)->state_ = Node::UNDEF;
+          // Set all its neighbors to OFF
+          for (typename std::set<Node *>::iterator neigh = (*it)->neighbors_.begin ();
+               neigh != (*it)->neighbors_.end (); ++neigh) {
+            (*neigh)->state_ = Node::OFF;
+            off_nodes.push_back (*neigh);
           }
 
-          // Now sort the nodes according to the fitness
-          std::sort (sorted_nodes.begin (), sorted_nodes.end (), Node::compare);
-
-          // Now run through the array and start switching nodes on and off
-          for ( typename std::vector<Node*>::iterator it = sorted_nodes.begin () ; it != sorted_nodes.end () ; ++it )
-          {
-            // Ignore graph nodes which are already OFF
-            if ( (*it)->state_ == Node::OFF )
-              continue;
-
-            // Set the node to ON
-            (*it)->state_ = Node::ON;
-
-            // Set all its neighbors to OFF
-            for ( typename std::set<Node*>::iterator neigh = (*it)->neighbors_.begin () ; neigh != (*it)->neighbors_.end () ; ++neigh )
-            {
-              (*neigh)->state_ = Node::OFF;
-              off_nodes.push_back (*neigh);
-            }
-
-            // Output the node
-            on_nodes.push_back (*it);
-          }
+          // Output the node
+          on_nodes.push_back (*it);
         }
+      }
 
-        inline void
-        insertUndirectedEdge (int id1, int id2)
-        {
-          nodes_[id1]->neighbors_.insert (nodes_[id2]);
-          nodes_[id2]->neighbors_.insert (nodes_[id1]);
-        }
+      inline void
+      insertUndirectedEdge (int id1, int id2)
+      {
+        nodes_[id1]->neighbors_.insert (nodes_[id2]);
+        nodes_[id2]->neighbors_.insert (nodes_[id1]);
+      }
 
-        inline void
-        insertDirectedEdge (int id1, int id2)
-        {
-          nodes_[id1]->neighbors_.insert (nodes_[id2]);
-        }
+      inline void
+      insertDirectedEdge (int id1, int id2)
+      {
+        nodes_[id1]->neighbors_.insert (nodes_[id2]);
+      }
 
-        inline void
-        deleteUndirectedEdge (int id1, int id2)
-        {
-          nodes_[id1]->neighbors_.erase (nodes_[id2]);
-          nodes_[id2]->neighbors_.erase (nodes_[id1]);
-        }
+      inline void
+      deleteUndirectedEdge (int id1, int id2)
+      {
+        nodes_[id1]->neighbors_.erase (nodes_[id2]);
+        nodes_[id2]->neighbors_.erase (nodes_[id1]);
+      }
 
-        inline void
-        deleteDirectedEdge (int id1, int id2)
-        {
-          nodes_[id1]->neighbors_.erase (nodes_[id2]);
-        }
+      inline void
+      deleteDirectedEdge (int id1, int id2)
+      {
+        nodes_[id1]->neighbors_.erase (nodes_[id2]);
+      }
 
-        inline typename std::vector<Node*>&
-        getNodes (){ return nodes_;}
+      inline typename std::vector<Node *> &
+      getNodes ()
+      {
+        return nodes_;
+      }
 
       public:
-        typename std::vector<Node*> nodes_;
+      typename std::vector<Node *> nodes_;
     };
   } // namespace recognition
 } // namespace pcl

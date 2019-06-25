@@ -40,40 +40,41 @@
 #ifndef PCL_FILTERS_IMPL_RADIUS_OUTLIER_REMOVAL_H_
 #define PCL_FILTERS_IMPL_RADIUS_OUTLIER_REMOVAL_H_
 
-#include <pcl/filters/radius_outlier_removal.h>
 #include <pcl/common/io.h>
+#include <pcl/filters/radius_outlier_removal.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::RadiusOutlierRemoval<PointT>::applyFilter (PointCloud &output)
 {
   std::vector<int> indices;
-  if (keep_organized_)
-  {
+  if (keep_organized_) {
     bool temp = extract_removed_indices_;
     extract_removed_indices_ = true;
     applyFilterIndices (indices);
     extract_removed_indices_ = temp;
 
     output = *input_;
-    for (int rii = 0; rii < static_cast<int> (removed_indices_->size ()); ++rii)  // rii = removed indices iterator
-      output.points[(*removed_indices_)[rii]].x = output.points[(*removed_indices_)[rii]].y = output.points[(*removed_indices_)[rii]].z = user_filter_value_;
+    for (int rii = 0; rii < static_cast<int> (removed_indices_->size ());
+         ++rii) // rii = removed indices iterator
+      output.points[(*removed_indices_)[rii]].x =
+          output.points[(*removed_indices_)[rii]].y =
+              output.points[(*removed_indices_)[rii]].z = user_filter_value_;
     if (!std::isfinite (user_filter_value_))
       output.is_dense = false;
-  }
-  else
-  {
+  } else {
     applyFilterIndices (indices);
     copyPointCloud (*input_, indices, output);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::RadiusOutlierRemoval<PointT>::applyFilterIndices (std::vector<int> &indices)
 {
-  if (search_radius_ == 0.0)
-  {
+  if (search_radius_ == 0.0) {
     PCL_ERROR ("[pcl::%s::applyFilter] No radius defined!\n", getClassName ().c_str ());
     indices.clear ();
     removed_indices_->clear ();
@@ -81,8 +82,7 @@ pcl::RadiusOutlierRemoval<PointT>::applyFilterIndices (std::vector<int> &indices
   }
 
   // Initialize the search class
-  if (!searcher_)
-  {
+  if (!searcher_) {
     if (input_->isOrganized ())
       searcher_.reset (new pcl::search::OrganizedNeighbor<PointT> ());
     else
@@ -95,44 +95,35 @@ pcl::RadiusOutlierRemoval<PointT>::applyFilterIndices (std::vector<int> &indices
   std::vector<float> nn_dists (indices_->size ());
   indices.resize (indices_->size ());
   removed_indices_->resize (indices_->size ());
-  int oii = 0, rii = 0;  // oii = output indices iterator, rii = removed indices iterator
+  int oii = 0, rii = 0; // oii = output indices iterator, rii = removed indices iterator
 
   // If the data is dense => use nearest-k search
-  if (input_->is_dense)
-  {
+  if (input_->is_dense) {
     // Note: k includes the query point, so is always at least 1
     int mean_k = min_pts_radius_ + 1;
     double nn_dists_max = search_radius_ * search_radius_;
 
-    for (std::vector<int>::const_iterator it = indices_->begin (); it != indices_->end (); ++it)
-    {
+    for (std::vector<int>::const_iterator it = indices_->begin ();
+         it != indices_->end (); ++it) {
       // Perform the nearest-k search
       int k = searcher_->nearestKSearch (*it, mean_k, nn_indices, nn_dists);
 
       // Check the number of neighbors
       // Note: nn_dists is sorted, so check the last item
       bool chk_neighbors = true;
-      if (k == mean_k)
-      {
-        if (negative_)
-        {
+      if (k == mean_k) {
+        if (negative_) {
           chk_neighbors = false;
-          if (nn_dists_max < nn_dists[k-1])
-          {
+          if (nn_dists_max < nn_dists[k - 1]) {
             chk_neighbors = true;
           }
-        }
-        else
-        {
+        } else {
           chk_neighbors = true;
-          if (nn_dists_max < nn_dists[k-1])
-          {
+          if (nn_dists_max < nn_dists[k - 1]) {
             chk_neighbors = false;
           }
         }
-      }
-      else
-      {
+      } else {
         if (negative_)
           chk_neighbors = true;
         else
@@ -141,8 +132,7 @@ pcl::RadiusOutlierRemoval<PointT>::applyFilterIndices (std::vector<int> &indices
 
       // Points having too few neighbors are outliers and are passed to removed indices
       // Unless negative was set, then it's the opposite condition
-      if (!chk_neighbors)
-      {
+      if (!chk_neighbors) {
         if (extract_removed_indices_)
           (*removed_indices_)[rii++] = *it;
         continue;
@@ -153,18 +143,16 @@ pcl::RadiusOutlierRemoval<PointT>::applyFilterIndices (std::vector<int> &indices
     }
   }
   // NaN or Inf values could exist => use radius search
-  else
-  {
-    for (std::vector<int>::const_iterator it = indices_->begin (); it != indices_->end (); ++it)
-    {
+  else {
+    for (std::vector<int>::const_iterator it = indices_->begin ();
+         it != indices_->end (); ++it) {
       // Perform the radius search
       // Note: k includes the query point, so is always at least 1
       int k = searcher_->radiusSearch (*it, search_radius_, nn_indices, nn_dists);
 
       // Points having too few neighbors are outliers and are passed to removed indices
       // Unless negative was set, then it's the opposite condition
-      if ((!negative_ && k <= min_pts_radius_) || (negative_ && k > min_pts_radius_))
-      {
+      if ((!negative_ && k <= min_pts_radius_) || (negative_ && k > min_pts_radius_)) {
         if (extract_removed_indices_)
           (*removed_indices_)[rii++] = *it;
         continue;
@@ -180,7 +168,7 @@ pcl::RadiusOutlierRemoval<PointT>::applyFilterIndices (std::vector<int> &indices
   removed_indices_->resize (rii);
 }
 
-#define PCL_INSTANTIATE_RadiusOutlierRemoval(T) template class PCL_EXPORTS pcl::RadiusOutlierRemoval<T>;
+#define PCL_INSTANTIATE_RadiusOutlierRemoval(T)                                        \
+  template class PCL_EXPORTS pcl::RadiusOutlierRemoval<T>;
 
-#endif  // PCL_FILTERS_IMPL_RADIUS_OUTLIER_REMOVAL_H_
-
+#endif // PCL_FILTERS_IMPL_RADIUS_OUTLIER_REMOVAL_H_

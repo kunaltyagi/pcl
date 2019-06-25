@@ -4,7 +4,7 @@
  *  Point Cloud Library (PCL) - www.pointclouds.org
  *  Copyright (c) 2010-2011, Willow Garage, Inc.
  *
- *  All rights reserved. 
+ *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
@@ -44,13 +44,14 @@
 namespace pcl
 {
 
-  /** \brief Feature that defines a position and quantized value in a specific modality. 
-    * \author Stefan Holzer
-    */
-  struct QuantizedMultiModFeature
-  {
+  /** \brief Feature that defines a position and quantized value in a specific modality.
+   * \author Stefan Holzer
+   */
+  struct QuantizedMultiModFeature {
     /** \brief Constructor. */
-    QuantizedMultiModFeature () : x (0), y (0), modality_index (0), quantized_value (0) {}
+    QuantizedMultiModFeature () : x (0), y (0), modality_index (0), quantized_value (0)
+    {
+    }
 
     /** \brief x-position. */
     int x;
@@ -61,11 +62,11 @@ namespace pcl
     /** \brief the quantized value attached to the feature. */
     unsigned char quantized_value;
 
-    /** \brief Compares whether two features are the same. 
-      * \param[in] base the feature to compare to.
-      */
+    /** \brief Compares whether two features are the same.
+     * \param[in] base the feature to compare to.
+     */
     bool
-    compareForEquality (const QuantizedMultiModFeature & base)
+    compareForEquality (const QuantizedMultiModFeature &base)
     {
       if (base.x != x)
         return false;
@@ -80,9 +81,9 @@ namespace pcl
     }
 
     /** \brief Serializes the object to the specified stream.
-      * \param[out] stream the stream the object will be serialized to. */
-    void 
-    serialize (std::ostream & stream) const
+     * \param[out] stream the stream the object will be serialized to. */
+    void
+    serialize (std::ostream &stream) const
     {
       write (stream, x);
       write (stream, y);
@@ -91,9 +92,9 @@ namespace pcl
     }
 
     /** \brief Deserializes the object from the specified stream.
-      * \param[in] stream the stream the object will be deserialized from. */
-    void 
-    deserialize (std::istream & stream)
+     * \param[in] stream the stream the object will be deserialized from. */
+    void
+    deserialize (std::istream &stream)
     {
       read (stream, x);
       read (stream, y);
@@ -102,11 +103,10 @@ namespace pcl
     }
   };
 
-  /** \brief A multi-modality template constructed from a set of quantized multi-modality features.
-    * \author Stefan Holzer 
-    */
-  struct SparseQuantizedMultiModTemplate
-  {
+  /** \brief A multi-modality template constructed from a set of quantized
+   * multi-modality features. \author Stefan Holzer
+   */
+  struct SparseQuantizedMultiModTemplate {
     /** \brief Constructor. */
     SparseQuantizedMultiModTemplate () {}
 
@@ -117,14 +117,13 @@ namespace pcl
     RegionXY region;
 
     /** \brief Serializes the object to the specified stream.
-      * \param[out] stream the stream the object will be serialized to. */
-    void 
-    serialize (std::ostream & stream) const
+     * \param[out] stream the stream the object will be serialized to. */
+    void
+    serialize (std::ostream &stream) const
     {
       const int num_of_features = static_cast<int> (features.size ());
       write (stream, num_of_features);
-      for (int feature_index = 0; feature_index < num_of_features; ++feature_index)
-      {
+      for (int feature_index = 0; feature_index < num_of_features; ++feature_index) {
         features[feature_index].serialize (stream);
       }
 
@@ -132,17 +131,16 @@ namespace pcl
     }
 
     /** \brief Deserializes the object from the specified stream.
-      * \param[in] stream the stream the object will be deserialized from. */
-    void 
-    deserialize (std::istream & stream)
+     * \param[in] stream the stream the object will be deserialized from. */
+    void
+    deserialize (std::istream &stream)
     {
       features.clear ();
 
       int num_of_features;
       read (stream, num_of_features);
       features.resize (num_of_features);
-      for (int feature_index = 0; feature_index < num_of_features; ++feature_index)
-      {
+      for (int feature_index = 0; feature_index < num_of_features; ++feature_index) {
         features[feature_index].deserialize (stream);
       }
 
@@ -150,4 +148,4 @@ namespace pcl
     }
   };
 
-}
+} // namespace pcl

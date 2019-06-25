@@ -44,23 +44,13 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
-pcl::MomentOfInertiaEstimation<PointT>::MomentOfInertiaEstimation () :
-  is_valid_ (false),
-  step_ (10.0f),
-  point_mass_ (0.0001f),
-  normalize_ (true),
-  mean_value_ (0.0f, 0.0f, 0.0f),
-  major_axis_ (0.0f, 0.0f, 0.0f),
-  middle_axis_ (0.0f, 0.0f, 0.0f),
-  minor_axis_ (0.0f, 0.0f, 0.0f),
-  major_value_ (0.0f),
-  middle_value_ (0.0f),
-  minor_value_ (0.0f),
-  aabb_min_point_ (),
-  aabb_max_point_ (),
-  obb_min_point_ (),
-  obb_max_point_ (),
-  obb_position_ (0.0f, 0.0f, 0.0f)
+pcl::MomentOfInertiaEstimation<PointT>::MomentOfInertiaEstimation ()
+    : is_valid_ (false), step_ (10.0f), point_mass_ (0.0001f), normalize_ (true),
+      mean_value_ (0.0f, 0.0f, 0.0f), major_axis_ (0.0f, 0.0f, 0.0f),
+      middle_axis_ (0.0f, 0.0f, 0.0f), minor_axis_ (0.0f, 0.0f, 0.0f),
+      major_value_ (0.0f), middle_value_ (0.0f), minor_value_ (0.0f),
+      aabb_min_point_ (), aabb_max_point_ (), obb_min_point_ (), obb_max_point_ (),
+      obb_position_ (0.0f, 0.0f, 0.0f)
 {
 }
 
@@ -73,7 +63,8 @@ pcl::MomentOfInertiaEstimation<PointT>::~MomentOfInertiaEstimation ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::MomentOfInertiaEstimation<PointT>::setAngleStep (const float step)
 {
   if (step <= 0.0f)
@@ -85,15 +76,18 @@ pcl::MomentOfInertiaEstimation<PointT>::setAngleStep (const float step)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> float
+template <typename PointT>
+float
 pcl::MomentOfInertiaEstimation<PointT>::getAngleStep () const
 {
   return (step_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
-pcl::MomentOfInertiaEstimation<PointT>::setNormalizePointMassFlag (bool need_to_normalize)
+template <typename PointT>
+void
+pcl::MomentOfInertiaEstimation<PointT>::setNormalizePointMassFlag (
+    bool need_to_normalize)
 {
   normalize_ = need_to_normalize;
 
@@ -101,14 +95,16 @@ pcl::MomentOfInertiaEstimation<PointT>::setNormalizePointMassFlag (bool need_to_
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
+template <typename PointT>
+bool
 pcl::MomentOfInertiaEstimation<PointT>::getNormalizePointMassFlag () const
 {
   return (normalize_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::MomentOfInertiaEstimation<PointT>::setPointMass (const float point_mass)
 {
   if (point_mass <= 0.0f)
@@ -120,65 +116,67 @@ pcl::MomentOfInertiaEstimation<PointT>::setPointMass (const float point_mass)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> float
+template <typename PointT>
+float
 pcl::MomentOfInertiaEstimation<PointT>::getPointMass () const
 {
   return (point_mass_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::MomentOfInertiaEstimation<PointT>::compute ()
 {
   moment_of_inertia_.clear ();
   eccentricity_.clear ();
 
-  if (!initCompute ())
-  {
+  if (!initCompute ()) {
     deinitCompute ();
     return;
   }
 
-  if (normalize_)
-  {
+  if (normalize_) {
     if (!indices_->empty ())
-      point_mass_ = 1.0f / static_cast <float> (indices_->size () * indices_->size ());
+      point_mass_ = 1.0f / static_cast<float> (indices_->size () * indices_->size ());
     else
       point_mass_ = 1.0f;
   }
 
   computeMeanValue ();
 
-  Eigen::Matrix <float, 3, 3> covariance_matrix;
+  Eigen::Matrix<float, 3, 3> covariance_matrix;
   covariance_matrix.setZero ();
   computeCovarianceMatrix (covariance_matrix);
 
-  computeEigenVectors (covariance_matrix, major_axis_, middle_axis_, minor_axis_, major_value_, middle_value_, minor_value_);
+  computeEigenVectors (covariance_matrix, major_axis_, middle_axis_, minor_axis_,
+                       major_value_, middle_value_, minor_value_);
 
   float theta = 0.0f;
-  while (theta <= 90.0f)
-  {
+  while (theta <= 90.0f) {
     float phi = 0.0f;
     Eigen::Vector3f rotated_vector;
     rotateVector (major_axis_, middle_axis_, theta, rotated_vector);
-    while (phi <= 360.0f)
-    {
+    while (phi <= 360.0f) {
       Eigen::Vector3f current_axis;
       rotateVector (rotated_vector, minor_axis_, phi, current_axis);
       current_axis.normalize ();
 
-      //compute moment of inertia for the current axis
-      float current_moment_of_inertia = calculateMomentOfInertia (current_axis, mean_value_);
+      // compute moment of inertia for the current axis
+      float current_moment_of_inertia =
+          calculateMomentOfInertia (current_axis, mean_value_);
       moment_of_inertia_.push_back (current_moment_of_inertia);
 
-      //compute eccentricity for the current plane
-      typename pcl::PointCloud<PointT>::Ptr projected_cloud (new pcl::PointCloud<PointT> ());
+      // compute eccentricity for the current plane
+      typename pcl::PointCloud<PointT>::Ptr projected_cloud (
+          new pcl::PointCloud<PointT> ());
       getProjectedCloud (current_axis, mean_value_, projected_cloud);
-      Eigen::Matrix <float, 3, 3> covariance_matrix;
+      Eigen::Matrix<float, 3, 3> covariance_matrix;
       covariance_matrix.setZero ();
       computeCovarianceMatrix (projected_cloud, covariance_matrix);
       projected_cloud.reset ();
-      float current_eccentricity = computeEccentricity (covariance_matrix, current_axis);
+      float current_eccentricity =
+          computeEccentricity (covariance_matrix, current_axis);
       eccentricity_.push_back (current_eccentricity);
 
       phi += step_;
@@ -194,8 +192,10 @@ pcl::MomentOfInertiaEstimation<PointT>::compute ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
-pcl::MomentOfInertiaEstimation<PointT>::getAABB (PointT& min_point, PointT& max_point) const
+template <typename PointT>
+bool
+pcl::MomentOfInertiaEstimation<PointT>::getAABB (PointT &min_point,
+                                                 PointT &max_point) const
 {
   min_point = aabb_min_point_;
   max_point = aabb_max_point_;
@@ -204,8 +204,11 @@ pcl::MomentOfInertiaEstimation<PointT>::getAABB (PointT& min_point, PointT& max_
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
-pcl::MomentOfInertiaEstimation<PointT>::getOBB (PointT& min_point, PointT& max_point, PointT& position, Eigen::Matrix3f& rotational_matrix) const
+template <typename PointT>
+bool
+pcl::MomentOfInertiaEstimation<PointT>::getOBB (
+    PointT &min_point, PointT &max_point, PointT &position,
+    Eigen::Matrix3f &rotational_matrix) const
 {
   min_point = obb_min_point_;
   max_point = obb_max_point_;
@@ -218,47 +221,55 @@ pcl::MomentOfInertiaEstimation<PointT>::getOBB (PointT& min_point, PointT& max_p
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::MomentOfInertiaEstimation<PointT>::computeOBB ()
 {
-  obb_min_point_.x = std::numeric_limits <float>::max ();
-  obb_min_point_.y = std::numeric_limits <float>::max ();
-  obb_min_point_.z = std::numeric_limits <float>::max ();
+  obb_min_point_.x = std::numeric_limits<float>::max ();
+  obb_min_point_.y = std::numeric_limits<float>::max ();
+  obb_min_point_.z = std::numeric_limits<float>::max ();
 
-  obb_max_point_.x = std::numeric_limits <float>::min ();
-  obb_max_point_.y = std::numeric_limits <float>::min ();
-  obb_max_point_.z = std::numeric_limits <float>::min ();
+  obb_max_point_.x = std::numeric_limits<float>::min ();
+  obb_max_point_.y = std::numeric_limits<float>::min ();
+  obb_max_point_.z = std::numeric_limits<float>::min ();
 
-  unsigned int number_of_points = static_cast <unsigned int> (indices_->size ());
-  for (unsigned int i_point = 0; i_point < number_of_points; i_point++)
-  {
-    float x = (input_->points[(*indices_)[i_point]].x - mean_value_ (0)) * major_axis_ (0) +
-              (input_->points[(*indices_)[i_point]].y - mean_value_ (1)) * major_axis_ (1) +
-              (input_->points[(*indices_)[i_point]].z - mean_value_ (2)) * major_axis_ (2);
-    float y = (input_->points[(*indices_)[i_point]].x - mean_value_ (0)) * middle_axis_ (0) +
-              (input_->points[(*indices_)[i_point]].y - mean_value_ (1)) * middle_axis_ (1) +
-              (input_->points[(*indices_)[i_point]].z - mean_value_ (2)) * middle_axis_ (2);
-    float z = (input_->points[(*indices_)[i_point]].x - mean_value_ (0)) * minor_axis_ (0) +
-              (input_->points[(*indices_)[i_point]].y - mean_value_ (1)) * minor_axis_ (1) +
-              (input_->points[(*indices_)[i_point]].z - mean_value_ (2)) * minor_axis_ (2);
+  unsigned int number_of_points = static_cast<unsigned int> (indices_->size ());
+  for (unsigned int i_point = 0; i_point < number_of_points; i_point++) {
+    float x =
+        (input_->points[(*indices_)[i_point]].x - mean_value_ (0)) * major_axis_ (0) +
+        (input_->points[(*indices_)[i_point]].y - mean_value_ (1)) * major_axis_ (1) +
+        (input_->points[(*indices_)[i_point]].z - mean_value_ (2)) * major_axis_ (2);
+    float y =
+        (input_->points[(*indices_)[i_point]].x - mean_value_ (0)) * middle_axis_ (0) +
+        (input_->points[(*indices_)[i_point]].y - mean_value_ (1)) * middle_axis_ (1) +
+        (input_->points[(*indices_)[i_point]].z - mean_value_ (2)) * middle_axis_ (2);
+    float z =
+        (input_->points[(*indices_)[i_point]].x - mean_value_ (0)) * minor_axis_ (0) +
+        (input_->points[(*indices_)[i_point]].y - mean_value_ (1)) * minor_axis_ (1) +
+        (input_->points[(*indices_)[i_point]].z - mean_value_ (2)) * minor_axis_ (2);
 
-    if (x <= obb_min_point_.x) obb_min_point_.x = x;
-    if (y <= obb_min_point_.y) obb_min_point_.y = y;
-    if (z <= obb_min_point_.z) obb_min_point_.z = z;
+    if (x <= obb_min_point_.x)
+      obb_min_point_.x = x;
+    if (y <= obb_min_point_.y)
+      obb_min_point_.y = y;
+    if (z <= obb_min_point_.z)
+      obb_min_point_.z = z;
 
-    if (x >= obb_max_point_.x) obb_max_point_.x = x;
-    if (y >= obb_max_point_.y) obb_max_point_.y = y;
-    if (z >= obb_max_point_.z) obb_max_point_.z = z;
+    if (x >= obb_max_point_.x)
+      obb_max_point_.x = x;
+    if (y >= obb_max_point_.y)
+      obb_max_point_.y = y;
+    if (z >= obb_max_point_.z)
+      obb_max_point_.z = z;
   }
 
   obb_rotational_matrix_ << major_axis_ (0), middle_axis_ (0), minor_axis_ (0),
-                            major_axis_ (1), middle_axis_ (1), minor_axis_ (1),
-                            major_axis_ (2), middle_axis_ (2), minor_axis_ (2);
+      major_axis_ (1), middle_axis_ (1), minor_axis_ (1), major_axis_ (2),
+      middle_axis_ (2), minor_axis_ (2);
 
-  Eigen::Vector3f shift (
-    (obb_max_point_.x + obb_min_point_.x) / 2.0f,
-    (obb_max_point_.y + obb_min_point_.y) / 2.0f,
-    (obb_max_point_.z + obb_min_point_.z) / 2.0f);
+  Eigen::Vector3f shift ((obb_max_point_.x + obb_min_point_.x) / 2.0f,
+                         (obb_max_point_.y + obb_min_point_.y) / 2.0f,
+                         (obb_max_point_.z + obb_min_point_.z) / 2.0f);
 
   obb_min_point_.x -= shift (0);
   obb_min_point_.y -= shift (1);
@@ -272,8 +283,10 @@ pcl::MomentOfInertiaEstimation<PointT>::computeOBB ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
-pcl::MomentOfInertiaEstimation<PointT>::getEigenValues (float& major, float& middle, float& minor) const
+template <typename PointT>
+bool
+pcl::MomentOfInertiaEstimation<PointT>::getEigenValues (float &major, float &middle,
+                                                        float &minor) const
 {
   major = major_value_;
   middle = middle_value_;
@@ -283,8 +296,11 @@ pcl::MomentOfInertiaEstimation<PointT>::getEigenValues (float& major, float& mid
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
-pcl::MomentOfInertiaEstimation<PointT>::getEigenVectors (Eigen::Vector3f& major, Eigen::Vector3f& middle, Eigen::Vector3f& minor) const
+template <typename PointT>
+bool
+pcl::MomentOfInertiaEstimation<PointT>::getEigenVectors (Eigen::Vector3f &major,
+                                                         Eigen::Vector3f &middle,
+                                                         Eigen::Vector3f &minor) const
 {
   major = major_axis_;
   middle = middle_axis_;
@@ -294,18 +310,23 @@ pcl::MomentOfInertiaEstimation<PointT>::getEigenVectors (Eigen::Vector3f& major,
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
-pcl::MomentOfInertiaEstimation<PointT>::getMomentOfInertia (std::vector <float>& moment_of_inertia) const
+template <typename PointT>
+bool
+pcl::MomentOfInertiaEstimation<PointT>::getMomentOfInertia (
+    std::vector<float> &moment_of_inertia) const
 {
   moment_of_inertia.resize (moment_of_inertia_.size (), 0.0f);
-  std::copy (moment_of_inertia_.begin (), moment_of_inertia_.end (), moment_of_inertia.begin ());
+  std::copy (moment_of_inertia_.begin (), moment_of_inertia_.end (),
+             moment_of_inertia.begin ());
 
   return (is_valid_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
-pcl::MomentOfInertiaEstimation<PointT>::getEccentricity (std::vector <float>& eccentricity) const
+template <typename PointT>
+bool
+pcl::MomentOfInertiaEstimation<PointT>::getEccentricity (
+    std::vector<float> &eccentricity) const
 {
   eccentricity.resize (eccentricity_.size (), 0.0f);
   std::copy (eccentricity_.begin (), eccentricity_.end (), eccentricity.begin ());
@@ -314,35 +335,41 @@ pcl::MomentOfInertiaEstimation<PointT>::getEccentricity (std::vector <float>& ec
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
+template <typename PointT>
+void
 pcl::MomentOfInertiaEstimation<PointT>::computeMeanValue ()
 {
   mean_value_ (0) = 0.0f;
   mean_value_ (1) = 0.0f;
   mean_value_ (2) = 0.0f;
 
-  aabb_min_point_.x = std::numeric_limits <float>::max ();
-  aabb_min_point_.y = std::numeric_limits <float>::max ();
-  aabb_min_point_.z = std::numeric_limits <float>::max ();
+  aabb_min_point_.x = std::numeric_limits<float>::max ();
+  aabb_min_point_.y = std::numeric_limits<float>::max ();
+  aabb_min_point_.z = std::numeric_limits<float>::max ();
 
-  aabb_max_point_.x = -std::numeric_limits <float>::max ();
-  aabb_max_point_.y = -std::numeric_limits <float>::max ();
-  aabb_max_point_.z = -std::numeric_limits <float>::max ();
+  aabb_max_point_.x = -std::numeric_limits<float>::max ();
+  aabb_max_point_.y = -std::numeric_limits<float>::max ();
+  aabb_max_point_.z = -std::numeric_limits<float>::max ();
 
-  unsigned int number_of_points = static_cast <unsigned int> (indices_->size ());
-  for (unsigned int i_point = 0; i_point < number_of_points; i_point++)
-  {
+  unsigned int number_of_points = static_cast<unsigned int> (indices_->size ());
+  for (unsigned int i_point = 0; i_point < number_of_points; i_point++) {
     mean_value_ (0) += input_->points[(*indices_)[i_point]].x;
     mean_value_ (1) += input_->points[(*indices_)[i_point]].y;
     mean_value_ (2) += input_->points[(*indices_)[i_point]].z;
 
-    if (input_->points[(*indices_)[i_point]].x <= aabb_min_point_.x) aabb_min_point_.x = input_->points[(*indices_)[i_point]].x;
-    if (input_->points[(*indices_)[i_point]].y <= aabb_min_point_.y) aabb_min_point_.y = input_->points[(*indices_)[i_point]].y;
-    if (input_->points[(*indices_)[i_point]].z <= aabb_min_point_.z) aabb_min_point_.z = input_->points[(*indices_)[i_point]].z;
+    if (input_->points[(*indices_)[i_point]].x <= aabb_min_point_.x)
+      aabb_min_point_.x = input_->points[(*indices_)[i_point]].x;
+    if (input_->points[(*indices_)[i_point]].y <= aabb_min_point_.y)
+      aabb_min_point_.y = input_->points[(*indices_)[i_point]].y;
+    if (input_->points[(*indices_)[i_point]].z <= aabb_min_point_.z)
+      aabb_min_point_.z = input_->points[(*indices_)[i_point]].z;
 
-    if (input_->points[(*indices_)[i_point]].x >= aabb_max_point_.x) aabb_max_point_.x = input_->points[(*indices_)[i_point]].x;
-    if (input_->points[(*indices_)[i_point]].y >= aabb_max_point_.y) aabb_max_point_.y = input_->points[(*indices_)[i_point]].y;
-    if (input_->points[(*indices_)[i_point]].z >= aabb_max_point_.z) aabb_max_point_.z = input_->points[(*indices_)[i_point]].z;
+    if (input_->points[(*indices_)[i_point]].x >= aabb_max_point_.x)
+      aabb_max_point_.x = input_->points[(*indices_)[i_point]].x;
+    if (input_->points[(*indices_)[i_point]].y >= aabb_max_point_.y)
+      aabb_max_point_.y = input_->points[(*indices_)[i_point]].y;
+    if (input_->points[(*indices_)[i_point]].z >= aabb_max_point_.z)
+      aabb_max_point_.z = input_->points[(*indices_)[i_point]].z;
   }
 
   if (number_of_points == 0)
@@ -354,15 +381,17 @@ pcl::MomentOfInertiaEstimation<PointT>::computeMeanValue ()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
-pcl::MomentOfInertiaEstimation<PointT>::computeCovarianceMatrix (Eigen::Matrix <float, 3, 3>& covariance_matrix) const
+template <typename PointT>
+void
+pcl::MomentOfInertiaEstimation<PointT>::computeCovarianceMatrix (
+    Eigen::Matrix<float, 3, 3> &covariance_matrix) const
 {
   covariance_matrix.setZero ();
 
-  unsigned int number_of_points = static_cast <unsigned int> (indices_->size ());
-  float factor = 1.0f / static_cast <float> ((number_of_points - 1 > 0)?(number_of_points - 1):1);
-  for (unsigned int i_point = 0; i_point < number_of_points; i_point++)
-  {
+  unsigned int number_of_points = static_cast<unsigned int> (indices_->size ());
+  float factor = 1.0f / static_cast<float> (
+                            (number_of_points - 1 > 0) ? (number_of_points - 1) : 1);
+  for (unsigned int i_point = 0; i_point < number_of_points; i_point++) {
     Eigen::Vector3f current_point (0.0f, 0.0f, 0.0f);
     current_point (0) = input_->points[(*indices_)[i_point]].x - mean_value_ (0);
     current_point (1) = input_->points[(*indices_)[i_point]].y - mean_value_ (1);
@@ -375,16 +404,18 @@ pcl::MomentOfInertiaEstimation<PointT>::computeCovarianceMatrix (Eigen::Matrix <
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
-pcl::MomentOfInertiaEstimation<PointT>::computeCovarianceMatrix (PointCloudConstPtr cloud, Eigen::Matrix <float, 3, 3>& covariance_matrix) const
+template <typename PointT>
+void
+pcl::MomentOfInertiaEstimation<PointT>::computeCovarianceMatrix (
+    PointCloudConstPtr cloud, Eigen::Matrix<float, 3, 3> &covariance_matrix) const
 {
   covariance_matrix.setZero ();
 
-  unsigned int number_of_points = static_cast <unsigned int> (cloud->points.size ());
-  float factor = 1.0f / static_cast <float> ((number_of_points - 1 > 0)?(number_of_points - 1):1);
+  unsigned int number_of_points = static_cast<unsigned int> (cloud->points.size ());
+  float factor = 1.0f / static_cast<float> (
+                            (number_of_points - 1 > 0) ? (number_of_points - 1) : 1);
   Eigen::Vector3f current_point;
-  for (unsigned int i_point = 0; i_point < number_of_points; i_point++)
-  {
+  for (unsigned int i_point = 0; i_point < number_of_points; i_point++) {
     current_point (0) = cloud->points[i_point].x - mean_value_ (0);
     current_point (1) = cloud->points[i_point].y - mean_value_ (1);
     current_point (2) = cloud->points[i_point].z - mean_value_ (2);
@@ -396,16 +427,18 @@ pcl::MomentOfInertiaEstimation<PointT>::computeCovarianceMatrix (PointCloudConst
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
-pcl::MomentOfInertiaEstimation<PointT>::computeEigenVectors (const Eigen::Matrix <float, 3, 3>& covariance_matrix,
-  Eigen::Vector3f& major_axis, Eigen::Vector3f& middle_axis, Eigen::Vector3f& minor_axis, float& major_value,
-  float& middle_value, float& minor_value)
+template <typename PointT>
+void
+pcl::MomentOfInertiaEstimation<PointT>::computeEigenVectors (
+    const Eigen::Matrix<float, 3, 3> &covariance_matrix, Eigen::Vector3f &major_axis,
+    Eigen::Vector3f &middle_axis, Eigen::Vector3f &minor_axis, float &major_value,
+    float &middle_value, float &minor_value)
 {
-  Eigen::EigenSolver <Eigen::Matrix <float, 3, 3> > eigen_solver;
+  Eigen::EigenSolver<Eigen::Matrix<float, 3, 3>> eigen_solver;
   eigen_solver.compute (covariance_matrix);
 
-  Eigen::EigenSolver <Eigen::Matrix <float, 3, 3> >::EigenvectorsType eigen_vectors;
-  Eigen::EigenSolver <Eigen::Matrix <float, 3, 3> >::EigenvalueType eigen_values;
+  Eigen::EigenSolver<Eigen::Matrix<float, 3, 3>>::EigenvectorsType eigen_vectors;
+  Eigen::EigenSolver<Eigen::Matrix<float, 3, 3>>::EigenvalueType eigen_values;
   eigen_vectors = eigen_solver.eigenvectors ();
   eigen_values = eigen_solver.eigenvalues ();
 
@@ -414,22 +447,19 @@ pcl::MomentOfInertiaEstimation<PointT>::computeEigenVectors (const Eigen::Matrix
   unsigned int middle_index = 1;
   unsigned int minor_index = 2;
 
-  if (eigen_values.real () (major_index) < eigen_values.real () (middle_index))
-  {
+  if (eigen_values.real () (major_index) < eigen_values.real () (middle_index)) {
     temp = major_index;
     major_index = middle_index;
     middle_index = temp;
   }
 
-  if (eigen_values.real () (major_index) < eigen_values.real () (minor_index))
-  {
+  if (eigen_values.real () (major_index) < eigen_values.real () (minor_index)) {
     temp = major_index;
     major_index = minor_index;
     minor_index = temp;
   }
 
-  if (eigen_values.real () (middle_index) < eigen_values.real () (minor_index))
-  {
+  if (eigen_values.real () (middle_index) < eigen_values.real () (minor_index)) {
     temp = minor_index;
     minor_index = middle_index;
     middle_index = temp;
@@ -448,8 +478,7 @@ pcl::MomentOfInertiaEstimation<PointT>::computeEigenVectors (const Eigen::Matrix
   minor_axis.normalize ();
 
   float det = major_axis.dot (middle_axis.cross (minor_axis));
-  if (det <= 0.0f)
-  {
+  if (det <= 0.0f) {
     major_axis (0) = -major_axis (0);
     major_axis (1) = -major_axis (1);
     major_axis (2) = -major_axis (2);
@@ -457,31 +486,37 @@ pcl::MomentOfInertiaEstimation<PointT>::computeEigenVectors (const Eigen::Matrix
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
-pcl::MomentOfInertiaEstimation<PointT>::rotateVector (const Eigen::Vector3f& vector, const Eigen::Vector3f& axis, const float angle, Eigen::Vector3f& rotated_vector) const
+template <typename PointT>
+void
+pcl::MomentOfInertiaEstimation<PointT>::rotateVector (
+    const Eigen::Vector3f &vector, const Eigen::Vector3f &axis, const float angle,
+    Eigen::Vector3f &rotated_vector) const
 {
-  Eigen::Matrix <float, 3, 3> rotation_matrix;
+  Eigen::Matrix<float, 3, 3> rotation_matrix;
   const float x = axis (0);
   const float y = axis (1);
   const float z = axis (2);
   const float rad = M_PI / 180.0f;
   const float cosine = std::cos (angle * rad);
   const float sine = std::sin (angle * rad);
-  rotation_matrix << cosine + (1 - cosine) * x * x,      (1 - cosine) * x * y - sine * z,    (1 - cosine) * x * z + sine * y,
-                     (1 - cosine) * y * x + sine * z,    cosine + (1 - cosine) * y * y,      (1 - cosine) * y * z - sine * x,
-                     (1 - cosine) * z * x - sine * y,    (1 - cosine) * z * y + sine * x,    cosine + (1 - cosine) * z * z;
+  rotation_matrix << cosine + (1 - cosine) * x * x, (1 - cosine) * x * y - sine * z,
+      (1 - cosine) * x * z + sine * y, (1 - cosine) * y * x + sine * z,
+      cosine + (1 - cosine) * y * y, (1 - cosine) * y * z - sine * x,
+      (1 - cosine) * z * x - sine * y, (1 - cosine) * z * y + sine * x,
+      cosine + (1 - cosine) * z * z;
 
   rotated_vector = rotation_matrix * vector;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> float
-pcl::MomentOfInertiaEstimation<PointT>::calculateMomentOfInertia (const Eigen::Vector3f& current_axis, const Eigen::Vector3f& mean_value) const
+template <typename PointT>
+float
+pcl::MomentOfInertiaEstimation<PointT>::calculateMomentOfInertia (
+    const Eigen::Vector3f &current_axis, const Eigen::Vector3f &mean_value) const
 {
   float moment_of_inertia = 0.0f;
-  unsigned int number_of_points = static_cast <unsigned int> (indices_->size ());
-  for (unsigned int i_point = 0; i_point < number_of_points; i_point++)
-  {
+  unsigned int number_of_points = static_cast<unsigned int> (indices_->size ());
+  for (unsigned int i_point = 0; i_point < number_of_points; i_point++) {
     Eigen::Vector3f vector;
     vector (0) = mean_value (0) - input_->points[(*indices_)[i_point]].x;
     vector (1) = mean_value (1) - input_->points[(*indices_)[i_point]].y;
@@ -489,7 +524,8 @@ pcl::MomentOfInertiaEstimation<PointT>::calculateMomentOfInertia (const Eigen::V
 
     Eigen::Vector3f product = vector.cross (current_axis);
 
-    float distance = product (0) * product (0) + product (1) * product (1) + product (2) * product (2);
+    float distance = product (0) * product (0) + product (1) * product (1) +
+                     product (2) * product (2);
 
     moment_of_inertia += distance;
   }
@@ -498,18 +534,22 @@ pcl::MomentOfInertiaEstimation<PointT>::calculateMomentOfInertia (const Eigen::V
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
-pcl::MomentOfInertiaEstimation<PointT>::getProjectedCloud (const Eigen::Vector3f& normal_vector, const Eigen::Vector3f& point, typename pcl::PointCloud <PointT>::Ptr projected_cloud) const
+template <typename PointT>
+void
+pcl::MomentOfInertiaEstimation<PointT>::getProjectedCloud (
+    const Eigen::Vector3f &normal_vector, const Eigen::Vector3f &point,
+    typename pcl::PointCloud<PointT>::Ptr projected_cloud) const
 {
-  const float D = - normal_vector.dot (point);
+  const float D = -normal_vector.dot (point);
 
-  unsigned int number_of_points = static_cast <unsigned int> (indices_->size ());
+  unsigned int number_of_points = static_cast<unsigned int> (indices_->size ());
   projected_cloud->points.resize (number_of_points, PointT ());
 
-  for (unsigned int i_point = 0; i_point < number_of_points; i_point++)
-  {
+  for (unsigned int i_point = 0; i_point < number_of_points; i_point++) {
     const unsigned int index = (*indices_)[i_point];
-    float K = - (D + normal_vector (0) * input_->points[index].x + normal_vector (1) * input_->points[index].y + normal_vector (2) * input_->points[index].z);
+    float K = -(D + normal_vector (0) * input_->points[index].x +
+                normal_vector (1) * input_->points[index].y +
+                normal_vector (2) * input_->points[index].z);
     PointT projected_point;
     projected_point.x = input_->points[index].x + K * normal_vector (0);
     projected_point.y = input_->points[index].y + K * normal_vector (1);
@@ -522,8 +562,11 @@ pcl::MomentOfInertiaEstimation<PointT>::getProjectedCloud (const Eigen::Vector3f
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> float
-pcl::MomentOfInertiaEstimation<PointT>::computeEccentricity (const Eigen::Matrix <float, 3, 3>& covariance_matrix, const Eigen::Vector3f& normal_vector)
+template <typename PointT>
+float
+pcl::MomentOfInertiaEstimation<PointT>::computeEccentricity (
+    const Eigen::Matrix<float, 3, 3> &covariance_matrix,
+    const Eigen::Vector3f &normal_vector)
 {
   Eigen::Vector3f major_axis (0.0f, 0.0f, 0.0f);
   Eigen::Vector3f middle_axis (0.0f, 0.0f, 0.0f);
@@ -531,7 +574,8 @@ pcl::MomentOfInertiaEstimation<PointT>::computeEccentricity (const Eigen::Matrix
   float major_value = 0.0f;
   float middle_value = 0.0f;
   float minor_value = 0.0f;
-  computeEigenVectors (covariance_matrix, major_axis, middle_axis, minor_axis, major_value, middle_value, minor_value);
+  computeEigenVectors (covariance_matrix, major_axis, middle_axis, minor_axis,
+                       major_value, middle_value, minor_value);
 
   float major = std::abs (major_axis.dot (normal_vector));
   float middle = std::abs (middle_axis.dot (normal_vector));
@@ -540,20 +584,25 @@ pcl::MomentOfInertiaEstimation<PointT>::computeEccentricity (const Eigen::Matrix
   float eccentricity = 0.0f;
 
   if (major >= middle && major >= minor && middle_value != 0.0f)
-    eccentricity = std::pow (1.0f - (minor_value * minor_value) / (middle_value * middle_value), 0.5f);
+    eccentricity = std::pow (
+        1.0f - (minor_value * minor_value) / (middle_value * middle_value), 0.5f);
 
   if (middle >= major && middle >= minor && major_value != 0.0f)
-    eccentricity = std::pow (1.0f - (minor_value * minor_value) / (major_value * major_value), 0.5f);
+    eccentricity = std::pow (
+        1.0f - (minor_value * minor_value) / (major_value * major_value), 0.5f);
 
   if (minor >= major && minor >= middle && major_value != 0.0f)
-    eccentricity = std::pow (1.0f - (middle_value * middle_value) / (major_value * major_value), 0.5f);
+    eccentricity = std::pow (
+        1.0f - (middle_value * middle_value) / (major_value * major_value), 0.5f);
 
   return (eccentricity);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> bool
-pcl::MomentOfInertiaEstimation<PointT>::getMassCenter (Eigen::Vector3f& mass_center) const
+template <typename PointT>
+bool
+pcl::MomentOfInertiaEstimation<PointT>::getMassCenter (
+    Eigen::Vector3f &mass_center) const
 {
   mass_center = mean_value_;
 
@@ -561,8 +610,9 @@ pcl::MomentOfInertiaEstimation<PointT>::getMassCenter (Eigen::Vector3f& mass_cen
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
-pcl::MomentOfInertiaEstimation<PointT>::setInputCloud (const PointCloudConstPtr& cloud)
+template <typename PointT>
+void
+pcl::MomentOfInertiaEstimation<PointT>::setInputCloud (const PointCloudConstPtr &cloud)
 {
   input_ = cloud;
 
@@ -570,77 +620,80 @@ pcl::MomentOfInertiaEstimation<PointT>::setInputCloud (const PointCloudConstPtr&
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
-pcl::MomentOfInertiaEstimation<PointT>::setIndices (const IndicesPtr& indices)
+template <typename PointT>
+void
+pcl::MomentOfInertiaEstimation<PointT>::setIndices (const IndicesPtr &indices)
 {
   indices_ = indices;
   fake_indices_ = false;
-  use_indices_  = true;
+  use_indices_ = true;
 
   is_valid_ = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
-pcl::MomentOfInertiaEstimation<PointT>::setIndices (const IndicesConstPtr& indices)
+template <typename PointT>
+void
+pcl::MomentOfInertiaEstimation<PointT>::setIndices (const IndicesConstPtr &indices)
 {
   indices_.reset (new std::vector<int> (*indices));
   fake_indices_ = false;
-  use_indices_  = true;
+  use_indices_ = true;
 
   is_valid_ = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
-pcl::MomentOfInertiaEstimation<PointT>::setIndices (const PointIndicesConstPtr& indices)
+template <typename PointT>
+void
+pcl::MomentOfInertiaEstimation<PointT>::setIndices (const PointIndicesConstPtr &indices)
 {
   indices_.reset (new std::vector<int> (indices->indices));
   fake_indices_ = false;
-  use_indices_  = true;
+  use_indices_ = true;
 
   is_valid_ = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointT> void
-pcl::MomentOfInertiaEstimation<PointT>::setIndices (size_t row_start, size_t col_start, size_t nb_rows, size_t nb_cols)
+template <typename PointT>
+void
+pcl::MomentOfInertiaEstimation<PointT>::setIndices (size_t row_start, size_t col_start,
+                                                    size_t nb_rows, size_t nb_cols)
 {
-  if ((nb_rows > input_->height) || (row_start > input_->height))
-  {
+  if ((nb_rows > input_->height) || (row_start > input_->height)) {
     PCL_ERROR ("[PCLBase::setIndices] cloud is only %d height", input_->height);
     return;
   }
 
-  if ((nb_cols > input_->width) || (col_start > input_->width))
-  {
+  if ((nb_cols > input_->width) || (col_start > input_->width)) {
     PCL_ERROR ("[PCLBase::setIndices] cloud is only %d width", input_->width);
     return;
   }
 
   size_t row_end = row_start + nb_rows;
-  if (row_end > input_->height)
-  {
-    PCL_ERROR ("[PCLBase::setIndices] %d is out of rows range %d", row_end, input_->height);
+  if (row_end > input_->height) {
+    PCL_ERROR ("[PCLBase::setIndices] %d is out of rows range %d", row_end,
+               input_->height);
     return;
   }
 
   size_t col_end = col_start + nb_cols;
-  if (col_end > input_->width)
-  {
-    PCL_ERROR ("[PCLBase::setIndices] %d is out of columns range %d", col_end, input_->width);
+  if (col_end > input_->width) {
+    PCL_ERROR ("[PCLBase::setIndices] %d is out of columns range %d", col_end,
+               input_->width);
     return;
   }
 
   indices_.reset (new std::vector<int>);
   indices_->reserve (nb_cols * nb_rows);
-  for(size_t i = row_start; i < row_end; i++)
-    for(size_t j = col_start; j < col_end; j++)
+  for (size_t i = row_start; i < row_end; i++)
+    for (size_t j = col_start; j < col_end; j++)
       indices_->push_back (static_cast<int> ((i * input_->width) + j));
   fake_indices_ = false;
-  use_indices_  = true;
+  use_indices_ = true;
 
   is_valid_ = false;
 }
 
-#endif    // PCL_MOMENT_OF_INERTIA_ESTIMATION_HPP_
+#endif // PCL_MOMENT_OF_INERTIA_ESTIMATION_HPP_

@@ -45,44 +45,40 @@
 
 namespace pcl
 {
-  /** \brief FileGrabber provides a container-style interface for grabbers which operate on fixed-size input
-    * \author Stephen Miller
-    * \ingroup io
-    */
+  /** \brief FileGrabber provides a container-style interface for grabbers which operate
+   * on fixed-size input \author Stephen Miller \ingroup io
+   */
   template <typename PointT>
   class PCL_EXPORTS FileGrabber
   {
-  public:
-
+    public:
     /** \brief Empty destructor */
     virtual ~FileGrabber () {}
 
-    /** \brief operator[] Returns the idx-th cloud in the dataset, without bounds checking.
-     *  Note that in the future, this could easily be modified to do caching
+    /** \brief operator[] Returns the idx-th cloud in the dataset, without bounds
+     * checking. Note that in the future, this could easily be modified to do caching
      *  \param[in] idx The frame to load
      */
-    virtual const boost::shared_ptr< const pcl::PointCloud<PointT> >
+    virtual const boost::shared_ptr<const pcl::PointCloud<PointT>>
     operator[] (size_t idx) const = 0;
 
     /** \brief size Returns the number of clouds currently loaded by the grabber */
     virtual size_t
     size () const = 0;
-    
+
     /** \brief at Returns the idx-th cloud in the dataset, with bounds checking
      *  \param[in] idx The frame to load
      */
-    virtual const boost::shared_ptr< const pcl::PointCloud<PointT> >
+    virtual const boost::shared_ptr<const pcl::PointCloud<PointT>>
     at (size_t idx) const
     {
-      if (idx >= size ())
-      {
-        // Throw error 
-        throw pcl::IOException ("[pcl::FileGrabber] Attempted to access element which is out of bounds!");
-      }
-      else
-      {
+      if (idx >= size ()) {
+        // Throw error
+        throw pcl::IOException (
+            "[pcl::FileGrabber] Attempted to access element which is out of bounds!");
+      } else {
         return (operator[] (idx));
       }
     }
   };
-}
+} // namespace pcl

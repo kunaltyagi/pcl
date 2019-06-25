@@ -37,8 +37,8 @@
 
 #pragma once
 
-#include <pcl/features/feature.h>
 #include <pcl/features/boost.h>
+#include <pcl/features/feature.h>
 
 namespace pcl
 {
@@ -46,51 +46,52 @@ namespace pcl
   class PPFRGBEstimation : public FeatureFromNormals<PointInT, PointNT, PointOutT>
   {
     public:
-      using PCLBase<PointInT>::indices_;
-      using Feature<PointInT, PointOutT>::input_;
-      using Feature<PointInT, PointOutT>::feature_name_;
-      using Feature<PointInT, PointOutT>::getClassName;
-      using FeatureFromNormals<PointInT, PointNT, PointOutT>::normals_;
+    using PCLBase<PointInT>::indices_;
+    using Feature<PointInT, PointOutT>::input_;
+    using Feature<PointInT, PointOutT>::feature_name_;
+    using Feature<PointInT, PointOutT>::getClassName;
+    using FeatureFromNormals<PointInT, PointNT, PointOutT>::normals_;
 
-      using PointCloudOut = pcl::PointCloud<PointOutT>;
+    using PointCloudOut = pcl::PointCloud<PointOutT>;
 
-      /**
-        * \brief Empty Constructor
-        */
-      PPFRGBEstimation ();
-
+    /**
+     * \brief Empty Constructor
+     */
+    PPFRGBEstimation ();
 
     private:
-      /** \brief The method called for actually doing the computations
-        * \param output the resulting point cloud (which should be of type pcl::PPFRGBSignature);
-        */
-      void
-      computeFeature (PointCloudOut &output);
+    /** \brief The method called for actually doing the computations
+     * \param output the resulting point cloud (which should be of type
+     * pcl::PPFRGBSignature);
+     */
+    void
+    computeFeature (PointCloudOut &output);
   };
 
   template <typename PointInT, typename PointNT, typename PointOutT>
   class PPFRGBRegionEstimation : public FeatureFromNormals<PointInT, PointNT, PointOutT>
   {
     public:
-      using Ptr = boost::shared_ptr<PPFRGBRegionEstimation<PointInT, PointNT, PointOutT> >;
-      using ConstPtr = boost::shared_ptr<const PPFRGBRegionEstimation<PointInT, PointNT, PointOutT> >;
-      using PCLBase<PointInT>::indices_;
-      using Feature<PointInT, PointOutT>::input_;
-      using Feature<PointInT, PointOutT>::feature_name_;
-      using Feature<PointInT, PointOutT>::search_radius_;
-      using Feature<PointInT, PointOutT>::tree_;
-      using Feature<PointInT, PointOutT>::getClassName;
-      using FeatureFromNormals<PointInT, PointNT, PointOutT>::normals_;
+    using Ptr = boost::shared_ptr<PPFRGBRegionEstimation<PointInT, PointNT, PointOutT>>;
+    using ConstPtr =
+        boost::shared_ptr<const PPFRGBRegionEstimation<PointInT, PointNT, PointOutT>>;
+    using PCLBase<PointInT>::indices_;
+    using Feature<PointInT, PointOutT>::input_;
+    using Feature<PointInT, PointOutT>::feature_name_;
+    using Feature<PointInT, PointOutT>::search_radius_;
+    using Feature<PointInT, PointOutT>::tree_;
+    using Feature<PointInT, PointOutT>::getClassName;
+    using FeatureFromNormals<PointInT, PointNT, PointOutT>::normals_;
 
-      using PointCloudOut = pcl::PointCloud<PointOutT>;
+    using PointCloudOut = pcl::PointCloud<PointOutT>;
 
-      PPFRGBRegionEstimation ();
+    PPFRGBRegionEstimation ();
 
     private:
-      void
-      computeFeature (PointCloudOut &output) override;
+    void
+    computeFeature (PointCloudOut &output) override;
   };
-}
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/features/impl/ppfrgb.hpp>

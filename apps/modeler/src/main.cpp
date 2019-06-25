@@ -36,15 +36,17 @@
 
 #include <pcl/apps/modeler/main_window.h>
 
-extern int qInitResources_resources();
+extern int
+qInitResources_resources ();
 
-int main( int argc, char** argv )
+int
+main (int argc, char **argv)
 {
-  QApplication app( argc, argv );
+  QApplication app (argc, argv);
 
-  qInitResources_resources();
+  qInitResources_resources ();
 
-  pcl::modeler::MainWindow::getInstance().show();
+  pcl::modeler::MainWindow::getInstance ().show ();
 
-  return QApplication::exec();
+  return QApplication::exec ();
 }

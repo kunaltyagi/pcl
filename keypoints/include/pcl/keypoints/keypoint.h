@@ -39,168 +39,203 @@
 
 // PCL includes
 #include <pcl/pcl_base.h>
-#include <pcl/search/pcl_search.h>
 #include <pcl/pcl_config.h>
+#include <pcl/search/pcl_search.h>
 
 #include <functional>
 
 namespace pcl
 {
   /** \brief @b Keypoint represents the base class for key points.
-    * \author Bastian Steder
-    * \ingroup keypoints
-    */
+   * \author Bastian Steder
+   * \ingroup keypoints
+   */
   template <typename PointInT, typename PointOutT>
   class Keypoint : public PCLBase<PointInT>
   {
     public:
-      using Ptr = boost::shared_ptr<Keypoint<PointInT, PointOutT> >;
-      using ConstPtr = boost::shared_ptr<const Keypoint<PointInT, PointOutT> >;
+    using Ptr = boost::shared_ptr<Keypoint<PointInT, PointOutT>>;
+    using ConstPtr = boost::shared_ptr<const Keypoint<PointInT, PointOutT>>;
 
-      using PCLBase<PointInT>::indices_;
-      using PCLBase<PointInT>::input_;
+    using PCLBase<PointInT>::indices_;
+    using PCLBase<PointInT>::input_;
 
-      using BaseClass = PCLBase<PointInT>;
-      using KdTree = pcl::search::Search<PointInT>;
-      using KdTreePtr = typename KdTree::Ptr;
-      using PointCloudIn = pcl::PointCloud<PointInT>;
-      using PointCloudInPtr = typename PointCloudIn::Ptr;
-      using PointCloudInConstPtr = typename PointCloudIn::ConstPtr;
-      using PointCloudOut = pcl::PointCloud<PointOutT>;
-      using SearchMethod = std::function<int (int, double, std::vector<int> &, std::vector<float> &)>;
-      using SearchMethodSurface = std::function<int (const PointCloudIn &cloud, int index, double, std::vector<int> &, std::vector<float> &)>;
+    using BaseClass = PCLBase<PointInT>;
+    using KdTree = pcl::search::Search<PointInT>;
+    using KdTreePtr = typename KdTree::Ptr;
+    using PointCloudIn = pcl::PointCloud<PointInT>;
+    using PointCloudInPtr = typename PointCloudIn::Ptr;
+    using PointCloudInConstPtr = typename PointCloudIn::ConstPtr;
+    using PointCloudOut = pcl::PointCloud<PointOutT>;
+    using SearchMethod =
+        std::function<int(int, double, std::vector<int> &, std::vector<float> &)>;
+    using SearchMethodSurface =
+        std::function<int(const PointCloudIn &cloud, int index, double,
+                          std::vector<int> &, std::vector<float> &)>;
 
     public:
-      /** \brief Empty constructor. */
-      Keypoint () : 
-        BaseClass (), 
-        search_method_surface_ (),
-        surface_ (), 
-        tree_ (), 
-        search_parameter_ (0), 
-        search_radius_ (0), 
-        k_ (0) 
-      {};
-      
-      /** \brief Empty destructor */
-      ~Keypoint () {}
+    /** \brief Empty constructor. */
+    Keypoint ()
+        : BaseClass (), search_method_surface_ (), surface_ (), tree_ (),
+          search_parameter_ (0), search_radius_ (0), k_ (0){};
 
-      /** \brief Provide a pointer to the input dataset that we need to estimate features at every point for.
-        * \param cloud the const boost shared pointer to a PointCloud message
-        */
-      virtual void
-      setSearchSurface (const PointCloudInConstPtr &cloud) { surface_ = cloud; }
+    /** \brief Empty destructor */
+    ~Keypoint () {}
 
-      /** \brief Get a pointer to the surface point cloud dataset. */
-      inline PointCloudInConstPtr
-      getSearchSurface () { return (surface_); }
+    /** \brief Provide a pointer to the input dataset that we need to estimate features
+     * at every point for. \param cloud the const boost shared pointer to a PointCloud
+     * message
+     */
+    virtual void
+    setSearchSurface (const PointCloudInConstPtr &cloud)
+    {
+      surface_ = cloud;
+    }
 
-      /** \brief Provide a pointer to the search object.
-        * \param tree a pointer to the spatial search object.
-        */
-      inline void
-      setSearchMethod (const KdTreePtr &tree) { tree_ = tree; }
+    /** \brief Get a pointer to the surface point cloud dataset. */
+    inline PointCloudInConstPtr
+    getSearchSurface ()
+    {
+      return (surface_);
+    }
 
-      /** \brief Get a pointer to the search method used. */
-      inline KdTreePtr
-      getSearchMethod () { return (tree_); }
+    /** \brief Provide a pointer to the search object.
+     * \param tree a pointer to the spatial search object.
+     */
+    inline void
+    setSearchMethod (const KdTreePtr &tree)
+    {
+      tree_ = tree;
+    }
 
-      /** \brief Get the internal search parameter. */
-      inline double
-      getSearchParameter () { return (search_parameter_); }
+    /** \brief Get a pointer to the search method used. */
+    inline KdTreePtr
+    getSearchMethod ()
+    {
+      return (tree_);
+    }
 
-      /** \brief Set the number of k nearest neighbors to use for the feature estimation.
-        * \param k the number of k-nearest neighbors
-        */
-      inline void
-      setKSearch (int k) { k_ = k; }
+    /** \brief Get the internal search parameter. */
+    inline double
+    getSearchParameter ()
+    {
+      return (search_parameter_);
+    }
 
-      /** \brief get the number of k nearest neighbors used for the feature estimation. */
-      inline int
-      getKSearch () { return (k_); }
+    /** \brief Set the number of k nearest neighbors to use for the feature estimation.
+     * \param k the number of k-nearest neighbors
+     */
+    inline void
+    setKSearch (int k)
+    {
+      k_ = k;
+    }
 
-      /** \brief Set the sphere radius that is to be used for determining the nearest neighbors used for the
-       *         key point detection
-        * \param radius the sphere radius used as the maximum distance to consider a point a neighbor
-        */
-      inline void
-      setRadiusSearch (double radius) { search_radius_ = radius; }
+    /** \brief get the number of k nearest neighbors used for the feature estimation. */
+    inline int
+    getKSearch ()
+    {
+      return (k_);
+    }
 
-      /** \brief Get the sphere radius used for determining the neighbors. */
-      inline double
-      getRadiusSearch () { return (search_radius_); }
+    /** \brief Set the sphere radius that is to be used for determining the nearest
+     * neighbors used for the key point detection \param radius the sphere radius used
+     * as the maximum distance to consider a point a neighbor
+     */
+    inline void
+    setRadiusSearch (double radius)
+    {
+      search_radius_ = radius;
+    }
 
-      /** \brief \return the keypoints indices in the input cloud.
-        * \note not all the daughter classes populate the keypoints indices so check emptiness before use.
-        */
-      pcl::PointIndicesConstPtr
-      getKeypointsIndices () { return (keypoints_indices_); }
+    /** \brief Get the sphere radius used for determining the neighbors. */
+    inline double
+    getRadiusSearch ()
+    {
+      return (search_radius_);
+    }
 
-      /** \brief Base method for key point detection for all points given in <setInputCloud (), setIndices ()> using
-        * the surface in setSearchSurface () and the spatial locator in setSearchMethod ()
-        * \param output the resultant point cloud model dataset containing the estimated features
-        */
-      inline void
-      compute (PointCloudOut &output);
+    /** \brief \return the keypoints indices in the input cloud.
+     * \note not all the daughter classes populate the keypoints indices so check
+     * emptiness before use.
+     */
+    pcl::PointIndicesConstPtr
+    getKeypointsIndices ()
+    {
+      return (keypoints_indices_);
+    }
 
-      /** \brief Search for k-nearest neighbors using the spatial locator from \a setSearchmethod, and the given surface
-        * from \a setSearchSurface.
-        * \param index the index of the query point
-        * \param parameter the search parameter (either k or radius)
-        * \param indices the resultant vector of indices representing the k-nearest neighbors
-        * \param distances the resultant vector of distances representing the distances from the query point to the
-        * k-nearest neighbors
-        */
-      inline int
-      searchForNeighbors (int index, double parameter, std::vector<int> &indices, std::vector<float> &distances) const
-      {
-        if (surface_ == input_)       // if the two surfaces are the same
-          return (search_method_ (index, parameter, indices, distances));
-        else
-          return (search_method_surface_ (*input_, index, parameter, indices, distances));
-      }
+    /** \brief Base method for key point detection for all points given in
+     * <setInputCloud (), setIndices ()> using the surface in setSearchSurface () and
+     * the spatial locator in setSearchMethod () \param output the resultant point cloud
+     * model dataset containing the estimated features
+     */
+    inline void
+    compute (PointCloudOut &output);
+
+    /** \brief Search for k-nearest neighbors using the spatial locator from \a
+     * setSearchmethod, and the given surface from \a setSearchSurface. \param index the
+     * index of the query point \param parameter the search parameter (either k or
+     * radius) \param indices the resultant vector of indices representing the k-nearest
+     * neighbors \param distances the resultant vector of distances representing the
+     * distances from the query point to the k-nearest neighbors
+     */
+    inline int
+    searchForNeighbors (int index, double parameter, std::vector<int> &indices,
+                        std::vector<float> &distances) const
+    {
+      if (surface_ == input_) // if the two surfaces are the same
+        return (search_method_ (index, parameter, indices, distances));
+      else
+        return (search_method_surface_ (*input_, index, parameter, indices, distances));
+    }
 
     protected:
-      using PCLBase<PointInT>::deinitCompute;
+    using PCLBase<PointInT>::deinitCompute;
 
-      virtual bool
-      initCompute ();
+    virtual bool
+    initCompute ();
 
-      /** \brief The key point detection method's name. */
-      std::string name_;
+    /** \brief The key point detection method's name. */
+    std::string name_;
 
-      /** \brief The search method template for indices. */
-      SearchMethod search_method_;
+    /** \brief The search method template for indices. */
+    SearchMethod search_method_;
 
-      /** \brief The search method template for points. */
-      SearchMethodSurface search_method_surface_;
+    /** \brief The search method template for points. */
+    SearchMethodSurface search_method_surface_;
 
-      /** \brief An input point cloud describing the surface that is to be used for nearest neighbors estimation. */
-      PointCloudInConstPtr surface_;
+    /** \brief An input point cloud describing the surface that is to be used for
+     * nearest neighbors estimation. */
+    PointCloudInConstPtr surface_;
 
-      /** \brief A pointer to the spatial search object. */
-      KdTreePtr tree_;
+    /** \brief A pointer to the spatial search object. */
+    KdTreePtr tree_;
 
-      /** \brief The actual search parameter (casted from either \a search_radius_ or \a k_). */
-      double search_parameter_;
+    /** \brief The actual search parameter (casted from either \a search_radius_ or \a
+     * k_). */
+    double search_parameter_;
 
-      /** \brief The nearest neighbors search radius for each point. */
-      double search_radius_;
+    /** \brief The nearest neighbors search radius for each point. */
+    double search_radius_;
 
-      /** \brief The number of K nearest neighbors to use for each point. */
-      int k_;
+    /** \brief The number of K nearest neighbors to use for each point. */
+    int k_;
 
-      /** \brief Indices of the keypoints in the input cloud. */
-      pcl::PointIndicesPtr keypoints_indices_;
+    /** \brief Indices of the keypoints in the input cloud. */
+    pcl::PointIndicesPtr keypoints_indices_;
 
-      /** \brief Get a string representation of the name of this class. */
-      inline const std::string&
-      getClassName () const { return (name_); }
+    /** \brief Get a string representation of the name of this class. */
+    inline const std::string &
+    getClassName () const
+    {
+      return (name_);
+    }
 
-      /** \brief Abstract key point detection method. */
-      virtual void
-      detectKeypoints (PointCloudOut &output) = 0;
+    /** \brief Abstract key point detection method. */
+    virtual void
+    detectKeypoints (PointCloudOut &output) = 0;
   };
-}
+} // namespace pcl
 
 #include <pcl/keypoints/impl/keypoint.hpp>

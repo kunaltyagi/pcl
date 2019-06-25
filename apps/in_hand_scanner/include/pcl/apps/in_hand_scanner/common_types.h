@@ -42,9 +42,9 @@
 
 #include <cstdint>
 
+#include <pcl/geometry/triangle_mesh.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
-#include <pcl/geometry/triangle_mesh.h>
 
 namespace pcl
 {
@@ -59,26 +59,19 @@ namespace pcl
 
 #include <pcl/apps/in_hand_scanner/impl/common_types.hpp>
 
-POINT_CLOUD_REGISTER_POINT_STRUCT (pcl::ihs::_PointIHS,
-                                   (float, x, x)
-                                   (float, y, y)
-                                   (float, z, z)
-                                   (float, normal_x, normal_x)
-                                   (float, normal_y, normal_y)
-                                   (float, normal_z, normal_z)
-                                   (float, rgb, rgb)
-                                   (float, weight, weight)
-                                   (unsigned int, age, age)
-                                   (uint32_t, directions, directions)
-                                  )
+POINT_CLOUD_REGISTER_POINT_STRUCT (
+    pcl::ihs::_PointIHS,
+    (float, x, x) (float, y, y) (float, z, z) (float, normal_x, normal_x) (
+        float, normal_y, normal_y) (float, normal_z, normal_z) (float, rgb, rgb) (
+        float, weight, weight) (unsigned int, age, age) (uint32_t, directions,
+                                                         directions))
 POINT_CLOUD_REGISTER_POINT_WRAPPER (pcl::ihs::PointIHS, pcl::ihs::_PointIHS)
 
 namespace pcl
 {
   namespace ihs
   {
-    struct MeshTraits
-    {
+    struct MeshTraits {
       using VertexData = PointIHS;
       using HalfEdgeData = pcl::geometry::NoData;
       using EdgeData = pcl::geometry::NoData;

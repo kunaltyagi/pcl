@@ -39,10 +39,10 @@
  */
 
 #include <gtest/gtest.h>
-#include <pcl/io/pcd_io.h>
+#include <pcl/console/time.h>
 #include <pcl/filters/fast_bilateral.h>
 #include <pcl/filters/fast_bilateral_omp.h>
-#include <pcl/console/time.h>
+#include <pcl/io/pcd_io.h>
 
 using namespace pcl;
 
@@ -67,8 +67,7 @@ TEST (FastBilateralFilter, Filters_Bilateral)
       p_102219 (0.175637f, -0.101353f, 0.661631f),
       p_81765 (0.223189f, -0.151714f, 0.708332f);
 
-  for (size_t dim = 0; dim < 3; ++dim)
-  {
+  for (size_t dim = 0; dim < 3; ++dim) {
     EXPECT_NEAR (p_84737[dim], (*cloud_filtered)[84737].getVector3fMap ()[dim], 1e-3);
     EXPECT_NEAR (p_57966[dim], (*cloud_filtered)[57966].getVector3fMap ()[dim], 1e-3);
     EXPECT_NEAR (p_39543[dim], (*cloud_filtered)[39543].getVector3fMap ()[dim], 1e-3);
@@ -82,17 +81,16 @@ TEST (FastBilateralFilter, Filters_Bilateral)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TEST (FastBilateralFilterOMP, Filters_Bilateral)
 {
-  std::vector<float> sigma_s; 
+  std::vector<float> sigma_s;
   sigma_s.push_back (2.341f);
   sigma_s.push_back (5.2342f);
   sigma_s.push_back (10.29380f);
-  std::vector<float> sigma_r; 
+  std::vector<float> sigma_r;
   sigma_r.push_back (0.0123f);
   sigma_r.push_back (0.023f);
   sigma_r.push_back (0.0345f);
   pcl::console::TicToc tt;
-  for (size_t i = 0; i < 3; i++)
-  {
+  for (size_t i = 0; i < 3; i++) {
     FastBilateralFilter<PointXYZ> fbf;
     fbf.setInputCloud (cloud);
     fbf.setSigmaS (sigma_s[i]);
@@ -112,34 +110,31 @@ TEST (FastBilateralFilterOMP, Filters_Bilateral)
     PCL_INFO ("[FastBilateralFilterOMP] filtering took %f ms\n", tt.toc ());
 
     EXPECT_EQ (cloud_filtered_omp->points.size (), cloud_filtered->points.size ());
-    for (size_t j = 0; j < cloud_filtered_omp->size (); ++j)
-    {
+    for (size_t j = 0; j < cloud_filtered_omp->size (); ++j) {
       if (std::isnan (cloud_filtered_omp->at (j).x))
         EXPECT_TRUE (std::isnan (cloud_filtered->at (j).x));
-      else
-      {
+      else {
         EXPECT_NEAR (cloud_filtered_omp->at (j).x, cloud_filtered->at (j).x, 1e-3);
         EXPECT_NEAR (cloud_filtered_omp->at (j).y, cloud_filtered->at (j).y, 1e-3);
         EXPECT_NEAR (cloud_filtered_omp->at (j).z, cloud_filtered->at (j).z, 1e-3);
       }
     }
   }
-
 }
 
 /* ---[ */
 int
-main (int argc,
-      char** argv)
+main (int argc, char **argv)
 {
   // Load a standard PCD file from disk
-  if (argc < 2)
-  {
-    std::cerr << "No test file given. Please download `milk_cartoon_all_small_clorox.pcd` and pass its path to the test." << std::endl;
+  if (argc < 2) {
+    std::cerr << "No test file given. Please download "
+                 "`milk_cartoon_all_small_clorox.pcd` and pass its path to the test."
+              << std::endl;
     return (-1);
   }
 
-  char* file_name = argv[1];
+  char *file_name = argv[1];
   // Load a standard PCD file from disk
   io::loadPCDFile (file_name, *cloud);
 

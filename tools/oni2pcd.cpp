@@ -32,13 +32,13 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
- *	
+ *
  */
 
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
 #include <pcl/io/oni_grabber.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
 #include <vector>
 
 using namespace std;
@@ -60,13 +60,13 @@ printHelp (int, char **argv)
 
 //////////////////////////////////////////////////////////////////////////////
 void
-cloud_cb (const CloudConstPtr& cloud)
+cloud_cb (const CloudConstPtr &cloud)
 {
   PCDWriter w;
   sprintf (buf, "frame_%06d.pcd", i);
   w.writeBinaryCompressed (buf, *cloud);
-  PCL_INFO ("Wrote a cloud with %lu (%ux%u) points in %s.\n", 
-            cloud->size (), cloud->width, cloud->height, buf);
+  PCL_INFO ("Wrote a cloud with %lu (%ux%u) points in %s.\n", cloud->size (),
+            cloud->width, cloud->height, buf);
   ++i;
 }
 
@@ -74,20 +74,19 @@ cloud_cb (const CloudConstPtr& cloud)
 int
 main (int argc, char **argv)
 {
-  print_info ("Convert an ONI file to PCD format. For more information, use: %s -h\n", argv[0]);
+  print_info ("Convert an ONI file to PCD format. For more information, use: %s -h\n",
+              argv[0]);
 
-  if (argc < 2)
-  {
+  if (argc < 2) {
     printHelp (argc, argv);
     return (-1);
   }
 
-  pcl::ONIGrabber* grabber = new pcl::ONIGrabber (argv[1], false, false);
-  std::function<void (const CloudConstPtr&) > f = boost::bind (&cloud_cb, _1);
+  pcl::ONIGrabber *grabber = new pcl::ONIGrabber (argv[1], false, false);
+  std::function<void(const CloudConstPtr &)> f = boost::bind (&cloud_cb, _1);
   boost::signals2::connection c = grabber->registerCallback (f);
 
-  while (grabber->hasDataLeft ())
-  {
+  while (grabber->hasDataLeft ()) {
     grabber->start ();
   }
   PCL_INFO ("Successfully processed %d frames.\n", i);

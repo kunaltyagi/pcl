@@ -48,79 +48,66 @@ namespace pcl
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /** \brief @b Octree node pool
-     * \note Used to reduce memory allocation and class instantiation events when generating octrees at high rate
-     * \author Julius Kammerl (julius@kammerl.de)
+     * \note Used to reduce memory allocation and class instantiation events when
+     * generating octrees at high rate \author Julius Kammerl (julius@kammerl.de)
      */
-    template<typename NodeT>
-      class OctreeNodePool
-      {
+    template <typename NodeT>
+    class OctreeNodePool
+    {
       public:
-        /** \brief Empty constructor. */
-        OctreeNodePool () :
-            nodePool_ ()
-        {
+      /** \brief Empty constructor. */
+      OctreeNodePool () : nodePool_ () {}
+
+      /** \brief Empty deconstructor. */
+      virtual ~OctreeNodePool () { deletePool (); }
+
+      /** \brief Push node to pool
+       *  \param node_arg: add this node to the pool
+       *  */
+      inline void
+      pushNode (NodeT *node_arg)
+      {
+        nodePool_.push_back (node_arg);
+      }
+
+      /** \brief Pop node from pool - Allocates new nodes if pool is empty
+       *  \return Pointer to octree node
+       *  */
+      inline NodeT *
+      popNode ()
+      {
+
+        NodeT *newLeafNode;
+
+        if (!nodePool_.size ()) {
+          // leaf pool is empty
+          // we need to create a new octree leaf class
+          newLeafNode = new NodeT ();
+        } else {
+          // reuse leaf node from branch pool
+          newLeafNode = nodePool_.back ();
+          nodePool_.pop_back ();
+          newLeafNode->reset ();
         }
 
-        /** \brief Empty deconstructor. */
-        virtual
-        ~OctreeNodePool ()
-        {
-          deletePool ();
+        return newLeafNode;
+      }
+
+      /** \brief Delete all nodes in pool
+       *  */
+      void
+      deletePool ()
+      {
+        // delete all branch instances from branch pool
+        while (!nodePool_.empty ()) {
+          delete (nodePool_.back ());
+          nodePool_.pop_back ();
         }
-
-        /** \brief Push node to pool
-        *  \param node_arg: add this node to the pool
-        *  */
-        inline
-        void
-        pushNode (NodeT* node_arg)
-        {
-          nodePool_.push_back (node_arg);
-        }
-
-        /** \brief Pop node from pool - Allocates new nodes if pool is empty
-        *  \return Pointer to octree node
-        *  */
-        inline NodeT*
-        popNode ()
-        {
-
-          NodeT* newLeafNode;
-
-          if (!nodePool_.size ())
-          {
-            // leaf pool is empty
-            // we need to create a new octree leaf class
-            newLeafNode = new NodeT ();
-          }
-          else
-          {
-            // reuse leaf node from branch pool
-            newLeafNode = nodePool_.back ();
-            nodePool_.pop_back ();
-            newLeafNode->reset ();
-          }
-
-          return newLeafNode;
-        }
-
-
-        /** \brief Delete all nodes in pool
-        *  */
-        void
-        deletePool ()
-        {
-          // delete all branch instances from branch pool
-          while (!nodePool_.empty ())
-          {
-            delete (nodePool_.back ());
-            nodePool_.pop_back ();
-          }
-        }
+      }
 
       protected:
-        std::vector<NodeT*> nodePool_;
-      };
+      std::vector<NodeT *> nodePool_;
+    };
 
-  }
-}
+  } // namespace octree
+} // namespace pcl

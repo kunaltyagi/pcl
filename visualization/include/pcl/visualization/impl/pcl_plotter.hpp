@@ -36,37 +36,34 @@
  */
 
 #ifndef PCL_VISUALUALIZATION_PCL_PLOTTER_IMPL_H_
-#define	PCL_VISUALUALIZATION_PCL_PLOTTER_IMPL_H_
+#define PCL_VISUALUALIZATION_PCL_PLOTTER_IMPL_H_
 
-template <typename PointT> bool
+template <typename PointT>
+bool
 pcl::visualization::PCLPlotter::addFeatureHistogram (
-    const pcl::PointCloud<PointT> &cloud, int hsize, 
-    const std::string &id, int win_width, int win_height)
+    const pcl::PointCloud<PointT> &cloud, int hsize, const std::string &id,
+    int win_width, int win_height)
 {
-  std::vector<double> array_x(hsize), array_y(hsize);
-  
+  std::vector<double> array_x (hsize), array_y (hsize);
+
   // Parse the cloud data and store it in the array
-  for (int i = 0; i < hsize; ++i)
-  {
+  for (int i = 0; i < hsize; ++i) {
     array_x[i] = i;
     array_y[i] = cloud.points[0].histogram[i];
   }
-  
-  this->addPlotData(array_x, array_y, id.c_str(), vtkChart::LINE);
+
+  this->addPlotData (array_x, array_y, id.c_str (), vtkChart::LINE);
   setWindowSize (win_width, win_height);
   return true;
 }
 
-
-template <typename PointT> bool
+template <typename PointT>
+bool
 pcl::visualization::PCLPlotter::addFeatureHistogram (
-    const pcl::PointCloud<PointT> &cloud, 
-    const std::string &field_name,
-    const int index, 
-    const std::string &id, int win_width, int win_height)
+    const pcl::PointCloud<PointT> &cloud, const std::string &field_name,
+    const int index, const std::string &id, int win_width, int win_height)
 {
-  if (index < 0 || index >= cloud.points.size ())
-  {
+  if (index < 0 || index >= cloud.points.size ()) {
     PCL_ERROR ("[addFeatureHistogram] Invalid point index (%d) given!\n", index);
     return (false);
   }
@@ -75,28 +72,29 @@ pcl::visualization::PCLPlotter::addFeatureHistogram (
   std::vector<pcl::PCLPointField> fields;
   // Check if our field exists
   int field_idx = pcl::getFieldIndex<PointT> (cloud, field_name, fields);
-  if (field_idx == -1)
-  {
-    PCL_ERROR ("[addFeatureHistogram] The specified field <%s> does not exist!\n", field_name.c_str ());
+  if (field_idx == -1) {
+    PCL_ERROR ("[addFeatureHistogram] The specified field <%s> does not exist!\n",
+               field_name.c_str ());
     return (false);
   }
 
   int hsize = fields[field_idx].count;
   std::vector<double> array_x (hsize), array_y (hsize);
-  
-  for (int i = 0; i < hsize; ++i)
-  {
+
+  for (int i = 0; i < hsize; ++i) {
     array_x[i] = i;
     float data;
     // TODO: replace float with the real data type
-    memcpy (&data, reinterpret_cast<const char*> (&cloud.points[index]) + fields[field_idx].offset + i * sizeof (float), sizeof (float));
+    memcpy (&data,
+            reinterpret_cast<const char *> (&cloud.points[index]) +
+                fields[field_idx].offset + i * sizeof (float),
+            sizeof (float));
     array_y[i] = data;
   }
-  
-  this->addPlotData(array_x, array_y, id.c_str(), vtkChart::LINE);
+
+  this->addPlotData (array_x, array_y, id.c_str (), vtkChart::LINE);
   setWindowSize (win_width, win_height);
   return (true);
 }
 
-#endif	/* PCL_VISUALUALIZATION_PCL_PLOTTER_IMPL_H_ */
-
+#endif /* PCL_VISUALUALIZATION_PCL_PLOTTER_IMPL_H_ */

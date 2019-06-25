@@ -43,7 +43,7 @@
 #include <pcl/apps/in_hand_scanner/main_window.h>
 
 int
-main (int argc, char** argv)
+main (int argc, char **argv)
 {
   QApplication app (argc, argv);
   pcl::ihs::MainWindow mw;

@@ -43,29 +43,27 @@
 namespace pcl
 {
   ////////////////////////////////////////////////////////////////////////////////////////////
-  /** \brief Obtain the difference between two aligned point clouds as another point cloud, given a distance threshold.
-    * \param src the input point cloud source
-    * \param threshold the distance threshold (tolerance) for point correspondences. (e.g., check if f a point p1 from 
-    * src has a correspondence > threshold than a point p2 from tgt)
-    * \param tree the spatial locator (e.g., kd-tree) used for nearest neighbors searching built over the target cloud
-    * \param output the resultant output point cloud difference
-    * \ingroup segmentation
-    */
-  template <typename PointT> 
-  void getPointCloudDifference (
-      const pcl::PointCloud<PointT> &src,
-      double threshold,
-      const typename pcl::search::Search<PointT>::Ptr &tree,
-      pcl::PointCloud<PointT> &output);
+  /** \brief Obtain the difference between two aligned point clouds as another point
+   * cloud, given a distance threshold. \param src the input point cloud source \param
+   * threshold the distance threshold (tolerance) for point correspondences. (e.g.,
+   * check if f a point p1 from src has a correspondence > threshold than a point p2
+   * from tgt) \param tree the spatial locator (e.g., kd-tree) used for nearest
+   * neighbors searching built over the target cloud \param output the resultant output
+   * point cloud difference \ingroup segmentation
+   */
+  template <typename PointT>
+  void
+  getPointCloudDifference (const pcl::PointCloud<PointT> &src, double threshold,
+                           const typename pcl::search::Search<PointT>::Ptr &tree,
+                           pcl::PointCloud<PointT> &output);
 
   template <typename PointT>
-  [[deprecated("tgt parameter is not used; it is deprecated and will be removed in future releases")]]
-  inline void getPointCloudDifference (
-      const pcl::PointCloud<PointT> &src,
-      const pcl::PointCloud<PointT> & /* tgt */,
-      double threshold,
-      const typename pcl::search::Search<PointT>::Ptr &tree,
-      pcl::PointCloud<PointT> &output)
+  [[deprecated ("tgt parameter is not used; it is deprecated and will be removed in "
+                "future releases")]] inline void
+  getPointCloudDifference (const pcl::PointCloud<PointT> &src,
+                           const pcl::PointCloud<PointT> & /* tgt */, double threshold,
+                           const typename pcl::search::Search<PointT>::Ptr &tree,
+                           pcl::PointCloud<PointT> &output)
   {
     getPointCloudDifference<PointT> (src, threshold, tree, output);
   }
@@ -74,97 +72,118 @@ namespace pcl
   ////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////
   /** \brief @b SegmentDifferences obtains the difference between two spatially
-    * aligned point clouds and returns the difference between them for a maximum
-    * given distance threshold.
-    * \author Radu Bogdan Rusu
-    * \ingroup segmentation
-    */
+   * aligned point clouds and returns the difference between them for a maximum
+   * given distance threshold.
+   * \author Radu Bogdan Rusu
+   * \ingroup segmentation
+   */
   template <typename PointT>
-  class SegmentDifferences: public PCLBase<PointT>
+  class SegmentDifferences : public PCLBase<PointT>
   {
     using BasePCLBase = PCLBase<PointT>;
 
     public:
-      using PointCloud = pcl::PointCloud<PointT>;
-      using PointCloudPtr = typename PointCloud::Ptr;
-      using PointCloudConstPtr = typename PointCloud::ConstPtr;
+    using PointCloud = pcl::PointCloud<PointT>;
+    using PointCloudPtr = typename PointCloud::Ptr;
+    using PointCloudConstPtr = typename PointCloud::ConstPtr;
 
-      using KdTree = pcl::search::Search<PointT>;
-      using KdTreePtr = typename KdTree::Ptr;
+    using KdTree = pcl::search::Search<PointT>;
+    using KdTreePtr = typename KdTree::Ptr;
 
-      using PointIndicesPtr = PointIndices::Ptr;
-      using PointIndicesConstPtr = PointIndices::ConstPtr;
+    using PointIndicesPtr = PointIndices::Ptr;
+    using PointIndicesConstPtr = PointIndices::ConstPtr;
 
-      /** \brief Empty constructor. */
-      SegmentDifferences () : 
-        tree_ (), target_ (), distance_threshold_ (0)
-      {};
+    /** \brief Empty constructor. */
+    SegmentDifferences () : tree_ (), target_ (), distance_threshold_ (0){};
 
-      /** \brief Provide a pointer to the target dataset against which we
-        * compare the input cloud given in setInputCloud
-        *
-        * \param cloud the target PointCloud dataset
-        */
-      inline void 
-      setTargetCloud (const PointCloudConstPtr &cloud) { target_ = cloud; }
+    /** \brief Provide a pointer to the target dataset against which we
+     * compare the input cloud given in setInputCloud
+     *
+     * \param cloud the target PointCloud dataset
+     */
+    inline void
+    setTargetCloud (const PointCloudConstPtr &cloud)
+    {
+      target_ = cloud;
+    }
 
-      /** \brief Get a pointer to the input target point cloud dataset. */
-      inline PointCloudConstPtr const 
-      getTargetCloud () { return (target_); }
+    /** \brief Get a pointer to the input target point cloud dataset. */
+    inline PointCloudConstPtr const
+    getTargetCloud ()
+    {
+      return (target_);
+    }
 
-      /** \brief Provide a pointer to the search object.
-        * \param tree a pointer to the spatial search object.
-        */
-      inline void 
-      setSearchMethod (const KdTreePtr &tree) { tree_ = tree; }
+    /** \brief Provide a pointer to the search object.
+     * \param tree a pointer to the spatial search object.
+     */
+    inline void
+    setSearchMethod (const KdTreePtr &tree)
+    {
+      tree_ = tree;
+    }
 
-      /** \brief Get a pointer to the search method used. */
-      inline KdTreePtr 
-      getSearchMethod () { return (tree_); }
+    /** \brief Get a pointer to the search method used. */
+    inline KdTreePtr
+    getSearchMethod ()
+    {
+      return (tree_);
+    }
 
-      /** \brief Set the maximum distance tolerance (squared) between corresponding
-        * points in the two input datasets.
-        *
-        * \param sqr_threshold the squared distance tolerance as a measure in L2 Euclidean space
-        */
-      inline void 
-      setDistanceThreshold (double sqr_threshold) { distance_threshold_ = sqr_threshold; }
+    /** \brief Set the maximum distance tolerance (squared) between corresponding
+     * points in the two input datasets.
+     *
+     * \param sqr_threshold the squared distance tolerance as a measure in L2 Euclidean
+     * space
+     */
+    inline void
+    setDistanceThreshold (double sqr_threshold)
+    {
+      distance_threshold_ = sqr_threshold;
+    }
 
-      /** \brief Get the squared distance tolerance between corresponding points as a
-        * measure in the L2 Euclidean space.
-        */
-      inline double 
-      getDistanceThreshold () { return (distance_threshold_); }
+    /** \brief Get the squared distance tolerance between corresponding points as a
+     * measure in the L2 Euclidean space.
+     */
+    inline double
+    getDistanceThreshold ()
+    {
+      return (distance_threshold_);
+    }
 
-      /** \brief Segment differences between two input point clouds.
-        * \param output the resultant difference between the two point clouds as a PointCloud
-        */
-      void 
-      segment (PointCloud &output);
+    /** \brief Segment differences between two input point clouds.
+     * \param output the resultant difference between the two point clouds as a
+     * PointCloud
+     */
+    void
+    segment (PointCloud &output);
 
     protected:
-      // Members derived from the base class
-      using BasePCLBase::input_;
-      using BasePCLBase::indices_;
-      using BasePCLBase::initCompute;
-      using BasePCLBase::deinitCompute;
+    // Members derived from the base class
+    using BasePCLBase::deinitCompute;
+    using BasePCLBase::indices_;
+    using BasePCLBase::initCompute;
+    using BasePCLBase::input_;
 
-      /** \brief A pointer to the spatial search object. */
-      KdTreePtr tree_;
+    /** \brief A pointer to the spatial search object. */
+    KdTreePtr tree_;
 
-      /** \brief The input target point cloud dataset. */
-      PointCloudConstPtr target_;
+    /** \brief The input target point cloud dataset. */
+    PointCloudConstPtr target_;
 
-      /** \brief The distance tolerance (squared) as a measure in the L2
-        * Euclidean space between corresponding points. 
-        */
-      double distance_threshold_;
+    /** \brief The distance tolerance (squared) as a measure in the L2
+     * Euclidean space between corresponding points.
+     */
+    double distance_threshold_;
 
-      /** \brief Class getName method. */
-      virtual std::string 
-      getClassName () const { return ("SegmentDifferences"); }
+    /** \brief Class getName method. */
+    virtual std::string
+    getClassName () const
+    {
+      return ("SegmentDifferences");
+    }
   };
-}
+} // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE
 #include <pcl/segmentation/impl/segment_differences.hpp>

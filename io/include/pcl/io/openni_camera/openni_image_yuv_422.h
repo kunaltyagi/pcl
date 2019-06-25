@@ -35,25 +35,26 @@
  */
 
 #pragma once
- 
+
 #include <pcl/pcl_config.h>
 #ifdef HAVE_OPENNI
 
-#include <pcl/pcl_macros.h>
 #include "openni_image.h"
+#include <pcl/pcl_macros.h>
 
 namespace openni_wrapper
 {
 
   /**
-   * @brief Concrete implementation of the interface Image for a YUV 422 image used by Primesense devices.
+   * @brief Concrete implementation of the interface Image for a YUV 422 image used by
+   * Primesense devices.
    * @author Suat Gedikli
    * @date 02.january 2011
    * @ingroup io
    */
   class PCL_EXPORTS ImageYUV422 : public Image
   {
-  public:
+    public:
     ImageYUV422 (boost::shared_ptr<xn::ImageMetaData> image_meta_data) throw ();
     ~ImageYUV422 () throw ();
 
@@ -63,17 +64,27 @@ namespace openni_wrapper
       return (YUV422);
     }
 
-    bool isResizingSupported (unsigned input_width, unsigned input_height, unsigned output_width, unsigned output_height) const override;
-    void fillRGB (unsigned width, unsigned height, unsigned char* rgb_buffer, unsigned rgb_line_step = 0) const override;
-    void fillGrayscale (unsigned width, unsigned height, unsigned char* gray_buffer, unsigned gray_line_step = 0) const override;
-    inline static bool resizingSupported (unsigned input_width, unsigned input_height, unsigned output_width, unsigned output_height);
-  } ;
+    bool
+    isResizingSupported (unsigned input_width, unsigned input_height,
+                         unsigned output_width, unsigned output_height) const override;
+    void
+    fillRGB (unsigned width, unsigned height, unsigned char *rgb_buffer,
+             unsigned rgb_line_step = 0) const override;
+    void
+    fillGrayscale (unsigned width, unsigned height, unsigned char *gray_buffer,
+                   unsigned gray_line_step = 0) const override;
+    inline static bool
+    resizingSupported (unsigned input_width, unsigned input_height,
+                       unsigned output_width, unsigned output_height);
+  };
 
   bool
-  ImageYUV422::resizingSupported (unsigned input_width, unsigned input_height, unsigned output_width, unsigned output_height)
+  ImageYUV422::resizingSupported (unsigned input_width, unsigned input_height,
+                                  unsigned output_width, unsigned output_height)
   {
-    return (output_width <= input_width && output_height <= input_height && input_width % output_width == 0 && input_height % output_height == 0);
+    return (output_width <= input_width && output_height <= input_height &&
+            input_width % output_width == 0 && input_height % output_height == 0);
   }
-} // namespace
+} // namespace openni_wrapper
 
 #endif
