@@ -294,8 +294,11 @@ pcl::ihs::InputDataProcessing::manhattan (const MatrixXb &mat, const bool comp) 
 ////////////////////////////////////////////////////////////////////////////////
 
 void
-pcl::ihs::InputDataProcessing::RGBToHSV (const unsigned char r, const unsigned char g,
-                                         const unsigned char b, float &h, float &s,
+pcl::ihs::InputDataProcessing::RGBToHSV (const unsigned char r,
+                                         const unsigned char g,
+                                         const unsigned char b,
+                                         float &h,
+                                         float &s,
                                          float &v) const
 {
   const unsigned char max = std::max (r, std::max (g, b));

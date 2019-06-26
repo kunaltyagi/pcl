@@ -56,7 +56,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::PointPickingCallback::Execute (vtkObject *caller,
-                                                   unsigned long eventid, void *)
+                                                   unsigned long eventid,
+                                                   void *)
 {
   PCLVisualizerInteractorStyle *style =
       reinterpret_cast<PCLVisualizerInteractorStyle *> (caller);
@@ -168,8 +169,8 @@ pcl::visualization::PointPickingCallback::performAreaPick (
   vtkAreaPicker *picker = static_cast<vtkAreaPicker *> (iren->GetPicker ());
   vtkRenderer *ren = iren->FindPokedRenderer (iren->GetEventPosition ()[0],
                                               iren->GetEventPosition ()[1]);
-  picker->AreaPick (x_, y_, iren->GetEventPosition ()[0], iren->GetEventPosition ()[1],
-                    ren);
+  picker->AreaPick (
+      x_, y_, iren->GetEventPosition ()[0], iren->GetEventPosition ()[1], ren);
   if (picker->GetDataSet ()) {
     vtkPolyData *points = reinterpret_cast<vtkPolyData *> (picker->GetDataSet ());
 

@@ -42,12 +42,12 @@ ON_UUID::operator!= (const ON_UUID &other) const
 // ON_UUIDs as an array of 16 bytes.
 
 // for little endian CPUs (Intel, etc)
-static const int little_endian_rho[16] = {3, 2, 1,  0,  5,  4,  7,  6,
-                                          8, 9, 10, 11, 12, 13, 14, 15};
+static const int little_endian_rho[16] = {
+    3, 2, 1, 0, 5, 4, 7, 6, 8, 9, 10, 11, 12, 13, 14, 15};
 
 // for big endian CPUs (Motorola, MIPS, Sparc, etc.)
-static const int big_endian_rho[16] = {0, 1, 2,  3,  4,  5,  6,  7,
-                                       8, 9, 10, 11, 12, 13, 14, 15};
+static const int big_endian_rho[16] = {
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
 bool
 ON_CreateUuid (ON_UUID &new_uuid)
@@ -423,8 +423,8 @@ ON_UuidToString (const ON_UUID &uuid, char *s)
   //     identical to the string returned by Windows' ::UuidToString().
   // static const char x[16] =
   // {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-  static const char x[16] = {'0', '1', '2', '3', '4', '5', '6', '7',
-                             '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+  static const char x[16] = {
+      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
   static const int addhyphen[16] = {0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0};
   const unsigned char *b = (const unsigned char *)&uuid;
   char *p;

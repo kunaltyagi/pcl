@@ -70,7 +70,8 @@ namespace pcl
       // This is needed because we have members which are Vector4f and Quaternionf
       EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-      CloudItem (const QString name, const pcl::PCLPointCloud2::Ptr cloud_ptr,
+      CloudItem (const QString name,
+                 const pcl::PCLPointCloud2::Ptr cloud_ptr,
                  const Eigen::Vector4f &origin = Eigen::Vector4f (),
                  const Eigen::Quaternionf &orientation = Eigen::Quaternionf (),
                  bool make_templated_cloud = true);

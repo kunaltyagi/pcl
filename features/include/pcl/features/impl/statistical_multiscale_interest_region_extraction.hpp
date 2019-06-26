@@ -67,8 +67,8 @@ pcl::StatisticalMultiscaleInterestRegionExtraction<PointT>::generateCloudGraph (
     kdtree.nearestKSearch (static_cast<int> (point_i), 16, k_indices, k_distances);
 
     for (int k_i = 0; k_i < static_cast<int> (k_indices.size ()); ++k_i)
-      add_edge (point_i, k_indices[k_i], Weight (std::sqrt (k_distances[k_i])),
-                cloud_graph);
+      add_edge (
+          point_i, k_indices[k_i], Weight (std::sqrt (k_distances[k_i])), cloud_graph);
   }
 
   const size_t E = num_edges (cloud_graph), V = num_vertices (cloud_graph);

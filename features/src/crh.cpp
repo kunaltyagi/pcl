@@ -46,7 +46,8 @@ PCL_INSTANTIATE_PRODUCT (CRHEstimation,
                          ((pcl::PointXYZ) (pcl::PointXYZI) (pcl::PointXYZRGBA)) (
                              (pcl::Normal)) ((pcl::Histogram<90>)))
 #else
-PCL_INSTANTIATE_PRODUCT (CRHEstimation, (PCL_XYZ_POINT_TYPES) (PCL_NORMAL_POINT_TYPES) (
-                                            (pcl::Histogram<90>)))
+PCL_INSTANTIATE_PRODUCT (
+    CRHEstimation,
+    (PCL_XYZ_POINT_TYPES) (PCL_NORMAL_POINT_TYPES) ((pcl::Histogram<90>)))
 #endif
 #endif // PCL_NO_PRECOMPILE

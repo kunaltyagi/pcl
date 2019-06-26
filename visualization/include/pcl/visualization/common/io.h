@@ -67,7 +67,8 @@ namespace pcl
      * \ingroup visualization
      */
     PCL_EXPORTS bool
-    savePointData (vtkPolyData *data, const std::string &out_file,
+    savePointData (vtkPolyData *data,
+                   const std::string &out_file,
                    const boost::shared_ptr<CloudActorMap> &actors);
   } // namespace visualization
 } // namespace pcl

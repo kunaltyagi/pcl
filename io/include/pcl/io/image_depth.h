@@ -73,10 +73,16 @@ namespace pcl
        * focal length may change, depending whether the depth stream is
        * registered/mapped to the RGB stream or not.
        */
-      DepthImage (FrameWrapper::Ptr depth_metadata, float baseline, float focal_length,
-                  pcl::uint64_t shadow_value, pcl::uint64_t no_sample_value);
-      DepthImage (FrameWrapper::Ptr depth_metadata, float baseline, float focal_length,
-                  pcl::uint64_t shadow_value, pcl::uint64_t no_sample_value,
+      DepthImage (FrameWrapper::Ptr depth_metadata,
+                  float baseline,
+                  float focal_length,
+                  pcl::uint64_t shadow_value,
+                  pcl::uint64_t no_sample_value);
+      DepthImage (FrameWrapper::Ptr depth_metadata,
+                  float baseline,
+                  float focal_length,
+                  pcl::uint64_t shadow_value,
+                  pcl::uint64_t no_sample_value,
                   Timestamp time);
 
       /** \brief Destructor. Never throws an exception. */
@@ -98,7 +104,9 @@ namespace pcl
        *        width in bytes (not floats) of the original width of the depth buffer.
        */
       void
-      fillDisparityImage (unsigned width, unsigned height, float *disparity_buffer,
+      fillDisparityImage (unsigned width,
+                          unsigned height,
+                          float *disparity_buffer,
                           unsigned line_step = 0) const;
 
       /** \brief fills a user given block of memory with the disparity values with
@@ -110,7 +118,9 @@ namespace pcl
        *        width in bytes (not floats) of the original width of the depth buffer.
        */
       void
-      fillDepthImage (unsigned width, unsigned height, float *depth_buffer,
+      fillDepthImage (unsigned width,
+                      unsigned height,
+                      float *depth_buffer,
                       unsigned line_step = 0) const;
 
       /** \brief fills a user given block of memory with the raw values with additional
@@ -122,7 +132,9 @@ namespace pcl
        *        width in bytes (not floats) of the original width of the depth buffer.
        */
       void
-      fillDepthImageRaw (unsigned width, unsigned height, unsigned short *depth_buffer,
+      fillDepthImageRaw (unsigned width,
+                         unsigned height,
+                         unsigned short *depth_buffer,
                          unsigned line_step = 0) const;
 
       /** \brief method to access the baseline of the "stereo" frame that was used to

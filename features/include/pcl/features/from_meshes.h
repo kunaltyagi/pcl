@@ -46,8 +46,12 @@ namespace pcl
             cloud.points[polygons[i].vertices[0]].getVector3fMap () -
             cloud.points[polygons[i].vertices[2]].getVector3fMap ();
         Eigen::Vector3f normal = vec_a_b.cross (vec_a_c);
-        pcl::flipNormalTowardsViewpoint (cloud.points[polygons[i].vertices[0]], 0.0f,
-                                         0.0f, 0.0f, normal (0), normal (1),
+        pcl::flipNormalTowardsViewpoint (cloud.points[polygons[i].vertices[0]],
+                                         0.0f,
+                                         0.0f,
+                                         0.0f,
+                                         normal (0),
+                                         normal (1),
                                          normal (2));
 
         // add normal to all points in polygon
@@ -57,9 +61,13 @@ namespace pcl
 
       for (int i = 0; i < nr_points; ++i) {
         normals.points[i].getNormalVector3fMap ().normalize ();
-        pcl::flipNormalTowardsViewpoint (
-            cloud.points[i], 0.0f, 0.0f, 0.0f, normals.points[i].normal_x,
-            normals.points[i].normal_y, normals.points[i].normal_z);
+        pcl::flipNormalTowardsViewpoint (cloud.points[i],
+                                         0.0f,
+                                         0.0f,
+                                         0.0f,
+                                         normals.points[i].normal_x,
+                                         normals.points[i].normal_y,
+                                         normals.points[i].normal_z);
       }
     }
 
@@ -74,7 +82,8 @@ namespace pcl
     template <typename PointT, typename PointNT>
     inline void
     computeApproximateCovariances (
-        const pcl::PointCloud<PointT> &cloud, const pcl::PointCloud<PointNT> &normals,
+        const pcl::PointCloud<PointT> &cloud,
+        const pcl::PointCloud<PointNT> &normals,
         std::vector<Eigen::Matrix3d, Eigen::aligned_allocator<Eigen::Matrix3d>>
             &covariances,
         double epsilon = 0.001)
@@ -84,7 +93,8 @@ namespace pcl
       int nr_points = static_cast<int> (cloud.points.size ());
       covariances.resize (nr_points);
       for (int i = 0; i < nr_points; ++i) {
-        Eigen::Vector3d normal (normals.points[i].normal_x, normals.points[i].normal_y,
+        Eigen::Vector3d normal (normals.points[i].normal_x,
+                                normals.points[i].normal_y,
                                 normals.points[i].normal_z);
 
         // compute rotation matrix

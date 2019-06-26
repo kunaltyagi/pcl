@@ -50,14 +50,18 @@ pcl::simulation::TriangleMeshModel::TriangleMeshModel (pcl::PolygonMesh::Ptr plg
 
   glGenBuffers (1, &vbo_);
   glBindBuffer (GL_ARRAY_BUFFER, vbo_);
-  glBufferData (GL_ARRAY_BUFFER, vertices.size () * sizeof (vertices[0]),
-                &(vertices[0]), GL_STATIC_DRAW);
+  glBufferData (GL_ARRAY_BUFFER,
+                vertices.size () * sizeof (vertices[0]),
+                &(vertices[0]),
+                GL_STATIC_DRAW);
   glBindBuffer (GL_ARRAY_BUFFER, 0);
 
   glGenBuffers (1, &ibo_);
   glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, ibo_);
-  glBufferData (GL_ELEMENT_ARRAY_BUFFER, indices.size () * sizeof (indices[0]),
-                &(indices[0]), GL_STATIC_DRAW);
+  glBufferData (GL_ELEMENT_ARRAY_BUFFER,
+                indices.size () * sizeof (indices[0]),
+                &(indices[0]),
+                GL_STATIC_DRAW);
   glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, 0);
 
   if (indices.size () > std::numeric_limits<GLuint>::max ())
@@ -269,8 +273,8 @@ pcl::simulation::Quad::render ()
   glEnableVertexAttribArray (0);
   glEnableVertexAttribArray (1);
   glVertexAttribPointer (0, 3, GL_FLOAT, GL_FALSE, sizeof (float) * 5, nullptr);
-  glVertexAttribPointer (1, 2, GL_FLOAT, GL_FALSE, sizeof (float) * 5,
-                         (const GLvoid *)12);
+  glVertexAttribPointer (
+      1, 2, GL_FLOAT, GL_FALSE, sizeof (float) * 5, (const GLvoid *)12);
 
   glDrawArrays (GL_QUADS, 0, 4);
 
@@ -298,8 +302,8 @@ pcl::simulation::TexturedQuad::TexturedQuad (int width, int height)
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-  glTexImage2D (GL_TEXTURE_2D, 0, GL_RGB, width_, height_, 0, GL_RGB, GL_UNSIGNED_BYTE,
-                nullptr);
+  glTexImage2D (
+      GL_TEXTURE_2D, 0, GL_RGB, width_, height_, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
   glBindTexture (GL_TEXTURE_2D, 0);
 }
 
@@ -309,8 +313,8 @@ void
 pcl::simulation::TexturedQuad::setTexture (const uint8_t *data)
 {
   glBindTexture (GL_TEXTURE_2D, texture_);
-  glTexImage2D (GL_TEXTURE_2D, 0, GL_RGB, width_, height_, 0, GL_RGB, GL_UNSIGNED_BYTE,
-                data);
+  glTexImage2D (
+      GL_TEXTURE_2D, 0, GL_RGB, width_, height_, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
   glBindTexture (GL_TEXTURE_2D, 0);
 }
 

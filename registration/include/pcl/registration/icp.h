@@ -126,8 +126,8 @@ namespace pcl
     using Registration<PointSource, PointTarget, Scalar>::final_transformation_;
     using Registration<PointSource, PointTarget, Scalar>::transformation_;
     using Registration<PointSource, PointTarget, Scalar>::transformation_epsilon_;
-    using Registration<PointSource, PointTarget,
-                       Scalar>::transformation_rotation_epsilon_;
+    using Registration<PointSource, PointTarget, Scalar>::
+        transformation_rotation_epsilon_;
     using Registration<PointSource, PointTarget, Scalar>::converged_;
     using Registration<PointSource, PointTarget, Scalar>::corr_dist_threshold_;
     using Registration<PointSource, PointTarget, Scalar>::inlier_threshold_;
@@ -152,11 +152,11 @@ namespace pcl
     {
       reg_name_ = "IterativeClosestPoint";
       transformation_estimation_.reset (
-          new pcl::registration::TransformationEstimationSVD<PointSource, PointTarget,
-                                                             Scalar> ());
+          new pcl::registration::
+              TransformationEstimationSVD<PointSource, PointTarget, Scalar> ());
       correspondence_estimation_.reset (
-          new pcl::registration::CorrespondenceEstimation<PointSource, PointTarget,
-                                                          Scalar>);
+          new pcl::registration::
+              CorrespondenceEstimation<PointSource, PointTarget, Scalar>);
       convergence_criteria_.reset (
           new pcl::registration::DefaultConvergenceCriteria<Scalar> (
               nr_iterations_, transformation_, *correspondences_));
@@ -260,7 +260,8 @@ namespace pcl
      * \note Can be used with cloud_in equal to cloud_out
      */
     virtual void
-    transformCloud (const PointCloudSource &input, PointCloudSource &output,
+    transformCloud (const PointCloudSource &input,
+                    PointCloudSource &output,
                     const Matrix4 &transform);
 
     /** \brief Rigid transformation computation method  with initial guess.
@@ -306,18 +307,20 @@ namespace pcl
       : public IterativeClosestPoint<PointSource, PointTarget, Scalar>
   {
     public:
-    using PointCloudSource = typename IterativeClosestPoint<PointSource, PointTarget,
+    using PointCloudSource = typename IterativeClosestPoint<PointSource,
+                                                            PointTarget,
                                                             Scalar>::PointCloudSource;
-    using PointCloudTarget = typename IterativeClosestPoint<PointSource, PointTarget,
+    using PointCloudTarget = typename IterativeClosestPoint<PointSource,
+                                                            PointTarget,
                                                             Scalar>::PointCloudTarget;
     using Matrix4 =
         typename IterativeClosestPoint<PointSource, PointTarget, Scalar>::Matrix4;
 
     using IterativeClosestPoint<PointSource, PointTarget, Scalar>::reg_name_;
-    using IterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::transformation_estimation_;
-    using IterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::correspondence_rejectors_;
+    using IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+        transformation_estimation_;
+    using IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+        correspondence_rejectors_;
 
     using Ptr =
         boost::shared_ptr<IterativeClosestPoint<PointSource, PointTarget, Scalar>>;
@@ -329,8 +332,9 @@ namespace pcl
     {
       reg_name_ = "IterativeClosestPointWithNormals";
       transformation_estimation_.reset (
-          new pcl::registration::TransformationEstimationPointToPlaneLLS<
-              PointSource, PointTarget, Scalar> ());
+          new pcl::registration::TransformationEstimationPointToPlaneLLS<PointSource,
+                                                                         PointTarget,
+                                                                         Scalar> ());
       // correspondence_rejectors_.add
     };
 
@@ -345,7 +349,8 @@ namespace pcl
      * \note Can be used with cloud_in equal to cloud_out
      */
     virtual void
-    transformCloud (const PointCloudSource &input, PointCloudSource &output,
+    transformCloud (const PointCloudSource &input,
+                    PointCloudSource &output,
                     const Matrix4 &transform);
   };
 } // namespace pcl

@@ -320,7 +320,8 @@ namespace pcl
 
     template <int Degree>
     void
-    execute (poisson::CoredVectorMeshData &mesh, poisson::Point3D<float> &translate,
+    execute (poisson::CoredVectorMeshData &mesh,
+             poisson::Point3D<float> &translate,
              float &scale);
 
     public:

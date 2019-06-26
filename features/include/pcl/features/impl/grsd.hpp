@@ -44,8 +44,12 @@
 template <typename PointInT, typename PointNT, typename PointOutT>
 int
 pcl::GRSDEstimation<PointInT, PointNT, PointOutT>::getSimpleType (
-    float min_radius, float max_radius, double min_radius_plane,
-    double max_radius_noise, double min_radius_cylinder, double max_min_radius_diff)
+    float min_radius,
+    float max_radius,
+    double min_radius_plane,
+    double max_radius_noise,
+    double min_radius_cylinder,
+    double max_min_radius_diff)
 {
   if (min_radius > min_radius_plane)
     return (1); // plane

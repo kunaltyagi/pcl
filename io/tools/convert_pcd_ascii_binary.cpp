@@ -81,8 +81,8 @@ main (int argc, char **argv)
   pcl::PCDWriter w;
   if (type == 0) {
     std::cerr << "Saving file " << argv[2] << " as ASCII." << std::endl;
-    w.writeASCII (string (argv[2]), cloud, origin, orientation,
-                  (argc == 5) ? atoi (argv[4]) : 7);
+    w.writeASCII (
+        string (argv[2]), cloud, origin, orientation, (argc == 5) ? atoi (argv[4]) : 7);
   } else if (type == 1) {
     std::cerr << "Saving file " << argv[2] << " as binary." << std::endl;
     w.writeBinary (string (argv[2]), cloud, origin, orientation);

@@ -106,7 +106,8 @@ namespace pcl
     createDataVectorFromVoxelGrid ();
 
     void
-    createUnaryPotentials (std::vector<float> &unary, std::vector<int> &colors,
+    createUnaryPotentials (std::vector<float> &unary,
+                           std::vector<int> &colors,
                            unsigned int n_labels);
 
     /** \brief Set the smoothness kernel parameters.
@@ -116,7 +117,9 @@ namespace pcl
      * \param[in] w weight
      */
     void
-    setSmoothnessKernelParameters (const float sx, const float sy, const float sz,
+    setSmoothnessKernelParameters (const float sx,
+                                   const float sy,
+                                   const float sz,
                                    const float w);
 
     /** \brief Set the appearanche kernel parameters.
@@ -129,12 +132,12 @@ namespace pcl
      * \param[in] w weight
      */
     void
-    setAppearanceKernelParameters (float sx, float sy, float sz, float sr, float sg,
-                                   float sb, float w);
+    setAppearanceKernelParameters (
+        float sx, float sy, float sz, float sr, float sg, float sb, float w);
 
     void
-    setSurfaceKernelParameters (float sx, float sy, float sz, float snx, float sny,
-                                float snz, float w);
+    setSurfaceKernelParameters (
+        float sx, float sy, float sz, float snx, float sny, float snz, float w);
 
     protected:
     /** \brief Voxel grid to discretize the scene */

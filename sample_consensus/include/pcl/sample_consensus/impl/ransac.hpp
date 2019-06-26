@@ -117,7 +117,10 @@ pcl::RandomSampleConsensus<PointT>::computeModel (int)
     ++iterations_;
     PCL_DEBUG ("[pcl::RandomSampleConsensus::computeModel] Trial %d out of %f: %d "
                "inliers (best is: %d so far).\n",
-               iterations_, k, n_inliers_count, n_best_inliers_count);
+               iterations_,
+               k,
+               n_inliers_count,
+               n_best_inliers_count);
     if (iterations_ > max_iterations_) {
       PCL_DEBUG ("[pcl::RandomSampleConsensus::computeModel] RANSAC reached the "
                  "maximum number of trials.\n");
@@ -127,7 +130,8 @@ pcl::RandomSampleConsensus<PointT>::computeModel (int)
 
   PCL_DEBUG (
       "[pcl::RandomSampleConsensus::computeModel] Model: %lu size, %d inliers.\n",
-      model_.size (), n_best_inliers_count);
+      model_.size (),
+      n_best_inliers_count);
 
   if (model_.empty ()) {
     inliers_.clear ();

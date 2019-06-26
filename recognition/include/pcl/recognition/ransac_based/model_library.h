@@ -65,8 +65,11 @@ namespace pcl
       class Model
       {
         public:
-        Model (const PointCloudIn &points, const PointCloudN &normals, float voxel_size,
-               const std::string &object_name, float frac_of_points_for_registration,
+        Model (const PointCloudIn &points,
+               const PointCloudN &normals,
+               float voxel_size,
+               const std::string &object_name,
+               float frac_of_points_for_registration,
                void *user_data = nullptr)
             : obj_name_ (object_name), user_data_ (user_data)
         {
@@ -181,7 +184,8 @@ namespace pcl
       public:
       /** \brief This class is used by 'ObjRecRANSAC' to maintain the object models to
        * be recognized. Normally, you do not need to use this class directly. */
-      ModelLibrary (float pair_width, float voxel_size,
+      ModelLibrary (float pair_width,
+                    float voxel_size,
                     float max_coplanarity_angle = 3.0f *
                                                   AUX_DEG_TO_RADIANS /*3 degrees*/);
       virtual ~ModelLibrary () { this->clear (); }
@@ -228,8 +232,10 @@ namespace pcl
        * Returns true if model successfully added and false otherwise (e.g., if
        * object_name is not unique). */
       bool
-      addModel (const PointCloudIn &points, const PointCloudN &normals,
-                const std::string &object_name, float frac_of_points_for_registration,
+      addModel (const PointCloudIn &points,
+                const PointCloudN &normals,
+                const std::string &object_name,
+                float frac_of_points_for_registration,
                 void *user_data = nullptr);
 
       /** \brief Returns the hash table built by this instance. */
@@ -264,7 +270,8 @@ namespace pcl
       /** \brief Returns true if the oriented point pair was added to the hash table and
        * false otherwise. */
       bool
-      addToHashTable (Model *model, const ORROctree::Node::Data *data1,
+      addToHashTable (Model *model,
+                      const ORROctree::Node::Data *data1,
                       const ORROctree::Node::Data *data2);
 
       protected:

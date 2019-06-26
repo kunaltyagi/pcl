@@ -59,7 +59,8 @@ namespace pcl
 
       /** \brief Helper function for adding a new property */
       void
-      addProperty (const QString prop_name, const QVariant value,
+      addProperty (const QString prop_name,
+                   const QVariant value,
                    const Qt::ItemFlags flags = Qt::ItemIsSelectable,
                    const QString category = "");
 

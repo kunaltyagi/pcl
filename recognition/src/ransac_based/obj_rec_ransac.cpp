@@ -63,8 +63,10 @@ pcl::recognition::ObjRecRANSAC::ObjRecRANSAC (float pair_width, float voxel_size
 
 void
 pcl::recognition::ObjRecRANSAC::recognize (
-    const PointCloudIn &scene, const PointCloudN &normals,
-    list<ObjRecRANSAC::Output> &recognized_objects, double success_probability)
+    const PointCloudIn &scene,
+    const PointCloudN &normals,
+    list<ObjRecRANSAC::Output> &recognized_objects,
+    double success_probability)
 {
   // Clear some stuff
   this->clearTestData ();
@@ -99,13 +101,14 @@ pcl::recognition::ObjRecRANSAC::recognize (
     num_iterations = num_full_leaves;
 
 #ifdef OBJ_REC_RANSAC_VERBOSE
-  printf ("ObjRecRANSAC::%s(): recognizing objects [%i iteration(s)]\n", __func__,
+  printf ("ObjRecRANSAC::%s(): recognizing objects [%i iteration(s)]\n",
+          __func__,
           num_iterations);
 #endif
 
   // First, sample oriented point pairs (opps)
-  this->sampleOrientedPointPairs (num_iterations, full_leaves,
-                                  sampled_oriented_point_pairs_);
+  this->sampleOrientedPointPairs (
+      num_iterations, full_leaves, sampled_oriented_point_pairs_);
 
   // Leave if we are in the SAMPLE_OPP test mode
   if (rec_mode_ == ObjRecRANSAC::SAMPLE_OPP)
@@ -118,8 +121,8 @@ pcl::recognition::ObjRecRANSAC::recognize (
 
   // Cluster the hypotheses
   HypothesisOctree grouped_hypotheses;
-  num_hypotheses = this->groupHypotheses (pre_hypotheses, num_hypotheses,
-                                          transform_space_, grouped_hypotheses);
+  num_hypotheses = this->groupHypotheses (
+      pre_hypotheses, num_hypotheses, transform_space_, grouped_hypotheses);
   pre_hypotheses.clear ();
 
   // The last graph-based steps in the algorithm
@@ -139,7 +142,8 @@ pcl::recognition::ObjRecRANSAC::recognize (
 
   // Initialize the vector with bounded objects
   for (vector<Hypothesis>::iterator hypo = accepted_hypotheses_.begin ();
-       hypo != accepted_hypotheses_.end (); ++hypo, ++i) {
+       hypo != accepted_hypotheses_.end ();
+       ++hypo, ++i) {
     // Create, initialize and save a bounded object based on the hypothesis
     BVHH::BoundedObject *bounded_object = new BVHH::BoundedObject (&(*hypo));
     hypo->computeCenterOfMass (bounded_object->getCentroid ());
@@ -160,7 +164,8 @@ pcl::recognition::ObjRecRANSAC::recognize (
   this->clearTestData ();
 
 #ifdef OBJ_REC_RANSAC_VERBOSE
-  printf ("ObjRecRANSAC::%s(): done [%i object(s)]\n", __func__,
+  printf ("ObjRecRANSAC::%s(): done [%i object(s)]\n",
+          __func__,
           static_cast<int> (recognized_objects.size ()));
 #endif
 }
@@ -169,7 +174,8 @@ pcl::recognition::ObjRecRANSAC::recognize (
 
 void
 pcl::recognition::ObjRecRANSAC::sampleOrientedPointPairs (
-    int num_iterations, const vector<ORROctree::Node *> &full_scene_leaves,
+    int num_iterations,
+    const vector<ORROctree::Node *> &full_scene_leaves,
     list<OrientedPointPair> &output) const
 {
 #ifdef OBJ_REC_RANSAC_VERBOSE
@@ -188,8 +194,8 @@ pcl::recognition::ObjRecRANSAC::sampleOrientedPointPairs (
   }
 
   // The random generator
-  UniformGenerator<int> randgen (0, num_full_leaves - 1,
-                                 static_cast<uint32_t> (time (nullptr)));
+  UniformGenerator<int> randgen (
+      0, num_full_leaves - 1, static_cast<uint32_t> (time (nullptr)));
 
   // Init the vector with the ids
   vector<int> ids (num_full_leaves);
@@ -264,8 +270,8 @@ pcl::recognition::ObjRecRANSAC::generateHypotheses (
     const float *scene_n2 = pair.n2_;
 
     // Use normals and points to compute a hash table key
-    compute_oriented_point_pair_signature (scene_p1, scene_n1, scene_p2, scene_n2,
-                                           hash_table_key);
+    compute_oriented_point_pair_signature (
+        scene_p1, scene_n1, scene_p2, scene_n2, hash_table_key);
     // Get the cell and its neighbors based on 'key'
     int num_neigh_cells =
         model_library_.getHashTable ().getNeighbors (hash_table_key, neigh_cells);
@@ -287,8 +293,14 @@ pcl::recognition::ObjRecRANSAC::generateHypotheses (
 
           HypothesisBase hypothesis (obj_model);
           // Get the rigid transform from model to scene
-          this->computeRigidTransform (model_p1, model_n1, model_p2, model_n2, scene_p1,
-                                       scene_n1, scene_p2, scene_n2,
+          this->computeRigidTransform (model_p1,
+                                       model_n1,
+                                       model_p2,
+                                       model_n2,
+                                       scene_p1,
+                                       scene_n1,
+                                       scene_p2,
+                                       scene_n2,
                                        hypothesis.rigid_transform_);
           // Save the current object hypothesis
           out.push_back (hypothesis);
@@ -308,12 +320,14 @@ pcl::recognition::ObjRecRANSAC::generateHypotheses (
 
 int
 pcl::recognition::ObjRecRANSAC::groupHypotheses (
-    list<HypothesisBase> &hypotheses, int num_hypotheses,
-    RigidTransformSpace &transform_space, HypothesisOctree &grouped_hypotheses) const
+    list<HypothesisBase> &hypotheses,
+    int num_hypotheses,
+    RigidTransformSpace &transform_space,
+    HypothesisOctree &grouped_hypotheses) const
 {
 #ifdef OBJ_REC_RANSAC_VERBOSE
-  printf ("ObjRecRANSAC::%s():\n  grouping %i hypotheses ... ", __func__,
-          num_hypotheses);
+  printf (
+      "ObjRecRANSAC::%s():\n  grouping %i hypotheses ... ", __func__, num_hypotheses);
   fflush (stdout);
 #endif
 
@@ -341,11 +355,12 @@ pcl::recognition::ObjRecRANSAC::groupHypotheses (
   for (const auto &hypothesis : hypotheses) {
     // Transform the center of mass of the model
     aux::transform (hypothesis.rigid_transform_,
-                    hypothesis.obj_model_->getOctreeCenterOfMass (), transformed_point);
+                    hypothesis.obj_model_->getOctreeCenterOfMass (),
+                    transformed_point);
 
     // Now add the rigid transform at the right place
-    transform_space.addRigidTransform (hypothesis.obj_model_, transformed_point,
-                                       hypothesis.rigid_transform_);
+    transform_space.addRigidTransform (
+        hypothesis.obj_model_, transformed_point, hypothesis.rigid_transform_);
   }
 
   list<RotationSpace *> &rotation_spaces = transform_space.getRotationSpaces ();
@@ -448,7 +463,8 @@ pcl::recognition::ObjRecRANSAC::buildGraphOfCloseHypotheses (
   graph.resize (static_cast<int> (hypo_leaves.size ()));
 
   for (vector<HypothesisOctree::Node *>::iterator hypo = hypo_leaves.begin ();
-       hypo != hypo_leaves.end (); ++hypo, ++i)
+       hypo != hypo_leaves.end ();
+       ++hypo, ++i)
     (*hypo)->getData ().setLinearId (i);
 
   i = 0;
@@ -456,7 +472,8 @@ pcl::recognition::ObjRecRANSAC::buildGraphOfCloseHypotheses (
   // Now create the graph connectivity such that each two neighboring rotation spaces
   // are neighbors in the graph
   for (vector<HypothesisOctree::Node *>::const_iterator hypo = hypo_leaves.begin ();
-       hypo != hypo_leaves.end (); ++hypo, ++i) {
+       hypo != hypo_leaves.end ();
+       ++hypo, ++i) {
     // Compute the fitness of the graph node
     graph.getNodes ()[i]->setFitness (
         static_cast<int> ((*hypo)->getData ().explained_pixels_.size ()));
@@ -525,7 +542,8 @@ pcl::recognition::ObjRecRANSAC::buildGraphOfConflictingHypotheses (
 
   // Setup the hypotheses' ids
   for (vector<BVHH::BoundedObject *>::const_iterator obj = bounded_objects->begin ();
-       obj != bounded_objects->end (); ++obj, ++lin_id) {
+       obj != bounded_objects->end ();
+       ++obj, ++lin_id) {
     (*obj)->getData ()->setLinearId (lin_id);
     graph.getNodes ()[lin_id]->setData ((*obj)->getData ());
   }
@@ -577,10 +595,11 @@ pcl::recognition::ObjRecRANSAC::buildGraphOfConflictingHypotheses (
       set<int> id_intersection;
 
       // Compute the ids intersection of 'obj' and 'it'
-      std::set_intersection (
-          hypo1->explained_pixels_.begin (), hypo1->explained_pixels_.end (),
-          hypo2->explained_pixels_.begin (), hypo2->explained_pixels_.end (),
-          std::inserter (id_intersection, id_intersection.begin ()));
+      std::set_intersection (hypo1->explained_pixels_.begin (),
+                             hypo1->explained_pixels_.end (),
+                             hypo2->explained_pixels_.begin (),
+                             hypo2->explained_pixels_.end (),
+                             std::inserter (id_intersection, id_intersection.begin ()));
 
       // Compute the intersection fractions
       float frac_1 = static_cast<float> (id_intersection.size ()) /
@@ -645,7 +664,8 @@ pcl::recognition::ObjRecRANSAC::filterGraphOfConflictingHypotheses (
 //===============================================================================================================================================
 
 inline void
-pcl::recognition::ObjRecRANSAC::testHypothesis (Hypothesis *hypothesis, int &match,
+pcl::recognition::ObjRecRANSAC::testHypothesis (Hypothesis *hypothesis,
+                                                int &match,
                                                 int &penalty) const
 {
   match = 0;
@@ -660,8 +680,8 @@ pcl::recognition::ObjRecRANSAC::testHypothesis (Hypothesis *hypothesis, int &mat
   // The match/penalty loop
   for (const auto &full_model_leaf : full_model_leaves) {
     // Transform the model point with the current rigid transform
-    aux::transform (rigid_transform, full_model_leaf->getData ()->getPoint (),
-                    transformed_point);
+    aux::transform (
+        rigid_transform, full_model_leaf->getData ()->getPoint (), transformed_point);
 
     // Get the pixel 'transformed_point' lies in
     const ORROctreeZProjection::Pixel *pixel =
@@ -704,8 +724,8 @@ pcl::recognition::ObjRecRANSAC::testHypothesisNormalBased (Hypothesis *hypothesi
   // The match/penalty loop
   for (const auto &full_model_leaf : full_model_leaves) {
     // Transform the model point with the current rigid transform
-    aux::transform (rigid_transform, full_model_leaf->getData ()->getPoint (),
-                    transformed_point);
+    aux::transform (
+        rigid_transform, full_model_leaf->getData ()->getPoint (), transformed_point);
 
     // Get the pixel 'transformed_point' lies in
     const ORROctreeZProjection::Pixel *pixel =
@@ -740,8 +760,8 @@ pcl::recognition::ObjRecRANSAC::testHypothesisNormalBased (Hypothesis *hypothesi
       }
 
       float rotated_normal[3];
-      aux::mult3x3 (rigid_transform, closest_node->getData ()->getNormal (),
-                    rotated_normal);
+      aux::mult3x3 (
+          rigid_transform, closest_node->getData ()->getNormal (), rotated_normal);
 
       match += aux::dot3 (rotated_normal, full_model_leaf->getData ()->getNormal ());
     }

@@ -113,7 +113,9 @@ pcl::search::FlannSearch<PointT, FlannDistance>::setInputCloud (
 template <typename PointT, typename FlannDistance>
 int
 pcl::search::FlannSearch<PointT, FlannDistance>::nearestKSearch (
-    const PointT &point, int k, std::vector<int> &indices,
+    const PointT &point,
+    int k,
+    std::vector<int> &indices,
     std::vector<float> &dists) const
 {
   assert (
@@ -133,8 +135,8 @@ pcl::search::FlannSearch<PointT, FlannDistance>::nearestKSearch (
 
   float *cdata =
       can_cast ? const_cast<float *> (reinterpret_cast<const float *> (&point)) : data;
-  const flann::Matrix<float> m (cdata, 1,
-                                point_representation_->getNumberOfDimensions ());
+  const flann::Matrix<float> m (
+      cdata, 1, point_representation_->getNumberOfDimensions ());
 
   flann::SearchParams p;
   p.eps = eps_;
@@ -163,7 +165,9 @@ pcl::search::FlannSearch<PointT, FlannDistance>::nearestKSearch (
 template <typename PointT, typename FlannDistance>
 void
 pcl::search::FlannSearch<PointT, FlannDistance>::nearestKSearch (
-    const PointCloud &cloud, const std::vector<int> &indices, int k,
+    const PointCloud &cloud,
+    const std::vector<int> &indices,
+    int k,
     std::vector<std::vector<int>> &k_indices,
     std::vector<std::vector<float>> &k_sqr_distances) const
 {
@@ -198,8 +202,8 @@ pcl::search::FlannSearch<PointT, FlannDistance>::nearestKSearch (
     float *cdata =
         can_cast ? const_cast<float *> (reinterpret_cast<const float *> (&cloud[0]))
                  : data;
-    const flann::Matrix<float> m (cdata, cloud.size (), dim_,
-                                  can_cast ? sizeof (PointT) : dim_ * sizeof (float));
+    const flann::Matrix<float> m (
+        cdata, cloud.size (), dim_, can_cast ? sizeof (PointT) : dim_ * sizeof (float));
 
     flann::SearchParams p;
     p.sorted = sorted_results_;
@@ -228,8 +232,8 @@ pcl::search::FlannSearch<PointT, FlannDistance>::nearestKSearch (
       float *out = data + i * dim_;
       point_representation_->vectorize (cloud[indices[i]], out);
     }
-    const flann::Matrix<float> m (data, indices.size (),
-                                  point_representation_->getNumberOfDimensions ());
+    const flann::Matrix<float> m (
+        data, indices.size (), point_representation_->getNumberOfDimensions ());
 
     flann::SearchParams p;
     p.sorted = sorted_results_;
@@ -252,8 +256,11 @@ pcl::search::FlannSearch<PointT, FlannDistance>::nearestKSearch (
 template <typename PointT, typename FlannDistance>
 int
 pcl::search::FlannSearch<PointT, FlannDistance>::radiusSearch (
-    const PointT &point, double radius, std::vector<int> &indices,
-    std::vector<float> &distances, unsigned int max_nn) const
+    const PointT &point,
+    double radius,
+    std::vector<int> &indices,
+    std::vector<float> &distances,
+    unsigned int max_nn) const
 {
   assert (
       point_representation_->isValid (point) &&
@@ -272,8 +279,8 @@ pcl::search::FlannSearch<PointT, FlannDistance>::radiusSearch (
 
   float *cdata =
       can_cast ? const_cast<float *> (reinterpret_cast<const float *> (&point)) : data;
-  const flann::Matrix<float> m (cdata, 1,
-                                point_representation_->getNumberOfDimensions ());
+  const flann::Matrix<float> m (
+      cdata, 1, point_representation_->getNumberOfDimensions ());
 
   flann::SearchParams p;
   p.sorted = sorted_results_;
@@ -300,9 +307,12 @@ pcl::search::FlannSearch<PointT, FlannDistance>::radiusSearch (
 template <typename PointT, typename FlannDistance>
 void
 pcl::search::FlannSearch<PointT, FlannDistance>::radiusSearch (
-    const PointCloud &cloud, const std::vector<int> &indices, double radius,
+    const PointCloud &cloud,
+    const std::vector<int> &indices,
+    double radius,
     std::vector<std::vector<int>> &k_indices,
-    std::vector<std::vector<float>> &k_sqr_distances, unsigned int max_nn) const
+    std::vector<std::vector<float>> &k_sqr_distances,
+    unsigned int max_nn) const
 {
   if (indices.empty ()) // full point cloud + trivial copy operation = no need to do any
                         // conversion/copying to the flann matrix!
@@ -333,8 +343,8 @@ pcl::search::FlannSearch<PointT, FlannDistance>::radiusSearch (
     float *cdata =
         can_cast ? const_cast<float *> (reinterpret_cast<const float *> (&cloud[0]))
                  : data;
-    const flann::Matrix<float> m (cdata, cloud.size (), dim_,
-                                  can_cast ? sizeof (PointT) : dim_ * sizeof (float));
+    const flann::Matrix<float> m (
+        cdata, cloud.size (), dim_, can_cast ? sizeof (PointT) : dim_ * sizeof (float));
 
     flann::SearchParams p;
     p.sorted = sorted_results_;
@@ -343,8 +353,8 @@ pcl::search::FlannSearch<PointT, FlannDistance>::radiusSearch (
     // here: max_nn==0: take all neighbors. flann: max_nn==0: return no neighbors, only
     // count them. max_nn==-1: return all neighbors
     p.max_neighbors = max_nn != 0 ? max_nn : -1;
-    index_->radiusSearch (m, k_indices, k_sqr_distances,
-                          static_cast<float> (radius * radius), p);
+    index_->radiusSearch (
+        m, k_indices, k_sqr_distances, static_cast<float> (radius * radius), p);
 
     delete[] data;
   } else // if indices are present, the cloud has to be copied anyway. Only copy the
@@ -367,8 +377,8 @@ pcl::search::FlannSearch<PointT, FlannDistance>::radiusSearch (
       float *out = data + i * dim_;
       point_representation_->vectorize (cloud[indices[i]], out);
     }
-    const flann::Matrix<float> m (data, cloud.size (),
-                                  point_representation_->getNumberOfDimensions ());
+    const flann::Matrix<float> m (
+        data, cloud.size (), point_representation_->getNumberOfDimensions ());
 
     flann::SearchParams p;
     p.sorted = sorted_results_;
@@ -377,8 +387,8 @@ pcl::search::FlannSearch<PointT, FlannDistance>::radiusSearch (
     // here: max_nn==0: take all neighbors. flann: max_nn==0: return no neighbors, only
     // count them. max_nn==-1: return all neighbors
     p.max_neighbors = max_nn != 0 ? max_nn : -1;
-    index_->radiusSearch (m, k_indices, k_sqr_distances,
-                          static_cast<float> (radius * radius), p);
+    index_->radiusSearch (
+        m, k_indices, k_sqr_distances, static_cast<float> (radius * radius), p);
 
     delete[] data;
   }
@@ -415,14 +425,16 @@ pcl::search::FlannSearch<PointT, FlannDistance>::convertInputToFlannMatrix ()
       // const cast is evil, but flann won't change the data
       input_flann_ = MatrixPtr (new flann::Matrix<float> (
           const_cast<float *> (reinterpret_cast<const float *> (&(*input_)[0])),
-          original_no_of_points, point_representation_->getNumberOfDimensions (),
+          original_no_of_points,
+          point_representation_->getNumberOfDimensions (),
           sizeof (PointT)));
       input_copied_for_flann_ = false;
     } else {
       input_flann_ = MatrixPtr (new flann::Matrix<float> (
           new float[original_no_of_points *
                     point_representation_->getNumberOfDimensions ()],
-          original_no_of_points, point_representation_->getNumberOfDimensions ()));
+          original_no_of_points,
+          point_representation_->getNumberOfDimensions ()));
       float *cloud_ptr = input_flann_->ptr ();
       for (size_t i = 0; i < original_no_of_points; ++i) {
         const PointT &point = (*input_)[i];
@@ -444,7 +456,8 @@ pcl::search::FlannSearch<PointT, FlannDistance>::convertInputToFlannMatrix ()
     input_flann_ = MatrixPtr (new flann::Matrix<float> (
         new float[original_no_of_points *
                   point_representation_->getNumberOfDimensions ()],
-        original_no_of_points, point_representation_->getNumberOfDimensions ()));
+        original_no_of_points,
+        point_representation_->getNumberOfDimensions ()));
     float *cloud_ptr = input_flann_->ptr ();
     for (size_t indices_index = 0; indices_index < original_no_of_points;
          ++indices_index) {

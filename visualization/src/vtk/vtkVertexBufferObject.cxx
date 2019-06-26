@@ -39,14 +39,25 @@
 
 // Mapping from Usage values to OpenGL values.
 
-GLenum OpenGLVertexBufferObjectUsage[9] = {
-    vtkgl::STREAM_DRAW,  vtkgl::STREAM_READ,  vtkgl::STREAM_COPY,
-    vtkgl::STATIC_DRAW,  vtkgl::STATIC_READ,  vtkgl::STATIC_COPY,
-    vtkgl::DYNAMIC_DRAW, vtkgl::DYNAMIC_READ, vtkgl::DYNAMIC_COPY};
+GLenum OpenGLVertexBufferObjectUsage[9] = {vtkgl::STREAM_DRAW,
+                                           vtkgl::STREAM_READ,
+                                           vtkgl::STREAM_COPY,
+                                           vtkgl::STATIC_DRAW,
+                                           vtkgl::STATIC_READ,
+                                           vtkgl::STATIC_COPY,
+                                           vtkgl::DYNAMIC_DRAW,
+                                           vtkgl::DYNAMIC_READ,
+                                           vtkgl::DYNAMIC_COPY};
 
-const char *VertexBufferObjectUsageAsString[9] = {
-    "StreamDraw", "StreamRead",  "StreamCopy",  "StaticDraw", "StaticRead",
-    "StaticCopy", "DynamicDraw", "DynamicRead", "DynamicCopy"};
+const char *VertexBufferObjectUsageAsString[9] = {"StreamDraw",
+                                                  "StreamRead",
+                                                  "StreamCopy",
+                                                  "StaticDraw",
+                                                  "StaticRead",
+                                                  "StaticCopy",
+                                                  "DynamicDraw",
+                                                  "DynamicRead",
+                                                  "DynamicCopy"};
 
 #ifdef VTK_PBO_DEBUG
 #include <pthread.h> // for debugging with MPI, pthread_self()
@@ -158,7 +169,8 @@ vtkVertexBufferObject::GetContext ()
 
 //----------------------------------------------------------------------------
 void
-vtkVertexBufferObject::SetUserDefinedAttribute (int index, bool normalized /*=false*/,
+vtkVertexBufferObject::SetUserDefinedAttribute (int index,
+                                                bool normalized /*=false*/,
                                                 int stride /*=0*/)
 {
   this->AttributeIndex = index;
@@ -197,17 +209,19 @@ vtkVertexBufferObject::Bind ()
   vtkgl::BindBuffer (static_cast<GLenum> (this->BufferTarget), this->Handle);
 
   if (this->AttributeIndex >= 0) {
-    vtkgl::VertexAttribPointer (this->AttributeIndex, this->AttributeSize,
+    vtkgl::VertexAttribPointer (this->AttributeIndex,
+                                this->AttributeSize,
                                 this->AttributeType,
                                 static_cast<GLboolean> (this->AttributeNormalized),
-                                this->AttributeStride, nullptr);
+                                this->AttributeStride,
+                                nullptr);
     vtkgl::EnableVertexAttribArray (this->AttributeIndex);
   } else {
     glEnableClientState (this->ArrayType);
     switch (this->ArrayType) {
     case GL_VERTEX_ARRAY:
-      glVertexPointer (this->AttributeSize, this->AttributeType, this->AttributeStride,
-                       nullptr);
+      glVertexPointer (
+          this->AttributeSize, this->AttributeType, this->AttributeStride, nullptr);
       break;
 
     case GL_INDEX_ARRAY:
@@ -215,8 +229,8 @@ vtkVertexBufferObject::Bind ()
       break;
 
     case GL_COLOR_ARRAY:
-      glColorPointer (this->AttributeSize, this->AttributeType, this->AttributeStride,
-                      nullptr);
+      glColorPointer (
+          this->AttributeSize, this->AttributeType, this->AttributeStride, nullptr);
       break;
 
     case GL_NORMAL_ARRAY:
@@ -448,8 +462,8 @@ vtkVertexBufferObject::ReleaseMemory ()
 {
   if (this->Context && this->Handle) {
     this->Bind ();
-    vtkgl::BufferData (this->BufferTarget, 0, nullptr,
-                       OpenGLVertexBufferObjectUsage[this->Usage]);
+    vtkgl::BufferData (
+        this->BufferTarget, 0, nullptr, OpenGLVertexBufferObjectUsage[this->Usage]);
     this->Size = 0;
     this->Count = 0;
   }

@@ -85,15 +85,21 @@ main (int, char **argv)
   const double eps_angle = 5 * (M_PI / 180.0); // 5degree tolerance in normals
   const unsigned int min_cluster_size = 50;
 
-  pcl::extractEuclideanClusters (*cloud_ptr, *cloud_normals, tolerance, tree_ec,
-                                 cluster_indices, eps_angle, min_cluster_size);
+  pcl::extractEuclideanClusters (*cloud_ptr,
+                                 *cloud_normals,
+                                 tolerance,
+                                 tree_ec,
+                                 cluster_indices,
+                                 eps_angle,
+                                 min_cluster_size);
 
   std::cout << "No of clusters formed are " << cluster_indices.size () << std::endl;
 
   // Saving the clusters in separate pcd files
   int j = 0;
   for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin ();
-       it != cluster_indices.end (); ++it) {
+       it != cluster_indices.end ();
+       ++it) {
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_cluster (
         new pcl::PointCloud<pcl::PointXYZ>);
     for (const int &index : it->indices)

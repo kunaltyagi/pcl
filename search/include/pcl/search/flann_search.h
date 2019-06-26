@@ -293,7 +293,9 @@ namespace pcl
        * number of neighbors found
        */
       int
-      nearestKSearch (const PointT &point, int k, std::vector<int> &k_indices,
+      nearestKSearch (const PointT &point,
+                      int k,
+                      std::vector<int> &k_indices,
                       std::vector<float> &k_sqr_distances) const override;
 
       /** \brief Search for the k-nearest neighbors for the given query point.
@@ -306,7 +308,9 @@ namespace pcl
        * corresponds to the neighbors of the query point i
        */
       void
-      nearestKSearch (const PointCloud &cloud, const std::vector<int> &indices, int k,
+      nearestKSearch (const PointCloud &cloud,
+                      const std::vector<int> &indices,
+                      int k,
                       std::vector<std::vector<int>> &k_indices,
                       std::vector<std::vector<float>> &k_sqr_distances) const override;
 
@@ -320,7 +324,9 @@ namespace pcl
        * radius will be returned. \return number of neighbors found in radius
        */
       int
-      radiusSearch (const PointT &point, double radius, std::vector<int> &k_indices,
+      radiusSearch (const PointT &point,
+                    double radius,
+                    std::vector<int> &k_indices,
                     std::vector<float> &k_sqr_distances,
                     unsigned int max_nn = 0) const override;
 
@@ -335,8 +341,10 @@ namespace pcl
        * \param[in] max_nn if given, bounds the maximum returned neighbors to this value
        */
       void
-      radiusSearch (const PointCloud &cloud, const std::vector<int> &indices,
-                    double radius, std::vector<std::vector<int>> &k_indices,
+      radiusSearch (const PointCloud &cloud,
+                    const std::vector<int> &indices,
+                    double radius,
+                    std::vector<std::vector<int>> &k_indices,
                     std::vector<std::vector<float>> &k_sqr_distances,
                     unsigned int max_nn = 0) const override;
 

@@ -145,7 +145,8 @@ namespace pcl
   namespace gpu
   {
     void
-    paint3DView (const KinfuTracker::View &rgb24, KinfuTracker::View &view,
+    paint3DView (const KinfuTracker::View &rgb24,
+                 KinfuTracker::View &view,
                  float colors_weight = 0.5f);
     void
     mergePointNormal (const DeviceArray<PointXYZ> &cloud,
@@ -184,9 +185,15 @@ setViewerPose (visualization::PCLVisualizer &viewer, const Eigen::Affine3f &view
   Eigen::Vector3f look_at_vector =
       viewer_pose.rotation () * Eigen::Vector3f (0, 0, 1) + pos_vector;
   Eigen::Vector3f up_vector = viewer_pose.rotation () * Eigen::Vector3f (0, -1, 0);
-  viewer.setCameraPosition (pos_vector[0], pos_vector[1], pos_vector[2],
-                            look_at_vector[0], look_at_vector[1], look_at_vector[2],
-                            up_vector[0], up_vector[1], up_vector[2]);
+  viewer.setCameraPosition (pos_vector[0],
+                            pos_vector[1],
+                            pos_vector[2],
+                            look_at_vector[0],
+                            look_at_vector[1],
+                            look_at_vector[2],
+                            up_vector[0],
+                            up_vector[1],
+                            up_vector[2]);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -390,7 +397,8 @@ display_tic_toc (vector<double> &tic_toc, const string &fun_name)
 }
 
 void
-capture (Eigen::Isometry3d pose_in, unsigned short *depth_buffer_mm,
+capture (Eigen::Isometry3d pose_in,
+         unsigned short *depth_buffer_mm,
          const uint8_t *color_buffer) //, string point_cloud_fname)
 {
   // No reference image - but this is kept for compatibility with range_test_v2:
@@ -486,7 +494,10 @@ load_PolygonMesh_model (std::string polygon_file)
 void
 generate_halo (
     std::vector<Eigen::Isometry3d, Eigen::aligned_allocator<Eigen::Isometry3d>> &poses,
-    Eigen::Vector3d focus_center, double halo_r, double halo_dz, int n_poses)
+    Eigen::Vector3d focus_center,
+    double halo_r,
+    double halo_dz,
+    int n_poses)
 {
   for (double t = 0; t < (2 * M_PI); t = t + (2 * M_PI) / ((double)n_poses)) {
     double x = halo_r * cos (t);
@@ -625,8 +636,10 @@ struct ImageView {
   }
 
   void
-  showScene (KinfuTracker &kinfu, const PtrStepSz<const KinfuTracker::PixelRGB> &rgb24,
-             bool registration, Eigen::Affine3f *pose_ptr = 0)
+  showScene (KinfuTracker &kinfu,
+             const PtrStepSz<const KinfuTracker::PixelRGB> &rgb24,
+             bool registration,
+             Eigen::Affine3f *pose_ptr = 0)
   {
     if (pose_ptr) {
       raycaster_ptr_->run (kinfu.volume (), *pose_ptr);
@@ -642,14 +655,16 @@ struct ImageView {
     int cols;
     view_device_.download (view_host_, cols);
     viewerScene_.showRGBImage (reinterpret_cast<unsigned char *> (&view_host_[0]),
-                               view_device_.cols (), view_device_.rows ());
+                               view_device_.cols (),
+                               view_device_.rows ());
 
     // viewerColor_.showRGBImage ((unsigned char*)&rgb24.data, rgb24.cols, rgb24.rows);
 
 #ifdef HAVE_OPENCV
     if (accumulate_views_) {
       views_.push_back (cv::Mat ());
-      cv::cvtColor (cv::Mat (480, 640, CV_8UC3, (void *)&view_host_[0]), views_.back (),
+      cv::cvtColor (cv::Mat (480, 640, CV_8UC3, (void *)&view_host_[0]),
+                    views_.back (),
                     CV_RGB2GRAY);
       // cv::copy(cv::Mat(480, 640, CV_8UC3, (void*)&view_host_[0]), views_.back());
     }
@@ -672,8 +687,8 @@ struct ImageView {
     vector<unsigned short> data;
     generated_depth_.download (data, c);
 
-    viewerDepth_.showShortImage (&data[0], generated_depth_.cols (),
-                                 generated_depth_.rows (), 0, 5000, true);
+    viewerDepth_.showShortImage (
+        &data[0], generated_depth_.cols (), generated_depth_.rows (), 0, 5000, true);
   }
 
   void
@@ -791,8 +806,8 @@ struct SceneCloudView {
     if (cube_added_)
       cloud_viewer_.removeShape ("cube");
     else
-      cloud_viewer_.addCube (size * 0.5, Eigen::Quaternionf::Identity (), size (0),
-                             size (1), size (2));
+      cloud_viewer_.addCube (
+          size * 0.5, Eigen::Quaternionf::Identity (), size (0), size (1), size (2));
 
     cube_added_ = !cube_added_;
   }
@@ -988,11 +1003,16 @@ struct KinFuApp {
     if (!match_file.empty ())
       evaluation_ptr_->setMatchFile (match_file);
 
-    kinfu_.setDepthIntrinsics (evaluation_ptr_->fx, evaluation_ptr_->fy,
-                               evaluation_ptr_->cx, evaluation_ptr_->cy);
-    image_view_.raycaster_ptr_ = RayCaster::Ptr (
-        new RayCaster (kinfu_.rows (), kinfu_.cols (), evaluation_ptr_->fx,
-                       evaluation_ptr_->fy, evaluation_ptr_->cx, evaluation_ptr_->cy));
+    kinfu_.setDepthIntrinsics (evaluation_ptr_->fx,
+                               evaluation_ptr_->fy,
+                               evaluation_ptr_->cx,
+                               evaluation_ptr_->cy);
+    image_view_.raycaster_ptr_ = RayCaster::Ptr (new RayCaster (kinfu_.rows (),
+                                                                kinfu_.cols (),
+                                                                evaluation_ptr_->fx,
+                                                                evaluation_ptr_->fy,
+                                                                evaluation_ptr_->cx,
+                                                                evaluation_ptr_->cy));
   }
 
   void
@@ -1099,11 +1119,11 @@ struct KinFuApp {
 
       cout << " color: " << integrate_colors_
            << "\n"; // integrate_colors_ seems to be zero
-      depth_device_.upload (depth_sim.data, depth_sim.step, depth_sim.rows,
-                            depth_sim.cols);
+      depth_device_.upload (
+          depth_sim.data, depth_sim.step, depth_sim.rows, depth_sim.cols);
       if (integrate_colors_) {
-        image_view_.colors_device_.upload (rgb24_sim.data, rgb24_sim.step,
-                                           rgb24_sim.rows, rgb24_sim.cols);
+        image_view_.colors_device_.upload (
+            rgb24_sim.data, rgb24_sim.step, rgb24_sim.rows, rgb24_sim.cols);
       }
 
       tic_toc.push_back (getTime ());
@@ -1176,8 +1196,8 @@ struct KinFuApp {
           Eigen::Affine3f viewer_pose = getViewerPose (scene_cloud_view_.cloud_viewer_);
           //          image_view_.showScene (kinfu_, rgb24, registration_,
           //          independent_camera_ ? &viewer_pose : 0);
-          image_view_.showScene (kinfu_, rgb24_sim, registration_,
-                                 independent_camera_ ? &viewer_pose : 0);
+          image_view_.showScene (
+              kinfu_, rgb24_sim, registration_, independent_camera_ ? &viewer_pose : 0);
         }
 
         if (current_frame_cloud_view_)
@@ -1217,8 +1237,9 @@ struct KinFuApp {
           writeCloudFile (format, view.cloud_ptr_);
       } else {
         if (view.valid_combined_)
-          writeCloudFile (format, merge<PointXYZRGBNormal> (*view.combined_ptr_,
-                                                            *view.point_colors_ptr_));
+          writeCloudFile (
+              format,
+              merge<PointXYZRGBNormal> (*view.combined_ptr_, *view.point_colors_ptr_));
         else
           writeCloudFile (
               format, merge<PointXYZRGB> (*view.cloud_ptr_, *view.point_colors_ptr_));
@@ -1351,8 +1372,8 @@ struct KinFuApp {
         app->tsdf_volume_.save ("tsdf_volume.dat", true);
         cout << "done [" << app->tsdf_volume_.size () << " voxels]" << endl;
         cout << "Saving TSDF volume cloud to tsdf_cloud.pcd ... " << flush;
-        pcl::io::savePCDFile<pcl::PointXYZI> ("tsdf_cloud.pcd", *app->tsdf_cloud_ptr_,
-                                              true);
+        pcl::io::savePCDFile<pcl::PointXYZI> (
+            "tsdf_cloud.pcd", *app->tsdf_cloud_ptr_, true);
         cout << "done [" << app->tsdf_cloud_ptr_->size () << " points]" << endl;
         break;
 

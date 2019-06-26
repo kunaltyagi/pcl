@@ -41,7 +41,8 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 pcl::PairwisePotential::PairwisePotential (const std::vector<float> &feature,
-                                           const int feature_dimension, const int N,
+                                           const int feature_dimension,
+                                           const int N,
                                            const float w)
     : N_ (N), w_ (w)
 {
@@ -112,8 +113,10 @@ pcl::PairwisePotential::PairwisePotential (const std::vector<float> &feature,
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::PairwisePotential::compute (std::vector<float> &out, const std::vector<float> &in,
-                                 std::vector<float> &tmp, int value_size) const
+pcl::PairwisePotential::compute (std::vector<float> &out,
+                                 const std::vector<float> &in,
+                                 std::vector<float> &tmp,
+                                 int value_size) const
 {
   lattice_.compute (tmp, in, value_size);
   for (int i = 0, k = 0; i < N_; i++)

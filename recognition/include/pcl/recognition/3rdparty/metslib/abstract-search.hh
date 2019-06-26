@@ -94,7 +94,8 @@ namespace mets
     /// @param moveman A problem specific implementation of the
     /// move_manager_type used to generate the neighborhood.
     ///
-    abstract_search (feasible_solution &working, solution_recorder &recorder,
+    abstract_search (feasible_solution &working,
+                     solution_recorder &recorder,
                      move_manager_type &moveman)
         : subject<abstract_search<move_manager_type>> (),
           solution_recorder_m (recorder), working_solution_m (working),

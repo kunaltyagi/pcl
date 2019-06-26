@@ -70,8 +70,10 @@ printHelp (int, char **argv)
 }
 
 bool
-loadCloud (const string &filename, pcl::PCLPointCloud2 &cloud,
-           Eigen::Vector4f &translation, Eigen::Quaternionf &orientation)
+loadCloud (const string &filename,
+           pcl::PCLPointCloud2 &cloud,
+           Eigen::Vector4f &translation,
+           Eigen::Quaternionf &orientation)
 {
   if (loadPCDFile (filename, cloud, translation, orientation) < 0)
     return (false);
@@ -80,8 +82,10 @@ loadCloud (const string &filename, pcl::PCLPointCloud2 &cloud,
 }
 
 void
-compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output,
-         float sigma_s = 5.f, float sigma_r = 0.03f)
+compute (const pcl::PCLPointCloud2::ConstPtr &input,
+         pcl::PCLPointCloud2 &output,
+         float sigma_s = 5.f,
+         float sigma_r = 0.03f)
 {
   // Convert data to PointCloud<T>
   PointCloud<PointXYZ>::Ptr xyz (new PointCloud<PointXYZ>);
@@ -111,15 +115,19 @@ compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output
 }
 
 void
-saveCloud (const string &filename, const pcl::PCLPointCloud2 &output,
-           const Eigen::Vector4f &translation, const Eigen::Quaternionf &orientation)
+saveCloud (const string &filename,
+           const pcl::PCLPointCloud2 &output,
+           const Eigen::Vector4f &translation,
+           const Eigen::Quaternionf &orientation)
 {
   PCDWriter w;
   w.writeBinaryCompressed (filename, output, translation, orientation);
 }
 
 int
-batchProcess (const vector<string> &pcd_files, string &output_dir, float sigma_s,
+batchProcess (const vector<string> &pcd_files,
+              string &output_dir,
+              float sigma_s,
               float sigma_r)
 {
 #if _OPENMP

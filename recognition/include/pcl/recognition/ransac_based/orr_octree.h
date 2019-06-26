@@ -378,8 +378,10 @@ namespace pcl
        * enlarge_bounds = 1 means that the
        * bounds will be enlarged by 100%. The default value is fine. */
       void
-      build (const PointCloudIn &points, float voxel_size,
-             const PointCloudN *normals = nullptr, float enlarge_bounds = 0.00001f);
+      build (const PointCloudIn &points,
+             float voxel_size,
+             const PointCloudN *normals = nullptr,
+             float enlarge_bounds = 0.00001f);
 
       /** \brief Creates an empty octree with bounds at least as large as the ones
        * provided as input and with leaf size equal to 'voxel_size'. */
@@ -443,7 +445,8 @@ namespace pcl
        * (since its faster than checking all leaf corners and sides), so we report more
        * leaves than we should, but still, this is a fair approximation. */
       void
-      getFullLeavesIntersectedBySphere (const float *p, float radius,
+      getFullLeavesIntersectedBySphere (const float *p,
+                                        float radius,
                                         std::list<ORROctree::Node *> &out) const;
 
       /** \brief Randomly chooses and returns a full leaf that is intersected by the

@@ -96,7 +96,10 @@ pcl::ProjectInliers<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
     if (x_idx == -1 || y_idx == -1 || z_idx == -1) {
       PCL_ERROR (
           "[pcl::%s::segment] X (%d) Y (%d) Z (%d) field dimensions not found!\n",
-          getClassName ().c_str (), x_idx, y_idx, z_idx);
+          getClassName ().c_str (),
+          x_idx,
+          y_idx,
+          z_idx);
       output.width = output.height = 0;
       output.data.clear ();
       return;
@@ -106,13 +109,16 @@ pcl::ProjectInliers<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
     for (size_t i = 0; i < indices_->size (); ++i) {
       memcpy (&output.data[(*indices_)[i] * output.point_step +
                            output.fields[x_idx].offset],
-              &cloud_out.points[(*indices_)[i]].x, sizeof (float));
+              &cloud_out.points[(*indices_)[i]].x,
+              sizeof (float));
       memcpy (&output.data[(*indices_)[i] * output.point_step +
                            output.fields[y_idx].offset],
-              &cloud_out.points[(*indices_)[i]].y, sizeof (float));
+              &cloud_out.points[(*indices_)[i]].y,
+              sizeof (float));
       memcpy (&output.data[(*indices_)[i] * output.point_step +
                            output.fields[z_idx].offset],
-              &cloud_out.points[(*indices_)[i]].z, sizeof (float));
+              &cloud_out.points[(*indices_)[i]].z,
+              sizeof (float));
     }
   } else {
     if (!copy_all_fields_) {
@@ -142,7 +148,10 @@ pcl::ProjectInliers<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
       if (x_idx == -1 || y_idx == -1 || z_idx == -1) {
         PCL_ERROR (
             "[pcl::%s::segment] X (%d) Y (%d) Z (%d) field dimensions not found!\n",
-            getClassName ().c_str (), x_idx, y_idx, z_idx);
+            getClassName ().c_str (),
+            x_idx,
+            y_idx,
+            z_idx);
         output.width = output.height = 0;
         output.data.clear ();
         return;
@@ -151,13 +160,17 @@ pcl::ProjectInliers<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
       // Copy the projected points
       for (size_t i = 0; i < indices_->size (); ++i) {
         memcpy (&output.data[i * output.point_step],
-                &input_->data[(*indices_)[i] * input_->point_step], output.point_step);
+                &input_->data[(*indices_)[i] * input_->point_step],
+                output.point_step);
         memcpy (&output.data[i * output.point_step + output.fields[x_idx].offset],
-                &cloud_out.points[(*indices_)[i]].x, sizeof (float));
+                &cloud_out.points[(*indices_)[i]].x,
+                sizeof (float));
         memcpy (&output.data[i * output.point_step + output.fields[y_idx].offset],
-                &cloud_out.points[(*indices_)[i]].y, sizeof (float));
+                &cloud_out.points[(*indices_)[i]].y,
+                sizeof (float));
         memcpy (&output.data[i * output.point_step + output.fields[z_idx].offset],
-                &cloud_out.points[(*indices_)[i]].z, sizeof (float));
+                &cloud_out.points[(*indices_)[i]].z,
+                sizeof (float));
       }
     }
   }
@@ -266,8 +279,9 @@ pcl::ProjectInliers<pcl::PCLPointCloud2>::initSACModel (int model_type)
 
 // Instantiations of specific point types
 #ifdef PCL_ONLY_CORE_POINT_TYPES
-PCL_INSTANTIATE (ProjectInliers, (pcl::PointXYZ) (pcl::PointXYZI) (pcl::PointXYZRGB) (
-                                     pcl::PointXYZRGBA))
+PCL_INSTANTIATE (
+    ProjectInliers,
+    (pcl::PointXYZ) (pcl::PointXYZI) (pcl::PointXYZRGB) (pcl::PointXYZRGBA))
 #else
 PCL_INSTANTIATE (ProjectInliers, PCL_XYZ_POINT_TYPES)
 #endif

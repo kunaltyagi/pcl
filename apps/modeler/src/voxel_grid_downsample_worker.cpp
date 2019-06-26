@@ -95,12 +95,12 @@ pcl::modeler::VoxelGridDownampleWorker::setupParameters ()
   double size = range_max / 1000;
   double step = range_max / 1000;
 
-  leaf_size_x_ = new DoubleParameter ("Leaf Size X", "The X size of the voxel grid",
-                                      size, 0, x_max_ - x_min_, step);
-  leaf_size_y_ = new DoubleParameter ("Leaf Size Y", "The Y size of the voxel grid",
-                                      size, 0, y_max_ - y_min_, step);
-  leaf_size_z_ = new DoubleParameter ("Leaf Size Z", "The Z size of the voxel grid",
-                                      size, 0, z_max_ - z_min_, step);
+  leaf_size_x_ = new DoubleParameter (
+      "Leaf Size X", "The X size of the voxel grid", size, 0, x_max_ - x_min_, step);
+  leaf_size_y_ = new DoubleParameter (
+      "Leaf Size Y", "The Y size of the voxel grid", size, 0, y_max_ - y_min_, step);
+  leaf_size_z_ = new DoubleParameter (
+      "Leaf Size Z", "The Z size of the voxel grid", size, 0, z_max_ - z_min_, step);
 
   parameter_dialog_->addParameter (leaf_size_x_);
   parameter_dialog_->addParameter (leaf_size_y_);
@@ -115,8 +115,8 @@ pcl::modeler::VoxelGridDownampleWorker::processImpl (CloudMeshItem *cloud_mesh_i
 {
   pcl::VoxelGrid<pcl::PointSurfel> voxel_grid;
   voxel_grid.setInputCloud (cloud_mesh_item->getCloudMesh ()->getCloud ());
-  voxel_grid.setLeafSize (float(*leaf_size_x_), float(*leaf_size_y_),
-                          float(*leaf_size_z_));
+  voxel_grid.setLeafSize (
+      float(*leaf_size_x_), float(*leaf_size_y_), float(*leaf_size_z_));
 
   CloudMesh::PointCloudPtr cloud (new CloudMesh::PointCloud ());
   voxel_grid.filter (*cloud);

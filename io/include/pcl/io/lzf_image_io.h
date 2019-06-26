@@ -149,7 +149,8 @@ namespace pcl
        * \return an array filled with the data loaded from disk, NULL if error
        */
       bool
-      loadImageBlob (const std::string &filename, std::vector<char> &data,
+      loadImageBlob (const std::string &filename,
+                     std::vector<char> &data,
                      uint32_t &uncompressed_size);
 
       /** \brief Realtime LZF decompression.
@@ -212,7 +213,8 @@ namespace pcl
        */
       template <typename PointT>
       bool
-      readOMP (const std::string &filename, pcl::PointCloud<PointT> &cloud,
+      readOMP (const std::string &filename,
+               pcl::PointCloud<PointT> &cloud,
                unsigned int num_threads = 0);
 
       /** \brief Read camera parameters from a given stream and store them internally.
@@ -266,7 +268,8 @@ namespace pcl
        */
       template <typename PointT>
       bool
-      readOMP (const std::string &filename, pcl::PointCloud<PointT> &cloud,
+      readOMP (const std::string &filename,
+               pcl::PointCloud<PointT> &cloud,
                unsigned int num_threads = 0);
 
       /** \brief Read camera parameters from a given stream and store them internally.
@@ -315,7 +318,8 @@ namespace pcl
        */
       template <typename PointT>
       bool
-      readOMP (const std::string &filename, pcl::PointCloud<PointT> &cloud,
+      readOMP (const std::string &filename,
+               pcl::PointCloud<PointT> &cloud,
                unsigned int num_threads = 0);
     };
 
@@ -356,7 +360,8 @@ namespace pcl
        */
       template <typename PointT>
       bool
-      readOMP (const std::string &filename, pcl::PointCloud<PointT> &cloud,
+      readOMP (const std::string &filename,
+               pcl::PointCloud<PointT> &cloud,
                unsigned int num_threads = 0);
     };
 
@@ -400,7 +405,9 @@ namespace pcl
        * \return true if operation successful, false otherwise
        */
       virtual bool
-      write (const char *data, uint32_t width, uint32_t height,
+      write (const char *data,
+             uint32_t width,
+             uint32_t height,
              const std::string &filename) = 0;
 
       /** \brief Write camera parameters to disk. Virtual.
@@ -422,8 +429,11 @@ namespace pcl
        * \return true if operation successful, false otherwise
        */
       virtual bool
-      write (const char *data, uint32_t width, uint32_t height,
-             const CameraParameters &parameters, const std::string &filename_data,
+      write (const char *data,
+             uint32_t width,
+             uint32_t height,
+             const CameraParameters &parameters,
+             const std::string &filename_data,
              const std::string &filename_xml)
       {
         bool res1 = write (data, width, height, filename_data);
@@ -443,7 +453,8 @@ namespace pcl
        * \endcode
        */
       bool
-      writeParameter (const double &parameter, const std::string &tag,
+      writeParameter (const double &parameter,
+                      const std::string &tag,
                       const std::string &filename);
 
       protected:
@@ -468,8 +479,12 @@ namespace pcl
        * \return the number of bytes in the output array
        */
       uint32_t
-      compress (const char *input, uint32_t input_size, uint32_t width, uint32_t height,
-                const std::string &image_type, char *output);
+      compress (const char *input,
+                uint32_t input_size,
+                uint32_t width,
+                uint32_t height,
+                const std::string &image_type,
+                char *output);
     };
 
     /** \brief PCL-LZF 16-bit depth image format writer.
@@ -502,7 +517,9 @@ namespace pcl
        * \return true if operation successful, false otherwise
        */
       bool
-      write (const char *data, uint32_t width, uint32_t height,
+      write (const char *data,
+             uint32_t width,
+             uint32_t height,
              const std::string &filename) override;
 
       /** \brief Write camera parameters to disk.
@@ -554,7 +571,9 @@ namespace pcl
        * \return true if operation successful, false otherwise
        */
       bool
-      write (const char *data, uint32_t width, uint32_t height,
+      write (const char *data,
+             uint32_t width,
+             uint32_t height,
              const std::string &filename) override;
 
       /** \brief Write camera parameters to disk.
@@ -595,7 +614,9 @@ namespace pcl
        * \return true if operation successful, false otherwise
        */
       bool
-      write (const char *data, uint32_t width, uint32_t height,
+      write (const char *data,
+             uint32_t width,
+             uint32_t height,
              const std::string &filename) override;
     };
 
@@ -625,7 +646,9 @@ namespace pcl
        * \return true if operation successful, false otherwise
        */
       bool
-      write (const char *data, uint32_t width, uint32_t height,
+      write (const char *data,
+             uint32_t width,
+             uint32_t height,
              const std::string &filename) override;
     };
   } // namespace io

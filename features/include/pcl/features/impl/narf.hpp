@@ -58,8 +58,13 @@ namespace pcl
       std::cerr << __PRETTY_FUNCTION__ << ": descriptor size is not 36!\n";
       return;
     }
-    getTranslationAndEulerAngles (transformation_.inverse (), narf36.x, narf36.y,
-                                  narf36.z, narf36.roll, narf36.pitch, narf36.yaw);
+    getTranslationAndEulerAngles (transformation_.inverse (),
+                                  narf36.x,
+                                  narf36.y,
+                                  narf36.z,
+                                  narf36.roll,
+                                  narf36.pitch,
+                                  narf36.yaw);
     memcpy (narf36.descriptor, descriptor_, 36 * sizeof (*descriptor_));
   }
 

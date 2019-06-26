@@ -131,7 +131,8 @@ pcl::LocalMaximum<PointT>::applyFilterIndices (std::vector<int> &indices)
     if (searcher_->radiusSearch (p, radius_, radius_indices, radius_dists) == 0) {
       PCL_WARN (
           "[pcl::%s::applyFilter] Searching for neighbors within radius %f failed.\n",
-          getClassName ().c_str (), radius_);
+          getClassName ().c_str (),
+          radius_);
       continue;
     }
 

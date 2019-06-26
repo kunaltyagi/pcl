@@ -16,7 +16,8 @@
 
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-ON_OBJECT_IMPLEMENT (ON_PointCloud, ON_Geometry,
+ON_OBJECT_IMPLEMENT (ON_PointCloud,
+                     ON_Geometry,
                      "2488F347-F8FA-11d3-BFEC-0010830122F0");
 
 ON_3dPoint &ON_PointCloud::operator[] (int i) { return m_P[i]; }
@@ -323,8 +324,10 @@ ON_PointCloud::Height (int i)
 }
 
 bool
-ON_GetClosestPointInPointList (int point_count, const ON_3dPoint *point_list,
-                               ON_3dPoint P, int *closest_point_index)
+ON_GetClosestPointInPointList (int point_count,
+                               const ON_3dPoint *point_list,
+                               ON_3dPoint P,
+                               int *closest_point_index)
 {
   bool rc = false;
   if (point_count > 0 && 0 != point_list && closest_point_index) {
@@ -365,7 +368,8 @@ ON_GetClosestPointInPointList (int point_count, const ON_3dPoint *point_list,
 }
 
 bool
-ON_3dPointArray::GetClosestPoint (ON_3dPoint P, int *closest_point_index,
+ON_3dPointArray::GetClosestPoint (ON_3dPoint P,
+                                  int *closest_point_index,
                                   double maximum_distance) const
 {
   int i;
@@ -398,7 +402,8 @@ ON_PointCloud::HasPointNormals () const
 }
 
 bool
-ON_PointCloud::GetClosestPoint (ON_3dPoint P, int *closest_point_index,
+ON_PointCloud::GetClosestPoint (ON_3dPoint P,
+                                int *closest_point_index,
                                 double maximum_distance) const
 {
   if (maximum_distance > 0.0 && m_bbox.IsValid ()) {

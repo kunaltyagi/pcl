@@ -102,7 +102,8 @@ pcl::io::load (const std::string &file_name, pcl::TextureMesh &mesh)
 }
 
 int
-pcl::io::save (const std::string &file_name, const pcl::PCLPointCloud2 &blob,
+pcl::io::save (const std::string &file_name,
+               const pcl::PCLPointCloud2 &blob,
                unsigned precision)
 {
   boost::filesystem::path p (file_name.c_str ());
@@ -129,7 +130,8 @@ pcl::io::save (const std::string &file_name, const pcl::PCLPointCloud2 &blob,
 }
 
 int
-pcl::io::save (const std::string &file_name, const pcl::TextureMesh &tex_mesh,
+pcl::io::save (const std::string &file_name,
+               const pcl::TextureMesh &tex_mesh,
                unsigned precision)
 {
   boost::filesystem::path p (file_name.c_str ());
@@ -146,7 +148,8 @@ pcl::io::save (const std::string &file_name, const pcl::TextureMesh &tex_mesh,
 }
 
 int
-pcl::io::save (const std::string &file_name, const pcl::PolygonMesh &poly_mesh,
+pcl::io::save (const std::string &file_name,
+               const pcl::PolygonMesh &poly_mesh,
                unsigned precision)
 {
   boost::filesystem::path p (file_name.c_str ());

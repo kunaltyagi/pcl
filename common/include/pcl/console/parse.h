@@ -97,7 +97,9 @@ namespace pcl
      * \return index of found argument or -1 if arguments do not appear in list
      */
     PCL_EXPORTS int
-    parse_argument (int argc, const char *const *argv, const char *str,
+    parse_argument (int argc,
+                    const char *const *argv,
+                    const char *str,
                     std::string &val);
 
     /** \brief Parse for a specific given command line argument.
@@ -148,7 +150,9 @@ namespace pcl
      * \return index of found argument or -1 if arguments do not appear in list
      */
     PCL_EXPORTS int
-    parse_argument (int argc, const char *const *argv, const char *str,
+    parse_argument (int argc,
+                    const char *const *argv,
+                    const char *str,
                     unsigned int &val);
 
     /** \brief Parse for a specific given command line argument.
@@ -172,8 +176,12 @@ namespace pcl
      * \return index of found argument or -1 if arguments do not appear in list
      */
     PCL_EXPORTS int
-    parse_2x_arguments (int argc, const char *const *argv, const char *str, float &f,
-                        float &s, bool debug = true);
+    parse_2x_arguments (int argc,
+                        const char *const *argv,
+                        const char *str,
+                        float &f,
+                        float &s,
+                        bool debug = true);
 
     /** \brief Parse for specific given command line arguments (2x values comma
      * separated).
@@ -186,8 +194,12 @@ namespace pcl
      * \return index of found argument or -1 if arguments do not appear in list
      */
     PCL_EXPORTS int
-    parse_2x_arguments (int argc, const char *const *argv, const char *str, double &f,
-                        double &s, bool debug = true);
+    parse_2x_arguments (int argc,
+                        const char *const *argv,
+                        const char *str,
+                        double &f,
+                        double &s,
+                        bool debug = true);
 
     /** \brief Parse for specific given command line arguments (2x values comma
      * separated).
@@ -200,8 +212,12 @@ namespace pcl
      * \return index of found argument or -1 if arguments do not appear in list
      */
     PCL_EXPORTS int
-    parse_2x_arguments (int argc, const char *const *argv, const char *str, int &f,
-                        int &s, bool debug = true);
+    parse_2x_arguments (int argc,
+                        const char *const *argv,
+                        const char *str,
+                        int &f,
+                        int &s,
+                        bool debug = true);
 
     /** \brief Parse for specific given command line arguments (3x values comma
      * separated).
@@ -215,8 +231,13 @@ namespace pcl
      * \return index of found argument or -1 if arguments do not appear in list
      */
     PCL_EXPORTS int
-    parse_3x_arguments (int argc, const char *const *argv, const char *str, float &f,
-                        float &s, float &t, bool debug = true);
+    parse_3x_arguments (int argc,
+                        const char *const *argv,
+                        const char *str,
+                        float &f,
+                        float &s,
+                        float &t,
+                        bool debug = true);
 
     /** \brief Parse for specific given command line arguments (3x values comma
      * separated).
@@ -230,8 +251,13 @@ namespace pcl
      * \return index of found argument or -1 if arguments do not appear in list
      */
     PCL_EXPORTS int
-    parse_3x_arguments (int argc, const char *const *argv, const char *str, double &f,
-                        double &s, double &t, bool debug = true);
+    parse_3x_arguments (int argc,
+                        const char *const *argv,
+                        const char *str,
+                        double &f,
+                        double &s,
+                        double &t,
+                        bool debug = true);
 
     /** \brief Parse for specific given command line arguments (3x values comma
      * separated).
@@ -245,8 +271,13 @@ namespace pcl
      * return index of found argument or -1 if arguments do not appear in list
      */
     PCL_EXPORTS int
-    parse_3x_arguments (int argc, const char *const *argv, const char *str, int &f,
-                        int &s, int &t, bool debug = true);
+    parse_3x_arguments (int argc,
+                        const char *const *argv,
+                        const char *str,
+                        int &f,
+                        int &s,
+                        int &t,
+                        bool debug = true);
 
     /** \brief Parse for specific given command line arguments (3x values comma
      * separated).
@@ -257,7 +288,9 @@ namespace pcl
      * \return index of found argument or -1 if arguments do not appear in list
      */
     PCL_EXPORTS int
-    parse_x_arguments (int argc, const char *const *argv, const char *str,
+    parse_x_arguments (int argc,
+                       const char *const *argv,
+                       const char *str,
                        std::vector<double> &v);
 
     /** \brief Parse for specific given command line arguments (N values comma
@@ -269,7 +302,9 @@ namespace pcl
      * \return index of found argument or -1 if arguments do not appear in list
      */
     PCL_EXPORTS int
-    parse_x_arguments (int argc, const char *const *argv, const char *str,
+    parse_x_arguments (int argc,
+                       const char *const *argv,
+                       const char *str,
                        std::vector<float> &v);
 
     /** \brief Parse for specific given command line arguments (N values comma
@@ -281,7 +316,9 @@ namespace pcl
      * \return index of found argument or -1 if arguments do not appear in list
      */
     PCL_EXPORTS int
-    parse_x_arguments (int argc, const char *const *argv, const char *str,
+    parse_x_arguments (int argc,
+                       const char *const *argv,
+                       const char *str,
                        std::vector<int> &v);
 
     /** \brief Parse for specific given command line arguments (multiple occurrences
@@ -293,7 +330,9 @@ namespace pcl
      * \return index of found argument or -1 if arguments do not appear in list
      */
     PCL_EXPORTS bool
-    parse_multiple_arguments (int argc, const char *const *argv, const char *str,
+    parse_multiple_arguments (int argc,
+                              const char *const *argv,
+                              const char *str,
                               std::vector<int> &values);
 
     /** \brief Parse for specific given command line arguments (multiple occurrences
@@ -305,7 +344,9 @@ namespace pcl
      * \return true if found, false otherwise
      */
     PCL_EXPORTS bool
-    parse_multiple_arguments (int argc, const char *const *argv, const char *str,
+    parse_multiple_arguments (int argc,
+                              const char *const *argv,
+                              const char *str,
                               std::vector<float> &values);
 
     /** \brief Parse for specific given command line arguments (multiple occurrences
@@ -317,7 +358,9 @@ namespace pcl
      * \return true if found, false otherwise
      */
     PCL_EXPORTS bool
-    parse_multiple_arguments (int argc, const char *const *argv, const char *str,
+    parse_multiple_arguments (int argc,
+                              const char *const *argv,
+                              const char *str,
                               std::vector<double> &values);
 
     /** \brief Parse for a specific given command line argument (multiple occurrences
@@ -329,7 +372,9 @@ namespace pcl
      * \return true if found, false otherwise
      */
     PCL_EXPORTS bool
-    parse_multiple_arguments (int argc, const char *const *argv, const char *str,
+    parse_multiple_arguments (int argc,
+                              const char *const *argv,
+                              const char *str,
                               std::vector<std::string> &values);
 
     /** \brief Parse command line arguments for file names with given extension
@@ -340,7 +385,9 @@ namespace pcl
      * of output values \return true if found, false otherwise
      */
     PCL_EXPORTS bool
-    parse_multiple_2x_arguments (int argc, const char *const *argv, const char *str,
+    parse_multiple_2x_arguments (int argc,
+                                 const char *const *argv,
+                                 const char *str,
                                  std::vector<double> &values_f,
                                  std::vector<double> &values_s);
 
@@ -353,7 +400,9 @@ namespace pcl
      * true if found, false otherwise
      */
     PCL_EXPORTS bool
-    parse_multiple_3x_arguments (int argc, const char *const *argv, const char *str,
+    parse_multiple_3x_arguments (int argc,
+                                 const char *const *argv,
+                                 const char *str,
                                  std::vector<double> &values_f,
                                  std::vector<double> &values_s,
                                  std::vector<double> &values_t);
@@ -365,7 +414,8 @@ namespace pcl
      * \return a vector with file names indices
      */
     PCL_EXPORTS std::vector<int>
-    parse_file_extension_argument (int argc, const char *const *argv,
+    parse_file_extension_argument (int argc,
+                                   const char *const *argv,
                                    const std::vector<std::string> &extensions);
 
     /** \brief Parse command line arguments for file names with given extension
@@ -375,7 +425,8 @@ namespace pcl
      * \return a vector with file names indices
      */
     PCL_EXPORTS std::vector<int>
-    parse_file_extension_argument (int argc, const char *const *argv,
+    parse_file_extension_argument (int argc,
+                                   const char *const *argv,
                                    const std::string &ext);
   } // namespace console
 } // namespace pcl

@@ -65,10 +65,12 @@ namespace pcl
   class PCLException : public std::runtime_error
   {
     public:
-    PCLException (const std::string &error_description, const char *file_name = nullptr,
-                  const char *function_name = nullptr, unsigned line_number = 0)
-        : std::runtime_error (createDetailedMessage (error_description, file_name,
-                                                     function_name, line_number)),
+    PCLException (const std::string &error_description,
+                  const char *file_name = nullptr,
+                  const char *function_name = nullptr,
+                  unsigned line_number = 0)
+        : std::runtime_error (createDetailedMessage (
+              error_description, file_name, function_name, line_number)),
           file_name_ (file_name), function_name_ (function_name),
           line_number_ (line_number)
     {
@@ -100,8 +102,10 @@ namespace pcl
 
     protected:
     static std::string
-    createDetailedMessage (const std::string &error_description, const char *file_name,
-                           const char *function_name, unsigned line_number)
+    createDetailedMessage (const std::string &error_description,
+                           const char *file_name,
+                           const char *function_name,
+                           unsigned line_number)
     {
       std::ostringstream sstream;
       if (function_name != nullptr)
@@ -147,7 +151,8 @@ namespace pcl
     public:
     IsNotDenseException (const std::string &error_description,
                          const char *file_name = nullptr,
-                         const char *function_name = nullptr, unsigned line_number = 0)
+                         const char *function_name = nullptr,
+                         unsigned line_number = 0)
         : pcl::PCLException (error_description, file_name, function_name, line_number)
     {
     }
@@ -175,8 +180,10 @@ namespace pcl
   class IOException : public PCLException
   {
     public:
-    IOException (const std::string &error_description, const char *file_name = nullptr,
-                 const char *function_name = nullptr, unsigned line_number = 0)
+    IOException (const std::string &error_description,
+                 const char *file_name = nullptr,
+                 const char *function_name = nullptr,
+                 unsigned line_number = 0)
         : pcl::PCLException (error_description, file_name, function_name, line_number)
     {
     }
@@ -191,7 +198,8 @@ namespace pcl
     public:
     InitFailedException (const std::string &error_description = "",
                          const char *file_name = nullptr,
-                         const char *function_name = nullptr, unsigned line_number = 0)
+                         const char *function_name = nullptr,
+                         unsigned line_number = 0)
         : pcl::PCLException (error_description, file_name, function_name, line_number)
     {
     }
@@ -261,7 +269,8 @@ namespace pcl
     public:
     BadArgumentException (const std::string &error_description,
                           const char *file_name = nullptr,
-                          const char *function_name = nullptr, unsigned line_number = 0)
+                          const char *function_name = nullptr,
+                          unsigned line_number = 0)
         : pcl::PCLException (error_description, file_name, function_name, line_number)
     {
     }

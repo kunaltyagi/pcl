@@ -184,9 +184,13 @@ namespace pcl
      * \param[out] outcloud output the resultant point cloud
      */
     void
-    partition (const PointCloud &cloud, const int first, const int last,
-               const Vector min_values, const Vector max_values,
-               std::vector<int> &indices, PointCloud &outcloud);
+    partition (const PointCloud &cloud,
+               const int first,
+               const int last,
+               const Vector min_values,
+               const Vector max_values,
+               std::vector<int> &indices,
+               PointCloud &outcloud);
 
     /** \brief Randomly sample the points in each grid.
      * \param[in] data
@@ -196,8 +200,11 @@ namespace pcl
      * \param[out] output the resultant point cloud
      */
     void
-    samplePartition (const PointCloud &data, const int first, const int last,
-                     std::vector<int> &indices, PointCloud &outcloud);
+    samplePartition (const PointCloud &data,
+                     const int first,
+                     const int last,
+                     std::vector<int> &indices,
+                     PointCloud &outcloud);
 
     /** \brief Returns the threshold for splitting in a given dimension.
      * \param[in] cloud the input cloud
@@ -232,8 +239,11 @@ namespace pcl
      * = 0) \param[out] curvature the estimated surface curvature as a measure of
      */
     void
-    solvePlaneParameters (const Eigen::Matrix3f &covariance_matrix, float &nx,
-                          float &ny, float &nz, float &curvature);
+    solvePlaneParameters (const Eigen::Matrix3f &covariance_matrix,
+                          float &nx,
+                          float &ny,
+                          float &nz,
+                          float &curvature);
   };
 } // namespace pcl
 

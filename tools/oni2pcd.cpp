@@ -65,8 +65,11 @@ cloud_cb (const CloudConstPtr &cloud)
   PCDWriter w;
   sprintf (buf, "frame_%06d.pcd", i);
   w.writeBinaryCompressed (buf, *cloud);
-  PCL_INFO ("Wrote a cloud with %lu (%ux%u) points in %s.\n", cloud->size (),
-            cloud->width, cloud->height, buf);
+  PCL_INFO ("Wrote a cloud with %lu (%ux%u) points in %s.\n",
+            cloud->size (),
+            cloud->width,
+            cloud->height,
+            buf);
   ++i;
 }
 

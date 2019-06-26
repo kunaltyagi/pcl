@@ -46,8 +46,12 @@ using Array4size_t = Eigen::Array<size_t, 4, 1>;
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::getMinMax3D (const pcl::PCLPointCloud2ConstPtr &cloud, int x_idx, int y_idx,
-                  int z_idx, Eigen::Vector4f &min_pt, Eigen::Vector4f &max_pt)
+pcl::getMinMax3D (const pcl::PCLPointCloud2ConstPtr &cloud,
+                  int x_idx,
+                  int y_idx,
+                  int z_idx,
+                  Eigen::Vector4f &min_pt,
+                  Eigen::Vector4f &max_pt)
 {
   // @todo fix this
   if (cloud->fields[x_idx].datatype != pcl::PCLPointField::FLOAT32 ||
@@ -64,8 +68,10 @@ pcl::getMinMax3D (const pcl::PCLPointCloud2ConstPtr &cloud, int x_idx, int y_idx
   size_t nr_points = cloud->width * cloud->height;
 
   Eigen::Array4f pt = Eigen::Array4f::Zero ();
-  Array4size_t xyz_offset (cloud->fields[x_idx].offset, cloud->fields[y_idx].offset,
-                           cloud->fields[z_idx].offset, 0);
+  Array4size_t xyz_offset (cloud->fields[x_idx].offset,
+                           cloud->fields[y_idx].offset,
+                           cloud->fields[z_idx].offset,
+                           0);
 
   for (size_t cp = 0; cp < nr_points; ++cp) {
     // Unoptimized memcpys: assume fields x, y, z are in random order
@@ -87,9 +93,15 @@ pcl::getMinMax3D (const pcl::PCLPointCloud2ConstPtr &cloud, int x_idx, int y_idx
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::getMinMax3D (const pcl::PCLPointCloud2ConstPtr &cloud, int x_idx, int y_idx,
-                  int z_idx, const std::string &distance_field_name, float min_distance,
-                  float max_distance, Eigen::Vector4f &min_pt, Eigen::Vector4f &max_pt,
+pcl::getMinMax3D (const pcl::PCLPointCloud2ConstPtr &cloud,
+                  int x_idx,
+                  int y_idx,
+                  int z_idx,
+                  const std::string &distance_field_name,
+                  float min_distance,
+                  float max_distance,
+                  Eigen::Vector4f &min_pt,
+                  Eigen::Vector4f &max_pt,
                   bool limit_negative)
 {
   // @todo fix this
@@ -116,8 +128,10 @@ pcl::getMinMax3D (const pcl::PCLPointCloud2ConstPtr &cloud, int x_idx, int y_idx
   size_t nr_points = cloud->width * cloud->height;
 
   Eigen::Array4f pt = Eigen::Array4f::Zero ();
-  Array4size_t xyz_offset (cloud->fields[x_idx].offset, cloud->fields[y_idx].offset,
-                           cloud->fields[z_idx].offset, 0);
+  Array4size_t xyz_offset (cloud->fields[x_idx].offset,
+                           cloud->fields[y_idx].offset,
+                           cloud->fields[z_idx].offset,
+                           0);
   float distance_value = 0;
   for (size_t cp = 0; cp < nr_points; ++cp) {
     size_t point_offset = cp * cloud->point_step;
@@ -198,9 +212,15 @@ pcl::VoxelGrid<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
   Eigen::Vector4f min_p, max_p;
   // Get the minimum and maximum dimensions
   if (!filter_field_name_.empty ()) // If we don't want to process the entire cloud...
-    getMinMax3D (input_, x_idx_, y_idx_, z_idx_, filter_field_name_,
+    getMinMax3D (input_,
+                 x_idx_,
+                 y_idx_,
+                 z_idx_,
+                 filter_field_name_,
                  static_cast<float> (filter_limit_min_),
-                 static_cast<float> (filter_limit_max_), min_p, max_p,
+                 static_cast<float> (filter_limit_max_),
+                 min_p,
+                 max_p,
                  filter_limit_negative_);
   else
     getMinMax3D (input_, x_idx_, y_idx_, z_idx_, min_p, max_p);
@@ -235,8 +255,10 @@ pcl::VoxelGrid<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
   index_vector.reserve (nr_points);
 
   // Create the first xyz_offset, and set up the division multiplier
-  Array4size_t xyz_offset (input_->fields[x_idx_].offset, input_->fields[y_idx_].offset,
-                           input_->fields[z_idx_].offset, 0);
+  Array4size_t xyz_offset (input_->fields[x_idx_].offset,
+                           input_->fields[y_idx_].offset,
+                           input_->fields[z_idx_].offset,
+                           0);
   divb_mul_ = Eigen::Vector4i (1, div_b_[0], div_b_[0] * div_b_[1], 0);
   Eigen::Vector4f pt = Eigen::Vector4f::Zero ();
 
@@ -349,8 +371,8 @@ pcl::VoxelGrid<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
   // Second pass: sort the index_vector vector using value representing target cell as
   // index in effect all points belonging to the same output cell will be next to each
   // other
-  std::sort (index_vector.begin (), index_vector.end (),
-             std::less<cloud_point_index_idx> ());
+  std::sort (
+      index_vector.begin (), index_vector.end (), std::less<cloud_point_index_idx> ());
 
   // Third pass: count output cells
   // we need to skip all the same, adjacenent idx values
@@ -385,20 +407,23 @@ pcl::VoxelGrid<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
     } catch (std::bad_alloc &) {
       throw PCLException (
           "VoxelGrid bin size is too low; impossible to allocate memory for layout",
-          "voxel_grid.cpp", "applyFilter");
+          "voxel_grid.cpp",
+          "applyFilter");
     } catch (std::length_error &) {
       throw PCLException (
           "VoxelGrid bin size is too low; impossible to allocate memory for layout",
-          "voxel_grid.cpp", "applyFilter");
+          "voxel_grid.cpp",
+          "applyFilter");
     }
   }
 
   // If we downsample each field, the {x,y,z}_idx_ offsets should correspond in input_
   // and output
   if (downsample_all_data_)
-    xyz_offset =
-        Array4size_t (output.fields[x_idx_].offset, output.fields[y_idx_].offset,
-                      output.fields[z_idx_].offset, 0);
+    xyz_offset = Array4size_t (output.fields[x_idx_].offset,
+                               output.fields[y_idx_].offset,
+                               output.fields[z_idx_].offset,
+                               0);
   else
     // If not, we must have created a new xyzw cloud
     xyz_offset = Array4size_t (0, 4, 8, 12);
@@ -411,11 +436,14 @@ pcl::VoxelGrid<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
     size_t point_offset = index_vector[cp].cloud_point_index * input_->point_step;
     // Do we need to process all the fields?
     if (!downsample_all_data_) {
-      memcpy (&pt[0], &input_->data[point_offset + input_->fields[x_idx_].offset],
+      memcpy (&pt[0],
+              &input_->data[point_offset + input_->fields[x_idx_].offset],
               sizeof (float));
-      memcpy (&pt[1], &input_->data[point_offset + input_->fields[y_idx_].offset],
+      memcpy (&pt[1],
+              &input_->data[point_offset + input_->fields[y_idx_].offset],
               sizeof (float));
-      memcpy (&pt[2], &input_->data[point_offset + input_->fields[z_idx_].offset],
+      memcpy (&pt[2],
+              &input_->data[point_offset + input_->fields[z_idx_].offset],
               sizeof (float));
       centroid[0] = pt[0];
       centroid[1] = pt[1];
@@ -426,7 +454,8 @@ pcl::VoxelGrid<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
       // fill extra r/g/b centroid field
       if (rgba_index >= 0) {
         pcl::RGB rgb;
-        memcpy (&rgb, &input_->data[point_offset + input_->fields[rgba_index].offset],
+        memcpy (&rgb,
+                &input_->data[point_offset + input_->fields[rgba_index].offset],
                 sizeof (RGB));
         centroid[centroid_size - 4] = rgb.r;
         centroid[centroid_size - 3] = rgb.g;
@@ -435,7 +464,8 @@ pcl::VoxelGrid<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
       }
       // Copy all the fields
       for (size_t d = 0; d < input_->fields.size (); ++d)
-        memcpy (&centroid[d], &input_->data[point_offset + input_->fields[d].offset],
+        memcpy (&centroid[d],
+                &input_->data[point_offset + input_->fields[d].offset],
                 field_sizes_[d]);
     }
 
@@ -443,11 +473,14 @@ pcl::VoxelGrid<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
     while (i < index_vector.size () && index_vector[i].idx == index_vector[cp].idx) {
       size_t point_offset = index_vector[i].cloud_point_index * input_->point_step;
       if (!downsample_all_data_) {
-        memcpy (&pt[0], &input_->data[point_offset + input_->fields[x_idx_].offset],
+        memcpy (&pt[0],
+                &input_->data[point_offset + input_->fields[x_idx_].offset],
                 sizeof (float));
-        memcpy (&pt[1], &input_->data[point_offset + input_->fields[y_idx_].offset],
+        memcpy (&pt[1],
+                &input_->data[point_offset + input_->fields[y_idx_].offset],
                 sizeof (float));
-        memcpy (&pt[2], &input_->data[point_offset + input_->fields[z_idx_].offset],
+        memcpy (&pt[2],
+                &input_->data[point_offset + input_->fields[z_idx_].offset],
                 sizeof (float));
         centroid[0] += pt[0];
         centroid[1] += pt[1];
@@ -457,7 +490,8 @@ pcl::VoxelGrid<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
         // fill extra r/g/b centroid field
         if (rgba_index >= 0) {
           pcl::RGB rgb;
-          memcpy (&rgb, &input_->data[point_offset + input_->fields[rgba_index].offset],
+          memcpy (&rgb,
+                  &input_->data[point_offset + input_->fields[rgba_index].offset],
                   sizeof (RGB));
           temporary[centroid_size - 4] = rgb.r;
           temporary[centroid_size - 3] = rgb.g;
@@ -466,7 +500,8 @@ pcl::VoxelGrid<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
         }
         // Copy all the fields
         for (size_t d = 0; d < input_->fields.size (); ++d)
-          memcpy (&temporary[d], &input_->data[point_offset + input_->fields[d].offset],
+          memcpy (&temporary[d],
+                  &input_->data[point_offset + input_->fields[d].offset],
                   field_sizes_[d]);
         centroid += temporary;
       }
@@ -492,7 +527,8 @@ pcl::VoxelGrid<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
       size_t point_offset = index * output.point_step;
       // Copy all the fields
       for (size_t d = 0; d < output.fields.size (); ++d)
-        memcpy (&output.data[point_offset + output.fields[d].offset], &centroid[d],
+        memcpy (&output.data[point_offset + output.fields[d].offset],
+                &centroid[d],
                 field_sizes_[d]);
 
       // ---[ RGB special case
@@ -502,7 +538,8 @@ pcl::VoxelGrid<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
               b = centroid[centroid_size - 2], a = centroid[centroid_size - 1];
         int rgb = (static_cast<int> (a) << 24) | (static_cast<int> (r) << 16) |
                   (static_cast<int> (g) << 8) | static_cast<int> (b);
-        memcpy (&output.data[point_offset + output.fields[rgba_index].offset], &rgb,
+        memcpy (&output.data[point_offset + output.fields[rgba_index].offset],
+                &rgb,
                 sizeof (float));
       }
     }

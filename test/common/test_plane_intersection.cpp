@@ -183,10 +183,10 @@ TEST (PCL, lineWithLineIntersection)
   EXPECT_LT (sqr_mod_act_2, sqr_mod_case_2);
   EXPECT_EQ (
       lineWithLineIntersection (coeff1, coeff2, point_mod_case_2, sqr_mod_case_2),
-      lineWithLineIntersection (line_a_mod_2, line_b_mod_2, point_mod_2,
-                                sqr_mod_case_2));
-  EXPECT_TRUE (lineWithLineIntersection (line_a_mod_2, line_b_mod_2, point_mod_2,
-                                         sqr_mod_case_2));
+      lineWithLineIntersection (
+          line_a_mod_2, line_b_mod_2, point_mod_2, sqr_mod_case_2));
+  EXPECT_TRUE (lineWithLineIntersection (
+      line_a_mod_2, line_b_mod_2, point_mod_2, sqr_mod_case_2));
 
   EXPECT_EQ (point_mod_2[0], point_mod_case_2[0]);
   EXPECT_EQ (point_mod_2[1], point_mod_case_2[1]);

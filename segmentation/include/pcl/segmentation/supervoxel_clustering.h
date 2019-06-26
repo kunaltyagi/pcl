@@ -181,9 +181,8 @@ namespace pcl
     using PCLBase<PointT>::deinitCompute;
     using PCLBase<PointT>::input_;
 
-    using VoxelAdjacencyList =
-        boost::adjacency_list<boost::setS, boost::setS, boost::undirectedS, uint32_t,
-                              float>;
+    using VoxelAdjacencyList = boost::
+        adjacency_list<boost::setS, boost::setS, boost::undirectedS, uint32_t, float>;
     using VoxelID = VoxelAdjacencyList::vertex_descriptor;
     using EdgeID = VoxelAdjacencyList::edge_descriptor;
 
@@ -199,7 +198,8 @@ namespace pcl
         "Default behavior is now to use the transform for organized clouds, and not "
         "use it for unorganized. Use setUseSingleCameraTransform() to override the "
         "defaults.")]] SupervoxelClustering (float voxel_resolution,
-                                             float seed_resolution, bool)
+                                             float seed_resolution,
+                                             bool)
         : SupervoxelClustering (voxel_resolution, seed_resolution)
     {
     }
@@ -320,9 +320,9 @@ namespace pcl
      */
     [[deprecated ("use getLabeledVoxelCloud() instead. An example of how to display "
                   "and save with colorized labels can be found in "
-                  "examples/segmentation/example_supervoxels.cpp")]] pcl::PointCloud<
-        pcl::PointXYZRGBA>::Ptr
-    getColoredVoxelCloud () const
+                  "examples/segmentation/example_supervoxels.cpp")]] pcl::
+        PointCloud<pcl::PointXYZRGBA>::Ptr
+        getColoredVoxelCloud () const
     {
       return pcl::PointCloud<PointXYZRGBA>::Ptr (new pcl::PointCloud<PointXYZRGBA>);
     }

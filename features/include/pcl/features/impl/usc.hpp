@@ -231,9 +231,11 @@ pcl::UniqueShapeContext<PointInT, PointOutT, PointRFT>::computePointDescriptor (
     /// "point_density_radius_" around the current neighbour
     std::vector<int> neighbour_indices;
     std::vector<float> neighbour_didtances;
-    float point_density = static_cast<float> (
-        searchForNeighbors (*surface_, nn_indices[ne], point_density_radius_,
-                            neighbour_indices, neighbour_didtances));
+    float point_density = static_cast<float> (searchForNeighbors (*surface_,
+                                                                  nn_indices[ne],
+                                                                  point_density_radius_,
+                                                                  neighbour_indices,
+                                                                  neighbour_didtances));
     /// point_density is always bigger than 0 because FindPointsWithinRadius returns at
     /// least the point itself
     float w =

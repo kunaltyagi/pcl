@@ -66,8 +66,8 @@ pcl::cloud_composer::CloudItem::createCloudItemFromTemplate (
 {
   pcl::PCLPointCloud2::Ptr cloud_blob = boost::make_shared<pcl::PCLPointCloud2> ();
   toPCLPointCloud2 (*cloud_ptr, *cloud_blob);
-  CloudItem *cloud_item = new CloudItem (name, cloud_blob, Eigen::Vector4f (),
-                                         Eigen::Quaternionf (), false);
+  CloudItem *cloud_item = new CloudItem (
+      name, cloud_blob, Eigen::Vector4f (), Eigen::Quaternionf (), false);
   cloud_item->setData (QVariant::fromValue (cloud_ptr), ItemDataRole::CLOUD_TEMPLATED);
   cloud_item->setPointType<PointT> ();
   return cloud_item;

@@ -68,7 +68,8 @@ namespace pcl
        * \param[in] bin_size  size of each bing of the Hough space.
        * \param[in] max_coord maximum (x,y,z) coordinates of the Hough space.
        */
-      HoughSpace3D (const Eigen::Vector3d &min_coord, const Eigen::Vector3d &bin_size,
+      HoughSpace3D (const Eigen::Vector3d &min_coord,
+                    const Eigen::Vector3d &bin_size,
                     const Eigen::Vector3d &max_coord);
 
       /** \brief Reset all cast votes. */
@@ -110,7 +111,8 @@ namespace pcl
        * \return The min_threshold used, either set by the user or found by this method.
        */
       double
-      findMaxima (double min_threshold, std::vector<double> &maxima_values,
+      findMaxima (double min_threshold,
+                  std::vector<double> &maxima_values,
                   std::vector<std::vector<int>> &maxima_voter_ids);
 
       protected:
@@ -151,7 +153,8 @@ namespace pcl
    * \author Federico Tombari (original), Tommaso Cavallari (PCL port)
    * \ingroup recognition
    */
-  template <typename PointModelT, typename PointSceneT,
+  template <typename PointModelT,
+            typename PointSceneT,
             typename PointModelRfT = pcl::ReferenceFrame,
             typename PointSceneRfT = pcl::ReferenceFrame>
   class Hough3DGrouping : public CorrespondenceGrouping<PointModelT, PointSceneT>

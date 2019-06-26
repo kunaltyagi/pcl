@@ -103,7 +103,9 @@ namespace pcl
        * number of neighbors found
        */
       int
-      nearestKSearch (const PointT &point, int k, std::vector<int> &k_indices,
+      nearestKSearch (const PointT &point,
+                      int k,
+                      std::vector<int> &k_indices,
                       std::vector<float> &k_distances) const override;
 
       /** \brief Search for all the nearest neighbors of the query point in a given
@@ -116,27 +118,35 @@ namespace pcl
        * radius will be returned. \return number of neighbors found in radius
        */
       int
-      radiusSearch (const PointT &point, double radius, std::vector<int> &k_indices,
+      radiusSearch (const PointT &point,
+                    double radius,
+                    std::vector<int> &k_indices,
                     std::vector<float> &k_sqr_distances,
                     unsigned int max_nn = 0) const override;
 
       private:
       int
-      denseKSearch (const PointT &point, int k, std::vector<int> &k_indices,
+      denseKSearch (const PointT &point,
+                    int k,
+                    std::vector<int> &k_indices,
                     std::vector<float> &k_distances) const;
 
       int
-      sparseKSearch (const PointT &point, int k, std::vector<int> &k_indices,
+      sparseKSearch (const PointT &point,
+                     int k,
+                     std::vector<int> &k_indices,
                      std::vector<float> &k_distances) const;
 
       int
-      denseRadiusSearch (const PointT &point, double radius,
+      denseRadiusSearch (const PointT &point,
+                         double radius,
                          std::vector<int> &k_indices,
                          std::vector<float> &k_sqr_distances,
                          unsigned int max_nn = 0) const;
 
       int
-      sparseRadiusSearch (const PointT &point, double radius,
+      sparseRadiusSearch (const PointT &point,
+                          double radius,
                           std::vector<int> &k_indices,
                           std::vector<float> &k_sqr_distances,
                           unsigned int max_nn = 0) const;

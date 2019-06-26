@@ -112,7 +112,9 @@ pcl::NormalRefinement<NormalT>::applyFilter (PointCloud &output)
     if (ddot < convergence_threshold_) {
       PCL_DEBUG ("[pcl::%s::applyFilter] Converged after %i iterations with mean error "
                  "of %f.\n",
-                 getClassName ().c_str (), i + 1, ddot);
+                 getClassName ().c_str (),
+                 i + 1,
+                 ddot);
       break;
     }
   }

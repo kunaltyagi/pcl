@@ -80,7 +80,8 @@ namespace pcl
       virtual void
       setValueTables (const int &flags, const double &smooth = 0);
       virtual void
-      setValueTables (const int &flags, const double &valueSmooth,
+      setValueTables (const int &flags,
+                      const double &valueSmooth,
                       const double &normalSmooth);
       virtual void
       clearValueTables (void);
@@ -101,33 +102,56 @@ namespace pcl
        ********************************************************/
 #if BOUNDARY_CONDITIONS
       void
-      set (const int &maxDepth, const PPolynomial<Degree> &F, const int &normalize,
-           bool useDotRatios = true, bool reflectBoundary = false);
+      set (const int &maxDepth,
+           const PPolynomial<Degree> &F,
+           const int &normalize,
+           bool useDotRatios = true,
+           bool reflectBoundary = false);
 #else  // !BOUNDARY_CONDITIONS
       void
-      set (const int &maxDepth, const PPolynomial<Degree> &F, const int &normalize,
+      set (const int &maxDepth,
+           const PPolynomial<Degree> &F,
+           const int &normalize,
            bool useDotRatios = true);
 #endif // BOUNDARY_CONDITIONS
 
 #if BOUNDARY_CONDITIONS
       Real
-      dotProduct (const double &center1, const double &width1, const double &center2,
-                  const double &width2, int boundary1, int boundary2) const;
+      dotProduct (const double &center1,
+                  const double &width1,
+                  const double &center2,
+                  const double &width2,
+                  int boundary1,
+                  int boundary2) const;
       Real
-      dDotProduct (const double &center1, const double &width1, const double &center2,
-                   const double &width2, int boundary1, int boundary2) const;
+      dDotProduct (const double &center1,
+                   const double &width1,
+                   const double &center2,
+                   const double &width2,
+                   int boundary1,
+                   int boundary2) const;
       Real
-      d2DotProduct (const double &center1, const double &width1, const double &center2,
-                    const double &width2, int boundary1, int boundary2) const;
+      d2DotProduct (const double &center1,
+                    const double &width1,
+                    const double &center2,
+                    const double &width2,
+                    int boundary1,
+                    int boundary2) const;
 #else  // !BOUNDARY_CONDITIONS
       Real
-      dotProduct (const double &center1, const double &width1, const double &center2,
+      dotProduct (const double &center1,
+                  const double &width1,
+                  const double &center2,
                   const double &width2) const;
       Real
-      dDotProduct (const double &center1, const double &width1, const double &center2,
+      dDotProduct (const double &center1,
+                   const double &width1,
+                   const double &center2,
                    const double &width2) const;
       Real
-      d2DotProduct (const double &center1, const double &width1, const double &center2,
+      d2DotProduct (const double &center1,
+                    const double &width1,
+                    const double &center2,
                     const double &width2) const;
 #endif // BOUNDARY_CONDITIONS
 

@@ -42,9 +42,14 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::computePairFeatures (const Eigen::Vector4f &p1, const Eigen::Vector4f &n1,
-                          const Eigen::Vector4f &p2, const Eigen::Vector4f &n2,
-                          float &f1, float &f2, float &f3, float &f4)
+pcl::computePairFeatures (const Eigen::Vector4f &p1,
+                          const Eigen::Vector4f &n1,
+                          const Eigen::Vector4f &p2,
+                          const Eigen::Vector4f &n2,
+                          float &f1,
+                          float &f2,
+                          float &f3,
+                          float &f4)
 {
   Eigen::Vector4f dp2p1 = p2 - p1;
   dp2p1[3] = 0.0f;
@@ -100,11 +105,19 @@ pcl::computePairFeatures (const Eigen::Vector4f &p1, const Eigen::Vector4f &n1,
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::computeRGBPairFeatures (const Eigen::Vector4f &p1, const Eigen::Vector4f &n1,
-                             const Eigen::Vector4i &colors1, const Eigen::Vector4f &p2,
-                             const Eigen::Vector4f &n2, const Eigen::Vector4i &colors2,
-                             float &f1, float &f2, float &f3, float &f4, float &f5,
-                             float &f6, float &f7)
+pcl::computeRGBPairFeatures (const Eigen::Vector4f &p1,
+                             const Eigen::Vector4f &n1,
+                             const Eigen::Vector4i &colors1,
+                             const Eigen::Vector4f &p2,
+                             const Eigen::Vector4f &n2,
+                             const Eigen::Vector4i &colors2,
+                             float &f1,
+                             float &f2,
+                             float &f3,
+                             float &f4,
+                             float &f5,
+                             float &f6,
+                             float &f7)
 {
   Eigen::Vector4f dp2p1 = p2 - p1;
   dp2p1[3] = 0.0f;
@@ -168,15 +181,17 @@ pcl::computeRGBPairFeatures (const Eigen::Vector4f &p1, const Eigen::Vector4f &n
 // Instantiations of specific point types
 #ifdef PCL_ONLY_CORE_POINT_TYPES
 PCL_INSTANTIATE_PRODUCT (
-    PFHEstimation, ((pcl::PointXYZ) (pcl::PointXYZI) (pcl::PointXYZRGB) (
-                       pcl::PointXYZRGBA)) ((pcl::Normal)) ((pcl::PFHSignature125)))
+    PFHEstimation,
+    ((pcl::PointXYZ) (pcl::PointXYZI) (pcl::PointXYZRGB) (pcl::PointXYZRGBA)) (
+        (pcl::Normal)) ((pcl::PFHSignature125)))
 PCL_INSTANTIATE_PRODUCT (
     PFHRGBEstimation,
     ((pcl::PointXYZRGBA) (pcl::PointXYZRGB) (pcl::PointXYZRGBNormal)) (
         (pcl::Normal) (pcl::PointXYZRGBNormal)) ((pcl::PFHRGBSignature250)))
 #else
-PCL_INSTANTIATE_PRODUCT (PFHEstimation, (PCL_XYZ_POINT_TYPES) (PCL_NORMAL_POINT_TYPES) (
-                                            (pcl::PFHSignature125)))
+PCL_INSTANTIATE_PRODUCT (
+    PFHEstimation,
+    (PCL_XYZ_POINT_TYPES) (PCL_NORMAL_POINT_TYPES) ((pcl::PFHSignature125)))
 PCL_INSTANTIATE_PRODUCT (
     PFHRGBEstimation,
     ((pcl::PointXYZRGB) (pcl::PointXYZRGBA) (pcl::PointXYZRGBNormal)) (

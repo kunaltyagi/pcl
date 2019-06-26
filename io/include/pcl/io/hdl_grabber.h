@@ -71,7 +71,8 @@ namespace pcl
      * different RGB
      */
     using sig_cb_velodyne_hdl_scan_point_cloud_xyzrgba =
-        void(const boost::shared_ptr<const pcl::PointCloud<pcl::PointXYZRGBA>> &, float,
+        void(const boost::shared_ptr<const pcl::PointCloud<pcl::PointXYZRGBA>> &,
+             float,
              float);
 
     using sig_cb_velodyne_hdl_scan_point_cloud_xyzrgb
@@ -128,7 +129,8 @@ namespace pcl
      * parameters for the HDL.  This field is mandatory for the HDL-64, optional for the
      * HDL-32
      */
-    HDLGrabber (const boost::asio::ip::address &ipAddress, const uint16_t port,
+    HDLGrabber (const boost::asio::ip::address &ipAddress,
+                const uint16_t port,
                 const std::string &correctionsFile = "");
 
     /** \brief virtual Destructor inherited from the Grabber interface. It never throws.
@@ -286,8 +288,10 @@ namespace pcl
     void
     fireCurrentScan (const uint16_t startAngle, const uint16_t endAngle);
     void
-    computeXYZI (pcl::PointXYZI &pointXYZI, uint16_t azimuth,
-                 HDLLaserReturn laserReturn, HDLLaserCorrection correction);
+    computeXYZI (pcl::PointXYZI &pointXYZI,
+                 uint16_t azimuth,
+                 HDLLaserReturn laserReturn,
+                 HDLLaserCorrection correction);
 
     private:
     static double *cos_lookup_table_;

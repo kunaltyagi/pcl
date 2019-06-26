@@ -92,7 +92,8 @@ namespace pcl
        * \note Converts from m to cm.
        */
       bool
-      segment (const CloudXYZRGBAConstPtr &cloud_in, CloudXYZRGBNormalPtr &cloud_out,
+      segment (const CloudXYZRGBAConstPtr &cloud_in,
+               CloudXYZRGBNormalPtr &cloud_out,
                CloudXYZRGBNormalPtr &cloud_discarded) const;
 
       /** \brief Calculate the normals of the input cloud.
@@ -340,8 +341,12 @@ namespace pcl
 
       /** \brief Conversion from the RGB to HSV color space. */
       void
-      RGBToHSV (const unsigned char r, const unsigned char g, const unsigned char b,
-                float &h, float &s, float &v) const;
+      RGBToHSV (const unsigned char r,
+                const unsigned char g,
+                const unsigned char b,
+                float &h,
+                float &s,
+                float &v) const;
 
       ////////////////////////////////////////////////////////////////////////
       // Members

@@ -677,7 +677,8 @@ IntToString (int i, char s[7])
   s[6] = 0;
 }
 
-ON_ClassId::ON_ClassId (const char *sClassName, const char *sBaseClassName,
+ON_ClassId::ON_ClassId (const char *sClassName,
+                        const char *sBaseClassName,
                         ON_Object *(*create) (),
                         bool (*copy) (const ON_Object *, ON_Object *),
                         const char *sUUID // UUID in registry format from guidgen
@@ -692,7 +693,8 @@ ON_ClassId::ON_ClassId (const char *sClassName, const char *sBaseClassName,
                         // the new constructor was called.
 }
 
-ON_ClassId::ON_ClassId (const char *sClassName, const char *sBaseClassName,
+ON_ClassId::ON_ClassId (const char *sClassName,
+                        const char *sBaseClassName,
                         ON_Object *(*create) (),
                         const char *sUUID // UUID in registry format from guidgen
                         )
@@ -706,7 +708,8 @@ ON_ClassId::ON_ClassId (const char *sClassName, const char *sBaseClassName,
 }
 
 void
-ON_ClassId::ConstructorHelper (const char *sClassName, const char *sBaseClassName,
+ON_ClassId::ConstructorHelper (const char *sClassName,
+                               const char *sBaseClassName,
                                const char *sUUID // UUID in registry format from guidgen
 )
 {
@@ -804,10 +807,7 @@ ON_ClassId::~ON_ClassId () {}
 static ON_UUID s_most_recent_class_id_create_uuid;
 
 ON_UUID
-ON_GetMostRecentClassIdCreateUuid ()
-{
-  return s_most_recent_class_id_create_uuid;
-}
+ON_GetMostRecentClassIdCreateUuid () { return s_most_recent_class_id_create_uuid; }
 
 ON_Object *
 ON_ClassId::Create () const
@@ -1149,10 +1149,7 @@ ON_ClassId::BaseClassName () const
 }
 
 ON_UUID
-ON_ClassId::Uuid () const
-{
-  return m_uuid;
-}
+ON_ClassId::Uuid () const { return m_uuid; }
 
 int
 ON_ClassId::Mark () const
@@ -1471,70 +1468,37 @@ ON_Object::ObjectType () const
 }
 
 ON_UUID
-ON_Object::ModelObjectId () const
-{
-  return ON_nil_uuid;
-}
+ON_Object::ModelObjectId () const { return ON_nil_uuid; }
 
 ON_UUID
-ON_Material::ModelObjectId () const
-{
-  return m_material_id;
-}
+ON_Material::ModelObjectId () const { return m_material_id; }
 
 ON_UUID
-ON_Layer::ModelObjectId () const
-{
-  return m_layer_id;
-}
+ON_Layer::ModelObjectId () const { return m_layer_id; }
 
 ON_UUID
-ON_Font::ModelObjectId () const
-{
-  return m_font_id;
-}
+ON_Font::ModelObjectId () const { return m_font_id; }
 
 ON_UUID
-ON_DimStyle::ModelObjectId () const
-{
-  return m_dimstyle_id;
-}
+ON_DimStyle::ModelObjectId () const { return m_dimstyle_id; }
 
 ON_UUID
-ON_HatchPattern::ModelObjectId () const
-{
-  return m_hatchpattern_id;
-}
+ON_HatchPattern::ModelObjectId () const { return m_hatchpattern_id; }
 
 ON_UUID
-ON_Linetype::ModelObjectId () const
-{
-  return m_linetype_id;
-}
+ON_Linetype::ModelObjectId () const { return m_linetype_id; }
 
 ON_UUID
-ON_Bitmap::ModelObjectId () const
-{
-  return m_bitmap_id;
-}
+ON_Bitmap::ModelObjectId () const { return m_bitmap_id; }
 
 ON_UUID
-ON_Light::ModelObjectId () const
-{
-  return m_light_id;
-}
+ON_Light::ModelObjectId () const { return m_light_id; }
 
 ON_UUID
-ON_TextureMapping::ModelObjectId () const
-{
-  return m_mapping_id;
-}
+ON_TextureMapping::ModelObjectId () const { return m_mapping_id; }
 
 ON_UUID
-ON_InstanceDefinition::ModelObjectId () const
-{
-  return m_uuid;
-}
+ON_InstanceDefinition::ModelObjectId () const { return m_uuid; }
 
 unsigned int
 ON_Object::SizeOf () const

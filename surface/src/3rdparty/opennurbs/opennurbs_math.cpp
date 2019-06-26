@@ -342,8 +342,8 @@ ON_ArrayScale (int dim, double s, const double *A, double *sA)
 }
 
 void
-ON_Array_aA_plus_B (int dim, double a, const double *A, const double *B,
-                    double *aA_plus_B)
+ON_Array_aA_plus_B (
+    int dim, double a, const double *A, const double *B, double *aA_plus_B)
 {
   if (dim > 0) {
     while (dim--)
@@ -381,8 +381,11 @@ ON_Array_aA_plus_B (int dim, float a, const float *A, const float *B, float *aA_
 }
 
 int
-ON_DecomposeVector (const ON_3dVector &V, const ON_3dVector &A, const ON_3dVector &B,
-                    double *x, double *y)
+ON_DecomposeVector (const ON_3dVector &V,
+                    const ON_3dVector &A,
+                    const ON_3dVector &B,
+                    double *x,
+                    double *y)
 {
   int rank;
   double pr;
@@ -448,9 +451,13 @@ ON_EvJacobian (double ds_o_ds, double ds_o_dt, double dt_o_dt, double *det_addr)
 }
 
 ON_BOOL32
-ON_EvNormalPartials (const ON_3dVector &ds, const ON_3dVector &dt,
-                     const ON_3dVector &dss, const ON_3dVector &dst,
-                     const ON_3dVector &dtt, ON_3dVector &ns, ON_3dVector &nt)
+ON_EvNormalPartials (const ON_3dVector &ds,
+                     const ON_3dVector &dt,
+                     const ON_3dVector &dss,
+                     const ON_3dVector &dst,
+                     const ON_3dVector &dtt,
+                     ON_3dVector &ns,
+                     ON_3dVector &nt)
 {
   ON_BOOL32 rc = false;
   const double ds_o_ds = ds * ds;
@@ -516,8 +523,8 @@ ON_Pullback3dVector (          // use to pull 3d vector back to surface paramete
     rc = ON_EvNormalPartials (ds, dt, dss, dst, dtt, ns, nt);
     if (rc) {
       // adjust ds and dt to take account of offset distance
-      rc = ON_DecomposeVector (vector, ds + distance * ns, dt + distance * nt,
-                               &pullback.x, &pullback.y);
+      rc = ON_DecomposeVector (
+          vector, ds + distance * ns, dt + distance * nt, &pullback.x, &pullback.y);
     }
   } else {
     rc = ON_DecomposeVector (vector, ds, dt, &pullback.x, &pullback.y);
@@ -527,9 +534,11 @@ ON_Pullback3dVector (          // use to pull 3d vector back to surface paramete
 
 ON_BOOL32
 ON_GetParameterTolerance (
-    double t0, double t1,         // domain
-    double t,                     // parameter in domain
-    double *tminus, double *tplus // parameter tolerance (tminus, tplus) returned here
+    double t0,
+    double t1, // domain
+    double t,  // parameter in domain
+    double *tminus,
+    double *tplus // parameter tolerance (tminus, tplus) returned here
 )
 {
   const ON_BOOL32 rc = (t0 < t1) ? true : false;
@@ -554,8 +563,12 @@ ON_GetParameterTolerance (
 }
 
 ON_BOOL32
-ON_EvNormal (int limit_dir, const ON_3dVector &Du, const ON_3dVector &Dv,
-             const ON_3dVector &Duu, const ON_3dVector &Duv, const ON_3dVector &Dvv,
+ON_EvNormal (int limit_dir,
+             const ON_3dVector &Du,
+             const ON_3dVector &Dv,
+             const ON_3dVector &Duu,
+             const ON_3dVector &Duv,
+             const ON_3dVector &Dvv,
              ON_3dVector &N)
 {
   const double DuoDu = Du.LengthSquared ();
@@ -736,9 +749,12 @@ ON_EvCurvature (const ON_3dVector &D1, // first derivative
 }
 
 bool
-ON_EvSectionalCurvature (const ON_3dVector &S10, const ON_3dVector &S01,
-                         const ON_3dVector &S20, const ON_3dVector &S11,
-                         const ON_3dVector &S02, const ON_3dVector &planeNormal,
+ON_EvSectionalCurvature (const ON_3dVector &S10,
+                         const ON_3dVector &S01,
+                         const ON_3dVector &S20,
+                         const ON_3dVector &S11,
+                         const ON_3dVector &S02,
+                         const ON_3dVector &planeNormal,
                          ON_3dVector &K)
 {
   ON_3dVector M, D1, M1, D2;
@@ -835,10 +851,18 @@ ON_EvSectionalCurvature (const ON_3dVector &S10, const ON_3dVector &S01,
 }
 
 ON_BOOL32
-ON_IsContinuous (ON::continuity desired_continuity, ON_3dPoint Pa, ON_3dVector D1a,
-                 ON_3dVector D2a, ON_3dPoint Pb, ON_3dVector D1b, ON_3dVector D2b,
-                 double point_tolerance, double d1_tolerance, double d2_tolerance,
-                 double cos_angle_tolerance, double curvature_tolerance)
+ON_IsContinuous (ON::continuity desired_continuity,
+                 ON_3dPoint Pa,
+                 ON_3dVector D1a,
+                 ON_3dVector D2a,
+                 ON_3dPoint Pb,
+                 ON_3dVector D1b,
+                 ON_3dVector D2b,
+                 double point_tolerance,
+                 double d1_tolerance,
+                 double d2_tolerance,
+                 double cos_angle_tolerance,
+                 double curvature_tolerance)
 {
   ON_3dVector Ta, Tb, Ka, Kb;
 
@@ -886,12 +910,12 @@ ON_IsContinuous (ON::continuity desired_continuity, ON_3dPoint Pa, ON_3dVector D
     if (!(Pa - Pb).IsTiny (point_tolerance) || Ta * Tb < cos_angle_tolerance)
       return false;
     if (ON::Gsmooth_continuous == desired_continuity) {
-      if (!ON_IsGsmoothCurvatureContinuous (Ka, Kb, cos_angle_tolerance,
-                                            curvature_tolerance))
+      if (!ON_IsGsmoothCurvatureContinuous (
+              Ka, Kb, cos_angle_tolerance, curvature_tolerance))
         return false;
     } else {
-      if (!ON_IsG2CurvatureContinuous (Ka, Kb, cos_angle_tolerance,
-                                       curvature_tolerance))
+      if (!ON_IsG2CurvatureContinuous (
+              Ka, Kb, cos_angle_tolerance, curvature_tolerance))
         return false;
     }
     break;
@@ -1365,8 +1389,13 @@ ON_IsValidPointList (int dim, int is_rat, int count, int stride, const double *p
 }
 
 ON_BOOL32
-ON_IsValidPointGrid (int dim, ON_BOOL32 is_rat, int point_count0, int point_count1,
-                     int point_stride0, int point_stride1, const double *p)
+ON_IsValidPointGrid (int dim,
+                     ON_BOOL32 is_rat,
+                     int point_count0,
+                     int point_count1,
+                     int point_stride0,
+                     int point_stride1,
+                     const double *p)
 {
   if (dim < 1 || point_count0 < 1 || point_count1 < 1 || p == NULL)
     return false;
@@ -1406,18 +1435,24 @@ ON_ReversePointList (int dim, int is_rat, int count, int stride, double *p)
 }
 
 ON_BOOL32
-ON_ReversePointGrid (int dim, ON_BOOL32 is_rat, int point_count0, int point_count1,
-                     int point_stride0, int point_stride1, double *p, int dir)
+ON_ReversePointGrid (int dim,
+                     ON_BOOL32 is_rat,
+                     int point_count0,
+                     int point_count1,
+                     int point_stride0,
+                     int point_stride1,
+                     double *p,
+                     int dir)
 {
   ON_BOOL32 rc = false;
   if (!dir) {
-    rc = ON_ReversePointGrid (dim, is_rat, point_count1, point_count0, point_stride1,
-                              point_stride0, p, 1);
+    rc = ON_ReversePointGrid (
+        dim, is_rat, point_count1, point_count0, point_stride1, point_stride0, p, 1);
   } else {
     int i;
     for (i = 0; i < point_count0; i++) {
-      if (!ON_ReversePointList (dim, is_rat, point_count1, point_stride1,
-                                p + i * point_stride0)) {
+      if (!ON_ReversePointList (
+              dim, is_rat, point_count1, point_stride1, p + i * point_stride0)) {
         rc = false;
         break;
       } else if (!i) {
@@ -1467,8 +1502,12 @@ ON_SwapPointListCoordinates (int count, int stride, double *p, int i, int j)
 }
 
 ON_BOOL32
-ON_SwapPointGridCoordinates (int point_count0, int point_count1, int point_stride0,
-                             int point_stride1, double *p, int i,
+ON_SwapPointGridCoordinates (int point_count0,
+                             int point_count1,
+                             int point_stride0,
+                             int point_stride1,
+                             double *p,
+                             int i,
                              int j // coordinates to swap
 )
 {
@@ -1492,8 +1531,8 @@ ON_SwapPointGridCoordinates (int point_count0, int point_count1, int point_strid
 }
 
 bool
-ON_TransformPointList (int dim, int is_rat, int count, int stride, float *point,
-                       const ON_Xform &xform)
+ON_TransformPointList (
+    int dim, int is_rat, int count, int stride, float *point, const ON_Xform &xform)
 {
   bool rc = true;
   double x, y, z, w;
@@ -1608,8 +1647,8 @@ ON_TransformPointList (int dim, int is_rat, int count, int stride, float *point,
 }
 
 bool
-ON_TransformPointList (int dim, int is_rat, int count, int stride, double *point,
-                       const ON_Xform &xform)
+ON_TransformPointList (
+    int dim, int is_rat, int count, int stride, double *point, const ON_Xform &xform)
 {
   bool rc = true;
   double x, y, z, w;
@@ -1724,8 +1763,13 @@ ON_TransformPointList (int dim, int is_rat, int count, int stride, double *point
 }
 
 ON_BOOL32
-ON_TransformPointGrid (int dim, int is_rat, int point_count0, int point_count1,
-                       int point_stride0, int point_stride1, double *point,
+ON_TransformPointGrid (int dim,
+                       int is_rat,
+                       int point_count0,
+                       int point_count1,
+                       int point_stride0,
+                       int point_stride1,
+                       double *point,
                        const ON_Xform &xform)
 {
   ON_BOOL32 rc = false;
@@ -1743,8 +1787,8 @@ ON_TransformPointGrid (int dim, int is_rat, int point_count0, int point_count1,
 }
 
 ON_BOOL32
-ON_TransformVectorList (int dim, int count, int stride, float *vector,
-                        const ON_Xform &xform)
+ON_TransformVectorList (
+    int dim, int count, int stride, float *vector, const ON_Xform &xform)
 {
   ON_BOOL32 rc = true;
   double x, y, z;
@@ -1793,8 +1837,8 @@ ON_TransformVectorList (int dim, int count, int stride, float *vector,
 }
 
 ON_BOOL32
-ON_TransformVectorList (int dim, int count, int stride, double *vector,
-                        const ON_Xform &xform)
+ON_TransformVectorList (
+    int dim, int count, int stride, double *vector, const ON_Xform &xform)
 {
   ON_BOOL32 rc = true;
   double x, y, z;
@@ -1885,15 +1929,15 @@ ON_PointsAreCoincident (int dim, int is_rat, const double *pointA, const double 
 }
 
 bool
-ON_PointsAreCoincident (int dim, int is_rat, int point_count, int point_stride,
-                        const double *points)
+ON_PointsAreCoincident (
+    int dim, int is_rat, int point_count, int point_stride, const double *points)
 {
   if (0 == points || point_count < 2)
     return false;
   if (point_stride < (is_rat ? (dim + 1) : dim))
     return false;
-  if (false == ON_PointsAreCoincident (dim, is_rat, points,
-                                       points + ((point_count - 1) * point_stride)))
+  if (false == ON_PointsAreCoincident (
+                   dim, is_rat, points, points + ((point_count - 1) * point_stride)))
     return false;
   if (point_count > 2) {
     point_count--;
@@ -1911,7 +1955,10 @@ ON_ComparePoint ( // returns
                   // -1: first < second
                   //  0: first == second
                   // +1: first > second
-    int dim, ON_BOOL32 is_rat, const double *pointA, const double *pointB)
+    int dim,
+    ON_BOOL32 is_rat,
+    const double *pointA,
+    const double *pointB)
 {
   const double wA = (is_rat && pointA[dim] != 0.0) ? 1.0 / pointA[dim] : 1.0;
   const double wB = (is_rat && pointB[dim] != 0.0) ? 1.0 / pointB[dim] : 1.0;
@@ -1940,8 +1987,13 @@ ON_ComparePointList ( // returns
                       // -1: first < second
                       //  0: first == second
                       // +1: first > second
-    int dim, ON_BOOL32 is_rat, int point_count, int point_strideA, const double *pointA,
-    int point_strideB, const double *pointB)
+    int dim,
+    ON_BOOL32 is_rat,
+    int point_count,
+    int point_strideA,
+    const double *pointA,
+    int point_strideB,
+    const double *pointB)
 {
   int i, rc = 0, rc1 = 0;
   bool bDoSecondCheck =
@@ -1995,8 +2047,14 @@ ON_IsPointListClosed (int dim, int is_rat, int count, int stride, const double *
 }
 
 ON_BOOL32
-ON_IsPointGridClosed (int dim, ON_BOOL32 is_rat, int point_count0, int point_count1,
-                      int point_stride0, int point_stride1, const double *p, int dir)
+ON_IsPointGridClosed (int dim,
+                      ON_BOOL32 is_rat,
+                      int point_count0,
+                      int point_count1,
+                      int point_stride0,
+                      int point_stride1,
+                      const double *p,
+                      int dir)
 {
   ON_BOOL32 rc = false;
   if (point_count0 > 0 && point_count1 > 0 && p != NULL) {
@@ -2159,8 +2217,8 @@ ON_SolveQuadraticEquation (double a, double b, double c, double *r0, double *r1)
 }
 
 ON_BOOL32
-ON_SolveTriDiagonal (int dim, int n, double *a, const double *b, double *c,
-                     const double *d, double *X)
+ON_SolveTriDiagonal (
+    int dim, int n, double *a, const double *b, double *c, const double *d, double *X)
 /*****************************************************************************
 Solve a tridiagonal linear system of equations using backsubstution
 
@@ -2276,8 +2334,15 @@ RELATED FUNCTIONS:
 }
 
 int
-ON_Solve2x2 (double m00, double m01, double m10, double m11, double d0, double d1,
-             double *x_addr, double *y_addr, double *pivot_ratio)
+ON_Solve2x2 (double m00,
+             double m01,
+             double m10,
+             double m11,
+             double d0,
+             double d1,
+             double *x_addr,
+             double *y_addr,
+             double *pivot_ratio)
 /* Solve a 2x2 system of linear equations
  *
  * INPUT:
@@ -2404,8 +2469,14 @@ ON_Solve2x2 (double m00, double m01, double m10, double m11, double d0, double d
 }
 
 int
-ON_Solve3x2 (const double col0[3], const double col1[3], double d0, double d1,
-             double d2, double *x_addr, double *y_addr, double *err_addr,
+ON_Solve3x2 (const double col0[3],
+             const double col1[3],
+             double d0,
+             double d1,
+             double d2,
+             double *x_addr,
+             double *y_addr,
+             double *err_addr,
              double *pivot_ratio)
 /* Solve a 3x2 system of linear equations
  *
@@ -2583,8 +2654,8 @@ ON_Solve3x2 (const double col0[3], const double col1[3], double d0, double d1,
 }
 
 double
-ON_SolveNxN (bool bFullPivot, bool bNormalize, int n, double *M[], double B[],
-             double X[])
+ON_SolveNxN (
+    bool bFullPivot, bool bNormalize, int n, double *M[], double B[], double X[])
 {
   if (n <= 0 || 0 == M || 0 == B || 0 == X)
     return 0.0;
@@ -2725,9 +2796,18 @@ ON_SolveNxN (bool bFullPivot, bool bNormalize, int n, double *M[], double B[],
 }
 
 int
-ON_Solve4x4 (const double row0[4], const double row1[4], const double row2[4],
-             const double row3[4], double d0, double d1, double d2, double d3,
-             double *x_addr, double *y_addr, double *z_addr, double *w_addr,
+ON_Solve4x4 (const double row0[4],
+             const double row1[4],
+             const double row2[4],
+             const double row3[4],
+             double d0,
+             double d1,
+             double d2,
+             double d3,
+             double *x_addr,
+             double *y_addr,
+             double *z_addr,
+             double *w_addr,
              double *pivot_ratio)
 {
   /* Solve a 4x4 linear system using Gauss-Jordan elimination
@@ -3237,9 +3317,16 @@ ON_Solve4x4 (const double row0[4], const double row1[4], const double row2[4],
 }
 
 int
-ON_Solve3x3 (const double row0[3], const double row1[3], const double row2[3],
-             double d0, double d1, double d2, double *x_addr, double *y_addr,
-             double *z_addr, double *pivot_ratio)
+ON_Solve3x3 (const double row0[3],
+             const double row1[3],
+             const double row2[3],
+             double d0,
+             double d1,
+             double d2,
+             double *x_addr,
+             double *y_addr,
+             double *z_addr,
+             double *pivot_ratio)
 {
   /* Solve a 3x3 linear system using Gauss-Jordan elimination
    * with full pivoting.
@@ -3536,8 +3623,12 @@ qicompar3 (void *p, const void *a, const void *b)
 }
 
 void
-ON_Sort (ON::sort_algorithm method, int *index, const void *data, size_t count,
-         size_t sizeof_element, int (*compar) (const void *, const void *))
+ON_Sort (ON::sort_algorithm method,
+         int *index,
+         const void *data,
+         size_t count,
+         size_t sizeof_element,
+         int (*compar) (const void *, const void *))
 /*****************************************************************************
 Sort an index
 
@@ -3636,8 +3727,12 @@ REFERENCE:
 }
 
 void
-ON_Sort (ON::sort_algorithm method, int *index, const void *data, size_t count,
-         size_t sizeof_element, int (*compar) (const void *, const void *, void *),
+ON_Sort (ON::sort_algorithm method,
+         int *index,
+         const void *data,
+         size_t count,
+         size_t sizeof_element,
+         int (*compar) (const void *, const void *, void *),
          void *p)
 {
   tagON_SORT_CONTEXT context;
@@ -3690,9 +3785,9 @@ ON_Sort (ON::sort_algorithm method, int *index, const void *data, size_t count,
       i = k;
       j = (k << 1) + 1;
       while (j <= icount) {
-        if (j < icount &&
-            context.compar3 (context.qdata + idx[j], context.qdata + idx[j + 1],
-                             context.users_context) < 0) {
+        if (j < icount && context.compar3 (context.qdata + idx[j],
+                                           context.qdata + idx[j + 1],
+                                           context.users_context) < 0) {
           j++;
         }
         if (context.compar3 (tmp, context.qdata + idx[j], context.users_context) < 0) {
@@ -4325,8 +4420,11 @@ ON_EPC_WARNING (const char *msg)
 
 ON_BOOL32
 ON_EvPrincipalCurvatures (
-    const ON_3dVector &Ds, const ON_3dVector &Dt, const ON_3dVector &Dss,
-    const ON_3dVector &Dst, const ON_3dVector &Dtt,
+    const ON_3dVector &Ds,
+    const ON_3dVector &Dt,
+    const ON_3dVector &Dss,
+    const ON_3dVector &Dst,
+    const ON_3dVector &Dtt,
     const ON_3dVector &N, // unit normal (use TL_EvNormal())
     double *gauss,        // = Gaussian curvature = kappa1*kappa2
     double *mean,         // = mean curvature = (kappa1+kappa2)/2
@@ -4341,15 +4439,17 @@ ON_EvPrincipalCurvatures (
   const double m = N.x * Dst.x + N.y * Dst.y + N.z * Dst.z;
   const double n = N.x * Dtt.x + N.y * Dtt.y + N.z * Dtt.z;
 
-  return ON_EvPrincipalCurvatures (Ds, Dt, l, m, n, N, gauss, mean, kappa1, kappa2, K1,
-                                   K2);
+  return ON_EvPrincipalCurvatures (
+      Ds, Dt, l, m, n, N, gauss, mean, kappa1, kappa2, K1, K2);
 }
 
 ON_BOOL32
 ON_EvPrincipalCurvatures (
-    const ON_3dVector &Ds, const ON_3dVector &Dt,
+    const ON_3dVector &Ds,
+    const ON_3dVector &Dt,
     double l, // Second fundamental form coefficients
-    double m, double n,
+    double m,
+    double n,
     const ON_3dVector &N, // unit normal (use TL_EvNormal())
     double *gauss,        // = Gaussian curvature = kappa1*kappa2
     double *mean,         // = mean curvature = (kappa1+kappa2)/2
@@ -4605,8 +4705,8 @@ ON_EvPrincipalCurvatures (
                 bSecondTry = true;
                 double ggg, mmm, kkk1, kkk2;
                 ON_3dVector KKK1, KKK2;
-                ON_EvPrincipalCurvatures (Ds, Dt, Dss, Dst, Dtt, N, &ggg, &mmm, &kkk1,
-                                          &kkk2, KKK1, KKK2);
+                ON_EvPrincipalCurvatures (
+                    Ds, Dt, Dss, Dst, Dtt, N, &ggg, &mmm, &kkk1, &kkk2, KKK1, KKK2);
                 bSecondTry = false;
               }
             }
@@ -4651,9 +4751,12 @@ ON_EvPrincipalCurvatures (
 }
 
 ON_3dVector
-ON_NormalCurvature (const ON_3dVector &S10, const ON_3dVector &S01,
-                    const ON_3dVector &S20, const ON_3dVector &S11,
-                    const ON_3dVector &S02, const ON_3dVector &UnitNormal,
+ON_NormalCurvature (const ON_3dVector &S10,
+                    const ON_3dVector &S01,
+                    const ON_3dVector &S20,
+                    const ON_3dVector &S11,
+                    const ON_3dVector &S02,
+                    const ON_3dVector &UnitNormal,
                     const ON_3dVector &UnitTangent)
 /*****************************************************************************
 Evaluate normal curvature from surface derivatives and direction
@@ -4679,8 +4782,8 @@ curvature is equal to NormalCurvature o UnitNormal.
 
   a = b = 0.0;
   // solve T = a*S10 + b*S01
-  rc = ON_Solve3x2 (S10, S01, UnitTangent.x, UnitTangent.y, UnitTangent.z, &a, &b, &e,
-                    &pr);
+  rc = ON_Solve3x2 (
+      S10, S01, UnitTangent.x, UnitTangent.y, UnitTangent.z, &a, &b, &e, &pr);
   if (rc < 2) {
     NormalCurvature.Zero ();
   } else {
@@ -4699,8 +4802,8 @@ curvature is equal to NormalCurvature o UnitNormal.
 }
 
 bool
-ON_GetPolylineLength (int dim, ON_BOOL32 is_rat, int count, int stride, const double *P,
-                      double *length)
+ON_GetPolylineLength (
+    int dim, ON_BOOL32 is_rat, int count, int stride, const double *P, double *length)
 /* first point  = {P[0], ... }
  * second point = {P[stride], ... }
  */
@@ -4782,8 +4885,10 @@ ON_GetPolylineLength (int dim, ON_BOOL32 is_rat, int count, int stride, const do
 #undef SUM_SIZE
 }
 
-ON_Evaluator::ON_Evaluator (int parameter_count, int value_count,
-                            const ON_Interval *domain, const bool *periodic)
+ON_Evaluator::ON_Evaluator (int parameter_count,
+                            int value_count,
+                            const ON_Interval *domain,
+                            const bool *periodic)
     : m_parameter_count (parameter_count),
       m_value_count (value_count > 0 ? value_count : parameter_count)
 {
@@ -4811,8 +4916,10 @@ ON_Evaluator::ON_Evaluator (int parameter_count, int value_count,
 ON_Evaluator::~ON_Evaluator () {}
 
 int
-ON_Evaluator::EvaluateHessian (const double *parameters, double *value,
-                               double *gradient, double **hessian)
+ON_Evaluator::EvaluateHessian (const double *parameters,
+                               double *value,
+                               double *gradient,
+                               double **hessian)
 {
   if (m_parameter_count == 1) {
     if (0 != gradient) {

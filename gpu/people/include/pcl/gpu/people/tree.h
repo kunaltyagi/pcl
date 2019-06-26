@@ -145,15 +145,21 @@ namespace pcl
          * there are 2^threeheight   leaves ( [label] lines )
          */
         int
-        loadTree (std::istream &is, std::vector<Node> &tree,
+        loadTree (std::istream &is,
+                  std::vector<Node> &tree,
                   std::vector<Label> &leaves);
         int
-        loadTree (const std::string &filename, std::vector<Node> &tree,
+        loadTree (const std::string &filename,
+                  std::vector<Node> &tree,
                   std::vector<Label> &leaves);
         void
-        runThroughTree (int maxDepth, const std::vector<Node> &tree,
-                        const std::vector<Label> &leaves, int W, int H,
-                        const uint16_t *dmap, Label *lmap);
+        runThroughTree (int maxDepth,
+                        const std::vector<Node> &tree,
+                        const std::vector<Label> &leaves,
+                        int W,
+                        int H,
+                        const uint16_t *dmap,
+                        Label *lmap);
 
       } // namespace trees
     }   // end namespace people

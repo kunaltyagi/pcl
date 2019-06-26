@@ -164,7 +164,8 @@ namespace pcl
        *
        */
       ValueAndDerivatives<3, double>
-      test (const PointT &transformed_pt, const double &cos_theta,
+      test (const PointT &transformed_pt,
+            const double &cos_theta,
             const double &sin_theta) const
       {
         if (n_ < min_n_)
@@ -224,8 +225,10 @@ namespace pcl
       using NormalDist = pcl::ndt2d::NormalDist<PointT>;
 
       public:
-      NDTSingleGrid (PointCloudConstPtr cloud, const Eigen::Vector2f &about,
-                     const Eigen::Vector2f &extent, const Eigen::Vector2f &step)
+      NDTSingleGrid (PointCloudConstPtr cloud,
+                     const Eigen::Vector2f &about,
+                     const Eigen::Vector2f &extent,
+                     const Eigen::Vector2f &step)
           : min_ (about - extent), max_ (min_ + 2 * extent), step_ (step),
             cells_ ((max_[0] - min_[0]) / step_[0], (max_[1] - min_[1]) / step_[1]),
             normal_distributions_ (cells_[0], cells_[1])
@@ -240,7 +243,10 @@ namespace pcl
           }
 
         PCL_DEBUG ("[pcl::NDTSingleGrid] NDT single grid %dx%d using %d/%d points\n",
-                   cells_[0], cells_[1], used_points, cloud->size ());
+                   cells_[0],
+                   cells_[1],
+                   used_points,
+                   cloud->size ());
 
         // then bake the distributions such that they approximate the
         // points (and throw away memory of the points)
@@ -257,7 +263,8 @@ namespace pcl
        * transformation: to avoid repeated evaluation
        */
       ValueAndDerivatives<3, double>
-      test (const PointT &transformed_pt, const double &cos_theta,
+      test (const PointT &transformed_pt,
+            const double &cos_theta,
             const double &sin_theta) const
       {
         const NormalDist *n = normalDistForPoint (transformed_pt);
@@ -318,8 +325,10 @@ namespace pcl
        * \param[in] extent Extent of grid for normal distributions model
        * \param[in] step Size of region that each normal distribution will model
        */
-      NDT2D (PointCloudConstPtr cloud, const Eigen::Vector2f &about,
-             const Eigen::Vector2f &extent, const Eigen::Vector2f &step)
+      NDT2D (PointCloudConstPtr cloud,
+             const Eigen::Vector2f &about,
+             const Eigen::Vector2f &extent,
+             const Eigen::Vector2f &step)
       {
         Eigen::Vector2f dx (step[0] / 2, 0);
         Eigen::Vector2f dy (0, step[1] / 2);
@@ -337,7 +346,8 @@ namespace pcl
        * transformation: to avoid repeated evaluation
        */
       ValueAndDerivatives<3, double>
-      test (const PointT &transformed_pt, const double &cos_theta,
+      test (const PointT &transformed_pt,
+            const double &cos_theta,
             const double &sin_theta) const
       {
         ValueAndDerivatives<3, double> r = ValueAndDerivatives<3, double>::Zero ();
@@ -396,8 +406,8 @@ pcl::NormalDistributionsTransform2D<PointSource, PointTarget>::computeTransforma
   }
 
   // build Normal Distribution Transform of target cloud:
-  ndt2d::NDT2D<PointTarget> target_ndt (target_, grid_centre_, grid_extent_,
-                                        grid_step_);
+  ndt2d::NDT2D<PointTarget> target_ndt (
+      target_, grid_centre_, grid_extent_, grid_step_);
 
   // can't seem to use .block<> () member function on transformation_
   // directly... gcc bug?
@@ -409,8 +419,8 @@ pcl::NormalDistributionsTransform2D<PointSource, PointTarget>::computeTransforma
   const Eigen::Vector3f rot_x (initial_rot * Eigen::Vector3f::UnitX ());
   const double z_rotation = std::atan2 (rot_x[1], rot_x[0]);
 
-  Eigen::Vector3d xytheta_transformation (transformation (0, 3), transformation (1, 3),
-                                          z_rotation);
+  Eigen::Vector3d xytheta_transformation (
+      transformation (0, 3), transformation (1, 3), z_rotation);
 
   while (!converged_) {
     const double cos_theta = std::cos (xytheta_transformation[2]);
@@ -424,7 +434,9 @@ pcl::NormalDistributionsTransform2D<PointSource, PointTarget>::computeTransforma
 
     PCL_DEBUG ("[pcl::NormalDistributionsTransform2D::computeTransformation] NDT score "
                "%f (x=%f,y=%f,r=%f)\n",
-               float(score.value), xytheta_transformation[0], xytheta_transformation[1],
+               float(score.value),
+               xytheta_transformation[0],
+               xytheta_transformation[1],
                xytheta_transformation[2]);
 
     if (score.value != 0) {
@@ -444,8 +456,10 @@ pcl::NormalDistributionsTransform2D<PointSource, PointTarget>::computeTransforma
         solver.compute (score.hessian, false);
         PCL_DEBUG ("[pcl::NormalDistributionsTransform2D::computeTransformation] "
                    "adjust hessian: %f: new eigenvalues:%f %f %f\n",
-                   float(lambda), solver.eigenvalues ()[0].real (),
-                   solver.eigenvalues ()[1].real (), solver.eigenvalues ()[2].real ());
+                   float(lambda),
+                   solver.eigenvalues ()[0].real (),
+                   solver.eigenvalues ()[1].real (),
+                   solver.eigenvalues ()[2].real ());
       }
       assert (solver.eigenvalues ()[0].real () >= 0 &&
               solver.eigenvalues ()[1].real () >= 0 &&
@@ -462,7 +476,8 @@ pcl::NormalDistributionsTransform2D<PointSource, PointTarget>::computeTransforma
           static_cast<float> (xytheta_transformation[2]), Eigen::Vector3f::UnitZ ()));
       transformation.block<3, 1> (0, 3).matrix () =
           Eigen::Vector3f (static_cast<float> (xytheta_transformation[0]),
-                           static_cast<float> (xytheta_transformation[1]), 0.0f);
+                           static_cast<float> (xytheta_transformation[1]),
+                           0.0f);
 
       // std::cout << "new transformation:\n" << transformation << std::endl;
     } else {

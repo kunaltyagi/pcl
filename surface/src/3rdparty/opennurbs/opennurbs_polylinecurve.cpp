@@ -16,7 +16,8 @@
 
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-ON_OBJECT_IMPLEMENT (ON_PolylineCurve, ON_Curve,
+ON_OBJECT_IMPLEMENT (ON_PolylineCurve,
+                     ON_Curve,
                      "4ED7D4E6-E947-11d3-BFE5-0010830122F0");
 
 ON_PolylineCurve::ON_PolylineCurve () { m_dim = 3; }
@@ -92,8 +93,14 @@ ON_PolylineCurve::GetBBox ( // returns true if successful
     double *boxmax,         // maximum
     ON_BOOL32 bGrowBox) const
 {
-  return ON_GetPointListBoundingBox (m_dim, false, PointCount (), 3, m_pline[0], boxmin,
-                                     boxmax, bGrowBox ? true : false);
+  return ON_GetPointListBoundingBox (m_dim,
+                                     false,
+                                     PointCount (),
+                                     3,
+                                     m_pline[0],
+                                     boxmin,
+                                     boxmax,
+                                     bGrowBox ? true : false);
 }
 
 ON_BOOL32
@@ -127,8 +134,11 @@ ON_PolylineCurve::IsValid (ON_TextLog *text_log) const
       if (m_t[i] <= m_t[i - 1]) {
         if (0 != text_log) {
           text_log->Print (
-              "PolylineCurve m_t[%d]=%g should be less than m_t[%d]=(%g).\n", i - 1,
-              m_t[i - 1], i, m_t[i]);
+              "PolylineCurve m_t[%d]=%g should be less than m_t[%d]=(%g).\n",
+              i - 1,
+              m_t[i - 1],
+              i,
+              m_t[i]);
         }
         return ON_IsNotValid ();
       }
@@ -145,7 +155,8 @@ ON_PolylineCurve::IsValid (ON_TextLog *text_log) const
     else
       text_log->Print (
           "PolylineCurve m_t.Count() = %d and PointCount() = %d (should be equal)\n",
-          m_t.Count (), count);
+          m_t.Count (),
+          count);
     return ON_IsNotValid ();
   }
 
@@ -467,8 +478,12 @@ ON_BOOL32
 ON_PolylineCurve::IsPeriodic () const { return false; }
 
 bool
-ON_PolylineCurve::GetNextDiscontinuity (ON::continuity c, double t0, double t1,
-                                        double *t, int *hint, int *dtype,
+ON_PolylineCurve::GetNextDiscontinuity (ON::continuity c,
+                                        double t0,
+                                        double t1,
+                                        double *t,
+                                        int *hint,
+                                        int *dtype,
                                         double cos_angle_tolerance,
                                         double curvature_tolerance) const
 {
@@ -567,8 +582,8 @@ ON_PolylineCurve::GetNextDiscontinuity (ON::continuity c, double t0, double t1,
       if (!rc && segment_count > 0 && parametric_c != c) {
         // 20 March 2003 Dale Lear:
         //   Let base class test for locus continuities at start/end.
-        rc = ON_Curve::GetNextDiscontinuity (c, t0, t1, t, hint, dtype,
-                                             cos_angle_tolerance, curvature_tolerance);
+        rc = ON_Curve::GetNextDiscontinuity (
+            c, t0, t1, t, hint, dtype, cos_angle_tolerance, curvature_tolerance);
       }
     }
   }
@@ -578,7 +593,8 @@ ON_PolylineCurve::GetNextDiscontinuity (ON::continuity c, double t0, double t1,
 
 bool
 ON_PolylineCurve::IsContinuous (
-    ON::continuity desired_continuity, double t,
+    ON::continuity desired_continuity,
+    double t,
     int *hint,                  // default = NULL,
     double point_tolerance,     // default=ON_ZERO_TOLERANCE
     double d1_tolerance,        // default==ON_ZERO_TOLERANCE
@@ -643,8 +659,13 @@ ON_PolylineCurve::IsContinuous (
 
     if (bPerformTest) {
       // need to evaluate and test
-      rc = ON_Curve::IsContinuous (desired_continuity, t, hint, point_tolerance,
-                                   d1_tolerance, d2_tolerance, cos_angle_tolerance,
+      rc = ON_Curve::IsContinuous (desired_continuity,
+                                   t,
+                                   hint,
+                                   point_tolerance,
+                                   d1_tolerance,
+                                   d2_tolerance,
+                                   cos_angle_tolerance,
                                    curvature_tolerance);
     }
   }
@@ -742,8 +763,8 @@ ON_PolylineCurve::Evaluate ( // returns false if unable to evaluate
       //   to indicate that if t is numerically closed to an end paramter, then
       //   it should be tuned up to be at the end paramter.
       double a = t;
-      if (ON_TuneupEvaluationParameter (side, m_t[segment_index],
-                                        m_t[segment_index + 1], &a)) {
+      if (ON_TuneupEvaluationParameter (
+              side, m_t[segment_index], m_t[segment_index + 1], &a)) {
         // recalculate segment index
         t = a;
         segment_index = ON_NurbsSpanIndex (2, count, m_t, t, side, segment_index);
@@ -1072,9 +1093,10 @@ ON_PolylineCurve::Split (double t, ON_Curve *&left_side, ON_Curve *&right_side) 
         left_pl->m_t.SetCount (left_point_count);
         left_pl->m_pline.Reserve (left_point_count);
         left_pl->m_pline.SetCount (left_point_count);
-        memcpy (left_pl->m_t.Array (), m_t.Array (),
-                left_point_count * sizeof (double));
-        memcpy (left_pl->m_pline.Array (), m_pline.Array (),
+        memcpy (
+            left_pl->m_t.Array (), m_t.Array (), left_point_count * sizeof (double));
+        memcpy (left_pl->m_pline.Array (),
+                m_pline.Array (),
                 left_point_count * sizeof (ON_3dPoint));
         if (split_at_break) {
           // reparameterize the last segment
@@ -1089,7 +1111,8 @@ ON_PolylineCurve::Split (double t, ON_Curve *&left_side, ON_Curve *&right_side) 
         right_pl->m_t.SetCount (right_point_count);
         right_pl->m_pline.Reserve (right_point_count);
         right_pl->m_pline.SetCount (right_point_count);
-        memcpy (right_pl->m_t.Array (), m_t.Array () + m_t.Count () - right_point_count,
+        memcpy (right_pl->m_t.Array (),
+                m_t.Array () + m_t.Count () - right_point_count,
                 right_point_count * sizeof (double));
         memcpy (right_pl->m_pline.Array (),
                 m_pline.Array () + m_pline.Count () - right_point_count,
@@ -1113,7 +1136,8 @@ ON_PolylineCurve::Split (double t, ON_Curve *&left_side, ON_Curve *&right_side) 
 
 int
 ON_PolylineCurve::GetNurbForm (
-    ON_NurbsCurve &nurb, double tol,
+    ON_NurbsCurve &nurb,
+    double tol,
     const ON_Interval *subdomain // OPTIONAL subdomain of ON::ProxyCurve::Domain()
     ) const
 {

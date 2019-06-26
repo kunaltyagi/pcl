@@ -84,8 +84,8 @@ namespace pcl
 #endif
 
       using iter = typename boost::mpl::next<Iterator>::type;
-      for_each_type_impl<std::is_same<iter, LastIterator>::value>::template execute<
-          iter, LastIterator, F> (f);
+      for_each_type_impl<std::is_same<iter, LastIterator>::value>::
+          template execute<iter, LastIterator, F> (f);
     }
   };
 
@@ -97,8 +97,8 @@ namespace pcl
     BOOST_MPL_ASSERT ((boost::mpl::is_sequence<Sequence>));
     using first = typename boost::mpl::begin<Sequence>::type;
     using last = typename boost::mpl::end<Sequence>::type;
-    for_each_type_impl<std::is_same<first, last>::value>::template execute<first, last,
-                                                                           F> (f);
+    for_each_type_impl<
+        std::is_same<first, last>::value>::template execute<first, last, F> (f);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////

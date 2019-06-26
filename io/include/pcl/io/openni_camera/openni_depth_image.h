@@ -44,7 +44,7 @@
 #include "openni.h"
 
 //#include <pcl/pcl_macros.h> // <-- because current header is included in NVCC-compiled
-//code and contains <Eigen/Core>. Consider <pcl/pcl_exports.h>
+// code and contains <Eigen/Core>. Consider <pcl/pcl_exports.h>
 #include "openni_exception.h"
 #include <pcl/io/boost.h>
 #include <pcl/pcl_exports.h>
@@ -73,7 +73,9 @@ namespace openni_wrapper
      * RGB stream or not.
      */
     inline DepthImage (boost::shared_ptr<xn::DepthMetaData> depth_meta_data,
-                       float baseline, float focal_length, XnUInt64 shadow_value,
+                       float baseline,
+                       float focal_length,
+                       XnUInt64 shadow_value,
                        XnUInt64 no_sample_value) throw ();
 
     /** \brief Destructor. Never throws an exception. */
@@ -95,7 +97,9 @@ namespace openni_wrapper
      *        width in bytes (not floats) of the original width of the depth buffer.
      */
     void
-    fillDisparityImage (unsigned width, unsigned height, float *disparity_buffer,
+    fillDisparityImage (unsigned width,
+                        unsigned height,
+                        float *disparity_buffer,
                         unsigned line_step = 0) const;
 
     /** \brief fills a user given block of memory with the disparity values with
@@ -107,7 +111,9 @@ namespace openni_wrapper
      * (not floats) of the original width of the depth buffer.
      */
     void
-    fillDepthImage (unsigned width, unsigned height, float *depth_buffer,
+    fillDepthImage (unsigned width,
+                    unsigned height,
+                    float *depth_buffer,
                     unsigned line_step = 0) const;
 
     /** \brief fills a user given block of memory with the raw values with additional
@@ -119,7 +125,9 @@ namespace openni_wrapper
      *        width in bytes (not floats) of the original width of the depth buffer.
      */
     void
-    fillDepthImageRaw (unsigned width, unsigned height, unsigned short *depth_buffer,
+    fillDepthImageRaw (unsigned width,
+                       unsigned height,
+                       unsigned short *depth_buffer,
                        unsigned line_step = 0) const;
 
     /** \brief method to access the baseline of the "stereo" frame that was used to
@@ -176,7 +184,9 @@ namespace openni_wrapper
   };
 
   DepthImage::DepthImage (boost::shared_ptr<xn::DepthMetaData> depth_meta_data,
-                          float baseline, float focal_length, XnUInt64 shadow_value,
+                          float baseline,
+                          float focal_length,
+                          XnUInt64 shadow_value,
                           XnUInt64 no_sample_value) throw ()
       : depth_md_ (depth_meta_data), baseline_ (baseline), focal_length_ (focal_length),
         shadow_value_ (shadow_value), no_sample_value_ (no_sample_value)

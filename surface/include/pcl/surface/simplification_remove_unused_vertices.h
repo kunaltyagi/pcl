@@ -73,7 +73,8 @@ namespace pcl
        * \param[out] indices the resultant vector of indices
        */
       void
-      simplify (const pcl::PolygonMesh &input, pcl::PolygonMesh &output,
+      simplify (const pcl::PolygonMesh &input,
+                pcl::PolygonMesh &output,
                 std::vector<int> &indices);
     };
   } // namespace surface

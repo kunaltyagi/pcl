@@ -206,7 +206,9 @@ namespace pcl
      * \param[out] dist the array of distances to the corresponding neighbours
      */
     void
-    findRegionsKNN (int index, int nghbr_number, std::vector<int> &nghbrs,
+    findRegionsKNN (int index,
+                    int nghbr_number,
+                    std::vector<int> &nghbrs,
                     std::vector<float> &dist);
 
     /** \brief This function implements the merging algorithm described in the article
@@ -253,7 +255,9 @@ namespace pcl
      * can serve as the seed
      */
     bool
-    validatePoint (int initial_seed, int point, int nghbr,
+    validatePoint (int initial_seed,
+                   int point,
+                   int nghbr,
                    bool &is_a_seed) const override;
 
     protected:

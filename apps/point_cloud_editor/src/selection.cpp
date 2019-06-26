@@ -108,7 +108,9 @@ Selection::invertSelect ()
   IncIndex inc;
   for (unsigned int i = 0; i < cloud_ptr_->size (); ++i)
     s.insert (i);
-  std::set_difference (s.begin (), s.end (), selected_indices_.begin (),
+  std::set_difference (s.begin (),
+                       s.end (),
+                       selected_indices_.begin (),
                        selected_indices_.end (),
                        std::inserter (complement, complement.end ()));
   selected_indices_ = complement;

@@ -151,8 +151,10 @@ Returns:
 */
 ON_DECL
 int
-ON_DecodeUTF8 (const ON__UINT8 *sUTF8, int sUTF8_count,
-               struct ON_UnicodeErrorParameters *e, ON__UINT32 *unicode_code_point);
+ON_DecodeUTF8 (const ON__UINT8 *sUTF8,
+               int sUTF8_count,
+               struct ON_UnicodeErrorParameters *e,
+               ON__UINT32 *unicode_code_point);
 
 /*
 Description:
@@ -208,8 +210,10 @@ Returns:
 */
 ON_DECL
 int
-ON_DecodeUTF16 (const ON__UINT16 *sUTF16, int sUTF16_count,
-                struct ON_UnicodeErrorParameters *e, ON__UINT32 *unicode_code_point);
+ON_DecodeUTF16 (const ON__UINT16 *sUTF16,
+                int sUTF16_count,
+                struct ON_UnicodeErrorParameters *e,
+                ON__UINT32 *unicode_code_point);
 
 /*
 Description:
@@ -240,7 +244,8 @@ Returns:
 */
 ON_DECL
 int
-ON_DecodeSwapByteUTF16 (const ON__UINT16 *sUTF16, int sUTF16_count,
+ON_DecodeSwapByteUTF16 (const ON__UINT16 *sUTF16,
+                        int sUTF16_count,
                         struct ON_UnicodeErrorParameters *e,
                         ON__UINT32 *unicode_code_point);
 
@@ -333,9 +338,13 @@ Returns:
 */
 ON_DECL
 int
-ON_ConvertUTF8ToUTF16 (const ON__UINT8 *sUTF8, int sUTF8_count, ON__UINT16 *sUTF16,
-                       int sUTF16_count, unsigned int *error_status,
-                       unsigned int error_mask, ON__UINT32 error_code_point,
+ON_ConvertUTF8ToUTF16 (const ON__UINT8 *sUTF8,
+                       int sUTF8_count,
+                       ON__UINT16 *sUTF16,
+                       int sUTF16_count,
+                       unsigned int *error_status,
+                       unsigned int error_mask,
+                       ON__UINT32 error_code_point,
                        const ON__UINT8 **sNextUTF8);
 
 /*
@@ -428,9 +437,13 @@ Returns:
 */
 ON_DECL
 int
-ON_ConvertUTF8ToUTF32 (const ON__UINT8 *sUTF8, int sUTF8_count, ON__UINT32 *sUTF32,
-                       int sUTF32_count, unsigned int *error_status,
-                       unsigned int error_mask, ON__UINT32 error_code_point,
+ON_ConvertUTF8ToUTF32 (const ON__UINT8 *sUTF8,
+                       int sUTF8_count,
+                       ON__UINT32 *sUTF32,
+                       int sUTF32_count,
+                       unsigned int *error_status,
+                       unsigned int error_mask,
+                       ON__UINT32 error_code_point,
                        const ON__UINT8 **sNextUTF8);
 
 /*
@@ -535,9 +548,14 @@ Parameters:
 */
 ON_DECL
 int
-ON_ConvertUTF16ToUTF8 (int bTestByteOrder, const ON__UINT16 *sUTF16, int sUTF16_count,
-                       ON__UINT8 *sUTF8, int sUTF8_count, unsigned int *error_status,
-                       unsigned int error_mask, ON__UINT32 error_code_point,
+ON_ConvertUTF16ToUTF8 (int bTestByteOrder,
+                       const ON__UINT16 *sUTF16,
+                       int sUTF16_count,
+                       ON__UINT8 *sUTF8,
+                       int sUTF8_count,
+                       unsigned int *error_status,
+                       unsigned int error_mask,
+                       ON__UINT32 error_code_point,
                        const ON__UINT16 **sNextUTF16);
 
 /*
@@ -643,10 +661,15 @@ Returns:
 */
 ON_DECL
 int
-ON_ConvertUTF16ToUTF32 (int bTestByteOrder, const ON__UINT16 *sUTF16, int sUTF16_count,
-                        unsigned int *sUTF32, int sUTF32_count,
-                        unsigned int *error_status, unsigned int error_mask,
-                        ON__UINT32 error_code_point, const ON__UINT16 **sNextUTF16);
+ON_ConvertUTF16ToUTF32 (int bTestByteOrder,
+                        const ON__UINT16 *sUTF16,
+                        int sUTF16_count,
+                        unsigned int *sUTF32,
+                        int sUTF32_count,
+                        unsigned int *error_status,
+                        unsigned int error_mask,
+                        ON__UINT32 error_code_point,
+                        const ON__UINT16 **sNextUTF16);
 
 /*
 Description:
@@ -756,9 +779,14 @@ Returns:
 */
 ON_DECL
 int
-ON_ConvertUTF32ToUTF8 (int bTestByteOrder, const ON__UINT32 *sUTF32, int sUTF32_count,
-                       ON__UINT8 *sUTF8, int sUTF8_count, unsigned int *error_status,
-                       unsigned int error_mask, ON__UINT32 error_code_point,
+ON_ConvertUTF32ToUTF8 (int bTestByteOrder,
+                       const ON__UINT32 *sUTF32,
+                       int sUTF32_count,
+                       ON__UINT8 *sUTF8,
+                       int sUTF8_count,
+                       unsigned int *error_status,
+                       unsigned int error_mask,
+                       ON__UINT32 error_code_point,
                        const ON__UINT32 **sNextUTF32);
 
 /*
@@ -869,10 +897,15 @@ Returns:
 */
 ON_DECL
 int
-ON_ConvertUTF32ToUTF16 (int bTestByteOrder, const ON__UINT32 *sUTF32, int sUTF32_count,
-                        ON__UINT16 *sUTF16, int sUTF16_count,
-                        unsigned int *error_status, unsigned int error_mask,
-                        ON__UINT32 error_code_point, const ON__UINT32 **sNextUTF32);
+ON_ConvertUTF32ToUTF16 (int bTestByteOrder,
+                        const ON__UINT32 *sUTF32,
+                        int sUTF32_count,
+                        ON__UINT16 *sUTF16,
+                        int sUTF16_count,
+                        unsigned int *error_status,
+                        unsigned int error_mask,
+                        ON__UINT32 error_code_point,
+                        const ON__UINT32 **sNextUTF32);
 
 /*
 Description:
@@ -984,10 +1017,15 @@ Parameters:
 */
 ON_DECL
 int
-ON_ConvertWideCharToUTF8 (int bTestByteOrder, const wchar_t *sWideChar,
-                          int sWideChar_count, char *sUTF8, int sUTF8_count,
-                          unsigned int *error_status, unsigned int error_mask,
-                          ON__UINT32 error_code_point, const wchar_t **sNextWideChar);
+ON_ConvertWideCharToUTF8 (int bTestByteOrder,
+                          const wchar_t *sWideChar,
+                          int sWideChar_count,
+                          char *sUTF8,
+                          int sUTF8_count,
+                          unsigned int *error_status,
+                          unsigned int error_mask,
+                          ON__UINT32 error_code_point,
+                          const wchar_t **sNextWideChar);
 
 /*
 Description:
@@ -1086,9 +1124,13 @@ Returns:
 */
 ON_DECL
 int
-ON_ConvertUTF8ToWideChar (const char *sUTF8, int sUTF8_count, wchar_t *sWideChar,
-                          int sWideChar_count, unsigned int *error_status,
-                          unsigned int error_mask, ON__UINT32 error_code_point,
+ON_ConvertUTF8ToWideChar (const char *sUTF8,
+                          int sUTF8_count,
+                          wchar_t *sWideChar,
+                          int sWideChar_count,
+                          unsigned int *error_status,
+                          unsigned int error_mask,
+                          ON__UINT32 error_code_point,
                           const char **sNextUTF8);
 
 ON_END_EXTERNC

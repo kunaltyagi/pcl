@@ -100,8 +100,11 @@ TEST (ORROctreeTest, OctreeSphereIntersection)
   std::string object_name = "test_object";
 
   ModelLibrary::Model *new_model =
-      new ModelLibrary::Model (*model_cloud, *model_cloud_normals, voxel_size,
-                               object_name, frac_of_points_for_registration);
+      new ModelLibrary::Model (*model_cloud,
+                               *model_cloud_normals,
+                               voxel_size,
+                               object_name,
+                               frac_of_points_for_registration);
 
   const ORROctree &octree = new_model->getOctree ();
   const vector<ORROctree::Node *> &full_leaves = octree.getFullLeaves ();
@@ -109,15 +112,17 @@ TEST (ORROctreeTest, OctreeSphereIntersection)
 
   // Run through all full leaves
   for (vector<ORROctree::Node *>::const_iterator leaf1 = full_leaves.begin ();
-       leaf1 != full_leaves.end (); ++leaf1) {
+       leaf1 != full_leaves.end ();
+       ++leaf1) {
     const ORROctree::Node::Data *node_data1 = (*leaf1)->getData ();
     // Get all full leaves at the right distance to the current leaf
     inter_leaves.clear ();
-    octree.getFullLeavesIntersectedBySphere (node_data1->getPoint (), pair_width,
-                                             inter_leaves);
+    octree.getFullLeavesIntersectedBySphere (
+        node_data1->getPoint (), pair_width, inter_leaves);
     // Ensure that inter_leaves does not contain leaf1
     for (list<ORROctree::Node *>::iterator leaf2 = inter_leaves.begin ();
-         leaf2 != inter_leaves.end (); ++leaf2) {
+         leaf2 != inter_leaves.end ();
+         ++leaf2) {
       EXPECT_NE (*leaf1, *leaf2);
     }
   }

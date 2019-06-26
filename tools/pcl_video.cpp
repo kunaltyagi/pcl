@@ -323,7 +323,8 @@ class Player
     // option tham the memory-based cluster when the size of the stored
     // data is large.
     for (tide::Segment::FileBlockIterator block (segment.blocks_begin_file (stream));
-         block != segment.blocks_end_file (stream); ++block) {
+         block != segment.blocks_end_file (stream);
+         ++block) {
       bpt::time_duration blk_offset (
           bpt::microseconds (((block.cluster ()->timecode () + block->timecode ()) *
                               segment.info.timecode_scale () / 1000)));

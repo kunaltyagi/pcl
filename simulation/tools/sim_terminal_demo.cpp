@@ -93,7 +93,10 @@ write_sim_output (const string &fname_root)
 void
 generate_halo (
     std::vector<Eigen::Isometry3d, Eigen::aligned_allocator<Eigen::Isometry3d>> &poses,
-    Eigen::Vector3d focus_center, double halo_r, double halo_dz, int n_poses)
+    Eigen::Vector3d focus_center,
+    double halo_r,
+    double halo_dz,
+    int n_poses)
 {
 
   for (double t = 0; t < (2 * M_PI); t = t + (2 * M_PI) / ((double)n_poses)) {

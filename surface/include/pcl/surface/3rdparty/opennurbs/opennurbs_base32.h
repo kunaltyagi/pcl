@@ -75,7 +75,8 @@ ON_Base32ToString (const ON_SimpleArray<unsigned char> &base32_digits,
                    ON_wString &sBase32);
 ON_DECL
 bool
-ON_Base32ToString (const unsigned char *base32_digits, int base32_digit_count,
+ON_Base32ToString (const unsigned char *base32_digits,
+                   int base32_digit_count,
                    char *sBase32);
 
 /*

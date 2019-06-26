@@ -67,8 +67,10 @@ namespace pcl
       public:
       using Ptr = boost::shared_ptr<
           TransformationEstimationPointToPlaneLLS<PointSource, PointTarget, Scalar>>;
-      using ConstPtr = boost::shared_ptr<const TransformationEstimationPointToPlaneLLS<
-          PointSource, PointTarget, Scalar>>;
+      using ConstPtr =
+          boost::shared_ptr<const TransformationEstimationPointToPlaneLLS<PointSource,
+                                                                          PointTarget,
+                                                                          Scalar>>;
 
       using Matrix4 =
           typename TransformationEstimation<PointSource, PointTarget, Scalar>::Matrix4;
@@ -146,9 +148,12 @@ namespace pcl
        * \param[out] transformation_matrix the resultant transformation matrix
        */
       inline void
-      constructTransformationMatrix (const double &alpha, const double &beta,
-                                     const double &gamma, const double &tx,
-                                     const double &ty, const double &tz,
+      constructTransformationMatrix (const double &alpha,
+                                     const double &beta,
+                                     const double &gamma,
+                                     const double &tx,
+                                     const double &ty,
+                                     const double &tz,
                                      Matrix4 &transformation_matrix) const;
     };
   } // namespace registration

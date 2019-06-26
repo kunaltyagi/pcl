@@ -75,8 +75,10 @@ my_sqr (double a)
 }
 
 bool
-vtk_to_pointcloud (const char *file_name, PointCloud<PointXYZ> &points_in,
-                   PointCloud<Normal> &normals_in, double bounds[6]);
+vtk_to_pointcloud (const char *file_name,
+                   PointCloud<PointXYZ> &points_in,
+                   PointCloud<Normal> &normals_in,
+                   double bounds[6]);
 void
 visualize (const ModelLibrary::HashTable &hash_table);
 
@@ -117,8 +119,10 @@ main (int argc, char **argv)
 //===========================================================================================================================================
 
 bool
-vtk_to_pointcloud (const char *file_name, PointCloud<PointXYZ> &points_in,
-                   PointCloud<Normal> &normals_in, double b[6])
+vtk_to_pointcloud (const char *file_name,
+                   PointCloud<PointXYZ> &points_in,
+                   PointCloud<Normal> &normals_in,
+                   double b[6])
 {
   size_t len = strlen (file_name);
   if (file_name[len - 3] != 'v' || file_name[len - 2] != 't' ||

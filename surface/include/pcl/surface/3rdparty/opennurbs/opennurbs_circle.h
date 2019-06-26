@@ -52,7 +52,9 @@ class ON_CLASS ON_Circle
   // Create a circle through three 2d points.
   // The start/end of the circle is at point P.
   ON_Circle ( // circle through 3 2d points
-      const ON_2dPoint &P, const ON_2dPoint &Q, const ON_2dPoint &R);
+      const ON_2dPoint &P,
+      const ON_2dPoint &Q,
+      const ON_2dPoint &R);
 
   // Create a circle through three 3d points.
   // The start/end of the circle is at point P.
@@ -79,7 +81,9 @@ class ON_CLASS ON_Circle
   // The start/end of the circle is at point P.
   bool
   Create ( // circle through 3 2d points
-      const ON_2dPoint &P, const ON_2dPoint &Q, const ON_2dPoint &R);
+      const ON_2dPoint &P,
+      const ON_2dPoint &Q,
+      const ON_2dPoint &R);
 
   // Create a circle through three 3d points.
   // The start/end of the circle is at point P.
@@ -139,7 +143,8 @@ class ON_CLASS ON_Circle
     True if a valid tight_bbox is returned.
   */
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   bool
@@ -182,11 +187,14 @@ class ON_CLASS ON_Circle
 
   // rotate circle about a point and axis
   bool
-  Rotate (double sin_angle, double cos_angle, const ON_3dVector &axis_of_rotation,
+  Rotate (double sin_angle,
+          double cos_angle,
+          const ON_3dVector &axis_of_rotation,
           const ON_3dPoint &center_of_rotation);
 
   bool
-  Rotate (double angle_in_radians, const ON_3dVector &axis_of_rotation,
+  Rotate (double angle_in_radians,
+          const ON_3dVector &axis_of_rotation,
           const ON_3dPoint &center_of_rotation);
 
   bool

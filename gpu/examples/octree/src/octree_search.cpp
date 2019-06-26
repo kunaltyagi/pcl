@@ -68,8 +68,8 @@ main (int argc, char **argv)
   pcl::gpu::NeighborIndices result_device (queries_device.size (), max_answers);
 
   // Do the actual search
-  octree_device.radiusSearch (queries_device, radiuses_device, max_answers,
-                              result_device);
+  octree_device.radiusSearch (
+      queries_device, radiuses_device, max_answers, result_device);
 
   std::vector<int> sizes, data;
   result_device.sizes.download (sizes);

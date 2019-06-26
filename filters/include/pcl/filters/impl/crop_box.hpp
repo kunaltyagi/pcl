@@ -85,8 +85,8 @@ pcl::CropBox<PointT>::applyFilter (std::vector<int> &indices)
   Eigen::Affine3f inverse_transform = Eigen::Affine3f::Identity ();
 
   if (rotation_ != Eigen::Vector3f::Zero ()) {
-    pcl::getTransformation (0, 0, 0, rotation_ (0), rotation_ (1), rotation_ (2),
-                            transform);
+    pcl::getTransformation (
+        0, 0, 0, rotation_ (0), rotation_ (1), rotation_ (2), transform);
     inverse_transform = transform.inverse ();
   }
 

@@ -149,8 +149,8 @@ namespace pcl
       void
       computeCenterOfMass (float center_of_mass[3]) const
       {
-        aux::transform (rigid_transform_, obj_model_->getOctreeCenterOfMass (),
-                        center_of_mass);
+        aux::transform (
+            rigid_transform_, obj_model_->getOctreeCenterOfMass (), center_of_mass);
       }
 
       public:

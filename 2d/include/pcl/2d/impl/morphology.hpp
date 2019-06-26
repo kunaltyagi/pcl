@@ -357,7 +357,8 @@ pcl::Morphology<PointT>::structuringElementCircular (pcl::PointCloud<PointT> &ke
 template <typename PointT>
 void
 pcl::Morphology<PointT>::structuringElementRectangle (pcl::PointCloud<PointT> &kernel,
-                                                      const int height, const int width)
+                                                      const int height,
+                                                      const int width)
 {
   kernel.height = height;
   kernel.width = width;

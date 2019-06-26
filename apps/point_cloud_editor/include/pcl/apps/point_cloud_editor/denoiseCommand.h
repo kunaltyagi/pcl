@@ -55,7 +55,9 @@ class DenoiseCommand : public Command
   /// @param cloud_ptr a shared pointer pointing to the cloud object.
   /// @param mean the number of points to use for mean distance estimation.
   /// @param threshold the standard deviation multiplier threshold
-  DenoiseCommand (SelectionPtr selection_ptr, CloudPtr cloud_ptr, float mean,
+  DenoiseCommand (SelectionPtr selection_ptr,
+                  CloudPtr cloud_ptr,
+                  float mean,
                   float threshold)
       : selection_ptr_ (selection_ptr), cloud_ptr_ (cloud_ptr), mean_ (mean),
         threshold_ (threshold), removed_indices_ (cloud_ptr)

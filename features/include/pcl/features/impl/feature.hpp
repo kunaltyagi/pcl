@@ -47,10 +47,14 @@
 inline void
 pcl::solvePlaneParameters (const Eigen::Matrix3f &covariance_matrix,
                            const Eigen::Vector4f &point,
-                           Eigen::Vector4f &plane_parameters, float &curvature)
+                           Eigen::Vector4f &plane_parameters,
+                           float &curvature)
 {
-  solvePlaneParameters (covariance_matrix, plane_parameters[0], plane_parameters[1],
-                        plane_parameters[2], curvature);
+  solvePlaneParameters (covariance_matrix,
+                        plane_parameters[0],
+                        plane_parameters[1],
+                        plane_parameters[2],
+                        curvature);
 
   plane_parameters[3] = 0;
   // Hessian form (D = nc . p_plane (centroid here) + p)
@@ -59,8 +63,11 @@ pcl::solvePlaneParameters (const Eigen::Matrix3f &covariance_matrix,
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 inline void
-pcl::solvePlaneParameters (const Eigen::Matrix3f &covariance_matrix, float &nx,
-                           float &ny, float &nz, float &curvature)
+pcl::solvePlaneParameters (const Eigen::Matrix3f &covariance_matrix,
+                           float &nx,
+                           float &ny,
+                           float &nz,
+                           float &curvature)
 {
   // Avoid getting hung on Eigen's optimizers
   //  for (int i = 0; i < 9; ++i)
@@ -139,8 +146,10 @@ pcl::Feature<PointInT, PointOutT>::initCompute ()
     {
       search_parameter_ = search_radius_;
       // Declare the search locator definition
-      search_method_surface_ = [this](const PointCloudIn &cloud, int index,
-                                      double radius, std::vector<int> &k_indices,
+      search_method_surface_ = [this](const PointCloudIn &cloud,
+                                      int index,
+                                      double radius,
+                                      std::vector<int> &k_indices,
                                       std::vector<float> &k_distances) {
         return tree_->radiusSearch (cloud, index, radius, k_indices, k_distances, 0);
       };
@@ -150,7 +159,9 @@ pcl::Feature<PointInT, PointOutT>::initCompute ()
     {
       search_parameter_ = k_;
       // Declare the search locator definition
-      search_method_surface_ = [this](const PointCloudIn &cloud, int index, int k,
+      search_method_surface_ = [this](const PointCloudIn &cloud,
+                                      int index,
+                                      int k,
                                       std::vector<int> &k_indices,
                                       std::vector<float> &k_distances) {
         return tree_->nearestKSearch (cloud, index, k, k_indices, k_distances);

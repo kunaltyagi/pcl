@@ -52,7 +52,8 @@ pcl::ihs::MeshProcessing::MeshProcessing () {}
 
 void
 pcl::ihs::MeshProcessing::processBoundary (
-    Mesh &mesh, const std::vector<HalfEdgeIndices> &boundary_collection,
+    Mesh &mesh,
+    const std::vector<HalfEdgeIndices> &boundary_collection,
     const bool cleanup) const
 {
   Mesh::VertexIndex vi_a, vi_b, vi_c, vi_d;

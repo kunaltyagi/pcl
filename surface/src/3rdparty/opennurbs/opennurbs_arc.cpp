@@ -42,7 +42,9 @@ ON_Arc::ON_Arc (const ON_3dPoint &C, double r, double angle_in_radians)
   Create (C, r, angle_in_radians);
 }
 
-ON_Arc::ON_Arc (const ON_Plane &pln, const ON_3dPoint &C, double r,
+ON_Arc::ON_Arc (const ON_Plane &pln,
+                const ON_3dPoint &C,
+                double r,
                 double angle_in_radians)
     : m_angle (0.0, 2.0 * ON_PI)
 {
@@ -385,7 +387,8 @@ ON_Arc::Trim (ON_Interval domain)
 }
 
 bool
-ON_ArcCurve::IsContinuous (ON::continuity c, double t,
+ON_ArcCurve::IsContinuous (ON::continuity c,
+                           double t,
                            int *,  // hint                - formal parameter
                                    // intentionally ignored in this virtual function
                            double, // point_tolerance     - formal parameter

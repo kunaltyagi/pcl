@@ -41,8 +41,11 @@
 template <typename PointT>
 bool
 pcl::visualization::PCLPlotter::addFeatureHistogram (
-    const pcl::PointCloud<PointT> &cloud, int hsize, const std::string &id,
-    int win_width, int win_height)
+    const pcl::PointCloud<PointT> &cloud,
+    int hsize,
+    const std::string &id,
+    int win_width,
+    int win_height)
 {
   std::vector<double> array_x (hsize), array_y (hsize);
 
@@ -60,8 +63,12 @@ pcl::visualization::PCLPlotter::addFeatureHistogram (
 template <typename PointT>
 bool
 pcl::visualization::PCLPlotter::addFeatureHistogram (
-    const pcl::PointCloud<PointT> &cloud, const std::string &field_name,
-    const int index, const std::string &id, int win_width, int win_height)
+    const pcl::PointCloud<PointT> &cloud,
+    const std::string &field_name,
+    const int index,
+    const std::string &id,
+    int win_width,
+    int win_height)
 {
   if (index < 0 || index >= cloud.points.size ()) {
     PCL_ERROR ("[addFeatureHistogram] Invalid point index (%d) given!\n", index);

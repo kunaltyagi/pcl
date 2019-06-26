@@ -53,7 +53,8 @@ namespace pcl
    */
   template <typename PointT>
   void
-  getPointCloudDifference (const pcl::PointCloud<PointT> &src, double threshold,
+  getPointCloudDifference (const pcl::PointCloud<PointT> &src,
+                           double threshold,
                            const typename pcl::search::Search<PointT>::Ptr &tree,
                            pcl::PointCloud<PointT> &output);
 
@@ -61,7 +62,8 @@ namespace pcl
   [[deprecated ("tgt parameter is not used; it is deprecated and will be removed in "
                 "future releases")]] inline void
   getPointCloudDifference (const pcl::PointCloud<PointT> &src,
-                           const pcl::PointCloud<PointT> & /* tgt */, double threshold,
+                           const pcl::PointCloud<PointT> & /* tgt */,
+                           double threshold,
                            const typename pcl::search::Search<PointT>::Ptr &tree,
                            pcl::PointCloud<PointT> &output)
   {

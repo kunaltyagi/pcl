@@ -87,8 +87,8 @@ pcl::FPFHEstimationOMP<PointInT, PointNT, PointOutT>::computeFeature (
       spfh_indices_set.insert (nn_indices.begin (), nn_indices.end ());
     }
     spfh_indices_vec.resize (spfh_indices_set.size ());
-    std::copy (spfh_indices_set.begin (), spfh_indices_set.end (),
-               spfh_indices_vec.begin ());
+    std::copy (
+        spfh_indices_set.begin (), spfh_indices_set.end (), spfh_indices_vec.begin ());
   } else {
     // Special case: When a feature must be computed at every point, there is no need
     // for a neighborhood search
@@ -119,13 +119,13 @@ pcl::FPFHEstimationOMP<PointInT, PointNT, PointOutT>::computeFeature (
 
     // Find the neighborhood around p_idx
     if (!isFinite ((*input_)[p_idx]) ||
-        this->searchForNeighbors (*surface_, p_idx, search_parameter_, nn_indices,
-                                  nn_dists) == 0)
+        this->searchForNeighbors (
+            *surface_, p_idx, search_parameter_, nn_indices, nn_dists) == 0)
       continue;
 
     // Estimate the SPFH signature around p_idx
-    this->computePointSPFHSignature (*surface_, *normals_, p_idx, i, nn_indices,
-                                     hist_f1_, hist_f2_, hist_f3_);
+    this->computePointSPFHSignature (
+        *surface_, *normals_, p_idx, i, nn_indices, hist_f1_, hist_f2_, hist_f3_);
 
     // Populate a lookup table for converting a point index to its corresponding row in
     // the spfh_hist_* matrices
@@ -146,8 +146,8 @@ pcl::FPFHEstimationOMP<PointInT, PointNT, PointOutT>::computeFeature (
   for (int idx = 0; idx < static_cast<int> (indices_->size ()); ++idx) {
     // Find the indices of point idx's neighbors...
     if (!isFinite ((*input_)[(*indices_)[idx]]) ||
-        this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                  nn_dists) == 0) {
+        this->searchForNeighbors (
+            (*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0) {
       for (int d = 0; d < nr_bins; ++d)
         output.points[idx].histogram[d] = std::numeric_limits<float>::quiet_NaN ();
 
@@ -163,8 +163,8 @@ pcl::FPFHEstimationOMP<PointInT, PointNT, PointOutT>::computeFeature (
     // Compute the FPFH signature (i.e. compute a weighted combination of local SPFH
     // signatures) ...
     Eigen::VectorXf fpfh_histogram = Eigen::VectorXf::Zero (nr_bins);
-    weightPointSPFHSignature (hist_f1_, hist_f2_, hist_f3_, nn_indices, nn_dists,
-                              fpfh_histogram);
+    weightPointSPFHSignature (
+        hist_f1_, hist_f2_, hist_f3_, nn_indices, nn_dists, fpfh_histogram);
 
     // ...and copy it into the output cloud
     for (int d = 0; d < nr_bins; ++d)

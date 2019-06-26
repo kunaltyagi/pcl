@@ -9,8 +9,8 @@
 
 template <template <class> class Distance, typename PointInT, typename FeatureT>
 void
-pcl::rec_3d_framework::GlobalNNPipeline<Distance, PointInT,
-                                        FeatureT>::loadFeaturesAndCreateFLANN ()
+pcl::rec_3d_framework::GlobalNNPipeline<Distance, PointInT, FeatureT>::
+    loadFeaturesAndCreateFLANN ()
 {
   boost::shared_ptr<std::vector<ModelT>> models = source_->getModels ();
   for (size_t i = 0; i < models->size (); i++) {
@@ -38,7 +38,8 @@ pcl::rec_3d_framework::GlobalNNPipeline<Distance, PointInT,
         descr_model.first = models->at (i);
         int size_feat = sizeof (signature->points[0].histogram) / sizeof (float);
         descr_model.second.resize (size_feat);
-        memcpy (&descr_model.second[0], &signature->points[0].histogram[0],
+        memcpy (&descr_model.second[0],
+                &signature->points[0].histogram[0],
                 size_feat * sizeof (float));
 
         flann_models_.push_back (descr_model);
@@ -54,8 +55,11 @@ pcl::rec_3d_framework::GlobalNNPipeline<Distance, PointInT,
 template <template <class> class Distance, typename PointInT, typename FeatureT>
 void
 pcl::rec_3d_framework::GlobalNNPipeline<Distance, PointInT, FeatureT>::nearestKSearch (
-    flann::Index<DistT> *index, const flann_model &model, int k,
-    flann::Matrix<int> &indices, flann::Matrix<float> &distances)
+    flann::Index<DistT> *index,
+    const flann_model &model,
+    int k,
+    flann::Matrix<int> &indices,
+    flann::Matrix<float> &distances)
 {
   flann::Matrix<float> p =
       flann::Matrix<float> (new float[model.second.size ()], 1, model.second.size ());
@@ -169,8 +173,8 @@ pcl::rec_3d_framework::GlobalNNPipeline<Distance, PointInT, FeatureT>::initializ
         typename pcl::PointCloud<FeatureT>::CloudVectorType signatures;
         std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f>>
             centroids;
-        estimator_->estimate (models->at (i).views_->at (v), processed, signatures,
-                              centroids);
+        estimator_->estimate (
+            models->at (i).views_->at (v), processed, signatures, centroids);
 
         // source_->makeModelPersistent (models->at (i), training_dir_, descr_name_,
         // static_cast<int> (v));

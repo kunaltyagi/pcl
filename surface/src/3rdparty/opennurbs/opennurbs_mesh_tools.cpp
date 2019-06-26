@@ -457,7 +457,9 @@ ON_Mesh::CollapseEdge (int topei)
 
   // sort old2new_map[] so we can use a fast bsearch() call
   // to update faces.
-  ON_qsort (old2new_map, old2new_map_count, sizeof (old2new_map[0]),
+  ON_qsort (old2new_map,
+            old2new_map_count,
+            sizeof (old2new_map[0]),
             (QSORTCMPFUNC)CompareNEWVI);
 
   // count faces that use the vertices that are being changed
@@ -495,7 +497,9 @@ ON_Mesh::CollapseEdge (int topei)
         ON_MeshFace &f = mesh.m_F[fi];
         for (fvi = 0; fvi < 4; fvi++) {
           nvi.oldvi = f.vi[fvi];
-          ON__NEWVI *p = (ON__NEWVI *)bsearch (&nvi, old2new_map, old2new_map_count,
+          ON__NEWVI *p = (ON__NEWVI *)bsearch (&nvi,
+                                               old2new_map,
+                                               old2new_map_count,
                                                sizeof (old2new_map[0]),
                                                (QSORTCMPFUNC)CompareNEWVI);
           if (0 != p && p->oldvi != p->newvi) {
@@ -627,7 +631,8 @@ ON_Mesh::DeleteFace (int meshfi)
 }
 
 ON_Mesh *
-ON_ControlPolygonMesh (const ON_NurbsSurface &nurbs_surface, bool bCleanMesh,
+ON_ControlPolygonMesh (const ON_NurbsSurface &nurbs_surface,
+                       bool bCleanMesh,
                        ON_Mesh *input_mesh)
 {
   int u0 = 0;
@@ -909,9 +914,11 @@ IsUnweldedEdge (int edgeidx, const ON_MeshTopology &Top)
 }
 
 static void
-FindAdjacentFaces (const ON_MeshTopology &Top, ON_SimpleArray<int> &FacesToCheck,
+FindAdjacentFaces (const ON_MeshTopology &Top,
+                   ON_SimpleArray<int> &FacesToCheck,
                    const ON_SimpleArray<int> &SortedFaceArray,
-                   ON_SimpleArray<int> &DupFaceArray, bool bUseVertexConnections,
+                   ON_SimpleArray<int> &DupFaceArray,
+                   bool bUseVertexConnections,
                    bool bTopologicalConnections)
 {
   int fi, vi, ei, facecount = FacesToCheck.Count (),
@@ -995,8 +1002,8 @@ ON_Mesh::GetConnectedComponents (bool bUseVertexConnections,
   int i, facecount = m_F.Count (), meshidx = 0;
 
   // This array will act as an associative array to m_F since ON_MeshFace do not have
-  // something like m_trim_user_i on a ON_BrepTrim.  It will have the indice of the final
-  // mesh the face belongs to.
+  // something like m_trim_user_i on a ON_BrepTrim.  It will have the indice of the
+  // final mesh the face belongs to.
   if (facecount != facet_component_labels.Count ()) {
     facet_component_labels.Reserve (facecount);
     facet_component_labels.SetCount (facecount);
@@ -1022,8 +1029,12 @@ ON_Mesh::GetConnectedComponents (bool bUseVertexConnections,
 
     while (0 != FacesToCheck.Count ()) {
       // Figure out which faces are connected to each other
-      FindAdjacentFaces (Top, FacesToCheck, facet_component_labels, DupFaceArray,
-                         bUseVertexConnections, bTopologicalConnections);
+      FindAdjacentFaces (Top,
+                         FacesToCheck,
+                         facet_component_labels,
+                         DupFaceArray,
+                         bUseVertexConnections,
+                         bTopologicalConnections);
       int j;
       for (j = 0; j < FacesToCheck.Count (); j++)
         facet_component_labels[FacesToCheck[j]] = meshidx;
@@ -1047,8 +1058,8 @@ ON_Mesh::GetConnectedComponents (bool bUseVertexConnections,
   ON_SimpleArray<int> SortedFaceArray (facecount);
   SortedFaceArray.SetCount (facecount);
 
-  int compct = GetConnectedComponents (bUseVertexConnections, bTopologicalConnections,
-                                       SortedFaceArray);
+  int compct = GetConnectedComponents (
+      bUseVertexConnections, bTopologicalConnections, SortedFaceArray);
   if (0 == compct || 0 == components)
     return compct;
 

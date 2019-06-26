@@ -82,7 +82,8 @@ pcl::SampleConsensusPrerejective<PointSource, PointTarget, FeatureT>::selectSamp
     PCL_ERROR ("[pcl::%s::selectSamples] ", getClassName ().c_str ());
     PCL_ERROR ("The number of samples (%d) must not be greater than the number of "
                "points (%lu)!\n",
-               nr_samples, cloud.points.size ());
+               nr_samples,
+               cloud.points.size ());
     return;
   }
 
@@ -134,8 +135,11 @@ pcl::SampleConsensusPrerejective<PointSource, PointTarget, FeatureT>::
     // Find the k nearest feature neighbors to the sampled input feature if they are not
     // in the cache already
     if (similar_features[idx].empty ())
-      feature_tree_->nearestKSearch (*input_features_, idx, k_correspondences_,
-                                     similar_features[idx], nn_distances);
+      feature_tree_->nearestKSearch (*input_features_,
+                                     idx,
+                                     k_correspondences_,
+                                     similar_features[idx],
+                                     nn_distances);
 
     // Select one at random and add it to corresponding_indices
     if (k_correspondences_ == 1)
@@ -170,7 +174,8 @@ pcl::SampleConsensusPrerejective<PointSource, PointTarget, FeatureT>::
     PCL_ERROR ("[pcl::%s::computeTransformation] ", getClassName ().c_str ());
     PCL_ERROR ("The source points and source feature points need to be in a one-to-one "
                "relationship! Current input cloud sizes: %ld vs %ld.\n",
-               input_->size (), input_features_->size ());
+               input_->size (),
+               input_features_->size ());
     return;
   }
 
@@ -178,7 +183,8 @@ pcl::SampleConsensusPrerejective<PointSource, PointTarget, FeatureT>::
     PCL_ERROR ("[pcl::%s::computeTransformation] ", getClassName ().c_str ());
     PCL_ERROR ("The target points and target feature points need to be in a one-to-one "
                "relationship! Current input cloud sizes: %ld vs %ld.\n",
-               target_->size (), target_features_->size ());
+               target_->size (),
+               target_features_->size ());
     return;
   }
 
@@ -293,7 +299,9 @@ pcl::SampleConsensusPrerejective<PointSource, PointTarget, FeatureT>::
   // Debug output
   PCL_DEBUG ("[pcl::%s::computeTransformation] Rejected %i out of %i generated pose "
              "hypotheses.\n",
-             getClassName ().c_str (), num_rejections, max_iterations_);
+             getClassName ().c_str (),
+             num_rejections,
+             max_iterations_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

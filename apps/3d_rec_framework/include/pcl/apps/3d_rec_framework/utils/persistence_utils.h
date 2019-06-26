@@ -223,7 +223,8 @@ namespace pcl
 
       template <typename PointInT>
       inline void
-      getPointCloudFromFile (std::string dir, std::string file,
+      getPointCloudFromFile (std::string dir,
+                             std::string file,
                              typename pcl::PointCloud<PointInT>::Ptr &cloud)
       {
 

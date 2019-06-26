@@ -45,7 +45,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointInT, typename PointOutT>
 void
-pcl::SIFTKeypoint<PointInT, PointOutT>::setScales (float min_scale, int nr_octaves,
+pcl::SIFTKeypoint<PointInT, PointOutT>::setScales (float min_scale,
+                                                   int nr_octaves,
                                                    int nr_scales_per_octave)
 {
   min_scale_ = min_scale;
@@ -68,23 +69,27 @@ pcl::SIFTKeypoint<PointInT, PointOutT>::initCompute ()
 {
   if (min_scale_ <= 0) {
     PCL_ERROR ("[pcl::%s::initCompute] : Minimum scale (%f) must be strict positive!\n",
-               name_.c_str (), min_scale_);
+               name_.c_str (),
+               min_scale_);
     return (false);
   }
   if (nr_octaves_ < 1) {
     PCL_ERROR ("[pcl::%s::initCompute] : Number of octaves (%d) must be at least 1!\n",
-               name_.c_str (), nr_octaves_);
+               name_.c_str (),
+               nr_octaves_);
     return (false);
   }
   if (nr_scales_per_octave_ < 1) {
     PCL_ERROR ("[pcl::%s::initCompute] : Number of scales per octave (%d) must be at "
                "least 1!\n",
-               name_.c_str (), nr_scales_per_octave_);
+               name_.c_str (),
+               nr_scales_per_octave_);
     return (false);
   }
   if (min_contrast_ < 0) {
     PCL_ERROR ("[pcl::%s::initCompute] : Minimum contrast (%f) must be non-negative!\n",
-               name_.c_str (), min_contrast_);
+               name_.c_str (),
+               min_contrast_);
     return (false);
   }
 
@@ -155,15 +160,18 @@ pcl::SIFTKeypoint<PointInT, PointOutT>::detectKeypoints (PointCloudOut &output)
 template <typename PointInT, typename PointOutT>
 void
 pcl::SIFTKeypoint<PointInT, PointOutT>::detectKeypointsForOctave (
-    const PointCloudIn &input, KdTree &tree, float base_scale, int nr_scales_per_octave,
+    const PointCloudIn &input,
+    KdTree &tree,
+    float base_scale,
+    int nr_scales_per_octave,
     PointCloudOut &output)
 {
   // Compute the difference of Gaussians (DoG) scale space
   std::vector<float> scales (nr_scales_per_octave + 3);
   for (int i_scale = 0; i_scale <= nr_scales_per_octave + 2; ++i_scale) {
-    scales[i_scale] =
-        base_scale * powf (2.0f, (1.0f * static_cast<float> (i_scale) - 1.0f) /
-                                     static_cast<float> (nr_scales_per_octave));
+    scales[i_scale] = base_scale * powf (2.0f,
+                                         (1.0f * static_cast<float> (i_scale) - 1.0f) /
+                                             static_cast<float> (nr_scales_per_octave));
   }
   Eigen::MatrixXf diff_of_gauss;
   computeScaleSpace (input, tree, scales, diff_of_gauss);
@@ -184,7 +192,8 @@ pcl::SIFTKeypoint<PointInT, PointOutT>::detectKeypointsForOctave (
       keypoint.y = input.points[keypoint_index].y;
       keypoint.z = input.points[keypoint_index].z;
       memcpy (reinterpret_cast<char *> (&keypoint) + out_fields_[scale_idx_].offset,
-              &scales[extrema_scales[i_keypoint]], sizeof (float));
+              &scales[extrema_scales[i_keypoint]],
+              sizeof (float));
       output.points.push_back (keypoint);
     }
   } else {
@@ -204,7 +213,9 @@ pcl::SIFTKeypoint<PointInT, PointOutT>::detectKeypointsForOctave (
 template <typename PointInT, typename PointOutT>
 void
 pcl::SIFTKeypoint<PointInT, PointOutT>::computeScaleSpace (
-    const PointCloudIn &input, KdTree &tree, const std::vector<float> &scales,
+    const PointCloudIn &input,
+    KdTree &tree,
+    const std::vector<float> &scales,
     Eigen::MatrixXf &diff_of_gauss)
 {
   diff_of_gauss.resize (input.size (), scales.size () - 1);
@@ -254,8 +265,11 @@ pcl::SIFTKeypoint<PointInT, PointOutT>::computeScaleSpace (
 template <typename PointInT, typename PointOutT>
 void
 pcl::SIFTKeypoint<PointInT, PointOutT>::findScaleSpaceExtrema (
-    const PointCloudIn &input, KdTree &tree, const Eigen::MatrixXf &diff_of_gauss,
-    std::vector<int> &extrema_indices, std::vector<int> &extrema_scales)
+    const PointCloudIn &input,
+    KdTree &tree,
+    const Eigen::MatrixXf &diff_of_gauss,
+    std::vector<int> &extrema_indices,
+    std::vector<int> &extrema_scales)
 {
   const int k = 25;
   std::vector<int> nn_indices (k);

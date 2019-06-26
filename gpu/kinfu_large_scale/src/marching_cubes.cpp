@@ -73,7 +73,9 @@ pcl::gpu::kinfuLS::MarchingCubes::run (const TsdfVolume &tsdf,
     return DeviceArray<PointType> ();
   }
 
-  DeviceArray2D<int> occupied_voxels (3, active_voxels, occupied_voxels_buffer_.ptr (),
+  DeviceArray2D<int> occupied_voxels (3,
+                                      active_voxels,
+                                      occupied_voxels_buffer_.ptr (),
                                       occupied_voxels_buffer_.step ());
 
   int total_vertexes =
@@ -81,7 +83,9 @@ pcl::gpu::kinfuLS::MarchingCubes::run (const TsdfVolume &tsdf,
 
   float3 volume_size = device_cast<const float3> (tsdf.getSize ());
   pcl::device::kinfuLS::generateTriangles (
-      tsdf.data (), occupied_voxels, volume_size,
+      tsdf.data (),
+      occupied_voxels,
+      volume_size,
       (DeviceArray<pcl::device::kinfuLS::PointType> &)triangles_buffer);
 
   pcl::device::kinfuLS::unbindTextures ();

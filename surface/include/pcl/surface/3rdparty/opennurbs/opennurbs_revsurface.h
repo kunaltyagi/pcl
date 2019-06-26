@@ -166,7 +166,8 @@ class ON_CLASS ON_RevSurface : public ON_Surface
   ON_BOOL32
   SetDomain (
       int dir, // 0 sets first parameter's domain, 1 gets second parameter's domain
-      double t0, double t1);
+      double t0,
+      double t1);
 
   ON_Interval
   Domain (int // 0 gets first parameter's domain, 1 gets second parameter's domain
@@ -339,8 +340,13 @@ class ON_CLASS ON_RevSurface : public ON_Surface
       the ends of their domains.
   */
   bool
-  GetNextDiscontinuity (int dir, ON::continuity c, double t0, double t1, double *t,
-                        int *hint = NULL, int *dtype = NULL,
+  GetNextDiscontinuity (int dir,
+                        ON::continuity c,
+                        double t0,
+                        double t1,
+                        double *t,
+                        int *hint = NULL,
+                        int *dtype = NULL,
                         double cos_angle_tolerance = ON_DEFAULT_ANGLE_TOLERANCE_COSINE,
                         double curvature_tolerance = ON_SQRT_EPSILON) const;
 
@@ -372,7 +378,10 @@ class ON_CLASS ON_RevSurface : public ON_Surface
       Overrides virtual ON_Surface::IsContinuous
     */
   bool
-  IsContinuous (ON::continuity c, double s, double t, int *hint = NULL,
+  IsContinuous (ON::continuity c,
+                double s,
+                double t,
+                int *hint = NULL,
                 double point_tolerance = ON_ZERO_TOLERANCE,
                 double d1_tolerance = ON_ZERO_TOLERANCE,
                 double d2_tolerance = ON_ZERO_TOLERANCE,
@@ -388,19 +397,20 @@ class ON_CLASS ON_RevSurface : public ON_Surface
   Transpose (); // transpose surface parameterization (swap "s" and "t")
 
   ON_BOOL32
-  Evaluate (          // returns false if unable to evaluate
-      double, double, // evaluation parameters  (see m_bTransposed)
-      int,            // number of derivatives (>=0)
-      int,            // array stride (>=Dimension())
-      double *,       // array of length stride*(ndir+1)*(ndir+2)/2
-      int = 0,        // optional - determines which quadrant to evaluate from
-                      //         0 = default
-                      //         1 from NE quadrant
-                      //         2 from NW quadrant
-                      //         3 from SW quadrant
-                      //         4 from SE quadrant
-      int * = 0       // optional - evaluation hint (int[2]) used to speed
-                      //            repeated evaluations
+  Evaluate ( // returns false if unable to evaluate
+      double,
+      double,   // evaluation parameters  (see m_bTransposed)
+      int,      // number of derivatives (>=0)
+      int,      // array stride (>=Dimension())
+      double *, // array of length stride*(ndir+1)*(ndir+2)/2
+      int = 0,  // optional - determines which quadrant to evaluate from
+                //         0 = default
+                //         1 from NE quadrant
+                //         2 from NW quadrant
+                //         3 from SW quadrant
+                //         4 from SE quadrant
+      int * = 0 // optional - evaluation hint (int[2]) used to speed
+                //            repeated evaluations
       ) const;
 
   /*
@@ -485,7 +495,9 @@ class ON_CLASS ON_RevSurface : public ON_Surface
 
   */
   ON_BOOL32
-  Split (int dir, double c, ON_Surface *&west_or_south_side,
+  Split (int dir,
+         double c,
+         ON_Surface *&west_or_south_side,
          ON_Surface *&east_or_north_side) const;
 
   int
@@ -499,7 +511,8 @@ class ON_CLASS ON_RevSurface : public ON_Surface
                 //            surface's parameterization and the NURBS
                 //            parameterization may not match to the
                 //            desired accuracy.
-      ON_NurbsSurface &, double = 0.0) const;
+      ON_NurbsSurface &,
+      double = 0.0) const;
 
   int HasNurbForm ( // returns 0: unable to create NURBS representation
                     //            with desired accuracy.
@@ -514,12 +527,16 @@ class ON_CLASS ON_RevSurface : public ON_Surface
       ) const;
 
   bool
-  GetSurfaceParameterFromNurbFormParameter (double nurbs_s, double nurbs_t,
-                                            double *surface_s, double *surface_t) const;
+  GetSurfaceParameterFromNurbFormParameter (double nurbs_s,
+                                            double nurbs_t,
+                                            double *surface_s,
+                                            double *surface_t) const;
 
   bool
-  GetNurbFormParameterFromSurfaceParameter (double surface_s, double surface_t,
-                                            double *nurbs_s, double *nurbs_t) const;
+  GetNurbFormParameterFromSurfaceParameter (double surface_s,
+                                            double surface_t,
+                                            double *nurbs_s,
+                                            double *nurbs_t) const;
 };
 
 #endif

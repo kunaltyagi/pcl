@@ -75,8 +75,13 @@ pcl::PPFRGBEstimation<PointInT, PointNT, PointOutT>::computeFeature (
                                          input_->points[i].getRGBVector4i (),
                                          input_->points[j].getVector4fMap (),
                                          normals_->points[j].getNormalVector4fMap (),
-                                         input_->points[j].getRGBVector4i (), p.f1,
-                                         p.f2, p.f3, p.f4, p.r_ratio, p.g_ratio,
+                                         input_->points[j].getRGBVector4i (),
+                                         p.f1,
+                                         p.f2,
+                                         p.f3,
+                                         p.f4,
+                                         p.r_ratio,
+                                         p.g_ratio,
                                          p.b_ratio)) {
           // Calculate alpha_m angle
           Eigen::Vector3f model_reference_point = input_->points[i].getVector3fMap (),
@@ -99,7 +104,9 @@ pcl::PPFRGBEstimation<PointInT, PointNT, PointOutT>::computeFeature (
         } else {
           PCL_ERROR ("[pcl::%s::computeFeature] Computing pair feature vector between "
                      "points %lu and %lu went wrong.\n",
-                     getClassName ().c_str (), i, j);
+                     getClassName ().c_str (),
+                     i,
+                     j);
           p.f1 = p.f2 = p.f3 = p.f4 = p.alpha_m = p.r_ratio = p.g_ratio = p.b_ratio =
               0.f;
         }
@@ -135,8 +142,8 @@ pcl::PPFRGBRegionEstimation<PointInT, PointNT, PointOutT>::computeFeature (
     int i = (*indices_)[index_i];
     std::vector<int> nn_indices;
     std::vector<float> nn_distances;
-    tree_->radiusSearch (i, static_cast<float> (search_radius_), nn_indices,
-                         nn_distances);
+    tree_->radiusSearch (
+        i, static_cast<float> (search_radius_), nn_indices, nn_distances);
 
     PointOutT average_feature_nn;
     average_feature_nn.alpha_m = 0;
@@ -152,8 +159,14 @@ pcl::PPFRGBRegionEstimation<PointInT, PointNT, PointOutT>::computeFeature (
                                          input_->points[i].getRGBVector4i (),
                                          input_->points[j].getVector4fMap (),
                                          normals_->points[j].getNormalVector4fMap (),
-                                         input_->points[j].getRGBVector4i (), f1, f2,
-                                         f3, f4, r_ratio, g_ratio, b_ratio)) {
+                                         input_->points[j].getRGBVector4i (),
+                                         f1,
+                                         f2,
+                                         f3,
+                                         f4,
+                                         r_ratio,
+                                         g_ratio,
+                                         b_ratio)) {
           average_feature_nn.f1 += f1;
           average_feature_nn.f2 += f2;
           average_feature_nn.f3 += f3;
@@ -164,7 +177,9 @@ pcl::PPFRGBRegionEstimation<PointInT, PointNT, PointOutT>::computeFeature (
         } else {
           PCL_ERROR ("[pcl::%s::computeFeature] Computing pair feature vector between "
                      "points %lu and %lu went wrong.\n",
-                     getClassName ().c_str (), i, j);
+                     getClassName ().c_str (),
+                     i,
+                     j);
         }
       }
     }

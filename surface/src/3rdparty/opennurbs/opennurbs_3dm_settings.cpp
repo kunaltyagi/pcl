@@ -1614,7 +1614,8 @@ ON_3dmPageSettings::IsValid (ON_TextLog *text_log) const
       if (text_log) {
         text_log->Print ("ON_3dmPageSettings has m_left_margin_mm+m_right_margin_mm = "
                          "%g > %g = m_width_mm.\n",
-                         m_left_margin_mm + m_right_margin_mm, m_width_mm);
+                         m_left_margin_mm + m_right_margin_mm,
+                         m_width_mm);
       }
       rc = false;
     }
@@ -1622,7 +1623,8 @@ ON_3dmPageSettings::IsValid (ON_TextLog *text_log) const
       if (text_log) {
         text_log->Print ("ON_3dmPageSettings has m_top_margin_mm+m_bottom_margin_mm = "
                          "%g > %g = m_height_mm.\n",
-                         m_top_margin_mm + m_bottom_margin_mm, m_height_mm);
+                         m_top_margin_mm + m_bottom_margin_mm,
+                         m_height_mm);
       }
       rc = false;
     }
@@ -1789,11 +1791,11 @@ ON_3dmView::Dump (ON_TextLog &dump) const
   ON_3dVector camX, camY, camZ;
   ON_BOOL32 bValidCamera = m_vp.GetCameraFrame (camLoc, camX, camY, camZ);
   double frus_left, frus_right, frus_bottom, frus_top, frus_near, frus_far;
-  ON_BOOL32 bValidFrustum = m_vp.GetFrustum (&frus_left, &frus_right, &frus_bottom,
-                                             &frus_top, &frus_near, &frus_far);
+  ON_BOOL32 bValidFrustum = m_vp.GetFrustum (
+      &frus_left, &frus_right, &frus_bottom, &frus_top, &frus_near, &frus_far);
   int port_left, port_right, port_bottom, port_top, port_near, port_far;
-  ON_BOOL32 bValidPort = m_vp.GetScreenPort (&port_left, &port_right, &port_bottom,
-                                             &port_top, &port_near, &port_far);
+  ON_BOOL32 bValidPort = m_vp.GetScreenPort (
+      &port_left, &port_right, &port_bottom, &port_top, &port_near, &port_far);
 
   const char *sProjectionName;
   switch (proj) {
@@ -1808,8 +1810,8 @@ ON_3dmView::Dump (ON_TextLog &dump) const
     sProjectionName = "unknown";
     break;
   }
-  dump.Print ("Viewport: name = \"%ls\" projection = %s\n", wsViewName,
-              sProjectionName);
+  dump.Print (
+      "Viewport: name = \"%ls\" projection = %s\n", wsViewName, sProjectionName);
 
   dump.PushIndent ();
 
@@ -1819,14 +1821,27 @@ ON_3dmView::Dump (ON_TextLog &dump) const
                 "  X = %g, %g, %g\n"
                 "  Y = %g, %g, %g\n"
                 "  Z = %g, %g, %g\n",
-                camLoc.x, camLoc.y, camLoc.z, camX.x, camX.y, camX.z, camY.x, camY.y,
-                camY.z, camZ.x, camZ.y, camZ.z);
+                camLoc.x,
+                camLoc.y,
+                camLoc.z,
+                camX.x,
+                camX.y,
+                camX.z,
+                camY.x,
+                camY.y,
+                camY.z,
+                camZ.x,
+                camZ.y,
+                camZ.z);
     ON_3dPoint target_point = TargetPoint ();
     double target_distance = target_point.DistanceTo (camLoc);
     dump.Print ("camera target\n"
                 "  distance = %g\n"
                 "  point = %g,%g,%g\n",
-                target_distance, target_point.x, target_point.y, target_point.z);
+                target_distance,
+                target_point.x,
+                target_point.y,
+                target_point.z);
   }
 
   if (bValidFrustum) {
@@ -1834,7 +1849,12 @@ ON_3dmView::Dump (ON_TextLog &dump) const
                 "  left   = %g, right = %g\n"
                 "  bottom = %g, top   = %g\n"
                 "  near   = %g, far   = %g\n",
-                frus_left, frus_right, frus_bottom, frus_top, frus_near, frus_far);
+                frus_left,
+                frus_right,
+                frus_bottom,
+                frus_top,
+                frus_near,
+                frus_far);
   }
 
   if (bValidPort) {
@@ -1843,7 +1863,12 @@ ON_3dmView::Dump (ON_TextLog &dump) const
                 "  left   = %4d, right = %4d\n"
                 "  bottom = %4d, top   = %4d\n"
                 "  near   = %4d, far   = %4d\n",
-                port_left, port_right, port_bottom, port_top, port_near, port_far);
+                port_left,
+                port_right,
+                port_bottom,
+                port_top,
+                port_near,
+                port_far);
   }
 
   // relative position of viewport window in application main frame
@@ -1855,7 +1880,10 @@ ON_3dmView::Dump (ON_TextLog &dump) const
   dump.Print ("relative viewport window position in application frame window\n"
               "  left   = %6.2f%%, right = %6.2f%%\n"
               "  bottom = %6.2f%%, top   = %6.2f%%\n",
-              100.0 * rel_left, 100.0 * rel_right, 100.0 * rel_bottom, 100.0 * rel_top);
+              100.0 * rel_left,
+              100.0 * rel_right,
+              100.0 * rel_bottom,
+              100.0 * rel_top);
 
   dump.PopIndent ();
 }
@@ -1875,8 +1903,8 @@ ON_3dmView::Default ()
   m_view_type = ON::model_view_type;
   m_position.Default ();
   if (m_vp.Projection () == ON::parallel_view) {
-    m_cplane.m_plane.CreateFromFrame (m_cplane.m_plane.origin, m_vp.CameraX (),
-                                      m_vp.CameraY ());
+    m_cplane.m_plane.CreateFromFrame (
+        m_cplane.m_plane.origin, m_vp.CameraX (), m_vp.CameraY ());
   }
   m_bShowConstructionGrid = true;
   m_bShowConstructionAxes = true;
@@ -1923,7 +1951,8 @@ ON_3dmView::IsValid (ON_TextLog *text_log) const
           text_log->Print (
               "ON_3dmView has m_view_type = ON::model_view_type but m_page_settings "
               "width,height = (%g,%g) (both should be zero).\n",
-              m_page_settings.m_width_mm, m_page_settings.m_height_mm);
+              m_page_settings.m_width_mm,
+              m_page_settings.m_height_mm);
         }
         rc = false;
       }
@@ -1979,7 +2008,8 @@ ON_3dmView::IsValid (ON_TextLog *text_log) const
         if (text_log) {
           text_log->Print ("ON_3dmView has m_view_type = ON::page_view_type but page "
                            "width,height = (%g,%g)\n",
-                           m_page_settings.m_width_mm, m_page_settings.m_height_mm);
+                           m_page_settings.m_width_mm,
+                           m_page_settings.m_height_mm);
         }
         rc = false;
       }
@@ -1991,7 +2021,8 @@ ON_3dmView::IsValid (ON_TextLog *text_log) const
           text_log->Print (
               "ON_3dmView has m_view_type = ON::nested_view_type but m_page_settings "
               "width,height = (%g,%g) (both should be zero).\n",
-              m_page_settings.m_width_mm, m_page_settings.m_height_mm);
+              m_page_settings.m_width_mm,
+              m_page_settings.m_height_mm);
         }
         rc = false;
       }
@@ -3015,12 +3046,17 @@ ON_3dmSettings_Read_v1_TCODE_VIEW (ON_BinaryArchive &file, ON_3dmView &view)
       cameradist = 100.0;
     if (viewsize <= 0.0 || viewsize >= (DBL_MAX / 2.0))
       viewsize = 0.125;
-    ON_ViewportFromRhinoView (
-        projection == 2 ? ON::perspective_view : ON::parallel_view, target_point,
-        angle1, angle2, angle3, viewsize, cameradist,
-        100, // screen_width,
-        100, // screen_height,
-        view.m_vp);
+    ON_ViewportFromRhinoView (projection == 2 ? ON::perspective_view
+                                              : ON::parallel_view,
+                              target_point,
+                              angle1,
+                              angle2,
+                              angle3,
+                              viewsize,
+                              cameradist,
+                              100, // screen_width,
+                              100, // screen_height,
+                              view.m_vp);
     // keep obsolete view.m_target in sync with view.m_vp.m_target_point
     view.OBSOLETE_3DM_VIEW_TARGET = view.m_vp.TargetPoint ();
     break;

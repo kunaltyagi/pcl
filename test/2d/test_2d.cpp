@@ -135,10 +135,11 @@ TEST (Convolution, borderOptions)
           1);
 
   for (int i = 1; i < height - 1; i++) {
-    EXPECT_NEAR ((*output_cloud) (0, i).intensity, ((*input_cloud) (1, i).intensity),
-                 1);
+    EXPECT_NEAR (
+        (*output_cloud) (0, i).intensity, ((*input_cloud) (1, i).intensity), 1);
     EXPECT_NEAR ((*output_cloud) (width - 1, i).intensity,
-                 (-(*input_cloud) (width - 2, i).intensity), 1);
+                 (-(*input_cloud) (width - 2, i).intensity),
+                 1);
   }
 }
 
@@ -175,8 +176,8 @@ TEST (Convolution, gaussianSmooth)
   conv->filter (*output_cloud);
   for (int i = 1; i < height - 1; i++)
     for (int j = 1; j < width - 1; j++)
-      EXPECT_NEAR ((*output_cloud) (j, i).intensity,
-                   (*gt_output_cloud) (j, i).intensity, 1);
+      EXPECT_NEAR (
+          (*output_cloud) (j, i).intensity, (*gt_output_cloud) (j, i).intensity, 1);
 }
 
 TEST (Edge, sobel)
@@ -283,8 +284,8 @@ TEST (Edge, canny)
 
   for (int i = 1; i < height - 1; i++) {
     for (int j = 1; j < width - 1; j++) {
-      EXPECT_NEAR ((*output_cloud) (j, i).magnitude,
-                   (*gt_output_cloud) (j, i).intensity, 255);
+      EXPECT_NEAR (
+          (*output_cloud) (j, i).magnitude, (*gt_output_cloud) (j, i).intensity, 255);
     }
   }
 }
@@ -328,8 +329,8 @@ TEST (Morphology, erosion)
 
   for (int i = 1; i < height - 1; i++)
     for (int j = 1; j < width - 1; j++)
-      EXPECT_NEAR ((*output_cloud) (j, i).intensity,
-                   (*gt_output_cloud) (j, i).intensity, 1);
+      EXPECT_NEAR (
+          (*output_cloud) (j, i).intensity, (*gt_output_cloud) (j, i).intensity, 1);
 
   pcl::io::loadPCDFile (erosion_binary_ref, *gt_output_cloud);
   threshold (input_cloud, 100);
@@ -338,7 +339,8 @@ TEST (Morphology, erosion)
   for (int i = 1; i < height - 1; i++)
     for (int j = 1; j < width - 1; j++)
       EXPECT_NEAR ((*output_cloud) (j, i).intensity,
-                   (*gt_output_cloud) (j, i).intensity / 255.0, 1);
+                   (*gt_output_cloud) (j, i).intensity / 255.0,
+                   1);
 }
 
 TEST (Morphology, dilation)
@@ -367,8 +369,8 @@ TEST (Morphology, dilation)
 
   for (int i = 1; i < height - 1; i++)
     for (int j = 1; j < width - 1; j++)
-      EXPECT_NEAR ((*output_cloud) (j, i).intensity,
-                   (*gt_output_cloud) (j, i).intensity, 1);
+      EXPECT_NEAR (
+          (*output_cloud) (j, i).intensity, (*gt_output_cloud) (j, i).intensity, 1);
 
   pcl::io::loadPCDFile (dilation_binary_ref, *gt_output_cloud);
   threshold (input_cloud, 100);
@@ -377,7 +379,8 @@ TEST (Morphology, dilation)
   for (int i = 1; i < height - 1; i++)
     for (int j = 1; j < width - 1; j++)
       EXPECT_NEAR ((*output_cloud) (j, i).intensity,
-                   (*gt_output_cloud) (j, i).intensity / 255.0, 1);
+                   (*gt_output_cloud) (j, i).intensity / 255.0,
+                   1);
 }
 
 TEST (Morphology, opening)
@@ -406,8 +409,8 @@ TEST (Morphology, opening)
 
   for (int i = 1; i < height - 1; i++)
     for (int j = 1; j < width - 1; j++)
-      EXPECT_NEAR ((*output_cloud) (j, i).intensity,
-                   (*gt_output_cloud) (j, i).intensity, 1);
+      EXPECT_NEAR (
+          (*output_cloud) (j, i).intensity, (*gt_output_cloud) (j, i).intensity, 1);
 
   pcl::io::loadPCDFile (opening_binary_ref, *gt_output_cloud);
   threshold (input_cloud, 100);
@@ -416,7 +419,8 @@ TEST (Morphology, opening)
   for (int i = 1; i < height - 1; i++)
     for (int j = 1; j < width - 1; j++)
       EXPECT_NEAR ((*output_cloud) (j, i).intensity,
-                   (*gt_output_cloud) (j, i).intensity / 255.0, 1);
+                   (*gt_output_cloud) (j, i).intensity / 255.0,
+                   1);
 }
 
 TEST (Morphology, closing)
@@ -445,8 +449,8 @@ TEST (Morphology, closing)
 
   for (int i = 1; i < height - 1; i++)
     for (int j = 1; j < width - 1; j++)
-      EXPECT_NEAR ((*output_cloud) (j, i).intensity,
-                   (*gt_output_cloud) (j, i).intensity, 1);
+      EXPECT_NEAR (
+          (*output_cloud) (j, i).intensity, (*gt_output_cloud) (j, i).intensity, 1);
 
   pcl::io::loadPCDFile (closing_binary_ref, *gt_output_cloud);
   threshold (input_cloud, 100);
@@ -455,7 +459,8 @@ TEST (Morphology, closing)
   for (int i = 1; i < height - 1; i++)
     for (int j = 1; j < width - 1; j++)
       EXPECT_NEAR ((*output_cloud) (j, i).intensity,
-                   (*gt_output_cloud) (j, i).intensity / 255.0, 1);
+                   (*gt_output_cloud) (j, i).intensity / 255.0,
+                   1);
 }
 
 /** --[ */

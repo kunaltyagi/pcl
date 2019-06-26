@@ -110,19 +110,22 @@ ON_GL (const ON_NurbsCurve &, //
 );
 
 void
-ON_GL (                 // low level NURBS curve renderer
-    int, int, int, int, // dim, is_rat, cv_count, order
-    const double *,     // knot_vector[]
-    int,                // cv_stride
-    const double *,     // cv
-    GLUnurbsObj *,      // created with gluNewNurbsRenderer
-    GLenum = 0,         // type of curve (if 0, type is automatically set)
-    int = 1,            // bPermitKnotScaling - If true, curve knots may
-                        // be rescaled to avoid knot vectors GL cannot handle.
-    double * = NULL,    // knot_scale[2] - If not NULL and bPermitKnotScaling,
-                        // the scaling applied to the knot vector is
-                        // returned here.
-    double[][4] = NULL  // optional transformation applied to curve
+ON_GL ( // low level NURBS curve renderer
+    int,
+    int,
+    int,
+    int,               // dim, is_rat, cv_count, order
+    const double *,    // knot_vector[]
+    int,               // cv_stride
+    const double *,    // cv
+    GLUnurbsObj *,     // created with gluNewNurbsRenderer
+    GLenum = 0,        // type of curve (if 0, type is automatically set)
+    int = 1,           // bPermitKnotScaling - If true, curve knots may
+                       // be rescaled to avoid knot vectors GL cannot handle.
+    double * = NULL,   // knot_scale[2] - If not NULL and bPermitKnotScaling,
+                       // the scaling applied to the knot vector is
+                       // returned here.
+    double[][4] = NULL // optional transformation applied to curve
 );
 
 // Use ON_GL( const ON_NurbsSurface&,...) in place of
@@ -207,8 +210,11 @@ ON_GL (const ON_Light &,
 //   port_bottom = height-1
 //   port_top    = 0
 void
-ON_GL (ON_Viewport &, int, int, // port_left, port_right (port_left != port_right)
-       int, int                 // port_bottom, port_top (port_bottom != port_top)
+ON_GL (ON_Viewport &,
+       int,
+       int, // port_left, port_right (port_left != port_right)
+       int,
+       int // port_bottom, port_top (port_bottom != port_top)
 );
 
 ////////////

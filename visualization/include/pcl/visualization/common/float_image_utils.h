@@ -55,7 +55,9 @@ namespace pcl
       /** Get RGB color values for a given float in [0, 1] or special cases like
        * -INFINITY(light green), INFINITY(light blue), NAN(light red) */
       static void
-      getColorForFloat (float value, unsigned char &r, unsigned char &g,
+      getColorForFloat (float value,
+                        unsigned char &r,
+                        unsigned char &g,
                         unsigned char &b);
 
       /** Get RGB color values for a given float in [-PI, PI] or special cases like
@@ -63,7 +65,9 @@ namespace pcl
        * black(-PI) -> blue(-PI/2) -> white(0) -> green(PI/2) -> black(PI) with
        * accordant values in between */
       static void
-      getColorForAngle (float value, unsigned char &r, unsigned char &g,
+      getColorForAngle (float value,
+                        unsigned char &r,
+                        unsigned char &g,
                         unsigned char &b);
 
       /** Get RGB color values for a given float in [0, PI] or special cases like
@@ -71,7 +75,9 @@ namespace pcl
        * black(-PI/2) -> blue(-PI/4) -> white(0) -> green(PI/4) -> black(PI/2) with
        * accordant values in between */
       static void
-      getColorForHalfAngle (float value, unsigned char &r, unsigned char &g,
+      getColorForHalfAngle (float value,
+                            unsigned char &r,
+                            unsigned char &g,
                             unsigned char &b);
 
       /** Use getColorForFloat for all elements of the given arrays, whereas the values
@@ -81,7 +87,9 @@ namespace pcl
        * gray_scale is true, the outcome will still be an RGB image, but all colors
        * apart for the special colors of non-finite numbers, will be gray values */
       static unsigned char *
-      getVisualImage (const float *float_image, int width, int height,
+      getVisualImage (const float *float_image,
+                      int width,
+                      int height,
                       float min_value = -std::numeric_limits<float>::infinity (),
                       float max_value = std::numeric_limits<float>::infinity (),
                       bool gray_scale = false);
@@ -93,7 +101,9 @@ namespace pcl
        * will be gray values. */
       static unsigned char *
       getVisualImage (
-          const unsigned short *float_image, int width, int height,
+          const unsigned short *float_image,
+          int width,
+          int height,
           unsigned short min_value = 0,
           unsigned short max_value = std::numeric_limits<unsigned short>::max (),
           bool gray_scale = false);

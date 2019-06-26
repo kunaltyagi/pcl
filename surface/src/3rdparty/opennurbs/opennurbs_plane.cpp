@@ -16,13 +16,16 @@
 
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-const ON_Plane ON_xy_plane (ON_3dPoint (0.0, 0.0, 0.0), ON_3dVector (1.0, 0.0, 0.0),
+const ON_Plane ON_xy_plane (ON_3dPoint (0.0, 0.0, 0.0),
+                            ON_3dVector (1.0, 0.0, 0.0),
                             ON_3dVector (0.0, 1.0, 0.0));
 
-const ON_Plane ON_yz_plane (ON_3dPoint (0.0, 0.0, 0.0), ON_3dVector (0.0, 1.0, 0.0),
+const ON_Plane ON_yz_plane (ON_3dPoint (0.0, 0.0, 0.0),
+                            ON_3dVector (0.0, 1.0, 0.0),
                             ON_3dVector (0.0, 0.0, 1.0));
 
-const ON_Plane ON_zx_plane (ON_3dPoint (0.0, 0.0, 0.0), ON_3dVector (0.0, 0.0, 1.0),
+const ON_Plane ON_zx_plane (ON_3dPoint (0.0, 0.0, 0.0),
+                            ON_3dVector (0.0, 0.0, 1.0),
                             ON_3dVector (1.0, 0.0, 0.0));
 
 const ON_Plane ON_Plane::World_xy = ON_xy_plane;
@@ -108,7 +111,8 @@ ON_Plane::DistanceTo (const ON_3dPoint &point) const
 }
 
 bool
-ON_Plane::GetDistanceToBoundingBox (const ON_BoundingBox &Box, double *min,
+ON_Plane::GetDistanceToBoundingBox (const ON_BoundingBox &Box,
+                                    double *min,
                                     double *max) const
 {
   // min and max signed distance.  Returns false if plane normal has zero length.
@@ -483,7 +487,10 @@ int
 ON_ArePointsOnPlane ( // returns 0=no, 1 = yes, 2 = pointset is (to tolerance) a single
                       // point on the line
     int dim,          // 2 or 3
-    int is_rat, int count, int stride, const double *point,
+    int is_rat,
+    int count,
+    int stride,
+    const double *point,
     const ON_BoundingBox
         &bbox, // if needed, use ON_GetBoundingBox(dim,is_rat,count,stride,point)
     const ON_Plane &plane, // line to test

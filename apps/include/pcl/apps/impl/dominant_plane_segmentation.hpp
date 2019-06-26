@@ -331,8 +331,10 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (
           } else {
             if ((j - 1) < 0) {
               // top-row, check on the left of pixel to assign a new label or not
-              int left = check ((*binary_cloud) (i - 1, j), (*binary_cloud) (i, j),
-                                c_intensity, object_cluster_tolerance_);
+              int left = check ((*binary_cloud) (i - 1, j),
+                                (*binary_cloud) (i, j),
+                                c_intensity,
+                                object_cluster_tolerance_);
               if (left) {
                 // Nothing found on the left, check bigger window
 
@@ -341,8 +343,10 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (
                   if ((i - kk) < 0)
                     continue;
 
-                  int left = check ((*binary_cloud) (i - kk, j), (*binary_cloud) (i, j),
-                                    c_intensity, object_cluster_tolerance_);
+                  int left = check ((*binary_cloud) (i - kk, j),
+                                    (*binary_cloud) (i, j),
+                                    c_intensity,
+                                    object_cluster_tolerance_);
                   if (left == 0) {
                     found = true;
                   }
@@ -356,17 +360,20 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (
             } else {
               if ((i - 1) == 0) {
                 // check only top
-                int top = check ((*binary_cloud) (i, j - 1), (*binary_cloud) (i, j),
-                                 c_intensity, object_cluster_tolerance_);
+                int top = check ((*binary_cloud) (i, j - 1),
+                                 (*binary_cloud) (i, j),
+                                 c_intensity,
+                                 object_cluster_tolerance_);
                 if (top) {
                   bool found = false;
                   for (int kk = 2; kk < wsize && !found; kk++) {
                     if ((j - kk) < 0)
                       continue;
 
-                    int top =
-                        check ((*binary_cloud) (i, j - kk), (*binary_cloud) (i, j),
-                               c_intensity, object_cluster_tolerance_);
+                    int top = check ((*binary_cloud) (i, j - kk),
+                                     (*binary_cloud) (i, j),
+                                     c_intensity,
+                                     object_cluster_tolerance_);
                     if (top == 0) {
                       found = true;
                     }
@@ -380,10 +387,14 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (
 
               } else {
                 // check left and top
-                int left = check ((*binary_cloud) (i - 1, j), (*binary_cloud) (i, j),
-                                  c_intensity, object_cluster_tolerance_);
-                int top = check ((*binary_cloud) (i, j - 1), (*binary_cloud) (i, j),
-                                 c_intensity, object_cluster_tolerance_);
+                int left = check ((*binary_cloud) (i - 1, j),
+                                  (*binary_cloud) (i, j),
+                                  c_intensity,
+                                  object_cluster_tolerance_);
+                int top = check ((*binary_cloud) (i, j - 1),
+                                 (*binary_cloud) (i, j),
+                                 c_intensity,
+                                 object_cluster_tolerance_);
 
                 if (left == 0 && top == 0) {
                   // both top and left had labels, check if they are different
@@ -414,12 +425,14 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_fast (
                     if (((i - dist) < 0) || ((j - dist) < 0))
                       continue;
 
-                    int left =
-                        check ((*binary_cloud) (i - dist, j), (*binary_cloud) (i, j),
-                               c_intensity, object_cluster_tolerance_);
-                    int top =
-                        check ((*binary_cloud) (i, j - dist), (*binary_cloud) (i, j),
-                               c_intensity, object_cluster_tolerance_);
+                    int left = check ((*binary_cloud) (i - dist, j),
+                                      (*binary_cloud) (i, j),
+                                      c_intensity,
+                                      object_cluster_tolerance_);
+                    int top = check ((*binary_cloud) (i, j - dist),
+                                     (*binary_cloud) (i, j),
+                                     c_intensity,
+                                     object_cluster_tolerance_);
 
                     if (left == 0 && top == 0) {
                       if ((*binary_cloud) (i - dist, j).intensity !=
@@ -580,7 +593,9 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute (
 
   PCL_INFO ("[DominantPlaneSegmentation] Number of points left after filtering (%f -> "
             "%f): %lu out of %lu\n",
-            min_z_bounds_, max_z_bounds_, cloud_downsampled_->points.size (),
+            min_z_bounds_,
+            max_z_bounds_,
+            cloud_downsampled_->points.size (),
             input_->points.size ());
 
   // ---[ Estimate the point normals
@@ -749,7 +764,9 @@ pcl::apps::DominantPlaneSegmentation<PointType>::compute_full (
 
   PCL_INFO ("[DominantPlaneSegmentation] Number of points left after "
             "filtering&downsampling (%f -> %f): %lu out of %lu\n",
-            min_z_bounds_, max_z_bounds_, cloud_downsampled_->points.size (),
+            min_z_bounds_,
+            max_z_bounds_,
+            cloud_downsampled_->points.size (),
             input_->points.size ());
 
   // ---[ Estimate the point normals

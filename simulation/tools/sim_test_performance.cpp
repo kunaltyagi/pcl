@@ -225,7 +225,8 @@ display ()
   glReadBuffer (GL_BACK);
 
   // Draw the resulting images from the range_likelihood
-  glViewport (range_likelihood_visualization_->getWidth (), 0,
+  glViewport (range_likelihood_visualization_->getWidth (),
+              0,
               range_likelihood_visualization_->getWidth (),
               range_likelihood_visualization_->getHeight ());
   glMatrixMode (GL_PROJECTION);
@@ -242,11 +243,15 @@ display ()
 
   glRasterPos2i (-1, -1);
   glDrawPixels (range_likelihood_visualization_->getWidth (),
-                range_likelihood_visualization_->getHeight (), GL_RGB, GL_UNSIGNED_BYTE,
+                range_likelihood_visualization_->getHeight (),
+                GL_RGB,
+                GL_UNSIGNED_BYTE,
                 range_likelihood_visualization_->getColorBuffer ());
 
   // Draw the depth image
-  glViewport (0, 0, range_likelihood_visualization_->getWidth (),
+  glViewport (0,
+              0,
+              range_likelihood_visualization_->getWidth (),
               range_likelihood_visualization_->getHeight ());
 
   glMatrixMode (GL_PROJECTION);
@@ -262,7 +267,8 @@ display ()
     for (int j = 0; j < range_likelihood_->getCols (); ++j) {
       Camera camera (*camera_);
       camera.move ((j - range_likelihood_->getCols () / 2.0) * 0.1,
-                   (i - range_likelihood_->getRows () / 2.0) * 0.1, 0.0);
+                   (i - range_likelihood_->getRows () / 2.0) * 0.1,
+                   0.0);
       poses.push_back (camera.getPose ());
     }
   }
@@ -316,7 +322,8 @@ display ()
   }
 
   // Draw the score image for the particles
-  glViewport (0, range_likelihood_visualization_->getHeight (),
+  glViewport (0,
+              range_likelihood_visualization_->getHeight (),
               range_likelihood_visualization_->getWidth (),
               range_likelihood_visualization_->getHeight ());
 

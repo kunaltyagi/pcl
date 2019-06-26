@@ -114,7 +114,8 @@ class ON_CLASS ON_Cone
 
   // returns parameters of point on cone that is closest to given point
   bool
-  ClosestPointTo (ON_3dPoint point, double *radial_parameter,
+  ClosestPointTo (ON_3dPoint point,
+                  double *radial_parameter,
                   double *height_parameter) const;
 
   // returns point on cone that is closest to given point
@@ -132,10 +133,13 @@ class ON_CLASS ON_Cone
 
   // rotate cone about a point and axis
   ON_BOOL32
-  Rotate (double sin_angle, double cos_angle, const ON_3dVector &axis_of_rotation,
+  Rotate (double sin_angle,
+          double cos_angle,
+          const ON_3dVector &axis_of_rotation,
           const ON_3dPoint &center_of_rotation);
   ON_BOOL32
-  Rotate (double angle_in_radians, const ON_3dVector &axis_of_rotation,
+  Rotate (double angle_in_radians,
+          const ON_3dVector &axis_of_rotation,
           const ON_3dPoint &center_of_rotation);
 
   ON_BOOL32

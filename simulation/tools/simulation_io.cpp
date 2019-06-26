@@ -18,8 +18,8 @@ pcl::simulation::SimExample::SimExample (int argc, char **argv, int height, int 
   // rl_ = RangeLikelihood::Ptr(new RangeLikelihood(1, 1, height_, width_, scene_));
 
   // Actually corresponds to default parameters:
-  rl_->setCameraIntrinsicsParameters (width_, height_, 576.09757860, 576.09757860,
-                                      321.06398107, 242.97676897);
+  rl_->setCameraIntrinsicsParameters (
+      width_, height_, 576.09757860, 576.09757860, 321.06398107, 242.97676897);
   rl_->setComputeOnCPU (false);
   rl_->setSumOnCPU (true);
   rl_->setUseColor (true);

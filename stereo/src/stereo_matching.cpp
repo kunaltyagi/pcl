@@ -188,7 +188,10 @@ pcl::StereoMatching::leftRightCheck ()
 
 //////////////////////////////////////////////////////////////////////////////
 bool
-pcl::StereoMatching::getPointCloud (float u_c, float v_c, float focal, float baseline,
+pcl::StereoMatching::getPointCloud (float u_c,
+                                    float v_c,
+                                    float focal,
+                                    float baseline,
                                     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,
                                     pcl::PointCloud<pcl::RGB>::Ptr texture)
 {
@@ -267,7 +270,10 @@ pcl::StereoMatching::getPointCloud (float u_c, float v_c, float focal, float bas
 // const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr
 // pcl::StereoMatching::getPointCloud(float uC, float vC, float focal, float baseline)
 bool
-pcl::StereoMatching::getPointCloud (float u_c, float v_c, float focal, float baseline,
+pcl::StereoMatching::getPointCloud (float u_c,
+                                    float v_c,
+                                    float focal,
+                                    float baseline,
                                     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud)
 {
 
@@ -458,8 +464,10 @@ pcl::GrayStereoMatching::compute (pcl::PointCloud<pcl::RGB> &ref,
 
 //////////////////////////////////////////////////////////////////////////////
 void
-pcl::GrayStereoMatching::compute (unsigned char *ref_img, unsigned char *trg_img,
-                                  int width, int height)
+pcl::GrayStereoMatching::compute (unsigned char *ref_img,
+                                  unsigned char *trg_img,
+                                  int width,
+                                  int height)
 {
 
   // Check that a suitable value of max_disp has been selected

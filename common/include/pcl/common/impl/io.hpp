@@ -48,7 +48,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 int
-pcl::getFieldIndex (const pcl::PointCloud<PointT> &, const std::string &field_name,
+pcl::getFieldIndex (const pcl::PointCloud<PointT> &,
+                    const std::string &field_name,
                     std::vector<pcl::PCLPointField> &fields)
 {
   fields.clear ();
@@ -136,7 +137,8 @@ pcl::copyPointCloud (const pcl::PointCloud<PointInT> &cloud_in,
 
   if (isSamePointType<PointInT, PointOutT> ())
     // Copy the whole memory block
-    memcpy (&cloud_out.points[0], &cloud_in.points[0],
+    memcpy (&cloud_out.points[0],
+            &cloud_in.points[0],
             cloud_in.points.size () * sizeof (PointInT));
   else
     // Iterate over each point
@@ -392,8 +394,13 @@ pcl::concatenateFields (const pcl::PointCloud<PointIn1T> &cloud1_in,
 template <typename PointT>
 void
 pcl::copyPointCloud (const pcl::PointCloud<PointT> &cloud_in,
-                     pcl::PointCloud<PointT> &cloud_out, int top, int bottom, int left,
-                     int right, pcl::InterpolationType border_type, const PointT &value)
+                     pcl::PointCloud<PointT> &cloud_out,
+                     int top,
+                     int bottom,
+                     int left,
+                     int right,
+                     pcl::InterpolationType border_type,
+                     const PointT &value)
 {
   if (top < 0 || left < 0 || bottom < 0 || right < 0) {
     std::string faulty =
@@ -460,13 +467,14 @@ pcl::copyPointCloud (const pcl::PointCloud<PointT> &cloud_in,
 
           for (int i = 0; i < top; i++) {
             int j = pcl::interpolatePointIndex (i - top, cloud_in.height, border_type);
-            memcpy (out + i * cloud_out.width, out + (j + top) * cloud_out.width,
+            memcpy (out + i * cloud_out.width,
+                    out + (j + top) * cloud_out.width,
                     sizeof (PointT) * cloud_out.width);
           }
 
           for (int i = 0; i < bottom; i++) {
-            int j = pcl::interpolatePointIndex (i + cloud_in.height, cloud_in.height,
-                                                border_type);
+            int j = pcl::interpolatePointIndex (
+                i + cloud_in.height, cloud_in.height, border_type);
             memcpy (out + (i + cloud_in.height + top) * cloud_out.width,
                     out + (j + top) * cloud_out.width,
                     cloud_out.width * sizeof (PointT));
@@ -494,12 +502,13 @@ pcl::copyPointCloud (const pcl::PointCloud<PointT> &cloud_in,
         }
 
         for (int i = 0; i < top; i++) {
-          memcpy (out + i * cloud_out.width, buff_ptr,
-                  cloud_out.width * sizeof (PointT));
+          memcpy (
+              out + i * cloud_out.width, buff_ptr, cloud_out.width * sizeof (PointT));
         }
 
         for (int i = 0; i < bottom; i++) {
-          memcpy (out + (i + cloud_in.height + top) * cloud_out.width, buff_ptr,
+          memcpy (out + (i + cloud_in.height + top) * cloud_out.width,
+                  buff_ptr,
                   cloud_out.width * sizeof (PointT));
         }
       }

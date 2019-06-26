@@ -181,15 +181,16 @@ inline Eigen::Affine3f
 pcl::registration::LUM<PointT>::getTransformation (const Vertex &vertex) const
 {
   Eigen::Vector6f pose = getPose (vertex);
-  return (pcl::getTransformation (pose (0), pose (1), pose (2), pose (3), pose (4),
-                                  pose (5)));
+  return (pcl::getTransformation (
+      pose (0), pose (1), pose (2), pose (3), pose (4), pose (5)));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 void
 pcl::registration::LUM<PointT>::setCorrespondences (
-    const Vertex &source_vertex, const Vertex &target_vertex,
+    const Vertex &source_vertex,
+    const Vertex &target_vertex,
     const pcl::CorrespondencesPtr &corrs)
 {
   if (source_vertex >= getNumVertices () || target_vertex >= getNumVertices () ||
@@ -342,12 +343,20 @@ pcl::registration::LUM<PointT>::computeEdge (const Edge &e)
   {
     // Compound the point pair onto the current pose
     Eigen::Vector3f source_compounded =
-        pcl::getTransformation (source_pose (0), source_pose (1), source_pose (2),
-                                source_pose (3), source_pose (4), source_pose (5)) *
+        pcl::getTransformation (source_pose (0),
+                                source_pose (1),
+                                source_pose (2),
+                                source_pose (3),
+                                source_pose (4),
+                                source_pose (5)) *
         source_cloud->points[(*corrs)[ici].index_query].getVector3fMap ();
     Eigen::Vector3f target_compounded =
-        pcl::getTransformation (target_pose (0), target_pose (1), target_pose (2),
-                                target_pose (3), target_pose (4), target_pose (5)) *
+        pcl::getTransformation (target_pose (0),
+                                target_pose (1),
+                                target_pose (2),
+                                target_pose (3),
+                                target_pose (4),
+                                target_pose (5)) *
         target_cloud->points[(*corrs)[ici].index_match].getVector3fMap ();
 
     // NaN points can not be passed to the remaining computational pipeline
@@ -372,7 +381,8 @@ pcl::registration::LUM<PointT>::computeEdge (const Edge &e)
     PCL_WARN ("[pcl::registration::LUM::compute] The correspondences between vertex %d "
               "and %d do not contain enough valid correspondences to be considered for "
               "computation.\n",
-              source (e, *slam_graph_), target (e, *slam_graph_));
+              source (e, *slam_graph_),
+              target (e, *slam_graph_));
     (*slam_graph_)[e].cinv_ = Eigen::Matrix6f::Zero ();
     (*slam_graph_)[e].cinvd_ = Eigen::Vector6f::Zero ();
     return;

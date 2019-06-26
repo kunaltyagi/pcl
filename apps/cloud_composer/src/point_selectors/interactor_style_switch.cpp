@@ -106,11 +106,11 @@ pcl::cloud_composer::InteractorStyleSwitch::SetInteractor (
   this->Interactor = iren;
   // add observers for each of the events handled in ProcessEvents
   if (iren) {
-    iren->AddObserver (vtkCommand::CharEvent, this->EventCallbackCommand,
-                       this->Priority);
+    iren->AddObserver (
+        vtkCommand::CharEvent, this->EventCallbackCommand, this->Priority);
 
-    iren->AddObserver (vtkCommand::DeleteEvent, this->EventCallbackCommand,
-                       this->Priority);
+    iren->AddObserver (
+        vtkCommand::DeleteEvent, this->EventCallbackCommand, this->Priority);
   }
 }
 

@@ -98,8 +98,11 @@ printNode (OctreeDiskNode *)
 }
 
 int
-outofcorePrint (boost::filesystem::path tree_root, size_t print_depth,
-                bool bounding_box = false, bool pcd = false, bool point_count = false,
+outofcorePrint (boost::filesystem::path tree_root,
+                size_t print_depth,
+                bool bounding_box = false,
+                bool pcd = false,
+                bool point_count = false,
                 bool breadth_first = false)
 {
   std::cout << boost::filesystem::absolute (tree_root) << std::endl;
@@ -111,8 +114,13 @@ outofcorePrint (boost::filesystem::path tree_root, size_t print_depth,
   octree->getBoundingBox (min, max);
 
   // Cloud bounding box
-  PCL_INFO (" Bounding Box: <%lf, %lf, %lf> - <%lf, %lf, %lf>\n", min[0], min[1],
-            min[2], max[0], max[1], max[2]);
+  PCL_INFO (" Bounding Box: <%lf, %lf, %lf> - <%lf, %lf, %lf>\n",
+            min[0],
+            min[1],
+            min[2],
+            max[0],
+            max[1],
+            max[2]);
 
   // Cloud depth
   uint64_t depth = octree->getTreeDepth ();
@@ -136,8 +144,9 @@ outofcorePrint (boost::filesystem::path tree_root, size_t print_depth,
 
   // Point data for statistics
   std::vector<boost::uint64_t> pointsPerVoxel;
-  ba::accumulator_set<boost::uint64_t, ba::features<ba::tag::min, ba::tag::max,
-                                                    ba::tag::mean, ba::tag::variance>>
+  ba::accumulator_set<
+      boost::uint64_t,
+      ba::features<ba::tag::min, ba::tag::max, ba::tag::mean, ba::tag::variance>>
       acc;
 
   if (!breadth_first) {
@@ -149,16 +158,16 @@ outofcorePrint (boost::filesystem::path tree_root, size_t print_depth,
 
       printDepth (node_depth);
       std::string metadata_relative_file = node->getMetadataFilename ().string ();
-      boost::replace_first (metadata_relative_file, tree_root.parent_path ().string (),
-                            "");
+      boost::replace_first (
+          metadata_relative_file, tree_root.parent_path ().string (), "");
       PCL_INFO ("..%s\n", metadata_relative_file.c_str ());
 
       printDepth (node_depth);
 
       if (pcd) {
         std::string pcd_relative_file = node->getPCDFilename ().string ();
-        boost::replace_first (pcd_relative_file, tree_root.parent_path ().string (),
-                              "");
+        boost::replace_first (
+            pcd_relative_file, tree_root.parent_path ().string (), "");
         PCL_INFO ("  PCD: ..%s\n", pcd_relative_file.c_str ());
       }
 
@@ -167,8 +176,13 @@ outofcorePrint (boost::filesystem::path tree_root, size_t print_depth,
         node->getBoundingBox (min, max);
 
         printDepth (node_depth);
-        PCL_INFO ("  Bounding Box: <%lf, %lf, %lf> - <%lf, %lf, %lf>\n", min[0], min[1],
-                  min[2], max[0], max[1], max[2]);
+        PCL_INFO ("  Bounding Box: <%lf, %lf, %lf> - <%lf, %lf, %lf>\n",
+                  min[0],
+                  min[1],
+                  min[2],
+                  max[0],
+                  max[1],
+                  max[2]);
       }
 
       if (point_count) {
@@ -189,16 +203,16 @@ outofcorePrint (boost::filesystem::path tree_root, size_t print_depth,
 
       printDepth (node_depth);
       std::string metadata_relative_file = node->getMetadataFilename ().string ();
-      boost::replace_first (metadata_relative_file, tree_root.parent_path ().string (),
-                            "");
+      boost::replace_first (
+          metadata_relative_file, tree_root.parent_path ().string (), "");
       PCL_INFO ("..%s\n", metadata_relative_file.c_str ());
 
       printDepth (node_depth);
 
       if (pcd) {
         std::string pcd_relative_file = node->getPCDFilename ().string ();
-        boost::replace_first (pcd_relative_file, tree_root.parent_path ().string (),
-                              "");
+        boost::replace_first (
+            pcd_relative_file, tree_root.parent_path ().string (), "");
         PCL_INFO ("  PCD: ..%s\n", pcd_relative_file.c_str ());
       }
 
@@ -207,8 +221,13 @@ outofcorePrint (boost::filesystem::path tree_root, size_t print_depth,
         node->getBoundingBox (min, max);
 
         printDepth (node_depth);
-        PCL_INFO ("  Bounding Box: <%lf, %lf, %lf> - <%lf, %lf, %lf>\n", min[0], min[1],
-                  min[2], max[0], max[1], max[2]);
+        PCL_INFO ("  Bounding Box: <%lf, %lf, %lf> - <%lf, %lf, %lf>\n",
+                  min[0],
+                  min[1],
+                  min[2],
+                  max[0],
+                  max[1],
+                  max[2]);
       }
 
       if (point_count) {
@@ -224,8 +243,11 @@ outofcorePrint (boost::filesystem::path tree_root, size_t print_depth,
 
   if (point_count) {
     PCL_INFO ("Points per Voxel:\n");
-    PCL_INFO ("Min: %u, Max: %u, Mean: %f, StdDev %f\n", ba::min (acc), ba::max (acc),
-              ba::mean (acc), sqrt (ba::variance (acc)));
+    PCL_INFO ("Min: %u, Max: %u, Mean: %f, StdDev %f\n",
+              ba::min (acc),
+              ba::max (acc),
+              ba::mean (acc),
+              sqrt (ba::variance (acc)));
   }
 
   return 0;
@@ -299,6 +321,6 @@ main (int argc, char *argv[])
     }
   }
 
-  return outofcorePrint (tree_root, depth, bounding_box, pcd, point_count,
-                         breadth_first);
+  return outofcorePrint (
+      tree_root, depth, bounding_box, pcd, point_count, breadth_first);
 }

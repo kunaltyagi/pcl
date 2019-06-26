@@ -56,9 +56,10 @@ pcl::cloud_composer::VoxelGridDownsampleTool::performAction (ConstItemList input
     Eigen::Quaternionf source_orientation =
         input_item->data (ItemDataRole::ORIENTATION).value<Eigen::Quaternionf> ();
     // Put the modified cloud into an item, stick in output
-    CloudItem *cloud_item =
-        new CloudItem (input_item->text () + tr (" vox ds"), cloud_filtered,
-                       source_origin, source_orientation);
+    CloudItem *cloud_item = new CloudItem (input_item->text () + tr (" vox ds"),
+                                           cloud_filtered,
+                                           source_origin,
+                                           source_orientation);
 
     output.append (cloud_item);
   } else {
@@ -75,12 +76,12 @@ pcl::cloud_composer::VoxelGridDownsampleToolFactory::createToolParameterModel (
 {
   PropertiesModel *parameter_model = new PropertiesModel (parent);
 
-  parameter_model->addProperty ("Leaf Size x", 0.01,
-                                Qt::ItemIsEditable | Qt::ItemIsEnabled);
-  parameter_model->addProperty ("Leaf Size y", 0.01,
-                                Qt::ItemIsEditable | Qt::ItemIsEnabled);
-  parameter_model->addProperty ("Leaf Size z", 0.01,
-                                Qt::ItemIsEditable | Qt::ItemIsEnabled);
+  parameter_model->addProperty (
+      "Leaf Size x", 0.01, Qt::ItemIsEditable | Qt::ItemIsEnabled);
+  parameter_model->addProperty (
+      "Leaf Size y", 0.01, Qt::ItemIsEditable | Qt::ItemIsEnabled);
+  parameter_model->addProperty (
+      "Leaf Size z", 0.01, Qt::ItemIsEditable | Qt::ItemIsEnabled);
 
   return parameter_model;
 }

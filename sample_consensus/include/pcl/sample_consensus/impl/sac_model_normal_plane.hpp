@@ -47,7 +47,8 @@
 template <typename PointT, typename PointNT>
 void
 pcl::SampleConsensusModelNormalPlane<PointT, PointNT>::selectWithinDistance (
-    const Eigen::VectorXf &model_coefficients, const double threshold,
+    const Eigen::VectorXf &model_coefficients,
+    const double threshold,
     std::vector<int> &inliers)
 {
   if (!normals_) {

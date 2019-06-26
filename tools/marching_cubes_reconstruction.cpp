@@ -103,8 +103,12 @@ loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
 }
 
 void
-compute (const pcl::PCLPointCloud2::ConstPtr &input, PolygonMesh &output,
-         int hoppe_or_rbf, float iso_level, int grid_res, float extend_percentage,
+compute (const pcl::PCLPointCloud2::ConstPtr &input,
+         PolygonMesh &output,
+         int hoppe_or_rbf,
+         float iso_level,
+         int grid_res,
+         float extend_percentage,
          float off_surface_displacement)
 {
   PointCloud<PointNormal>::Ptr xyz_cloud (new pcl::PointCloud<PointNormal> ());
@@ -222,7 +226,12 @@ main (int argc, char **argv)
 
   // Apply the marching cubes algorithm
   PolygonMesh output;
-  compute (cloud, output, hoppe_or_rbf, iso_level, grid_res, extend_percentage,
+  compute (cloud,
+           output,
+           hoppe_or_rbf,
+           iso_level,
+           grid_res,
+           extend_percentage,
            off_surface_displacement);
 
   // Save into the second file

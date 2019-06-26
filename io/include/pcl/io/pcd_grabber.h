@@ -75,7 +75,8 @@ namespace pcl
      * trigger, publishing the next PCD in the list. \param[in] repeat whether to play
      * PCD file in an endless loop or not.
      */
-    PCDGrabberBase (const std::vector<std::string> &pcd_files, float frames_per_second,
+    PCDGrabberBase (const std::vector<std::string> &pcd_files,
+                    float frames_per_second,
                     bool repeat);
 
     /** \brief Copy constructor.
@@ -134,7 +135,9 @@ namespace pcl
 
     /** \brief Get cloud (in ROS form) at a particular location */
     bool
-    getCloudAt (size_t idx, pcl::PCLPointCloud2 &blob, Eigen::Vector4f &origin,
+    getCloudAt (size_t idx,
+                pcl::PCLPointCloud2 &blob,
+                Eigen::Vector4f &origin,
                 Eigen::Quaternionf &orientation) const;
 
     /** \brief Returns the size */
@@ -143,7 +146,8 @@ namespace pcl
 
     private:
     virtual void
-    publish (const pcl::PCLPointCloud2 &blob, const Eigen::Vector4f &origin,
+    publish (const pcl::PCLPointCloud2 &blob,
+             const Eigen::Vector4f &origin,
              const Eigen::Quaternionf &orientation,
              const std::string &file_name) const = 0;
 
@@ -159,9 +163,11 @@ namespace pcl
   class PCDGrabber : public PCDGrabberBase, public FileGrabber<PointT>
   {
     public:
-    PCDGrabber (const std::string &pcd_path, float frames_per_second = 0,
+    PCDGrabber (const std::string &pcd_path,
+                float frames_per_second = 0,
                 bool repeat = false);
-    PCDGrabber (const std::vector<std::string> &pcd_files, float frames_per_second = 0,
+    PCDGrabber (const std::vector<std::string> &pcd_files,
+                float frames_per_second = 0,
                 bool repeat = false);
 
     /** \brief Virtual destructor. */
@@ -177,7 +183,8 @@ namespace pcl
 
     protected:
     void
-    publish (const pcl::PCLPointCloud2 &blob, const Eigen::Vector4f &origin,
+    publish (const pcl::PCLPointCloud2 &blob,
+             const Eigen::Vector4f &origin,
              const Eigen::Quaternionf &orientation,
              const std::string &file_name) const override;
 
@@ -198,7 +205,8 @@ namespace pcl
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   template <typename PointT>
-  PCDGrabber<PointT>::PCDGrabber (const std::string &pcd_path, float frames_per_second,
+  PCDGrabber<PointT>::PCDGrabber (const std::string &pcd_path,
+                                  float frames_per_second,
                                   bool repeat)
       : PCDGrabberBase (pcd_path, frames_per_second, repeat)
   {
@@ -210,16 +218,18 @@ namespace pcl
         createSignal<void(const boost::shared_ptr<openni_wrapper::DepthImage> &)> ();
     image_signal_ =
         createSignal<void(const boost::shared_ptr<openni_wrapper::Image> &)> ();
-    image_depth_image_signal_ = createSignal<void(
-        const boost::shared_ptr<openni_wrapper::Image> &,
-        const boost::shared_ptr<openni_wrapper::DepthImage> &, float constant)> ();
+    image_depth_image_signal_ =
+        createSignal<void(const boost::shared_ptr<openni_wrapper::Image> &,
+                          const boost::shared_ptr<openni_wrapper::DepthImage> &,
+                          float constant)> ();
 #endif
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   template <typename PointT>
   PCDGrabber<PointT>::PCDGrabber (const std::vector<std::string> &pcd_files,
-                                  float frames_per_second, bool repeat)
+                                  float frames_per_second,
+                                  bool repeat)
       : PCDGrabberBase (pcd_files, frames_per_second, repeat), signal_ ()
   {
     signal_ =
@@ -230,9 +240,10 @@ namespace pcl
         createSignal<void(const boost::shared_ptr<openni_wrapper::DepthImage> &)> ();
     image_signal_ =
         createSignal<void(const boost::shared_ptr<openni_wrapper::Image> &)> ();
-    image_depth_image_signal_ = createSignal<void(
-        const boost::shared_ptr<openni_wrapper::Image> &,
-        const boost::shared_ptr<openni_wrapper::DepthImage> &, float constant)> ();
+    image_depth_image_signal_ =
+        createSignal<void(const boost::shared_ptr<openni_wrapper::Image> &,
+                          const boost::shared_ptr<openni_wrapper::DepthImage> &,
+                          float constant)> ();
 #endif
   }
 
@@ -306,15 +317,16 @@ namespace pcl
       rgba_index = fields[rgba_index].offset;
 
       boost::shared_ptr<xn::ImageMetaData> image_meta_data (new xn::ImageMetaData);
-      image_meta_data->AllocateData (cloud->width, cloud->height,
-                                     XN_PIXEL_FORMAT_RGB24);
+      image_meta_data->AllocateData (
+          cloud->width, cloud->height, XN_PIXEL_FORMAT_RGB24);
       XnRGB24Pixel *image_map = image_meta_data->WritableRGB24Data ();
       k = 0;
       for (uint32_t i = 0; i < cloud->height; ++i) {
         for (uint32_t j = 0; j < cloud->width; ++j) {
           // Fill r/g/b data, assuming that the order is BGRA
           pcl::RGB rgb;
-          memcpy (&rgb, reinterpret_cast<const char *> (&cloud->points[k]) + rgba_index,
+          memcpy (&rgb,
+                  reinterpret_cast<const char *> (&cloud->points[k]) + rgba_index,
                   sizeof (RGB));
           image_map[k].nRed = static_cast<XnUInt8> (rgb.r);
           image_map[k].nGreen = static_cast<XnUInt8> (rgb.g);

@@ -109,10 +109,13 @@ namespace pcl
       std::unique_lock<std::mutex> lock2 (mutex2_);
 
       for (typename std::map<int, CallbackFunction>::iterator cb = cb_.begin ();
-           cb != cb_.end (); ++cb) {
+           cb != cb_.end ();
+           ++cb) {
         if (cb->second) {
-          cb->second.operator() (queueT1.front ().second, queueT2.front ().second,
-                                 queueT1.front ().first, queueT2.front ().first);
+          cb->second.operator() (queueT1.front ().second,
+                                 queueT2.front ().second,
+                                 queueT1.front ().first,
+                                 queueT2.front ().first);
         }
       }
 

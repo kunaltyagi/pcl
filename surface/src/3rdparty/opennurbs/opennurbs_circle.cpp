@@ -225,14 +225,18 @@ ON_Circle::Create (const ON_Plane &pln, const ON_3dPoint &C, double r)
 
 bool
 ON_Circle::Create ( // circle through three 3d points
-    const ON_2dPoint &P, const ON_2dPoint &Q, const ON_2dPoint &R)
+    const ON_2dPoint &P,
+    const ON_2dPoint &Q,
+    const ON_2dPoint &R)
 {
   return Create (ON_3dPoint (P), ON_3dPoint (Q), ON_3dPoint (R));
 }
 
 bool
 ON_Circle::Create ( // circle through three 3d points
-    const ON_3dPoint &P, const ON_3dPoint &Q, const ON_3dPoint &R)
+    const ON_3dPoint &P,
+    const ON_3dPoint &Q,
+    const ON_3dPoint &R)
 {
   ON_3dPoint C;
   ON_3dVector X, Y, Z;
@@ -477,7 +481,9 @@ ON_Circle::Rotate (double angle, const ON_3dVector &axis)
 }
 
 bool
-ON_Circle::Rotate (double sin_angle, double cos_angle, const ON_3dVector &axis,
+ON_Circle::Rotate (double sin_angle,
+                   double cos_angle,
+                   const ON_3dVector &axis,
                    const ON_3dPoint &point)
 {
   return plane.Rotate (sin_angle, cos_angle, axis, point);

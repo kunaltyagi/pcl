@@ -230,7 +230,8 @@ class PCL_EXPORTS ON_CLASS ON_Interval
   // empty set interval or disjoint intervals is the empty set interval.
   bool
   Intersection ( // this = intersection of two args
-      const ON_Interval &, const ON_Interval &);
+      const ON_Interval &,
+      const ON_Interval &);
 
   //////////
   // The union of an empty set and an increasing interval is the increasing
@@ -249,7 +250,8 @@ class PCL_EXPORTS ON_CLASS ON_Interval
 
   bool
   Union ( // this = this union arg
-      int count, const double *t);
+      int count,
+      const double *t);
 
   //////////
   // The union of an empty set and an increasing interval is the increasing
@@ -260,7 +262,8 @@ class PCL_EXPORTS ON_CLASS ON_Interval
   // Union() returns true if the union is not empty.
   bool
   Union ( // this = union of two args
-      const ON_Interval &, const ON_Interval &);
+      const ON_Interval &,
+      const ON_Interval &);
 };
 
 ////////////////////////////////////////////////////////////////
@@ -1003,13 +1006,13 @@ class PCL_EXPORTS ON_CLASS ON_2dVector
   WedgeProduct (const ON_2dVector &B) const;
 
   bool
-  Decompose ( // Computes a, b such that this vector = a*X + b*Y
-              // Returns false if unable to solve for a,b.  This happens
-              // when X,Y is not really a basis.
-              //
-              // If X,Y is known to be an orthonormal frame,
-              // then a = V*X, b = V*Y will compute
-              // the same result more quickly.
+  Decompose (              // Computes a, b such that this vector = a*X + b*Y
+                           // Returns false if unable to solve for a,b.  This happens
+                           // when X,Y is not really a basis.
+                           //
+                           // If X,Y is known to be an orthonormal frame,
+                           // then a = V*X, b = V*Y will compute
+                           // the same result more quickly.
       const ON_2dVector &, // X
       const ON_2dVector &, // Y
       double *,            // a
@@ -1328,13 +1331,13 @@ class PCL_EXPORTS ON_CLASS ON_3dVector
   Length () const;
 
   bool
-  Decompose ( // Computes a, b, c such that this vector = a*X + b*Y + c*Z
-              // Returns false if unable to solve for a,b,c.  This happens
-              // when X,Y,Z is not really a basis.
-              //
-              // If X,Y,Z is known to be an orthonormal frame,
-              // then a = V*X, b = V*Y, c = V*Z will compute
-              // the same result more quickly.
+  Decompose (              // Computes a, b, c such that this vector = a*X + b*Y + c*Z
+                           // Returns false if unable to solve for a,b,c.  This happens
+                           // when X,Y,Z is not really a basis.
+                           //
+                           // If X,Y,Z is known to be an orthonormal frame,
+                           // then a = V*X, b = V*Y, c = V*Z will compute
+                           // the same result more quickly.
       const ON_3dVector &, // X
       const ON_3dVector &, // Y
       const ON_3dVector &, // Z
@@ -1414,7 +1417,9 @@ class PCL_EXPORTS ON_CLASS ON_3dVector
       //    ON_3dVector N = ON_CrossProduct(P1-P0,P2-P0);
       //    N.Unitize();
       // returns false if points are coincident or colinear
-      const ON_3dPoint &, const ON_3dPoint &, const ON_3dPoint &);
+      const ON_3dPoint &,
+      const ON_3dPoint &,
+      const ON_3dPoint &);
 
   // These transform the vector in place. The transformation matrix acts on
   // the left of the vector; i.e., result = transformation*vector
@@ -1627,8 +1632,11 @@ class PCL_EXPORTS ON_CLASS ON_PlaneEquation : public ON_3dVector
     If the input is not valid, then ON_UNSET_VALUE is returned.
   */
   double
-  MaximumValueAt (bool bRational, int point_count, int point_stride,
-                  const double *points, double stop_value) const;
+  MaximumValueAt (bool bRational,
+                  int point_count,
+                  int point_stride,
+                  const double *points,
+                  double stop_value) const;
 
   /*
   Description:
@@ -1652,8 +1660,11 @@ class PCL_EXPORTS ON_CLASS ON_PlaneEquation : public ON_3dVector
     If the input is not valid, then ON_UNSET_VALUE is returned.
   */
   double
-  MinimumValueAt (bool bRational, int point_count, int point_stride,
-                  const double *points, double stop_value) const;
+  MinimumValueAt (bool bRational,
+                  int point_count,
+                  int point_stride,
+                  const double *points,
+                  double stop_value) const;
 
   /*
   Description:
@@ -1678,8 +1689,11 @@ class PCL_EXPORTS ON_CLASS ON_PlaneEquation : public ON_3dVector
     If the input is not valid, then ON_UNSET_VALUE is returned.
   */
   double
-  MaximumAbsoluteValueAt (bool bRational, int point_count, int point_stride,
-                          const double *points, double stop_value) const;
+  MaximumAbsoluteValueAt (bool bRational,
+                          int point_count,
+                          int point_stride,
+                          const double *points,
+                          double stop_value) const;
 
   /*
   Description:
@@ -1706,9 +1720,14 @@ class PCL_EXPORTS ON_CLASS ON_PlaneEquation : public ON_3dVector
     (The test terminates when the first failure is encountered.)
   */
   bool
-  IsNearerThan (const class ON_BezierCurve &bezcrv, double s0, double s1,
-                int sample_count, double endpoint_tolerance, double interior_tolerance,
-                double *smin, double *smax) const;
+  IsNearerThan (const class ON_BezierCurve &bezcrv,
+                double s0,
+                double s1,
+                int sample_count,
+                double endpoint_tolerance,
+                double interior_tolerance,
+                double *smin,
+                double *smax) const;
 
   bool
   operator== (const ON_PlaneEquation &) const;

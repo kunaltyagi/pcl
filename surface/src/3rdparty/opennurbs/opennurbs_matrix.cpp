@@ -416,8 +416,8 @@ ON_Matrix::RowOp (int dest_row, double s, int src_row)
   double **this_m = ThisM ();
   dest_row -= m_row_offset;
   src_row -= m_row_offset;
-  ON_Array_aA_plus_B (m_col_count, s, this_m[src_row], this_m[dest_row],
-                      this_m[dest_row]);
+  ON_Array_aA_plus_B (
+      m_col_count, s, this_m[src_row], this_m[dest_row], this_m[dest_row]);
 }
 
 void
@@ -486,8 +486,11 @@ ON_Matrix::RowReduce (double zero_tolerance, double &determinant, double &pivot)
       x = -this_m[i][k];
       this_m[i][k] = 0.0;
       if (fabs (x) > zero_tolerance) {
-        ON_Array_aA_plus_B (m_col_count - 1 - k, x, &this_m[k][k + 1],
-                            &this_m[i][k + 1], &this_m[i][k + 1]);
+        ON_Array_aA_plus_B (m_col_count - 1 - k,
+                            x,
+                            &this_m[k][k + 1],
+                            &this_m[i][k + 1],
+                            &this_m[i][k + 1]);
       }
     }
   }
@@ -542,8 +545,11 @@ ON_Matrix::RowReduce (double zero_tolerance, double *B, double *pivot)
       x = -this_m[i][k];
       this_m[i][k] = 0.0;
       if (fabs (x) > zero_tolerance) {
-        ON_Array_aA_plus_B (m_col_count - 1 - k, x, &this_m[k][k + 1],
-                            &this_m[i][k + 1], &this_m[i][k + 1]);
+        ON_Array_aA_plus_B (m_col_count - 1 - k,
+                            x,
+                            &this_m[k][k + 1],
+                            &this_m[i][k + 1],
+                            &this_m[i][k + 1]);
         B[i] += x * B[k];
       }
     }
@@ -601,8 +607,11 @@ ON_Matrix::RowReduce (double zero_tolerance, ON_3dPoint *B, double *pivot)
       x = -this_m[i][k];
       this_m[i][k] = 0.0;
       if (fabs (x) > zero_tolerance) {
-        ON_Array_aA_plus_B (m_col_count - 1 - k, x, &this_m[k][k + 1],
-                            &this_m[i][k + 1], &this_m[i][k + 1]);
+        ON_Array_aA_plus_B (m_col_count - 1 - k,
+                            x,
+                            &this_m[k][k + 1],
+                            &this_m[i][k + 1],
+                            &this_m[i][k + 1]);
         B[i] += x * B[k];
       }
     }
@@ -615,8 +624,8 @@ ON_Matrix::RowReduce (double zero_tolerance, ON_3dPoint *B, double *pivot)
 }
 
 int
-ON_Matrix::RowReduce (double zero_tolerance, int pt_dim, int pt_stride, double *pt,
-                      double *pivot)
+ON_Matrix::RowReduce (
+    double zero_tolerance, int pt_dim, int pt_stride, double *pt, double *pivot)
 {
   const int sizeof_pt = pt_dim * sizeof (pt[0]);
   double *tmp_pt = (double *)onmalloc (pt_dim * sizeof (tmp_pt[0]));
@@ -672,8 +681,11 @@ ON_Matrix::RowReduce (double zero_tolerance, int pt_dim, int pt_stride, double *
       x = -this_m[i][k];
       this_m[i][k] = 0.0;
       if (fabs (x) > zero_tolerance) {
-        ON_Array_aA_plus_B (m_col_count - 1 - k, x, &this_m[k][k + 1],
-                            &this_m[i][k + 1], &this_m[i][k + 1]);
+        ON_Array_aA_plus_B (m_col_count - 1 - k,
+                            x,
+                            &this_m[k][k + 1],
+                            &this_m[i][k + 1],
+                            &this_m[i][k + 1]);
         ptA = pt + (i * pt_stride);
         for (pti = 0; pti < pt_dim; pti++) {
           ptA[pti] += x * ptB[pti];
@@ -691,7 +703,9 @@ ON_Matrix::RowReduce (double zero_tolerance, int pt_dim, int pt_stride, double *
 }
 
 bool
-ON_Matrix::BackSolve (double zero_tolerance, int Bsize, const double *B,
+ON_Matrix::BackSolve (double zero_tolerance,
+                      int Bsize,
+                      const double *B,
                       double *X) const
 {
   int i;
@@ -720,7 +734,9 @@ ON_Matrix::BackSolve (double zero_tolerance, int Bsize, const double *B,
 }
 
 bool
-ON_Matrix::BackSolve (double zero_tolerance, int Bsize, const ON_3dPoint *B,
+ON_Matrix::BackSolve (double zero_tolerance,
+                      int Bsize,
+                      const ON_3dPoint *B,
                       ON_3dPoint *X) const
 {
   int i, j;
@@ -758,8 +774,13 @@ ON_Matrix::BackSolve (double zero_tolerance, int Bsize, const ON_3dPoint *B,
 }
 
 bool
-ON_Matrix::BackSolve (double zero_tolerance, int pt_dim, int Bsize, int Bpt_stride,
-                      const double *Bpt, int Xpt_stride, double *Xpt) const
+ON_Matrix::BackSolve (double zero_tolerance,
+                      int pt_dim,
+                      int Bsize,
+                      int Bpt_stride,
+                      const double *Bpt,
+                      int Xpt_stride,
+                      double *Xpt) const
 {
   const int sizeof_pt = pt_dim * sizeof (double);
   double mij;
@@ -1019,8 +1040,11 @@ ON_Matrix::Invert (double zero_tolerance)
         x = -this_m[i][k];
         this_m[i][k] = 0.0;
         if (fabs (x) > zero_tolerance) {
-          ON_Array_aA_plus_B (m_col_count - k - 1, x, &this_m[k][k + 1],
-                              &this_m[i][k + 1], &this_m[i][k + 1]);
+          ON_Array_aA_plus_B (m_col_count - k - 1,
+                              x,
+                              &this_m[k][k + 1],
+                              &this_m[i][k + 1],
+                              &this_m[i][k + 1]);
           I.RowOp (i, x, k);
         }
       }
@@ -1126,7 +1150,11 @@ ON_Matrix::Scale (double s)
 }
 
 int
-ON_RowReduce (int row_count, int col_count, double zero_pivot, double **A, double **B,
+ON_RowReduce (int row_count,
+              int col_count,
+              double zero_pivot,
+              double **A,
+              double **B,
               double pivots[2])
 {
   // returned A is identity, B = inverse of input A
@@ -1292,8 +1320,13 @@ ON_InvertSVDW (int count, const double *W, double *&invW)
 }
 
 bool
-ON_SolveSVD (int row_count, int col_count, double const *const *U, const double *invW,
-             double const *const *V, const double *B, double *&X)
+ON_SolveSVD (int row_count,
+             int col_count,
+             double const *const *U,
+             const double *invW,
+             double const *const *V,
+             const double *B,
+             double *&X)
 {
   int i, j;
   double *Y;

@@ -48,8 +48,12 @@
 template <typename PointInT, typename PointNT, typename PointOutT>
 bool
 pcl::BoundaryEstimation<PointInT, PointNT, PointOutT>::isBoundaryPoint (
-    const pcl::PointCloud<PointInT> &cloud, int q_idx, const std::vector<int> &indices,
-    const Eigen::Vector4f &u, const Eigen::Vector4f &v, const float angle_threshold)
+    const pcl::PointCloud<PointInT> &cloud,
+    int q_idx,
+    const std::vector<int> &indices,
+    const Eigen::Vector4f &u,
+    const Eigen::Vector4f &v,
+    const float angle_threshold)
 {
   return (isBoundaryPoint (cloud, cloud.points[q_idx], indices, u, v, angle_threshold));
 }
@@ -58,8 +62,11 @@ pcl::BoundaryEstimation<PointInT, PointNT, PointOutT>::isBoundaryPoint (
 template <typename PointInT, typename PointNT, typename PointOutT>
 bool
 pcl::BoundaryEstimation<PointInT, PointNT, PointOutT>::isBoundaryPoint (
-    const pcl::PointCloud<PointInT> &cloud, const PointInT &q_point,
-    const std::vector<int> &indices, const Eigen::Vector4f &u, const Eigen::Vector4f &v,
+    const pcl::PointCloud<PointInT> &cloud,
+    const PointInT &q_point,
+    const std::vector<int> &indices,
+    const Eigen::Vector4f &u,
+    const Eigen::Vector4f &v,
     const float angle_threshold)
 {
   if (indices.size () < 3)
@@ -131,8 +138,8 @@ pcl::BoundaryEstimation<PointInT, PointNT, PointOutT>::computeFeature (
   if (input_->is_dense) {
     // Iterating over the entire index vector
     for (size_t idx = 0; idx < indices_->size (); ++idx) {
-      if (this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                    nn_dists) == 0) {
+      if (this->searchForNeighbors (
+              (*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0) {
         output.points[idx].boundary_point = std::numeric_limits<uint8_t>::quiet_NaN ();
         output.is_dense = false;
         continue;
@@ -145,15 +152,19 @@ pcl::BoundaryEstimation<PointInT, PointNT, PointOutT>::computeFeature (
 
       // Estimate whether the point is lying on a boundary surface or not
       output.points[idx].boundary_point =
-          isBoundaryPoint (*surface_, input_->points[(*indices_)[idx]], nn_indices, u,
-                           v, angle_threshold_);
+          isBoundaryPoint (*surface_,
+                           input_->points[(*indices_)[idx]],
+                           nn_indices,
+                           u,
+                           v,
+                           angle_threshold_);
     }
   } else {
     // Iterating over the entire index vector
     for (size_t idx = 0; idx < indices_->size (); ++idx) {
       if (!isFinite ((*input_)[(*indices_)[idx]]) ||
-          this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                    nn_dists) == 0) {
+          this->searchForNeighbors (
+              (*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0) {
         output.points[idx].boundary_point = std::numeric_limits<uint8_t>::quiet_NaN ();
         output.is_dense = false;
         continue;
@@ -166,8 +177,12 @@ pcl::BoundaryEstimation<PointInT, PointNT, PointOutT>::computeFeature (
 
       // Estimate whether the point is lying on a boundary surface or not
       output.points[idx].boundary_point =
-          isBoundaryPoint (*surface_, input_->points[(*indices_)[idx]], nn_indices, u,
-                           v, angle_threshold_);
+          isBoundaryPoint (*surface_,
+                           input_->points[(*indices_)[idx]],
+                           nn_indices,
+                           u,
+                           v,
+                           angle_threshold_);
     }
   }
 }

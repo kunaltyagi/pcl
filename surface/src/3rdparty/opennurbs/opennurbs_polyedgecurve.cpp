@@ -1,7 +1,8 @@
 #include "pcl/surface/3rdparty/opennurbs/opennurbs_polyedgecurve.h"
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-ON_OBJECT_IMPLEMENT (ON_PolyEdgeSegment, ON_CurveProxy,
+ON_OBJECT_IMPLEMENT (ON_PolyEdgeSegment,
+                     ON_CurveProxy,
                      "42F47A87-5B1B-4e31-AB87-4639D78325D6");
 
 ON_PolyEdgeSegment::ON_PolyEdgeSegment () { Init (); }
@@ -207,7 +208,8 @@ ON_PolyEdgeSegment::EdgeParameter (double t) const
   return edge_t;
 }
 
-ON_OBJECT_IMPLEMENT (ON_PolyEdgeCurve, ON_PolyCurve,
+ON_OBJECT_IMPLEMENT (ON_PolyEdgeCurve,
+                     ON_PolyCurve,
                      "39FF3DD3-FE0F-4807-9D59-185F0D73C0E4");
 
 ON_PolyEdgeCurve::ON_PolyEdgeCurve () {}
@@ -389,10 +391,7 @@ ON_PolyEdgeCurve::Remove (int segment_index)
   return rc;
 }
 ON_BOOL32
-ON_PolyEdgeCurve::Remove ()
-{
-  return Remove (Count () - 1);
-}
+ON_PolyEdgeCurve::Remove () { return Remove (Count () - 1); }
 
 ON_BOOL32
 ON_PolyEdgeCurve::IsClosed (void) const

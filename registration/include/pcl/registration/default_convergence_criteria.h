@@ -94,7 +94,8 @@ namespace pcl
        * by the transformation evaluation \param[in] correspondences a reference to the
        * current set of point correspondences between source and target
        */
-      DefaultConvergenceCriteria (const int &iterations, const Matrix4 &transform,
+      DefaultConvergenceCriteria (const int &iterations,
+                                  const Matrix4 &transform,
                                   const pcl::Correspondences &correspondences)
           : iterations_ (iterations), transformation_ (transform),
             correspondences_ (correspondences),

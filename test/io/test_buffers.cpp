@@ -168,15 +168,15 @@ TYPED_TEST (BuffersTest, MedianBufferSize3Window3)
     MedianBuffer<TypeParam> mb (3, 3);
     const TypeParam data[] = {3, 3, 3, 1, 1, 1, -1, -1, -1};
     const TypeParam median[] = {3, 3, 3, 3, 3, 3, 1, 1, 1};
-    this->checkBuffer (mb, data, median,
-                       sizeof (data) / sizeof (TypeParam) / mb.size ());
+    this->checkBuffer (
+        mb, data, median, sizeof (data) / sizeof (TypeParam) / mb.size ());
   }
   {
     MedianBuffer<TypeParam> mb (3, 3);
     const TypeParam data[] = {3, 2, 1, 1, 1, 1, 3, 2, 1, 1, 2, 3};
     const TypeParam median[] = {3, 2, 1, 3, 2, 1, 3, 2, 1, 1, 2, 1};
-    this->checkBuffer (mb, data, median,
-                       sizeof (data) / sizeof (TypeParam) / mb.size ());
+    this->checkBuffer (
+        mb, data, median, sizeof (data) / sizeof (TypeParam) / mb.size ());
   }
 }
 

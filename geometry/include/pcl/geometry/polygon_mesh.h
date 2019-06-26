@@ -56,11 +56,12 @@ namespace pcl
      */
     template <class MeshTraitsT>
     class PolygonMesh : public pcl::geometry::MeshBase<PolygonMesh<MeshTraitsT>,
-                                                       MeshTraitsT, PolygonMeshTag>
+                                                       MeshTraitsT,
+                                                       PolygonMeshTag>
     {
       public:
-      using Base = pcl::geometry::MeshBase<PolygonMesh<MeshTraitsT>, MeshTraitsT,
-                                           PolygonMeshTag>;
+      using Base = pcl::geometry::
+          MeshBase<PolygonMesh<MeshTraitsT>, MeshTraitsT, PolygonMeshTag>;
 
       using Self = PolygonMesh<MeshTraitsT>;
       using Ptr = boost::shared_ptr<Self>;
@@ -128,8 +129,10 @@ namespace pcl
        * behavior!
        */
       inline FaceIndex
-      addFace (const VertexIndex &idx_v_0, const VertexIndex &idx_v_1,
-               const VertexIndex &idx_v_2, const FaceData &face_data = FaceData (),
+      addFace (const VertexIndex &idx_v_0,
+               const VertexIndex &idx_v_1,
+               const VertexIndex &idx_v_2,
+               const FaceData &face_data = FaceData (),
                const EdgeData &edge_data = EdgeData (),
                const HalfEdgeData &half_edge_data = HalfEdgeData ())
       {
@@ -137,8 +140,8 @@ namespace pcl
         add_triangle_[1] = idx_v_1;
         add_triangle_[2] = idx_v_2;
 
-        return (this->addFaceImplBase (add_triangle_, face_data, edge_data,
-                                       half_edge_data));
+        return (this->addFaceImplBase (
+            add_triangle_, face_data, edge_data, half_edge_data));
       }
 
       /** \brief Add a quad to the mesh. Data is only added if it is associated with the
@@ -154,8 +157,10 @@ namespace pcl
        * behavior!
        */
       inline FaceIndex
-      addFace (const VertexIndex &idx_v_0, const VertexIndex &idx_v_1,
-               const VertexIndex &idx_v_2, const VertexIndex &idx_v_3,
+      addFace (const VertexIndex &idx_v_0,
+               const VertexIndex &idx_v_1,
+               const VertexIndex &idx_v_2,
+               const VertexIndex &idx_v_3,
                const FaceData &face_data = FaceData (),
                const EdgeData &edge_data = EdgeData (),
                const HalfEdgeData &half_edge_data = HalfEdgeData ())
@@ -171,13 +176,16 @@ namespace pcl
 
       private:
       // NOTE: Can't use the typedef of Base as a friend.
-      friend class pcl::geometry::MeshBase<PolygonMesh<MeshTraitsT>, MeshTraitsT,
+      friend class pcl::geometry::MeshBase<PolygonMesh<MeshTraitsT>,
+                                           MeshTraitsT,
                                            pcl::geometry::PolygonMeshTag>;
 
       /** \brief addFace for the polygon mesh. */
       inline FaceIndex
-      addFaceImpl (const VertexIndices &vertices, const FaceData &face_data,
-                   const EdgeData &edge_data, const HalfEdgeData &half_edge_data)
+      addFaceImpl (const VertexIndices &vertices,
+                   const FaceData &face_data,
+                   const EdgeData &edge_data,
+                   const HalfEdgeData &half_edge_data)
       {
         return (this->addFaceImplBase (vertices, face_data, edge_data, half_edge_data));
       }

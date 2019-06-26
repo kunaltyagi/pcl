@@ -183,7 +183,8 @@ namespace pcl
      * \return "true" if the disparity map was successfully loaded; "false" otherwise
      */
     bool
-    loadDisparityMap (const std::string &file_name, const size_t width,
+    loadDisparityMap (const std::string &file_name,
+                      const size_t width,
                       const size_t height);
 
     /** \brief Set the disparity map.
@@ -199,7 +200,8 @@ namespace pcl
      * \return "true" if the disparity map was successfully loaded; "false" otherwise
      */
     void
-    setDisparityMap (const std::vector<float> &disparity_map, const size_t width,
+    setDisparityMap (const std::vector<float> &disparity_map,
+                     const size_t width,
                      const size_t height);
 
     /** \brief Get the disparity map.

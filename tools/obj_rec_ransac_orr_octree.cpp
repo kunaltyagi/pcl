@@ -77,14 +77,16 @@ using namespace std::chrono_literals;
 void
 run (const char *file_name, float voxel_size);
 bool
-vtk_to_pointcloud (const char *file_name, PointCloud<PointXYZ> &pcl_points,
+vtk_to_pointcloud (const char *file_name,
+                   PointCloud<PointXYZ> &pcl_points,
                    PointCloud<Normal> *pcl_normals);
 void
 show_octree (ORROctree *octree, PCLVisualizer &viz, bool show_full_leaves_only);
 void
 node_to_cube (const ORROctree::Node *node, vtkAppendPolyData *additive_octree);
 void
-updateViewer (ORROctree &octree, PCLVisualizer &viz,
+updateViewer (ORROctree &octree,
+              PCLVisualizer &viz,
               std::vector<ORROctree::Node *>::iterator leaf);
 
 #define _SHOW_OCTREE_NORMALS_
@@ -92,7 +94,8 @@ updateViewer (ORROctree &octree, PCLVisualizer &viz,
 class CallbackParameters
 {
   public:
-  CallbackParameters (ORROctree &octree, PCLVisualizer &viz,
+  CallbackParameters (ORROctree &octree,
+                      PCLVisualizer &viz,
                       std::vector<ORROctree::Node *>::iterator leaf)
       : octree_ (octree), viz_ (viz), leaf_ (leaf)
   {
@@ -148,7 +151,8 @@ keyboardCB (const pcl::visualization::KeyboardEvent &event, void *params_void)
 //===============================================================================================================================
 
 void
-updateViewer (ORROctree &octree, PCLVisualizer &viz,
+updateViewer (ORROctree &octree,
+              PCLVisualizer &viz,
               std::vector<ORROctree::Node *>::iterator leaf)
 {
   viz.removeAllShapes ();
@@ -232,16 +236,16 @@ run (const char *file_name, float voxel_size)
   viz.addPointCloud (points_in, "cloud in");
   viz.addPointCloud (points_out, "cloud out");
   if (!normals_in->empty ())
-    viz.addPointCloudNormals<PointXYZ, Normal> (points_out, normals_out, 1, 6.0f,
-                                                "normals out");
+    viz.addPointCloudNormals<PointXYZ, Normal> (
+        points_out, normals_out, 1, 6.0f, "normals out");
 
   // Change the appearance
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
-                                        2, "cloud in");
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
-                                        5, "cloud out");
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 1.0,
-                                        0.0, 0.0, "cloud out");
+  viz.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud in");
+  viz.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "cloud out");
+  viz.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 0.0, 0.0, "cloud out");
 
   // Convert the octree to a VTK poly-data object
   //  show_octree(&octree, viz, true/*show full leaves only*/);
@@ -259,7 +263,8 @@ run (const char *file_name, float voxel_size)
 //===============================================================================================================================
 
 bool
-vtk_to_pointcloud (const char *file_name, PointCloud<PointXYZ> &pcl_points,
+vtk_to_pointcloud (const char *file_name,
+                   PointCloud<PointXYZ> &pcl_points,
                    PointCloud<Normal> *pcl_normals)
 {
   size_t len = strlen (file_name);

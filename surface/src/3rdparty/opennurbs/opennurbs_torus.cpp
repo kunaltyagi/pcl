@@ -18,7 +18,8 @@
 
 ON_Torus::ON_Torus () : major_radius (0.0), minor_radius (0.0) {}
 
-ON_Torus::ON_Torus (const ON_Plane &major_plane, double major__radius,
+ON_Torus::ON_Torus (const ON_Plane &major_plane,
+                    double major__radius,
                     double minor__radius)
 {
   Create (major_plane, major__radius, minor__radius);
@@ -41,7 +42,8 @@ ON_Torus::IsValid (ON_TextLog *text_log) const
   } else if (major_radius <= minor_radius) {
     if (text_log)
       text_log->Print ("ON_Torus.major_radius = %g (should be > minor_radius=%g)\n",
-                       major_radius, minor_radius);
+                       major_radius,
+                       minor_radius);
   } else if (!plane.IsValid ()) {
     if (text_log)
       text_log->Print ("ON_Torus.plane is not valid.\n");
@@ -51,7 +53,8 @@ ON_Torus::IsValid (ON_TextLog *text_log) const
 }
 
 ON_BOOL32
-ON_Torus::Create (const ON_Plane &major_plane, double major__radius,
+ON_Torus::Create (const ON_Plane &major_plane,
+                  double major__radius,
                   double minor__radius)
 {
   plane = major_plane;
@@ -154,7 +157,8 @@ ON_Torus::MinorRadius () const
 }
 
 ON_BOOL32
-ON_Torus::ClosestPointTo (ON_3dPoint test_point, double *major__angle_radians,
+ON_Torus::ClosestPointTo (ON_3dPoint test_point,
+                          double *major__angle_radians,
                           double *minor__angle_radians) const
 {
   double major_angle_radians, minor_angle_radians;
@@ -194,7 +198,8 @@ ON_Torus::ClosestPointTo (ON_3dPoint test_point) const
 
 // rotate cylinder about its origin
 ON_BOOL32
-ON_Torus::Rotate (double sin_angle, double cos_angle,
+ON_Torus::Rotate (double sin_angle,
+                  double cos_angle,
                   const ON_3dVector &axis // axis of rotation
 )
 {
@@ -210,7 +215,8 @@ ON_Torus::Rotate (double angle,           // angle in radians
 }
 
 ON_BOOL32
-ON_Torus::Rotate (double sin_angle, double cos_angle,
+ON_Torus::Rotate (double sin_angle,
+                  double cos_angle,
                   const ON_3dVector &axis, // axis of rotation
                   const ON_3dPoint &point  // center of rotation
 )
@@ -228,10 +234,7 @@ ON_Torus::Rotate (double angle,            // angle in radians
 }
 
 ON_BOOL32
-ON_Torus::Translate (const ON_3dVector &delta)
-{
-  return plane.Translate (delta);
-}
+ON_Torus::Translate (const ON_3dVector &delta) { return plane.Translate (delta); }
 
 ON_BOOL32
 ON_Torus::Transform (const ON_Xform &xform)

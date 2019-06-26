@@ -56,8 +56,10 @@
 template <typename PointT>
 void
 pcl::applyMorphologicalOperator (
-    const typename pcl::PointCloud<PointT>::ConstPtr &cloud_in, float resolution,
-    const int morphological_operator, pcl::PointCloud<PointT> &cloud_out)
+    const typename pcl::PointCloud<PointT>::ConstPtr &cloud_in,
+    float resolution,
+    const int morphological_operator,
+    pcl::PointCloud<PointT> &cloud_out)
 {
   if (cloud_in->empty ())
     return;

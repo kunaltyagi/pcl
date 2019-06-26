@@ -385,7 +385,8 @@ TEST (PassThrough, Filters)
   EXPECT_EQ (output.is_dense, cloud->is_dense);
   EXPECT_NEAR (output.points[0].x, cloud->points[0].x, 1e-5);
   EXPECT_NEAR (output.points[output.points.size () - 1].x,
-               cloud->points[cloud->points.size () - 1].x, 1e-5);
+               cloud->points[cloud->points.size () - 1].x,
+               1e-5);
 
   pt.setFilterFieldName ("z");
   pt.setFilterLimitsNegative (false);
@@ -534,7 +535,8 @@ TEST (PassThrough, Filters)
   EXPECT_EQ (output.is_dense, cloud->is_dense);
   EXPECT_NEAR (output.points[0].x, cloud->points[0].x, 1e-5);
   EXPECT_NEAR (output.points[output.points.size () - 1].x,
-               cloud->points[cloud->points.size () - 1].x, 1e-5);
+               cloud->points[cloud->points.size () - 1].x,
+               1e-5);
 
   pt2.setFilterFieldName ("z");
   pt2.setFilterLimitsNegative (false);
@@ -713,11 +715,11 @@ TEST (VoxelGrid, Filters)
   // EXPECT_NEAR (output.points[99].z, 0.042178, 1e-4);
 
   // centroids should be identified correctly
-  EXPECT_EQ (grid2.getCentroidIndex (output.points[0].x, output.points[0].y,
-                                     output.points[0].z),
+  EXPECT_EQ (grid2.getCentroidIndex (
+                 output.points[0].x, output.points[0].y, output.points[0].z),
              0);
-  EXPECT_EQ (grid2.getCentroidIndex (output.points[99].x, output.points[99].y,
-                                     output.points[99].z),
+  EXPECT_EQ (grid2.getCentroidIndex (
+                 output.points[99].x, output.points[99].y, output.points[99].z),
              99);
   EXPECT_EQ (grid2.getCentroidIndexAt (grid2.getGridCoordinates (-1, -1, -1)), -1);
   // PCL_ERROR ("IGNORE PREVIOUS ERROR: testing it's functionality!\n");
@@ -732,11 +734,13 @@ TEST (VoxelGrid, Filters)
   EXPECT_LE (fabs (output.points[centroidIdx2].z - 0.017434), 0.02);
 
   // if getNeighborCentroidIndices works then the other helper functions work as well
-  EXPECT_EQ (grid2.getNeighborCentroidIndices (output.points[0].x, output.points[0].y,
+  EXPECT_EQ (grid2.getNeighborCentroidIndices (output.points[0].x,
+                                               output.points[0].y,
                                                output.points[0].z,
                                                Eigen::MatrixXi::Zero (3, 1))[0],
              0);
-  EXPECT_EQ (grid2.getNeighborCentroidIndices (output.points[99].x, output.points[99].y,
+  EXPECT_EQ (grid2.getNeighborCentroidIndices (output.points[99].x,
+                                               output.points[99].y,
                                                output.points[99].z,
                                                Eigen::MatrixXi::Zero (3, 1))[0],
              99);
@@ -881,11 +885,11 @@ TEST (VoxelGrid_No_DownsampleAllData, Filters)
   EXPECT_EQ (bool(output.is_dense), true);
 
   // centroids should be identified correctly
-  EXPECT_EQ (grid2.getCentroidIndex (output.points[0].x, output.points[0].y,
-                                     output.points[0].z),
+  EXPECT_EQ (grid2.getCentroidIndex (
+                 output.points[0].x, output.points[0].y, output.points[0].z),
              0);
-  EXPECT_EQ (grid2.getCentroidIndex (output.points[99].x, output.points[99].y,
-                                     output.points[99].z),
+  EXPECT_EQ (grid2.getCentroidIndex (
+                 output.points[99].x, output.points[99].y, output.points[99].z),
              99);
   EXPECT_EQ (grid2.getCentroidIndexAt (grid2.getGridCoordinates (-1, -1, -1)), -1);
   // PCL_ERROR ("IGNORE PREVIOUS ERROR: testing it's functionality!\n");
@@ -900,11 +904,13 @@ TEST (VoxelGrid_No_DownsampleAllData, Filters)
   EXPECT_LE (fabs (output.points[centroidIdx2].z - 0.017434), 0.02);
 
   // if getNeighborCentroidIndices works then the other helper functions work as well
-  EXPECT_EQ (grid2.getNeighborCentroidIndices (output.points[0].x, output.points[0].y,
+  EXPECT_EQ (grid2.getNeighborCentroidIndices (output.points[0].x,
+                                               output.points[0].y,
                                                output.points[0].z,
                                                Eigen::MatrixXi::Zero (3, 1))[0],
              0);
-  EXPECT_EQ (grid2.getNeighborCentroidIndices (output.points[99].x, output.points[99].y,
+  EXPECT_EQ (grid2.getNeighborCentroidIndices (output.points[99].x,
+                                               output.points[99].y,
                                                output.points[99].z,
                                                Eigen::MatrixXi::Zero (3, 1))[0],
              99);
@@ -1496,8 +1502,9 @@ TEST (RadiusOutlierRemoval, Filters)
   EXPECT_EQ (int(cloud_out.points.size ()), 307);
   EXPECT_EQ (int(cloud_out.width), 307);
   EXPECT_EQ (bool(cloud_out.is_dense), true);
-  EXPECT_EQ (int(cloud_out.points.size ()), cloud_blob->width * cloud_blob->height -
-                                                outrem2_.getRemovedIndices ()->size ());
+  EXPECT_EQ (int(cloud_out.points.size ()),
+             cloud_blob->width * cloud_blob->height -
+                 outrem2_.getRemovedIndices ()->size ());
 
   EXPECT_NEAR (cloud_out.points[cloud_out.points.size () - 1].x, -0.077893, 1e-4);
   EXPECT_NEAR (cloud_out.points[cloud_out.points.size () - 1].y, 0.16039, 1e-4);
@@ -1602,8 +1609,9 @@ TEST (StatisticalOutlierRemoval, Filters)
   EXPECT_EQ (int(output.points.size ()), 352);
   EXPECT_EQ (int(output.width), 352);
   EXPECT_EQ (bool(output.is_dense), true);
-  EXPECT_EQ (int(output.points.size ()), cloud_blob->width * cloud_blob->height -
-                                             outrem2_.getRemovedIndices ()->size ());
+  EXPECT_EQ (int(output.points.size ()),
+             cloud_blob->width * cloud_blob->height -
+                 outrem2_.getRemovedIndices ()->size ());
   EXPECT_NEAR (output.points[output.points.size () - 1].x, -0.034667, 1e-4);
   EXPECT_NEAR (output.points[output.points.size () - 1].y, 0.15131, 1e-4);
   EXPECT_NEAR (output.points[output.points.size () - 1].z, -0.00071029, 1e-4);
@@ -1616,8 +1624,9 @@ TEST (StatisticalOutlierRemoval, Filters)
   EXPECT_EQ (int(output.points.size ()), int(cloud->points.size ()) - 352);
   EXPECT_EQ (int(output.width), int(cloud->width) - 352);
   EXPECT_EQ (bool(output.is_dense), true);
-  EXPECT_EQ (int(output.points.size ()), cloud_blob->width * cloud_blob->height -
-                                             outrem2_.getRemovedIndices ()->size ());
+  EXPECT_EQ (int(output.points.size ()),
+             cloud_blob->width * cloud_blob->height -
+                 outrem2_.getRemovedIndices ()->size ());
   EXPECT_NEAR (output.points[output.points.size () - 1].x, -0.07793, 1e-4);
   EXPECT_NEAR (output.points[output.points.size () - 1].y, 0.17516, 1e-4);
   EXPECT_NEAR (output.points[output.points.size () - 1].z, -0.0444, 1e-4);
@@ -2212,8 +2221,8 @@ TEST (NormalRefinement, Filters)
   // Input without NaN
   pcl::PointCloud<pcl::PointXYZRGB> cloud_organized_nonan;
   std::vector<int> dummy;
-  pcl::removeNaNFromPointCloud<pcl::PointXYZRGB> (*cloud_organized,
-                                                  cloud_organized_nonan, dummy);
+  pcl::removeNaNFromPointCloud<pcl::PointXYZRGB> (
+      *cloud_organized, cloud_organized_nonan, dummy);
 
   // Viewpoint
   const float vp_x = cloud_organized_nonan.sensor_origin_[0];
@@ -2236,8 +2245,8 @@ TEST (NormalRefinement, Filters)
   // Search for neighbors
   pcl::search::KdTree<pcl::PointXYZRGB> kdtree;
   kdtree.setInputCloud (cloud_organized_nonan.makeShared ());
-  kdtree.nearestKSearch (cloud_organized_nonan, std::vector<int> (), k, k_indices,
-                         k_sqr_distances);
+  kdtree.nearestKSearch (
+      cloud_organized_nonan, std::vector<int> (), k, k_indices, k_sqr_distances);
 
   /*
    * Estimate normals
@@ -2253,10 +2262,18 @@ TEST (NormalRefinement, Filters)
     std::memcpy (normali.data, cloud_organized_nonan[i].data, 3 * sizeof (float));
     normali.rgba = cloud_organized_nonan[i].rgba;
     // Normal
-    ne.computePointNormal (cloud_organized_nonan, k_indices[i], normali.normal_x,
-                           normali.normal_y, normali.normal_z, normali.curvature);
-    pcl::flipNormalTowardsViewpoint (cloud_organized_nonan[i], vp_x, vp_y, vp_z,
-                                     normali.normal_x, normali.normal_y,
+    ne.computePointNormal (cloud_organized_nonan,
+                           k_indices[i],
+                           normali.normal_x,
+                           normali.normal_y,
+                           normali.normal_z,
+                           normali.curvature);
+    pcl::flipNormalTowardsViewpoint (cloud_organized_nonan[i],
+                                     vp_x,
+                                     vp_y,
+                                     vp_z,
+                                     normali.normal_x,
+                                     normali.normal_y,
                                      normali.normal_z);
     // Store
     cloud_organized_normal.push_back (normali);

@@ -76,7 +76,8 @@ namespace pcl
    * \author Radu B. Rusu
    * \ingroup features
    */
-  template <typename PointInT, typename PointNT,
+  template <typename PointInT,
+            typename PointNT,
             typename PointOutT = pcl::FPFHSignature33>
   class FPFHEstimation : public FeatureFromNormals<PointInT, PointNT, PointOutT>
   {
@@ -118,8 +119,13 @@ namespace pcl
      */
     bool
     computePairFeatures (const pcl::PointCloud<PointInT> &cloud,
-                         const pcl::PointCloud<PointNT> &normals, int p_idx, int q_idx,
-                         float &f1, float &f2, float &f3, float &f4);
+                         const pcl::PointCloud<PointNT> &normals,
+                         int p_idx,
+                         int q_idx,
+                         float &f1,
+                         float &f2,
+                         float &f3,
+                         float &f4);
 
     /** \brief Estimate the SPFH (Simple Point Feature Histograms) individual signatures
      * of the three angular (f1, f2, f3) features for a given point based on its spatial
@@ -134,9 +140,12 @@ namespace pcl
      */
     void
     computePointSPFHSignature (const pcl::PointCloud<PointInT> &cloud,
-                               const pcl::PointCloud<PointNT> &normals, int p_idx,
-                               int row, const std::vector<int> &indices,
-                               Eigen::MatrixXf &hist_f1, Eigen::MatrixXf &hist_f2,
+                               const pcl::PointCloud<PointNT> &normals,
+                               int p_idx,
+                               int row,
+                               const std::vector<int> &indices,
+                               Eigen::MatrixXf &hist_f1,
+                               Eigen::MatrixXf &hist_f2,
                                Eigen::MatrixXf &hist_f3);
 
     /** \brief Weight the SPFH (Simple Point Feature Histograms) individual histograms
@@ -191,8 +200,10 @@ namespace pcl
      * \param[out] hist_f3 the resultant SPFH histogram for feature f3
      */
     void
-    computeSPFHSignatures (std::vector<int> &spf_hist_lookup, Eigen::MatrixXf &hist_f1,
-                           Eigen::MatrixXf &hist_f2, Eigen::MatrixXf &hist_f3);
+    computeSPFHSignatures (std::vector<int> &spf_hist_lookup,
+                           Eigen::MatrixXf &hist_f1,
+                           Eigen::MatrixXf &hist_f2,
+                           Eigen::MatrixXf &hist_f3);
 
     /** \brief Estimate the Fast Point Feature Histograms (FPFH) descriptors at a set of
      * points given by <setInputCloud (), setIndices ()> using the surface in

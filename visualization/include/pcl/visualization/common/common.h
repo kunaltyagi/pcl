@@ -64,8 +64,8 @@ namespace pcl
      * \param[in] max maximum value for the colors
      */
     PCL_EXPORTS void
-    getRandomColors (double &r, double &g, double &b, double min = 0.2,
-                     double max = 2.8);
+    getRandomColors (
+        double &r, double &g, double &b, double min = 0.2, double max = 2.8);
 
     /** \brief Get (good) random values for R/G/B.
      * \param[out] rgb the resultant RGB color value
@@ -80,7 +80,9 @@ namespace pcl
 
     PCL_EXPORTS Eigen::Vector2i
     worldToView (const Eigen::Vector4d &world_pt,
-                 const Eigen::Matrix4d &view_projection_matrix, int width, int height);
+                 const Eigen::Matrix4d &view_projection_matrix,
+                 int width,
+                 int height);
 
     PCL_EXPORTS void
     getViewFrustum (const Eigen::Matrix4d &view_projection_matrix, double planes[24]);
@@ -88,13 +90,16 @@ namespace pcl
     enum FrustumCull { PCL_INSIDE_FRUSTUM, PCL_INTERSECT_FRUSTUM, PCL_OUTSIDE_FRUSTUM };
 
     PCL_EXPORTS int
-    cullFrustum (double planes[24], const Eigen::Vector3d &min_bb,
+    cullFrustum (double planes[24],
+                 const Eigen::Vector3d &min_bb,
                  const Eigen::Vector3d &max_bb);
 
     PCL_EXPORTS float
-    viewScreenArea (const Eigen::Vector3d &eye, const Eigen::Vector3d &min_bb,
+    viewScreenArea (const Eigen::Vector3d &eye,
+                    const Eigen::Vector3d &min_bb,
                     const Eigen::Vector3d &max_bb,
-                    const Eigen::Matrix4d &view_projection_matrix, int width,
+                    const Eigen::Matrix4d &view_projection_matrix,
+                    int width,
                     int height);
 
     /** \brief Set of rendering properties. */
@@ -233,7 +238,8 @@ namespace pcl
        */
       template <typename PointT>
       void
-      cvtWindowCoordinates (const PointT &pt, Eigen::Vector4d &window_cord,
+      cvtWindowCoordinates (const PointT &pt,
+                            Eigen::Vector4d &window_cord,
                             const Eigen::Matrix4d &composite_mat) const;
     };
   } // namespace visualization

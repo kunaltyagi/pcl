@@ -63,7 +63,9 @@ namespace pcl
    * \author Samuele Salti, Federico Tombari
    * \ingroup features
    */
-  template <typename PointInT, typename PointNT, typename PointOutT,
+  template <typename PointInT,
+            typename PointNT,
+            typename PointOutT,
             typename PointRFT = pcl::ReferenceFrame>
   class SHOTEstimationBase : public FeatureFromNormals<PointInT, PointNT, PointOutT>,
                              public FeatureWithLocalReferenceFrames<PointInT, PointRFT>
@@ -111,8 +113,10 @@ namespace pcl
      * query point
      */
     virtual void
-    computePointSHOT (const int index, const std::vector<int> &indices,
-                      const std::vector<float> &sqr_dists, Eigen::VectorXf &shot) = 0;
+    computePointSHOT (const int index,
+                      const std::vector<int> &indices,
+                      const std::vector<float> &sqr_dists,
+                      Eigen::VectorXf &shot) = 0;
 
     /** \brief Set the radius used for local reference frame estimation if the frames
      * are not set by the user */
@@ -146,8 +150,10 @@ namespace pcl
      */
     void
     interpolateSingleChannel (const std::vector<int> &indices,
-                              const std::vector<float> &sqr_dists, const int index,
-                              std::vector<double> &binDistance, const int nr_bins,
+                              const std::vector<float> &sqr_dists,
+                              const int index,
+                              std::vector<double> &binDistance,
+                              const int nr_bins,
                               Eigen::VectorXf &shot);
 
     /** \brief Normalize the SHOT histogram.
@@ -163,7 +169,8 @@ namespace pcl
      * \param[out] bin_distance_shape the resultant histogram
      */
     void
-    createBinDistanceShape (int index, const std::vector<int> &indices,
+    createBinDistanceShape (int index,
+                            const std::vector<int> &indices,
                             std::vector<double> &bin_distance_shape);
 
     /** \brief The number of bins in each shape histogram. */
@@ -216,7 +223,9 @@ namespace pcl
    * \author Samuele Salti, Federico Tombari
    * \ingroup features
    */
-  template <typename PointInT, typename PointNT, typename PointOutT = pcl::SHOT352,
+  template <typename PointInT,
+            typename PointNT,
+            typename PointOutT = pcl::SHOT352,
             typename PointRFT = pcl::ReferenceFrame>
   class SHOTEstimation
       : public SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>
@@ -242,10 +251,10 @@ namespace pcl
     using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::radius3_4_;
     using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::radius1_4_;
     using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::radius1_2_;
-    using SHOTEstimationBase<PointInT, PointNT, PointOutT,
-                             PointRFT>::maxAngularSectors_;
-    using SHOTEstimationBase<PointInT, PointNT, PointOutT,
-                             PointRFT>::interpolateSingleChannel;
+    using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::
+        maxAngularSectors_;
+    using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::
+        interpolateSingleChannel;
     using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::shot_;
     using FeatureWithLocalReferenceFrames<PointInT, PointRFT>::frames_;
 
@@ -268,7 +277,8 @@ namespace pcl
      * query point
      */
     void
-    computePointSHOT (const int index, const std::vector<int> &indices,
+    computePointSHOT (const int index,
+                      const std::vector<int> &indices,
                       const std::vector<float> &sqr_dists,
                       Eigen::VectorXf &shot) override;
 
@@ -303,7 +313,9 @@ namespace pcl
    * \author Samuele Salti, Federico Tombari
    * \ingroup features
    */
-  template <typename PointInT, typename PointNT, typename PointOutT = pcl::SHOT1344,
+  template <typename PointInT,
+            typename PointNT,
+            typename PointOutT = pcl::SHOT1344,
             typename PointRFT = pcl::ReferenceFrame>
   class SHOTColorEstimation
       : public SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>
@@ -329,10 +341,10 @@ namespace pcl
     using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::radius3_4_;
     using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::radius1_4_;
     using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::radius1_2_;
-    using SHOTEstimationBase<PointInT, PointNT, PointOutT,
-                             PointRFT>::maxAngularSectors_;
-    using SHOTEstimationBase<PointInT, PointNT, PointOutT,
-                             PointRFT>::interpolateSingleChannel;
+    using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::
+        maxAngularSectors_;
+    using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::
+        interpolateSingleChannel;
     using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::shot_;
     using FeatureWithLocalReferenceFrames<PointInT, PointRFT>::frames_;
 
@@ -361,7 +373,8 @@ namespace pcl
      * query point
      */
     void
-    computePointSHOT (const int index, const std::vector<int> &indices,
+    computePointSHOT (const int index,
+                      const std::vector<int> &indices,
                       const std::vector<float> &sqr_dists,
                       Eigen::VectorXf &shot) override;
 
@@ -386,10 +399,12 @@ namespace pcl
      */
     void
     interpolateDoubleChannel (const std::vector<int> &indices,
-                              const std::vector<float> &sqr_dists, const int index,
+                              const std::vector<float> &sqr_dists,
+                              const int index,
                               std::vector<double> &binDistanceShape,
                               std::vector<double> &binDistanceColor,
-                              const int nr_bins_shape, const int nr_bins_color,
+                              const int nr_bins_shape,
+                              const int nr_bins_color,
                               Eigen::VectorXf &shot);
 
     /** \brief Compute shape descriptor. */
@@ -411,7 +426,11 @@ namespace pcl
      * \param[out] B2 the second color-opponent dimension
      */
     static void
-    RGB2CIELAB (unsigned char R, unsigned char G, unsigned char B, float &L, float &A,
+    RGB2CIELAB (unsigned char R,
+                unsigned char G,
+                unsigned char B,
+                float &L,
+                float &A,
                 float &B2);
 
     static float sRGB_LUT[256];

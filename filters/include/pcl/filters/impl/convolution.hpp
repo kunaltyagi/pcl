@@ -63,8 +63,9 @@ pcl::filters::Convolution<PointIn, PointOut>::initCompute (PointCloud<PointOut> 
         "[pcl::filters::Convolution::initCompute] unknown borders policy.");
 
   if (kernel_.size () % 2 == 0)
-    PCL_THROW_EXCEPTION (InitFailedException, "[pcl::filters::Convolution::initCompute]"
-                                              " convolving element width must be odd.");
+    PCL_THROW_EXCEPTION (InitFailedException,
+                         "[pcl::filters::Convolution::initCompute]"
+                         " convolving element width must be odd.");
 
   if (distance_threshold_ != std::numeric_limits<float>::infinity ())
     distance_threshold_ *=

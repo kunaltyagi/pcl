@@ -50,7 +50,10 @@ namespace pcl
 {
 
   /** \brief Trainer for decision trees. */
-  template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+  template <class FeatureType,
+            class DataSet,
+            class LabelType,
+            class ExampleIndex,
             class NodeType>
   class PCL_EXPORTS DecisionTreeTrainer
   {
@@ -160,8 +163,11 @@ namespace pcl
      */
     void
     setDecisionTreeDataProvider (
-        typename pcl::DecisionTreeTrainerDataProvider<
-            FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::Ptr &dtdp)
+        typename pcl::DecisionTreeTrainerDataProvider<FeatureType,
+                                                      DataSet,
+                                                      LabelType,
+                                                      ExampleIndex,
+                                                      NodeType>::Ptr &dtdp)
     {
       decision_tree_trainer_data_provider_ = dtdp;
     }
@@ -191,7 +197,8 @@ namespace pcl
     void
     trainDecisionTreeNode (std::vector<FeatureType> &features,
                            std::vector<ExampleIndex> &examples,
-                           std::vector<LabelType> &label_data, size_t max_depth,
+                           std::vector<LabelType> &label_data,
+                           size_t max_depth,
                            NodeType &node);
 
     /** \brief Creates uniformely distrebuted thresholds over the range of the supplied
@@ -200,7 +207,8 @@ namespace pcl
      * \param[out] thresholds The resulting thresholds.
      */
     static void
-    createThresholdsUniform (const size_t num_of_thresholds, std::vector<float> &values,
+    createThresholdsUniform (const size_t num_of_thresholds,
+                             std::vector<float> &values,
                              std::vector<float> &thresholds);
 
     private:
@@ -231,8 +239,11 @@ namespace pcl
     std::vector<float> thresholds_;
     /** \brief The data provider which is called before training a specific tree, if
      * pointer is NULL, then data_set_ is used. */
-    typename pcl::DecisionTreeTrainerDataProvider<FeatureType, DataSet, LabelType,
-                                                  ExampleIndex, NodeType>::Ptr
+    typename pcl::DecisionTreeTrainerDataProvider<FeatureType,
+                                                  DataSet,
+                                                  LabelType,
+                                                  ExampleIndex,
+                                                  NodeType>::Ptr
         decision_tree_trainer_data_provider_;
     /** \brief If true, random features are generated at each node, otherwise, at start
      * of training the tree */

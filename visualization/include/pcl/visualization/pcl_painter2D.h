@@ -184,14 +184,23 @@ namespace pcl
      */
     struct FEllipticArc2D : public Figure2D {
 
-      FEllipticArc2D (std::vector<float> info, vtkPen *p, vtkBrush *b,
+      FEllipticArc2D (std::vector<float> info,
+                      vtkPen *p,
+                      vtkBrush *b,
                       vtkTransform2D *t)
           : Figure2D (info, p, b, t)
       {
       }
 
-      FEllipticArc2D (float x, float y, float rx, float ry, float sa, float ea,
-                      vtkPen *p, vtkBrush *b, vtkTransform2D *t)
+      FEllipticArc2D (float x,
+                      float y,
+                      float rx,
+                      float ry,
+                      float sa,
+                      float ea,
+                      vtkPen *p,
+                      vtkBrush *b,
+                      vtkTransform2D *t)
           : Figure2D (p, b, t)
       {
         info_.resize (6);
@@ -207,13 +216,13 @@ namespace pcl
       draw (vtkContext2D *painter) override
       {
         applyInternals (painter);
-        painter->DrawEllipticArc (info_[0], info_[1], info_[2], info_[3], info_[4],
-                                  info_[5]);
+        painter->DrawEllipticArc (
+            info_[0], info_[1], info_[2], info_[3], info_[4], info_[5]);
       }
     };
 
     ////////////////////////////////////The Main Painter Class begins
-    ///here//////////////////////////////////////
+    /// here//////////////////////////////////////
     /** \brief PCL Painter2D main class. Class for drawing 2D figures
      * \author Kripasindhu Sarkar
      * \ingroup visualization
@@ -313,8 +322,8 @@ namespace pcl
        * \param[in] end_angle the ending angle of the arc expressed in degrees
        */
       void
-      addEllipticArc (float x, float y, float rx, float ry, float start_angle,
-                      float end_angle);
+      addEllipticArc (
+          float x, float y, float rx, float ry, float start_angle, float end_angle);
 
       /** \brief Draw an arc based on the inputs
        * \param[in] x X coordinate of the origin
@@ -397,7 +406,9 @@ namespace pcl
       vtkBrush *
       getBrush ();
       void
-      setBrushColor (unsigned char r, unsigned char g, unsigned char b,
+      setBrushColor (unsigned char r,
+                     unsigned char g,
+                     unsigned char b,
                      unsigned char a);
       unsigned char *
       getBrushColor ();
@@ -479,7 +490,8 @@ namespace pcl
           return (new ExitMainLoopTimerCallback);
         }
         void
-        Execute (vtkObject *vtkNotUsed (caller), unsigned long event_id,
+        Execute (vtkObject *vtkNotUsed (caller),
+                 unsigned long event_id,
                  void *call_data) override
         {
           if (event_id != vtkCommand::TimerEvent)

@@ -59,8 +59,8 @@ main (int, char **argv)
   PointCloud<PointXYZ>::Ptr cloud_subsampled (new PointCloud<PointXYZ> ());
   VoxelGrid<PointXYZ> subsampling_filter;
   subsampling_filter.setInputCloud (cloud);
-  subsampling_filter.setLeafSize (subsampling_leaf_size, subsampling_leaf_size,
-                                  subsampling_leaf_size);
+  subsampling_filter.setLeafSize (
+      subsampling_leaf_size, subsampling_leaf_size, subsampling_leaf_size);
   subsampling_filter.filter (*cloud_subsampled);
   cerr << "subsampled cloud has #points: " << cloud_subsampled->points.size () << endl;
 

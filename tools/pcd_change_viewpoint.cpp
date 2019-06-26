@@ -74,16 +74,23 @@ loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
   print_value ("%d", cloud.width * cloud.height);
   print_info (" points]\n");
   print_info ("VIEWPOINT information is: ");
-  print_value ("%.2f %.2f %.2f / %.2f %.2f %.2f %.2f\n", translation.x (),
-               translation.y (), translation.z (), orientation.w (), orientation.x (),
-               orientation.y (), orientation.z ());
+  print_value ("%.2f %.2f %.2f / %.2f %.2f %.2f %.2f\n",
+               translation.x (),
+               translation.y (),
+               translation.z (),
+               orientation.w (),
+               orientation.x (),
+               orientation.y (),
+               orientation.z ());
 
   return (true);
 }
 
 void
-saveCloud (const std::string &filename, const Eigen::Vector4f &translation,
-           const Eigen::Quaternionf &orientation, const pcl::PCLPointCloud2 &output)
+saveCloud (const std::string &filename,
+           const Eigen::Vector4f &translation,
+           const Eigen::Quaternionf &orientation,
+           const pcl::PCLPointCloud2 &output)
 {
   TicToc tt;
   tt.tic ();
@@ -144,9 +151,14 @@ main (int argc, char **argv)
     return (-1);
 
   print_info ("Saving output PCD file with the following VIEWPOINT information: ");
-  print_value ("%.2f %.2f %.2f / %.2f %.2f %.2f %.2f\n", translation.x (),
-               translation.y (), translation.z (), orientation.w (), orientation.x (),
-               orientation.y (), orientation.z ());
+  print_value ("%.2f %.2f %.2f / %.2f %.2f %.2f %.2f\n",
+               translation.x (),
+               translation.y (),
+               translation.z (),
+               orientation.w (),
+               orientation.x (),
+               orientation.y (),
+               orientation.z ());
 
   // Save into the second file
   saveCloud (argv[p_file_indices[1]], translation, orientation, cloud);

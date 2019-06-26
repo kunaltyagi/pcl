@@ -76,7 +76,8 @@ main (int, char **argv)
   normal_estimation.compute (*cloud_with_normals);
 
   // Setup the principal curvatures computation
-  pcl::PrincipalCurvaturesEstimation<pcl::PointXYZ, pcl::Normal,
+  pcl::PrincipalCurvaturesEstimation<pcl::PointXYZ,
+                                     pcl::Normal,
                                      pcl::PrincipalCurvatures>
       principal_curvatures_estimation;
 

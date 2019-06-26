@@ -48,7 +48,9 @@
 #include <pcl/features/board.h>
 #include <pcl/features/normal_3d.h>
 
-template <typename PointModelT, typename PointSceneT, typename PointModelRfT,
+template <typename PointModelT,
+          typename PointSceneT,
+          typename PointModelRfT,
           typename PointSceneRfT>
 template <typename PointType, typename PointRfType>
 void
@@ -81,7 +83,9 @@ pcl::Hough3DGrouping<PointModelT, PointSceneT, PointModelRfT, PointSceneRfT>::
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointModelT, typename PointSceneT, typename PointModelRfT,
+template <typename PointModelT,
+          typename PointSceneT,
+          typename PointModelRfT,
           typename PointSceneRfT>
 bool
 pcl::Hough3DGrouping<PointModelT, PointSceneT, PointModelRfT, PointSceneRfT>::train ()
@@ -118,11 +122,14 @@ pcl::Hough3DGrouping<PointModelT, PointSceneT, PointModelRfT, PointSceneRfT>::tr
 
   // compute model votes
   for (size_t i = 0; i < input_->size (); ++i) {
-    Eigen::Vector3f x_ax ((*input_rf_)[i].x_axis[0], (*input_rf_)[i].x_axis[1],
+    Eigen::Vector3f x_ax ((*input_rf_)[i].x_axis[0],
+                          (*input_rf_)[i].x_axis[1],
                           (*input_rf_)[i].x_axis[2]);
-    Eigen::Vector3f y_ax ((*input_rf_)[i].y_axis[0], (*input_rf_)[i].y_axis[1],
+    Eigen::Vector3f y_ax ((*input_rf_)[i].y_axis[0],
+                          (*input_rf_)[i].y_axis[1],
                           (*input_rf_)[i].y_axis[2]);
-    Eigen::Vector3f z_ax ((*input_rf_)[i].z_axis[0], (*input_rf_)[i].z_axis[1],
+    Eigen::Vector3f z_ax ((*input_rf_)[i].z_axis[0],
+                          (*input_rf_)[i].z_axis[1],
                           (*input_rf_)[i].z_axis[2]);
 
     model_votes_[i].x () = x_ax.dot (centroid - input_->at (i).getVector3fMap ());
@@ -135,11 +142,13 @@ pcl::Hough3DGrouping<PointModelT, PointSceneT, PointModelRfT, PointSceneRfT>::tr
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointModelT, typename PointSceneT, typename PointModelRfT,
+template <typename PointModelT,
+          typename PointSceneT,
+          typename PointModelRfT,
           typename PointSceneRfT>
 bool
-pcl::Hough3DGrouping<PointModelT, PointSceneT, PointModelRfT,
-                     PointSceneRfT>::houghVoting ()
+pcl::Hough3DGrouping<PointModelT, PointSceneT, PointModelRfT, PointSceneRfT>::
+    houghVoting ()
 {
   if (needs_training_) {
     if (!train ()) // checks input and input_rf
@@ -265,7 +274,9 @@ pcl::Hough3DGrouping<PointModelT, PointSceneT, PointModelRfT,
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointModelT, typename PointSceneT, typename PointModelRfT,
+template <typename PointModelT,
+          typename PointSceneT,
+          typename PointModelRfT,
           typename PointSceneRfT>
 void
 pcl::Hough3DGrouping<PointModelT, PointSceneT, PointModelRfT, PointSceneRfT>::
@@ -343,7 +354,9 @@ pcl::Hough3DGrouping<PointModelT, PointSceneT, PointModelRfT, PointSceneRfT>::
 //}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointModelT, typename PointSceneT, typename PointModelRfT,
+template <typename PointModelT,
+          typename PointSceneT,
+          typename PointModelRfT,
           typename PointSceneRfT>
 bool
 pcl::Hough3DGrouping<PointModelT, PointSceneT, PointModelRfT, PointSceneRfT>::
@@ -355,7 +368,9 @@ pcl::Hough3DGrouping<PointModelT, PointSceneT, PointModelRfT, PointSceneRfT>::
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointModelT, typename PointSceneT, typename PointModelRfT,
+template <typename PointModelT,
+          typename PointSceneT,
+          typename PointModelRfT,
           typename PointSceneRfT>
 bool
 pcl::Hough3DGrouping<PointModelT, PointSceneT, PointModelRfT, PointSceneRfT>::

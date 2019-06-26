@@ -41,7 +41,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename ModelT, typename SceneT>
-pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::ZBuffering (int resx, int resy,
+pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::ZBuffering (int resx,
+                                                                  int resy,
                                                                   float f)
     : f_ (f), cx_ (resx), cy_ (resy), depth_ (nullptr)
 {
@@ -66,7 +67,8 @@ template <typename ModelT, typename SceneT>
 void
 pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::filter (
     typename pcl::PointCloud<ModelT>::ConstPtr &model,
-    typename pcl::PointCloud<ModelT>::Ptr &filtered, float thres)
+    typename pcl::PointCloud<ModelT>::Ptr &filtered,
+    float thres)
 {
   std::vector<int> indices_to_keep;
   filter (model, indices_to_keep, thres);
@@ -78,7 +80,8 @@ template <typename ModelT, typename SceneT>
 void
 pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::filter (
     typename pcl::PointCloud<ModelT>::ConstPtr &model,
-    std::vector<int> &indices_to_keep, float thres)
+    std::vector<int> &indices_to_keep,
+    float thres)
 {
 
   float cx, cy;
@@ -113,7 +116,9 @@ pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::filter (
 template <typename ModelT, typename SceneT>
 void
 pcl::occlusion_reasoning::ZBuffering<ModelT, SceneT>::computeDepthMap (
-    typename pcl::PointCloud<SceneT>::ConstPtr &scene, bool compute_focal, bool smooth,
+    typename pcl::PointCloud<SceneT>::ConstPtr &scene,
+    bool compute_focal,
+    bool smooth,
     int wsize)
 {
   float cx, cy;

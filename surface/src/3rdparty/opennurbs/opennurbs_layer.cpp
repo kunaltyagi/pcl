@@ -792,7 +792,8 @@ ON__LayerPerViewSettings::DataCRC (ON__UINT32 current_remainder) const
     if (0 != (settings_mask & ON_Layer::per_viewport_visible))
       current_remainder = ON_CRC32 (current_remainder, sizeof (m_visible), &m_visible);
     if (0 != (settings_mask & ON_Layer::per_viewport_persistent_visibility))
-      current_remainder = ON_CRC32 (current_remainder, sizeof (m_persistent_visibility),
+      current_remainder = ON_CRC32 (current_remainder,
+                                    sizeof (m_persistent_visibility),
                                     &m_persistent_visibility);
   }
   return current_remainder;
@@ -971,8 +972,8 @@ ON__LayerPerViewSettings::Read (const ON_Layer &layer, ON_BinaryArchive &binary_
 
   int major_version = 0;
   int minor_version = 0;
-  if (!binary_archive.BeginRead3dmChunk (TCODE_ANONYMOUS_CHUNK, &major_version,
-                                         &minor_version))
+  if (!binary_archive.BeginRead3dmChunk (
+          TCODE_ANONYMOUS_CHUNK, &major_version, &minor_version))
     return false;
 
   bool rc = false;
@@ -1092,8 +1093,10 @@ class /*NEVER EXPORT THIS CLASS DEFINITION*/ ON__LayerExtensions : public ON_Use
   IsEmpty () const;
 
   static ON__LayerPerViewSettings *
-  ViewportSettings (const ON_Layer &layer, const unsigned char *layer_m_extension_bits,
-                    ON_UUID viewport_id, bool bCreate);
+  ViewportSettings (const ON_Layer &layer,
+                    const unsigned char *layer_m_extension_bits,
+                    ON_UUID viewport_id,
+                    bool bCreate);
 
   static void
   DeleteViewportSettings (const ON_Layer &layer,
@@ -1101,7 +1104,8 @@ class /*NEVER EXPORT THIS CLASS DEFINITION*/ ON__LayerExtensions : public ON_Use
                           const ON__LayerPerViewSettings *vp_settings_to_delete);
 
   static ON__LayerExtensions *
-  LayerExtensions (const ON_Layer &layer, const unsigned char *layer_m_extension_bits,
+  LayerExtensions (const ON_Layer &layer,
+                   const unsigned char *layer_m_extension_bits,
                    bool bCreate);
 
   // per viewport overrides of color, linetype, plot color, plot weight, and visibility
@@ -1110,7 +1114,8 @@ class /*NEVER EXPORT THIS CLASS DEFINITION*/ ON__LayerExtensions : public ON_Use
 
 #undef ON_BOZO_VACCINE_3E4904E6E9304fbcAA42EBD407AEFE3B
 
-ON_OBJECT_IMPLEMENT (ON__LayerExtensions, ON_UserData,
+ON_OBJECT_IMPLEMENT (ON__LayerExtensions,
+                     ON_UserData,
                      "3E4904E6-E930-4fbc-AA42-EBD407AEFE3B");
 
 ON__LayerExtensions *
@@ -1159,10 +1164,7 @@ ON__LayerExtensions::~ON__LayerExtensions () {}
 
 // virtual ON_Object override
 ON_BOOL32
-ON__LayerExtensions::IsValid (ON_TextLog *text_log) const
-{
-  return true;
-}
+ON__LayerExtensions::IsValid (ON_TextLog *text_log) const { return true; }
 
 // virtual ON_Object override
 unsigned int
@@ -1221,8 +1223,8 @@ ON__LayerExtensions::Read (ON_BinaryArchive &binary_archive)
 
   int major_version = 0;
   int minor_version = 0;
-  bool rc = binary_archive.BeginRead3dmChunk (TCODE_ANONYMOUS_CHUNK, &major_version,
-                                              &minor_version);
+  bool rc = binary_archive.BeginRead3dmChunk (
+      TCODE_ANONYMOUS_CHUNK, &major_version, &minor_version);
   if (!rc)
     return false;
 
@@ -1270,10 +1272,7 @@ ON__LayerExtensions::Read (ON_BinaryArchive &binary_archive)
 
 // virtual ON_UserData override
 ON_BOOL32
-ON__LayerExtensions::Archive () const
-{
-  return !IsEmpty ();
-}
+ON__LayerExtensions::Archive () const { return !IsEmpty (); }
 
 // virtual ON_UserData override
 ON_BOOL32
@@ -1286,7 +1285,8 @@ ON__LayerExtensions::GetDescription (ON_wString &description)
 ON__LayerPerViewSettings *
 ON__LayerExtensions::ViewportSettings (const ON_Layer &layer,
                                        const unsigned char *layer_m_extension_bits,
-                                       ON_UUID viewport_id, bool bCreate)
+                                       ON_UUID viewport_id,
+                                       bool bCreate)
 {
   if (!ON_UuidIsNil (viewport_id)) {
     ON__LayerExtensions *ud =
@@ -1325,7 +1325,8 @@ ON__LayerExtensions::ViewportSettings (const ON_Layer &layer,
 
 void
 ON__LayerExtensions::DeleteViewportSettings (
-    const ON_Layer &layer, const unsigned char *layer_m_extension_bits,
+    const ON_Layer &layer,
+    const unsigned char *layer_m_extension_bits,
     const ON__LayerPerViewSettings *vp_settings_to_delete)
 {
   ON__LayerExtensions *ud =
@@ -1393,8 +1394,8 @@ ON_Layer::SetPerViewportColor (ON_UUID viewport_id, ON_Color layer_color)
     if (vp_settings) {
       vp_settings->m_color = layer_color;
       if (!bSet && 0 == vp_settings->SettingsMask ())
-        ON__LayerExtensions::DeleteViewportSettings (*this, &m_extension_bits,
-                                                     vp_settings);
+        ON__LayerExtensions::DeleteViewportSettings (
+            *this, &m_extension_bits, vp_settings);
     }
   }
 }
@@ -1410,8 +1411,8 @@ ON_Layer::PerViewportColor (ON_UUID viewport_id) const
 {
   if (!ExtensionBit (m_extension_bits, 0x01)) {
     const ON__LayerPerViewSettings *vp_settings =
-        ON__LayerExtensions::ViewportSettings (*this, &m_extension_bits, viewport_id,
-                                               false);
+        ON__LayerExtensions::ViewportSettings (
+            *this, &m_extension_bits, viewport_id, false);
     if (0 != vp_settings && ON_UNSET_COLOR != vp_settings->m_color)
       return vp_settings->m_color;
   }
@@ -1438,8 +1439,8 @@ ON_Layer::SetPerViewportPlotColor (ON_UUID viewport_id, ON_Color plot_color)
     if (vp_settings) {
       vp_settings->m_plot_color = plot_color;
       if (!bSet && 0 == vp_settings->SettingsMask ())
-        ON__LayerExtensions::DeleteViewportSettings (*this, &m_extension_bits,
-                                                     vp_settings);
+        ON__LayerExtensions::DeleteViewportSettings (
+            *this, &m_extension_bits, vp_settings);
     }
   }
 }
@@ -1455,8 +1456,8 @@ ON_Layer::PerViewportPlotColor (ON_UUID viewport_id) const
 {
   if (!ExtensionBit (m_extension_bits, 0x01)) {
     const ON__LayerPerViewSettings *vp_settings =
-        ON__LayerExtensions::ViewportSettings (*this, &m_extension_bits, viewport_id,
-                                               false);
+        ON__LayerExtensions::ViewportSettings (
+            *this, &m_extension_bits, viewport_id, false);
     if (0 != vp_settings && vp_settings->m_plot_color != ON_UNSET_COLOR)
       return vp_settings->m_plot_color;
   }
@@ -1486,8 +1487,8 @@ ON_Layer::SetPerViewportPlotWeight (ON_UUID viewport_id, double plot_weight_mm)
     if (vp_settings) {
       vp_settings->m_plot_weight_mm = (bSet) ? plot_weight_mm : ON_UNSET_VALUE;
       if (!bSet && 0 == vp_settings->SettingsMask ())
-        ON__LayerExtensions::DeleteViewportSettings (*this, &m_extension_bits,
-                                                     vp_settings);
+        ON__LayerExtensions::DeleteViewportSettings (
+            *this, &m_extension_bits, vp_settings);
     }
   }
 }
@@ -1503,8 +1504,8 @@ ON_Layer::PerViewportPlotWeight (ON_UUID viewport_id) const
 {
   if (!ExtensionBit (m_extension_bits, 0x01)) {
     const ON__LayerPerViewSettings *vp_settings =
-        ON__LayerExtensions::ViewportSettings (*this, &m_extension_bits, viewport_id,
-                                               false);
+        ON__LayerExtensions::ViewportSettings (
+            *this, &m_extension_bits, viewport_id, false);
     if (0 != vp_settings &&
         (vp_settings->m_plot_weight_mm >= 0.0 || -1.0 == vp_settings->m_plot_weight_mm))
       return vp_settings->m_plot_weight_mm;
@@ -1538,8 +1539,8 @@ ON_Layer::PerViewportIsVisible (ON_UUID viewport_id) const
       }
     } else {
       const ON__LayerPerViewSettings *vp_settings =
-          ON__LayerExtensions::ViewportSettings (*this, &m_extension_bits, viewport_id,
-                                                 false);
+          ON__LayerExtensions::ViewportSettings (
+              *this, &m_extension_bits, viewport_id, false);
       if (vp_settings) {
         if (1 == vp_settings->m_visible)
           return true; // per viewport ON setting overrides layer setting
@@ -1672,8 +1673,8 @@ ON_Layer::DeletePerViewportColor (const ON_UUID &viewport_id)
     if (vp_settings) {
       vp_settings->m_color = ON_Color::UnsetColor;
       if (0 == vp_settings->SettingsMask ())
-        ON__LayerExtensions::DeleteViewportSettings (*this, &m_extension_bits,
-                                                     vp_settings);
+        ON__LayerExtensions::DeleteViewportSettings (
+            *this, &m_extension_bits, vp_settings);
     }
   }
 }
@@ -1701,8 +1702,8 @@ ON_Layer::DeletePerViewportPlotColor (const ON_UUID &viewport_id)
     if (vp_settings) {
       vp_settings->m_plot_color = ON_UNSET_COLOR;
       if (0 == vp_settings->SettingsMask ())
-        ON__LayerExtensions::DeleteViewportSettings (*this, &m_extension_bits,
-                                                     vp_settings);
+        ON__LayerExtensions::DeleteViewportSettings (
+            *this, &m_extension_bits, vp_settings);
     }
   }
 }
@@ -1752,8 +1753,8 @@ ON_Layer::DeletePerViewportPlotWeight (const ON_UUID &viewport_id)
     if (vp_settings) {
       vp_settings->m_plot_weight_mm = ON_UNSET_VALUE;
       if (0 == vp_settings->SettingsMask ())
-        ON__LayerExtensions::DeleteViewportSettings (*this, &m_extension_bits,
-                                                     vp_settings);
+        ON__LayerExtensions::DeleteViewportSettings (
+            *this, &m_extension_bits, vp_settings);
     }
   }
 }
@@ -1783,8 +1784,8 @@ ON_Layer::DeletePerViewportVisible (const ON_UUID &viewport_id)
       vp_settings->m_visible = 0;
       vp_settings->m_persistent_visibility = 0;
       if (0 == vp_settings->SettingsMask ())
-        ON__LayerExtensions::DeleteViewportSettings (*this, &m_extension_bits,
-                                                     vp_settings);
+        ON__LayerExtensions::DeleteViewportSettings (
+            *this, &m_extension_bits, vp_settings);
     }
   }
 }
@@ -1873,7 +1874,8 @@ ON_Layer::CopyPerViewportSettings (ON_UUID source_viewport_id,
 }
 
 bool
-ON_Layer::CopyPerViewportSettings (const ON_Layer &source_layer, ON_UUID viewport_id,
+ON_Layer::CopyPerViewportSettings (const ON_Layer &source_layer,
+                                   ON_UUID viewport_id,
                                    unsigned int settings_mask)
 {
   bool rc = false;
@@ -1881,8 +1883,8 @@ ON_Layer::CopyPerViewportSettings (const ON_Layer &source_layer, ON_UUID viewpor
     if (ON_UuidIsNil (viewport_id)) {
       // copy per viwport settings for every viewport
       const ON__LayerExtensions *soruce_layer_ud =
-          ON__LayerExtensions::LayerExtensions (source_layer,
-                                                &source_layer.m_extension_bits, false);
+          ON__LayerExtensions::LayerExtensions (
+              source_layer, &source_layer.m_extension_bits, false);
       if (0 != soruce_layer_ud) {
         const int count = soruce_layer_ud->m_vp_settings.Count ();
         for (int i = 0; i < count; i++) {
@@ -1921,8 +1923,8 @@ ON_Layer::DeletePerViewportSettings (const ON_UUID &viewport_id) const
     ON__LayerPerViewSettings *vp_settings = ON__LayerExtensions::ViewportSettings (
         *this, &m_extension_bits, viewport_id, false);
     if (vp_settings)
-      ON__LayerExtensions::DeleteViewportSettings (*this, &m_extension_bits,
-                                                   vp_settings);
+      ON__LayerExtensions::DeleteViewportSettings (
+          *this, &m_extension_bits, vp_settings);
   }
 }
 
@@ -2170,7 +2172,8 @@ class /*NEVER EXPORT THIS CLASS DEFINITION*/ ON__LayerSettingsUserData
 
 #undef ON_BOZO_VACCINE_BFB63C094BC7472789BB7CC754118200
 
-ON_OBJECT_IMPLEMENT (ON__LayerSettingsUserData, ON_UserData,
+ON_OBJECT_IMPLEMENT (ON__LayerSettingsUserData,
+                     ON_UserData,
                      "BFB63C09-4BC7-4727-89BB-7CC754118200");
 
 ON__LayerSettingsUserData *
@@ -2198,10 +2201,7 @@ ON__LayerSettingsUserData::~ON__LayerSettingsUserData () {}
 
 // virtual ON_Object override
 ON_BOOL32
-ON__LayerSettingsUserData::IsValid (ON_TextLog *text_log) const
-{
-  return true;
-}
+ON__LayerSettingsUserData::IsValid (ON_TextLog *text_log) const { return true; }
 
 // virtual ON_Object override
 unsigned int
@@ -2270,8 +2270,8 @@ ON__LayerSettingsUserData::Read (ON_BinaryArchive &binary_archive)
 
   int major_version = 0;
   int minor_version = 0;
-  bool rc = binary_archive.BeginRead3dmChunk (TCODE_ANONYMOUS_CHUNK, &major_version,
-                                              &minor_version);
+  bool rc = binary_archive.BeginRead3dmChunk (
+      TCODE_ANONYMOUS_CHUNK, &major_version, &minor_version);
   if (!rc)
     return false;
 

@@ -168,7 +168,9 @@ namespace pcl
      * number of points
      */
     int
-    nearestKSearch (const PointT &point, int k, std::vector<int> &k_indices,
+    nearestKSearch (const PointT &point,
+                    int k,
+                    std::vector<int> &k_indices,
                     std::vector<float> &k_sqr_distances) const override;
 
     /** \brief Search for all the nearest neighbors of the query point in a given
@@ -191,7 +193,9 @@ namespace pcl
      * number of points
      */
     int
-    radiusSearch (const PointT &point, double radius, std::vector<int> &k_indices,
+    radiusSearch (const PointT &point,
+                  double radius,
+                  std::vector<int> &k_indices,
                   std::vector<float> &k_sqr_distances,
                   unsigned int max_nn = 0) const override;
 

@@ -39,10 +39,13 @@
 #define PCL_ML_FERNS_FERN_TRAINER_HPP_
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
-pcl::FernTrainer<FeatureType, DataSet, LabelType, ExampleIndex,
-                 NodeType>::FernTrainer ()
+pcl::FernTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
+    FernTrainer ()
     : fern_depth_ (10), num_of_features_ (1000), num_of_thresholds_ (10),
       feature_handler_ (NULL), stats_estimator_ (NULL), data_set_ (), label_data_ (),
       examples_ ()
@@ -50,15 +53,21 @@ pcl::FernTrainer<FeatureType, DataSet, LabelType, ExampleIndex,
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
-pcl::FernTrainer<FeatureType, DataSet, LabelType, ExampleIndex,
-                 NodeType>::~FernTrainer ()
+pcl::FernTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
+    ~FernTrainer ()
 {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
 void
 pcl::FernTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::train (
@@ -82,7 +91,9 @@ pcl::FernTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::train
     feature_results[feature_index].reserve (num_of_examples);
     flags[feature_index].reserve (num_of_examples);
 
-    feature_handler_->evaluateFeature (features[feature_index], data_set_, examples_,
+    feature_handler_->evaluateFeature (features[feature_index],
+                                       data_set_,
+                                       examples_,
                                        feature_results[feature_index],
                                        flags[feature_index]);
   }
@@ -116,7 +127,8 @@ pcl::FernTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::train
 
     for (size_t feature_index = 0; feature_index < num_of_features_; ++feature_index) {
       thresholds.reserve (num_of_thresholds_);
-      createThresholdsUniform (num_of_thresholds_, feature_results[feature_index],
+      createThresholdsUniform (num_of_thresholds_,
+                               feature_results[feature_index],
                                thresholds[feature_index]);
     }
 
@@ -134,7 +146,8 @@ pcl::FernTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::train
              ++branch_index) {
           const float branch_information_gain =
               stats_estimator_->computeInformationGain (
-                  data_set_, branch_examples[feature_index][branch_index],
+                  data_set_,
+                  branch_examples[feature_index][branch_index],
                   branch_label_data[feature_index][branch_index],
                   branch_feature_results[feature_index][branch_index],
                   branch_flags[feature_index][branch_index],
@@ -189,8 +202,10 @@ pcl::FernTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::train
         branch_indices.reserve (num_of_examples_in_this_branch);
 
         stats_estimator_->computeBranchIndices (
-            cur_branch_feature_results[branch_index], cur_branch_flags[branch_index],
-            best_feature_threshold, branch_indices);
+            cur_branch_feature_results[branch_index],
+            cur_branch_flags[branch_index],
+            best_feature_threshold,
+            branch_indices);
 
         // split results into different branches
         const size_t base_branch_index = branch_index * num_of_branches;
@@ -230,13 +245,16 @@ pcl::FernTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::train
     final_flags[depth_index].reserve (num_of_examples);
     final_branch_indices[depth_index].reserve (num_of_examples);
 
-    feature_handler_->evaluateFeature (fern.accessFeature (depth_index), data_set_,
-                                       examples_, final_feature_results[depth_index],
+    feature_handler_->evaluateFeature (fern.accessFeature (depth_index),
+                                       data_set_,
+                                       examples_,
+                                       final_feature_results[depth_index],
                                        final_flags[depth_index]);
 
-    stats_estimator_->computeBranchIndices (
-        final_feature_results[depth_index], final_flags[depth_index],
-        fern.accessThreshold (depth_index), final_branch_indices[depth_index]);
+    stats_estimator_->computeBranchIndices (final_feature_results[depth_index],
+                                            final_flags[depth_index],
+                                            fern.accessThreshold (depth_index),
+                                            final_branch_indices[depth_index]);
   }
 
   // - distribute examples to nodes
@@ -259,20 +277,24 @@ pcl::FernTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::train
   // - compute and set statistics for every node
   const size_t num_of_nodes = 0x1 << fern_depth_;
   for (size_t node_index = 0; node_index < num_of_nodes; ++node_index) {
-    stats_estimator_->computeAndSetNodeStats (data_set_, node_examples[node_index],
+    stats_estimator_->computeAndSetNodeStats (data_set_,
+                                              node_examples[node_index],
                                               node_labels[node_index],
                                               fern[node_index]);
   }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
 void
-pcl::FernTrainer<FeatureType, DataSet, LabelType, ExampleIndex,
-                 NodeType>::createThresholdsUniform (const size_t num_of_thresholds,
-                                                     std::vector<float> &values,
-                                                     std::vector<float> &thresholds)
+pcl::FernTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
+    createThresholdsUniform (const size_t num_of_thresholds,
+                             std::vector<float> &values,
+                             std::vector<float> &thresholds)
 {
   // estimate range of values
   float min_value = ::std::numeric_limits<float>::max ();

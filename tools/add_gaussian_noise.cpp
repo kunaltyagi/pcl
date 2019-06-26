@@ -84,7 +84,8 @@ loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
 }
 
 void
-compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output,
+compute (const pcl::PCLPointCloud2::ConstPtr &input,
+         pcl::PCLPointCloud2 &output,
          float standard_deviation)
 {
   TicToc tt;

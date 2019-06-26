@@ -45,8 +45,11 @@
 void
 seededHueSegmentation (
     const boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB>> &host_cloud_,
-    const pcl::gpu::Octree::Ptr &tree, float tolerance, PointIndices &indices_in,
-    PointIndices &indices_out, float delta_hue)
+    const pcl::gpu::Octree::Ptr &tree,
+    float tolerance,
+    PointIndices &indices_in,
+    PointIndices &indices_out,
+    float delta_hue)
 {
 
   // Create a bool vector of processed point indices, and initialize it to false
@@ -150,8 +153,8 @@ pcl::gpu::SeededHueSegmentation::segment (PointIndices &indices_in,
     }
   */
   // Extract the actual clusters
-  seededHueSegmentation (host_cloud_, tree_, cluster_tolerance_, indices_in,
-                         indices_out, delta_hue_);
+  seededHueSegmentation (
+      host_cloud_, tree_, cluster_tolerance_, indices_in, indices_out, delta_hue_);
 }
 
 #endif // PCL_GPU_SEGMENTATION_IMPL_SEEDED_HUE_SEGMENTATION_H_

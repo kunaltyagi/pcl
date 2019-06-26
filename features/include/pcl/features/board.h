@@ -296,7 +296,8 @@ namespace pcl
      * plane defined by v1 and v2. \return angle
      */
     float
-    getAngleBetweenUnitVectors (Eigen::Vector3f const &v1, Eigen::Vector3f const &v2,
+    getAngleBetweenUnitVectors (Eigen::Vector3f const &v1,
+                                Eigen::Vector3f const &v2,
                                 Eigen::Vector3f const &axis);
 
     /** \brief Disambiguates a normal direction using adjacent normals
@@ -319,7 +320,8 @@ namespace pcl
      */
     void
     planeFitting (Eigen::Matrix<float, Eigen::Dynamic, 3> const &points,
-                  Eigen::Vector3f &center, Eigen::Vector3f &norm);
+                  Eigen::Vector3f &center,
+                  Eigen::Vector3f &norm);
 
     /** \brief Given a plane (origin and normal) and a point, return the projection of x
      * on plane

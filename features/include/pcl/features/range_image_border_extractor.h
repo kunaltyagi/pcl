@@ -249,8 +249,11 @@ namespace pcl
      * /return the resulting border score
      */
     inline float
-    getNeighborDistanceChangeScore (const LocalSurface &local_surface, int x, int y,
-                                    int offset_x, int offset_y,
+    getNeighborDistanceChangeScore (const LocalSurface &local_surface,
+                                    int x,
+                                    int y,
+                                    int offset_x,
+                                    int offset_y,
                                     int pixel_radius = 1) const;
 
     /** \brief Calculate a border score based on how much the neighbor is away from the
@@ -258,8 +261,11 @@ namespace pcl
      * offset_y \return the resulting border score
      */
     inline float
-    getNormalBasedBorderScore (const LocalSurface &local_surface, int x, int y,
-                               int offset_x, int offset_y) const;
+    getNormalBasedBorderScore (const LocalSurface &local_surface,
+                               int x,
+                               int y,
+                               int offset_x,
+                               int offset_y) const;
 
     /** \brief Find the best corresponding shadow border and lower score according to
      * the shadow borders value \param x \param y \param offset_x \param offset_y \param
@@ -267,7 +273,10 @@ namespace pcl
      * \return
      */
     inline bool
-    changeScoreAccordingToShadowBorderValue (int x, int y, int offset_x, int offset_y,
+    changeScoreAccordingToShadowBorderValue (int x,
+                                             int y,
+                                             int offset_x,
+                                             int offset_y,
                                              float *border_scores,
                                              float *border_scores_other_direction,
                                              int &shadow_border_idx) const;
@@ -278,7 +287,8 @@ namespace pcl
      * scores \return the resulting updated border score
      */
     inline float
-    updatedScoreAccordingToNeighborValues (int x, int y,
+    updatedScoreAccordingToNeighborValues (int x,
+                                           int y,
                                            const float *border_scores) const;
 
     /** \brief For all pixels, returns a new score that is >= the original value, based
@@ -305,8 +315,12 @@ namespace pcl
      * shadow border
      */
     inline bool
-    checkPotentialBorder (int x, int y, int offset_x, int offset_y,
-                          float *border_scores_left, float *border_scores_right,
+    checkPotentialBorder (int x,
+                          int y,
+                          int offset_x,
+                          int offset_y,
+                          float *border_scores_left,
+                          float *border_scores_right,
                           int &shadow_border_idx) const;
 
     /** \brief Check if a potential border point is a maximum regarding the border score
@@ -319,7 +333,11 @@ namespace pcl
      * \result a boolean value indicating whether or not the point is a maximum
      */
     inline bool
-    checkIfMaximum (int x, int y, int offset_x, int offset_y, float *border_scores,
+    checkIfMaximum (int x,
+                    int y,
+                    int offset_x,
+                    int offset_y,
+                    float *border_scores,
                     int shadow_border_idx) const;
 
     /** \brief Find the best corresponding shadow border and lower score according to
@@ -376,7 +394,10 @@ namespace pcl
      * \param main_direction the resulting direction
      */
     inline bool
-    calculateMainPrincipalCurvature (int x, int y, int radius, float &magnitude,
+    calculateMainPrincipalCurvature (int x,
+                                     int y,
+                                     int radius,
+                                     float &magnitude,
                                      Eigen::Vector3f &main_direction) const;
 
     /** \brief Uses either the border or principal curvature to define a score how much

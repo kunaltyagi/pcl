@@ -234,7 +234,8 @@ class ON_CLASS ON_Viewport : public ON_Geometry
     are all equal, then no changes are made and true is returned.
   */
   bool
-  ChangeToPerspectiveProjection (double target_distance, bool bSymmetricFrustum,
+  ChangeToPerspectiveProjection (double target_distance,
+                                 bool bSymmetricFrustum,
                                  double lens_length);
 
   /*
@@ -265,7 +266,8 @@ class ON_CLASS ON_Viewport : public ON_Geometry
     made and true is returned.
   */
   bool
-  ChangeToTwoPointPerspectiveProjection (double target_distance, ON_3dVector up,
+  ChangeToTwoPointPerspectiveProjection (double target_distance,
+                                         ON_3dVector up,
                                          double lens_length);
 
   /*
@@ -518,7 +520,8 @@ class ON_CLASS ON_Viewport : public ON_Geometry
     with the specified symmetries.
   */
   bool
-  ChangeToSymmetricFrustum (bool bLeftRightSymmetric, bool bTopBottomSymmetric,
+  ChangeToSymmetricFrustum (bool bLeftRightSymmetric,
+                            bool bTopBottomSymmetric,
                             double target_distance);
 
   /*
@@ -541,7 +544,9 @@ class ON_CLASS ON_Viewport : public ON_Geometry
     view frustum.
   */
   bool
-  GetPointDepth (ON_3dPoint point, double *near_dist, double *far_dist,
+  GetPointDepth (ON_3dPoint point,
+                 double *near_dist,
+                 double *far_dist,
                  bool bGrowNearFar = false) const;
 
   /*
@@ -598,7 +603,9 @@ class ON_CLASS ON_Viewport : public ON_Geometry
     projection.
   */
   bool
-  GetBoundingBoxDepth (ON_BoundingBox bbox, double *near_dist, double *far_dist,
+  GetBoundingBoxDepth (ON_BoundingBox bbox,
+                       double *near_dist,
+                       double *far_dist,
                        bool bGrowNearFar = false) const;
 
   /*
@@ -621,7 +628,9 @@ class ON_CLASS ON_Viewport : public ON_Geometry
     False if the sphere does not intesect the view frustum.
   */
   bool
-  GetSphereDepth (ON_Sphere sphere, double *near_dist, double *far_dist,
+  GetSphereDepth (ON_Sphere sphere,
+                  double *near_dist,
+                  double *far_dist,
                   bool bGrowNearFar = false) const;
 
   /*
@@ -659,12 +668,18 @@ class ON_CLASS ON_Viewport : public ON_Geometry
       objects.
   */
   bool
-  SetFrustumNearFar (double near_dist, double far_dist, double min_near_dist,
-                     double min_near_over_far, double target_dist);
+  SetFrustumNearFar (double near_dist,
+                     double far_dist,
+                     double min_near_dist,
+                     double min_near_over_far,
+                     double target_dist);
 
   bool
-  SetFrustumNearFar (double near_dist, double far_dist, double min_near_dist,
-                     double min_near_over_far, double target_dist,
+  SetFrustumNearFar (double near_dist,
+                     double far_dist,
+                     double min_near_dist,
+                     double min_near_over_far,
+                     double target_dist,
                      double relative_depth_bias);
 
   // Description:
@@ -816,7 +831,9 @@ class ON_CLASS ON_Viewport : public ON_Geometry
   // Returns:
   //   true if camera and frustum are valid.
   bool
-  GetNearRect (ON_3dPoint &left_bottom, ON_3dPoint &right_bottom, ON_3dPoint &left_top,
+  GetNearRect (ON_3dPoint &left_bottom,
+               ON_3dPoint &right_bottom,
+               ON_3dPoint &left_top,
                ON_3dPoint &right_top) const;
 
   // Description:
@@ -831,7 +848,9 @@ class ON_CLASS ON_Viewport : public ON_Geometry
   // Returns:
   //   true if camera and frustum are valid.
   bool
-  GetFarRect (ON_3dPoint &left_bottom, ON_3dPoint &right_bottom, ON_3dPoint &left_top,
+  GetFarRect (ON_3dPoint &left_bottom,
+              ON_3dPoint &right_bottom,
+              ON_3dPoint &left_top,
               ON_3dPoint &right_top) const;
 
   /*
@@ -856,8 +875,10 @@ class ON_CLASS ON_Viewport : public ON_Geometry
     was calculated.  False otherwise.
   */
   bool
-  GetViewPlaneRect (double view_plane_depth, ON_3dPoint &left_bottom,
-                    ON_3dPoint &right_bottom, ON_3dPoint &left_top,
+  GetViewPlaneRect (double view_plane_depth,
+                    ON_3dPoint &left_bottom,
+                    ON_3dPoint &right_bottom,
+                    ON_3dPoint &left_top,
                     ON_3dPoint &right_top) const;
 
   /*
@@ -894,15 +915,20 @@ class ON_CLASS ON_Viewport : public ON_Geometry
     ON_Viewport::GetScreenPort
   */
   bool
-  SetScreenPort (int port_left, int port_right, int port_bottom, int port_top,
-                 int port_near = 0, int port_far = 0);
+  SetScreenPort (int port_left,
+                 int port_right,
+                 int port_bottom,
+                 int port_top,
+                 int port_near = 0,
+                 int port_far = 0);
 
   bool
   GetScreenPort (int *left,
                  int *right, //( port_left != port_right )
                  int *port_bottom,
                  int *port_top, //( port_bottom != port_top)
-                 int *port_near = NULL, int *port_far = NULL) const;
+                 int *port_near = NULL,
+                 int *port_far = NULL) const;
 
   /*
   Returns:
@@ -954,7 +980,8 @@ class ON_CLASS ON_Viewport : public ON_Geometry
   SetCamera35mmLenseLength (double lens_length);
 
   bool
-  GetXform (ON::coordinate_system srcCS, ON::coordinate_system destCS,
+  GetXform (ON::coordinate_system srcCS,
+            ON::coordinate_system destCS,
             ON_Xform &matrix // 4x4 transformation matrix (acts on the left)
             ) const;
 
@@ -984,8 +1011,9 @@ class ON_CLASS ON_Viewport : public ON_Geometry
       ) const;
 
   bool
-  GetCoordinateSprite (int,         // size in pixels of coordinate sprite axes
-                       int, int,    // screen (x,y) for sprite origin
+  GetCoordinateSprite (int, // size in pixels of coordinate sprite axes
+                       int,
+                       int,         // screen (x,y) for sprite origin
                        int[3],      // returns depth order for axes
                        double[3][2] // screen coords for axes ends
                        ) const;

@@ -51,7 +51,10 @@ namespace pcl
 {
 
   /** \brief Trainer for decision trees. */
-  template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+  template <class FeatureType,
+            class DataSet,
+            class LabelType,
+            class ExampleIndex,
             class NodeType>
   class PCL_EXPORTS DecisionForestTrainer
   {
@@ -170,8 +173,11 @@ namespace pcl
      */
     void
     setDecisionTreeDataProvider (
-        typename pcl::DecisionTreeTrainerDataProvider<
-            FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::Ptr &dtdp)
+        typename pcl::DecisionTreeTrainerDataProvider<FeatureType,
+                                                      DataSet,
+                                                      LabelType,
+                                                      ExampleIndex,
+                                                      NodeType>::Ptr &dtdp)
     {
       decision_tree_trainer_.setDecisionTreeDataProvider (dtdp);
     }

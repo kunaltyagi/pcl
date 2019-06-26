@@ -65,8 +65,10 @@ namespace face_detection_apps_utils
   }
 
   inline void
-  getFilesInDirectory (bf::path &dir, std::string &rel_path_so_far,
-                       std::vector<std::string> &relative_paths, std::string &ext)
+  getFilesInDirectory (bf::path &dir,
+                       std::string &rel_path_so_far,
+                       std::vector<std::string> &relative_paths,
+                       std::string &ext)
   {
     bf::directory_iterator end_itr;
     for (bf::directory_iterator itr (dir); itr != end_itr; ++itr) {

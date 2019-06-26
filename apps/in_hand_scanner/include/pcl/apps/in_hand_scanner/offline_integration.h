@@ -152,7 +152,8 @@ namespace pcl
        * \return True if success.
        */
       bool
-      getFilesFromDirectory (const std::string path_dir, const std::string extension,
+      getFilesFromDirectory (const std::string path_dir,
+                             const std::string extension,
                              std::vector<std::string> &files) const;
 
       /** \brief Load the transformation matrix from the given file.
@@ -168,7 +169,8 @@ namespace pcl
        * computed normals. \param[out] T Loaded transformation. \return True if success.
        */
       bool
-      load (const std::string &filename, CloudXYZRGBNormalPtr &cloud,
+      load (const std::string &filename,
+            CloudXYZRGBNormalPtr &cloud,
             Eigen::Matrix4f &T) const;
 
       /** \see http://doc.qt.digia.com/qt/qwidget.html#paintEvent

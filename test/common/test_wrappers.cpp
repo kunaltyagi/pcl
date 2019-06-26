@@ -114,9 +114,9 @@ TEST (PointCloud, insert_range)
 {
   PointCloud<PointXYZ> cloud2 (10, 1);
   for (uint32_t i = 0; i < 10; ++i)
-    cloud2[i] =
-        PointXYZ (5.0f * static_cast<float> (i) + 0, 5.0f * static_cast<float> (i) + 1,
-                  5.0f * static_cast<float> (i) + 2);
+    cloud2[i] = PointXYZ (5.0f * static_cast<float> (i) + 0,
+                          5.0f * static_cast<float> (i) + 1,
+                          5.0f * static_cast<float> (i) + 2);
 
   uint32_t old_size = static_cast<uint32_t> (cloud.size ());
   cloud.insert (cloud.begin (), cloud2.begin (), cloud2.end ());

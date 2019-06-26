@@ -166,8 +166,8 @@ class PCDOrganizedMultiPlaneSegmentation
 
     viewer.removeAllPointClouds (0);
     viewer.removeAllShapes (0);
-    pcl::visualization::PointCloudColorHandlerCustom<PointT> single_color (cloud, 0,
-                                                                           255, 0);
+    pcl::visualization::PointCloudColorHandlerCustom<PointT> single_color (
+        cloud, 0, 255, 0);
     viewer.addPointCloud<PointT> (cloud, single_color, "cloud");
 
     pcl::PlanarPolygon<PointT> approx_polygon;
@@ -184,12 +184,12 @@ class PCDOrganizedMultiPlaneSegmentation
 
       contour->points = regions[i].getContour ();
       sprintf (name, "plane_%02d", int(i));
-      pcl::visualization::PointCloudColorHandlerCustom<PointT> color (contour, red[i],
-                                                                      grn[i], blu[i]);
+      pcl::visualization::PointCloudColorHandlerCustom<PointT> color (
+          contour, red[i], grn[i], blu[i]);
       viewer.addPointCloud (contour, color, name);
 
-      pcl::approximatePolygon (regions[i], approx_polygon, threshold_,
-                               polygon_refinement_);
+      pcl::approximatePolygon (
+          regions[i], approx_polygon, threshold_, polygon_refinement_);
       approx_contour->points = approx_polygon.getContour ();
       std::cout << "polygon: " << contour->size () << " -> " << approx_contour->size ()
                 << std::endl;
@@ -203,7 +203,10 @@ class PCDOrganizedMultiPlaneSegmentation
         viewer.addLine (
             approx_contour->points[idx],
             approx_contour->points[(idx + 1) % approx_contour->points.size ()],
-            0.5 * red[i], 0.5 * grn[i], 0.5 * blu[i], name);
+            0.5 * red[i],
+            0.5 * grn[i],
+            0.5 * blu[i],
+            name);
       }
     }
   }

@@ -82,8 +82,10 @@ class OpenNIFeaturePersistence
   using CloudPtr = typename Cloud::Ptr;
   using CloudConstPtr = typename Cloud::ConstPtr;
 
-  OpenNIFeaturePersistence (float &subsampling_leaf_size, double &normal_search_radius,
-                            std::vector<float> &scales_vector, float &alpha,
+  OpenNIFeaturePersistence (float &subsampling_leaf_size,
+                            double &normal_search_radius,
+                            std::vector<float> &scales_vector,
+                            float &alpha,
                             const std::string &device_id = "")
       : viewer ("PCL OpenNI Feature Persistence Viewer"), device_id_ (device_id)
   {
@@ -96,8 +98,8 @@ class OpenNIFeaturePersistence
       std::cout << scale << " ";
     std::cout << "\n";
 
-    subsampling_filter_.setLeafSize (subsampling_leaf_size, subsampling_leaf_size,
-                                     subsampling_leaf_size);
+    subsampling_filter_.setLeafSize (
+        subsampling_leaf_size, subsampling_leaf_size, subsampling_leaf_size);
     typename pcl::search::KdTree<PointType>::Ptr normal_search_tree (
         new typename pcl::search::KdTree<PointType>);
     normal_estimation_filter_.setSearchMethod (normal_search_tree);
@@ -106,9 +108,9 @@ class OpenNIFeaturePersistence
     feature_persistence_.setScalesVector (scales_vector);
     feature_persistence_.setAlpha (alpha);
 
-    fpfh_estimation_.reset (new
-                            typename pcl::FPFHEstimationOMP<PointType, pcl::Normal,
-                                                            pcl::FPFHSignature33> ());
+    fpfh_estimation_.reset (
+        new typename pcl::
+            FPFHEstimationOMP<PointType, pcl::Normal, pcl::FPFHSignature33> ());
     typename pcl::search::KdTree<PointType>::Ptr fpfh_tree (
         new typename pcl::search::KdTree<PointType> ());
     fpfh_estimation_->setSearchMethod (fpfh_tree);
@@ -289,8 +291,8 @@ main (int argc, char **argv)
   float subsampling_leaf_size = default_subsampling_leaf_size;
   pcl::console::parse_argument (argc, argv, "-octree_leaf_size", subsampling_leaf_size);
   double normal_search_radius = default_normal_search_radius;
-  pcl::console::parse_argument (argc, argv, "-normal_search_radius",
-                                normal_search_radius);
+  pcl::console::parse_argument (
+      argc, argv, "-normal_search_radius", normal_search_radius);
   std::vector<double> scales_vector_double = default_scales_vector;
   pcl::console::parse_multiple_arguments (argc, argv, "-scales", scales_vector_double);
   std::vector<float> scales_vector (scales_vector_double.size ());

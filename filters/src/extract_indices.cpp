@@ -52,7 +52,8 @@ pcl::ExtractIndices<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
         for (size_t j = 0; j < output.fields.size (); ++j)
           memcpy (&output.data[(*indices_)[i] * output.point_step +
                                output.fields[j].offset],
-                  &user_filter_value_, sizeof (float));
+                  &user_filter_value_,
+                  sizeof (float));
     } else {
       // Prepare a vector holding all indices
       std::vector<int> all_indices (input_->width * input_->height);
@@ -64,7 +65,9 @@ pcl::ExtractIndices<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
 
       // Get the diference
       std::vector<int> remaining_indices;
-      set_difference (all_indices.begin (), all_indices.end (), indices.begin (),
+      set_difference (all_indices.begin (),
+                      all_indices.end (),
+                      indices.begin (),
                       indices.end (),
                       inserter (remaining_indices, remaining_indices.begin ()));
 
@@ -73,7 +76,8 @@ pcl::ExtractIndices<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
         for (size_t j = 0; j < output.fields.size (); ++j)
           memcpy (&output.data[remaining_index * output.point_step +
                                output.fields[j].offset],
-                  &user_filter_value_, sizeof (float));
+                  &user_filter_value_,
+                  sizeof (float));
     }
     if (!std::isfinite (user_filter_value_))
       output.is_dense = false;
@@ -118,7 +122,9 @@ pcl::ExtractIndices<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
 
     // Get the diference
     std::vector<int> remaining_indices;
-    set_difference (all_indices.begin (), all_indices.end (), indices.begin (),
+    set_difference (all_indices.begin (),
+                    all_indices.end (),
+                    indices.begin (),
                     indices.end (),
                     inserter (remaining_indices, remaining_indices.begin ()));
 
@@ -135,7 +141,8 @@ pcl::ExtractIndices<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
     output.data.resize (indices_->size () * output.point_step);
     for (size_t i = 0; i < indices_->size (); ++i)
       memcpy (&output.data[i * output.point_step],
-              &input_->data[(*indices_)[i] * output.point_step], output.point_step);
+              &input_->data[(*indices_)[i] * output.point_step],
+              output.point_step);
   }
   output.row_step = output.point_step * output.width;
 }
@@ -170,8 +177,10 @@ pcl::ExtractIndices<pcl::PCLPointCloud2>::applyFilter (std::vector<int> &indices
     std::sort (indices_subset.begin (), indices_subset.end ());
 
     // Get the difference
-    set_difference (indices_fullset.begin (), indices_fullset.end (),
-                    indices_subset.begin (), indices_subset.end (),
+    set_difference (indices_fullset.begin (),
+                    indices_fullset.end (),
+                    indices_subset.begin (),
+                    indices_subset.end (),
                     inserter (indices, indices.begin ()));
   } else
     indices = *indices_;
@@ -182,9 +191,10 @@ pcl::ExtractIndices<pcl::PCLPointCloud2>::applyFilter (std::vector<int> &indices
 #include <pcl/point_types.h>
 
 #ifdef PCL_ONLY_CORE_POINT_TYPES
-PCL_INSTANTIATE (ExtractIndices, (pcl::PointXYZ) (pcl::PointXYZI) (pcl::PointXYZRGB) (
-                                     pcl::PointXYZRGBA) (pcl::Normal) (
-                                     pcl::PointNormal) (pcl::PointXYZRGBNormal))
+PCL_INSTANTIATE (
+    ExtractIndices,
+    (pcl::PointXYZ) (pcl::PointXYZI) (pcl::PointXYZRGB) (pcl::PointXYZRGBA) (
+        pcl::Normal) (pcl::PointNormal) (pcl::PointXYZRGBNormal))
 #else
 PCL_INSTANTIATE (ExtractIndices, PCL_POINT_TYPES)
 #endif

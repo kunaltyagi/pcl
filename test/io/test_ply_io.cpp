@@ -77,8 +77,12 @@ TEST (PCL, PLYReaderWriter)
 
   // test for toPCLPointCloud2 ()
   pcl::PLYWriter writer;
-  writer.write ("test_pcl_io.ply", cloud_blob, Eigen::Vector4f::Zero (),
-                Eigen::Quaternionf::Identity (), true, true);
+  writer.write ("test_pcl_io.ply",
+                cloud_blob,
+                Eigen::Vector4f::Zero (),
+                Eigen::Quaternionf::Identity (),
+                true,
+                true);
 
   pcl::PLYReader reader;
   reader.read ("test_pcl_io.ply", cloud_blob2);

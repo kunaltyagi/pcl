@@ -45,8 +45,11 @@
 template <typename PointT>
 bool
 pcl::visualization::PCLHistogramVisualizer::addFeatureHistogram (
-    const pcl::PointCloud<PointT> &cloud, int hsize, const std::string &id,
-    int win_width, int win_height)
+    const pcl::PointCloud<PointT> &cloud,
+    int hsize,
+    const std::string &id,
+    int win_width,
+    int win_height)
 {
   RenWinInteractMap::iterator am_it = wins_.find (id);
   if (am_it != wins_.end ()) {
@@ -80,8 +83,12 @@ pcl::visualization::PCLHistogramVisualizer::addFeatureHistogram (
 template <typename PointT>
 bool
 pcl::visualization::PCLHistogramVisualizer::addFeatureHistogram (
-    const pcl::PointCloud<PointT> &cloud, const std::string &field_name,
-    const int index, const std::string &id, int win_width, int win_height)
+    const pcl::PointCloud<PointT> &cloud,
+    const std::string &field_name,
+    const int index,
+    const std::string &id,
+    int win_width,
+    int win_height)
 {
   if (index < 0 || index >= cloud.points.size ()) {
     PCL_ERROR ("[addFeatureHistogram] Invalid point index (%d) given!\n", index);
@@ -164,8 +171,10 @@ pcl::visualization::PCLHistogramVisualizer::updateFeatureHistogram (
 template <typename PointT>
 bool
 pcl::visualization::PCLHistogramVisualizer::updateFeatureHistogram (
-    const pcl::PointCloud<PointT> &cloud, const std::string &field_name,
-    const int index, const std::string &id)
+    const pcl::PointCloud<PointT> &cloud,
+    const std::string &field_name,
+    const int index,
+    const std::string &id)
 {
   if (index < 0 || index >= cloud.points.size ()) {
     PCL_ERROR ("[updateFeatureHistogram] Invalid point index (%d) given!\n", index);

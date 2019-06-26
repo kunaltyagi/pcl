@@ -148,7 +148,8 @@ class KeyboardCallback : public vtkCommand
   }
 
   void
-  Execute (vtkObject *caller, unsigned long vtkNotUsed (eventId),
+  Execute (vtkObject *caller,
+           unsigned long vtkNotUsed (eventId),
            void *vtkNotUsed (callData)) override
   {
     vtkRenderWindowInteractor *interactor =
@@ -188,15 +189,17 @@ class KeyboardCallback : public vtkCommand
     if (key == "Escape") {
       Eigen::Vector3d min (cloud->getBoundingBoxMin ());
       Eigen::Vector3d max (cloud->getBoundingBoxMax ());
-      renderer->ResetCamera (min.x (), max.x (), min.y (), max.y (), min.z (),
-                             max.z ());
+      renderer->ResetCamera (
+          min.x (), max.x (), min.y (), max.y (), min.z (), max.z ());
     }
   }
 };
 
 void
-renderTimerCallback (vtkObject *caller, unsigned long int vtkNotUsed (eventId),
-                     void *vtkNotUsed (clientData), void *vtkNotUsed (callData))
+renderTimerCallback (vtkObject *caller,
+                     unsigned long int vtkNotUsed (eventId),
+                     void *vtkNotUsed (clientData),
+                     void *vtkNotUsed (callData))
 {
   vtkRenderWindowInteractor *interactor =
       vtkRenderWindowInteractor::SafeDownCast (caller);
@@ -206,7 +209,8 @@ renderTimerCallback (vtkObject *caller, unsigned long int vtkNotUsed (eventId),
 void
 renderStartCallback (vtkObject *vtkNotUsed (caller),
                      unsigned long int vtkNotUsed (eventId),
-                     void *vtkNotUsed (clientData), void *vtkNotUsed (callData))
+                     void *vtkNotUsed (clientData),
+                     void *vtkNotUsed (callData))
 {
   // std::cout << "Start...";
 }
@@ -214,14 +218,17 @@ renderStartCallback (vtkObject *vtkNotUsed (caller),
 void
 renderEndCallback (vtkObject *vtkNotUsed (caller),
                    unsigned long int vtkNotUsed (eventId),
-                   void *vtkNotUsed (clientData), void *vtkNotUsed (callData))
+                   void *vtkNotUsed (clientData),
+                   void *vtkNotUsed (callData))
 {
   // std::cout << "End" << std::endl;
 }
 
 int
-outofcoreViewer (boost::filesystem::path tree_root, int depth,
-                 bool display_octree = true, unsigned int gpu_cache_size = 512)
+outofcoreViewer (boost::filesystem::path tree_root,
+                 int depth,
+                 bool display_octree = true,
+                 unsigned int gpu_cache_size = 512)
 {
   cout << boost::filesystem::absolute (tree_root) << endl;
 
@@ -284,10 +291,10 @@ outofcoreViewer (boost::filesystem::path tree_root, int depth,
   // Frame cameras
   Eigen::Vector3d min (cloud->getBoundingBoxMin ());
   Eigen::Vector3d max (cloud->getBoundingBoxMax ());
-  octree_viewport.getRenderer ()->ResetCamera (min.x (), max.x (), min.y (), max.y (),
-                                               min.z (), max.z ());
-  persp_viewport.getRenderer ()->ResetCamera (min.x (), max.x (), min.y (), max.y (),
-                                              min.z (), max.z ());
+  octree_viewport.getRenderer ()->ResetCamera (
+      min.x (), max.x (), min.y (), max.y (), min.z (), max.z ());
+  persp_viewport.getRenderer ()->ResetCamera (
+      min.x (), max.x (), min.y (), max.y (), min.z (), max.z ());
 
   cloud->setRenderCamera (octree_camera);
 

@@ -59,7 +59,8 @@ namespace pcl
    * \author Nizar Sallem (port to PCL)
    * \ingroup features
    */
-  template <typename PointInT, typename PointOutT = pcl::UniqueShapeContext1960,
+  template <typename PointInT,
+            typename PointOutT = pcl::UniqueShapeContext1960,
             typename PointRFT = pcl::ReferenceFrame>
   class UniqueShapeContext : public Feature<PointInT, PointOutT>,
                              public FeatureWithLocalReferenceFrames<PointInT, PointRFT>

@@ -190,7 +190,7 @@ pcl::HarrisKeypoint2D<PointInT, PointOutT, IntensityT>::detectKeypoints (
   derivatives_rows_.resize (input_->width, input_->height);
   // Compute cloud intensities first derivatives along columns and rows
   //!!! nsallem 20120220 : we don't test here for density so if one term in nan the
-  //!result is nan
+  //! result is nan
   int w = static_cast<int> (input_->width) - 1;
   int h = static_cast<int> (input_->height) - 1;
   // j = 0 --> j-1 out of range ; use 0
@@ -263,8 +263,9 @@ pcl::HarrisKeypoint2D<PointInT, PointOutT, IntensityT>::detectKeypoints (
     for (size_t i = 0; i < response_->size (); ++i)
       keypoints_indices_->indices.push_back (i);
   } else {
-    std::sort (indices_->begin (), indices_->end (),
-               [this](int p1, int p2) { return greaterIntensityAtIndices (p1, p2); });
+    std::sort (indices_->begin (), indices_->end (), [this](int p1, int p2) {
+      return greaterIntensityAtIndices (p1, p2);
+    });
     float threshold = threshold_ * response_->points[indices_->front ()].intensity;
     output.clear ();
     output.reserve (response_->size ());

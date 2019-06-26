@@ -56,7 +56,8 @@ pcl::registration::CorrespondenceRejectorVarTrimmed::getRemainingCorrespondences
     }
   }
   factor_ = optimizeInlierRatio (dists);
-  nth_element (dists.begin (), dists.begin () + int(double(dists.size ()) * factor_),
+  nth_element (dists.begin (),
+               dists.begin () + int(double(dists.size ()) * factor_),
                dists.end ());
   trimmed_distance_ = dists[int(double(dists.size ()) * factor_)];
 

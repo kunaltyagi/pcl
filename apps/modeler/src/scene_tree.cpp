@@ -66,13 +66,18 @@ pcl::modeler::SceneTree::SceneTree (QWidget *parent) : QTreeWidget (parent)
   setSelectionMode (QAbstractItemView::ExtendedSelection);
 
   connect (selectionModel (),
-           SIGNAL (selectionChanged (QItemSelection, QItemSelection)), this,
+           SIGNAL (selectionChanged (QItemSelection, QItemSelection)),
+           this,
            SLOT (slotUpdateOnSelectionChange (QItemSelection, const QItemSelection)));
 
-  connect (this, SIGNAL (itemInsertedOrRemoved ()), this,
+  connect (this,
+           SIGNAL (itemInsertedOrRemoved ()),
+           this,
            SLOT (slotUpdateOnInsertOrRemove ()));
 
-  connect (this, SIGNAL (itemDoubleClicked (QTreeWidgetItem *, int)), this,
+  connect (this,
+           SIGNAL (itemDoubleClicked (QTreeWidgetItem *, int)),
+           this,
            SLOT (slotOnItemDoubleClicked (QTreeWidgetItem *)));
 }
 
@@ -153,15 +158,18 @@ pcl::modeler::SceneTree::slotOpenPointCloud ()
   QList<RenderWindowItem *> selected_render_window_items = selectedRenderWindowItems ();
 
   if (selected_render_window_items.empty ()) {
-    QMessageBox::warning (main_window, tr ("Failed to Open Point Cloud"),
+    QMessageBox::warning (main_window,
+                          tr ("Failed to Open Point Cloud"),
                           tr ("Please specify in which render window(s) you want to "
                               "open the point cloud(s)"));
     return;
   }
 
-  QStringList filenames = QFileDialog::getOpenFileNames (
-      main_window, tr ("Open Point Cloud"), main_window->getRecentFolder (),
-      tr ("Point Cloud(*.pcd)\n"));
+  QStringList filenames =
+      QFileDialog::getOpenFileNames (main_window,
+                                     tr ("Open Point Cloud"),
+                                     main_window->getRecentFolder (),
+                                     tr ("Point Cloud(*.pcd)\n"));
 
   if (filenames.isEmpty ())
     return;
@@ -176,9 +184,11 @@ pcl::modeler::SceneTree::slotOpenPointCloud ()
   }
 
   for (QStringList::const_iterator filenames_it = filenames.begin ();
-       filenames_it != filenames.end (); ++filenames_it) {
+       filenames_it != filenames.end ();
+       ++filenames_it) {
     if (!openPointCloud (*filenames_it))
-      QMessageBox::warning (main_window, tr ("Failed to Open Point Cloud"),
+      QMessageBox::warning (main_window,
+                            tr ("Failed to Open Point Cloud"),
                             tr ("Can not open point cloud file %1, please check if "
                                 "it's in valid .pcd format!")
                                 .arg (*filenames_it));
@@ -194,22 +204,27 @@ pcl::modeler::SceneTree::slotImportPointCloud ()
   MainWindow *main_window = &MainWindow::getInstance ();
 
   if (selectedRenderWindowItems ().empty ()) {
-    QMessageBox::warning (main_window, tr ("Failed to Import Point Cloud"),
+    QMessageBox::warning (main_window,
+                          tr ("Failed to Import Point Cloud"),
                           tr ("Please specify in which render window(s) you want to "
                               "import the point cloud(s)"));
     return;
   }
 
-  QStringList filenames = QFileDialog::getOpenFileNames (
-      main_window, tr ("Import Point Cloud"), main_window->getRecentFolder (),
-      tr ("Point Cloud(*.pcd)\n"));
+  QStringList filenames =
+      QFileDialog::getOpenFileNames (main_window,
+                                     tr ("Import Point Cloud"),
+                                     main_window->getRecentFolder (),
+                                     tr ("Point Cloud(*.pcd)\n"));
   if (filenames.isEmpty ())
     return;
 
   for (QStringList::const_iterator filenames_it = filenames.begin ();
-       filenames_it != filenames.end (); ++filenames_it) {
+       filenames_it != filenames.end ();
+       ++filenames_it) {
     if (!openPointCloud (*filenames_it))
-      QMessageBox::warning (main_window, tr ("Failed to Import Point Cloud"),
+      QMessageBox::warning (main_window,
+                            tr ("Failed to Import Point Cloud"),
                             tr ("Can not import point cloud file %1, please check if "
                                 "it's in valid .pcd format!")
                                 .arg (*filenames_it));
@@ -225,12 +240,14 @@ pcl::modeler::SceneTree::slotSavePointCloud ()
   MainWindow *main_window = &MainWindow::getInstance ();
 
   if (selectedTypeItems<CloudMeshItem> ().empty ()) {
-    QMessageBox::warning (main_window, tr ("Failed to Save Point Cloud"),
+    QMessageBox::warning (main_window,
+                          tr ("Failed to Save Point Cloud"),
                           tr ("Please specify the point cloud(s) you want to save"));
     return;
   }
 
-  QString filename = QFileDialog::getSaveFileName (main_window, tr ("Save Point Cloud"),
+  QString filename = QFileDialog::getSaveFileName (main_window,
+                                                   tr ("Save Point Cloud"),
                                                    main_window->getRecentFolder (),
                                                    tr ("Save Cloud(*.pcd)\n"));
 
@@ -260,7 +277,8 @@ pcl::modeler::SceneTree::closePointCloud (const QList<CloudMeshItem *> &items)
 
   for (QList<RenderWindowItem *>::const_iterator render_window_items_it =
            render_window_items.begin ();
-       render_window_items_it != render_window_items.end (); ++render_window_items_it) {
+       render_window_items_it != render_window_items.end ();
+       ++render_window_items_it) {
     (*render_window_items_it)->getRenderWindow ()->render ();
   }
 
@@ -276,7 +294,8 @@ pcl::modeler::SceneTree::slotClosePointCloud ()
       selectedTypeItems<CloudMeshItem> ();
 
   if (selected_cloud_mesh_items.empty ()) {
-    QMessageBox::warning (main_window, tr ("Failed to Close Point Cloud"),
+    QMessageBox::warning (main_window,
+                          tr ("Failed to Close Point Cloud"),
                           tr ("Please specify the point cloud(s) you want to close"));
     return;
   }
@@ -294,8 +313,8 @@ pcl::modeler::SceneTree::slotICPRegistration ()
       selectedTypeItems<CloudMeshItem> ();
   CloudMesh::PointCloudPtr result (new CloudMesh::PointCloud ());
 
-  AbstractWorker *worker = new ICPRegistrationWorker (result, selected_cloud_mesh_items,
-                                                      &MainWindow::getInstance ());
+  AbstractWorker *worker = new ICPRegistrationWorker (
+      result, selected_cloud_mesh_items, &MainWindow::getInstance ());
   ThreadController *thread_controller = new ThreadController ();
 
   QList<RenderWindowItem *> selected_render_window_items = selectedRenderWindowItems ();
@@ -303,7 +322,9 @@ pcl::modeler::SceneTree::slotICPRegistration ()
     CloudMeshItem *cloud_mesh_item =
         selected_render_window_item->addPointCloud (result);
     expandItem (selected_render_window_item);
-    connect (worker, SIGNAL (finished ()), new CloudMeshItemUpdater (cloud_mesh_item),
+    connect (worker,
+             SIGNAL (finished ()),
+             new CloudMeshItemUpdater (cloud_mesh_item),
              SLOT (updateCloudMeshItem ()));
   }
 
@@ -321,7 +342,9 @@ pcl::modeler::SceneTree::slotVoxelGridDownsampleFilter ()
   AbstractWorker *worker = new VoxelGridDownampleWorker (selected_cloud_mesh_items,
                                                          &MainWindow::getInstance ());
   ThreadController *thread_controller = new ThreadController ();
-  connect (worker, SIGNAL (dataUpdated (CloudMeshItem *)), thread_controller,
+  connect (worker,
+           SIGNAL (dataUpdated (CloudMeshItem *)),
+           thread_controller,
            SLOT (slotOnCloudMeshItemUpdate (CloudMeshItem *)));
   thread_controller->runWorker (worker);
 
@@ -337,7 +360,9 @@ pcl::modeler::SceneTree::slotStatisticalOutlierRemovalFilter ()
   AbstractWorker *worker = new StatisticalOutlierRemovalWorker (
       selected_cloud_mesh_items, &MainWindow::getInstance ());
   ThreadController *thread_controller = new ThreadController ();
-  connect (worker, SIGNAL (dataUpdated (CloudMeshItem *)), thread_controller,
+  connect (worker,
+           SIGNAL (dataUpdated (CloudMeshItem *)),
+           thread_controller,
            SLOT (slotOnCloudMeshItemUpdate (CloudMeshItem *)));
   thread_controller->runWorker (worker);
 
@@ -353,7 +378,9 @@ pcl::modeler::SceneTree::slotEstimateNormal ()
   AbstractWorker *worker = new NormalEstimationWorker (selected_cloud_mesh_items,
                                                        &MainWindow::getInstance ());
   ThreadController *thread_controller = new ThreadController ();
-  connect (worker, SIGNAL (dataUpdated (CloudMeshItem *)), thread_controller,
+  connect (worker,
+           SIGNAL (dataUpdated (CloudMeshItem *)),
+           thread_controller,
            SLOT (slotOnCloudMeshItemUpdate (CloudMeshItem *)));
   thread_controller->runWorker (worker);
 
@@ -369,7 +396,9 @@ pcl::modeler::SceneTree::slotPoissonReconstruction ()
   AbstractWorker *worker = new PoissonReconstructionWorker (
       selected_cloud_mesh_items, &MainWindow::getInstance ());
   ThreadController *thread_controller = new ThreadController ();
-  connect (worker, SIGNAL (dataUpdated (CloudMeshItem *)), thread_controller,
+  connect (worker,
+           SIGNAL (dataUpdated (CloudMeshItem *)),
+           thread_controller,
            SLOT (slotOnCloudMeshItemUpdate (CloudMeshItem *)));
   thread_controller->runWorker (worker);
 
@@ -392,7 +421,8 @@ pcl::modeler::SceneTree::slotUpdateOnSelectionChange (const QItemSelection &sele
 {
   QModelIndexList selected_indices = selected.indexes ();
   for (QModelIndexList::const_iterator selected_indices_it = selected_indices.begin ();
-       selected_indices_it != selected_indices.end (); ++selected_indices_it) {
+       selected_indices_it != selected_indices.end ();
+       ++selected_indices_it) {
     QTreeWidgetItem *item = itemFromIndex (*selected_indices_it);
     RenderWindowItem *render_window_item = dynamic_cast<RenderWindowItem *> (item);
     if (render_window_item != nullptr) {
@@ -403,7 +433,8 @@ pcl::modeler::SceneTree::slotUpdateOnSelectionChange (const QItemSelection &sele
   QModelIndexList deselected_indices = deselected.indexes ();
   for (QModelIndexList::const_iterator deselected_indices_it =
            deselected_indices.begin ();
-       deselected_indices_it != deselected_indices.end (); ++deselected_indices_it) {
+       deselected_indices_it != deselected_indices.end ();
+       ++deselected_indices_it) {
     QTreeWidgetItem *item = itemFromIndex (*deselected_indices_it);
     RenderWindowItem *render_window_item = dynamic_cast<RenderWindowItem *> (item);
     if (render_window_item != nullptr) {
@@ -507,7 +538,9 @@ pcl::modeler::SceneTree::dropEvent (QDropEvent *event)
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::modeler::SceneTree::dropMimeData (QTreeWidgetItem *parent, int, const QMimeData *,
+pcl::modeler::SceneTree::dropMimeData (QTreeWidgetItem *parent,
+                                       int,
+                                       const QMimeData *,
                                        Qt::DropAction)
 {
   QList<CloudMeshItem *> selected_cloud_meshes = selectedTypeItems<CloudMeshItem> ();

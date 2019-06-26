@@ -85,7 +85,8 @@ print_help ()
 }
 
 void
-cloud_cb_ (const PointCloudT::ConstPtr &callback_cloud, PointCloudT::Ptr &cloud,
+cloud_cb_ (const PointCloudT::ConstPtr &callback_cloud,
+           PointCloudT::Ptr &cloud,
            bool *new_cloud_available_flag)
 {
   cloud_mutex.lock (); // for not overwriting the point cloud from another thread
@@ -110,8 +111,8 @@ pp_callback (const pcl::visualization::PointPickingEvent &event, void *args)
   event.getPoint (current_point.x, current_point.y, current_point.z);
   data->clicked_points_3d->points.push_back (current_point);
   // Draw clicked points in red:
-  pcl::visualization::PointCloudColorHandlerCustom<PointT> red (data->clicked_points_3d,
-                                                                255, 0, 0);
+  pcl::visualization::PointCloudColorHandlerCustom<PointT> red (
+      data->clicked_points_3d, 255, 0, 0);
   data->viewerPtr->removePointCloud ("clicked_points");
   data->viewerPtr->addPointCloud (data->clicked_points_3d, red, "clicked_points");
   data->viewerPtr->setPointCloudRenderingProperties (

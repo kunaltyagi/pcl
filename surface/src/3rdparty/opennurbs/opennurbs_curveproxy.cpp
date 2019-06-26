@@ -260,8 +260,10 @@ ON_CurveProxy::IsValid (ON_TextLog *text_log) const
 void
 ON_CurveProxy::Dump (ON_TextLog &dump) const
 {
-  dump.Print ("ON_CurveProxy uses %x on [%g,%g]\n", m_real_curve,
-              m_real_curve_domain[0], m_real_curve_domain[1]);
+  dump.Print ("ON_CurveProxy uses %x on [%g,%g]\n",
+              m_real_curve,
+              m_real_curve_domain[0],
+              m_real_curve_domain[1]);
 }
 
 ON_BOOL32
@@ -663,8 +665,13 @@ ON_CurveProxy::IsPeriodic () const
 }
 
 bool
-ON_CurveProxy::GetNextDiscontinuity (ON::continuity c, double t0, double t1, double *t,
-                                     int *hint, int *dtype, double cos_angle_tolerance,
+ON_CurveProxy::GetNextDiscontinuity (ON::continuity c,
+                                     double t0,
+                                     double t1,
+                                     double *t,
+                                     int *hint,
+                                     int *dtype,
+                                     double cos_angle_tolerance,
                                      double curvature_tolerance) const
 {
   bool rc = false;
@@ -694,9 +701,14 @@ ON_CurveProxy::GetNextDiscontinuity (ON::continuity c, double t0, double t1, dou
     ON::continuity parametric_c = ON::ParametricContinuity (c);
 
     int realcrv_dtype = 0;
-    bool realcrv_rc = m_real_curve->GetNextDiscontinuity (
-        parametric_c, s0, s1, &s, hint, &realcrv_dtype, cos_angle_tolerance,
-        curvature_tolerance);
+    bool realcrv_rc = m_real_curve->GetNextDiscontinuity (parametric_c,
+                                                          s0,
+                                                          s1,
+                                                          &s,
+                                                          hint,
+                                                          &realcrv_dtype,
+                                                          cos_angle_tolerance,
+                                                          curvature_tolerance);
 
     if (realcrv_rc) {
       double thiscrv_t = ThisCurveParameter (s);
@@ -707,9 +719,14 @@ ON_CurveProxy::GetNextDiscontinuity (ON::continuity c, double t0, double t1, dou
         // To avoid infinite loops, it is critical that *t != t0
         double s2 = ON_SQRT_EPSILON * s1 + (1.0 - ON_SQRT_EPSILON) * s0;
         if ((s0 < s2 && s2 < s1) || (s1 < s2 && s2 < s0)) {
-          realcrv_rc = m_real_curve->GetNextDiscontinuity (
-              parametric_c, s2, s1, &s, hint, &realcrv_dtype, cos_angle_tolerance,
-              curvature_tolerance);
+          realcrv_rc = m_real_curve->GetNextDiscontinuity (parametric_c,
+                                                           s2,
+                                                           s1,
+                                                           &s,
+                                                           hint,
+                                                           &realcrv_dtype,
+                                                           cos_angle_tolerance,
+                                                           curvature_tolerance);
           if (realcrv_rc)
             thiscrv_t = ThisCurveParameter (s);
         }
@@ -727,8 +744,8 @@ ON_CurveProxy::GetNextDiscontinuity (ON::continuity c, double t0, double t1, dou
     if (!rc && parametric_c != c) {
       // 20 March 2003 Dale Lear:
       //   Let base class test decide locus continuity questions at ends
-      rc = ON_Curve::GetNextDiscontinuity (c, t0, t1, t, hint, dtype,
-                                           cos_angle_tolerance, curvature_tolerance);
+      rc = ON_Curve::GetNextDiscontinuity (
+          c, t0, t1, t, hint, dtype, cos_angle_tolerance, curvature_tolerance);
     }
   }
 
@@ -737,7 +754,8 @@ ON_CurveProxy::GetNextDiscontinuity (ON::continuity c, double t0, double t1, dou
 
 bool
 ON_CurveProxy::IsContinuous (
-    ON::continuity desired_continuity, double t,
+    ON::continuity desired_continuity,
+    double t,
     int *hint,                  // default = NULL,
     double point_tolerance,     // default=ON_ZERO_TOLERANCE
     double d1_tolerance,        // default==ON_ZERO_TOLERANCE
@@ -781,9 +799,14 @@ ON_CurveProxy::IsContinuous (
       }
     }
     if (rc)
-      rc = m_real_curve->IsContinuous (desired_continuity, RealCurveParameter (t), hint,
-                                       point_tolerance, d1_tolerance, d2_tolerance,
-                                       cos_angle_tolerance, curvature_tolerance);
+      rc = m_real_curve->IsContinuous (desired_continuity,
+                                       RealCurveParameter (t),
+                                       hint,
+                                       point_tolerance,
+                                       d1_tolerance,
+                                       d2_tolerance,
+                                       cos_angle_tolerance,
+                                       curvature_tolerance);
   }
   return rc;
 }

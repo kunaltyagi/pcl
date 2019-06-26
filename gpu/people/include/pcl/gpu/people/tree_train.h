@@ -248,8 +248,11 @@ namespace pcl
         // #######################################
         // reading and writing info files
         inline void
-        writeInfoFile (const std::string &filename, int attribId, Attrib threshold,
-                       double gain, const HistogramPair &HP)
+        writeInfoFile (const std::string &filename,
+                       int attribId,
+                       Attrib threshold,
+                       double gain,
+                       const HistogramPair &HP)
         {
           std::ofstream fout (filename.c_str ());
           if (!fout.is_open ())
@@ -261,8 +264,11 @@ namespace pcl
         }
 
         inline void
-        readInfoFile (const std::string &filename, int &attribId, Attrib &threshold,
-                      double &gain, HistogramPair &HP)
+        readInfoFile (const std::string &filename,
+                      int &attribId,
+                      Attrib &threshold,
+                      double &gain,
+                      HistogramPair &HP)
         {
           std::ifstream fin (filename.c_str ());
           if (!fin.is_open ())

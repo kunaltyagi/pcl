@@ -84,11 +84,12 @@ main (int argc, char **argv)
 
   PointCloud<PointXYZ>::Ptr cloud_subsampled;
   PointCloud<Normal>::Ptr cloud_subsampled_normals;
-  subsampleAndCalculateNormals (cloud_scene, cloud_subsampled,
-                                cloud_subsampled_normals);
+  subsampleAndCalculateNormals (
+      cloud_scene, cloud_subsampled, cloud_subsampled_normals);
 
   PCL_INFO ("STATS:\ninitial point cloud size: %u\nsubsampled point cloud size: %u\n",
-            cloud_scene->points.size (), cloud_subsampled->points.size ());
+            cloud_scene->points.size (),
+            cloud_subsampled->points.size ());
   visualization::CloudViewer viewer (
       "Multiscale Feature Persistence Example Visualization");
   viewer.showCloud (cloud_scene, "scene");

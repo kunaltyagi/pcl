@@ -69,8 +69,8 @@ local const int extra_dbits[D_CODES] /* extra bits for each distance code */
 local const int extra_blbits[BL_CODES] /* extra bits for each bit length code */
     = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 7};
 
-local const uch bl_order[BL_CODES] = {16, 17, 18, 0, 8,  7, 9,  6, 10, 5,
-                                      11, 4,  12, 3, 13, 2, 14, 1, 15};
+local const uch bl_order[BL_CODES] = {
+    16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15};
 /* The lengths of the bit length codes are sent in order of decreasing
  * probability, to avoid transmitting the lengths for unused bit length codes.
  */
@@ -141,14 +141,14 @@ struct static_tree_desc_s {
   int max_length;             /* max bit length for the codes */
 };
 
-local static_tree_desc static_l_desc = {static_ltree, extra_lbits, LITERALS + 1,
-                                        L_CODES, MAX_BITS};
+local static_tree_desc static_l_desc = {
+    static_ltree, extra_lbits, LITERALS + 1, L_CODES, MAX_BITS};
 
-local static_tree_desc static_d_desc = {static_dtree, extra_dbits, 0, D_CODES,
-                                        MAX_BITS};
+local static_tree_desc static_d_desc = {
+    static_dtree, extra_dbits, 0, D_CODES, MAX_BITS};
 
-local static_tree_desc static_bl_desc = {(const ct_data *)0, extra_blbits, 0, BL_CODES,
-                                         MAX_BL_BITS};
+local static_tree_desc static_bl_desc = {
+    (const ct_data *)0, extra_blbits, 0, BL_CODES, MAX_BL_BITS};
 
 /* ===========================================================================
  * Local (static) routines in this file.
@@ -359,13 +359,19 @@ gen_trees_header ()
 
   fprintf (header, "local const ct_data static_ltree[L_CODES+2] = {\n");
   for (i = 0; i < L_CODES + 2; i++) {
-    fprintf (header, "{{%3u},{%3u}}%s", static_ltree[i].Code, static_ltree[i].Len,
+    fprintf (header,
+             "{{%3u},{%3u}}%s",
+             static_ltree[i].Code,
+             static_ltree[i].Len,
              SEPARATOR (i, L_CODES + 1, 5));
   }
 
   fprintf (header, "local const ct_data static_dtree[D_CODES] = {\n");
   for (i = 0; i < D_CODES; i++) {
-    fprintf (header, "{{%2u},{%2u}}%s", static_dtree[i].Code, static_dtree[i].Len,
+    fprintf (header,
+             "{{%2u},{%2u}}%s",
+             static_dtree[i].Code,
+             static_dtree[i].Len,
              SEPARATOR (i, D_CODES - 1, 5));
   }
 
@@ -376,8 +382,8 @@ gen_trees_header ()
 
   fprintf (header, "const uch _length_code[MAX_MATCH-MIN_MATCH+1]= {\n");
   for (i = 0; i < MAX_MATCH - MIN_MATCH + 1; i++) {
-    fprintf (header, "%2u%s", _length_code[i],
-             SEPARATOR (i, MAX_MATCH - MIN_MATCH, 20));
+    fprintf (
+        header, "%2u%s", _length_code[i], SEPARATOR (i, MAX_MATCH - MIN_MATCH, 20));
   }
 
   fprintf (header, "local const int base_length[LENGTH_CODES] = {\n");
@@ -598,8 +604,8 @@ tree_desc *desc; /* the tree descriptor */
  * OUT assertion: the field code is set for all tree elements of non
  *     zero code length.
  */
-local void gen_codes (tree, max_code,
-                      bl_count) ct_data *tree; /* the tree to decorate */
+local void
+    gen_codes (tree, max_code, bl_count) ct_data *tree; /* the tree to decorate */
 int max_code;   /* largest code with non zero frequency */
 ushf *bl_count; /* number of codes at each bit length */
 {
@@ -629,8 +635,13 @@ ushf *bl_count; /* number of codes at each bit length */
     tree[n].Code = bi_reverse (next_code[len]++, len);
 
     Tracecv (tree != static_ltree,
-             (stderr, "\nn %3d %c l %2d c %4x (%x) ", n, (isgraph (n) ? n : ' '), len,
-              tree[n].Code, next_code[len] - 1));
+             (stderr,
+              "\nn %3d %c l %2d c %4x (%x) ",
+              n,
+              (isgraph (n) ? n : ' '),
+              len,
+              tree[n].Code,
+              next_code[len] - 1));
   }
 }
 
@@ -707,8 +718,14 @@ tree_desc *desc; /* the tree descriptor */
     tree[n].Dad = tree[m].Dad = (ush)node;
 #ifdef DUMP_BL_TREE
     if (tree == s->bl_tree) {
-      fprintf (stderr, "\nnode %d(%d), sons %d(%d) %d(%d)", node, tree[node].Freq, n,
-               tree[n].Freq, m, tree[m].Freq);
+      fprintf (stderr,
+               "\nnode %d(%d), sons %d(%d) %d(%d)",
+               node,
+               tree[node].Freq,
+               n,
+               tree[n].Freq,
+               m,
+               tree[m].Freq);
     }
 #endif
     /* and insert the new node in the heap */
@@ -987,8 +1004,14 @@ int eof;        /* true if this is the last block for a file */
     opt_lenb = (s->opt_len + 3 + 7) >> 3;
     static_lenb = (s->static_len + 3 + 7) >> 3;
 
-    Tracev ((stderr, "\nopt %u(%u) stat %u(%u) stored %u lit %u ", opt_lenb, s->opt_len,
-             static_lenb, s->static_len, stored_len, s->last_lit));
+    Tracev ((stderr,
+             "\nopt %u(%u) stat %u(%u) stored %u lit %u ",
+             opt_lenb,
+             s->opt_len,
+             static_lenb,
+             s->static_len,
+             stored_len,
+             s->last_lit));
 
     if (static_lenb <= opt_lenb)
       opt_lenb = static_lenb;
@@ -1042,7 +1065,9 @@ int eof;        /* true if this is the last block for a file */
     s->compressed_len += 7; /* align on byte boundary */
 #endif
   }
-  Tracev ((stderr, "\ncomprlen %u(%u) ", s->compressed_len >> 3,
+  Tracev ((stderr,
+           "\ncomprlen %u(%u) ",
+           s->compressed_len >> 3,
            s->compressed_len - 7 * eof));
 }
 
@@ -1082,8 +1107,12 @@ unsigned lc;   /* match length-MIN_MATCH or unmatched char (if dist==0) */
       out_length += (ulg)s->dyn_dtree[dcode].Freq * (5L + extra_dbits[dcode]);
     }
     out_length >>= 3;
-    Tracev ((stderr, "\nlast_lit %u, in %d, out ~%d(%d%%) ", s->last_lit, in_length,
-             out_length, 100L - out_length * 100L / in_length));
+    Tracev ((stderr,
+             "\nlast_lit %u, in %d, out ~%d(%d%%) ",
+             s->last_lit,
+             in_length,
+             out_length,
+             100L - out_length * 100L / in_length));
     if (s->matches < s->last_lit / 2 && out_length < in_length / 2)
       return 1;
   }

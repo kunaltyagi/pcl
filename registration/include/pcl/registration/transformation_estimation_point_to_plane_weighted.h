@@ -57,7 +57,8 @@ namespace pcl
      */
     template <typename PointSource, typename PointTarget, typename MatScalar = float>
     class TransformationEstimationPointToPlaneWeighted
-        : public TransformationEstimationPointToPlane<PointSource, PointTarget,
+        : public TransformationEstimationPointToPlane<PointSource,
+                                                      PointTarget,
                                                       MatScalar>
     {
       using PointCloudSource = pcl::PointCloud<PointSource>;
@@ -70,15 +71,19 @@ namespace pcl
       using PointIndicesConstPtr = PointIndices::ConstPtr;
 
       public:
-      using Ptr = boost::shared_ptr<TransformationEstimationPointToPlaneWeighted<
-          PointSource, PointTarget, MatScalar>>;
-      using ConstPtr =
-          boost::shared_ptr<const TransformationEstimationPointToPlaneWeighted<
-              PointSource, PointTarget, MatScalar>>;
+      using Ptr =
+          boost::shared_ptr<TransformationEstimationPointToPlaneWeighted<PointSource,
+                                                                         PointTarget,
+                                                                         MatScalar>>;
+      using ConstPtr = boost::shared_ptr<
+          const TransformationEstimationPointToPlaneWeighted<PointSource,
+                                                             PointTarget,
+                                                             MatScalar>>;
 
       using VectorX = Eigen::Matrix<MatScalar, Eigen::Dynamic, 1>;
       using Vector4 = Eigen::Matrix<MatScalar, 4, 1>;
-      using Matrix4 = typename TransformationEstimation<PointSource, PointTarget,
+      using Matrix4 = typename TransformationEstimation<PointSource,
+                                                        PointTarget,
                                                         MatScalar>::Matrix4;
 
       /** \brief Constructor. */
@@ -185,8 +190,9 @@ namespace pcl
        * \param[in] warp_fcn a shared pointer to an object that warps points
        */
       void
-      setWarpFunction (const typename WarpPointRigid<PointSource, PointTarget,
-                                                     MatScalar>::Ptr &warp_fcn)
+      setWarpFunction (
+          const typename WarpPointRigid<PointSource, PointTarget, MatScalar>::Ptr
+              &warp_fcn)
       {
         warp_point_ = warp_fcn;
       }
@@ -208,8 +214,8 @@ namespace pcl
       mutable const std::vector<int> *tmp_idx_tgt_;
 
       /** \brief The parameterized function used to warp the source to the target. */
-      typename pcl::registration::WarpPointRigid<PointSource, PointTarget,
-                                                 MatScalar>::Ptr warp_point_;
+      typename pcl::registration::WarpPointRigid<PointSource, PointTarget, MatScalar>::
+          Ptr warp_point_;
 
       /** Base functor all the models that need non linear optimization must
        * define their own one and implement operator() (const Eigen::VectorXd& x,
@@ -291,7 +297,8 @@ namespace pcl
         int
         operator() (const VectorX &x, VectorX &fvec) const;
 
-        const TransformationEstimationPointToPlaneWeighted<PointSource, PointTarget,
+        const TransformationEstimationPointToPlaneWeighted<PointSource,
+                                                           PointTarget,
                                                            MatScalar> *estimator_;
       };
 
@@ -340,7 +347,8 @@ namespace pcl
         int
         operator() (const VectorX &x, VectorX &fvec) const;
 
-        const TransformationEstimationPointToPlaneWeighted<PointSource, PointTarget,
+        const TransformationEstimationPointToPlaneWeighted<PointSource,
+                                                           PointTarget,
                                                            MatScalar> *estimator_;
       };
 

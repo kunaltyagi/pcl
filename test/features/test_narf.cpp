@@ -45,14 +45,20 @@ using namespace pcl;
 TEST (PCL, Narf_save_load)
 {
   Narf narf;
-  getTransformation (1.0f, 2.0f, 3.0f, deg2rad (10.0f), deg2rad (20.0f),
-                     deg2rad (30.0f), narf.getTransformation ());
+  getTransformation (1.0f,
+                     2.0f,
+                     3.0f,
+                     deg2rad (10.0f),
+                     deg2rad (20.0f),
+                     deg2rad (30.0f),
+                     narf.getTransformation ());
   narf.getPosition () = narf.getTransformation ().inverse ().translation ();
   narf.getSurfacePatchPixelSize () = 10;
   narf.setSurfacePatch (
       new float[narf.getSurfacePatchPixelSize () * narf.getSurfacePatchPixelSize ()]);
   for (int i = 0;
-       i < narf.getSurfacePatchPixelSize () * narf.getSurfacePatchPixelSize (); ++i)
+       i < narf.getSurfacePatchPixelSize () * narf.getSurfacePatchPixelSize ();
+       ++i)
     narf.getSurfacePatch ()[i] = static_cast<float> (i);
   narf.getSurfacePatchWorldSize () = 0.5f;
   narf.getSurfacePatchRotation () = deg2rad (10.0f);
@@ -73,7 +79,8 @@ TEST (PCL, Narf_save_load)
   EXPECT_EQ (narf.getPosition (), narf2.getPosition ());
   EXPECT_EQ (narf.getSurfacePatchPixelSize (), narf2.getSurfacePatchPixelSize ());
   for (int i = 0;
-       i < narf.getSurfacePatchPixelSize () * narf.getSurfacePatchPixelSize (); ++i)
+       i < narf.getSurfacePatchPixelSize () * narf.getSurfacePatchPixelSize ();
+       ++i)
     EXPECT_EQ (narf.getSurfacePatch ()[i], narf2.getSurfacePatch ()[i]);
   EXPECT_EQ (narf.getSurfacePatchWorldSize (), narf2.getSurfacePatchWorldSize ());
   EXPECT_EQ (narf.getSurfacePatchRotation (), narf2.getSurfacePatchRotation ());

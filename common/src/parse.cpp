@@ -51,7 +51,8 @@ pcl::console::find_switch (int argc, const char *const *argv, const char *argume
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::find_argument (int argc, const char *const *argv,
+pcl::console::find_argument (int argc,
+                             const char *const *argv,
                              const char *argument_name)
 {
   for (int i = 1; i < argc; ++i) {
@@ -65,7 +66,9 @@ pcl::console::find_argument (int argc, const char *const *argv,
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_argument (int argc, const char *const *argv, const char *str,
+pcl::console::parse_argument (int argc,
+                              const char *const *argv,
+                              const char *str,
                               std::string &val)
 {
   int index = find_argument (argc, argv, str) + 1;
@@ -77,7 +80,9 @@ pcl::console::parse_argument (int argc, const char *const *argv, const char *str
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_argument (int argc, const char *const *argv, const char *str,
+pcl::console::parse_argument (int argc,
+                              const char *const *argv,
+                              const char *str,
                               bool &val)
 {
   int index = find_argument (argc, argv, str) + 1;
@@ -90,7 +95,9 @@ pcl::console::parse_argument (int argc, const char *const *argv, const char *str
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_argument (int argc, const char *const *argv, const char *str,
+pcl::console::parse_argument (int argc,
+                              const char *const *argv,
+                              const char *str,
                               double &val)
 {
   int index = find_argument (argc, argv, str) + 1;
@@ -103,7 +110,9 @@ pcl::console::parse_argument (int argc, const char *const *argv, const char *str
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_argument (int argc, const char *const *argv, const char *str,
+pcl::console::parse_argument (int argc,
+                              const char *const *argv,
+                              const char *str,
                               float &val)
 {
   int index = find_argument (argc, argv, str) + 1;
@@ -116,7 +125,9 @@ pcl::console::parse_argument (int argc, const char *const *argv, const char *str
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_argument (int argc, const char *const *argv, const char *str,
+pcl::console::parse_argument (int argc,
+                              const char *const *argv,
+                              const char *str,
                               int &val)
 {
   int index = find_argument (argc, argv, str) + 1;
@@ -129,7 +140,9 @@ pcl::console::parse_argument (int argc, const char *const *argv, const char *str
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_argument (int argc, const char *const *argv, const char *str,
+pcl::console::parse_argument (int argc,
+                              const char *const *argv,
+                              const char *str,
                               unsigned int &val)
 {
   int index = find_argument (argc, argv, str) + 1;
@@ -142,7 +155,9 @@ pcl::console::parse_argument (int argc, const char *const *argv, const char *str
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_argument (int argc, const char *const *argv, const char *str,
+pcl::console::parse_argument (int argc,
+                              const char *const *argv,
+                              const char *str,
                               char &val)
 {
   int index = find_argument (argc, argv, str) + 1;
@@ -155,7 +170,8 @@ pcl::console::parse_argument (int argc, const char *const *argv, const char *str
 
 ////////////////////////////////////////////////////////////////////////////////
 std::vector<int>
-pcl::console::parse_file_extension_argument (int argc, const char *const *argv,
+pcl::console::parse_file_extension_argument (int argc,
+                                             const char *const *argv,
                                              const std::vector<std::string> &extension)
 {
   std::vector<int> indices;
@@ -186,7 +202,8 @@ pcl::console::parse_file_extension_argument (int argc, const char *const *argv,
 
 ////////////////////////////////////////////////////////////////////////////////
 std::vector<int>
-pcl::console::parse_file_extension_argument (int argc, const char *const *argv,
+pcl::console::parse_file_extension_argument (int argc,
+                                             const char *const *argv,
                                              const std::string &ext)
 {
   std::vector<std::string> extensions;
@@ -196,8 +213,8 @@ pcl::console::parse_file_extension_argument (int argc, const char *const *argv,
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_2x_arguments (int argc, const char *const *argv, const char *str,
-                                  float &f, float &s, bool debug)
+pcl::console::parse_2x_arguments (
+    int argc, const char *const *argv, const char *str, float &f, float &s, bool debug)
 {
   for (int i = 1; i < argc; ++i) {
     // Search for the string
@@ -208,7 +225,8 @@ pcl::console::parse_2x_arguments (int argc, const char *const *argv, const char 
       if (values.size () != 2 && debug) {
         print_error (
             "[parse_2x_arguments] Number of values for %s (%lu) different than 2!\n",
-            str, values.size ());
+            str,
+            values.size ());
         return (-2);
       }
       f = static_cast<float> (atof (values.at (0).c_str ()));
@@ -221,8 +239,12 @@ pcl::console::parse_2x_arguments (int argc, const char *const *argv, const char 
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_2x_arguments (int argc, const char *const *argv, const char *str,
-                                  double &f, double &s, bool debug)
+pcl::console::parse_2x_arguments (int argc,
+                                  const char *const *argv,
+                                  const char *str,
+                                  double &f,
+                                  double &s,
+                                  bool debug)
 {
   for (int i = 1; i < argc; ++i) {
     // Search for the string
@@ -233,7 +255,8 @@ pcl::console::parse_2x_arguments (int argc, const char *const *argv, const char 
       if (values.size () != 2 && debug) {
         print_error (
             "[parse_2x_arguments] Number of values for %s (%lu) different than 2!\n",
-            str, values.size ());
+            str,
+            values.size ());
         return (-2);
       }
       f = atof (values.at (0).c_str ());
@@ -246,8 +269,8 @@ pcl::console::parse_2x_arguments (int argc, const char *const *argv, const char 
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_2x_arguments (int argc, const char *const *argv, const char *str,
-                                  int &f, int &s, bool debug)
+pcl::console::parse_2x_arguments (
+    int argc, const char *const *argv, const char *str, int &f, int &s, bool debug)
 {
   for (int i = 1; i < argc; ++i) {
     // Search for the string
@@ -258,7 +281,8 @@ pcl::console::parse_2x_arguments (int argc, const char *const *argv, const char 
       if (values.size () != 2 && debug) {
         print_error (
             "[parse_2x_arguments] Number of values for %s (%lu) different than 2!\n",
-            str, values.size ());
+            str,
+            values.size ());
         return (-2);
       }
       f = atoi (values.at (0).c_str ());
@@ -271,8 +295,13 @@ pcl::console::parse_2x_arguments (int argc, const char *const *argv, const char 
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_3x_arguments (int argc, const char *const *argv, const char *str,
-                                  float &f, float &s, float &t, bool debug)
+pcl::console::parse_3x_arguments (int argc,
+                                  const char *const *argv,
+                                  const char *str,
+                                  float &f,
+                                  float &s,
+                                  float &t,
+                                  bool debug)
 {
   for (int i = 1; i < argc; ++i) {
     // Search for the string
@@ -283,7 +312,8 @@ pcl::console::parse_3x_arguments (int argc, const char *const *argv, const char 
       if (values.size () != 3 && debug) {
         print_error (
             "[parse_3x_arguments] Number of values for %s (%lu) different than 3!\n",
-            str, values.size ());
+            str,
+            values.size ());
         return (-2);
       }
       f = static_cast<float> (atof (values.at (0).c_str ()));
@@ -297,8 +327,13 @@ pcl::console::parse_3x_arguments (int argc, const char *const *argv, const char 
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_3x_arguments (int argc, const char *const *argv, const char *str,
-                                  double &f, double &s, double &t, bool debug)
+pcl::console::parse_3x_arguments (int argc,
+                                  const char *const *argv,
+                                  const char *str,
+                                  double &f,
+                                  double &s,
+                                  double &t,
+                                  bool debug)
 {
   for (int i = 1; i < argc; ++i) {
     // Search for the string
@@ -309,7 +344,8 @@ pcl::console::parse_3x_arguments (int argc, const char *const *argv, const char 
       if (values.size () != 3 && debug) {
         print_error (
             "[parse_3x_arguments] Number of values for %s (%lu) different than 3!\n",
-            str, values.size ());
+            str,
+            values.size ());
         return (-2);
       }
       f = atof (values.at (0).c_str ());
@@ -323,8 +359,13 @@ pcl::console::parse_3x_arguments (int argc, const char *const *argv, const char 
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_3x_arguments (int argc, const char *const *argv, const char *str,
-                                  int &f, int &s, int &t, bool debug)
+pcl::console::parse_3x_arguments (int argc,
+                                  const char *const *argv,
+                                  const char *str,
+                                  int &f,
+                                  int &s,
+                                  int &t,
+                                  bool debug)
 {
   for (int i = 1; i < argc; ++i) {
     // Search for the string
@@ -335,7 +376,8 @@ pcl::console::parse_3x_arguments (int argc, const char *const *argv, const char 
       if (values.size () != 3 && debug) {
         print_error (
             "[parse_3x_arguments] Number of values for %s (%lu) different than 3!\n",
-            str, values.size ());
+            str,
+            values.size ());
         return (-2);
       }
       f = atoi (values.at (0).c_str ());
@@ -349,7 +391,9 @@ pcl::console::parse_3x_arguments (int argc, const char *const *argv, const char 
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_x_arguments (int argc, const char *const *argv, const char *str,
+pcl::console::parse_x_arguments (int argc,
+                                 const char *const *argv,
+                                 const char *str,
                                  std::vector<double> &v)
 {
   for (int i = 1; i < argc; ++i) {
@@ -371,7 +415,9 @@ pcl::console::parse_x_arguments (int argc, const char *const *argv, const char *
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_x_arguments (int argc, const char *const *argv, const char *str,
+pcl::console::parse_x_arguments (int argc,
+                                 const char *const *argv,
+                                 const char *str,
                                  std::vector<float> &v)
 {
   for (int i = 1; i < argc; ++i) {
@@ -393,7 +439,9 @@ pcl::console::parse_x_arguments (int argc, const char *const *argv, const char *
 
 ////////////////////////////////////////////////////////////////////////////////
 int
-pcl::console::parse_x_arguments (int argc, const char *const *argv, const char *str,
+pcl::console::parse_x_arguments (int argc,
+                                 const char *const *argv,
+                                 const char *str,
                                  std::vector<int> &v)
 {
   for (int i = 1; i < argc; ++i) {
@@ -415,8 +463,10 @@ pcl::console::parse_x_arguments (int argc, const char *const *argv, const char *
 
 ////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::console::parse_multiple_arguments (int argc, const char *const *argv,
-                                        const char *str, std::vector<int> &values)
+pcl::console::parse_multiple_arguments (int argc,
+                                        const char *const *argv,
+                                        const char *str,
+                                        std::vector<int> &values)
 {
   for (int i = 1; i < argc; ++i) {
     // Search for the string
@@ -433,8 +483,10 @@ pcl::console::parse_multiple_arguments (int argc, const char *const *argv,
 
 ////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::console::parse_multiple_arguments (int argc, const char *const *argv,
-                                        const char *str, std::vector<double> &values)
+pcl::console::parse_multiple_arguments (int argc,
+                                        const char *const *argv,
+                                        const char *str,
+                                        std::vector<double> &values)
 {
   for (int i = 1; i < argc; ++i) {
     // Search for the string
@@ -451,8 +503,10 @@ pcl::console::parse_multiple_arguments (int argc, const char *const *argv,
 
 ////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::console::parse_multiple_arguments (int argc, const char *const *argv,
-                                        const char *str, std::vector<float> &values)
+pcl::console::parse_multiple_arguments (int argc,
+                                        const char *const *argv,
+                                        const char *str,
+                                        std::vector<float> &values)
 {
   for (int i = 1; i < argc; ++i) {
     // Search for the string
@@ -469,7 +523,8 @@ pcl::console::parse_multiple_arguments (int argc, const char *const *argv,
 
 ////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::console::parse_multiple_arguments (int argc, const char *const *argv,
+pcl::console::parse_multiple_arguments (int argc,
+                                        const char *const *argv,
                                         const char *str,
                                         std::vector<std::string> &values)
 {
@@ -487,7 +542,8 @@ pcl::console::parse_multiple_arguments (int argc, const char *const *argv,
 
 ////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::console::parse_multiple_2x_arguments (int argc, const char *const *argv,
+pcl::console::parse_multiple_2x_arguments (int argc,
+                                           const char *const *argv,
                                            const char *str,
                                            std::vector<double> &values_f,
                                            std::vector<double> &values_s)
@@ -502,7 +558,8 @@ pcl::console::parse_multiple_2x_arguments (int argc, const char *const *argv,
       if (values.size () != 2) {
         print_error ("[parse_multiple_2x_arguments] Number of values for %s (%lu) "
                      "different than 2!\n",
-                     str, values.size ());
+                     str,
+                     values.size ());
         return (false);
       }
       f = atof (values.at (0).c_str ());
@@ -519,7 +576,8 @@ pcl::console::parse_multiple_2x_arguments (int argc, const char *const *argv,
 
 ////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::console::parse_multiple_3x_arguments (int argc, const char *const *argv,
+pcl::console::parse_multiple_3x_arguments (int argc,
+                                           const char *const *argv,
                                            const char *str,
                                            std::vector<double> &values_f,
                                            std::vector<double> &values_s,
@@ -535,7 +593,8 @@ pcl::console::parse_multiple_3x_arguments (int argc, const char *const *argv,
       if (values.size () != 3) {
         print_error ("[parse_multiple_3x_arguments] Number of values for %s (%lu) "
                      "different than 3!\n",
-                     str, values.size ());
+                     str,
+                     values.size ());
         return (false);
       }
       f = atof (values.at (0).c_str ());

@@ -49,17 +49,25 @@ namespace openni_wrapper
 {
 
   void
-  DepthImage::fillDepthImageRaw (unsigned width, unsigned height,
-                                 unsigned short *depth_buffer, unsigned line_step) const
+  DepthImage::fillDepthImageRaw (unsigned width,
+                                 unsigned height,
+                                 unsigned short *depth_buffer,
+                                 unsigned line_step) const
   {
     if (width > depth_md_->XRes () || height > depth_md_->YRes ())
       THROW_OPENNI_EXCEPTION ("upsampling not supported: %d x %d -> %d x %d",
-                              depth_md_->XRes (), depth_md_->YRes (), width, height);
+                              depth_md_->XRes (),
+                              depth_md_->YRes (),
+                              width,
+                              height);
 
     if (depth_md_->XRes () % width != 0 || depth_md_->YRes () % height != 0)
       THROW_OPENNI_EXCEPTION (
           "downsampling only supported for integer scale: %d x %d -> %d x %d",
-          depth_md_->XRes (), depth_md_->YRes (), width, height);
+          depth_md_->XRes (),
+          depth_md_->YRes (),
+          width,
+          height);
 
     if (line_step == 0)
       line_step = width * static_cast<unsigned> (sizeof (unsigned short));
@@ -102,17 +110,25 @@ namespace openni_wrapper
   }
 
   void
-  DepthImage::fillDepthImage (unsigned width, unsigned height, float *depth_buffer,
+  DepthImage::fillDepthImage (unsigned width,
+                              unsigned height,
+                              float *depth_buffer,
                               unsigned line_step) const
   {
     if (width > depth_md_->XRes () || height > depth_md_->YRes ())
       THROW_OPENNI_EXCEPTION ("upsampling not supported: %d x %d -> %d x %d",
-                              depth_md_->XRes (), depth_md_->YRes (), width, height);
+                              depth_md_->XRes (),
+                              depth_md_->YRes (),
+                              width,
+                              height);
 
     if (depth_md_->XRes () % width != 0 || depth_md_->YRes () % height != 0)
       THROW_OPENNI_EXCEPTION (
           "downsampling only supported for integer scale: %d x %d -> %d x %d",
-          depth_md_->XRes (), depth_md_->YRes (), width, height);
+          depth_md_->XRes (),
+          depth_md_->YRes (),
+          width,
+          height);
 
     if (line_step == 0)
       line_step = width * static_cast<unsigned> (sizeof (float));
@@ -147,17 +163,25 @@ namespace openni_wrapper
   }
 
   void
-  DepthImage::fillDisparityImage (unsigned width, unsigned height,
-                                  float *disparity_buffer, unsigned line_step) const
+  DepthImage::fillDisparityImage (unsigned width,
+                                  unsigned height,
+                                  float *disparity_buffer,
+                                  unsigned line_step) const
   {
     if (width > depth_md_->XRes () || height > depth_md_->YRes ())
       THROW_OPENNI_EXCEPTION ("upsampling not supported: %d x %d -> %d x %d",
-                              depth_md_->XRes (), depth_md_->YRes (), width, height);
+                              depth_md_->XRes (),
+                              depth_md_->YRes (),
+                              width,
+                              height);
 
     if (depth_md_->XRes () % width != 0 || depth_md_->YRes () % height != 0)
       THROW_OPENNI_EXCEPTION (
           "downsampling only supported for integer scale: %d x %d -> %d x %d",
-          depth_md_->XRes (), depth_md_->YRes (), width, height);
+          depth_md_->XRes (),
+          depth_md_->YRes (),
+          width,
+          height);
 
     if (line_step == 0)
       line_step = width * static_cast<unsigned> (sizeof (float));

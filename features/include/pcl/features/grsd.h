@@ -121,8 +121,11 @@ namespace pcl
      * values as Plane (1), Cylinder (2), Noise or corner (0), Sphere (3) and Edge (4)
      */
     static inline int
-    getSimpleType (float min_radius, float max_radius, double min_radius_plane = 0.100,
-                   double max_radius_noise = 0.015, double min_radius_cylinder = 0.175,
+    getSimpleType (float min_radius,
+                   float max_radius,
+                   double min_radius_plane = 0.100,
+                   double max_radius_noise = 0.015,
+                   double min_radius_cylinder = 0.175,
                    double max_min_radius_diff = 0.050);
 
     protected:

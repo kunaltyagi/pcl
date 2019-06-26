@@ -105,8 +105,15 @@ namespace pcl
 
     /** \brief ... */
     int
-    lci (const int x1, const int y1, const int z1, const int x2, const int y2,
-         const int z2, float &ratio, int &incnt, int &pointcount);
+    lci (const int x1,
+         const int y1,
+         const int z1,
+         const int x2,
+         const int y2,
+         const int z2,
+         float &ratio,
+         int &incnt,
+         int &pointcount);
 
     /** \brief ... */
     void
@@ -122,7 +129,8 @@ namespace pcl
 
     /** \brief ... */
     void
-    scale_points_unit_sphere (const pcl::PointCloud<PointInT> &pc, float scalefactor,
+    scale_points_unit_sphere (const pcl::PointCloud<PointInT> &pc,
+                              float scalefactor,
                               Eigen::Vector4f &centroid);
 
     private:

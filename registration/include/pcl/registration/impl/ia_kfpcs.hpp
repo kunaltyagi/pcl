@@ -39,8 +39,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename NormalT, typename Scalar>
-pcl::registration::KFPCSInitialAlignment<PointSource, PointTarget, NormalT,
-                                         Scalar>::KFPCSInitialAlignment ()
+pcl::registration::KFPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
+    KFPCSInitialAlignment ()
     : lower_trl_boundary_ (-1.f), upper_trl_boundary_ (-1.f), lambda_ (0.5f),
       use_trl_score_ (false), indices_validation_ (new std::vector<int>)
 {
@@ -50,8 +50,8 @@ pcl::registration::KFPCSInitialAlignment<PointSource, PointTarget, NormalT,
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename NormalT, typename Scalar>
 bool
-pcl::registration::KFPCSInitialAlignment<PointSource, PointTarget, NormalT,
-                                         Scalar>::initCompute ()
+pcl::registration::KFPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
+    initCompute ()
 {
   // due to sparse keypoint cloud, do not normalize delta with estimated point density
   if (normalize_delta_) {
@@ -62,8 +62,8 @@ pcl::registration::KFPCSInitialAlignment<PointSource, PointTarget, NormalT,
   }
 
   // initialize as in fpcs
-  pcl::registration::FPCSInitialAlignment<PointSource, PointTarget, NormalT,
-                                          Scalar>::initCompute ();
+  pcl::registration::FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
+      initCompute ();
 
   // set the threshold values with respect to keypoint charactersitics
   max_pair_diff_ = delta_ * 1.414f;      // diff between 2 points of delta_ accuracy
@@ -143,8 +143,8 @@ pcl::registration::KFPCSInitialAlignment<PointSource, PointTarget, NormalT, Scal
 {
   // transform sub sampled source cloud
   PointCloudSource source_transformed;
-  pcl::transformPointCloud (*input_, *indices_validation_, source_transformed,
-                            transformation);
+  pcl::transformPointCloud (
+      *input_, *indices_validation_, source_transformed, transformation);
 
   const std::size_t nr_points = source_transformed.size ();
   float score_a = 0.f, score_b = 0.f;
@@ -154,7 +154,8 @@ pcl::registration::KFPCSInitialAlignment<PointSource, PointTarget, NormalT, Scal
   std::vector<float> dists_sqr;
   for (PointCloudSourceIterator it = source_transformed.begin (),
                                 it_e = source_transformed.end ();
-       it != it_e; ++it) {
+       it != it_e;
+       ++it) {
     // search for nearest point using kd tree search
     tree_->nearestKSearch (*it, 1, ids, dists_sqr);
     score_a += (dists_sqr[0] < max_inlier_dist_sqr_ ? dists_sqr[0]
@@ -231,7 +232,9 @@ pcl::registration::KFPCSInitialAlignment<PointSource, PointTarget, NormalT, Scal
 template <typename PointSource, typename PointTarget, typename NormalT, typename Scalar>
 void
 pcl::registration::KFPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
-    getNBestCandidates (int n, float min_angle3d, float min_translation3d,
+    getNBestCandidates (int n,
+                        float min_angle3d,
+                        float min_translation3d,
                         MatchingCandidates &candidates)
 {
   candidates.clear ();
@@ -239,7 +242,8 @@ pcl::registration::KFPCSInitialAlignment<PointSource, PointTarget, NormalT, Scal
   // loop over all candidates starting from the best one
   for (MatchingCandidates::iterator it_candidate = candidates_.begin (),
                                     it_e = candidates_.end ();
-       it_candidate != it_e; it_candidate++) {
+       it_candidate != it_e;
+       it_candidate++) {
     // stop if current candidate has no valid score
     if (it_candidate->fitness_score == FLT_MAX)
       return;
@@ -271,7 +275,9 @@ pcl::registration::KFPCSInitialAlignment<PointSource, PointTarget, NormalT, Scal
 template <typename PointSource, typename PointTarget, typename NormalT, typename Scalar>
 void
 pcl::registration::KFPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
-    getTBestCandidates (float t, float min_angle3d, float min_translation3d,
+    getTBestCandidates (float t,
+                        float min_angle3d,
+                        float min_translation3d,
                         MatchingCandidates &candidates)
 {
   candidates.clear ();
@@ -279,7 +285,8 @@ pcl::registration::KFPCSInitialAlignment<PointSource, PointTarget, NormalT, Scal
   // loop over all candidates starting from the best one
   for (MatchingCandidates::iterator it_candidate = candidates_.begin (),
                                     it_e = candidates_.end ();
-       it_candidate != it_e; it_candidate++) {
+       it_candidate != it_e;
+       it_candidate++) {
     // stop if current candidate has score below threshold
     if (it_candidate->fitness_score > t)
       return;

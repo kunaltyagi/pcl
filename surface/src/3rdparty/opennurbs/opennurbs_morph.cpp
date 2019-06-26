@@ -214,7 +214,9 @@ ON_Localizer::Read (ON_BinaryArchive &archive)
 }
 
 bool
-ON_Localizer::CreateCylinderLocalizer (ON_3dPoint P, ON_3dVector V, double r0,
+ON_Localizer::CreateCylinderLocalizer (ON_3dPoint P,
+                                       ON_3dVector V,
+                                       double r0,
                                        double r1)
 {
   Destroy ();

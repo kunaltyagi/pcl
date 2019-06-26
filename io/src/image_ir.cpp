@@ -106,17 +106,25 @@ pcl::io::IRImage::getSystemTimestamp () const
 }
 
 void
-pcl::io::IRImage::fillRaw (unsigned width, unsigned height, unsigned short *ir_buffer,
+pcl::io::IRImage::fillRaw (unsigned width,
+                           unsigned height,
+                           unsigned short *ir_buffer,
                            unsigned line_step) const
 {
   if (width > wrapper_->getWidth () || height > wrapper_->getHeight ())
     THROW_IO_EXCEPTION ("upsampling not supported: %d x %d -> %d x %d",
-                        wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+                        wrapper_->getWidth (),
+                        wrapper_->getHeight (),
+                        width,
+                        height);
 
   if (wrapper_->getWidth () % width != 0 || wrapper_->getHeight () % height != 0)
     THROW_IO_EXCEPTION (
         "downsampling only supported for integer scale: %d x %d -> %d x %d",
-        wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+        wrapper_->getWidth (),
+        wrapper_->getHeight (),
+        width,
+        height);
 
   if (line_step == 0)
     line_step = width * static_cast<unsigned> (sizeof (unsigned short));

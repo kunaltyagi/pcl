@@ -82,9 +82,14 @@ namespace pcl
         unsigned regularisation_resU;
         unsigned regularisation_resV;
 
-        Parameter (double intW = 1.0, double intS = 0.000001, double intR = 0.0,
-                   double bndW = 1.0, double bndS = 0.000001, double bndR = 0.0,
-                   unsigned regU = 0, unsigned regV = 0)
+        Parameter (double intW = 1.0,
+                   double intS = 0.000001,
+                   double intR = 0.0,
+                   double bndW = 1.0,
+                   double bndS = 0.000001,
+                   double bndR = 0.0,
+                   unsigned regU = 0,
+                   unsigned regV = 0)
             : interior_weight (intW), interior_smoothness (intS),
               interior_regularisation (intR), boundary_weight (bndW),
               boundary_smoothness (bndS), boundary_regularisation (bndR),
@@ -104,7 +109,8 @@ namespace pcl
        * \param[in] data pointer to the 2D point-cloud data to be fit.
        * \param[in] z vector defining front face of surface.
        */
-      FittingSurface (int order, NurbsDataSurface *data,
+      FittingSurface (int order,
+                      NurbsDataSurface *data,
                       Eigen::Vector3d z = Eigen::Vector3d (0.0, 0.0, 1.0));
 
       /** \brief Refines surface by inserting a knot in the middle of each element.
@@ -161,15 +167,25 @@ namespace pcl
        * function returns \return closest point on surface in parametric domain.
        */
       static Eigen::Vector2d
-      inverseMapping (const ON_NurbsSurface &nurbs, const Eigen::Vector3d &pt,
-                      const Eigen::Vector2d &hint, double &error, Eigen::Vector3d &p,
-                      Eigen::Vector3d &tu, Eigen::Vector3d &tv, int maxSteps = 100,
-                      double accuracy = 1e-6, bool quiet = true);
+      inverseMapping (const ON_NurbsSurface &nurbs,
+                      const Eigen::Vector3d &pt,
+                      const Eigen::Vector2d &hint,
+                      double &error,
+                      Eigen::Vector3d &p,
+                      Eigen::Vector3d &tu,
+                      Eigen::Vector3d &tv,
+                      int maxSteps = 100,
+                      double accuracy = 1e-6,
+                      bool quiet = true);
 
       static Eigen::Vector2d
-      inverseMapping (const ON_NurbsSurface &nurbs, const Eigen::Vector3d &pt,
-                      const Eigen::Vector2d &hint, Eigen::Vector3d &p, int maxSteps,
-                      double accuracy, bool quiet);
+      inverseMapping (const ON_NurbsSurface &nurbs,
+                      const Eigen::Vector3d &pt,
+                      const Eigen::Vector2d &hint,
+                      Eigen::Vector3d &p,
+                      int maxSteps,
+                      double accuracy,
+                      bool quiet);
 
       /** \brief Given a point pt, the function finds the closest midpoint of the
        * elements of the surface. \param[in] nurbs the B-Spline surface. \param[in] pt
@@ -192,10 +208,15 @@ namespace pcl
        * function returns \return closest point on surface in parametric domain.
        */
       static Eigen::Vector2d
-      inverseMappingBoundary (const ON_NurbsSurface &nurbs, const Eigen::Vector3d &pt,
-                              double &error, Eigen::Vector3d &p, Eigen::Vector3d &tu,
-                              Eigen::Vector3d &tv, int maxSteps = 100,
-                              double accuracy = 1e-6, bool quiet = true);
+      inverseMappingBoundary (const ON_NurbsSurface &nurbs,
+                              const Eigen::Vector3d &pt,
+                              double &error,
+                              Eigen::Vector3d &p,
+                              Eigen::Vector3d &tu,
+                              Eigen::Vector3d &tv,
+                              int maxSteps = 100,
+                              double accuracy = 1e-6,
+                              bool quiet = true);
 
       /** \brief Inverse mapping / point inversion: Given a point pt, this function
        * finds the closest point on one side of the boundary of the B-Spline surface
@@ -212,27 +233,35 @@ namespace pcl
        * function returns \return closest point on surface in parametric domain.
        */
       static Eigen::Vector2d
-      inverseMappingBoundary (const ON_NurbsSurface &nurbs, const Eigen::Vector3d &pt,
-                              int side, double hint, double &error, Eigen::Vector3d &p,
-                              Eigen::Vector3d &tu, Eigen::Vector3d &tv,
-                              int maxSteps = 100, double accuracy = 1e-6,
+      inverseMappingBoundary (const ON_NurbsSurface &nurbs,
+                              const Eigen::Vector3d &pt,
+                              int side,
+                              double hint,
+                              double &error,
+                              Eigen::Vector3d &p,
+                              Eigen::Vector3d &tu,
+                              Eigen::Vector3d &tv,
+                              int maxSteps = 100,
+                              double accuracy = 1e-6,
                               bool quiet = true);
 
       /** \brief Initializing a B-Spline surface using 4 corners */
       static ON_NurbsSurface
-      initNurbs4Corners (int order, ON_3dPoint ll, ON_3dPoint lr, ON_3dPoint ur,
-                         ON_3dPoint ul);
+      initNurbs4Corners (
+          int order, ON_3dPoint ll, ON_3dPoint lr, ON_3dPoint ur, ON_3dPoint ul);
 
       /** \brief Initializing a B-Spline surface using principal-component-analysis and
        * eigen values */
       static ON_NurbsSurface
-      initNurbsPCA (int order, NurbsDataSurface *data,
+      initNurbsPCA (int order,
+                    NurbsDataSurface *data,
                     Eigen::Vector3d z = Eigen::Vector3d (0.0, 0.0, 1.0));
 
       /** \brief Initializing a B-Spline surface using principal-component-analysis and
        * bounding box of points */
       static ON_NurbsSurface
-      initNurbsPCABoundingBox (int order, NurbsDataSurface *data,
+      initNurbsPCABoundingBox (int order,
+                               NurbsDataSurface *data,
                                Eigen::Vector3d z = Eigen::Vector3d (0.0, 0.0, 1.0));
 
       /** \brief Enable/Disable debug outputs in console. */
@@ -259,8 +288,10 @@ namespace pcl
       /** \brief Add minimization constraint: point-to-surface distance
        * (point-distance-minimization). */
       virtual void
-      addPointConstraint (const Eigen::Vector2d &params, const Eigen::Vector3d &point,
-                          double weight, unsigned &row);
+      addPointConstraint (const Eigen::Vector2d &params,
+                          const Eigen::Vector3d &point,
+                          double weight,
+                          unsigned &row);
       //  void addBoundaryPointConstraint(double paramU, double paramV, double weight,
       //  unsigned &row);
 
@@ -282,14 +313,14 @@ namespace pcl
       /** \brief Add minimization constraint: interior smoothness by derivatives
        * regularisation. */
       virtual void
-      addInteriorRegularisation (int order, int resU, int resV, double weight,
-                                 unsigned &row);
+      addInteriorRegularisation (
+          int order, int resU, int resV, double weight, unsigned &row);
 
       /** \brief Add minimization constraint: boundary smoothness by derivatives
        * regularisation. */
       virtual void
-      addBoundaryRegularisation (int order, int resU, int resV, double weight,
-                                 unsigned &row);
+      addBoundaryRegularisation (
+          int order, int resU, int resV, double weight, unsigned &row);
 
       NurbsSolve m_solver;
 

@@ -64,11 +64,14 @@ namespace pcl
      * publishing the next PCD in the list. \param[in] repeat whether to play PCD file
      * in an endless loop or not. \param pclzf_mode
      */
-    ImageGrabberBase (const std::string &directory, float frames_per_second,
-                      bool repeat, bool pclzf_mode);
+    ImageGrabberBase (const std::string &directory,
+                      float frames_per_second,
+                      bool repeat,
+                      bool pclzf_mode);
 
     ImageGrabberBase (const std::string &depth_directory,
-                      const std::string &rgb_directory, float frames_per_second,
+                      const std::string &rgb_directory,
+                      float frames_per_second,
                       bool repeat);
     /** \brief Constructor taking a list of paths to PCD files, that are played in the
      * order they appear in the list. \param[in] depth_image_files Path to the depth
@@ -77,7 +80,8 @@ namespace pcl
      * whether to play PCD file in an endless loop or not.
      */
     ImageGrabberBase (const std::vector<std::string> &depth_image_files,
-                      float frames_per_second, bool repeat);
+                      float frames_per_second,
+                      bool repeat);
 
     /** \brief Copy constructor.
      * \param[in] src the Image Grabber base object to copy into this
@@ -170,7 +174,8 @@ namespace pcl
      * principal point (cy)
      */
     virtual void
-    setCameraIntrinsics (const double focal_length_x, const double focal_length_y,
+    setCameraIntrinsics (const double focal_length_x,
+                         const double focal_length_y,
                          const double principal_point_x,
                          const double principal_point_y);
 
@@ -184,8 +189,10 @@ namespace pcl
      * Vertical coordinates of the principal point (cy)
      */
     virtual void
-    getCameraIntrinsics (double &focal_length_x, double &focal_length_y,
-                         double &principal_point_x, double &principal_point_y) const;
+    getCameraIntrinsics (double &focal_length_x,
+                         double &focal_length_y,
+                         double &principal_point_x,
+                         double &principal_point_y) const;
 
     /** \brief Define the units the depth data is stored in.
      *  Defaults to mm (0.001), meaning a brightness of 1000 corresponds to 1 m*/
@@ -207,12 +214,15 @@ namespace pcl
 
     /** \brief Gets the cloud in ROS form at location idx */
     bool
-    getCloudAt (size_t idx, pcl::PCLPointCloud2 &blob, Eigen::Vector4f &origin,
+    getCloudAt (size_t idx,
+                pcl::PCLPointCloud2 &blob,
+                Eigen::Vector4f &origin,
                 Eigen::Quaternionf &orientation) const;
 
     private:
     virtual void
-    publish (const pcl::PCLPointCloud2 &blob, const Eigen::Vector4f &origin,
+    publish (const pcl::PCLPointCloud2 &blob,
+             const Eigen::Vector4f &origin,
              const Eigen::Quaternionf &orientation) const = 0;
 
     // to separate and hide the implementation from interface: PIMPL
@@ -227,14 +237,19 @@ namespace pcl
   class ImageGrabber : public ImageGrabberBase, public FileGrabber<PointT>
   {
     public:
-    ImageGrabber (const std::string &dir, float frames_per_second = 0,
-                  bool repeat = false, bool pclzf_mode = false);
+    ImageGrabber (const std::string &dir,
+                  float frames_per_second = 0,
+                  bool repeat = false,
+                  bool pclzf_mode = false);
 
-    ImageGrabber (const std::string &depth_dir, const std::string &rgb_dir,
-                  float frames_per_second = 0, bool repeat = false);
+    ImageGrabber (const std::string &depth_dir,
+                  const std::string &rgb_dir,
+                  float frames_per_second = 0,
+                  bool repeat = false);
 
     ImageGrabber (const std::vector<std::string> &depth_image_files,
-                  float frames_per_second = 0, bool repeat = false);
+                  float frames_per_second = 0,
+                  bool repeat = false);
 
     /** \brief Empty destructor */
     ~ImageGrabber () throw () {}
@@ -249,7 +264,8 @@ namespace pcl
 
     protected:
     void
-    publish (const pcl::PCLPointCloud2 &blob, const Eigen::Vector4f &origin,
+    publish (const pcl::PCLPointCloud2 &blob,
+             const Eigen::Vector4f &origin,
              const Eigen::Quaternionf &orientation) const override;
     boost::signals2::signal<void(
         const boost::shared_ptr<const pcl::PointCloud<PointT>> &)> *signal_;
@@ -257,8 +273,10 @@ namespace pcl
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   template <typename PointT>
-  ImageGrabber<PointT>::ImageGrabber (const std::string &dir, float frames_per_second,
-                                      bool repeat, bool pclzf_mode)
+  ImageGrabber<PointT>::ImageGrabber (const std::string &dir,
+                                      float frames_per_second,
+                                      bool repeat,
+                                      bool pclzf_mode)
       : ImageGrabberBase (dir, frames_per_second, repeat, pclzf_mode)
   {
     signal_ =
@@ -269,7 +287,8 @@ namespace pcl
   template <typename PointT>
   ImageGrabber<PointT>::ImageGrabber (const std::string &depth_dir,
                                       const std::string &rgb_dir,
-                                      float frames_per_second, bool repeat)
+                                      float frames_per_second,
+                                      bool repeat)
       : ImageGrabberBase (depth_dir, rgb_dir, frames_per_second, repeat)
   {
     signal_ =
@@ -279,7 +298,8 @@ namespace pcl
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   template <typename PointT>
   ImageGrabber<PointT>::ImageGrabber (const std::vector<std::string> &depth_image_files,
-                                      float frames_per_second, bool repeat)
+                                      float frames_per_second,
+                                      bool repeat)
       : ImageGrabberBase (depth_image_files, frames_per_second, repeat), signal_ ()
   {
     signal_ =

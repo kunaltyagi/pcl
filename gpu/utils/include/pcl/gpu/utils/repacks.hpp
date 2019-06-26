@@ -70,18 +70,30 @@ namespace pcl
     /* Combines performs all field copy operations in given rule array (can be 0, 1, or
      * 16 copies) */
     void
-    copyFieldsImpl (int in_size, int out_size, int rules[4], int size,
-                    const void *input, void *output);
+    copyFieldsImpl (int in_size,
+                    int out_size,
+                    int rules[4],
+                    int size,
+                    const void *input,
+                    void *output);
 
     template <typename PointIn, typename PointOut>
     void
-    copyFieldsEx (const DeviceArray<PointIn> &src, DeviceArray<PointOut> &dst,
-                  int rule1, int rule2 = NoCP, int rule3 = NoCP, int rule4 = NoCP)
+    copyFieldsEx (const DeviceArray<PointIn> &src,
+                  DeviceArray<PointOut> &dst,
+                  int rule1,
+                  int rule2 = NoCP,
+                  int rule3 = NoCP,
+                  int rule4 = NoCP)
     {
       int rules[4] = {rule1, rule2, rule3, rule4};
       dst.create (src.size ());
-      copyFieldsImpl (sizeof (PointIn) / sizeof (int), sizeof (PointOut) / sizeof (int),
-                      rules, (int)src.size (), src.ptr (), dst.ptr ());
+      copyFieldsImpl (sizeof (PointIn) / sizeof (int),
+                      sizeof (PointOut) / sizeof (int),
+                      rules,
+                      (int)src.size (),
+                      src.ptr (),
+                      dst.ptr ());
     }
 
     void

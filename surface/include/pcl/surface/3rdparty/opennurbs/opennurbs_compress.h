@@ -17,7 +17,8 @@
 #if !defined(OPENNURBS_COMPRESS_INC_)
 #define OPENNURBS_COMPRESS_INC_
 
-typedef bool (*ON_StreamCallbackFunction) (void *context, ON__UINT32 size,
+typedef bool (*ON_StreamCallbackFunction) (void *context,
+                                           ON__UINT32 size,
                                            const void *buffer);
 
 class ON_CLASS ON_CompressStream

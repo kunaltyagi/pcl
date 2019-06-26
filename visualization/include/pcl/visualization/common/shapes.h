@@ -204,7 +204,9 @@ namespace pcl
      * of the plane. \ingroup visualization
      */
     PCL_EXPORTS vtkSmartPointer<vtkDataSet>
-    createPlane (const pcl::ModelCoefficients &coefficients, double x, double y,
+    createPlane (const pcl::ModelCoefficients &coefficients,
+                 double x,
+                 double y,
                  double z);
 
     /** \brief Create a 2d circle shape from a set of model coefficients.
@@ -276,8 +278,11 @@ namespace pcl
      * \ingroup visualization
      */
     PCL_EXPORTS vtkSmartPointer<vtkDataSet>
-    createCube (const Eigen::Vector3f &translation, const Eigen::Quaternionf &rotation,
-                double width, double height, double depth);
+    createCube (const Eigen::Vector3f &translation,
+                const Eigen::Quaternionf &rotation,
+                double width,
+                double height,
+                double depth);
 
     /** \brief Create a cube from a set of bounding points
      * \param[in] x_min is the minimum x value of the box
@@ -288,7 +293,11 @@ namespace pcl
      * \param[in] z_max is the maximum z value of the box
      */
     PCL_EXPORTS vtkSmartPointer<vtkDataSet>
-    createCube (double x_min, double x_max, double y_min, double y_max, double z_min,
+    createCube (double x_min,
+                double x_max,
+                double y_min,
+                double y_max,
+                double z_min,
                 double z_max);
 
     /** \brief Allocate a new unstructured grid smartpointer. For internal use only.

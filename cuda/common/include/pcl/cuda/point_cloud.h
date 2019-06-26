@@ -166,7 +166,8 @@ namespace pcl
         else
           return (PointXYZRGB (std::numeric_limits<float>::quiet_NaN (),
                                std::numeric_limits<float>::quiet_NaN (),
-                               std::numeric_limits<float>::quiet_NaN (), 0));
+                               std::numeric_limits<float>::quiet_NaN (),
+                               0));
         // throw IsNotDenseException ("Can't use 2D indexing with a sparse point
         // cloud");
       }

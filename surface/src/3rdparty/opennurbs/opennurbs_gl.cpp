@@ -90,7 +90,10 @@ ON_GL (const int order,    // ON_NurbsCurve order
 }
 
 static void
-GetGLCV (const int dim, const int is_rat, const double *cv, double xform[4][4],
+GetGLCV (const int dim,
+         const int is_rat,
+         const double *cv,
+         double xform[4][4],
          GLfloat *glcv)
 {
   if (xform) {
@@ -122,11 +125,22 @@ void
 ON_GL (const ON_NurbsCurve &nurbs_curve,
        GLUnurbsObj *nobj, // created with gluNewNurbsRenderer )
        GLenum type,       // = 0 (and type is automatically set)
-       int bPermitKnotScaling, double *knot_scale, double xform[][4])
+       int bPermitKnotScaling,
+       double *knot_scale,
+       double xform[][4])
 {
-  ON_GL (nurbs_curve.Dimension (), nurbs_curve.IsRational (), nurbs_curve.Order (),
-         nurbs_curve.CVCount (), nurbs_curve.Knot (), nurbs_curve.m_cv_stride,
-         nurbs_curve.m_cv, nobj, type, bPermitKnotScaling, knot_scale, xform);
+  ON_GL (nurbs_curve.Dimension (),
+         nurbs_curve.IsRational (),
+         nurbs_curve.Order (),
+         nurbs_curve.CVCount (),
+         nurbs_curve.Knot (),
+         nurbs_curve.m_cv_stride,
+         nurbs_curve.m_cv,
+         nobj,
+         type,
+         bPermitKnotScaling,
+         knot_scale,
+         xform);
 }
 
 void
@@ -173,9 +187,18 @@ ON_GL (const ON_Curve &curve,
 }
 
 void
-ON_GL (int dim, int is_rat, int nurb_order, int cv_count, const double *knot_vector,
-       int cv_stride, const double *cv, GLUnurbsObj *nobj, GLenum type,
-       int bPermitKnotScaling, double *knot_scale, double xform[][4])
+ON_GL (int dim,
+       int is_rat,
+       int nurb_order,
+       int cv_count,
+       const double *knot_vector,
+       int cv_stride,
+       const double *cv,
+       GLUnurbsObj *nobj,
+       GLenum type,
+       int bPermitKnotScaling,
+       double *knot_scale,
+       double xform[][4])
 {
   ON_BOOL32 bCallgluBeginEndCurve = false;
   int i;
@@ -240,7 +263,9 @@ void
 ON_GL (const ON_NurbsSurface &s,
        GLUnurbsObj *nobj, // created with gluNewNurbsRenderer )
        GLenum type,       // = 0 (and type is automatically set)
-       int bPermitKnotScaling, double *knot_scale0, double *knot_scale1)
+       int bPermitKnotScaling,
+       double *knot_scale0,
+       double *knot_scale1)
 {
   int i, j, k;
 
@@ -252,14 +277,14 @@ ON_GL (const ON_NurbsSurface &s,
   // GL "s" knots
   GLint sknot_count = s.KnotCount (0) + 2;
   GLfloat *sknot = (GLfloat *)onmalloc (sknot_count * sizeof (*sknot));
-  ON_GL (s.Order (0), s.CVCount (0), s.Knot (0), sknot, bPermitKnotScaling,
-         knot_scale0);
+  ON_GL (
+      s.Order (0), s.CVCount (0), s.Knot (0), sknot, bPermitKnotScaling, knot_scale0);
 
   // GL "t" knots
   GLint tknot_count = s.KnotCount (1) + 2;
   GLfloat *tknot = (GLfloat *)onmalloc (tknot_count * sizeof (*tknot));
-  ON_GL (s.Order (1), s.CVCount (1), s.Knot (1), tknot, bPermitKnotScaling,
-         knot_scale1);
+  ON_GL (
+      s.Order (1), s.CVCount (1), s.Knot (1), tknot, bPermitKnotScaling, knot_scale1);
 
   // control vertices
   const int cv_size = s.CVSize ();
@@ -285,8 +310,17 @@ ON_GL (const ON_NurbsSurface &s,
     type = (s.IsRational ()) ? GL_MAP2_VERTEX_4 : GL_MAP2_VERTEX_3;
   }
 
-  gluNurbsSurface (nobj, sknot_count, sknot, tknot_count, tknot, s_stride, t_stride,
-                   ctlarray, sorder, torder, type);
+  gluNurbsSurface (nobj,
+                   sknot_count,
+                   sknot,
+                   tknot_count,
+                   tknot,
+                   s_stride,
+                   t_stride,
+                   ctlarray,
+                   sorder,
+                   torder,
+                   type);
 
   onfree (ctlarray);
   onfree (tknot);
@@ -340,9 +374,12 @@ ON_GL (const ON_BrepFace &face,
       if (!nurbs_srf)
         return;
       gluBeginSurface (nobj);
-      ON_GL (*nurbs_srf, nobj,
-             (nurbs_srf->IsRational ()) ? GL_MAP2_VERTEX_4 : GL_MAP2_VERTEX_3, true,
-             knot_scale[0], knot_scale[1]);
+      ON_GL (*nurbs_srf,
+             nobj,
+             (nurbs_srf->IsRational ()) ? GL_MAP2_VERTEX_4 : GL_MAP2_VERTEX_3,
+             true,
+             knot_scale[0],
+             knot_scale[1]);
     }
 
     if (bSkipTrims || brep->FaceIsSurface (face.m_face_index)) {
@@ -639,8 +676,8 @@ ON_GL (const ON_Light &light, GLenum light_index)
 }
 
 void
-ON_GL (ON_Viewport &viewport, int port_left, int port_right, int port_bottom,
-       int port_top)
+ON_GL (
+    ON_Viewport &viewport, int port_left, int port_right, int port_bottom, int port_top)
 {
   // Sets viewport's port to port_* values and adjusts frustum
   // so it's aspect matches the port's.

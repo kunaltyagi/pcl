@@ -64,8 +64,10 @@ namespace pcl
   template <typename PointT>
   PCL_EXPORTS void
   applyMorphologicalOperator (
-      const typename pcl::PointCloud<PointT>::ConstPtr &cloud_in, float resolution,
-      const int morphological_operator, pcl::PointCloud<PointT> &cloud_out);
+      const typename pcl::PointCloud<PointT>::ConstPtr &cloud_in,
+      float resolution,
+      const int morphological_operator,
+      pcl::PointCloud<PointT> &cloud_out);
 } // namespace pcl
 
 #ifdef PCL_NO_PRECOMPILE

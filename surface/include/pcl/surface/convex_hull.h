@@ -184,7 +184,8 @@ namespace pcl
      * \param[in] fill_polygon_data true if polygons should be filled, false otherwise
      */
     void
-    performReconstruction (PointCloud &points, std::vector<pcl::Vertices> &polygons,
+    performReconstruction (PointCloud &points,
+                           std::vector<pcl::Vertices> &polygons,
                            bool fill_polygon_data = false);
 
     /** \brief The reconstruction method for 2D data.  Does not require dimension to be
@@ -196,7 +197,8 @@ namespace pcl
      * \param[in] fill_polygon_data true if polygons should be filled, false otherwise
      */
     void
-    performReconstruction2D (PointCloud &points, std::vector<pcl::Vertices> &polygons,
+    performReconstruction2D (PointCloud &points,
+                             std::vector<pcl::Vertices> &polygons,
                              bool fill_polygon_data = false);
 
     /** \brief The reconstruction method for 3D data.  Does not require dimension to be
@@ -208,7 +210,8 @@ namespace pcl
      * \param[in] fill_polygon_data true if polygons should be filled, false otherwise
      */
     void
-    performReconstruction3D (PointCloud &points, std::vector<pcl::Vertices> &polygons,
+    performReconstruction3D (PointCloud &points,
+                             std::vector<pcl::Vertices> &polygons,
                              bool fill_polygon_data = false);
 
     /** \brief A reconstruction method that returns a polygonmesh.

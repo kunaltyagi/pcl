@@ -110,9 +110,13 @@ pcl::PCDWriter::resetLockingPermissions (const std::string &file_name,
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 int
-pcl::PCDReader::readHeader (std::istream &fs, pcl::PCLPointCloud2 &cloud,
-                            Eigen::Vector4f &origin, Eigen::Quaternionf &orientation,
-                            int &pcd_version, int &data_type, unsigned int &data_idx)
+pcl::PCDReader::readHeader (std::istream &fs,
+                            pcl::PCLPointCloud2 &cloud,
+                            Eigen::Vector4f &origin,
+                            Eigen::Quaternionf &orientation,
+                            int &pcd_version,
+                            int &data_type,
+                            unsigned int &data_idx)
 {
   // Default values
   data_idx = 0;
@@ -360,7 +364,9 @@ pcl::PCDReader::readHeader (std::istream &fs, pcl::PCLPointCloud2 &cloud,
   if (cloud.width * cloud.height != nr_points) {
     PCL_ERROR ("[pcl::PCDReader::readHeader] HEIGHT (%d) x WIDTH (%d) != number of "
                "points (%d)\n",
-               cloud.height, cloud.width, nr_points);
+               cloud.height,
+               cloud.width,
+               nr_points);
     return (-1);
   }
 
@@ -369,9 +375,13 @@ pcl::PCDReader::readHeader (std::istream &fs, pcl::PCLPointCloud2 &cloud,
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 int
-pcl::PCDReader::readHeader (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
-                            Eigen::Vector4f &origin, Eigen::Quaternionf &orientation,
-                            int &pcd_version, int &data_type, unsigned int &data_idx,
+pcl::PCDReader::readHeader (const std::string &file_name,
+                            pcl::PCLPointCloud2 &cloud,
+                            Eigen::Vector4f &origin,
+                            Eigen::Quaternionf &orientation,
+                            int &pcd_version,
+                            int &data_type,
+                            unsigned int &data_idx,
                             const int offset)
 {
   if (file_name.empty () || !boost::filesystem::exists (file_name)) {
@@ -386,7 +396,8 @@ pcl::PCDReader::readHeader (const std::string &file_name, pcl::PCLPointCloud2 &c
   fs.open (file_name.c_str (), std::ios::binary);
   if (!fs.is_open () || fs.fail ()) {
     PCL_ERROR ("[pcl::PCDReader::readHeader] Could not open file '%s'! Error : %s\n",
-               file_name.c_str (), strerror (errno));
+               file_name.c_str (),
+               strerror (errno));
     fs.close ();
     return (-1);
   }
@@ -406,7 +417,8 @@ pcl::PCDReader::readHeader (const std::string &file_name, pcl::PCLPointCloud2 &c
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 int
-pcl::PCDReader::readHeader (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
+pcl::PCDReader::readHeader (const std::string &file_name,
+                            pcl::PCLPointCloud2 &cloud,
                             const int offset)
 {
   Eigen::Vector4f origin = Eigen::Vector4f::Zero ();
@@ -415,13 +427,14 @@ pcl::PCDReader::readHeader (const std::string &file_name, pcl::PCLPointCloud2 &c
   int data_type = 0;
   unsigned int data_idx = 0;
 
-  return readHeader (file_name, cloud, origin, orientation, pcd_version, data_type,
-                     data_idx, offset);
+  return readHeader (
+      file_name, cloud, origin, orientation, pcd_version, data_type, data_idx, offset);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int
-pcl::PCDReader::readBodyASCII (std::istream &fs, pcl::PCLPointCloud2 &cloud,
+pcl::PCDReader::readBodyASCII (std::istream &fs,
+                               pcl::PCLPointCloud2 &cloud,
                                int /*pcd_version*/)
 {
   // Get the number of points the cloud should have
@@ -448,7 +461,8 @@ pcl::PCDReader::readBodyASCII (std::istream &fs, pcl::PCLPointCloud2 &cloud,
       if (idx >= nr_points) {
         PCL_WARN (
             "[pcl::PCDReader::read] input has more points (%d) than advertised (%d)!\n",
-            idx, nr_points);
+            idx,
+            nr_points);
         break;
       }
 
@@ -524,7 +538,8 @@ pcl::PCDReader::readBodyASCII (std::istream &fs, pcl::PCLPointCloud2 &cloud,
   if (idx != nr_points) {
     PCL_ERROR ("[pcl::PCDReader::read] Number of points read (%d) is different than "
                "expected (%d)\n",
-               idx, nr_points);
+               idx,
+               nr_points);
     return (-1);
   }
 
@@ -533,8 +548,10 @@ pcl::PCDReader::readBodyASCII (std::istream &fs, pcl::PCLPointCloud2 &cloud,
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int
-pcl::PCDReader::readBodyBinary (const unsigned char *map, pcl::PCLPointCloud2 &cloud,
-                                int /*pcd_version*/, bool compressed,
+pcl::PCDReader::readBodyBinary (const unsigned char *map,
+                                pcl::PCLPointCloud2 &cloud,
+                                int /*pcd_version*/,
+                                bool compressed,
                                 unsigned int data_idx)
 {
   // Setting the is_dense property to true by default
@@ -548,12 +565,14 @@ pcl::PCDReader::readBodyBinary (const unsigned char *map, pcl::PCLPointCloud2 &c
     memcpy (&uncompressed_size, &map[data_idx + 4], 4);
     PCL_DEBUG ("[pcl::PCDReader::read] Read a binary compressed file with %u bytes "
                "compressed and %u original.\n",
-               compressed_size, uncompressed_size);
+               compressed_size,
+               uncompressed_size);
 
     if (uncompressed_size != cloud.data.size ()) {
       PCL_WARN ("[pcl::PCDReader::read] The estimated cloud.data size (%u) is "
                 "different than the saved uncompressed value (%u)! Data corruption?\n",
-                cloud.data.size (), uncompressed_size);
+                cloud.data.size (),
+                uncompressed_size);
       cloud.data.resize (uncompressed_size);
     }
 
@@ -566,7 +585,9 @@ pcl::PCDReader::readBodyBinary (const unsigned char *map, pcl::PCLPointCloud2 &c
     if (tmp_size != uncompressed_size) {
       PCL_ERROR ("[pcl::PCDReader::read] Size of decompressed lzf data (%u) does not "
                  "match value stored in PCD header (%u). Errno: %d\n",
-                 tmp_size, uncompressed_size, errno);
+                 tmp_size,
+                 uncompressed_size,
+                 errno);
       return (-1);
     }
 
@@ -672,9 +693,12 @@ pcl::PCDReader::readBodyBinary (const unsigned char *map, pcl::PCLPointCloud2 &c
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int
-pcl::PCDReader::read (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
-                      Eigen::Vector4f &origin, Eigen::Quaternionf &orientation,
-                      int &pcd_version, const int offset)
+pcl::PCDReader::read (const std::string &file_name,
+                      pcl::PCLPointCloud2 &cloud,
+                      Eigen::Vector4f &origin,
+                      Eigen::Quaternionf &orientation,
+                      int &pcd_version,
+                      const int offset)
 {
   pcl::console::TicToc tt;
   tt.tic ();
@@ -688,8 +712,8 @@ pcl::PCDReader::read (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
   int data_type;
   unsigned int data_idx;
 
-  int res = readHeader (file_name, cloud, origin, orientation, pcd_version, data_type,
-                        data_idx, offset);
+  int res = readHeader (
+      file_name, cloud, origin, orientation, pcd_version, data_type, data_idx, offset);
 
   if (res < 0)
     return (res);
@@ -735,7 +759,8 @@ pcl::PCDReader::read (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
       long result = io::raw_lseek (fd, offset + data_idx, SEEK_SET);
       if (result < 0) {
         io::raw_close (fd);
-        PCL_ERROR ("[pcl::PCDReader::read] lseek errno: %d strerror: %s\n", errno,
+        PCL_ERROR ("[pcl::PCDReader::read] lseek errno: %d strerror: %s\n",
+                   errno,
                    strerror (errno));
         PCL_ERROR ("[pcl::PCDReader::read] Error during lseek ()!\n");
         return (-1);
@@ -746,7 +771,8 @@ pcl::PCDReader::read (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
       ssize_t num_read = io::raw_read (fd, &compressed_size, 4);
       if (num_read < 0) {
         io::raw_close (fd);
-        PCL_ERROR ("[pcl::PCDReader::read] read errno: %d strerror: %s\n", errno,
+        PCL_ERROR ("[pcl::PCDReader::read] read errno: %d strerror: %s\n",
+                   errno,
                    strerror (errno));
         PCL_ERROR ("[pcl::PCDReader::read] Error during read()!\n");
         return (-1);
@@ -772,8 +798,8 @@ pcl::PCDReader::read (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
 #ifdef _WIN32
     // As we don't know the real size of data (compressed or not),
     // we set dwMaximumSizeHigh = dwMaximumSizeLow = 0 so as to map the whole file
-    HANDLE fm = CreateFileMapping ((HANDLE)_get_osfhandle (fd), NULL, PAGE_READONLY, 0,
-                                   0, NULL);
+    HANDLE fm = CreateFileMapping (
+        (HANDLE)_get_osfhandle (fd), NULL, PAGE_READONLY, 0, 0, NULL);
     // As we don't know the real size of data (compressed or not),
     // we set dwNumberOfBytesToMap = 0 so as to map the whole file
     unsigned char *map =
@@ -814,14 +840,18 @@ pcl::PCDReader::read (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
   double total_time = tt.toc ();
   PCL_DEBUG ("[pcl::PCDReader::read] Loaded %s as a %s cloud in %g ms with %d points. "
              "Available dimensions: %s.\n",
-             file_name.c_str (), cloud.is_dense ? "dense" : "non-dense", total_time,
-             cloud.width * cloud.height, pcl::getFieldsList (cloud).c_str ());
+             file_name.c_str (),
+             cloud.is_dense ? "dense" : "non-dense",
+             total_time,
+             cloud.width * cloud.height,
+             pcl::getFieldsList (cloud).c_str ());
   return res;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int
-pcl::PCDReader::read (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
+pcl::PCDReader::read (const std::string &file_name,
+                      pcl::PCLPointCloud2 &cloud,
                       const int offset)
 {
   int pcd_version;
@@ -964,7 +994,8 @@ pcl::PCDWriter::generateHeaderBinary (const pcl::PCLPointCloud2 &cloud,
   if (fsize > cloud.point_step) {
     PCL_ERROR ("[pcl::PCDWriter::generateHeaderBinary] The size of the fields (%d) is "
                "larger than point_step (%d)! Something is wrong here...\n",
-               fsize, cloud.point_step);
+               fsize,
+               cloud.point_step);
     return ("");
   }
 
@@ -1048,7 +1079,8 @@ pcl::PCDWriter::generateHeaderBinaryCompressed (std::ostream &os,
     PCL_ERROR (
         "[pcl::PCDWriter::generateHeaderBinaryCompressed] The size of the fields (%d) "
         "is larger than point_step (%d)! Something is wrong here...\n",
-        fsize, cloud.point_step);
+        fsize,
+        cloud.point_step);
     return (-1);
   }
 
@@ -1096,7 +1128,8 @@ int
 pcl::PCDWriter::writeASCII (const std::string &file_name,
                             const pcl::PCLPointCloud2 &cloud,
                             const Eigen::Vector4f &origin,
-                            const Eigen::Quaternionf &orientation, const int precision)
+                            const Eigen::Quaternionf &orientation,
+                            const int precision)
 {
   if (cloud.data.empty ()) {
     PCL_ERROR ("[pcl::PCDWriter::writeASCII] Input point cloud has no data!\n");
@@ -1110,7 +1143,8 @@ pcl::PCDWriter::writeASCII (const std::string &file_name,
   if (!fs.is_open () || fs.fail ()) {
     PCL_ERROR ("[pcl::PCDWriter::writeASCII] Could not open file '%s' for writing! "
                "Error : %s\n",
-               file_name.c_str (), strerror (errno));
+               file_name.c_str (),
+               strerror (errno));
     return (-1);
   }
   // Mandatory lock file
@@ -1234,9 +1268,13 @@ pcl::PCDWriter::writeBinary (const std::string &file_name,
   data_idx = static_cast<unsigned int> (oss.tellp ());
 
 #ifdef _WIN32
-  HANDLE h_native_file =
-      CreateFile (file_name.c_str (), GENERIC_READ | GENERIC_WRITE, 0, NULL,
-                  CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+  HANDLE h_native_file = CreateFile (file_name.c_str (),
+                                     GENERIC_READ | GENERIC_WRITE,
+                                     0,
+                                     NULL,
+                                     CREATE_ALWAYS,
+                                     FILE_ATTRIBUTE_NORMAL,
+                                     NULL);
   if (h_native_file == INVALID_HANDLE_VALUE) {
     PCL_ERROR ("[pcl::PCDWriter::writeBinary] Error during CreateFile (%s)!\n",
                file_name.c_str ());
@@ -1247,7 +1285,8 @@ pcl::PCDWriter::writeBinary (const std::string &file_name,
   setLockingPermissions (file_name, file_lock);
 
 #else
-  int fd = io::raw_open (file_name.c_str (), O_RDWR | O_CREAT | O_TRUNC,
+  int fd = io::raw_open (file_name.c_str (),
+                         O_RDWR | O_CREAT | O_TRUNC,
                          S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
   if (fd < 0) {
     PCL_ERROR ("[pcl::PCDWriter::writeBinary] Error during open (%s)!\n",
@@ -1263,7 +1302,8 @@ pcl::PCDWriter::writeBinary (const std::string &file_name,
   if (result < 0) {
     io::raw_close (fd);
     resetLockingPermissions (file_name, file_lock);
-    PCL_ERROR ("[pcl::PCDWriter::writeBinary] lseek errno: %d strerror: %s\n", errno,
+    PCL_ERROR ("[pcl::PCDWriter::writeBinary] lseek errno: %d strerror: %s\n",
+               errno,
                strerror (errno));
     PCL_ERROR ("[pcl::PCDWriter::writeBinary] Error during lseek ()!\n");
     return (-1);
@@ -1279,16 +1319,24 @@ pcl::PCDWriter::writeBinary (const std::string &file_name,
 #endif
   // Prepare the map
 #ifdef _WIN32
-  HANDLE fm = CreateFileMapping (h_native_file, NULL, PAGE_READWRITE, 0,
-                                 (DWORD) (data_idx + cloud.data.size ()), NULL);
-  char *map = static_cast<char *> (MapViewOfFile (fm, FILE_MAP_READ | FILE_MAP_WRITE, 0,
-                                                  0, data_idx + cloud.data.size ()));
+  HANDLE fm = CreateFileMapping (h_native_file,
+                                 NULL,
+                                 PAGE_READWRITE,
+                                 0,
+                                 (DWORD) (data_idx + cloud.data.size ()),
+                                 NULL);
+  char *map = static_cast<char *> (MapViewOfFile (
+      fm, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, data_idx + cloud.data.size ()));
   CloseHandle (fm);
 
 #else
-  char *map = static_cast<char *> (
-      mmap (nullptr, static_cast<size_t> (data_idx + cloud.data.size ()),
-            PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0));
+  char *map =
+      static_cast<char *> (mmap (nullptr,
+                                 static_cast<size_t> (data_idx + cloud.data.size ()),
+                                 PROT_READ | PROT_WRITE,
+                                 MAP_SHARED,
+                                 fd,
+                                 0));
   if (map == reinterpret_cast<char *> (-1)) // MAP_FAILED
   {
     io::raw_close (fd);
@@ -1404,7 +1452,8 @@ pcl::PCDWriter::writeBinaryCompressed (std::ostream &os,
   // Go over all the points, and copy the data in the appropriate places
   for (size_t i = 0; i < cloud.width * cloud.height; ++i) {
     for (size_t j = 0; j < pters.size (); ++j) {
-      memcpy (pters[j], &cloud.data[i * cloud.point_step + fields[j].offset],
+      memcpy (pters[j],
+              &cloud.data[i * cloud.point_step + fields[j].offset],
               fields_sizes[j]);
       // Increment the pointer
       pters[j] += fields_sizes[j];
@@ -1413,9 +1462,11 @@ pcl::PCDWriter::writeBinaryCompressed (std::ostream &os,
 
   std::vector<char> temp_buf (data_size * 3 / 2 + 8);
   // Compress the valid data
-  unsigned int compressed_size = pcl::lzfCompress (
-      &only_valid_data.front (), static_cast<unsigned int> (data_size), &temp_buf[8],
-      data_size * 3 / 2);
+  unsigned int compressed_size =
+      pcl::lzfCompress (&only_valid_data.front (),
+                        static_cast<unsigned int> (data_size),
+                        &temp_buf[8],
+                        data_size * 3 / 2);
   // Was the compression successful?
   if (compressed_size == 0) {
     return (-1);
@@ -1451,9 +1502,13 @@ pcl::PCDWriter::writeBinaryCompressed (const std::string &file_name,
   std::string ostr = oss.str ();
 
 #ifdef _WIN32
-  HANDLE h_native_file =
-      CreateFile (file_name.c_str (), GENERIC_READ | GENERIC_WRITE, 0, NULL,
-                  CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+  HANDLE h_native_file = CreateFile (file_name.c_str (),
+                                     GENERIC_READ | GENERIC_WRITE,
+                                     0,
+                                     NULL,
+                                     CREATE_ALWAYS,
+                                     FILE_ATTRIBUTE_NORMAL,
+                                     NULL);
   if (h_native_file == INVALID_HANDLE_VALUE) {
     PCL_ERROR (
         "[pcl::PCDWriter::writeBinaryCompressed] Error during CreateFile (%s)!\n",
@@ -1461,7 +1516,8 @@ pcl::PCDWriter::writeBinaryCompressed (const std::string &file_name,
     return (-1);
   }
 #else
-  int fd = io::raw_open (file_name.c_str (), O_RDWR | O_CREAT | O_TRUNC,
+  int fd = io::raw_open (file_name.c_str (),
+                         O_RDWR | O_CREAT | O_TRUNC,
                          S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
   if (fd < 0) {
     PCL_ERROR ("[pcl::PCDWriter::writeBinaryCompressed] Error during open (%s)!\n",
@@ -1484,7 +1540,8 @@ pcl::PCDWriter::writeBinaryCompressed (const std::string &file_name,
     io::raw_close (fd);
     resetLockingPermissions (file_name, file_lock);
     PCL_ERROR ("[pcl::PCDWriter::writeBinaryCompressed] lseek errno: %d strerror: %s\n",
-               errno, strerror (errno));
+               errno,
+               strerror (errno));
     PCL_ERROR ("[pcl::PCDWriter::writeBinaryCompressed] Error during lseek ()!\n");
     return (-1);
   }

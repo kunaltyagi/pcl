@@ -45,8 +45,10 @@ template <typename PointT>
 void
 pcl::gpu::extractLabeledEuclideanClusters (
     const boost::shared_ptr<pcl::PointCloud<PointT>> &host_cloud_,
-    const pcl::gpu::Octree::Ptr &tree, float tolerance,
-    std::vector<PointIndices> &clusters, unsigned int min_pts_per_cluster,
+    const pcl::gpu::Octree::Ptr &tree,
+    float tolerance,
+    std::vector<PointIndices> &clusters,
+    unsigned int min_pts_per_cluster,
     unsigned int max_pts_per_cluster)
 {
 
@@ -168,8 +170,12 @@ pcl::gpu::EuclideanLabeledClusterExtraction<PointT>::extract (
     }
   */
   // Extract the actual clusters
-  extractLabeledEuclideanClusters (host_cloud_, tree_, cluster_tolerance_, clusters,
-                                   min_pts_per_cluster_, max_pts_per_cluster_);
+  extractLabeledEuclideanClusters (host_cloud_,
+                                   tree_,
+                                   cluster_tolerance_,
+                                   clusters,
+                                   min_pts_per_cluster_,
+                                   max_pts_per_cluster_);
 
   // Sort the clusters based on their size (largest one first)
   std::sort (clusters.rbegin (), clusters.rend (), compareLabeledPointClusters);
@@ -177,8 +183,12 @@ pcl::gpu::EuclideanLabeledClusterExtraction<PointT>::extract (
 
 #define PCL_INSTANTIATE_extractLabeledEuclideanClusters(T)                             \
   template void PCL_EXPORTS pcl::gpu::extractLabeledEuclideanClusters (                \
-      const boost::shared_ptr<pcl::PointCloud<T>> &, const pcl::gpu::Octree::Ptr &,    \
-      float, std::vector<PointIndices> &, unsigned int, unsigned int);
+      const boost::shared_ptr<pcl::PointCloud<T>> &,                                   \
+      const pcl::gpu::Octree::Ptr &,                                                   \
+      float,                                                                           \
+      std::vector<PointIndices> &,                                                     \
+      unsigned int,                                                                    \
+      unsigned int);
 #define PCL_INSTANTIATE_EuclideanLabeledClusterExtraction(T)                           \
   template class PCL_EXPORTS pcl::gpu::EuclideanLabeledClusterExtraction<T>;
 /*

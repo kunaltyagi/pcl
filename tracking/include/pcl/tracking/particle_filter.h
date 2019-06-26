@@ -392,8 +392,12 @@ namespace pcl
        * \param[out] z_max the maximum value of z axis.
        */
       void
-      calcBoundingBox (double &x_min, double &x_max, double &y_min, double &y_max,
-                       double &z_min, double &z_max);
+      calcBoundingBox (double &x_min,
+                       double &x_max,
+                       double &y_min,
+                       double &y_max,
+                       double &z_min,
+                       double &z_max);
 
       /** \brief Crop the pointcloud by the bounding box calculated from hypothesis and
        * the reference pointcloud. \param[in] cloud a pointer to pointcloud to be
@@ -409,7 +413,8 @@ namespace pcl
        *to hypothesis.
        **/
       void
-      computeTransformedPointCloud (const StateT &hypothesis, std::vector<int> &indices,
+      computeTransformedPointCloud (const StateT &hypothesis,
+                                    std::vector<int> &indices,
                                     PointCloudIn &cloud);
 
       /** \brief Compute a reference pointcloud transformed to the pose that hypothesis
@@ -492,7 +497,8 @@ namespace pcl
 
       /** \brief Generate the tables for walker's alias method. */
       void
-      genAliasTable (std::vector<int> &a, std::vector<double> &q,
+      genAliasTable (std::vector<int> &a,
+                     std::vector<double> &q,
                      const PointCloudStateConstPtr &particles);
 
       /** \brief Resampling the particle with replacement. */

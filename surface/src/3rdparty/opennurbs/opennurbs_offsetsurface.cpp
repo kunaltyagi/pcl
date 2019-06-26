@@ -16,7 +16,8 @@
 
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-ON_OBJECT_IMPLEMENT (ON_OffsetSurface, ON_SurfaceProxy,
+ON_OBJECT_IMPLEMENT (ON_OffsetSurface,
+                     ON_SurfaceProxy,
                      "00C61749-D430-4ecc-83A8-29130A20CF9C");
 
 ON_OffsetSurface::ON_OffsetSurface () : m__pSrf (0) {}
@@ -136,8 +137,13 @@ ON_OffsetSurface::GetBBox (double *bbox_min, double *bbox_max, ON_BOOL32 bGrowBo
 }
 
 ON_BOOL32
-ON_OffsetSurface::Evaluate (double s, double t, int der_count, int v_stride, double *v,
-                            int side, int *hint) const
+ON_OffsetSurface::Evaluate (double s,
+                            double t,
+                            int der_count,
+                            int v_stride,
+                            double *v,
+                            int side,
+                            int *hint) const
 {
   int vv_stride = v_stride;
   double *vv = v;
@@ -147,8 +153,8 @@ ON_OffsetSurface::Evaluate (double s, double t, int der_count, int v_stride, dou
     vv_stride = 3;
   }
 
-  ON_BOOL32 rc = ON_SurfaceProxy::Evaluate (s, t, (der_count > 2 ? der_count : 2),
-                                            vv_stride, vv, side, hint);
+  ON_BOOL32 rc = ON_SurfaceProxy::Evaluate (
+      s, t, (der_count > 2 ? der_count : 2), vv_stride, vv, side, hint);
 
   if (v != vv) {
     // save answer in v[] array
@@ -181,16 +187,26 @@ ON_OffsetSurface::Evaluate (double s, double t, int der_count, int v_stride, dou
     rc = m_offset_function.EvaluateDistance (s, t, der_count, d);
     if (rc) {
       ON_3dVector N;
-      ON_EvNormal (side, srf_value[1], srf_value[2], srf_value[3], srf_value[4],
-                   srf_value[5], N);
+      ON_EvNormal (side,
+                   srf_value[1],
+                   srf_value[2],
+                   srf_value[3],
+                   srf_value[4],
+                   srf_value[5],
+                   N);
       v[0] += d[0] * N.x;
       v[1] += d[0] * N.y;
       v[2] += d[0] * N.z;
 
       if (der_count > 0) {
         ON_3dVector Ns, Nt;
-        ON_EvNormalPartials (srf_value[1], srf_value[2], srf_value[3], srf_value[4],
-                             srf_value[5], Ns, Nt);
+        ON_EvNormalPartials (srf_value[1],
+                             srf_value[2],
+                             srf_value[3],
+                             srf_value[4],
+                             srf_value[5],
+                             Ns,
+                             Nt);
         v[v_stride] += d[0] * Ns.x + d[1] * N.x;
         v[v_stride + 1] += d[0] * Ns.y + d[1] * N.y;
         v[v_stride + 2] += d[0] * Ns.z + d[1] * N.z;
@@ -208,7 +224,9 @@ ON_OffsetSurface::Evaluate (double s, double t, int der_count, int v_stride, dou
 }
 
 void
-ON_BumpFunction::EvaluateHelperLinearBump (double t, double dt, int der_count,
+ON_BumpFunction::EvaluateHelperLinearBump (double t,
+                                           double dt,
+                                           int der_count,
                                            double *value) const
 {
   value[0] = t;
@@ -224,7 +242,9 @@ ON_BumpFunction::EvaluateHelperLinearBump (double t, double dt, int der_count,
 }
 
 void
-ON_BumpFunction::EvaluateHelperQuinticBump (double t, double dt, int der_count,
+ON_BumpFunction::EvaluateHelperQuinticBump (double t,
+                                            double dt,
+                                            int der_count,
                                             double *value) const
 {
   // c(t) = (1-t)^3 * (1 + 3t + 6t^2)
@@ -380,7 +400,9 @@ ON_OffsetSurfaceFunction::DistanceAt (double s, double t) const
 }
 
 bool
-ON_OffsetSurfaceFunction::EvaluateDistance (double s, double t, int num_der,
+ON_OffsetSurfaceFunction::EvaluateDistance (double s,
+                                            double t,
+                                            int num_der,
                                             double *value) const
 {
   const int vcnt = ((num_der + 1) * (num_der + 2)) / 2;
@@ -451,7 +473,9 @@ ON_OffsetSurfaceFunction::OffsetDistance (int i) const
 }
 
 bool
-ON_OffsetSurfaceFunction::SetOffsetPoint (double s, double t, double distance,
+ON_OffsetSurfaceFunction::SetOffsetPoint (double s,
+                                          double t,
+                                          double distance,
                                           double radius)
 {
   bool rc = false;

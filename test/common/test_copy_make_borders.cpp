@@ -50,8 +50,8 @@ TEST (CopyPointCloud, constant)
 {
   pcl::PointCloud<pcl::PointXYZ> dst (cloud.width + left + right,
                                       cloud.height + top + bottom);
-  pcl::copyPointCloud (cloud, dst, top, bottom, left, right, pcl::BORDER_CONSTANT,
-                       constant);
+  pcl::copyPointCloud (
+      cloud, dst, top, bottom, left, right, pcl::BORDER_CONSTANT, constant);
 
   for (int j = 0; j < top; ++j)
     for (uint32_t i = 0; i < dst.width; ++i)
@@ -79,8 +79,8 @@ TEST (CopyPointCloud, replicate)
 {
   pcl::PointCloud<pcl::PointXYZ> dst (cloud.width + left + right,
                                       cloud.height + top + bottom);
-  pcl::copyPointCloud (cloud, dst, top, bottom, left, right, pcl::BORDER_REPLICATE,
-                       constant);
+  pcl::copyPointCloud (
+      cloud, dst, top, bottom, left, right, pcl::BORDER_REPLICATE, constant);
 
   for (int j = 0; j < top; ++j) {
     for (int i = 0; i < left; ++i)
@@ -118,8 +118,8 @@ TEST (CopyPointCloud, reflect)
 {
   pcl::PointCloud<pcl::PointXYZ> dst (cloud.width + left + right,
                                       cloud.height + top + bottom);
-  pcl::copyPointCloud (cloud, dst, top, bottom, left, right, pcl::BORDER_REFLECT,
-                       constant);
+  pcl::copyPointCloud (
+      cloud, dst, top, bottom, left, right, pcl::BORDER_REFLECT, constant);
 
   for (int j = 0, k = top - 1; j < top; ++j, --k) {
     for (int i = 0, l = left - 1; i < left; ++i, --l)

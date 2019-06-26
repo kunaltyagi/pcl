@@ -102,9 +102,8 @@ namespace pcl
       using PointCloudConstPtr = boost::shared_ptr<const PointCloud>;
 
       // BGL graph
-      using VoxelAdjacencyList =
-          boost::adjacency_list<boost::setS, boost::setS, boost::undirectedS, PointT,
-                                float>;
+      using VoxelAdjacencyList = boost::
+          adjacency_list<boost::setS, boost::setS, boost::undirectedS, PointT, float>;
       using VoxelID = typename VoxelAdjacencyList::vertex_descriptor;
       using EdgeID = typename VoxelAdjacencyList::edge_descriptor;
 

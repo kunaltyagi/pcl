@@ -215,7 +215,9 @@ ON_Polyline::TangentAt (double t) const
 }
 
 bool
-ON_Polyline::ClosestPointTo (const ON_3dPoint &point, double *t, int segment_index0,
+ON_Polyline::ClosestPointTo (const ON_3dPoint &point,
+                             double *t,
+                             int segment_index0,
                              int segment_index1) const
 {
   bool rc = false;
@@ -317,7 +319,8 @@ ON_Polyline::CreateCircumscribedPolygon (const ON_Circle &circle, int side_count
 }
 
 bool
-ON_Polyline::CreateStarPolygon (const ON_Circle &circle, double other_radius,
+ON_Polyline::CreateStarPolygon (const ON_Circle &circle,
+                                double other_radius,
                                 int side_count)
 {
   bool rc =

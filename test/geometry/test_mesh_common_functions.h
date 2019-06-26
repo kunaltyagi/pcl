@@ -55,7 +55,8 @@ const unsigned int max_number_boundary_vertices = 100;
  * vector of vertices). */
 template <class MeshT>
 bool
-hasFaces (const MeshT &mesh, const std::vector<typename MeshT::VertexIndices> &faces,
+hasFaces (const MeshT &mesh,
+          const std::vector<typename MeshT::VertexIndices> &faces,
           const bool verbose = false)
 {
   using VAFC = typename MeshT::VertexAroundFaceCirculator;
@@ -118,7 +119,8 @@ hasFaces (const MeshT &mesh, const std::vector<typename MeshT::VertexIndices> &f
  */
 template <class MeshT>
 bool
-hasFaces (const MeshT &mesh, const std::vector<std::vector<int>> &faces,
+hasFaces (const MeshT &mesh,
+          const std::vector<std::vector<int>> &faces,
           const bool verbose = false)
 {
   using VAFC = typename MeshT::VertexAroundFaceCirculator;
@@ -181,7 +183,8 @@ hasFaces (const MeshT &mesh, const std::vector<std::vector<int>> &faces,
 /** \brief Circulate around the boundary and retrieve all vertices. */
 template <class MeshT>
 typename MeshT::VertexIndices
-getBoundaryVertices (const MeshT &mesh, const typename MeshT::VertexIndex &first,
+getBoundaryVertices (const MeshT &mesh,
+                     const typename MeshT::VertexIndex &first,
                      const bool verbose = false)
 {
   using VAFC = typename MeshT::VertexAroundFaceCirculator;
@@ -272,7 +275,8 @@ getBoundaryVertices (const MeshT &mesh, const int first, const bool verbose = fa
  */
 template <class ContainerT>
 bool
-isCircularPermutation (const ContainerT &expected, const ContainerT &actual,
+isCircularPermutation (const ContainerT &expected,
+                       const ContainerT &actual,
                        const bool verbose = false)
 {
   const unsigned int n = static_cast<unsigned int> (expected.size ());
@@ -349,7 +353,8 @@ isCircularPermutationVec (const std::vector<ContainerT> &expected,
  */
 template <class MeshT>
 typename MeshT::HalfEdgeIndex
-findHalfEdge (const MeshT &mesh, const typename MeshT::VertexIndex &idx_v_0,
+findHalfEdge (const MeshT &mesh,
+              const typename MeshT::VertexIndex &idx_v_0,
               const typename MeshT::VertexIndex &idx_v_1)
 {
   using HalfEdgeIndex = typename MeshT::HalfEdgeIndex;
@@ -376,7 +381,8 @@ findHalfEdge (const MeshT &mesh, const typename MeshT::VertexIndex &idx_v_0,
 /** \brief Check if the given half-edge goes from vertex a to vertex b. */
 template <class MeshT>
 bool
-checkHalfEdge (const MeshT &mesh, const typename MeshT::HalfEdgeIndex ind_he_ab,
+checkHalfEdge (const MeshT &mesh,
+               const typename MeshT::HalfEdgeIndex ind_he_ab,
                const typename MeshT::VertexIndex ind_v_a,
                const typename MeshT::VertexIndex ind_v_b)
 {

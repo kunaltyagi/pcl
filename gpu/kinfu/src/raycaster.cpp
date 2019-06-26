@@ -46,8 +46,8 @@ using namespace Eigen;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-pcl::gpu::RayCaster::RayCaster (int rows_arg, int cols_arg, float fx, float fy,
-                                float cx, float cy)
+pcl::gpu::RayCaster::RayCaster (
+    int rows_arg, int cols_arg, float fx, float fy, float cx, float cy)
     : cols (cols_arg), rows (rows_arg), fx_ (fx), fy_ (fy),
       cx_ (cx < 0 ? cols / 2 : cx), cy_ (cy < 0 ? rows / 2 : cy)
 {
@@ -90,9 +90,14 @@ pcl::gpu::RayCaster::run (const TsdfVolume &volume, const Affine3f &camera_pose)
   const float3 &device_t = device_cast<const float3> (t);
 
   float tranc_dist = volume.getTsdfTruncDist ();
-  device::raycast (intr, device_R, device_t, tranc_dist,
-                   device_cast<const float3> (volume_size_), volume.data (),
-                   vertex_map_, normal_map_);
+  device::raycast (intr,
+                   device_R,
+                   device_t,
+                   tranc_dist,
+                   device_cast<const float3> (volume_size_),
+                   volume.data (),
+                   vertex_map_,
+                   normal_map_);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,8 +131,8 @@ pcl::gpu::RayCaster::generateDepthImage (Depth &depth) const
   Matrix<float, 3, 3, RowMajor> R_inv = camera_pose_.linear ().inverse ();
   Vector3f t = camera_pose_.translation ();
 
-  device::generateDepth (device_cast<Mat33> (R_inv), device_cast<const float3> (t),
-                         vertex_map_, depth);
+  device::generateDepth (
+      device_cast<Mat33> (R_inv), device_cast<const float3> (t), vertex_map_, depth);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -27,10 +27,12 @@ ON_2dPointArray::ON_2dPointArray (const ON_2dPointArray &src)
 
 bool
 ON_2dPointArray::GetBBox ( // returns true if successful
-    double boxmin[2], double boxmax[2], int bGrowBox) const
+    double boxmin[2],
+    double boxmax[2],
+    int bGrowBox) const
 {
-  return ON_GetPointListBoundingBox (2, false, Count (), 2, (m_a) ? &m_a[0].x : 0,
-                                     boxmin, boxmax, bGrowBox);
+  return ON_GetPointListBoundingBox (
+      2, false, Count (), 2, (m_a) ? &m_a[0].x : 0, boxmin, boxmax, bGrowBox);
 }
 
 bool
@@ -84,10 +86,12 @@ ON_3dPointArray::GetBoundingBox (ON_BoundingBox &bbox, int bGrowBox) const
 
 bool
 ON_3dPointArray::GetBBox ( // returns true if successful
-    double boxmin[3], double boxmax[3], int bGrowBox) const
+    double boxmin[3],
+    double boxmax[3],
+    int bGrowBox) const
 {
-  return ON_GetPointListBoundingBox (3, false, Count (), 3, (m_a) ? &m_a[0].x : 0,
-                                     boxmin, boxmax, bGrowBox);
+  return ON_GetPointListBoundingBox (
+      3, false, Count (), 3, (m_a) ? &m_a[0].x : 0, boxmin, boxmax, bGrowBox);
 }
 
 bool
@@ -103,7 +107,8 @@ ON_3dPointArray::SwapCoordinates (int i, int j)
 }
 
 bool
-ON_3dPointArray::Rotate (double sin_angle, double cos_angle,
+ON_3dPointArray::Rotate (double sin_angle,
+                         double cos_angle,
                          const ON_3dVector &axis_of_rotation,
                          const ON_3dPoint &center_of_rotation)
 {
@@ -124,10 +129,13 @@ ON_3dPointArray::Rotate (double sin_angle, double cos_angle,
 }
 
 bool
-ON_3dPointArray::Rotate (double angle_in_radians, const ON_3dVector &axis_of_rotation,
+ON_3dPointArray::Rotate (double angle_in_radians,
+                         const ON_3dVector &axis_of_rotation,
                          const ON_3dPoint &center_of_rotation)
 {
-  return Rotate (sin (angle_in_radians), cos (angle_in_radians), axis_of_rotation,
+  return Rotate (sin (angle_in_radians),
+                 cos (angle_in_radians),
+                 axis_of_rotation,
                  center_of_rotation);
 }
 
@@ -157,8 +165,11 @@ ON_3dPointArray::operator= (const ON_SimpleArray<ON_3fPoint> &src)
 }
 
 bool
-ON_3dPointArray::Create (int point_dimension, int bRational, int point_count,
-                         int point_stride, const double *points)
+ON_3dPointArray::Create (int point_dimension,
+                         int bRational,
+                         int point_count,
+                         int point_stride,
+                         const double *points)
 {
   bool rc = false;
   if (point_dimension >= 2 && point_dimension <= 3 && point_count > 0 && points &&
@@ -198,8 +209,11 @@ ON_3dPointArray::Create (int point_dimension, int bRational, int point_count,
 }
 
 bool
-ON_3dPointArray::Create (int point_dimension, int bRational, int point_count,
-                         int point_stride, const float *points)
+ON_3dPointArray::Create (int point_dimension,
+                         int bRational,
+                         int point_count,
+                         int point_stride,
+                         const float *points)
 {
   bool rc = false;
   if (point_dimension >= 2 && point_dimension <= 3 && point_count > 0 && points &&
@@ -279,10 +293,12 @@ ON_2dVectorArray::ON_2dVectorArray (const ON_2dVectorArray &src)
 
 bool
 ON_2dVectorArray::GetBBox ( // returns true if successful
-    double boxmin[2], double boxmax[2], int bGrowBox) const
+    double boxmin[2],
+    double boxmax[2],
+    int bGrowBox) const
 {
-  return ON_GetPointListBoundingBox (2, false, Count (), 2, (m_a) ? &m_a[0].x : 0,
-                                     boxmin, boxmax, bGrowBox);
+  return ON_GetPointListBoundingBox (
+      2, false, Count (), 2, (m_a) ? &m_a[0].x : 0, boxmin, boxmax, bGrowBox);
 }
 
 bool
@@ -318,8 +334,8 @@ ON_3dVectorArray::ON_3dVectorArray (const ON_3dVectorArray &src)
 bool
 ON_3dVectorArray::GetBBox (double boxmin[3], double boxmax[3], bool bGrowBox) const
 {
-  return ON_GetPointListBoundingBox (3, false, Count (), 3, (m_a) ? &m_a[0].x : 0,
-                                     boxmin, boxmax, bGrowBox);
+  return ON_GetPointListBoundingBox (
+      3, false, Count (), 3, (m_a) ? &m_a[0].x : 0, boxmin, boxmax, bGrowBox);
 }
 
 bool
@@ -357,10 +373,12 @@ ON_2fPointArray::ON_2fPointArray (const ON_2fPointArray &src)
 
 bool
 ON_2fPointArray::GetBBox ( // returns true if successful
-    float boxmin[2], float boxmax[2], int bGrowBox) const
+    float boxmin[2],
+    float boxmax[2],
+    int bGrowBox) const
 {
-  return ON_GetPointListBoundingBox (2, false, Count (), 2, (m_a) ? &m_a[0].x : 0,
-                                     boxmin, boxmax, bGrowBox);
+  return ON_GetPointListBoundingBox (
+      2, false, Count (), 2, (m_a) ? &m_a[0].x : 0, boxmin, boxmax, bGrowBox);
 }
 
 bool
@@ -395,10 +413,12 @@ ON_3fPointArray::ON_3fPointArray (const ON_3fPointArray &src)
 
 bool
 ON_3fPointArray::GetBBox ( // returns true if successful
-    float boxmin[3], float boxmax[3], int bGrowBox) const
+    float boxmin[3],
+    float boxmax[3],
+    int bGrowBox) const
 {
-  return ON_GetPointListBoundingBox (3, false, Count (), 3, (m_a) ? &m_a[0].x : 0,
-                                     boxmin, boxmax, bGrowBox);
+  return ON_GetPointListBoundingBox (
+      3, false, Count (), 3, (m_a) ? &m_a[0].x : 0, boxmin, boxmax, bGrowBox);
 }
 
 bool
@@ -464,8 +484,8 @@ ON_2fVectorArray::ON_2fVectorArray (const ON_2fVectorArray &src)
 bool
 ON_2fVectorArray::GetBBox (float boxmin[2], float boxmax[2], bool bGrowBox) const
 {
-  return ON_GetPointListBoundingBox (2, false, Count (), 2, (m_a) ? &m_a[0].x : 0,
-                                     boxmin, boxmax, bGrowBox);
+  return ON_GetPointListBoundingBox (
+      2, false, Count (), 2, (m_a) ? &m_a[0].x : 0, boxmin, boxmax, bGrowBox);
 }
 
 bool
@@ -500,10 +520,12 @@ ON_3fVectorArray::ON_3fVectorArray (const ON_3fVectorArray &src)
 
 bool
 ON_3fVectorArray::GetBBox ( // returns true if successful
-    float boxmin[3], float boxmax[3], int bGrowBox) const
+    float boxmin[3],
+    float boxmax[3],
+    int bGrowBox) const
 {
-  return ON_GetPointListBoundingBox (3, false, Count (), 3, (m_a) ? &m_a[0].x : 0,
-                                     boxmin, boxmax, bGrowBox);
+  return ON_GetPointListBoundingBox (
+      3, false, Count (), 3, (m_a) ? &m_a[0].x : 0, boxmin, boxmax, bGrowBox);
 }
 
 bool
@@ -746,7 +768,10 @@ ON_UuidList::SearchHelper (const ON_UUID *uuid) const
 
   ON_UUID *p = (m_sorted_count > 0)
                    ? (ON_UUID *)bsearch (
-                         uuid, m_a, m_sorted_count, sizeof (m_a[0]),
+                         uuid,
+                         m_a,
+                         m_sorted_count,
+                         sizeof (m_a[0]),
                          (int (*) (const void *, const void *))ON_UuidList::CompareUuid)
                    : 0;
 
@@ -1064,7 +1089,10 @@ ON_UuidPairList::SearchHelper (const ON_UUID *id1) const
   //   array.
   ON_UuidPair *p = (m_sorted_count > 0)
                        ? (ON_UuidPair *)bsearch (
-                             id1, m_a, m_sorted_count, sizeof (m_a[0]),
+                             id1,
+                             m_a,
+                             m_sorted_count,
+                             sizeof (m_a[0]),
                              (int (*) (const void *, const void *))compar_uuidpair_id1)
                        : 0;
 
@@ -1179,7 +1207,10 @@ ON_UuidIndexList::SearchHelper (const ON_UUID *uuid) const
   ON_UuidIndex *p =
       (m_sorted_count > 0)
           ? (ON_UuidIndex *)bsearch (
-                uuid, m_a, m_sorted_count, sizeof (m_a[0]),
+                uuid,
+                m_a,
+                m_sorted_count,
+                sizeof (m_a[0]),
                 (int (*) (const void *, const void *))compar_uuidindex_uuid)
           : 0;
   if (0 == p) {

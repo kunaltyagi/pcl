@@ -83,26 +83,32 @@ namespace pcl
     static void
     extractFromRangeImageAndAddToList (const RangeImage &range_image,
                                        const Eigen::Vector3f &interest_point,
-                                       int descriptor_size, float support_size,
+                                       int descriptor_size,
+                                       float support_size,
                                        bool rotation_invariant,
                                        std::vector<Narf *> &feature_list);
     /** Same as above */
     static void
-    extractFromRangeImageAndAddToList (const RangeImage &range_image, float image_x,
-                                       float image_y, int descriptor_size,
-                                       float support_size, bool rotation_invariant,
+    extractFromRangeImageAndAddToList (const RangeImage &range_image,
+                                       float image_x,
+                                       float image_y,
+                                       int descriptor_size,
+                                       float support_size,
+                                       bool rotation_invariant,
                                        std::vector<Narf *> &feature_list);
     /** Get a list of features from the given interest points. */
     static void
     extractForInterestPoints (const RangeImage &range_image,
                               const PointCloud<InterestPoint> &interest_points,
-                              int descriptor_size, float support_size,
+                              int descriptor_size,
+                              float support_size,
                               bool rotation_invariant,
                               std::vector<Narf *> &feature_list);
     /** Extract an NARF for every point in the range image. */
     static void
     extractForEveryRangeImagePointAndAddToList (const RangeImage &range_image,
-                                                int descriptor_size, float support_size,
+                                                int descriptor_size,
+                                                float support_size,
                                                 bool rotation_invariant,
                                                 std::vector<Narf *> &feature_list);
 
@@ -116,26 +122,33 @@ namespace pcl
      * covers */
     bool
     extractFromRangeImage (
-        const RangeImage &range_image, const Eigen::Affine3f &pose, int descriptor_size,
+        const RangeImage &range_image,
+        const Eigen::Affine3f &pose,
+        int descriptor_size,
         float support_size,
         int surface_patch_world_size = NARF_DEFAULT_SURFACE_PATCH_PIXEL_SIZE);
 
     //! Same as above, but determines the transformation from the surface in the range
     //! image
     bool
-    extractFromRangeImage (const RangeImage &range_image, float x, float y,
-                           int descriptor_size, float support_size);
-
-    //! Same as above
-    bool
     extractFromRangeImage (const RangeImage &range_image,
-                           const InterestPoint &interest_point, int descriptor_size,
+                           float x,
+                           float y,
+                           int descriptor_size,
                            float support_size);
 
     //! Same as above
     bool
     extractFromRangeImage (const RangeImage &range_image,
-                           const Eigen::Vector3f &interest_point, int descriptor_size,
+                           const InterestPoint &interest_point,
+                           int descriptor_size,
+                           float support_size);
+
+    //! Same as above
+    bool
+    extractFromRangeImage (const RangeImage &range_image,
+                           const Eigen::Vector3f &interest_point,
+                           int descriptor_size,
                            float support_size);
 
     /** Same as above, but using the rotational invariant version by choosing the best
@@ -145,7 +158,8 @@ namespace pcl
     bool
     extractFromRangeImageWithBestRotation (const RangeImage &range_image,
                                            const Eigen::Vector3f &interest_point,
-                                           int descriptor_size, float support_size);
+                                           int descriptor_size,
+                                           float support_size);
 
     /* Get the dominant rotations of the current descriptor
      * \param rotations the returned rotations
@@ -335,7 +349,8 @@ namespace pcl
       void
       copyToFloatArray (const PointT &p, float *out) const override
       {
-        memcpy (out, p->getDescriptor (),
+        memcpy (out,
+                p->getDescriptor (),
                 sizeof (*p->getDescriptor ()) * this->nr_dimensions_);
       }
     };

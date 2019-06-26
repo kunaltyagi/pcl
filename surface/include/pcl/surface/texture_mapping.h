@@ -187,7 +187,8 @@ namespace pcl
      * by the camera
      */
     inline bool
-    getPointUVCoordinates (const PointInT &pt, const Camera &cam,
+    getPointUVCoordinates (const PointInT &pt,
+                           const Camera &cam,
                            Eigen::Vector2f &UV_coordinates)
     {
       // if the point is in front of the camera
@@ -251,7 +252,8 @@ namespace pcl
      */
     void
     removeOccludedPoints (const PointCloudPtr &input_cloud,
-                          PointCloudPtr &filtered_cloud, const double octree_voxel_size,
+                          PointCloudPtr &filtered_cloud,
+                          const double octree_voxel_size,
                           std::vector<int> &visible_indices,
                           std::vector<int> &occluded_indices);
 
@@ -285,9 +287,11 @@ namespace pcl
      * visible points
      */
     int
-    sortFacesByCamera (pcl::TextureMesh &tex_mesh, pcl::TextureMesh &sorted_mesh,
+    sortFacesByCamera (pcl::TextureMesh &tex_mesh,
+                       pcl::TextureMesh &sorted_mesh,
                        const pcl::texture_mapping::CameraVector &cameras,
-                       const double octree_voxel_size, PointCloud &visible_pts);
+                       const double octree_voxel_size,
+                       PointCloud &visible_pts);
 
     /** \brief Colors a point cloud, depending on its occlusions.
      * \details If showNbOcclusions is set to True, each point is colored depending on
@@ -303,7 +307,8 @@ namespace pcl
     showOcclusions (const PointCloudPtr &input_cloud,
                     pcl::PointCloud<pcl::PointXYZI>::Ptr &colored_cloud,
                     const double octree_voxel_size,
-                    const bool show_nb_occlusions = true, const int max_occlusions = 4);
+                    const bool show_nb_occlusions = true,
+                    const int max_occlusions = 4);
 
     /** \brief Colors the point cloud of a Mesh, depending on its occlusions.
      * \details If showNbOcclusions is set to True, each point is colored depending on
@@ -318,7 +323,8 @@ namespace pcl
     void
     showOcclusions (pcl::TextureMesh &tex_mesh,
                     pcl::PointCloud<pcl::PointXYZI>::Ptr &colored_cloud,
-                    double octree_voxel_size, bool show_nb_occlusions = true,
+                    double octree_voxel_size,
+                    bool show_nb_occlusions = true,
                     int max_occlusions = 4);
 
     /** \brief Segment and texture faces by camera visibility. Face-based segmentation.
@@ -351,7 +357,8 @@ namespace pcl
      * \param[in] p3 the third point
      */
     std::vector<Eigen::Vector2f, Eigen::aligned_allocator<Eigen::Vector2f>>
-    mapTexture2Face (const Eigen::Vector3f &p1, const Eigen::Vector3f &p2,
+    mapTexture2Face (const Eigen::Vector3f &p1,
+                     const Eigen::Vector3f &p2,
                      const Eigen::Vector3f &p3);
 
     /** \brief Returns the circumcenter of a triangle and the circle's radius.
@@ -363,8 +370,10 @@ namespace pcl
      * \param[out] radius the radius of the circumscribed circle.
      */
     inline void
-    getTriangleCircumcenterAndSize (const pcl::PointXY &p1, const pcl::PointXY &p2,
-                                    const pcl::PointXY &p3, pcl::PointXY &circumcenter,
+    getTriangleCircumcenterAndSize (const pcl::PointXY &p1,
+                                    const pcl::PointXY &p2,
+                                    const pcl::PointXY &p3,
+                                    pcl::PointXY &circumcenter,
                                     double &radius);
 
     /** \brief Returns the centroid of a triangle and the corresponding circumscribed
@@ -390,7 +399,8 @@ namespace pcl
      * by the camera
      */
     inline bool
-    getPointUVCoordinates (const PointInT &pt, const Camera &cam,
+    getPointUVCoordinates (const PointInT &pt,
+                           const Camera &cam,
                            pcl::PointXY &UV_coordinates);
 
     /** \brief Returns true if all the vertices of one face are projected on the
@@ -403,8 +413,12 @@ namespace pcl
      * \param[out] proj3 UV coordinates corresponding to p3.
      */
     inline bool
-    isFaceProjected (const Camera &camera, const PointInT &p1, const PointInT &p2,
-                     const PointInT &p3, pcl::PointXY &proj1, pcl::PointXY &proj2,
+    isFaceProjected (const Camera &camera,
+                     const PointInT &p1,
+                     const PointInT &p2,
+                     const PointInT &p3,
+                     pcl::PointXY &proj1,
+                     pcl::PointXY &proj2,
                      pcl::PointXY &proj3);
 
     /** \brief Returns True if a point lays within a triangle
@@ -415,8 +429,10 @@ namespace pcl
      * \param[in] pt the querry point.
      */
     inline bool
-    checkPointInsideTriangle (const pcl::PointXY &p1, const pcl::PointXY &p2,
-                              const pcl::PointXY &p3, const pcl::PointXY &pt);
+    checkPointInsideTriangle (const pcl::PointXY &p1,
+                              const pcl::PointXY &p2,
+                              const pcl::PointXY &p3,
+                              const pcl::PointXY &pt);
 
     /** \brief Class get name method. */
     std::string

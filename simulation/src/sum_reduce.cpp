@@ -43,8 +43,15 @@ pcl::simulation::SumReduce::SumReduce (int width, int height, int levels)
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-    glTexImage2D (GL_TEXTURE_2D, 0, GL_R32F, level_width, level_height, 0, GL_RED,
-                  GL_FLOAT, nullptr);
+    glTexImage2D (GL_TEXTURE_2D,
+                  0,
+                  GL_R32F,
+                  level_width,
+                  level_height,
+                  0,
+                  GL_RED,
+                  GL_FLOAT,
+                  nullptr);
     glBindTexture (GL_TEXTURE_2D, 0);
   }
 }
@@ -80,8 +87,8 @@ pcl::simulation::SumReduce::sum (GLuint input_array, float *output_array)
   }
 
   for (int i = 0; i < levels_; ++i) {
-    glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                            arrays_[i], 0);
+    glFramebufferTexture2D (
+        GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, arrays_[i], 0);
     glDrawBuffer (GL_COLOR_ATTACHMENT0);
 
     glViewport (0, 0, width / 2, height / 2);

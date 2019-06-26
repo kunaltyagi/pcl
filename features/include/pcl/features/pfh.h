@@ -78,7 +78,8 @@ namespace pcl
    * \author Radu B. Rusu
    * \ingroup features
    */
-  template <typename PointInT, typename PointNT,
+  template <typename PointInT,
+            typename PointNT,
             typename PointOutT = pcl::PFHSignature125>
   class PFHEstimation : public FeatureFromNormals<PointInT, PointNT, PointOutT>
   {
@@ -171,8 +172,13 @@ namespace pcl
      */
     bool
     computePairFeatures (const pcl::PointCloud<PointInT> &cloud,
-                         const pcl::PointCloud<PointNT> &normals, int p_idx, int q_idx,
-                         float &f1, float &f2, float &f3, float &f4);
+                         const pcl::PointCloud<PointNT> &normals,
+                         int p_idx,
+                         int q_idx,
+                         float &f1,
+                         float &f2,
+                         float &f3,
+                         float &f4);
 
     /** \brief Estimate the PFH (Point Feature Histograms) individual signatures of the
      * three angular (f1, f2, f3) features for a given point based on its spatial
@@ -187,7 +193,8 @@ namespace pcl
     void
     computePointPFHSignature (const pcl::PointCloud<PointInT> &cloud,
                               const pcl::PointCloud<PointNT> &normals,
-                              const std::vector<int> &indices, int nr_split,
+                              const std::vector<int> &indices,
+                              int nr_split,
                               Eigen::VectorXf &pfh_histogram);
 
     protected:
@@ -218,7 +225,9 @@ namespace pcl
     /** \brief Internal hashmap, used to optimize efficiency of redundant computations.
      */
     std::map<
-        std::pair<int, int>, Eigen::Vector4f, std::less<std::pair<int, int>>,
+        std::pair<int, int>,
+        Eigen::Vector4f,
+        std::less<std::pair<int, int>>,
         Eigen::aligned_allocator<std::pair<const std::pair<int, int>, Eigen::Vector4f>>>
         feature_map_;
 

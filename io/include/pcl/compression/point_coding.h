@@ -124,7 +124,8 @@ namespace pcl
        */
       void
       encodePoints (const typename std::vector<int> &indexVector_arg,
-                    const double *referencePoint_arg, PointCloudConstPtr inputCloud_arg)
+                    const double *referencePoint_arg,
+                    PointCloudConstPtr inputCloud_arg)
       {
         size_t len = indexVector_arg.size ();
 
@@ -137,17 +138,20 @@ namespace pcl
           const PointT &idxPoint = inputCloud_arg->points[idx];
 
           // differentially encode point coordinates and truncate overflow
-          diffX = static_cast<unsigned char> (max (
-              -127,
-              min<int> (127, static_cast<int> ((idxPoint.x - referencePoint_arg[0]) /
+          diffX = static_cast<unsigned char> (
+              max (-127,
+                   min<int> (127,
+                             static_cast<int> ((idxPoint.x - referencePoint_arg[0]) /
                                                pointCompressionResolution_))));
-          diffY = static_cast<unsigned char> (max (
-              -127,
-              min<int> (127, static_cast<int> ((idxPoint.y - referencePoint_arg[1]) /
+          diffY = static_cast<unsigned char> (
+              max (-127,
+                   min<int> (127,
+                             static_cast<int> ((idxPoint.y - referencePoint_arg[1]) /
                                                pointCompressionResolution_))));
-          diffZ = static_cast<unsigned char> (max (
-              -127,
-              min<int> (127, static_cast<int> ((idxPoint.z - referencePoint_arg[2]) /
+          diffZ = static_cast<unsigned char> (
+              max (-127,
+                   min<int> (127,
+                             static_cast<int> ((idxPoint.z - referencePoint_arg[2]) /
                                                pointCompressionResolution_))));
 
           // store information in differential point vector
@@ -165,8 +169,10 @@ namespace pcl
        * color information
        */
       void
-      decodePoints (PointCloudPtr outputCloud_arg, const double *referencePoint_arg,
-                    std::size_t beginIdx_arg, std::size_t endIdx_arg)
+      decodePoints (PointCloudPtr outputCloud_arg,
+                    const double *referencePoint_arg,
+                    std::size_t beginIdx_arg,
+                    std::size_t endIdx_arg)
       {
         assert (beginIdx_arg <= endIdx_arg);
 

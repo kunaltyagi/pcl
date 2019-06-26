@@ -52,7 +52,8 @@
 using namespace std::chrono_literals;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-pcl::OpenNIGrabber::OpenNIGrabber (const std::string &device_id, const Mode &depth_mode,
+pcl::OpenNIGrabber::OpenNIGrabber (const std::string &device_id,
+                                   const Mode &depth_mode,
                                    const Mode &image_mode)
     : image_width_ (), image_height_ (), depth_width_ (), depth_height_ (),
       image_required_ (false), depth_required_ (false), ir_required_ (false),
@@ -263,7 +264,8 @@ pcl::OpenNIGrabber::isRunning () const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::OpenNIGrabber::onInit (const std::string &device_id, const Mode &depth_mode,
+pcl::OpenNIGrabber::onInit (const std::string &device_id,
+                            const Mode &depth_mode,
                             const Mode &image_mode)
 {
   updateModeMaps (); // registering mapping from config modes to XnModes and vice versa
@@ -300,7 +302,8 @@ pcl::OpenNIGrabber::getName () const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::OpenNIGrabber::setupDevice (const std::string &device_id, const Mode &depth_mode,
+pcl::OpenNIGrabber::setupDevice (const std::string &device_id,
+                                 const Mode &depth_mode,
                                  const Mode &image_mode)
 {
   // Initialize the openni device

@@ -215,7 +215,8 @@ pcl::VTKUtils::mesh2vtk (const pcl::PolygonMesh &mesh,
     Eigen::Vector4f pt = Eigen::Vector4f::Zero ();
     Eigen::Array4i xyz_offset (mesh.cloud.fields[idx_x].offset,
                                mesh.cloud.fields[idx_y].offset,
-                               mesh.cloud.fields[idx_z].offset, 0);
+                               mesh.cloud.fields[idx_z].offset,
+                               0);
     for (vtkIdType cp = 0; cp < nr_points; ++cp, xyz_offset += mesh.cloud.point_step) {
       memcpy (&pt[0], &mesh.cloud.data[xyz_offset[0]], sizeof (float));
       memcpy (&pt[1], &mesh.cloud.data[xyz_offset[1]], sizeof (float));
@@ -246,7 +247,8 @@ pcl::VTKUtils::mesh2vtk (const pcl::PolygonMesh &mesh,
     int offset = (idx_rgb != -1) ? mesh.cloud.fields[idx_rgb].offset
                                  : mesh.cloud.fields[idx_rgba].offset;
     for (vtkIdType cp = 0; cp < nr_points; ++cp) {
-      memcpy (&rgb, &mesh.cloud.data[cp * mesh.cloud.point_step + offset],
+      memcpy (&rgb,
+              &mesh.cloud.data[cp * mesh.cloud.point_step + offset],
               sizeof (pcl::RGB));
       const unsigned char color[3] = {rgb.r, rgb.g, rgb.b};
       colors->InsertNextTupleValue (color);

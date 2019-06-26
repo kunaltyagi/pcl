@@ -111,10 +111,10 @@ class Segmentation
       } else
         first_time = false;
 
-      viz.addPointCloudNormals<pcl::PointXYZRGBNormal> (normal_cloud, 200, 0.1,
-                                                        "normalcloud");
-      viz.addPointCloud<pcl::PointXYZRGBNormal> (normal_cloud, Color_handler,
-                                                 std::string ("cloud"), 0);
+      viz.addPointCloudNormals<pcl::PointXYZRGBNormal> (
+          normal_cloud, 200, 0.1, "normalcloud");
+      viz.addPointCloud<pcl::PointXYZRGBNormal> (
+          normal_cloud, Color_handler, std::string ("cloud"), 0);
       new_cloud = false;
     }
   }
@@ -201,8 +201,8 @@ class Segmentation
     typename StoragePointer<Storage, char4>::type ptr;
     {
       ScopeTimeCPU time ("TIMING: Matrix Creation");
-      ImageType<Storage>::createContinuous ((int)data->height, (int)data->width,
-                                            CV_8UC4, normal_image);
+      ImageType<Storage>::createContinuous (
+          (int)data->height, (int)data->width, CV_8UC4, normal_image);
       ptr = typename StoragePointer<Storage, char4>::type ((char4 *)normal_image.data);
       createNormalsImage<Storage> (ptr, *normals);
     }
@@ -278,7 +278,8 @@ class Segmentation
         std::cerr << "[Segmentation] Using GPU..." << std::endl;
         std::function<void(
             const boost::shared_ptr<openni_wrapper::Image> &image,
-            const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image, float)>
+            const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image,
+            float)>
             f = boost::bind (&Segmentation::cloud_cb<Device>, this, _1, _2, _3);
         c = grabber->registerCallback (f);
       } else {

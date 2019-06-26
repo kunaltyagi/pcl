@@ -229,7 +229,8 @@ namespace pcl
        * root file extension does not match \ref
        * pcl::outofcore::OutofcoreOctreeBaseNode::node_index_extension
        */
-      OutofcoreOctreeBase (const Eigen::Vector3d &min, const Eigen::Vector3d &max,
+      OutofcoreOctreeBase (const Eigen::Vector3d &min,
+                           const Eigen::Vector3d &max,
                            const double resolution_arg,
                            const boost::filesystem::path &root_node_name,
                            const std::string &coord_sys);
@@ -247,7 +248,8 @@ namespace pcl
        * \throws PCLException if the parent directory has existing children (detects an
        * existing tree) \throws PCLException if file extension is not ".oct_idx"
        */
-      OutofcoreOctreeBase (const boost::uint64_t max_depth, const Eigen::Vector3d &min,
+      OutofcoreOctreeBase (const boost::uint64_t max_depth,
+                           const Eigen::Vector3d &min,
                            const Eigen::Vector3d &max,
                            const boost::filesystem::path &root_node_name,
                            const std::string &coord_sys);
@@ -325,11 +327,13 @@ namespace pcl
       queryFrustum (const double *planes, std::list<std::string> &file_names) const;
 
       void
-      queryFrustum (const double *planes, std::list<std::string> &file_names,
+      queryFrustum (const double *planes,
+                    std::list<std::string> &file_names,
                     const boost::uint32_t query_depth) const;
 
       void
-      queryFrustum (const double *planes, const Eigen::Vector3d &eye,
+      queryFrustum (const double *planes,
+                    const Eigen::Vector3d &eye,
                     const Eigen::Matrix4d &view_projection_matrix,
                     std::list<std::string> &file_names,
                     const boost::uint32_t query_depth) const;
@@ -350,7 +354,8 @@ namespace pcl
        * satisfy the query
        */
       void
-      queryBBIntersects (const Eigen::Vector3d &min, const Eigen::Vector3d &max,
+      queryBBIntersects (const Eigen::Vector3d &min,
+                         const Eigen::Vector3d &max,
                          const boost::uint32_t query_depth,
                          std::list<std::string> &bin_name) const;
 
@@ -367,7 +372,8 @@ namespace pcl
        * vector of points
        */
       void
-      queryBBIncludes (const Eigen::Vector3d &min, const Eigen::Vector3d &max,
+      queryBBIncludes (const Eigen::Vector3d &min,
+                       const Eigen::Vector3d &max,
                        const boost::uint64_t query_depth,
                        AlignedPointTVector &dst) const;
 
@@ -381,7 +387,8 @@ namespace pcl
        *points satisfying the query.
        **/
       void
-      queryBBIncludes (const Eigen::Vector3d &min, const Eigen::Vector3d &max,
+      queryBBIncludes (const Eigen::Vector3d &min,
+                       const Eigen::Vector3d &max,
                        const boost::uint64_t query_depth,
                        const pcl::PCLPointCloud2::Ptr &dst_blob) const;
 
@@ -397,8 +404,10 @@ namespace pcl
        *
        */
       void
-      queryBBIncludes_subsample (const Eigen::Vector3d &min, const Eigen::Vector3d &max,
-                                 uint64_t query_depth, const double percent,
+      queryBBIncludes_subsample (const Eigen::Vector3d &min,
+                                 const Eigen::Vector3d &max,
+                                 uint64_t query_depth,
+                                 const double percent,
                                  AlignedPointTVector &dst) const;
 
       //--------------------------------------------------------------------------------
@@ -416,8 +425,10 @@ namespace pcl
        * percentage which is applied after each time data are read from disk
        */
       virtual void
-      queryBoundingBox (const Eigen::Vector3d &min, const Eigen::Vector3d &max,
-                        const int query_depth, const pcl::PCLPointCloud2::Ptr &dst_blob,
+      queryBoundingBox (const Eigen::Vector3d &min,
+                        const Eigen::Vector3d &max,
+                        const int query_depth,
+                        const pcl::PCLPointCloud2::Ptr &dst_blob,
                         double percent = 1.0);
 
       /** \brief Returns list of pcd files from nodes whose bounding boxes intersect
@@ -428,8 +439,10 @@ namespace pcl
        * and processed.
        */
       inline virtual void
-      queryBoundingBox (const Eigen::Vector3d &min, const Eigen::Vector3d &max,
-                        const int query_depth, std::list<std::string> &filenames) const
+      queryBoundingBox (const Eigen::Vector3d &min,
+                        const Eigen::Vector3d &max,
+                        const int query_depth,
+                        std::list<std::string> &filenames) const
       {
         std::shared_lock<std::shared_timed_mutex> lock (read_write_mutex_);
         filenames.clear ();
@@ -470,8 +483,10 @@ namespace pcl
        *depth \b query_depth
        **/
       boost::uint64_t
-      queryBoundingBoxNumPoints (const Eigen::Vector3d &min, const Eigen::Vector3d &max,
-                                 const int query_depth, bool load_from_disk = true);
+      queryBoundingBoxNumPoints (const Eigen::Vector3d &min,
+                                 const Eigen::Vector3d &max,
+                                 const int query_depth,
+                                 bool load_from_disk = true);
 
       /** \brief Get number of points at each LOD
        * \return vector of number of points in each LOD indexed by each level of depth,
@@ -639,8 +654,10 @@ namespace pcl
 
       protected:
       void
-      init (const boost::uint64_t &depth, const Eigen::Vector3d &min,
-            const Eigen::Vector3d &max, const boost::filesystem::path &root_name,
+      init (const boost::uint64_t &depth,
+            const Eigen::Vector3d &min,
+            const Eigen::Vector3d &max,
+            const boost::filesystem::path &root_name,
             const std::string &coord_sys);
 
       OutofcoreOctreeBase (OutofcoreOctreeBase &rval);
@@ -727,7 +744,8 @@ namespace pcl
       /** \brief Auxiliary function to compute the depth of the tree given the bounding
        * box and the desired size of the leaf voxels */
       boost::uint64_t
-      calculateDepth (const Eigen::Vector3d &min_bb, const Eigen::Vector3d &max_bb,
+      calculateDepth (const Eigen::Vector3d &min_bb,
+                      const Eigen::Vector3d &max_bb,
                       const double leaf_resolution);
 
       double sample_percent_;

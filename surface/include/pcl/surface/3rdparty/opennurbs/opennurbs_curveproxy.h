@@ -307,8 +307,8 @@ class ON_CLASS ON_CurveProxy : public ON_Curve
       ) const;
 
   ON_BOOL32
-  IsPlanar (ON_Plane * = NULL, // if not NULL and true is returned, then plane
-                               // parameters are filled in
+  IsPlanar (ON_Plane * = NULL,         // if not NULL and true is returned, then plane
+                                       // parameters are filled in
             double = ON_ZERO_TOLERANCE // tolerance to use when checking
             ) const;
 
@@ -364,8 +364,12 @@ class ON_CLASS ON_CurveProxy : public ON_Curve
     Overrides ON_Curve::GetNextDiscontinuity.
   */
   bool
-  GetNextDiscontinuity (ON::continuity c, double t0, double t1, double *t,
-                        int *hint = NULL, int *dtype = NULL,
+  GetNextDiscontinuity (ON::continuity c,
+                        double t0,
+                        double t1,
+                        double *t,
+                        int *hint = NULL,
+                        int *dtype = NULL,
                         double cos_angle_tolerance = ON_DEFAULT_ANGLE_TOLERANCE_COSINE,
                         double curvature_tolerance = ON_SQRT_EPSILON) const;
 
@@ -403,7 +407,9 @@ class ON_CLASS ON_CurveProxy : public ON_Curve
     Overrides ON_Curve::IsContinuous.
   */
   bool
-  IsContinuous (ON::continuity c, double t, int *hint = NULL,
+  IsContinuous (ON::continuity c,
+                double t,
+                int *hint = NULL,
                 double point_tolerance = ON_ZERO_TOLERANCE,
                 double d1_tolerance = ON_ZERO_TOLERANCE,
                 double d2_tolerance = ON_ZERO_TOLERANCE,
@@ -447,7 +453,8 @@ class ON_CLASS ON_CurveProxy : public ON_Curve
                 //            curve's parameterization and the NURBS
                 //            parameterization may not match to the
                 //            desired accuracy.
-      ON_NurbsCurve &, double = 0.0,
+      ON_NurbsCurve &,
+      double = 0.0,
       const ON_Interval * = NULL // OPTIONAL subdomain of ON_CurveProxy::Domain()
       ) const;
 

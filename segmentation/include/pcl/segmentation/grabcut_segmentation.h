@@ -319,15 +319,19 @@ namespace pcl
       /** Build the initial GMMs using the Orchard and Bouman color clustering algorithm
        */
       PCL_EXPORTS void
-      buildGMMs (const Image &image, const std::vector<int> &indices,
+      buildGMMs (const Image &image,
+                 const std::vector<int> &indices,
                  const std::vector<SegmentationValue> &hardSegmentation,
-                 std::vector<std::size_t> &components, GMM &background_GMM,
+                 std::vector<std::size_t> &components,
+                 GMM &background_GMM,
                  GMM &foreground_GMM);
       /** Iteratively learn GMMs using GrabCut updating algorithm */
       PCL_EXPORTS void
-      learnGMMs (const Image &image, const std::vector<int> &indices,
+      learnGMMs (const Image &image,
+                 const std::vector<int> &indices,
                  const std::vector<SegmentationValue> &hard_segmentation,
-                 std::vector<std::size_t> &components, GMM &background_GMM,
+                 std::vector<std::size_t> &components,
+                 GMM &background_GMM,
                  GMM &foreground_GMM);
     } // namespace grabcut
   };  // namespace segmentation
@@ -487,11 +491,14 @@ namespace pcl
     /// Add an edge to the graph, graph must be oriented so we add the edge and its
     /// reverse
     void
-    addEdge (vertex_descriptor v1, vertex_descriptor v2, float capacity,
+    addEdge (vertex_descriptor v1,
+             vertex_descriptor v2,
+             float capacity,
              float rev_capacity);
     /// Set the weights of SOURCE --> v and v --> SINK
     void
-    setTerminalWeights (vertex_descriptor v, float source_capacity,
+    setTerminalWeights (vertex_descriptor v,
+                        float source_capacity,
                         float sink_capacity);
     /// \return true if v is in source tree
     inline bool

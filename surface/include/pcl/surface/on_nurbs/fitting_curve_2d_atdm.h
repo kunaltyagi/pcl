@@ -84,27 +84,35 @@ namespace pcl
       /** \brief Add minimization constraint: point-to-surface distance
        * (tangent-distance-minimization). */
       virtual void
-      addPointConstraint (const double &param, const Eigen::Vector2d &point,
-                          const Eigen::Vector2d &normal, double weight, unsigned &row);
+      addPointConstraint (const double &param,
+                          const Eigen::Vector2d &point,
+                          const Eigen::Vector2d &normal,
+                          double weight,
+                          unsigned &row);
 
       /** \brief Add minimization constraint: smoothness by control point
        * regularisation. */
       void
-      addCageRegularisation (double weight, unsigned &row,
+      addCageRegularisation (double weight,
+                             unsigned &row,
                              const std::vector<double> &elements,
                              double wConcav = 0.0) override;
 
       /** \brief Assemble point-to-surface constraints. */
       void
-      assembleInterior (double wInt, double sigma2, double rScale,
+      assembleInterior (double wInt,
+                        double sigma2,
+                        double rScale,
                         unsigned &row) override;
 
       /** \brief Assemble closest points constraints. At each midpoint of the curve
        * elements the closest data points
        * are computed and point-to-surface constraints are added. */
       virtual void
-      assembleClosestPoints (const std::vector<double> &elements, double weight,
-                             double sigma2, unsigned &row);
+      assembleClosestPoints (const std::vector<double> &elements,
+                             double weight,
+                             double sigma2,
+                             unsigned &row);
 
       /** \brief Assemble closest points constraints. Samples curve and searches for
        * close data points, and adds point-to-surface constraint. */

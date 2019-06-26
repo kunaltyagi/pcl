@@ -46,8 +46,8 @@ run (pcl::RFFaceDetectorTrainer &fdrf, bool heat_map = false, bool show_votes = 
     }
     pcl::visualization::PointCloudColorHandlerRGBField<OpenNIFrameSource::PointT>
         handler_keypoints (scene_vis);
-    vis.addPointCloud<OpenNIFrameSource::PointT> (scene_vis, handler_keypoints,
-                                                  "scene_cloud");
+    vis.addPointCloud<OpenNIFrameSource::PointT> (
+        scene_vis, handler_keypoints, "scene_cloud");
 
     if (heat_map) {
       pcl::PointCloud<pcl::PointXYZI>::Ptr intensity_cloud (
@@ -55,8 +55,8 @@ run (pcl::RFFaceDetectorTrainer &fdrf, bool heat_map = false, bool show_votes = 
       fdrf.getFaceHeatMap (intensity_cloud);
       pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI>
           handler_keypoints (intensity_cloud, "intensity");
-      vis.addPointCloud<pcl::PointXYZI> (intensity_cloud, handler_keypoints,
-                                         "heat_map");
+      vis.addPointCloud<pcl::PointXYZI> (
+          intensity_cloud, handler_keypoints, "heat_map");
     }
 
     if (show_votes) {
@@ -69,10 +69,10 @@ run (pcl::RFFaceDetectorTrainer &fdrf, bool heat_map = false, bool show_votes = 
       vis.addPointCloud<pcl::PointXYZ> (votes_cloud, handler_votes, "votes_cloud");
       vis.setPointCloudRenderingProperties (
           pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 14, "votes_cloud");
-      vis.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_OPACITY,
-                                            0.5, "votes_cloud");
-      vis.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_OPACITY,
-                                            0.75, "votes_cloud");
+      vis.setPointCloudRenderingProperties (
+          pcl::visualization::PCL_VISUALIZER_OPACITY, 0.5, "votes_cloud");
+      vis.setPointCloudRenderingProperties (
+          pcl::visualization::PCL_VISUALIZER_OPACITY, 0.75, "votes_cloud");
     }
 
     std::vector<Eigen::VectorXf> heads;
@@ -89,7 +89,7 @@ run (pcl::RFFaceDetectorTrainer &fdrf, bool heat_map = false, bool show_votes = 
 }
 
 //./bin/pcl_openni_face_detector -face_threshold 0.99 -max_variance 2400 -min_votes_size
-//300 -stride_sw 4 -heat_map 0 -show_votes 1 -pose_refinement 1 -icp_iterations 5
+// 300 -stride_sw 4 -heat_map 0 -show_votes 1 -pose_refinement 1 -icp_iterations 5
 //-model_path face_model.pcd -forest_fn forest.txt
 int
 main (int argc, char **argv)

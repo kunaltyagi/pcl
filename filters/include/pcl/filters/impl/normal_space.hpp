@@ -57,7 +57,8 @@ pcl::NormalSpaceSampling<PointT, NormalT>::initCompute ()
   if (sample_ >= input_->size ()) {
     PCL_ERROR ("[NormalSpaceSampling::initCompute] Requested more samples than the "
                "input cloud size: %d vs %lu\n",
-               sample_, input_->size ());
+               sample_,
+               input_->size ());
     return false;
   }
 
@@ -212,7 +213,8 @@ pcl::NormalSpaceSampling<PointT, NormalT>::applyFilter (std::vector<int> &indice
 
     size_t j = 0;
     for (std::list<int>::iterator itr = normals_hg[i].begin ();
-         itr != normals_hg[i].end (); itr++, j++)
+         itr != normals_hg[i].end ();
+         itr++, j++)
       random_access[i][j] = itr;
   }
   std::vector<size_t> start_index (normals_hg.size ());
@@ -250,7 +252,8 @@ pcl::NormalSpaceSampling<PointT, NormalT>::applyFilter (std::vector<int> &indice
       is_sampled_flag.flip (start_index[j] + random_index);
 
       // Checking if all points in bin j are sampled.
-      if (isEntireBinSampled (is_sampled_flag, start_index[j],
+      if (isEntireBinSampled (is_sampled_flag,
+                              start_index[j],
                               static_cast<unsigned int> (normals_hg[j].size ())))
         bin_empty_flag.flip (j);
 
@@ -269,8 +272,10 @@ pcl::NormalSpaceSampling<PointT, NormalT>::applyFilter (std::vector<int> &indice
 
     std::vector<int> all_indices_temp = *indices_;
     std::sort (all_indices_temp.begin (), all_indices_temp.end ());
-    set_difference (all_indices_temp.begin (), all_indices_temp.end (),
-                    indices_temp.begin (), indices_temp.end (),
+    set_difference (all_indices_temp.begin (),
+                    all_indices_temp.end (),
+                    indices_temp.begin (),
+                    indices_temp.end (),
                     inserter (*removed_indices_, removed_indices_->begin ()));
   }
 }

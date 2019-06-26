@@ -105,7 +105,8 @@ namespace pcl
     namespace kinfuLS
     {
       void
-      paint3DView (const KinfuTracker::View &rgb24, KinfuTracker::View &view,
+      paint3DView (const KinfuTracker::View &rgb24,
+                   KinfuTracker::View &view,
                    float colors_weight = 0.5f);
       void
       mergePointNormal (const DeviceArray<PointXYZ> &cloud,
@@ -179,9 +180,15 @@ setViewerPose (visualization::PCLVisualizer &viewer, const Eigen::Affine3f &view
   Eigen::Vector3f look_at_vector =
       viewer_pose.rotation () * Eigen::Vector3f (0, 0, 1) + pos_vector;
   Eigen::Vector3f up_vector = viewer_pose.rotation () * Eigen::Vector3f (0, -1, 0);
-  viewer.setCameraPosition (pos_vector[0], pos_vector[1], pos_vector[2],
-                            look_at_vector[0], look_at_vector[1], look_at_vector[2],
-                            up_vector[0], up_vector[1], up_vector[2]);
+  viewer.setCameraPosition (pos_vector[0],
+                            pos_vector[1],
+                            pos_vector[2],
+                            look_at_vector[0],
+                            look_at_vector[1],
+                            look_at_vector[2],
+                            up_vector[0],
+                            up_vector[1],
+                            up_vector[2]);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -312,11 +319,13 @@ struct ImageView {
   void
   showScene (KinfuTracker &kinfu,
              const PtrStepSz<const pcl::gpu::kinfuLS::PixelRGB> &rgb24,
-             bool registration, Eigen::Affine3f *pose_ptr = nullptr)
+             bool registration,
+             Eigen::Affine3f *pose_ptr = nullptr)
   {
     if (pose_ptr) {
       raycaster_ptr_->run (
-          kinfu.volume (), *pose_ptr,
+          kinfu.volume (),
+          *pose_ptr,
           kinfu.getCyclicalBufferStructure ()); // says in cmake it does not know it
       raycaster_ptr_->generateSceneView (view_device_);
     } else {
@@ -331,13 +340,15 @@ struct ImageView {
     int cols;
     view_device_.download (view_host_, cols);
     viewerScene_.showRGBImage (reinterpret_cast<unsigned char *> (&view_host_[0]),
-                               view_device_.cols (), view_device_.rows ());
+                               view_device_.cols (),
+                               view_device_.rows ());
 
     // viewerColor_.showRGBImage ((unsigned char*)&rgb24.data, rgb24.cols, rgb24.rows);
 #ifdef HAVE_OPENCV
     if (accumulate_views_) {
       views_.push_back (cv::Mat ());
-      cv::cvtColor (cv::Mat (480, 640, CV_8UC3, (void *)&view_host_[0]), views_.back (),
+      cv::cvtColor (cv::Mat (480, 640, CV_8UC3, (void *)&view_host_[0]),
+                    views_.back (),
                     CV_RGB2GRAY);
       // cv::copy(cv::Mat(480, 640, CV_8UC3, (void*)&view_host_[0]), views_.back());
     }
@@ -360,8 +371,8 @@ struct ImageView {
     vector<unsigned short> data;
     generated_depth_.download (data, c);
 
-    viewerDepth_.showShortImage (&data[0], generated_depth_.cols (),
-                                 generated_depth_.rows (), 0, 5000, true);
+    viewerDepth_.showShortImage (
+        &data[0], generated_depth_.cols (), generated_depth_.rows (), 0, 5000, true);
   }
 
   void
@@ -416,10 +427,10 @@ struct SceneCloudView {
 
     cloud_viewer_.addText ("H: print help", 2, 15, 20, 34, 135, 246);
     cloud_viewer_.addText ("ICP State: ", 450, 55, 20, 0.0, 1.0, 0.0, "icp");
-    cloud_viewer_.addText ("Press 'S' to save the current world", 450, 35, 10, 0.0, 1.0,
-                           0.0, "icp_save");
-    cloud_viewer_.addText ("Press 'R' to reset the system", 450, 15, 10, 0.0, 1.0, 0.0,
-                           "icp_reset");
+    cloud_viewer_.addText (
+        "Press 'S' to save the current world", 450, 35, 10, 0.0, 1.0, 0.0, "icp_save");
+    cloud_viewer_.addText (
+        "Press 'R' to reset the system", 450, 15, 10, 0.0, 1.0, 0.0, "icp_reset");
   }
 
   inline void
@@ -527,10 +538,16 @@ struct SceneCloudView {
       removeCamera (name_estimate);
       clearClouds (false);
       cloud_viewer_.updateText ("ICP State: OK", 450, 55, 20, 0.0, 1.0, 0.0, "icp");
-      cloud_viewer_.updateText ("Press 'S' to save the current world", 450, 35, 10, 0.0,
-                                1.0, 0.0, "icp_save");
-      cloud_viewer_.updateText ("Press 'R' to reset the system", 450, 15, 10, 0.0, 1.0,
-                                0.0, "icp_reset");
+      cloud_viewer_.updateText ("Press 'S' to save the current world",
+                                450,
+                                35,
+                                10,
+                                0.0,
+                                1.0,
+                                0.0,
+                                "icp_save");
+      cloud_viewer_.updateText (
+          "Press 'R' to reset the system", 450, 15, 10, 0.0, 1.0, 0.0, "icp_reset");
     } else if (!was_lost_ &&
                kinfu.icpIsLost ()) // execute only when we just lost ourselves (i.e.
                                    // was_lost_ = false && icpIsLost == true)
@@ -540,10 +557,16 @@ struct SceneCloudView {
       drawCamera (last_pose, name, 0.0, 1.0, 0.0);
 
       cloud_viewer_.updateText ("ICP State: LOST", 450, 55, 20, 1.0, 0.0, 0.0, "icp");
-      cloud_viewer_.updateText ("Press 'S' to save the current world", 450, 35, 10, 1.0,
-                                0.0, 0.0, "icp_save");
-      cloud_viewer_.updateText ("Press 'R' to reset the system", 450, 15, 10, 1.0, 0.0,
-                                0.0, "icp_reset");
+      cloud_viewer_.updateText ("Press 'S' to save the current world",
+                                450,
+                                35,
+                                10,
+                                1.0,
+                                0.0,
+                                0.0,
+                                "icp_save");
+      cloud_viewer_.updateText (
+          "Press 'R' to reset the system", 450, 15, 10, 1.0, 0.0, 0.0, "icp_reset");
     }
 
     if (kinfu.icpIsLost ()) {
@@ -578,8 +601,8 @@ struct SceneCloudView {
 
       if (compute_normals_) {
         kinfu.volume ().fetchNormals (extracted, normals_device_);
-        pcl::gpu::kinfuLS::mergePointNormal (extracted, normals_device_,
-                                             combined_device_);
+        pcl::gpu::kinfuLS::mergePointNormal (
+            extracted, normals_device_, combined_device_);
         combined_device_.download (combined_ptr_->points);
         combined_ptr_->width = (int)combined_ptr_->points.size ();
         combined_ptr_->height = 1;
@@ -622,8 +645,8 @@ struct SceneCloudView {
     if (cube_added_)
       cloud_viewer_.removeShape ("cube");
     else
-      cloud_viewer_.addCube (size * 0.5, Eigen::Quaternionf::Identity (), size (0),
-                             size (1), size (2));
+      cloud_viewer_.addCube (
+          size * 0.5, Eigen::Quaternionf::Identity (), size (0), size (1), size (2));
 
     cube_added_ = !cube_added_;
   }
@@ -743,7 +766,8 @@ struct KinFuLSApp {
     if (shiftDistance > 2.5 * vsz)
       PCL_WARN ("WARNING Shifting distance (%.2f) is very large compared to the volume "
                 "size (%.2f).\nYou can modify it using --shifting_distance.\n",
-                shiftDistance, vsz);
+                shiftDistance,
+                vsz);
 
     kinfu_ = new pcl::gpu::kinfuLS::KinfuTracker (volume_size, shiftDistance);
 
@@ -779,12 +803,12 @@ struct KinFuLSApp {
     //~ float fx, fy, cx, cy;
     //~ boost::shared_ptr<openni_wrapper::OpenNIDevice> d =
     //((pcl::OpenNIGrabber)source).getDevice (); ~ kinfu_->getDepthIntrinsics (fx, fy,
-    //cx, cy);
+    // cx, cy);
 
     float height = 480.0f;
     float width = 640.0f;
-    screenshot_manager_.setCameraIntrinsics (pcl::device::kinfuLS::FOCAL_LENGTH, height,
-                                             width);
+    screenshot_manager_.setCameraIntrinsics (
+        pcl::device::kinfuLS::FOCAL_LENGTH, height, width);
     snapshot_rate_ = snapshotRate;
 
     Eigen::Matrix3f Rid =
@@ -846,16 +870,22 @@ struct KinFuLSApp {
     if (!match_file.empty ())
       evaluation_ptr_->setMatchFile (match_file);
 
-    kinfu_->setDepthIntrinsics (evaluation_ptr_->fx, evaluation_ptr_->fy,
-                                evaluation_ptr_->cx, evaluation_ptr_->cy);
-    image_view_.raycaster_ptr_ = RayCaster::Ptr (
-        new RayCaster (kinfu_->rows (), kinfu_->cols (), evaluation_ptr_->fx,
-                       evaluation_ptr_->fy, evaluation_ptr_->cx, evaluation_ptr_->cy));
+    kinfu_->setDepthIntrinsics (evaluation_ptr_->fx,
+                                evaluation_ptr_->fy,
+                                evaluation_ptr_->cx,
+                                evaluation_ptr_->cy);
+    image_view_.raycaster_ptr_ = RayCaster::Ptr (new RayCaster (kinfu_->rows (),
+                                                                kinfu_->cols (),
+                                                                evaluation_ptr_->fx,
+                                                                evaluation_ptr_->fy,
+                                                                evaluation_ptr_->cx,
+                                                                evaluation_ptr_->cy));
   }
 
   void
   execute (const PtrStepSz<const unsigned short> &depth,
-           const PtrStepSz<const pcl::gpu::kinfuLS::PixelRGB> &rgb24, bool has_data)
+           const PtrStepSz<const pcl::gpu::kinfuLS::PixelRGB> &rgb24,
+           bool has_data)
   {
     bool has_image = false;
     frame_counter_++;
@@ -865,8 +895,8 @@ struct KinFuLSApp {
     if (has_data) {
       depth_device_.upload (depth.data, depth.step, depth.rows, depth.cols);
       if (integrate_colors_)
-        image_view_.colors_device_.upload (rgb24.data, rgb24.step, rgb24.rows,
-                                           rgb24.cols);
+        image_view_.colors_device_.upload (
+            rgb24.data, rgb24.step, rgb24.rows, rgb24.cols);
 
       {
         SampledScopeTime fps (time_ms_);
@@ -921,8 +951,8 @@ struct KinFuLSApp {
 
     if (has_image) {
       Eigen::Affine3f viewer_pose = getViewerPose (scene_cloud_view_.cloud_viewer_);
-      image_view_.showScene (*kinfu_, rgb24, registration_,
-                             independent_camera_ ? &viewer_pose : nullptr);
+      image_view_.showScene (
+          *kinfu_, rgb24, registration_, independent_camera_ ? &viewer_pose : nullptr);
     }
 
     if (current_frame_cloud_view_)
@@ -960,8 +990,8 @@ struct KinFuLSApp {
       depth_.step = depth_.cols * depth_.elemSize ();
 
       source_depth_data_.resize (depth_.cols * depth_.rows);
-      depth_wrapper->fillDepthImageRaw (depth_.cols, depth_.rows,
-                                        &source_depth_data_[0]);
+      depth_wrapper->fillDepthImageRaw (
+          depth_.cols, depth_.rows, &source_depth_data_[0]);
       depth_.data = &source_depth_data_[0];
     }
     data_ready_cond_.notify_one ();
@@ -969,7 +999,8 @@ struct KinFuLSApp {
 
   void
   source_cb2 (const boost::shared_ptr<openni_wrapper::Image> &image_wrapper,
-              const boost::shared_ptr<openni_wrapper::DepthImage> &depth_wrapper, float)
+              const boost::shared_ptr<openni_wrapper::DepthImage> &depth_wrapper,
+              float)
   {
     {
       std::unique_lock<std::mutex> lock (data_ready_mutex_, std::try_to_lock);
@@ -983,8 +1014,8 @@ struct KinFuLSApp {
       depth_.step = depth_.cols * depth_.elemSize ();
 
       source_depth_data_.resize (depth_.cols * depth_.rows);
-      depth_wrapper->fillDepthImageRaw (depth_.cols, depth_.rows,
-                                        &source_depth_data_[0]);
+      depth_wrapper->fillDepthImageRaw (
+          depth_.cols, depth_.rows, &source_depth_data_[0]);
       depth_.data = &source_depth_data_[0];
 
       rgb24_.cols = image_wrapper->getWidth ();
@@ -992,8 +1023,8 @@ struct KinFuLSApp {
       rgb24_.step = rgb24_.cols * rgb24_.elemSize ();
 
       source_image_data_.resize (rgb24_.cols * rgb24_.rows);
-      image_wrapper->fillRGB (rgb24_.cols, rgb24_.rows,
-                              (unsigned char *)&source_image_data_[0]);
+      image_wrapper->fillRGB (
+          rgb24_.cols, rgb24_.rows, (unsigned char *)&source_image_data_[0]);
       rgb24_.data = &source_image_data_[0];
     }
     data_ready_cond_.notify_one ();
@@ -1117,8 +1148,9 @@ struct KinFuLSApp {
           writeCloudFile (format, view.cloud_ptr_);
       } else {
         if (view.valid_combined_)
-          writeCloudFile (format, merge<PointXYZRGBNormal> (*view.combined_ptr_,
-                                                            *view.point_colors_ptr_));
+          writeCloudFile (
+              format,
+              merge<PointXYZRGBNormal> (*view.combined_ptr_, *view.point_colors_ptr_));
         else
           writeCloudFile (
               format, merge<PointXYZRGB> (*view.cloud_ptr_, *view.point_colors_ptr_));
@@ -1297,8 +1329,8 @@ struct KinFuLSApp {
         // cout << "done [" << app->tsdf_volume_.size () << " voxels]" << endl;
         cout << "done [" << app->kinfu_->volume ().size () << " voxels]" << endl;
         cout << "Saving TSDF volume cloud to tsdf_cloud.pcd ... " << flush;
-        pcl::io::savePCDFile<pcl::PointXYZI> ("tsdf_cloud.pcd", *app->tsdf_cloud_ptr_,
-                                              true);
+        pcl::io::savePCDFile<pcl::PointXYZI> (
+            "tsdf_cloud.pcd", *app->tsdf_cloud_ptr_, true);
         cout << "done [" << app->tsdf_cloud_ptr_->size () << " points]" << endl;
         break;
       default:
@@ -1436,7 +1468,8 @@ main (int argc, char *argv[])
       // true) ); capture.reset( new
       // pcl::ONIGrabber("/media/Main/onis/20111013-224932.oni", true, true) );
       // capture.reset( new pcl::ONIGrabber("d:/onis/20111013-224551.oni", true, true)
-      // ); capture.reset( new pcl::ONIGrabber("d:/onis/20111013-224719.oni", true, true)
+      // ); capture.reset( new pcl::ONIGrabber("d:/onis/20111013-224719.oni", true,
+      // true)
       // );
     }
   } catch (const pcl::PCLException & /*e*/) {
@@ -1512,7 +1545,7 @@ main (int argc, char *argv[])
   //~ cout << "Saving depth map of first view." << endl;
   //~ cv::imwrite ("./depthmap_1stview.png", app.image_view_.views_[0]);
   //~ cout << "Saving sequence of (" << app.image_view_.views_.size () << ") views." <<
-  //endl; ~ } ~ char buf[4096]; ~ sprintf (buf, "./%06d.png", (int)t); ~ cv::imwrite
+  // endl; ~ } ~ char buf[4096]; ~ sprintf (buf, "./%06d.png", (int)t); ~ cv::imwrite
   //(buf, app.image_view_.views_[t]); ~ printf ("writing: %s\n", buf); ~ } ~ #endif
   std::cout << "pcl_kinfu_largeScale exiting...\n";
   return 0;

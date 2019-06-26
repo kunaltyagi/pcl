@@ -60,7 +60,9 @@ namespace openni_wrapper
     friend class OpenNIDriver;
 
     public:
-    DeviceONI (xn::Context &context, const std::string &file_name, bool repeat = false,
+    DeviceONI (xn::Context &context,
+               const std::string &file_name,
+               bool repeat = false,
                bool streaming = true);
     ~DeviceONI () throw ();
 
@@ -87,9 +89,10 @@ namespace openni_wrapper
     isIRStreamRunning () const throw () override;
 
     bool
-    isImageResizeSupported (unsigned input_width, unsigned input_height,
-                            unsigned output_width, unsigned output_height) const
-        throw () override;
+    isImageResizeSupported (unsigned input_width,
+                            unsigned input_height,
+                            unsigned output_width,
+                            unsigned output_height) const throw () override;
 
     /** \brief Trigger a new frame in the ONI stream.
      * \param[in] relative_offset the relative offset in case we want to seek in the

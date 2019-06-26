@@ -78,8 +78,10 @@ printHelp (int, char **argv)
 }
 
 bool
-loadCloud (const string &filename, pcl::PCLPointCloud2 &cloud,
-           Eigen::Vector4f &translation, Eigen::Quaternionf &orientation)
+loadCloud (const string &filename,
+           pcl::PCLPointCloud2 &cloud,
+           Eigen::Vector4f &translation,
+           Eigen::Quaternionf &orientation)
 {
   if (loadPCDFile (filename, cloud, translation, orientation) < 0)
     return (false);
@@ -88,7 +90,9 @@ loadCloud (const string &filename, pcl::PCLPointCloud2 &cloud,
 }
 
 void
-compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output, int k,
+compute (const pcl::PCLPointCloud2::ConstPtr &input,
+         pcl::PCLPointCloud2 &output,
+         int k,
          double radius)
 {
   // Convert data to PointCloud<T>
@@ -131,8 +135,10 @@ compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output
 }
 
 void
-saveCloud (const string &filename, const pcl::PCLPointCloud2 &output,
-           const Eigen::Vector4f &translation, const Eigen::Quaternionf &orientation)
+saveCloud (const string &filename,
+           const pcl::PCLPointCloud2 &output,
+           const Eigen::Vector4f &translation,
+           const Eigen::Quaternionf &orientation)
 {
   PCDWriter w;
   w.writeBinaryCompressed (filename, output, translation, orientation);

@@ -164,8 +164,13 @@ DeviceVolume::createFromDepth (
 
   // integrate depth values into volume
   float3 device_volume_size = device_cast<float3> (volume_size_);
-  device::integrateTsdfVolume (device_depth, intr, device_volume_size, device_Rcam_inv,
-                               device_tcam, trunc_dist_, device_volume_,
+  device::integrateTsdfVolume (device_depth,
+                               intr,
+                               device_volume_size,
+                               device_Rcam_inv,
+                               device_tcam,
+                               trunc_dist_,
+                               device_volume_,
                                device_depth_scaled);
 }
 
@@ -177,7 +182,8 @@ DeviceVolume::getVolume (pcl::TSDFVolume<VoxelT, WeightT>::Ptr &volume)
   if ((size_t)volume_size != volume->size ()) {
     pc::print_error (
         "Device volume size (%d) and tsdf volume size (%d) don't match. ABORTING!\n",
-        volume_size, volume->size ());
+        volume_size,
+        volume->size ());
     return false;
   }
 
@@ -207,8 +213,8 @@ DeviceVolume::getCloud (pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud)
 
   // do the extraction
   float3 device_volume_size = device_cast<float3> (volume_size_);
-  /*size_t size =*/pcl::device::extractCloud (device_volume_, device_volume_size,
-                                              device_cloud_buffer);
+  /*size_t size =*/pcl::device::extractCloud (
+      device_volume_, device_volume_size, device_cloud_buffer);
 
   // write into point cloud structure
   device_cloud_buffer.download (cloud->points);
@@ -234,7 +240,8 @@ bool
 convertDepthRGBToCloud (
     const pcl::device::PtrStepSz<const unsigned short> &depth,
     const pcl::device::PtrStepSz<const pcl::gpu::KinfuTracker::PixelRGB> &rgb24,
-    const pcl::device::Intr &intr, pcl::PointCloud<PointT>::Ptr &cloud)
+    const pcl::device::Intr &intr,
+    pcl::PointCloud<PointT>::Ptr &cloud)
 {
   // resize point cloud if it doesn't fit
   if (depth.rows != (int)cloud->height || depth.cols != (int)cloud->width)
@@ -291,7 +298,8 @@ bool
 captureCloud (pcl::gpu::CaptureOpenNI &capture,
               pcl::device::PtrStepSz<const unsigned short> &depth,
               pcl::device::PtrStepSz<const pcl::gpu::KinfuTracker::PixelRGB> &rgb24,
-              pcl::device::Intr &intr, pcl::PointCloud<PointT>::Ptr &cloud)
+              pcl::device::Intr &intr,
+              pcl::PointCloud<PointT>::Ptr &cloud)
 {
   // capture frame
   if (!capture.grab (depth, rgb24)) {
@@ -453,8 +461,8 @@ main (int argc, char *argv[])
 
   // create volume object
   pcl::TSDFVolume<VoxelT, WeightT>::Ptr volume (new pcl::TSDFVolume<VoxelT, WeightT>);
-  Eigen::Vector3i resolution (pcl::device::VOLUME_X, pcl::device::VOLUME_Y,
-                              pcl::device::VOLUME_Z);
+  Eigen::Vector3i resolution (
+      pcl::device::VOLUME_X, pcl::device::VOLUME_Y, pcl::device::VOLUME_Z);
   Eigen::Vector3f volume_size = Eigen::Vector3f::Constant (3000);
   volume->resize (resolution, volume_size);
 

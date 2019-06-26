@@ -70,7 +70,8 @@ namespace pcl
    * \author Nizar Sallem (port to PCL)
    * \ingroup features
    */
-  template <typename PointInT, typename PointNT,
+  template <typename PointInT,
+            typename PointNT,
             typename PointOutT = pcl::ShapeContext1980>
   class ShapeContext3DEstimation
       : public FeatureFromNormals<PointInT, PointNT, PointOutT>
@@ -195,7 +196,9 @@ namespace pcl
      * error (e.g. the nearest neighbor didn't return any neighbors)
      */
     bool
-    computePoint (size_t index, const pcl::PointCloud<PointNT> &normals, float rf[9],
+    computePoint (size_t index,
+                  const pcl::PointCloud<PointNT> &normals,
+                  float rf[9],
                   std::vector<float> &desc);
 
     /** \brief Estimate the actual feature.

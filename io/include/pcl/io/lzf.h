@@ -61,7 +61,9 @@ namespace pcl
    *
    */
   PCL_EXPORTS unsigned int
-  lzfCompress (const void *const in_data, unsigned int in_len, void *out_data,
+  lzfCompress (const void *const in_data,
+               unsigned int in_len,
+               void *out_data,
                unsigned int out_len);
 
   /** \brief Decompress data compressed with the \a lzfCompress function and
@@ -83,6 +85,8 @@ namespace pcl
    * \param[out] out_len the length of the output buffer
    */
   PCL_EXPORTS unsigned int
-  lzfDecompress (const void *const in_data, unsigned int in_len, void *out_data,
+  lzfDecompress (const void *const in_data,
+                 unsigned int in_len,
+                 void *out_data,
                  unsigned int out_len);
 } // namespace pcl

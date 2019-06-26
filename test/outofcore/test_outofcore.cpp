@@ -283,8 +283,11 @@ point_test (octree_disk &t)
     // very slow exhaustive comparison
     while (!p_ot.empty ()) {
       AlignedPointTVector::iterator it;
-      it = std::find_first_of (p_ot.begin (), p_ot.end (), pointsinregion.begin (),
-                               pointsinregion.end (), compPt);
+      it = std::find_first_of (p_ot.begin (),
+                               p_ot.end (),
+                               pointsinregion.begin (),
+                               pointsinregion.end (),
+                               compPt);
 
       if (it != p_ot.end ()) {
         p_ot.erase (it);
@@ -474,7 +477,7 @@ TEST_F (OutofcoreTest, Outofcore_ConstructorSafety)
   int depth = 2;
 
   //(Case 3) Constructor Safety. These should throw OCT_CHILD_EXISTS exceptions and
-  //write an error message of conflicting file path
+  // write an error message of conflicting file path
   ASSERT_TRUE (boost::filesystem::exists (filename_otreeA))
       << "No tree detected on disk. This test will fail. Perhaps this test was run out "
          "of order.\n";
@@ -531,7 +534,8 @@ TEST_F (OutofcoreTest, Outofcore_PointcloudConstructor)
 
   // generate some random points
   for (size_t i = 0; i < numPts; i++) {
-    PointT tmp (static_cast<float> (i % 1024), static_cast<float> (i % 1024),
+    PointT tmp (static_cast<float> (i % 1024),
+                static_cast<float> (i % 1024),
                 static_cast<float> (i % 1024));
 
     test_cloud->points.push_back (tmp);
@@ -614,14 +618,16 @@ TEST_F (OutofcoreTest, Outofcore_MultiplePointClouds)
 
   // generate some random points
   for (size_t i = 0; i < numPts; i++) {
-    PointT tmp (static_cast<float> (i % 1024), static_cast<float> (i % 1024),
+    PointT tmp (static_cast<float> (i % 1024),
+                static_cast<float> (i % 1024),
                 static_cast<float> (i % 1024));
 
     test_cloud->points.push_back (tmp);
   }
 
   for (size_t i = 0; i < numPts; i++) {
-    PointT tmp (static_cast<float> (i % 1024), static_cast<float> (i % 1024),
+    PointT tmp (static_cast<float> (i % 1024),
+                static_cast<float> (i % 1024),
                 static_cast<float> (i % 1024));
 
     second_cloud->points.push_back (tmp);
@@ -680,14 +686,16 @@ TEST_F (OutofcoreTest, Outofcore_PointCloudInput_LOD)
 
   // generate some random points
   for (size_t i = 0; i < numPts; i++) {
-    PointT tmp (static_cast<float> (i % 1024), static_cast<float> (i % 1024),
+    PointT tmp (static_cast<float> (i % 1024),
+                static_cast<float> (i % 1024),
                 static_cast<float> (i % 1024));
 
     test_cloud->points.push_back (tmp);
   }
 
   for (size_t i = 0; i < numPts; i++) {
-    PointT tmp (static_cast<float> (i % 1024), static_cast<float> (i % 1024),
+    PointT tmp (static_cast<float> (i % 1024),
+                static_cast<float> (i % 1024),
                 static_cast<float> (i % 1024));
 
     second_cloud->points.push_back (tmp);
@@ -721,7 +729,8 @@ TEST_F (OutofcoreTest, PointCloud2_Constructors)
 
   // generate some random points
   for (size_t i = 0; i < numPts; i++) {
-    PointT tmp (static_cast<float> (i % 200) - 99, static_cast<float> (i % 200) - 99,
+    PointT tmp (static_cast<float> (i % 200) - 99,
+                static_cast<float> (i % 200) - 99,
                 static_cast<float> (i % 200) - 99);
 
     test_cloud->points.push_back (tmp);
@@ -805,14 +814,16 @@ TEST_F (OutofcoreTest, PointCloud2_MultiplePointCloud)
 
   // generate some random points
   for (size_t i = 0; i < numPts; i++) {
-    PointT tmp (static_cast<float> (i % 50), static_cast<float> (i % 50),
+    PointT tmp (static_cast<float> (i % 50),
+                static_cast<float> (i % 50),
                 static_cast<float> (i % 50));
 
     first_cloud->points.push_back (tmp);
   }
 
   for (size_t i = 0; i < numPts; i++) {
-    PointT tmp (static_cast<float> (i % 50), static_cast<float> (i % 50),
+    PointT tmp (static_cast<float> (i % 50),
+                static_cast<float> (i % 50),
                 static_cast<float> (i % 50));
 
     second_cloud->points.push_back (tmp);
@@ -862,7 +873,8 @@ TEST_F (OutofcoreTest, PointCloud2_QueryBoundingBox)
 
   // generate some random points
   for (size_t i = 0; i < numPts; i++) {
-    PointT tmp (static_cast<float> (i % 50) - 50, static_cast<float> (i % 50) - 50,
+    PointT tmp (static_cast<float> (i % 50) - 50,
+                static_cast<float> (i % 50) - 50,
                 static_cast<float> (i % 50) - 50);
 
     test_cloud->points.push_back (tmp);
@@ -911,7 +923,8 @@ TEST_F (OutofcoreTest, PointCloud2_Query)
 
   // generate some random points
   for (size_t i = 0; i < numPts; i++) {
-    PointT tmp (static_cast<float> (i % 50) - 50, static_cast<float> (i % 50) - 50,
+    PointT tmp (static_cast<float> (i % 50) - 50,
+                static_cast<float> (i % 50) - 50,
                 static_cast<float> (i % 50) - 50);
 
     test_cloud->points.push_back (tmp);

@@ -126,13 +126,21 @@ namespace pcl
                                   const Eigen::Vector3d &pt);
 
       Eigen::Vector2d
-      inverseMapping (const ON_NurbsSurface &nurbs, const Eigen::Vector3d &pt,
-                      const Eigen::Vector2d &hint, double &error, Eigen::Vector3d &p,
-                      Eigen::Vector3d &tu, Eigen::Vector3d &tv, int maxSteps,
-                      double accuracy, bool quiet);
+      inverseMapping (const ON_NurbsSurface &nurbs,
+                      const Eigen::Vector3d &pt,
+                      const Eigen::Vector2d &hint,
+                      double &error,
+                      Eigen::Vector3d &p,
+                      Eigen::Vector3d &tu,
+                      Eigen::Vector3d &tv,
+                      int maxSteps,
+                      double accuracy,
+                      bool quiet);
 
       void
-      addPointConstraint (const Eigen::Vector2i &params, double z, double weight,
+      addPointConstraint (const Eigen::Vector2i &params,
+                          double z,
+                          double weight,
                           unsigned &row);
 
       void

@@ -163,7 +163,9 @@ namespace pcl
      * \param[in] nb_cols the number of columns to be considered col_start included
      */
     void
-    setIndices (size_t row_start, size_t col_start, size_t nb_rows,
+    setIndices (size_t row_start,
+                size_t col_start,
+                size_t nb_rows,
                 size_t nb_cols) override
     {
       Base::setIndices (row_start, col_start, nb_rows, nb_cols);

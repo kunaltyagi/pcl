@@ -73,8 +73,8 @@ main (int argc, char **av)
     return -1;
   }
 
-  pcl::console::print_highlight ("Loaded cloud %s of size %lu\n", av[1],
-                                 cloud_ptr->points.size ());
+  pcl::console::print_highlight (
+      "Loaded cloud %s of size %lu\n", av[1], cloud_ptr->points.size ());
 
   // Remove the nans
   cloud_ptr->is_dense = false;

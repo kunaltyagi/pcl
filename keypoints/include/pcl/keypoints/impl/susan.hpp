@@ -276,8 +276,10 @@ pcl::SUSANKeypoint<PointInT, PointOutT, NormalT, IntensityT>::initCompute ()
 template <typename PointInT, typename PointOutT, typename NormalT, typename IntensityT>
 bool
 pcl::SUSANKeypoint<PointInT, PointOutT, NormalT, IntensityT>::isWithinNucleusCentroid (
-    const Eigen::Vector3f &nucleus, const Eigen::Vector3f &centroid,
-    const Eigen::Vector3f &nc, const PointInT &point) const
+    const Eigen::Vector3f &nucleus,
+    const Eigen::Vector3f &centroid,
+    const Eigen::Vector3f &nc,
+    const PointInT &point) const
 {
   Eigen::Vector3f pc = centroid - point.getVector3fMap ();
   Eigen::Vector3f pn = nucleus - point.getVector3fMap ();
@@ -364,7 +366,8 @@ pcl::SUSANKeypoint<PointInT, PointOutT, NormalT, IntensityT>::detectKeypoints (
       std::vector<int> usan;
       usan.reserve (nn_indices.size () - 1);
       for (std::vector<int>::const_iterator index = nn_indices.begin ();
-           index != nn_indices.end (); ++index) {
+           index != nn_indices.end ();
+           ++index) {
         if ((*index != point_index) &&
             std::isfinite (normals_->points[*index].normal_x)) {
           // if the point fulfill condition
@@ -394,7 +397,8 @@ pcl::SUSANKeypoint<PointInT, PointOutT, NormalT, IntensityT>::detectKeypoints (
             uint32_t label = static_cast<uint32_t> (point_index);
             memcpy (reinterpret_cast<char *> (&point_out) +
                         out_fields_[label_idx_].offset,
-                    &label, sizeof (uint32_t));
+                    &label,
+                    sizeof (uint32_t));
           }
           //#ifdef _OPENMP
           //#pragma omp critical
@@ -410,8 +414,8 @@ pcl::SUSANKeypoint<PointInT, PointOutT, NormalT, IntensityT>::detectKeypoints (
             // Check the contiguity
             auto usan_it = usan.cbegin ();
             for (; usan_it != usan.cend (); ++usan_it) {
-              if (!isWithinNucleusCentroid (nucleus, centroid, nc,
-                                            input_->points[*usan_it]))
+              if (!isWithinNucleusCentroid (
+                      nucleus, centroid, nc, input_->points[*usan_it]))
                 break;
             }
             // All points within usan lies on the segment [nucleus centroid]
@@ -426,7 +430,8 @@ pcl::SUSANKeypoint<PointInT, PointOutT, NormalT, IntensityT>::detectKeypoints (
                 uint32_t label = static_cast<uint32_t> (point_index);
                 memcpy (reinterpret_cast<char *> (&point_out) +
                             out_fields_[label_idx_].offset,
-                        &label, sizeof (uint32_t));
+                        &label,
+                        sizeof (uint32_t));
               }
               //#ifdef _OPENMP
               //#pragma omp critical
@@ -467,7 +472,8 @@ pcl::SUSANKeypoint<PointInT, PointOutT, NormalT, IntensityT>::detectKeypoints (
       tree_->radiusSearch (idx, search_radius_, nn_indices, nn_dists);
       bool is_minima = true;
       for (std::vector<int>::const_iterator nn_it = nn_indices.begin ();
-           nn_it != nn_indices.end (); ++nn_it) {
+           nn_it != nn_indices.end ();
+           ++nn_it) {
         //        if (intensity > response->points[*nn_it].intensity)
         if (intensity > intensity_out_ (response->points[*nn_it])) {
           is_minima = false;

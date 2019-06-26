@@ -125,7 +125,8 @@ namespace pcl
      */
     void
     selectWithinDistance (const Eigen::VectorXf &model_coefficients,
-                          const double threshold, std::vector<int> &inliers);
+                          const double threshold,
+                          std::vector<int> &inliers);
 
     /** \brief Count all the points which respect the given model coefficients as
      * inliers.

@@ -95,12 +95,16 @@ namespace pcl
     {
       features.resize (num_of_features);
       for (size_t feature_index = 0; feature_index < num_of_features; ++feature_index) {
-        features[feature_index].p1 = PointXY32i::randomPoint (
-            -feature_window_width_ / 2, feature_window_width_ / 2,
-            -feature_window_height_ / 2, feature_window_height_ / 2);
-        features[feature_index].p2 = PointXY32i::randomPoint (
-            -feature_window_width_ / 2, feature_window_width_ / 2,
-            -feature_window_height_ / 2, feature_window_height_ / 2);
+        features[feature_index].p1 =
+            PointXY32i::randomPoint (-feature_window_width_ / 2,
+                                     feature_window_width_ / 2,
+                                     -feature_window_height_ / 2,
+                                     feature_window_height_ / 2);
+        features[feature_index].p2 =
+            PointXY32i::randomPoint (-feature_window_width_ / 2,
+                                     feature_window_width_ / 2,
+                                     -feature_window_height_ / 2,
+                                     feature_window_height_ / 2);
         features[feature_index].channel = static_cast<unsigned char> (
             NUM_OF_CHANNELS * (static_cast<float> (rand ()) / (RAND_MAX + 1)));
       }
@@ -126,8 +130,8 @@ namespace pcl
       for (int example_index = 0; example_index < examples.size (); ++example_index) {
         const MultipleData2DExampleIndex &example = examples[example_index];
 
-        evaluateFeature (feature, data_set, example, results[example_index],
-                         flags[example_index]);
+        evaluateFeature (
+            feature, data_set, example, results[example_index], flags[example_index]);
       }
     }
 
@@ -142,7 +146,8 @@ namespace pcl
     inline void
     evaluateFeature (const MultiChannel2DComparisonFeature<PointXY32i> &feature,
                      MultiChannel2DDataSet<DATA_TYPE, NUM_OF_CHANNELS> &data_set,
-                     const MultipleData2DExampleIndex &example, float &result,
+                     const MultipleData2DExampleIndex &example,
+                     float &result,
                      unsigned char &flag) const
     {
       const int center_col_index = example.x;
@@ -193,7 +198,9 @@ namespace pcl
 
   /** \brief Feature utility class that handles the creation and evaluation of RGBD
    * comparison features. */
-  template <class DATA_TYPE, size_t NUM_OF_CHANNELS, size_t SCALE_CHANNEL,
+  template <class DATA_TYPE,
+            size_t NUM_OF_CHANNELS,
+            size_t SCALE_CHANNEL,
             bool INVERT_SCALE>
   class PCL_EXPORTS ScaledMultiChannel2DComparisonFeatureHandler
       : public pcl::FeatureHandler<
@@ -235,12 +242,16 @@ namespace pcl
     {
       features.resize (num_of_features);
       for (size_t feature_index = 0; feature_index < num_of_features; ++feature_index) {
-        features[feature_index].p1 = PointXY32f::randomPoint (
-            -feature_window_width_ / 2, feature_window_width_ / 2,
-            -feature_window_height_ / 2, feature_window_height_ / 2);
-        features[feature_index].p2 = PointXY32f::randomPoint (
-            -feature_window_width_ / 2, feature_window_width_ / 2,
-            -feature_window_height_ / 2, feature_window_height_ / 2);
+        features[feature_index].p1 =
+            PointXY32f::randomPoint (-feature_window_width_ / 2,
+                                     feature_window_width_ / 2,
+                                     -feature_window_height_ / 2,
+                                     feature_window_height_ / 2);
+        features[feature_index].p2 =
+            PointXY32f::randomPoint (-feature_window_width_ / 2,
+                                     feature_window_width_ / 2,
+                                     -feature_window_height_ / 2,
+                                     feature_window_height_ / 2);
         features[feature_index].channel = static_cast<unsigned char> (
             NUM_OF_CHANNELS * (static_cast<float> (rand ()) / (RAND_MAX + 1)));
       }
@@ -266,8 +277,8 @@ namespace pcl
       for (int example_index = 0; example_index < examples.size (); ++example_index) {
         const MultipleData2DExampleIndex &example = examples[example_index];
 
-        evaluateFeature (feature, data_set, example, results[example_index],
-                         flags[example_index]);
+        evaluateFeature (
+            feature, data_set, example, results[example_index], flags[example_index]);
       }
     }
 
@@ -282,7 +293,8 @@ namespace pcl
     inline void
     evaluateFeature (const MultiChannel2DComparisonFeature<PointXY32f> &feature,
                      MultiChannel2DDataSet<DATA_TYPE, NUM_OF_CHANNELS> &data_set,
-                     const MultipleData2DExampleIndex &example, float &result,
+                     const MultipleData2DExampleIndex &example,
+                     float &result,
                      unsigned char &flag) const
     {
       const int center_col_index = example.x;
@@ -290,12 +302,12 @@ namespace pcl
 
       float scale;
       if (INVERT_SCALE)
-        scale =
-            1.0f / static_cast<float> (data_set (example.data_set_id, center_col_index,
-                                                 center_row_index)[SCALE_CHANNEL]);
+        scale = 1.0f / static_cast<float> (data_set (example.data_set_id,
+                                                     center_col_index,
+                                                     center_row_index)[SCALE_CHANNEL]);
       else
-        scale = static_cast<float> (data_set (example.data_set_id, center_col_index,
-                                              center_row_index)[SCALE_CHANNEL]);
+        scale = static_cast<float> (data_set (
+            example.data_set_id, center_col_index, center_row_index)[SCALE_CHANNEL]);
 
       const size_t p1_col =
           static_cast<size_t> (scale * feature.p1.x + center_col_index);
@@ -352,7 +364,9 @@ namespace pcl
     int feature_window_height_;
   };
 
-  template <class DATA_TYPE, size_t NUM_OF_CHANNELS, size_t SCALE_CHANNEL,
+  template <class DATA_TYPE,
+            size_t NUM_OF_CHANNELS,
+            size_t SCALE_CHANNEL,
             bool INVERT_SCALE>
   class PCL_EXPORTS ScaledMultiChannel2DComparisonFeatureHandlerCCodeGenerator
       : public pcl::FeatureHandlerCodeGenerator<
@@ -372,11 +386,15 @@ namespace pcl
                       std::ostream &stream) const;
   };
 
-  template <class DATA_TYPE, size_t NUM_OF_CHANNELS, size_t SCALE_CHANNEL,
+  template <class DATA_TYPE,
+            size_t NUM_OF_CHANNELS,
+            size_t SCALE_CHANNEL,
             bool INVERT_SCALE>
   void
   ScaledMultiChannel2DComparisonFeatureHandlerCCodeGenerator<
-      DATA_TYPE, NUM_OF_CHANNELS, SCALE_CHANNEL,
+      DATA_TYPE,
+      NUM_OF_CHANNELS,
+      SCALE_CHANNEL,
       INVERT_SCALE>::generateEvalFunctionCode (std::ostream &stream) const
   {
     if (NUM_OF_CHANNELS == 1 && SCALE_CHANNEL == 0 && INVERT_SCALE) {
@@ -403,14 +421,17 @@ namespace pcl
     }
   }
 
-  template <class DATA_TYPE, size_t NUM_OF_CHANNELS, size_t SCALE_CHANNEL,
+  template <class DATA_TYPE,
+            size_t NUM_OF_CHANNELS,
+            size_t SCALE_CHANNEL,
             bool INVERT_SCALE>
   void
-  ScaledMultiChannel2DComparisonFeatureHandlerCCodeGenerator<
-      DATA_TYPE, NUM_OF_CHANNELS, SCALE_CHANNEL,
-      INVERT_SCALE>::generateEvalCode (const MultiChannel2DComparisonFeature<PointXY32f>
-                                           &feature,
-                                       std::ostream &stream) const
+  ScaledMultiChannel2DComparisonFeatureHandlerCCodeGenerator<DATA_TYPE,
+                                                             NUM_OF_CHANNELS,
+                                                             SCALE_CHANNEL,
+                                                             INVERT_SCALE>::
+      generateEvalCode (const MultiChannel2DComparisonFeature<PointXY32f> &feature,
+                        std::ostream &stream) const
   {
     stream << "LocalFeatureHandler::eval (data_ptr, " << feature.p1.x << ", "
            << feature.p1.y << ", " << feature.p2.x << ", " << feature.p2.y << ", "

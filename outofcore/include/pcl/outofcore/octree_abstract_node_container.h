@@ -68,12 +68,15 @@ namespace pcl
       insertRange (const PointT *const *start, const uint64_t count) = 0;
 
       virtual void
-      readRange (const uint64_t start, const uint64_t count,
+      readRange (const uint64_t start,
+                 const uint64_t count,
                  AlignedPointTVector &v) = 0;
 
       virtual void
-      readRangeSubSample (const uint64_t start, const uint64_t count,
-                          const double percent, AlignedPointTVector &v) = 0;
+      readRangeSubSample (const uint64_t start,
+                          const uint64_t count,
+                          const double percent,
+                          AlignedPointTVector &v) = 0;
 
       virtual bool
       empty () const = 0;

@@ -78,7 +78,8 @@ FittingCurve2dSDM::assemble (const FittingCurve2dPDM::Parameter &parameter)
   if (row < nrows) {
     m_solver.resize (row);
     if (!m_quiet)
-      printf ("[FittingCurve2dSDM::assemble] Warning: rows do not match: %d %d\n", row,
+      printf ("[FittingCurve2dSDM::assemble] Warning: rows do not match: %d %d\n",
+              row,
               nrows);
   }
 }
@@ -140,15 +141,18 @@ void
 FittingCurve2dSDM::addPointConstraint (const double &param,
                                        const Eigen::Vector2d &point,
                                        const Eigen::Vector2d &normal,
-                                       const Eigen::Vector2d &tangent, double rho,
-                                       double d, double weight, unsigned &row)
+                                       const Eigen::Vector2d &tangent,
+                                       double rho,
+                                       double d,
+                                       double weight,
+                                       unsigned &row)
 {
   int cp_red = m_nurbs.m_order - 2;
   int ncp = m_nurbs.m_cv_count - 2 * cp_red;
   double *N = new double[m_nurbs.m_order * m_nurbs.m_order];
 
-  int E = ON_NurbsSpanIndex (m_nurbs.m_order, m_nurbs.m_cv_count, m_nurbs.m_knot, param,
-                             0, 0);
+  int E = ON_NurbsSpanIndex (
+      m_nurbs.m_order, m_nurbs.m_cv_count, m_nurbs.m_knot, param, 0, 0);
 
   ON_EvaluateNurbsBasis (m_nurbs.m_order, m_nurbs.m_knot + E, param, N);
 
@@ -234,13 +238,29 @@ FittingCurve2dSDM::assembleInterior (double wInt, double rScale, unsigned &row)
     double error;
     if (p < int(m_data->interior_param.size ())) {
       param = findClosestElementMidPoint (m_nurbs, pcp, m_data->interior_param[p]);
-      param = inverseMapping (m_nurbs, pcp, param, error, pt, t, rScale, in_max_steps,
-                              in_accuracy, m_quiet);
+      param = inverseMapping (m_nurbs,
+                              pcp,
+                              param,
+                              error,
+                              pt,
+                              t,
+                              rScale,
+                              in_max_steps,
+                              in_accuracy,
+                              m_quiet);
       m_data->interior_param[p] = param;
     } else {
       param = findClosestElementMidPoint (m_nurbs, pcp);
-      param = inverseMapping (m_nurbs, pcp, param, error, pt, t, rScale, in_max_steps,
-                              in_accuracy, m_quiet);
+      param = inverseMapping (m_nurbs,
+                              pcp,
+                              param,
+                              error,
+                              pt,
+                              t,
+                              rScale,
+                              in_max_steps,
+                              in_accuracy,
+                              m_quiet);
       m_data->interior_param.push_back (param);
     }
 
@@ -297,8 +317,14 @@ FittingCurve2dSDM::assembleInterior (double wInt, double rScale, unsigned &row)
     m_data->interior_line_start.push_back (pt);
     m_data->interior_line_end.push_back (pcp);
 
-    addPointConstraint (m_data->interior_param[p], m_data->interior[p], n_prev, t_prev,
-                        rho_prev, d, wInt, row);
+    addPointConstraint (m_data->interior_param[p],
+                        m_data->interior[p],
+                        n_prev,
+                        t_prev,
+                        rho_prev,
+                        d,
+                        wInt,
+                        row);
   }
 
   //  printf("[FittingCurve2dSDM::assembleInterior] d>0: %d d<0: %d\n", i1, i2);

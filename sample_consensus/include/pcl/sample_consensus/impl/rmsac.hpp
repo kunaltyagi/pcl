@@ -94,11 +94,11 @@ pcl::RandomizedMEstimatorSampleConsensus<PointT>::computeModel (
 
     // RMSAC addon: verify a random fraction of the data
     // Get X random samples which satisfy the model criterion
-    this->getRandomSamples (sac_model_->getIndices (), fraction_nr_points,
-                            indices_subset);
+    this->getRandomSamples (
+        sac_model_->getIndices (), fraction_nr_points, indices_subset);
 
-    if (!sac_model_->doSamplesVerifyModel (indices_subset, model_coefficients,
-                                           threshold_)) {
+    if (!sac_model_->doSamplesVerifyModel (
+            indices_subset, model_coefficients, threshold_)) {
       // Unfortunately we cannot "continue" after the first iteration, because k might
       // not be set, while iterations gets incremented
       if (k != 1.0) {
@@ -146,7 +146,9 @@ pcl::RandomizedMEstimatorSampleConsensus<PointT>::computeModel (
     if (debug_verbosity_level > 1)
       PCL_DEBUG ("[pcl::RandomizedMEstimatorSampleConsensus::computeModel] Trial %d "
                  "out of %d. Best penalty is %f.\n",
-                 iterations_, static_cast<int> (ceil (k)), d_best_penalty);
+                 iterations_,
+                 static_cast<int> (ceil (k)),
+                 d_best_penalty);
     if (iterations_ > max_iterations_) {
       if (debug_verbosity_level > 0)
         PCL_DEBUG ("[pcl::RandomizedMEstimatorSampleConsensus::computeModel] MSAC "
@@ -169,7 +171,8 @@ pcl::RandomizedMEstimatorSampleConsensus<PointT>::computeModel (
   if (distances.size () != indices.size ()) {
     PCL_ERROR ("[pcl::RandomizedMEstimatorSampleConsensus::computeModel] Estimated "
                "distances (%lu) differs than the normal of indices (%lu).\n",
-               distances.size (), indices.size ());
+               distances.size (),
+               indices.size ());
     return (false);
   }
 
@@ -186,7 +189,8 @@ pcl::RandomizedMEstimatorSampleConsensus<PointT>::computeModel (
   if (debug_verbosity_level > 0)
     PCL_DEBUG ("[pcl::RandomizedMEstimatorSampleConsensus::computeModel] Model: %lu "
                "size, %d inliers.\n",
-               model_.size (), n_inliers_count);
+               model_.size (),
+               n_inliers_count);
 
   return (true);
 }

@@ -53,8 +53,10 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS void
-    encodeMonoImageToPNG (std::vector<uint8_t> &image_arg, size_t width_arg,
-                          size_t height_arg, std::vector<uint8_t> &pngData_arg,
+    encodeMonoImageToPNG (std::vector<uint8_t> &image_arg,
+                          size_t width_arg,
+                          size_t height_arg,
+                          std::vector<uint8_t> &pngData_arg,
                           int png_level_arg = -1);
 
     /** \brief Encodes 16-bit mono image to PNG format.
@@ -66,8 +68,10 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS void
-    encodeMonoImageToPNG (std::vector<uint16_t> &image_arg, size_t width_arg,
-                          size_t height_arg, std::vector<uint8_t> &pngData_arg,
+    encodeMonoImageToPNG (std::vector<uint16_t> &image_arg,
+                          size_t width_arg,
+                          size_t height_arg,
+                          std::vector<uint8_t> &pngData_arg,
                           int png_level_arg = -1);
 
     /** \brief Encodes 8-bit RGB image to PNG format.
@@ -79,8 +83,10 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS void
-    encodeRGBImageToPNG (std::vector<uint8_t> &image_arg, size_t width_arg,
-                         size_t height_arg, std::vector<uint8_t> &pngData_arg,
+    encodeRGBImageToPNG (std::vector<uint8_t> &image_arg,
+                         size_t width_arg,
+                         size_t height_arg,
+                         std::vector<uint8_t> &pngData_arg,
                          int png_level_arg = -1);
 
     /** \brief Encodes 16-bit RGB image to PNG format.
@@ -92,8 +98,10 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS void
-    encodeRGBImageToPNG (std::vector<uint16_t> &image_arg, size_t width_arg,
-                         size_t height_arg, std::vector<uint8_t> &pngData_arg,
+    encodeRGBImageToPNG (std::vector<uint16_t> &image_arg,
+                         size_t width_arg,
+                         size_t height_arg,
+                         std::vector<uint8_t> &pngData_arg,
                          int png_level_arg = -1);
 
     /** \brief Decode compressed PNG to 8-bit image
@@ -106,8 +114,10 @@ namespace pcl
      */
     PCL_EXPORTS void
     decodePNGToImage (std::vector<uint8_t> &pngData_arg,
-                      std::vector<uint8_t> &imageData_arg, size_t &width_arg,
-                      size_t &heigh_argt, unsigned int &channels_arg);
+                      std::vector<uint8_t> &imageData_arg,
+                      size_t &width_arg,
+                      size_t &heigh_argt,
+                      unsigned int &channels_arg);
 
     /** \brief Decode compressed PNG to 16-bit image
      * \param[in] pngData_arg PNG compressed input data
@@ -119,7 +129,9 @@ namespace pcl
      */
     PCL_EXPORTS void
     decodePNGToImage (std::vector<uint8_t> &pngData_arg,
-                      std::vector<uint16_t> &imageData_arg, size_t &width_arg,
-                      size_t &height_arg, unsigned int &channels_arg);
+                      std::vector<uint16_t> &imageData_arg,
+                      size_t &width_arg,
+                      size_t &height_arg,
+                      unsigned int &channels_arg);
   } // namespace io
 } // namespace pcl

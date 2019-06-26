@@ -44,7 +44,10 @@ using namespace pcl;
 
 template <typename PointT>
 void
-checkSimpleLine8 (unsigned x_start, unsigned y_start, unsigned x_end, unsigned y_end,
+checkSimpleLine8 (unsigned x_start,
+                  unsigned y_start,
+                  unsigned x_end,
+                  unsigned y_end,
                   PointCloud<PointT> &cloud)
 {
   PointXYZ point;
@@ -58,8 +61,8 @@ checkSimpleLine8 (unsigned x_start, unsigned y_start, unsigned x_end, unsigned y
     }
   }
 
-  LineIterator lineIt (x_start, y_start, x_end, y_end, cloud.width,
-                       LineIterator::Neighbor8);
+  LineIterator lineIt (
+      x_start, y_start, x_end, y_end, cloud.width, LineIterator::Neighbor8);
   // use polymorphic
   OrganizedIndexIterator &iterator = lineIt;
   unsigned idx = 0;
@@ -116,8 +119,12 @@ checkSimpleLine8 (unsigned x_start, unsigned y_start, unsigned x_end, unsigned y
 
 template <typename PointT>
 void
-checkGeneralLine (unsigned x_start, unsigned y_start, unsigned x_end, unsigned y_end,
-                  PointCloud<PointT> &cloud, bool neighorhood)
+checkGeneralLine (unsigned x_start,
+                  unsigned y_start,
+                  unsigned x_end,
+                  unsigned y_end,
+                  PointCloud<PointT> &cloud,
+                  bool neighorhood)
 {
   PointXYZ point;
   point.x = point.y = point.z = 0.0f;

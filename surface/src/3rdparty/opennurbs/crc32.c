@@ -55,8 +55,8 @@ typedef unsigned short u4;
 #ifdef BYFOUR
 #define REV(w)                                                                         \
   (((w) >> 24) + (((w) >> 8) & 0xff00) + (((w)&0xff00) << 8) + (((w)&0xff) << 24))
-local unsigned int crc32_little OF ((unsigned int, const unsigned char FAR *,
-                                     unsigned));
+local unsigned int
+    crc32_little OF ((unsigned int, const unsigned char FAR *, unsigned));
 local unsigned int crc32_big OF ((unsigned int, const unsigned char FAR *, unsigned));
 #define TBLS 8
 #else
@@ -185,7 +185,10 @@ const unsigned int FAR *table;
   int n;
 
   for (n = 0; n < 256; n++)
-    fprintf (out, "%s0x%08lxUL%s", n % 5 ? "" : "    ", table[n],
+    fprintf (out,
+             "%s0x%08lxUL%s",
+             n % 5 ? "" : "    ",
+             table[n],
              n == 255 ? "\n" : (n % 5 == 4 ? ",\n" : ", "));
 }
 #endif /* MAKECRCH */

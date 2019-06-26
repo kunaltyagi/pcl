@@ -86,16 +86,25 @@ namespace pcl
     init (const std::vector<float> &feature, const int feature_dimension, const int N);
 
     void
-    compute (std::vector<float> &out, const std::vector<float> &in, int value_size,
-             int in_offset = 0, int out_offset = 0, int in_size = -1,
+    compute (std::vector<float> &out,
+             const std::vector<float> &in,
+             int value_size,
+             int in_offset = 0,
+             int out_offset = 0,
+             int in_size = -1,
              int out_size = -1) const;
     void
-    initOLD (const std::vector<float> &feature, const int feature_dimension,
+    initOLD (const std::vector<float> &feature,
+             const int feature_dimension,
              const int N);
 
     void
-    computeOLD (std::vector<float> &out, const std::vector<float> &in, int value_size,
-                int in_offset = 0, int out_offset = 0, int in_size = -1,
+    computeOLD (std::vector<float> &out,
+                const std::vector<float> &in,
+                int value_size,
+                int in_offset = 0,
+                int out_offset = 0,
+                int in_size = -1,
                 int out_size = -1) const;
 
     void

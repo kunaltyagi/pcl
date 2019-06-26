@@ -57,7 +57,8 @@ class SelectionTransformTool : public ToolInterface
   /// @param selection_ptr a shared pointer pointing to the selection object.
   /// @param cloud_ptr a shared pointer pointing to the cloud object.
   /// @param command_queue_ptr a shared pointer pointing to the command queue.
-  SelectionTransformTool (ConstSelectionPtr selection_ptr, CloudPtr cloud_ptr,
+  SelectionTransformTool (ConstSelectionPtr selection_ptr,
+                          CloudPtr cloud_ptr,
                           CommandQueuePtr command_queue_ptr);
 
   /// @brief Destructor
@@ -118,7 +119,10 @@ class SelectionTransformTool : public ToolInterface
   /// implementing rotation along y or z-axis, which depens on which the mouse
   /// button that is being pressed during the rotation operation.
   void
-  getRotateMatrix (int dx, int dy, float *rotation_matrix_a, float *rotation_matrix_b,
+  getRotateMatrix (int dx,
+                   int dy,
+                   float *rotation_matrix_a,
+                   float *rotation_matrix_b,
                    BitMask buttons) const;
 
   /// @brief Computes the centroid of the selected points

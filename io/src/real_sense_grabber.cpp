@@ -88,14 +88,16 @@ pcl::RealSenseGrabber::Mode::Mode (unsigned int f, unsigned int dw, unsigned int
 {
 }
 
-pcl::RealSenseGrabber::Mode::Mode (unsigned int dw, unsigned int dh, unsigned int cw,
+pcl::RealSenseGrabber::Mode::Mode (unsigned int dw,
+                                   unsigned int dh,
+                                   unsigned int cw,
                                    unsigned int ch)
     : fps (0), depth_width (dw), depth_height (dh), color_width (cw), color_height (ch)
 {
 }
 
-pcl::RealSenseGrabber::Mode::Mode (unsigned int f, unsigned int dw, unsigned int dh,
-                                   unsigned int cw, unsigned int ch)
+pcl::RealSenseGrabber::Mode::Mode (
+    unsigned int f, unsigned int dw, unsigned int dh, unsigned int cw, unsigned int ch)
     : fps (f), depth_width (dw), depth_height (dh), color_width (cw), color_height (ch)
 {
 }
@@ -108,7 +110,8 @@ pcl::RealSenseGrabber::Mode::operator== (const pcl::RealSenseGrabber::Mode &m) c
           this->color_height == m.color_height);
 }
 
-pcl::RealSenseGrabber::RealSenseGrabber (const std::string &device_id, const Mode &mode,
+pcl::RealSenseGrabber::RealSenseGrabber (const std::string &device_id,
+                                         const Mode &mode,
                                          bool strict)
     : Grabber (), is_running_ (false), confidence_threshold_ (6),
       temporal_filtering_type_ (RealSense_None), temporal_filtering_window_size_ (1),

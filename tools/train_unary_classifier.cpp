@@ -116,7 +116,9 @@ loadCloud (const std::string &filename, CloudLT::Ptr &cloud)
 void
 compute (const CloudT::Ptr &input,
          std::vector<FeatureT, Eigen::aligned_allocator<FeatureT>> &output,
-         unsigned int k, float normal_radius_search, float fpfh_radius_search,
+         unsigned int k,
+         float normal_radius_search,
+         float fpfh_radius_search,
          bool label)
 {
   TicToc tt;
@@ -145,7 +147,9 @@ compute (const CloudT::Ptr &input,
 void
 compute (const CloudLT::Ptr &input,
          std::vector<FeatureT, Eigen::aligned_allocator<FeatureT>> &output,
-         unsigned int k, float normal_radius_search, float fpfh_radius_search,
+         unsigned int k,
+         float normal_radius_search,
+         float fpfh_radius_search,
          bool label)
 {
   TicToc tt;

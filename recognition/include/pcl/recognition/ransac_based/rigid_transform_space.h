@@ -157,7 +157,8 @@ namespace pcl
       }
 
       inline const RotationSpaceCell::Entry &
-      addRigidTransform (const ModelLibrary::Model *model, const float axis_angle[3],
+      addRigidTransform (const ModelLibrary::Model *model,
+                         const float axis_angle[3],
                          const float translation[3])
       {
         return model_to_entry_[model].addRigidTransform (axis_angle, translation);
@@ -174,8 +175,9 @@ namespace pcl
       virtual ~RotationSpaceCellCreator () {}
 
       RotationSpaceCell *
-      create (const SimpleOctree<RotationSpaceCell, RotationSpaceCellCreator,
-                                 float>::Node *)
+      create (
+          const SimpleOctree<RotationSpaceCell, RotationSpaceCellCreator, float>::Node
+              *)
       {
         return (new RotationSpaceCell ());
       }
@@ -266,7 +268,8 @@ namespace pcl
       }
 
       inline bool
-      addRigidTransform (const ModelLibrary::Model *model, const float axis_angle[3],
+      addRigidTransform (const ModelLibrary::Model *model,
+                         const float axis_angle[3],
                          const float translation[3])
       {
         CellOctree::Node *cell =
@@ -277,8 +280,16 @@ namespace pcl
           printf ("WARNING in 'RotationSpace::%s()': the provided axis-angle input "
                   "(%f, %f, %f) is "
                   "out of the rotation space bounds ([%f, %f], [%f, %f], [%f, %f]).\n",
-                  __func__, axis_angle[0], axis_angle[1], axis_angle[2], b[0], b[1],
-                  b[2], b[3], b[4], b[5]);
+                  __func__,
+                  axis_angle[0],
+                  axis_angle[1],
+                  axis_angle[2],
+                  b[0],
+                  b[1],
+                  b[2],
+                  b[3],
+                  b[4],
+                  b[5]);
           return (false);
         }
 
@@ -361,7 +372,8 @@ namespace pcl
       virtual ~RigidTransformSpace () { this->clear (); }
 
       inline void
-      build (const float *pos_bounds, float translation_cell_size,
+      build (const float *pos_bounds,
+             float translation_cell_size,
              float rotation_cell_size)
       {
         this->clear ();
@@ -397,7 +409,8 @@ namespace pcl
       }
 
       inline bool
-      addRigidTransform (const ModelLibrary::Model *model, const float position[3],
+      addRigidTransform (const ModelLibrary::Model *model,
+                         const float position[3],
                          const float rigid_transform[12])
       {
         // Get the leaf 'position' ends up in
@@ -407,7 +420,10 @@ namespace pcl
         if (!leaf) {
           printf ("WARNING in 'RigidTransformSpace::%s()': the input position (%f, %f, "
                   "%f) is out of bounds.\n",
-                  __func__, position[0], position[1], position[2]);
+                  __func__,
+                  position[0],
+                  position[1],
+                  position[2]);
           return (false);
         }
 

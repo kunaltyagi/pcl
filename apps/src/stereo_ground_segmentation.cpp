@@ -126,8 +126,8 @@ class HRCSSegmentation
     viewer->setBackgroundColor (0, 0, 0);
     viewer->addCoordinateSystem (1.0, "global");
     viewer->initCameraParameters ();
-    viewer->registerKeyboardCallback (&HRCSSegmentation::keyboardCallback, *this,
-                                      nullptr);
+    viewer->registerKeyboardCallback (
+        &HRCSSegmentation::keyboardCallback, *this, nullptr);
 
     // Set up the stereo matching
     stereo.setMaxDisparity (60);
@@ -226,8 +226,8 @@ class HRCSSegmentation
   {
     stereo.compute (*left_image, *right_image);
     stereo.medianFilter (4);
-    stereo.getPointCloud (318.112200f, 224.334900f, 368.534700f, 0.8387445f, out_cloud,
-                          left_image);
+    stereo.getPointCloud (
+        318.112200f, 224.334900f, 368.534700f, 0.8387445f, out_cloud, left_image);
   }
 
   void
@@ -285,8 +285,8 @@ class HRCSSegmentation
         }
 
         // Compute plane info
-        pcl::computeMeanAndCovarianceMatrix (*cloud, region_index.indices, clust_cov,
-                                             clust_centroid);
+        pcl::computeMeanAndCovarianceMatrix (
+            *cloud, region_index.indices, clust_cov, clust_centroid);
         Eigen::Vector4f plane_params;
 
         EIGEN_ALIGN16 Eigen::Vector3f::Scalar eigen_value;
@@ -347,7 +347,11 @@ class HRCSSegmentation
     mps.setDistanceThreshold (0.02);
     mps.setInputCloud (cloud);
     mps.setInputNormals (normal_cloud);
-    mps.refine (model_coefficients, inlier_indices, centroids, covariances, labels_ptr,
+    mps.refine (model_coefficients,
+                inlier_indices,
+                centroids,
+                covariances,
+                labels_ptr,
                 region_indices);
 
     // Note the regions that have been extended
@@ -382,9 +386,10 @@ class HRCSSegmentation
 
     if (!ground_cloud->points.empty ()) {
       ground_centroid = centroids[0];
-      ground_plane_params = Eigen::Vector4f (
-          model_coefficients[0].values[0], model_coefficients[0].values[1],
-          model_coefficients[0].values[2], model_coefficients[0].values[3]);
+      ground_plane_params = Eigen::Vector4f (model_coefficients[0].values[0],
+                                             model_coefficients[0].values[1],
+                                             model_coefficients[0].values[2],
+                                             model_coefficients[0].values[3]);
     }
 
     if (detect_obstacles) {
@@ -421,14 +426,16 @@ class HRCSSegmentation
 
             Eigen::Vector4f cluster_centroid;
             Eigen::Matrix3f cluster_cov;
-            pcl::computeMeanAndCovarianceMatrix (*cloud, euclidean_label_index.indices,
-                                                 cluster_cov, cluster_centroid);
+            pcl::computeMeanAndCovarianceMatrix (
+                *cloud, euclidean_label_index.indices, cluster_cov, cluster_centroid);
 
-            pcl::PointXYZ centroid_pt (cluster_centroid[0], cluster_centroid[1],
-                                       cluster_centroid[2]);
-            double ptp_dist = pcl::pointToPlaneDistanceSigned (
-                centroid_pt, ground_plane_params[0], ground_plane_params[1],
-                ground_plane_params[2], ground_plane_params[3]);
+            pcl::PointXYZ centroid_pt (
+                cluster_centroid[0], cluster_centroid[1], cluster_centroid[2]);
+            double ptp_dist = pcl::pointToPlaneDistanceSigned (centroid_pt,
+                                                               ground_plane_params[0],
+                                                               ground_plane_params[1],
+                                                               ground_plane_params[2],
+                                                               ground_plane_params[3]);
 
             if ((ptp_dist > 0.5) && (ptp_dist < 3.0)) {
 
@@ -515,8 +522,8 @@ class HRCSSegmentation
             nominal_road_normal;
 
         // Show the groundplane normal
-        pcl::PointXYZ np1 (prev_ground_centroid[0], prev_ground_centroid[1],
-                           prev_ground_centroid[2]);
+        pcl::PointXYZ np1 (
+            prev_ground_centroid[0], prev_ground_centroid[1], prev_ground_centroid[2]);
         pcl::PointXYZ np2 (prev_ground_centroid[0] + prev_ground_normal[0],
                            prev_ground_centroid[1] + prev_ground_normal[1],
                            prev_ground_centroid[2] + prev_ground_normal[2]);

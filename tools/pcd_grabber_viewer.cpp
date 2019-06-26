@@ -137,8 +137,8 @@ main (int argc, char **argv)
   double bcolor[3] = {0, 0, 0};
   pcl::console::parse_3x_arguments (argc, argv, "-bc", bcolor[0], bcolor[1], bcolor[2]);
 
-  fcolorparam = pcl::console::parse_multiple_3x_arguments (argc, argv, "-fc", fcolor_r,
-                                                           fcolor_g, fcolor_b);
+  fcolorparam = pcl::console::parse_multiple_3x_arguments (
+      argc, argv, "-fc", fcolor_r, fcolor_g, fcolor_b);
 
   int psize = 0;
   pcl::console::parse_argument (argc, argv, "-ps", psize);

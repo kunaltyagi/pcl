@@ -204,9 +204,10 @@ namespace pcl
       {
         public:
         using FeatureCloudConstPtr = typename pcl::PointCloud<FeatureT>::ConstPtr;
-        using SearchMethod =
-            std::function<int(const pcl::PointCloud<FeatureT> &, int,
-                              std::vector<int> &, std::vector<float> &)>;
+        using SearchMethod = std::function<int(const pcl::PointCloud<FeatureT> &,
+                                               int,
+                                               std::vector<int> &,
+                                               std::vector<float> &)>;
 
         using PointRepresentationConstPtr =
             typename pcl::PointRepresentation<FeatureT>::ConstPtr;

@@ -107,11 +107,16 @@ namespace pcl
        * slice
        */
       void
-      getExistingData (const double previous_origin_x, const double previous_origin_y,
-                       const double previous_origin_z, const double offset_x,
-                       const double offset_y, const double offset_z,
-                       const double volume_x, const double volume_y,
-                       const double volume_z, pcl::PointCloud<PointT> &existing_slice);
+      getExistingData (const double previous_origin_x,
+                       const double previous_origin_y,
+                       const double previous_origin_z,
+                       const double offset_x,
+                       const double offset_y,
+                       const double offset_z,
+                       const double volume_x,
+                       const double volume_y,
+                       const double volume_z,
+                       pcl::PointCloud<PointT> &existing_slice);
 
       /** \brief Give nan values to the slice of the world
        * \param[in] origin_x global origin of the cube on X axis, before the shift
@@ -125,10 +130,15 @@ namespace pcl
        * \param[in] size_z size of the cube, Z axis, in indices
        */
       void
-      setSliceAsNans (const double origin_x, const double origin_y,
-                      const double origin_z, const double offset_x,
-                      const double offset_y, const double offset_z, const int size_x,
-                      const int size_y, const int size_z);
+      setSliceAsNans (const double origin_x,
+                      const double origin_y,
+                      const double origin_z,
+                      const double offset_x,
+                      const double offset_y,
+                      const double offset_z,
+                      const int size_x,
+                      const int size_y,
+                      const int size_z);
 
       /** \brief Remove points with nan values from the world.
        */
@@ -165,7 +175,8 @@ namespace pcl
        */
       void
       getWorldAsCubes (
-          double size, std::vector<PointCloudPtr> &cubes,
+          double size,
+          std::vector<PointCloudPtr> &cubes,
           std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f>>
               &transforms,
           double overlap = 0.0);

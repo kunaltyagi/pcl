@@ -84,7 +84,10 @@ pcl::PPFHashMapSearch::setInputFeatureCloud (
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::PPFHashMapSearch::nearestNeighborSearch (
-    float &f1, float &f2, float &f3, float &f4,
+    float &f1,
+    float &f2,
+    float &f3,
+    float &f4,
     std::vector<std::pair<size_t, size_t>> &indices)
 {
   if (!internals_initialized_) {

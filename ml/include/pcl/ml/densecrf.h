@@ -63,23 +63,22 @@ namespace pcl
      * coordinates as ijk of the voxel grid
      */
     void
-    setDataVector (
-        const std::vector<Eigen::Vector3i, Eigen::aligned_allocator<Eigen::Vector3i>>
-            data);
+    setDataVector (const std::vector<Eigen::Vector3i,
+                                     Eigen::aligned_allocator<Eigen::Vector3i>> data);
 
     /** \brief The associated color of the data
      */
     void
-    setColorVector (
-        const std::vector<Eigen::Vector3i, Eigen::aligned_allocator<Eigen::Vector3i>>
-            color);
+    setColorVector (const std::vector<Eigen::Vector3i,
+                                      Eigen::aligned_allocator<Eigen::Vector3i>> color);
 
     void
     setUnaryEnergy (const std::vector<float> unary);
 
     /** \brief      */
     void
-    addPairwiseEnergy (const std::vector<float> &feature, const int feature_dimension,
+    addPairwiseEnergy (const std::vector<float> &feature,
+                       const int feature_dimension,
                        const float w);
 
     /** \brief Add a pairwise gaussian kernel
@@ -92,15 +91,21 @@ namespace pcl
      *
      */
     void
-    addPairwiseBilateral (float sx, float sy, float sz, float sr, float sg, float sb,
-                          float w);
+    addPairwiseBilateral (
+        float sx, float sy, float sz, float sr, float sg, float sb, float w);
 
     void
     addPairwiseNormals (
         std::vector<Eigen::Vector3i, Eigen::aligned_allocator<Eigen::Vector3i>> &coord,
         std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f>>
             &normals,
-        float sx, float sy, float sz, float snx, float sny, float snz, float w);
+        float sx,
+        float sy,
+        float sz,
+        float snx,
+        float sny,
+        float snz,
+        float w);
 
     void
     inference (int n_iterations, std::vector<float> &result, float relax = 1.0f);
@@ -109,11 +114,15 @@ namespace pcl
     mapInference (int n_iterations, std::vector<int> &result, float relax = 1.0f);
 
     void
-    expAndNormalize (std::vector<float> &out, const std::vector<float> &in, float scale,
+    expAndNormalize (std::vector<float> &out,
+                     const std::vector<float> &in,
+                     float scale,
                      float relax = 1.0f);
 
     void
-    expAndNormalizeORI (float *out, const float *in, float scale = 1.0f,
+    expAndNormalizeORI (float *out,
+                        const float *in,
+                        float scale = 1.0f,
                         float relax = 1.0f);
     void
     map (int n_iterations, std::vector<int> result, float relax = 1.0f);

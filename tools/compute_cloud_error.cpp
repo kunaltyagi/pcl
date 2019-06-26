@@ -75,7 +75,8 @@ printHelp (int, char **argv)
 
 void
 compute (const pcl::PCLPointCloud2::ConstPtr &cloud_source,
-         const pcl::PCLPointCloud2::ConstPtr &cloud_target, pcl::PCLPointCloud2 &output,
+         const pcl::PCLPointCloud2::ConstPtr &cloud_target,
+         pcl::PCLPointCloud2 &output,
          const std::string &correspondence_type)
 {
   PointCloud<PointXYZ>::Ptr xyz_source (new PointCloud<PointXYZ> ());
@@ -134,8 +135,8 @@ compute (const pcl::PCLPointCloud2::ConstPtr &cloud_source,
 
       std::vector<int> nn_indices (1);
       std::vector<float> nn_distances (1);
-      if (!tree->nearestKSearch (xyz_source->points[point_i], 1, nn_indices,
-                                 nn_distances))
+      if (!tree->nearestKSearch (
+              xyz_source->points[point_i], 1, nn_indices, nn_distances))
         continue;
       size_t point_nn_i = nn_indices.front ();
 
@@ -168,8 +169,8 @@ compute (const pcl::PCLPointCloud2::ConstPtr &cloud_source,
 
       std::vector<int> nn_indices (1);
       std::vector<float> nn_distances (1);
-      if (!tree->nearestKSearch (xyz_source->points[point_i], 1, nn_indices,
-                                 nn_distances))
+      if (!tree->nearestKSearch (
+              xyz_source->points[point_i], 1, nn_indices, nn_distances))
         continue;
       size_t point_nn_i = nn_indices.front ();
 

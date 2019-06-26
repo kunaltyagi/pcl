@@ -170,7 +170,8 @@ pcl::HarrisKeypoint3D<PointInT, PointOutT, NormalT>::calculateNormalCovar (
 #else
   memset (coefficients, 0, sizeof (float) * 8);
   for (std::vector<int>::const_iterator iIt = neighbors.begin ();
-       iIt != neighbors.end (); ++iIt) {
+       iIt != neighbors.end ();
+       ++iIt) {
     if (std::isfinite (normals_->points[*iIt].normal_x)) {
       coefficients[0] +=
           normals_->points[*iIt].normal_x * normals_->points[*iIt].normal_x;
@@ -213,7 +214,8 @@ pcl::HarrisKeypoint3D<PointInT, PointOutT, NormalT>::initCompute ()
 
   if (method_ < 1 || method_ > 5) {
     PCL_ERROR ("[pcl::%s::initCompute] method (%d) must be in [1..5]!\n",
-               name_.c_str (), method_);
+               name_.c_str (),
+               method_);
     return (false);
   }
 
@@ -238,7 +240,8 @@ pcl::HarrisKeypoint3D<PointInT, PointOutT, NormalT>::initCompute ()
   if (normals_->size () != surface_->size ()) {
     PCL_ERROR ("[pcl::%s::initCompute] normals given, but the number of normals does "
                "not match the number of input points!\n",
-               name_.c_str (), method_);
+               name_.c_str (),
+               method_);
     return (false);
   }
 
@@ -297,7 +300,8 @@ pcl::HarrisKeypoint3D<PointInT, PointOutT, NormalT>::detectKeypoints (
       tree_->radiusSearch (idx, search_radius_, nn_indices, nn_dists);
       bool is_maxima = true;
       for (std::vector<int>::const_iterator iIt = nn_indices.begin ();
-           iIt != nn_indices.end (); ++iIt) {
+           iIt != nn_indices.end ();
+           ++iIt) {
         if (response->points[idx].intensity < response->points[*iIt].intensity) {
           is_maxima = false;
           break;
@@ -525,7 +529,8 @@ pcl::HarrisKeypoint3D<PointInT, PointOutT, NormalT>::refineCorners (
       std::vector<float> nn_dists;
       tree_->radiusSearch (corner, search_radius_, nn_indices, nn_dists);
       for (std::vector<int>::const_iterator iIt = nn_indices.begin ();
-           iIt != nn_indices.end (); ++iIt) {
+           iIt != nn_indices.end ();
+           ++iIt) {
         if (!std::isfinite (normals_->points[*iIt].normal_x))
           continue;
 

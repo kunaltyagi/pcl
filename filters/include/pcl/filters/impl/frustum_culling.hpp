@@ -167,8 +167,8 @@ pcl::FrustumCulling<PointT>::applyFilter (std::vector<int> &indices)
   size_t removed_ctr = 0;
   for (size_t i = 0; i < indices_->size (); i++) {
     int idx = indices_->at (i);
-    Eigen::Vector4f pt (input_->points[idx].x, input_->points[idx].y,
-                        input_->points[idx].z, 1.0f);
+    Eigen::Vector4f pt (
+        input_->points[idx].x, input_->points[idx].y, input_->points[idx].z, 1.0f);
     bool is_in_fov = (pt.dot (pl_l) <= 0) && (pt.dot (pl_r) <= 0) &&
                      (pt.dot (pl_t) <= 0) && (pt.dot (pl_b) <= 0) &&
                      (pt.dot (pl_f) <= 0) && (pt.dot (pl_n) <= 0);

@@ -97,7 +97,8 @@ pcl::gpu::kinfuLS::ColorVolume::fetchColors (const DeviceArray<PointType> &cloud
 {
   colors.create (cloud.size ());
   pcl::device::kinfuLS::exctractColors (color_volume_,
-                                        device_cast<const float3> (volume_size_), cloud,
+                                        device_cast<const float3> (volume_size_),
+                                        cloud,
                                         (uchar4 *)colors.ptr () /*bgra*/);
 }
 

@@ -132,9 +132,12 @@ namespace pcl
     template <class Graph, class EdgeWeightMap, class VertexColorMap>
     bool
     randomWalker (
-        Graph &graph, EdgeWeightMap weights, VertexColorMap colors,
+        Graph &graph,
+        EdgeWeightMap weights,
+        VertexColorMap colors,
         Eigen::Matrix<typename boost::property_traits<EdgeWeightMap>::value_type,
-                      Eigen::Dynamic, Eigen::Dynamic> &potentials,
+                      Eigen::Dynamic,
+                      Eigen::Dynamic> &potentials,
         std::map<typename boost::property_traits<VertexColorMap>::value_type, size_t>
             &colors_to_columns_map);
 

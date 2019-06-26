@@ -175,11 +175,21 @@ compute (const pcl::PCLPointCloud2::ConstPtr &source,
   PCL_DEBUG ("Transformation "
              "is:\n\t%5f\t%5f\t%5f\t%5f\n\t%5f\t%5f\t%5f\t%5f\n\t%5f\t%5f\t%5f\t%"
              "5f\n\t%5f\t%5f\t%5f\t%5f\n",
-             transformation (0, 0), transformation (0, 1), transformation (0, 2),
-             transformation (0, 3), transformation (1, 0), transformation (1, 1),
-             transformation (1, 2), transformation (1, 3), transformation (2, 0),
-             transformation (2, 1), transformation (2, 2), transformation (2, 3),
-             transformation (3, 0), transformation (3, 1), transformation (3, 2),
+             transformation (0, 0),
+             transformation (0, 1),
+             transformation (0, 2),
+             transformation (0, 3),
+             transformation (1, 0),
+             transformation (1, 1),
+             transformation (1, 2),
+             transformation (1, 3),
+             transformation (2, 0),
+             transformation (2, 1),
+             transformation (2, 2),
+             transformation (2, 3),
+             transformation (3, 0),
+             transformation (3, 1),
+             transformation (3, 2),
              transformation (3, 3));
 
   // Convert data back

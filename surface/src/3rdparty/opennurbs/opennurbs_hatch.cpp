@@ -70,7 +70,8 @@ class ON_HatchExtra : public ON_UserData
   ON_2dPoint m_basepoint; // Base point in hatch's ECS
 };
 
-ON_OBJECT_IMPLEMENT (ON_HatchExtra, ON_UserData,
+ON_OBJECT_IMPLEMENT (ON_HatchExtra,
+                     ON_UserData,
                      "3FF7007C-3D04-463f-84E3-132ACEB91062");
 
 ON_HatchExtra *
@@ -179,10 +180,7 @@ ON_HatchExtra::GetDescription (ON_wString &description)
 }
 
 ON_BOOL32
-ON_HatchExtra::Archive () const
-{
-  return true;
-}
+ON_HatchExtra::Archive () const { return true; }
 
 void
 ON_HatchExtra::SetBasePoint (ON_2dPoint &point)
@@ -203,7 +201,8 @@ ON_HatchExtra::BasePoint () const
 
 ON_HatchLine::ON_HatchLine () : m_angle (0.0), m_base (0.0, 0.0), m_offset (0.0, 1.0) {}
 
-ON_HatchLine::ON_HatchLine (double angle, const ON_2dPoint &base,
+ON_HatchLine::ON_HatchLine (double angle,
+                            const ON_2dPoint &base,
                             const ON_2dVector &offset,
                             const ON_SimpleArray<double> dashes)
     : m_angle (angle), m_base (base), m_offset (offset), m_dashes (dashes)
@@ -262,7 +261,8 @@ ON_HatchLine::IsValid (ON_TextLog *text_log) const
 void
 ON_HatchLine::Dump (ON_TextLog &dump) const
 {
-  dump.Print ("ON_HatchLine: angle = %lf radians ( %lf degrees) ", Angle (),
+  dump.Print ("ON_HatchLine: angle = %lf radians ( %lf degrees) ",
+              Angle (),
               ON_RADIANS_TO_DEGREES * Angle ());
   dump.Print (" base = ");
   dump.Print (m_base);
@@ -390,7 +390,9 @@ ON_HatchLine::SetPattern (const ON_SimpleArray<double> &dashes)
 }
 
 void
-ON_HatchLine::GetLineData (double &angle, ON_2dPoint &base, ON_2dVector &offset,
+ON_HatchLine::GetLineData (double &angle,
+                           ON_2dPoint &base,
+                           ON_2dVector &offset,
                            ON_SimpleArray<double> &dashes) const
 {
   angle = m_angle;
@@ -412,7 +414,8 @@ ON_HatchLine::GetPatternLength () const
 
 //  class ON_HatchPattern
 /////////////////////////////////////////////////////////////////
-ON_OBJECT_IMPLEMENT (ON_HatchPattern, ON_Object,
+ON_OBJECT_IMPLEMENT (ON_HatchPattern,
+                     ON_Object,
                      "064E7C91-35F6-4734-A446-79FF7CD659E1");
 
 ON_HatchPattern::ON_HatchPattern ()
@@ -1034,14 +1037,16 @@ ON_Hatch::Dump (ON_TextLog &dump) const
   dump.Print ("Pattern scale: %g\n", PatternScale ());
   ON_3dPoint p = this->BasePoint ();
   dump.Print ("Base point: %g, %g, %g\n", p.x, p.y, p.z);
-  dump.Print ("Plane origin: %g, %g, %g\n", m_plane.origin.x, m_plane.origin.y,
+  dump.Print ("Plane origin: %g, %g, %g\n",
+              m_plane.origin.x,
+              m_plane.origin.y,
               m_plane.origin.z);
-  dump.Print ("Plane x axis: %g, %g, %g\n", m_plane.xaxis.x, m_plane.xaxis.y,
-              m_plane.xaxis.z);
-  dump.Print ("Plane y axis: %g, %g, %g\n", m_plane.yaxis.x, m_plane.yaxis.y,
-              m_plane.yaxis.z);
-  dump.Print ("Plane z axis: %g, %g, %g\n", m_plane.zaxis.x, m_plane.zaxis.y,
-              m_plane.zaxis.z);
+  dump.Print (
+      "Plane x axis: %g, %g, %g\n", m_plane.xaxis.x, m_plane.xaxis.y, m_plane.xaxis.z);
+  dump.Print (
+      "Plane y axis: %g, %g, %g\n", m_plane.yaxis.x, m_plane.yaxis.y, m_plane.yaxis.z);
+  dump.Print (
+      "Plane z axis: %g, %g, %g\n", m_plane.zaxis.x, m_plane.zaxis.y, m_plane.zaxis.z);
   int count = m_loops.Count ();
   dump.Print ("Loop count = %d\n", count);
   for (int i = 0; i < count; i++)
@@ -1177,7 +1182,8 @@ ON_Hatch::GetBBox (double *bmin, double *bmax, ON_BOOL32 bGrowBox) const
 }
 
 bool
-ON_Hatch::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_Hatch::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                               int bGrowBox,
                                const ON_Xform *xform) const
 {
   int i;
@@ -1305,8 +1311,11 @@ ON_Hatch::Transform (const ON_Xform &xform)
 }
 
 bool
-ON_Hatch::Create (const ON_Plane &plane, const ON_SimpleArray<const ON_Curve *> loops,
-                  int pattern_index, double pattern_rotation, double pattern_scale)
+ON_Hatch::Create (const ON_Plane &plane,
+                  const ON_SimpleArray<const ON_Curve *> loops,
+                  int pattern_index,
+                  double pattern_rotation,
+                  double pattern_scale)
 {
   if (loops.Count () < 1)
     return false;
@@ -1431,8 +1440,8 @@ ON_Hatch::ReplaceLoops (ON_SimpleArray<const ON_Curve *> loop_curves)
         break;
       }
     }
-    ON_HatchLoop *loop = new ON_HatchLoop (p2d, loops.Count () ? ON_HatchLoop::ltInner
-                                                               : ON_HatchLoop::ltOuter);
+    ON_HatchLoop *loop = new ON_HatchLoop (
+        p2d, loops.Count () ? ON_HatchLoop::ltInner : ON_HatchLoop::ltOuter);
     if (loop)
       loops.Append (loop);
     else

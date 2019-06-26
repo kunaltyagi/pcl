@@ -191,7 +191,8 @@ class PeoplePCDApp
   }
 
   void
-  convertProbToRGB (pcl::PointCloud<pcl::device::prob_histogram> &histograms, int label,
+  convertProbToRGB (pcl::PointCloud<pcl::device::prob_histogram> &histograms,
+                    int label,
                     pcl::PointCloud<pcl::RGB> &rgb)
   {
     for (const auto &point : histograms.points) {

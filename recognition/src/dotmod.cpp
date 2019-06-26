@@ -52,7 +52,8 @@ pcl::DOTMOD::~DOTMOD () {}
 size_t
 pcl::DOTMOD::createAndAddTemplate (const std::vector<pcl::DOTModality *> &modalities,
                                    const std::vector<pcl::MaskMap *> &masks,
-                                   size_t template_anker_x, size_t template_anker_y,
+                                   size_t template_anker_x,
+                                   size_t template_anker_y,
                                    const pcl::RegionXY &region)
 {
   DenseQuantizedMultiModTemplate dotmod_template;
@@ -130,7 +131,8 @@ pcl::DOTMOD::detectTemplates (const std::vector<DOTModality *> &modalities,
   // std::cerr << "height:                      " << height << std::endl;
   // std::cerr << "nr_templates:                " << nr_templates << std::endl;
   // std::cerr << "nr_template_horizontal_bins: " << nr_template_horizontal_bins <<
-  // std::endl; std::cerr << "nr_template_vertical_bins:   " << nr_template_vertical_bins
+  // std::endl; std::cerr << "nr_template_vertical_bins:   " <<
+  // nr_template_vertical_bins
   // << std::endl; std::cerr << "template_width_:             " << template_width_ <<
   // std::endl; std::cerr << "template_height_:            " << template_height_ <<
   // std::endl;
@@ -146,9 +148,11 @@ pcl::DOTMOD::detectTemplates (const std::vector<DOTModality *> &modalities,
 
       for (size_t modality_index = 0; modality_index < nr_modalities;
            ++modality_index) {
-        const QuantizedMap map = maps[modality_index].getSubMap (
-            col_index, row_index, nr_template_horizontal_bins,
-            nr_template_vertical_bins);
+        const QuantizedMap map =
+            maps[modality_index].getSubMap (col_index,
+                                            row_index,
+                                            nr_template_horizontal_bins,
+                                            nr_template_vertical_bins);
 
         const unsigned char *image_data = map.getData ();
         for (size_t template_index = 0; template_index < nr_templates;

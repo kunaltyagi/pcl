@@ -97,7 +97,8 @@ namespace pcl
        * there is no guess, set the matrix to identity!
        * */
       inline void
-      align (const PointCloud &source_points, int num_source_points_to_use,
+      align (const PointCloud &source_points,
+             int num_source_points_to_use,
              Matrix4 &guess_and_result) const
       {
         int num_trimmed_source_points = num_source_points_to_use,
@@ -130,12 +131,12 @@ namespace pcl
           // Update the correspondences
           for (int i = 0; i < num_source_points; ++i) {
             // Transform the i-th source point based on the current transform matrix
-            aux::transform (guess_and_result, source_points.points[i],
-                            transformed_source_point);
+            aux::transform (
+                guess_and_result, source_points.points[i], transformed_source_point);
 
             // Perform the closest point search
-            kdtree_.nearestKSearch (transformed_source_point, 1, target_index,
-                                    sqr_dist_to_target);
+            kdtree_.nearestKSearch (
+                transformed_source_point, 1, target_index, sqr_dist_to_target);
 
             // Update the i-th correspondence
             full_src_to_tgt[i].index_query = i;
@@ -144,7 +145,8 @@ namespace pcl
           }
 
           // Sort in ascending order according to the squared distance
-          std::sort (full_src_to_tgt.begin (), full_src_to_tgt.end (),
+          std::sort (full_src_to_tgt.begin (),
+                     full_src_to_tgt.end (),
                      TrimmedICP::compareCorrespondences);
 
           old_energy = energy;
@@ -157,8 +159,8 @@ namespace pcl
             energy += full_src_to_tgt[i].distance;
           }
 
-          this->estimateRigidTransformation (source_points, *target_points_,
-                                             trimmed_src_to_tgt, guess_and_result);
+          this->estimateRigidTransformation (
+              source_points, *target_points_, trimmed_src_to_tgt, guess_and_result);
 
           //            printf ("energy = %f, energy diff. = %f, ratio = %f\n", energy,
           //            old_energy - energy, energy/old_energy);

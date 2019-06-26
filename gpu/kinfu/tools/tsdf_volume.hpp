@@ -64,13 +64,15 @@ pcl::TSDFVolume<VoxelT, WeightT>::load (const std::string &filename, bool binary
       if (header_.volume_element_size != sizeof (VoxelT)) {
         pcl::console::print_error ("[TSDFVolume::load] Error: Given volume element "
                                    "size (%d) doesn't fit data (%d)",
-                                   sizeof (VoxelT), header_.volume_element_size);
+                                   sizeof (VoxelT),
+                                   header_.volume_element_size);
         return false;
       }
       if (header_.weights_element_size != sizeof (WeightT)) {
         pcl::console::print_error ("[TSDFVolume::load] Error: Given weights element "
                                    "size (%d) doesn't fit data (%d)",
-                                   sizeof (WeightT), header_.weights_element_size);
+                                   sizeof (WeightT),
+                                   header_.weights_element_size);
         return false;
       }
 
@@ -93,8 +95,8 @@ pcl::TSDFVolume<VoxelT, WeightT>::load (const std::string &filename, bool binary
   }
 
   const Eigen::Vector3i &res = this->gridResolution ();
-  pcl::console::print_info ("done [%d voxels, res %dx%dx%d]\n", this->size (), res[0],
-                            res[1], res[2]);
+  pcl::console::print_info (
+      "done [%d voxels, res %dx%dx%d]\n", this->size (), res[0], res[1], res[2]);
 
   return true;
 }
@@ -137,7 +139,8 @@ pcl::TSDFVolume<VoxelT, WeightT>::save (const std::string &filename, bool binary
 
       // write data
       for (typename std::vector<VoxelT>::const_iterator iter = volume_->begin ();
-           iter != volume_->end (); ++iter)
+           iter != volume_->end ();
+           ++iter)
         file << *iter << std::endl;
     }
 
@@ -169,7 +172,7 @@ pcl::TSDFVolume<VoxelT, WeightT>::convertToTsdfCloud (
 
   int volume_idx = 0, cloud_idx = 0;
   //#pragma omp parallel for // if used, increment over idx not possible! use index
-  //calculation
+  // calculation
   for (int z = 0; z < sz; z += step)
     for (int y = 0; y < sy; y += step)
       for (int x = 0; x < sx; x += step, ++cloud_idx) {
@@ -234,7 +237,8 @@ pcl::TSDFVolume<VoxelT, WeightT>::getVoxelCoordAndOffset (const PointT &point,
 template <typename VoxelT, typename WeightT>
 bool
 pcl::TSDFVolume<VoxelT, WeightT>::extractNeighborhood (
-    const Eigen::Vector3i &voxel_coord, int neighborhood_size,
+    const Eigen::Vector3i &voxel_coord,
+    int neighborhood_size,
     VoxelTVec &neighborhood) const
 {
   // point_index is at the center of a cube of scale_ x scale_ x scale_ voxels
@@ -247,7 +251,9 @@ pcl::TSDFVolume<VoxelT, WeightT>::extractNeighborhood (
       getLinearVoxelIndex (max_index) >= (int)size ()) {
     pcl::console::print_info (
         "[extractNeighborhood] Skipping voxel with coord (%d, %d, %d).\n",
-        voxel_coord (0), voxel_coord (1), voxel_coord (2));
+        voxel_coord (0),
+        voxel_coord (1),
+        voxel_coord (2));
     return false;
   }
 
@@ -255,8 +261,8 @@ pcl::TSDFVolume<VoxelT, WeightT>::extractNeighborhood (
       neighborhood_size * neighborhood_size * neighborhood_size;
   neighborhood.resize (descriptor_size);
 
-  const Eigen::RowVector3i offset_vector (1, neighborhood_size,
-                                          neighborhood_size * neighborhood_size);
+  const Eigen::RowVector3i offset_vector (
+      1, neighborhood_size, neighborhood_size * neighborhood_size);
 
 // loop over all voxels in 3D neighborhood
 #pragma omp parallel for
@@ -305,15 +311,17 @@ pcl::TSDFVolume<VoxelT, WeightT>::addNeighborhood (const Eigen::Vector3i &voxel_
   if (getLinearVoxelIndex (min_index) < 0 ||
       getLinearVoxelIndex (max_index) >= (int)size ()) {
     pcl::console::print_info (
-        "[addNeighborhood] Skipping voxel with coord (%d, %d, %d).\n", voxel_coord (0),
-        voxel_coord (1), voxel_coord (2));
+        "[addNeighborhood] Skipping voxel with coord (%d, %d, %d).\n",
+        voxel_coord (0),
+        voxel_coord (1),
+        voxel_coord (2));
     return false;
   }
 
   // static const int descriptor_size =
   // neighborhood_size*neighborhood_size*neighborhood_size;
-  const Eigen::RowVector3i offset_vector (1, neighborhood_size,
-                                          neighborhood_size * neighborhood_size);
+  const Eigen::RowVector3i offset_vector (
+      1, neighborhood_size, neighborhood_size * neighborhood_size);
 
   Eigen::Vector3i index = min_index;
 // loop over all voxels in 3D neighborhood

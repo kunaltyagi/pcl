@@ -39,8 +39,8 @@ namespace pcl
         data[3] = 1.0f;
       }
 
-      inline ParticleXYZRPY (float _x, float _y, float _z, float _roll, float _pitch,
-                             float _yaw)
+      inline ParticleXYZRPY (
+          float _x, float _y, float _z, float _roll, float _pitch, float _yaw)
       {
         x = _x;
         y = _y;
@@ -125,8 +125,8 @@ namespace pcl
       toState (const Eigen::Affine3f &trans)
       {
         float trans_x, trans_y, trans_z, trans_roll, trans_pitch, trans_yaw;
-        getTranslationAndEulerAngles (trans, trans_x, trans_y, trans_z, trans_roll,
-                                      trans_pitch, trans_yaw);
+        getTranslationAndEulerAngles (
+            trans, trans_x, trans_y, trans_z, trans_roll, trans_pitch, trans_yaw);
         return {trans_x, trans_y, trans_z, trans_roll, trans_pitch, trans_yaw};
       }
 
@@ -291,8 +291,8 @@ namespace pcl
       toState (const Eigen::Affine3f &trans)
       {
         float trans_x, trans_y, trans_z, trans_roll, trans_pitch, trans_yaw;
-        getTranslationAndEulerAngles (trans, trans_x, trans_y, trans_z, trans_roll,
-                                      trans_pitch, trans_yaw);
+        getTranslationAndEulerAngles (
+            trans, trans_x, trans_y, trans_z, trans_roll, trans_pitch, trans_yaw);
         return (
             pcl::tracking::ParticleXYZR (trans_x, trans_y, trans_z, 0, trans_pitch, 0));
       }
@@ -409,8 +409,8 @@ namespace pcl
         data[3] = 1.0f;
       }
 
-      inline ParticleXYRPY (float _x, float, float _z, float _roll, float _pitch,
-                            float _yaw)
+      inline ParticleXYRPY (
+          float _x, float, float _z, float _roll, float _pitch, float _yaw)
       {
         x = _x;
         y = 0;
@@ -459,10 +459,10 @@ namespace pcl
       toState (const Eigen::Affine3f &trans)
       {
         float trans_x, trans_y, trans_z, trans_roll, trans_pitch, trans_yaw;
-        getTranslationAndEulerAngles (trans, trans_x, trans_y, trans_z, trans_roll,
-                                      trans_pitch, trans_yaw);
-        return (pcl::tracking::ParticleXYRPY (trans_x, 0, trans_z, trans_roll,
-                                              trans_pitch, trans_yaw));
+        getTranslationAndEulerAngles (
+            trans, trans_x, trans_y, trans_z, trans_roll, trans_pitch, trans_yaw);
+        return (pcl::tracking::ParticleXYRPY (
+            trans_x, 0, trans_z, trans_roll, trans_pitch, trans_yaw));
       }
 
       // a[i]
@@ -626,10 +626,10 @@ namespace pcl
       toState (const Eigen::Affine3f &trans)
       {
         float trans_x, trans_y, trans_z, trans_roll, trans_pitch, trans_yaw;
-        getTranslationAndEulerAngles (trans, trans_x, trans_y, trans_z, trans_roll,
-                                      trans_pitch, trans_yaw);
-        return (pcl::tracking::ParticleXYRP (trans_x, 0, trans_z, 0, trans_pitch,
-                                             trans_yaw));
+        getTranslationAndEulerAngles (
+            trans, trans_x, trans_y, trans_z, trans_roll, trans_pitch, trans_yaw);
+        return (pcl::tracking::ParticleXYRP (
+            trans_x, 0, trans_z, 0, trans_pitch, trans_yaw));
       }
 
       // a[i]
@@ -793,8 +793,8 @@ namespace pcl
       toState (const Eigen::Affine3f &trans)
       {
         float trans_x, trans_y, trans_z, trans_roll, trans_pitch, trans_yaw;
-        getTranslationAndEulerAngles (trans, trans_x, trans_y, trans_z, trans_roll,
-                                      trans_pitch, trans_yaw);
+        getTranslationAndEulerAngles (
+            trans, trans_x, trans_y, trans_z, trans_roll, trans_pitch, trans_yaw);
         return (pcl::tracking::ParticleXYR (trans_x, 0, trans_z, 0, trans_pitch, 0));
       }
 

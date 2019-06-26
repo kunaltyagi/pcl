@@ -58,7 +58,8 @@ pcl::io::ImageRGB24::ImageRGB24 (FrameWrapper::Ptr image_metadata, Timestamp tim
 pcl::io::ImageRGB24::~ImageRGB24 () throw () {}
 
 bool
-pcl::io::ImageRGB24::isResizingSupported (unsigned input_width, unsigned input_height,
+pcl::io::ImageRGB24::isResizingSupported (unsigned input_width,
+                                          unsigned input_height,
                                           unsigned output_width,
                                           unsigned output_height) const
 {
@@ -67,13 +68,17 @@ pcl::io::ImageRGB24::isResizingSupported (unsigned input_width, unsigned input_h
 }
 
 void
-pcl::io::ImageRGB24::fillGrayscale (unsigned width, unsigned height,
+pcl::io::ImageRGB24::fillGrayscale (unsigned width,
+                                    unsigned height,
                                     unsigned char *gray_buffer,
                                     unsigned gray_line_step) const
 {
   if (width > wrapper_->getWidth () || height > wrapper_->getHeight ())
     THROW_IO_EXCEPTION ("Up-sampling not supported. Request was %d x %d -> %d x %d.",
-                        wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+                        wrapper_->getWidth (),
+                        wrapper_->getHeight (),
+                        width,
+                        height);
 
   if (wrapper_->getWidth () % width == 0 && wrapper_->getHeight () % height == 0) {
     unsigned src_step = wrapper_->getWidth () / width;
@@ -99,17 +104,25 @@ pcl::io::ImageRGB24::fillGrayscale (unsigned width, unsigned height,
   } else {
     THROW_IO_EXCEPTION ("Down-sampling only possible for integer scale. Request was %d "
                         "x %d -> %d x %d.",
-                        wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+                        wrapper_->getWidth (),
+                        wrapper_->getHeight (),
+                        width,
+                        height);
   }
 }
 
 void
-pcl::io::ImageRGB24::fillRGB (unsigned width, unsigned height,
-                              unsigned char *rgb_buffer, unsigned rgb_line_step) const
+pcl::io::ImageRGB24::fillRGB (unsigned width,
+                              unsigned height,
+                              unsigned char *rgb_buffer,
+                              unsigned rgb_line_step) const
 {
   if (width > wrapper_->getWidth () || height > wrapper_->getHeight ())
     THROW_IO_EXCEPTION ("Up-sampling not supported. Request was %d x %d -> %d x %d.",
-                        wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+                        wrapper_->getWidth (),
+                        wrapper_->getHeight (),
+                        width,
+                        height);
 
   if (width == wrapper_->getWidth () && height == wrapper_->getHeight ()) {
     unsigned line_size = width * 3;
@@ -154,6 +167,9 @@ pcl::io::ImageRGB24::fillRGB (unsigned width, unsigned height,
   } else {
     THROW_IO_EXCEPTION ("Down-sampling only possible for integer scale. Request was %d "
                         "x %d -> %d x %d.",
-                        wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+                        wrapper_->getWidth (),
+                        wrapper_->getHeight (),
+                        width,
+                        height);
   }
 }

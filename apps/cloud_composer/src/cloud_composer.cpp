@@ -80,20 +80,21 @@ pcl::cloud_composer::ComposerMainWindow::connectEditActions ()
   menuEdit->removeAction (action_redo_);
   action_redo_ = action_temp;
 
-  multiplexer_->connect (action_clear_selection_, SIGNAL (triggered ()),
-                         SLOT (clearSelection ()));
+  multiplexer_->connect (
+      action_clear_selection_, SIGNAL (triggered ()), SLOT (clearSelection ()));
 
-  multiplexer_->connect (action_delete_, SIGNAL (triggered ()),
-                         SLOT (deleteSelectedItems ()));
-  multiplexer_->connect (SIGNAL (deleteAvailable (bool)), action_delete_,
-                         SLOT (setEnabled (bool)));
+  multiplexer_->connect (
+      action_delete_, SIGNAL (triggered ()), SLOT (deleteSelectedItems ()));
+  multiplexer_->connect (
+      SIGNAL (deleteAvailable (bool)), action_delete_, SLOT (setEnabled (bool)));
 
-  multiplexer_->connect (this, SIGNAL (insertNewCloudFromFile ()),
-                         SLOT (insertNewCloudFromFile ()));
-  multiplexer_->connect (this, SIGNAL (insertNewCloudFromRGBandDepth ()),
+  multiplexer_->connect (
+      this, SIGNAL (insertNewCloudFromFile ()), SLOT (insertNewCloudFromFile ()));
+  multiplexer_->connect (this,
+                         SIGNAL (insertNewCloudFromRGBandDepth ()),
                          SLOT (insertNewCloudFromRGBandDepth ()));
-  multiplexer_->connect (this, SIGNAL (saveSelectedCloudToFile ()),
-                         SLOT (saveSelectedCloudToFile ()));
+  multiplexer_->connect (
+      this, SIGNAL (saveSelectedCloudToFile ()), SLOT (saveSelectedCloudToFile ()));
 
   mouse_style_group_ = new QActionGroup (this);
   mouse_style_group_->addAction (action_trackball_camera_style_);
@@ -101,10 +102,12 @@ pcl::cloud_composer::ComposerMainWindow::connectEditActions ()
   mouse_style_group_->addAction (action_manipulate_selected_);
   mouse_style_group_->addAction (action_rectangular_frustum_select_);
   mouse_style_group_->setExclusive (true);
-  multiplexer_->connect (mouse_style_group_, SIGNAL (triggered (QAction *)),
+  multiplexer_->connect (mouse_style_group_,
+                         SIGNAL (triggered (QAction *)),
                          SLOT (mouseStyleChanged (QAction *)));
   multiplexer_->connect (
-      SIGNAL (mouseStyleState (interactor_styles::INTERACTOR_STYLES)), this,
+      SIGNAL (mouseStyleState (interactor_styles::INTERACTOR_STYLES)),
+      this,
       SLOT (setMouseStyleAction (interactor_styles::INTERACTOR_STYLES)));
   action_trackball_camera_style_->setData (
       QVariant::fromValue (interactor_styles::PCL_VISUALIZER));
@@ -117,13 +120,15 @@ pcl::cloud_composer::ComposerMainWindow::connectEditActions ()
   // multiplexer_->connect (action_manipulate_selected_, SIGNAL (triggered ()), SLOT
   // (selectedTrackballInteractorStyle ()));
 
-  multiplexer_->connect (action_new_cloud_from_selection_, SIGNAL (triggered ()),
+  multiplexer_->connect (action_new_cloud_from_selection_,
+                         SIGNAL (triggered ()),
                          SLOT (createNewCloudFromSelection ()));
   multiplexer_->connect (SIGNAL (newCloudFromSelectionAvailable (bool)),
-                         action_new_cloud_from_selection_, SLOT (setEnabled (bool)));
+                         action_new_cloud_from_selection_,
+                         SLOT (setEnabled (bool)));
 
-  multiplexer_->connect (action_select_all_, SIGNAL (triggered ()),
-                         SLOT (selectAllItems ()));
+  multiplexer_->connect (
+      action_select_all_, SIGNAL (triggered ()), SLOT (selectAllItems ()));
 }
 
 void
@@ -156,10 +161,10 @@ pcl::cloud_composer::ComposerMainWindow::setMouseStyleAction (
 void
 pcl::cloud_composer::ComposerMainWindow::connectViewActions ()
 {
-  multiplexer_->connect (action_show_axes_, SIGNAL (toggled (bool)),
-                         SLOT (setAxisVisibility (bool)));
-  multiplexer_->connect (SIGNAL (axisVisible (bool)), action_show_axes_,
-                         SLOT (setChecked (bool)));
+  multiplexer_->connect (
+      action_show_axes_, SIGNAL (toggled (bool)), SLOT (setAxisVisibility (bool)));
+  multiplexer_->connect (
+      SIGNAL (axisVisible (bool)), action_show_axes_, SLOT (setChecked (bool)));
 }
 
 void
@@ -174,7 +179,9 @@ void
 pcl::cloud_composer::ComposerMainWindow::initializeCloudViewer ()
 {
   // Signal emitted when user selects new tab (ie different project) in the viewer
-  connect (cloud_viewer_, SIGNAL (newModelSelected (ProjectModel *)), this,
+  connect (cloud_viewer_,
+           SIGNAL (newModelSelected (ProjectModel *)),
+           this,
            SLOT (setCurrentModel (ProjectModel *)));
 }
 
@@ -200,16 +207,19 @@ pcl::cloud_composer::ComposerMainWindow::initializeToolBox ()
            tool_box_model_,
            SLOT (selectedToolChanged (const QModelIndex &, const QModelIndex &)));
 
-  connect (tool_box_model_, SIGNAL (enqueueToolAction (AbstractTool *)), this,
+  connect (tool_box_model_,
+           SIGNAL (enqueueToolAction (AbstractTool *)),
+           this,
            SLOT (enqueueToolAction (AbstractTool *)));
 
-  connect (this, SIGNAL (activeProjectChanged (ProjectModel *, ProjectModel *)),
+  connect (this,
+           SIGNAL (activeProjectChanged (ProjectModel *, ProjectModel *)),
            tool_box_model_,
            SLOT (activeProjectChanged (ProjectModel *, ProjectModel *)));
 
   // TODO : Remove this, tools should have a better way of being run
-  connect (action_run_tool_, SIGNAL (clicked ()), tool_box_model_,
-           SLOT (toolAction ()));
+  connect (
+      action_run_tool_, SIGNAL (clicked ()), tool_box_model_, SLOT (toolAction ()));
   // tool_box_view_->setStyleSheet("branch:has-siblings:!adjoins-item:image none");
   // tool_box_view_->setStyleSheet("branch:!has-children:!has-siblings:adjoins-item:image:
   // none");
@@ -284,8 +294,8 @@ pcl::cloud_composer::ComposerMainWindow::enqueueToolAction (AbstractTool *tool)
   if (current_model_)
     current_model_->enqueueToolAction (tool);
   else
-    QMessageBox::warning (this, "No Project Open!",
-                          "Cannot use tool, no project is open!");
+    QMessageBox::warning (
+        this, "No Project Open!", "Cannot use tool, no project is open!");
 }
 ///////// FILE MENU SLOTS ///////////
 void pcl::cloud_composer::ComposerMainWindow::on_action_new_project__triggered (
@@ -346,8 +356,8 @@ pcl::cloud_composer::ComposerMainWindow::on_action_save_selected_cloud__triggere
   if (current_model_)
     emit saveSelectedCloudToFile ();
   else
-    QMessageBox::warning (this, "No Project Open!",
-                          "Cannot save cloud, no project is open!");
+    QMessageBox::warning (
+        this, "No Project Open!", "Cannot save cloud, no project is open!");
 }
 
 void

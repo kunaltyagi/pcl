@@ -199,7 +199,8 @@ namespace pcl
      * \param[in] length number of points in the bin
      */
     bool
-    isEntireBinSampled (boost::dynamic_bitset<> &array, unsigned int start_index,
+    isEntireBinSampled (boost::dynamic_bitset<> &array,
+                        unsigned int start_index,
                         unsigned int length);
 
     /** \brief Uniform random distribution. */

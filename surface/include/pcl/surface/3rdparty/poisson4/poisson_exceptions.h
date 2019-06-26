@@ -73,9 +73,10 @@ namespace pcl
       public:
       PoissonException (const std::string &error_description,
                         const char *file_name = nullptr,
-                        const char *function_name = nullptr, unsigned line_number = 0)
-          : std::runtime_error (createDetailedMessage (error_description, file_name,
-                                                       function_name, line_number)),
+                        const char *function_name = nullptr,
+                        unsigned line_number = 0)
+          : std::runtime_error (createDetailedMessage (
+                error_description, file_name, function_name, line_number)),
             file_name_ (file_name), function_name_ (function_name),
             line_number_ (line_number)
       {
@@ -84,7 +85,8 @@ namespace pcl
       protected:
       static std::string
       createDetailedMessage (const std::string &error_description,
-                             const char *file_name, const char *function_name,
+                             const char *file_name,
+                             const char *function_name,
                              unsigned line_number)
       {
         std::ostringstream sstream;
@@ -117,8 +119,8 @@ namespace pcl
                                    const char *file_name = nullptr,
                                    const char *function_name = nullptr,
                                    unsigned line_number = 0)
-          : pcl::poisson::PoissonException (error_description, file_name, function_name,
-                                            line_number)
+          : pcl::poisson::PoissonException (
+                error_description, file_name, function_name, line_number)
       {
       }
     };
@@ -134,8 +136,8 @@ namespace pcl
                               const char *file_name = nullptr,
                               const char *function_name = nullptr,
                               unsigned line_number = 0)
-          : pcl::poisson::PoissonException (error_description, file_name, function_name,
-                                            line_number)
+          : pcl::poisson::PoissonException (
+                error_description, file_name, function_name, line_number)
       {
       }
     };
@@ -150,8 +152,8 @@ namespace pcl
                                const char *file_name = nullptr,
                                const char *function_name = nullptr,
                                unsigned line_number = 0)
-          : pcl::poisson::PoissonException (error_description, file_name, function_name,
-                                            line_number)
+          : pcl::poisson::PoissonException (
+                error_description, file_name, function_name, line_number)
       {
       }
     };

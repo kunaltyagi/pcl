@@ -85,7 +85,9 @@ TEST (PCL_OctreeGPU, hostRadiusSearch)
   cloud_host->width = data.points.size ();
   cloud_host->height = 1;
   cloud_host->points.resize (cloud_host->width * cloud_host->height);
-  std::transform (data.points.begin (), data.points.end (), cloud_host->points.begin (),
+  std::transform (data.points.begin (),
+                  data.points.end (),
+                  cloud_host->points.begin (),
                   DataGenerator::ConvPoint<pcl::PointXYZ> ());
 
   // build device octree
@@ -110,15 +112,17 @@ TEST (PCL_OctreeGPU, hostRadiusSearch)
   for (size_t i = 0; i < data.tests_num; ++i) {
     // search host on octree that was built on device
     vector<int> results_host_gpu; // host search
-    octree_device.radiusSearchHost (data.queries[i], data.radiuses[i],
-                                    results_host_gpu);
+    octree_device.radiusSearchHost (
+        data.queries[i], data.radiuses[i], results_host_gpu);
 
     // search host
     vector<float> dists;
     vector<int> results_host;
     octree_host.radiusSearch (
         pcl::PointXYZ (data.queries[i].x, data.queries[i].y, data.queries[i].z),
-        data.radiuses[i], results_host, dists);
+        data.radiuses[i],
+        results_host,
+        dists);
 
     std::sort (results_host_gpu.begin (), results_host_gpu.end ());
     std::sort (results_host.begin (), results_host.end ());

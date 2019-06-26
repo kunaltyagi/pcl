@@ -16,7 +16,8 @@
 
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-ON_VIRTUAL_OBJECT_IMPLEMENT (ON_Surface, ON_Geometry,
+ON_VIRTUAL_OBJECT_IMPLEMENT (ON_Surface,
+                             ON_Geometry,
                              "4ED7D4E1-E947-11d3-BFE5-0010830122F0");
 
 ON_Surface::ON_Surface () : ON_Geometry () {}
@@ -100,7 +101,8 @@ ON_Surface::SetDomain (int dir, ON_Interval domain)
 ON_BOOL32
 ON_Surface::SetDomain (
     int, // 0 sets first parameter's domain, 1 gets second parameter's domain
-    double, double)
+    double,
+    double)
 {
   // TODO make this pure virutual when all the source code is available
   return false;
@@ -297,10 +299,7 @@ ON_Surface::IsIsoparametric (const ON_BoundingBox &bbox) const
 }
 
 ON_BOOL32
-ON_Surface::IsPlanar (ON_Plane *plane, double tolerance) const
-{
-  return false;
-}
+ON_Surface::IsPlanar (ON_Plane *plane, double tolerance) const { return false; }
 
 ON_BOOL32
 ON_Surface::IsClosed (int dir) const
@@ -355,14 +354,16 @@ ON_Surface::IsClosed (int dir) const
 }
 
 ON_BOOL32
-ON_Surface::IsPeriodic (int dir) const
-{
-  return false;
-}
+ON_Surface::IsPeriodic (int dir) const { return false; }
 
 bool
-ON_Surface::GetNextDiscontinuity (int dir, ON::continuity c, double t0, double t1,
-                                  double *t, int *hint, int *dtype,
+ON_Surface::GetNextDiscontinuity (int dir,
+                                  ON::continuity c,
+                                  double t0,
+                                  double t1,
+                                  double *t,
+                                  int *hint,
+                                  int *dtype,
                                   double cos_angle_tolerance,
                                   double curvature_tolerance) const
 {
@@ -509,7 +510,8 @@ ON_Surface::GetNextDiscontinuity (int dir, ON::continuity c, double t0, double t
 }
 
 static bool
-PrincipalCurvaturesAreContinuous (bool bSmoothTest, double k1a,
+PrincipalCurvaturesAreContinuous (bool bSmoothTest,
+                                  double k1a,
                                   double k2a, // side "a" principal curvatures
                                   double k1b,
                                   double k2b, // side "b" principal curvatures
@@ -539,7 +541,9 @@ PrincipalCurvaturesAreContinuous (bool bSmoothTest, double k1a,
 
 bool
 ON_Surface::IsContinuous (
-    ON::continuity desired_continuity, double s, double t,
+    ON::continuity desired_continuity,
+    double s,
+    double t,
     int *hint,                  // default = NULL,
     double point_tolerance,     // default=ON_ZERO_TOLERANCE
     double d1_tolerance,        // default==ON_ZERO_TOLERANCE
@@ -646,8 +650,16 @@ ON_Surface::IsContinuous (
 
   case ON::C2_continuous:
     for (qi = 0; qi < 4; qi++) {
-      if (!Ev2Der (sq[qi], tq[qi], P[qi], Ds[qi], Dt[qi], Dss[qi], Dst[qi], Dtt[qi],
-                   qi + 1, hint))
+      if (!Ev2Der (sq[qi],
+                   tq[qi],
+                   P[qi],
+                   Ds[qi],
+                   Dt[qi],
+                   Dss[qi],
+                   Dst[qi],
+                   Dtt[qi],
+                   qi + 1,
+                   hint))
         return false;
       if (qi) {
         if (!(P[qi] - P[qi - 1]).IsTiny (point_tolerance))
@@ -699,19 +711,39 @@ ON_Surface::IsContinuous (
   case ON::Gsmooth_continuous: {
     bool bSmoothCon = (ON::Gsmooth_continuous == desired_continuity);
     for (qi = 0; qi < 4; qi++) {
-      if (!Ev2Der (sq[qi], tq[qi], P[qi], Ds[qi], Dt[qi], Dss[qi], Dst[qi], Dtt[qi],
-                   qi + 1, hint))
+      if (!Ev2Der (sq[qi],
+                   tq[qi],
+                   P[qi],
+                   Ds[qi],
+                   Dt[qi],
+                   Dss[qi],
+                   Dst[qi],
+                   Dtt[qi],
+                   qi + 1,
+                   hint))
         return false;
-      ON_EvPrincipalCurvatures (Ds[qi], Dt[qi], Dss[qi], Dst[qi], Dtt[qi], N[qi],
-                                &gauss[qi], &mean[qi], &kappa1[qi], &kappa2[qi], K1[qi],
+      ON_EvPrincipalCurvatures (Ds[qi],
+                                Dt[qi],
+                                Dss[qi],
+                                Dst[qi],
+                                Dtt[qi],
+                                N[qi],
+                                &gauss[qi],
+                                &mean[qi],
+                                &kappa1[qi],
+                                &kappa2[qi],
+                                K1[qi],
                                 K2[qi]);
       if (qi) {
         if (!(P[qi] - P[qi - 1]).IsTiny (point_tolerance))
           return false;
         if (N[qi] * N[qi - 1] < cos_angle_tolerance)
           return false;
-        if (!PrincipalCurvaturesAreContinuous (bSmoothCon, kappa1[qi], kappa2[qi],
-                                               kappa1[qi - 1], kappa2[qi - 1],
+        if (!PrincipalCurvaturesAreContinuous (bSmoothCon,
+                                               kappa1[qi],
+                                               kappa2[qi],
+                                               kappa1[qi - 1],
+                                               kappa2[qi - 1],
                                                curvature_tolerance))
           return false;
       }
@@ -719,8 +751,12 @@ ON_Surface::IsContinuous (
         return false;
       if (N[3] * N[0] < cos_angle_tolerance)
         return false;
-      if (!PrincipalCurvaturesAreContinuous (bSmoothCon, kappa1[3], kappa2[3],
-                                             kappa1[0], kappa2[0], curvature_tolerance))
+      if (!PrincipalCurvaturesAreContinuous (bSmoothCon,
+                                             kappa1[3],
+                                             kappa2[3],
+                                             kappa1[0],
+                                             kappa2[0],
+                                             curvature_tolerance))
         return false;
     }
   } break;
@@ -753,7 +789,8 @@ ON_Surface::IsSolid () const
 }
 
 bool
-ON_Surface::IsAtSingularity (double s, double t,
+ON_Surface::IsAtSingularity (double s,
+                             double t,
                              bool bExact // true by default
                              ) const
 
@@ -873,8 +910,9 @@ ON_Surface::FrameAt (double u, double v, ON_Plane &frame) const
 }
 
 ON_BOOL32
-ON_Surface::EvPoint (   // returns false if unable to evaluate
-    double s, double t, // evaluation parameters
+ON_Surface::EvPoint ( // returns false if unable to evaluate
+    double s,
+    double t, // evaluation parameters
     ON_3dPoint &point,
     int side, // optional - determines which side to evaluate from
               //         0 = default
@@ -911,9 +949,12 @@ ON_Surface::EvPoint (   // returns false if unable to evaluate
 }
 
 ON_BOOL32
-ON_Surface::Ev1Der (    // returns false if unable to evaluate
-    double s, double t, // evaluation parameters
-    ON_3dPoint &point, ON_3dVector &ds, ON_3dVector &dt,
+ON_Surface::Ev1Der ( // returns false if unable to evaluate
+    double s,
+    double t, // evaluation parameters
+    ON_3dPoint &point,
+    ON_3dVector &ds,
+    ON_3dVector &dt,
     int side, // optional - determines which side to evaluate from
               //         0 = default
               //         1 from NE quadrant
@@ -963,10 +1004,15 @@ ON_Surface::Ev1Der (    // returns false if unable to evaluate
 }
 
 ON_BOOL32
-ON_Surface::Ev2Der (    // returns false if unable to evaluate
-    double s, double t, // evaluation parameters
-    ON_3dPoint &point, ON_3dVector &ds, ON_3dVector &dt, ON_3dVector &dss,
-    ON_3dVector &dst, ON_3dVector &dtt,
+ON_Surface::Ev2Der ( // returns false if unable to evaluate
+    double s,
+    double t, // evaluation parameters
+    ON_3dPoint &point,
+    ON_3dVector &ds,
+    ON_3dVector &dt,
+    ON_3dVector &dss,
+    ON_3dVector &dst,
+    ON_3dVector &dtt,
     int side, // optional - determines which side to evaluate from
               //         0 = default
               //         1 from NE quadrant
@@ -1034,8 +1080,9 @@ ON_Surface::Ev2Der (    // returns false if unable to evaluate
 }
 
 ON_BOOL32
-ON_Surface::EvNormal (   // returns false if unable to evaluate
-    double s, double t,  // evaluation parameters (s,t)
+ON_Surface::EvNormal ( // returns false if unable to evaluate
+    double s,
+    double t,            // evaluation parameters (s,t)
     ON_3dVector &normal, // unit normal
     int side,            // optional - determines which side to evaluate from
                          //         0 = default
@@ -1053,8 +1100,9 @@ ON_Surface::EvNormal (   // returns false if unable to evaluate
 }
 
 ON_BOOL32
-ON_Surface::EvNormal (   // returns false if unable to evaluate
-    double s, double t,  // evaluation parameters (s,t)
+ON_Surface::EvNormal ( // returns false if unable to evaluate
+    double s,
+    double t,            // evaluation parameters (s,t)
     ON_3dPoint &point,   // returns value of surface
     ON_3dVector &normal, // unit normal
     int side,            // optional - determines which side to evaluate from
@@ -1072,8 +1120,9 @@ ON_Surface::EvNormal (   // returns false if unable to evaluate
 }
 
 ON_BOOL32
-ON_Surface::EvNormal (   // returns false if unable to evaluate
-    double s, double t,  // evaluation parameters (s,t)
+ON_Surface::EvNormal ( // returns false if unable to evaluate
+    double s,
+    double t,            // evaluation parameters (s,t)
     ON_3dPoint &point,   // returns value of surface
     ON_3dVector &ds,     // first partial derivatives (Ds)
     ON_3dVector &dt,     // (Dt)
@@ -1162,10 +1211,7 @@ ON_Surface::IsoCurve (
 
 // virtual
 ON_BOOL32
-ON_Surface::Trim (int dir, const ON_Interval &domain)
-{
-  return false;
-}
+ON_Surface::Trim (int dir, const ON_Interval &domain) { return false; }
 
 // virtual
 bool
@@ -1176,7 +1222,9 @@ ON_Surface::Extend (int dir, const ON_Interval &domain)
 
 // virtual
 ON_BOOL32
-ON_Surface::Split (int dir, double c, ON_Surface *&west_or_south_side,
+ON_Surface::Split (int dir,
+                   double c,
+                   ON_Surface *&west_or_south_side,
                    ON_Surface *&east_or_north_side) const
 {
   return false;
@@ -1197,7 +1245,8 @@ ON_Surface::HasNurbForm () const
 }
 
 bool
-ON_Surface::GetSurfaceParameterFromNurbFormParameter (double nurbs_s, double nurbs_t,
+ON_Surface::GetSurfaceParameterFromNurbFormParameter (double nurbs_s,
+                                                      double nurbs_t,
                                                       double *surface_s,
                                                       double *surface_t) const
 {
@@ -1209,7 +1258,8 @@ ON_Surface::GetSurfaceParameterFromNurbFormParameter (double nurbs_s, double nur
 
 bool
 ON_Surface::GetNurbFormParameterFromSurfaceParameter (double surface_s,
-                                                      double surface_t, double *nurbs_s,
+                                                      double surface_t,
+                                                      double *nurbs_s,
                                                       double *nurbs_t) const
 {
   // NOTE: ON_SumSurface and ON_RevSurface override this virtual function
@@ -1219,7 +1269,8 @@ ON_Surface::GetNurbFormParameterFromSurfaceParameter (double surface_s,
 }
 
 ON_NurbsSurface *
-ON_Surface::NurbsSurface (ON_NurbsSurface *pNurbsSurface, double tolerance,
+ON_Surface::NurbsSurface (ON_NurbsSurface *pNurbsSurface,
+                          double tolerance,
                           const ON_Interval *s_subdomain,
                           const ON_Interval *t_subdomain) const
 {
@@ -1344,10 +1395,7 @@ ON_SurfaceArray::Read (ON_BinaryArchive &file)
 }
 
 ON_BOOL32
-ON_Surface::HasBrepForm () const
-{
-  return true;
-}
+ON_Surface::HasBrepForm () const { return true; }
 
 ON_Brep *
 ON_Surface::BrepForm (ON_Brep *brep) const

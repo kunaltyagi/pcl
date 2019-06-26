@@ -82,7 +82,8 @@ template <typename PointNT>
 template <int Degree>
 void
 pcl::Poisson<PointNT>::execute (poisson::CoredVectorMeshData &mesh,
-                                poisson::Point3D<float> &center, float &scale)
+                                poisson::Point3D<float> &center,
+                                float &scale)
 {
   pcl::poisson::Real iso_value = 0;
   poisson::TreeNodeData::UseIndex = 1;
@@ -95,13 +96,15 @@ pcl::Poisson<PointNT>::execute (poisson::CoredVectorMeshData &mesh,
   if (solver_divide_ < min_depth_) {
     PCL_WARN ("[pcl::Poisson] solver_divide_ must be at least as large as min_depth_: "
               "%d >= %d\n",
-              solver_divide_, min_depth_);
+              solver_divide_,
+              min_depth_);
     solver_divide_ = min_depth_;
   }
   if (iso_divide_ < min_depth_) {
     PCL_WARN ("[pcl::Poisson] iso_divide_ must be at least as large as min_depth_: %d "
               ">= %d\n",
-              iso_divide_, min_depth_);
+              iso_divide_,
+              min_depth_);
     iso_divide_ = min_depth_;
   }
 
@@ -113,9 +116,17 @@ pcl::Poisson<PointNT>::execute (poisson::CoredVectorMeshData &mesh,
 
   tree.maxMemoryUsage = 0;
 
-  int point_count = tree.template setTree<PointNT> (
-      input_, depth_, min_depth_, kernel_depth_, samples_per_node_, scale_, center,
-      scale, confidence_, point_weight_, !non_adaptive_weights_);
+  int point_count = tree.template setTree<PointNT> (input_,
+                                                    depth_,
+                                                    min_depth_,
+                                                    kernel_depth_,
+                                                    samples_per_node_,
+                                                    scale_,
+                                                    center,
+                                                    scale,
+                                                    confidence_,
+                                                    point_weight_,
+                                                    !non_adaptive_weights_);
 
   tree.ClipTree ();
   tree.finalize ();
@@ -128,13 +139,13 @@ pcl::Poisson<PointNT>::execute (poisson::CoredVectorMeshData &mesh,
   tree.SetLaplacianConstraints ();
 
   tree.maxMemoryUsage = 0;
-  tree.LaplacianMatrixIteration (solver_divide_, show_residual_, min_iterations_,
-                                 solver_accuracy_);
+  tree.LaplacianMatrixIteration (
+      solver_divide_, show_residual_, min_iterations_, solver_accuracy_);
 
   iso_value = tree.GetIsoValue ();
 
-  tree.GetMCIsoTriangles (iso_value, iso_divide_, &mesh, 0, 1, manifold_,
-                          output_polygons_);
+  tree.GetMCIsoTriangles (
+      iso_value, iso_divide_, &mesh, 0, 1, manifold_, output_polygons_);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,7 +194,8 @@ pcl::Poisson<PointNT>::performReconstruction (PolygonMesh &output)
     cloud.points[i].z = p.coords[2] * scale + center.coords[2];
   }
   for (int i = int(mesh.inCorePoints.size ());
-       i < int(mesh.outOfCorePointCount () + mesh.inCorePoints.size ()); i++) {
+       i < int(mesh.outOfCorePointCount () + mesh.inCorePoints.size ());
+       i++) {
     mesh.nextOutOfCorePoint (p);
     cloud.points[i].x = p.coords[0] * scale + center.coords[0];
     cloud.points[i].y = p.coords[1] * scale + center.coords[1];
@@ -256,7 +268,8 @@ pcl::Poisson<PointNT>::performReconstruction (pcl::PointCloud<PointNT> &points,
     points.points[i].z = p.coords[2] * scale + center.coords[2];
   }
   for (int i = int(mesh.inCorePoints.size ());
-       i < int(mesh.outOfCorePointCount () + mesh.inCorePoints.size ()); i++) {
+       i < int(mesh.outOfCorePointCount () + mesh.inCorePoints.size ());
+       i++) {
     mesh.nextOutOfCorePoint (p);
     points.points[i].x = p.coords[0] * scale + center.coords[0];
     points.points[i].y = p.coords[1] * scale + center.coords[1];

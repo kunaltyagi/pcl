@@ -207,8 +207,9 @@ namespace pcl
         __m256d p0 = _mm256_mul_pd (_mm256_cvtps_pd (_mm_load_ps1 (&src[0])), c[0]);
         __m256d p1 = _mm256_mul_pd (_mm256_cvtps_pd (_mm_load_ps1 (&src[1])), c[1]);
         __m256d p2 = _mm256_mul_pd (_mm256_cvtps_pd (_mm_load_ps1 (&src[2])), c[2]);
-        _mm_store_ps (tgt, _mm256_cvtpd_ps (_mm256_add_pd (
-                               p0, _mm256_add_pd (p1, _mm256_add_pd (p2, c[3])))));
+        _mm_store_ps (tgt,
+                      _mm256_cvtpd_ps (_mm256_add_pd (
+                          p0, _mm256_add_pd (p1, _mm256_add_pd (p2, c[3])))));
       }
     };
 
@@ -306,8 +307,10 @@ pcl::transformPointCloud (const pcl::PointCloud<PointT> &cloud_in,
 template <typename PointT, typename Scalar>
 void
 pcl::transformPointCloudWithNormals (
-    const pcl::PointCloud<PointT> &cloud_in, pcl::PointCloud<PointT> &cloud_out,
-    const Eigen::Transform<Scalar, 3, Eigen::Affine> &transform, bool copy_all_fields)
+    const pcl::PointCloud<PointT> &cloud_in,
+    pcl::PointCloud<PointT> &cloud_out,
+    const Eigen::Transform<Scalar, 3, Eigen::Affine> &transform,
+    bool copy_all_fields)
 {
   if (&cloud_in != &cloud_out) {
     // Note: could be replaced by cloud_out = cloud_in
@@ -349,9 +352,11 @@ pcl::transformPointCloudWithNormals (
 template <typename PointT, typename Scalar>
 void
 pcl::transformPointCloudWithNormals (
-    const pcl::PointCloud<PointT> &cloud_in, const std::vector<int> &indices,
+    const pcl::PointCloud<PointT> &cloud_in,
+    const std::vector<int> &indices,
     pcl::PointCloud<PointT> &cloud_out,
-    const Eigen::Transform<Scalar, 3, Eigen::Affine> &transform, bool copy_all_fields)
+    const Eigen::Transform<Scalar, 3, Eigen::Affine> &transform,
+    bool copy_all_fields)
 {
   size_t npts = indices.size ();
   // In order to transform the data, we need to remove NaNs

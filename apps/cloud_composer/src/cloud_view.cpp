@@ -18,8 +18,8 @@ pcl::cloud_composer::CloudView::CloudView (QWidget *parent) : QWidget (parent)
   qvtk_ = new QVTKWidget (this);
   qvtk_->SetRenderWindow (vis_->getRenderWindow ());
   initializeInteractorSwitch ();
-  vis_->setupInteractor (qvtk_->GetInteractor (), qvtk_->GetRenderWindow (),
-                         style_switch_);
+  vis_->setupInteractor (
+      qvtk_->GetInteractor (), qvtk_->GetRenderWindow (), style_switch_);
 
   QGridLayout *mainLayout = new QGridLayout (this);
   mainLayout->addWidget (qvtk_, 0, 0);
@@ -36,8 +36,8 @@ pcl::cloud_composer::CloudView::CloudView (ProjectModel *model, QWidget *parent)
   qvtk_ = new QVTKWidget (this);
   qvtk_->SetRenderWindow (vis_->getRenderWindow ());
   initializeInteractorSwitch ();
-  vis_->setupInteractor (qvtk_->GetInteractor (), qvtk_->GetRenderWindow (),
-                         style_switch_);
+  vis_->setupInteractor (
+      qvtk_->GetInteractor (), qvtk_->GetRenderWindow (), style_switch_);
   setModel (model);
 
   QGridLayout *mainLayout = new QGridLayout (this);
@@ -65,11 +65,17 @@ pcl::cloud_composer::CloudView::setModel (ProjectModel *new_model)
 void
 pcl::cloud_composer::CloudView::connectSignalsAndSlots ()
 {
-  connect (model_, SIGNAL (itemChanged (QStandardItem *)), this,
+  connect (model_,
+           SIGNAL (itemChanged (QStandardItem *)),
+           this,
            SLOT (itemChanged (QStandardItem *)));
-  connect (model_, SIGNAL (rowsInserted (const QModelIndex &, int, int)), this,
+  connect (model_,
+           SIGNAL (rowsInserted (const QModelIndex &, int, int)),
+           this,
            SLOT (rowsInserted (const QModelIndex &, int, int)));
-  connect (model_, SIGNAL (rowsAboutToBeRemoved (const QModelIndex, int, int)), this,
+  connect (model_,
+           SIGNAL (rowsAboutToBeRemoved (const QModelIndex, int, int)),
+           this,
            SLOT (rowsAboutToBeRemoved (const QModelIndex, int, int)));
 }
 
@@ -91,7 +97,8 @@ pcl::cloud_composer::CloudView::itemChanged (QStandardItem *changed_item)
 }
 
 void
-pcl::cloud_composer::CloudView::rowsInserted (const QModelIndex &parent, int start,
+pcl::cloud_composer::CloudView::rowsInserted (const QModelIndex &parent,
+                                              int start,
                                               int end)
 {
   QStandardItem *parent_item;
@@ -118,7 +125,8 @@ pcl::cloud_composer::CloudView::rowsInserted (const QModelIndex &parent, int sta
 
 void
 pcl::cloud_composer::CloudView::rowsAboutToBeRemoved (const QModelIndex &parent,
-                                                      int start, int end)
+                                                      int start,
+                                                      int end)
 {
   QStandardItem *parent_item;
   // If the parent is invisibleRootItem this will be true (parent is not valid)
@@ -141,8 +149,8 @@ pcl::cloud_composer::CloudView::rowsAboutToBeRemoved (const QModelIndex &parent,
     //  qDebug () << "Making recursive call, start =0, end="<<item_to_remove->rowCount
     //  ()-1;
     if (item_to_remove->rowCount () > 0)
-      rowsAboutToBeRemoved (item_to_remove->index (), 0,
-                            item_to_remove->rowCount () - 1);
+      rowsAboutToBeRemoved (
+          item_to_remove->index (), 0, item_to_remove->rowCount () - 1);
   }
   qvtk_->update ();
 }
@@ -250,12 +258,14 @@ pcl::cloud_composer::CloudView::initializeInteractorSwitch ()
   connections_ = vtkSmartPointer<vtkEventQtSlotConnect>::New ();
   connections_->Connect (
       style_switch_->getInteractorStyle (interactor_styles::RECTANGULAR_FRUSTUM),
-      interactor_events::SELECTION_COMPLETE_EVENT, this,
+      interactor_events::SELECTION_COMPLETE_EVENT,
+      this,
       SLOT (selectionCompleted (vtkObject *, unsigned long, void *, void *)));
 
   connections_->Connect (
       style_switch_->getInteractorStyle (interactor_styles::CLICK_TRACKBALL),
-      interactor_events::MANIPULATION_COMPLETE_EVENT, this,
+      interactor_events::MANIPULATION_COMPLETE_EVENT,
+      this,
       SLOT (manipulationCompleted (vtkObject *, unsigned long, void *, void *)));
 }
 
@@ -267,7 +277,9 @@ pcl::cloud_composer::CloudView::setInteractorStyle (
 }
 
 void
-pcl::cloud_composer::CloudView::selectionCompleted (vtkObject *, unsigned long, void *,
+pcl::cloud_composer::CloudView::selectionCompleted (vtkObject *,
+                                                    unsigned long,
+                                                    void *,
                                                     void *call_data)
 {
   boost::shared_ptr<SelectionEvent> selected (
@@ -281,8 +293,10 @@ pcl::cloud_composer::CloudView::selectionCompleted (vtkObject *, unsigned long, 
 }
 
 void
-pcl::cloud_composer::CloudView::manipulationCompleted (vtkObject *, unsigned long,
-                                                       void *, void *call_data)
+pcl::cloud_composer::CloudView::manipulationCompleted (vtkObject *,
+                                                       unsigned long,
+                                                       void *,
+                                                       void *call_data)
 {
   boost::shared_ptr<ManipulationEvent> manip_event (
       static_cast<ManipulationEvent *> (call_data));

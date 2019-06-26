@@ -34,8 +34,10 @@ namespace pcl
                      const DeviceArray2D<PixelRGB> &input_color,
                      PtrSz<curandState> rng_states,
                      const DeviceArray<float> &step_noise_covariance,
-                     DeviceArray<StateType> &particles, StateType &representative_state,
-                     StateType &motion, float motion_ratio);
+                     DeviceArray<StateType> &particles,
+                     StateType &representative_state,
+                     StateType &motion,
+                     float motion_ratio);
 
     /*
     void

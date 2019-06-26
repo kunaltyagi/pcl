@@ -44,7 +44,8 @@
 #include <pcl/apps/point_cloud_editor/selection.h>
 
 PasteCommand::PasteCommand (ConstCopyBufferPtr copy_buffer_ptr,
-                            SelectionPtr selection_ptr, CloudPtr cloud_ptr)
+                            SelectionPtr selection_ptr,
+                            CloudPtr cloud_ptr)
     : copy_buffer_ptr_ (copy_buffer_ptr), selection_ptr_ (selection_ptr),
       cloud_ptr_ (cloud_ptr)
 {

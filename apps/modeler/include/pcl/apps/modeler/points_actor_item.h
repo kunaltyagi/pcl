@@ -48,7 +48,8 @@ namespace pcl
     class PointsActorItem : public ChannelActorItem
     {
       public:
-      PointsActorItem (QTreeWidgetItem *parent, const CloudMesh::Ptr &cloud_mesh,
+      PointsActorItem (QTreeWidgetItem *parent,
+                       const CloudMesh::Ptr &cloud_mesh,
                        const vtkSmartPointer<vtkRenderWindow> &render_window);
       ~PointsActorItem ();
 

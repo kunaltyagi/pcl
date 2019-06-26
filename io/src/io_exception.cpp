@@ -37,7 +37,8 @@
 #include <sstream>
 
 pcl::io::IOException::IOException (const std::string &function_name,
-                                   const std::string &file_name, unsigned line_number,
+                                   const std::string &file_name,
+                                   unsigned line_number,
                                    const std::string &message)
     : function_name_ (function_name), file_name_ (file_name),
       line_number_ (line_number), message_ (message)

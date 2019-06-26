@@ -99,8 +99,8 @@ ON_PlugInRef::Dump (ON_TextLog &text_log) const
   text_log.Print ("\n");
   text_log.Print ("type = %d\n", m_plugin_type);
   text_log.Print ("platform = %d\n", m_plugin_platform);
-  text_log.Print ("sdk version = %d.%d\n", m_plugin_sdk_version,
-                  m_plugin_sdk_service_release);
+  text_log.Print (
+      "sdk version = %d.%d\n", m_plugin_sdk_version, m_plugin_sdk_service_release);
   text_log.Print ("name = ");
   text_log.Print (m_plugin_name);
   text_log.Print ("\n");

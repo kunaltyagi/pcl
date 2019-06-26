@@ -128,7 +128,9 @@ namespace pcl
     {
       int i, c = 0;
       set (count);
-      qsort (sps, count, sizeof (StartingPolynomial<Degree>),
+      qsort (sps,
+             count,
+             sizeof (StartingPolynomial<Degree>),
              StartingPolynomial<Degree>::Compare);
       for (i = 0; i < count; i++) {
         if (!c || sps[i].start != polys[c - 1].start)
@@ -537,8 +539,8 @@ namespace pcl
     }
     template <int Degree>
     void
-    PPolynomial<Degree>::getSolutions (double c, std::vector<double> &roots, double EPS,
-                                       double min, double max) const
+    PPolynomial<Degree>::getSolutions (
+        double c, std::vector<double> &roots, double EPS, double min, double max) const
     {
       Polynomial<Degree> p;
       std::vector<double> tempRoots;

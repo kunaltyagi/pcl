@@ -82,7 +82,8 @@ namespace pcl
      * \return the size of the area as viewed according to \a viewer_pose
      */
     static inline float
-    getMaxAngleSize (const Eigen::Affine3f &viewer_pose, const Eigen::Vector3f &center,
+    getMaxAngleSize (const Eigen::Affine3f &viewer_pose,
+                     const Eigen::Vector3f &center,
                      float radius);
 
     /** \brief Get Eigen::Vector3f from PointWithRange
@@ -150,8 +151,10 @@ namespace pcl
         float max_angle_width = pcl::deg2rad (360.0f),
         float max_angle_height = pcl::deg2rad (180.0f),
         const Eigen::Affine3f &sensor_pose = Eigen::Affine3f::Identity (),
-        CoordinateFrame coordinate_frame = CAMERA_FRAME, float noise_level = 0.0f,
-        float min_range = 0.0f, int border_size = 0);
+        CoordinateFrame coordinate_frame = CAMERA_FRAME,
+        float noise_level = 0.0f,
+        float min_range = 0.0f,
+        int border_size = 0);
 
     /** \brief Create the depth image from a point cloud
      * \param point_cloud the input point cloud
@@ -178,8 +181,10 @@ namespace pcl
         float max_angle_width = pcl::deg2rad (360.0f),
         float max_angle_height = pcl::deg2rad (180.0f),
         const Eigen::Affine3f &sensor_pose = Eigen::Affine3f::Identity (),
-        CoordinateFrame coordinate_frame = CAMERA_FRAME, float noise_level = 0.0f,
-        float min_range = 0.0f, int border_size = 0);
+        CoordinateFrame coordinate_frame = CAMERA_FRAME,
+        float noise_level = 0.0f,
+        float min_range = 0.0f,
+        int border_size = 0);
 
     /** \brief Create the depth image from a point cloud, getting a hint about the size
      * of the scene for faster calculation. \param point_cloud the input point cloud
@@ -196,11 +201,15 @@ namespace pcl
     template <typename PointCloudType>
     void
     createFromPointCloudWithKnownSize (
-        const PointCloudType &point_cloud, float angular_resolution,
-        const Eigen::Vector3f &point_cloud_center, float point_cloud_radius,
+        const PointCloudType &point_cloud,
+        float angular_resolution,
+        const Eigen::Vector3f &point_cloud_center,
+        float point_cloud_radius,
         const Eigen::Affine3f &sensor_pose = Eigen::Affine3f::Identity (),
-        CoordinateFrame coordinate_frame = CAMERA_FRAME, float noise_level = 0.0f,
-        float min_range = 0.0f, int border_size = 0);
+        CoordinateFrame coordinate_frame = CAMERA_FRAME,
+        float noise_level = 0.0f,
+        float min_range = 0.0f,
+        int border_size = 0);
 
     /** \brief Create the depth image from a point cloud, getting a hint about the size
      * of the scene for faster calculation. \param point_cloud the input point cloud
@@ -221,12 +230,16 @@ namespace pcl
     template <typename PointCloudType>
     void
     createFromPointCloudWithKnownSize (
-        const PointCloudType &point_cloud, float angular_resolution_x,
-        float angular_resolution_y, const Eigen::Vector3f &point_cloud_center,
+        const PointCloudType &point_cloud,
+        float angular_resolution_x,
+        float angular_resolution_y,
+        const Eigen::Vector3f &point_cloud_center,
         float point_cloud_radius,
         const Eigen::Affine3f &sensor_pose = Eigen::Affine3f::Identity (),
-        CoordinateFrame coordinate_frame = CAMERA_FRAME, float noise_level = 0.0f,
-        float min_range = 0.0f, int border_size = 0);
+        CoordinateFrame coordinate_frame = CAMERA_FRAME,
+        float noise_level = 0.0f,
+        float min_range = 0.0f,
+        int border_size = 0);
 
     /** \brief Create the depth image from a point cloud, using the average viewpoint of
      * the points (vp_x,vp_y,vp_z in the point type) in the point cloud as sensor pose
@@ -246,11 +259,13 @@ namespace pcl
     template <typename PointCloudTypeWithViewpoints>
     void
     createFromPointCloudWithViewpoints (const PointCloudTypeWithViewpoints &point_cloud,
-                                        float angular_resolution, float max_angle_width,
+                                        float angular_resolution,
+                                        float max_angle_width,
                                         float max_angle_height,
                                         CoordinateFrame coordinate_frame = CAMERA_FRAME,
                                         float noise_level = 0.0f,
-                                        float min_range = 0.0f, int border_size = 0);
+                                        float min_range = 0.0f,
+                                        int border_size = 0);
 
     /** \brief Create the depth image from a point cloud, using the average viewpoint of
      * the points (vp_x,vp_y,vp_z in the point type) in the point cloud as sensor pose
@@ -275,10 +290,12 @@ namespace pcl
     createFromPointCloudWithViewpoints (const PointCloudTypeWithViewpoints &point_cloud,
                                         float angular_resolution_x,
                                         float angular_resolution_y,
-                                        float max_angle_width, float max_angle_height,
+                                        float max_angle_width,
+                                        float max_angle_height,
                                         CoordinateFrame coordinate_frame = CAMERA_FRAME,
                                         float noise_level = 0.0f,
-                                        float min_range = 0.0f, int border_size = 0);
+                                        float min_range = 0.0f,
+                                        int border_size = 0);
 
     /** \brief Create an empty depth image (filled with unobserved points)
      * \param[in] angular_resolution the angle (in radians) between each sample in the
@@ -309,7 +326,8 @@ namespace pcl
      * sensor (defaults to pi (180deg))
      */
     void
-    createEmpty (float angular_resolution_x, float angular_resolution_y,
+    createEmpty (float angular_resolution_x,
+                 float angular_resolution_y,
                  const Eigen::Affine3f &sensor_pose = Eigen::Affine3f::Identity (),
                  RangeImage::CoordinateFrame coordinate_frame = CAMERA_FRAME,
                  float angle_width = pcl::deg2rad (360.0f),
@@ -329,8 +347,13 @@ namespace pcl
      */
     template <typename PointCloudType>
     void
-    doZBuffer (const PointCloudType &point_cloud, float noise_level, float min_range,
-               int &top, int &right, int &bottom, int &left);
+    doZBuffer (const PointCloudType &point_cloud,
+               float noise_level,
+               float min_range,
+               int &top,
+               int &right,
+               int &bottom,
+               int &left);
 
     /** \brief Integrates the given far range measurements into the range image */
     template <typename PointCloudType>
@@ -347,7 +370,10 @@ namespace pcl
      * the left edge (defaults to -1)
      */
     PCL_EXPORTS void
-    cropImage (int border_size = 0, int top = -1, int right = -1, int bottom = -1,
+    cropImage (int border_size = 0,
+               int top = -1,
+               int right = -1,
+               int bottom = -1,
                int left = -1);
 
     /** \brief Get all the range values in one float array of size width*height
@@ -480,7 +506,9 @@ namespace pcl
 
     /** Calculate the 3D point according to the given image point and range */
     inline void
-    calculate3DPoint (float image_x, float image_y, float range,
+    calculate3DPoint (float image_x,
+                      float image_y,
+                      float range,
                       PointWithRange &point) const;
     /** Calculate the 3D point according to the given image point and the range value at
      * the closest pixel */
@@ -489,7 +517,9 @@ namespace pcl
 
     /** Calculate the 3D point according to the given image point and range */
     virtual inline void
-    calculate3DPoint (float image_x, float image_y, float range,
+    calculate3DPoint (float image_x,
+                      float image_y,
+                      float range,
                       Eigen::Vector3f &point) const;
     /** Calculate the 3D point according to the given image point and the range value at
      * the closest pixel */
@@ -503,12 +533,16 @@ namespace pcl
 
     /** Get imagePoint from 3D point in world coordinates */
     inline virtual void
-    getImagePoint (const Eigen::Vector3f &point, float &image_x, float &image_y,
+    getImagePoint (const Eigen::Vector3f &point,
+                   float &image_x,
+                   float &image_y,
                    float &range) const;
 
     /** Same as above */
     inline void
-    getImagePoint (const Eigen::Vector3f &point, int &image_x, int &image_y,
+    getImagePoint (const Eigen::Vector3f &point,
+                   int &image_x,
+                   int &image_y,
                    float &range) const;
 
     /** Same as above */
@@ -521,8 +555,8 @@ namespace pcl
 
     /** Same as above */
     inline void
-    getImagePoint (float x, float y, float z, float &image_x, float &image_y,
-                   float &range) const;
+    getImagePoint (
+        float x, float y, float z, float &image_x, float &image_y, float &range) const;
 
     /** Same as above */
     inline void
@@ -545,12 +579,16 @@ namespace pcl
 
     /** Get the image point corresponding to the given angles */
     inline void
-    getImagePointFromAngles (float angle_x, float angle_y, float &image_x,
+    getImagePointFromAngles (float angle_x,
+                             float angle_y,
+                             float &image_x,
                              float &image_y) const;
 
     /** Get the angles corresponding to the given image point */
     inline void
-    getAnglesFromImagePoint (float image_x, float image_y, float &angle_x,
+    getAnglesFromImagePoint (float image_x,
+                             float image_y,
+                             float &angle_x,
                              float &angle_y) const;
 
     /** Transforms an image point in float values to an image point in int values */
@@ -583,36 +621,50 @@ namespace pcl
      * distance of radius. step_size determines how many pixels are used. 1 means all, 2
      * only every second, etc.. Returns false if it was unable to calculate a normal.*/
     inline bool
-    getNormal (int x, int y, int radius, Eigen::Vector3f &normal,
-               int step_size = 1) const;
+    getNormal (
+        int x, int y, int radius, Eigen::Vector3f &normal, int step_size = 1) const;
 
     /** Same as above, but only the no_of_nearest_neighbors points closest to the given
      * point are considered. */
     inline bool
-    getNormalForClosestNeighbors (int x, int y, int radius, const PointWithRange &point,
-                                  int no_of_nearest_neighbors, Eigen::Vector3f &normal,
+    getNormalForClosestNeighbors (int x,
+                                  int y,
+                                  int radius,
+                                  const PointWithRange &point,
+                                  int no_of_nearest_neighbors,
+                                  Eigen::Vector3f &normal,
                                   int step_size = 1) const;
 
     /** Same as above */
     inline bool
-    getNormalForClosestNeighbors (int x, int y, int radius,
+    getNormalForClosestNeighbors (int x,
+                                  int y,
+                                  int radius,
                                   const Eigen::Vector3f &point,
-                                  int no_of_nearest_neighbors, Eigen::Vector3f &normal,
+                                  int no_of_nearest_neighbors,
+                                  Eigen::Vector3f &normal,
                                   Eigen::Vector3f *point_on_plane = nullptr,
                                   int step_size = 1) const;
 
     /** Same as above, using default values */
     inline bool
-    getNormalForClosestNeighbors (int x, int y, Eigen::Vector3f &normal,
+    getNormalForClosestNeighbors (int x,
+                                  int y,
+                                  Eigen::Vector3f &normal,
                                   int radius = 2) const;
 
     /** Same as above but extracts some more data and can also return the extracted
      * information for all neighbors in radius if normal_all_neighbors is not NULL */
     inline bool
-    getSurfaceInformation (int x, int y, int radius, const Eigen::Vector3f &point,
-                           int no_of_closest_neighbors, int step_size,
+    getSurfaceInformation (int x,
+                           int y,
+                           int radius,
+                           const Eigen::Vector3f &point,
+                           int no_of_closest_neighbors,
+                           int step_size,
                            float &max_closest_neighbor_distance_squared,
-                           Eigen::Vector3f &normal, Eigen::Vector3f &mean,
+                           Eigen::Vector3f &normal,
+                           Eigen::Vector3f &mean,
                            Eigen::Vector3f &eigen_values,
                            Eigen::Vector3f *normal_all_neighbors = nullptr,
                            Eigen::Vector3f *mean_all_neighbors = nullptr,
@@ -620,8 +672,8 @@ namespace pcl
 
     // Return the squared distance to the n-th neighbors of the point at x,y
     inline float
-    getSquaredDistanceOfNthNeighbor (int x, int y, int radius, int n,
-                                     int step_size) const;
+    getSquaredDistanceOfNthNeighbor (
+        int x, int y, int radius, int n, int step_size) const;
 
     /** Calculate the impact angle based on the sensor position and the two given points
      * - will return -INFINITY if one of the points is unobserved */
@@ -656,7 +708,8 @@ namespace pcl
 
     /** Calculate getAcutenessValue for every point */
     PCL_EXPORTS void
-    getAcutenessValueImages (int pixel_distance, float *&acuteness_value_image_x,
+    getAcutenessValueImages (int pixel_distance,
+                             float *&acuteness_value_image_x,
                              float *&acuteness_value_image_y) const;
 
     /** Calculates, how much the surface changes at a point. Pi meaning a flat suface
@@ -678,12 +731,13 @@ namespace pcl
      * for x and y direction. A return value of -INFINITY means that a point was
      * unobserved. */
     inline void
-    getSurfaceAngleChange (int x, int y, int radius, float &angle_change_x,
-                           float &angle_change_y) const;
+    getSurfaceAngleChange (
+        int x, int y, int radius, float &angle_change_x, float &angle_change_y) const;
 
     /** Uses the above function for every point in the image */
     PCL_EXPORTS void
-    getSurfaceAngleChangeImages (int radius, float *&angle_change_image_x,
+    getSurfaceAngleChangeImages (int radius,
+                                 float *&angle_change_image_x,
                                  float *&angle_change_image_y) const;
 
     /** Calculates the curvature in a point using pca */
@@ -731,8 +785,11 @@ namespace pcl
      * image
      */
     virtual void
-    getSubImage (int sub_image_image_offset_x, int sub_image_image_offset_y,
-                 int sub_image_width, int sub_image_height, int combine_pixels,
+    getSubImage (int sub_image_image_offset_x,
+                 int sub_image_image_offset_y,
+                 int sub_image_width,
+                 int sub_image_height,
+                 int combine_pixels,
                  RangeImage &sub_image) const;
 
     //! Get a range image with half the resolution
@@ -753,13 +810,15 @@ namespace pcl
      *  covers world_size/pixel_size meters in the world
      *  You are responsible for deleting the structure afterwards! */
     PCL_EXPORTS float *
-    getInterpolatedSurfaceProjection (const Eigen::Affine3f &pose, int pixel_size,
+    getInterpolatedSurfaceProjection (const Eigen::Affine3f &pose,
+                                      int pixel_size,
                                       float world_size) const;
 
     //! Same as above, but using the local coordinate frame defined by point and the
     //! viewing direction
     PCL_EXPORTS float *
-    getInterpolatedSurfaceProjection (const Eigen::Vector3f &point, int pixel_size,
+    getInterpolatedSurfaceProjection (const Eigen::Vector3f &point,
+                                      int pixel_size,
                                       float world_size) const;
 
     //! Get the local coordinate frame with 0,0,0 in point, upright and Z as the viewing
@@ -777,7 +836,8 @@ namespace pcl
 
     /** Get a local coordinate frame at the given point based on the normal. */
     PCL_EXPORTS bool
-    getNormalBasedUprightTransformation (const Eigen::Vector3f &point, float max_dist,
+    getNormalBasedUprightTransformation (const Eigen::Vector3f &point,
+                                         float max_dist,
                                          Eigen::Affine3f &transformation) const;
 
     /** Get the integral image of the range values (used for fast blur operations).
@@ -789,16 +849,15 @@ namespace pcl
      * integral image*/
     PCL_EXPORTS void // Template necessary so that this function also works in derived
                      // classes
-                     getBlurredImageUsingIntegralImage (int blur_radius,
-                                                        float *integral_image,
-                                                        int *valid_points_num_image,
-                                                        RangeImage &range_image) const;
+    getBlurredImageUsingIntegralImage (int blur_radius,
+                                       float *integral_image,
+                                       int *valid_points_num_image,
+                                       RangeImage &range_image) const;
 
     /** Get a blurred version of the range image using box filters */
     PCL_EXPORTS virtual void // Template necessary so that this function also works in
                              // derived classes
-                             getBlurredImage (int blur_radius,
-                                              RangeImage &range_image) const;
+    getBlurredImage (int blur_radius, RangeImage &range_image) const;
 
     /** Get the squared euclidean distance between the two image points.
      *  Returns -INFINITY if one of the points was not observed */
@@ -806,8 +865,8 @@ namespace pcl
     getEuclideanDistanceSquared (int x1, int y1, int x2, int y2) const;
     //! Doing the above for some steps in the given direction and averaging
     inline float
-    getAverageEuclideanDistance (int x, int y, int offset_x, int offset_y,
-                                 int max_steps) const;
+    getAverageEuclideanDistance (
+        int x, int y, int offset_x, int offset_y, int max_steps) const;
 
     //! Project all points on the local plane approximation, thereby smoothing the
     //! surface of the scan
@@ -821,15 +880,21 @@ namespace pcl
      * (range=INFINITY) if the first point is max range and an unobserved point
      * (range=-INFINITY) if non of the points is observed. */
     inline void
-    get1dPointAverage (int x, int y, int delta_x, int delta_y, int no_of_points,
+    get1dPointAverage (int x,
+                       int y,
+                       int delta_x,
+                       int delta_y,
+                       int no_of_points,
                        PointWithRange &average_point) const;
 
     /** Calculates the overlap of two range images given the relative transformation
      *  (from the given image to *this) */
     PCL_EXPORTS float
     getOverlap (const RangeImage &other_range_image,
-                const Eigen::Affine3f &relative_transformation, int search_radius,
-                float max_distance, int pixel_step = 1) const;
+                const Eigen::Affine3f &relative_transformation,
+                int search_radius,
+                float max_distance,
+                int pixel_step = 1) const;
 
     /** Get the viewing direction for the given point */
     inline bool

@@ -67,7 +67,9 @@ pcl::Keypoint<PointInT, PointOutT>::initCompute ()
     if (k_ != 0) {
       PCL_ERROR ("[pcl::%s::initCompute] Both radius (%f) and K (%d) defined! Set one "
                  "of them to zero first and then re-run compute ().\n",
-                 getClassName ().c_str (), search_radius_, k_);
+                 getClassName ().c_str (),
+                 search_radius_,
+                 k_);
       return (false);
     } else // Use the radiusSearch () function
     {
@@ -75,14 +77,18 @@ pcl::Keypoint<PointInT, PointOutT>::initCompute ()
       if (surface_ == input_) // if the two surfaces are the same
       {
         // Declare the search locator definition
-        search_method_ = [this](int index, double radius, std::vector<int> &k_indices,
+        search_method_ = [this](int index,
+                                double radius,
+                                std::vector<int> &k_indices,
                                 std::vector<float> &k_distances) {
           return tree_->radiusSearch (index, radius, k_indices, k_distances, 0);
         };
       } else {
         // Declare the search locator definition
-        search_method_surface_ = [this](const PointCloudIn &cloud, int index,
-                                        double radius, std::vector<int> &k_indices,
+        search_method_surface_ = [this](const PointCloudIn &cloud,
+                                        int index,
+                                        double radius,
+                                        std::vector<int> &k_indices,
                                         std::vector<float> &k_distances) {
           return tree_->radiusSearch (cloud, index, radius, k_indices, k_distances, 0);
         };
@@ -95,13 +101,17 @@ pcl::Keypoint<PointInT, PointOutT>::initCompute ()
       if (surface_ == input_) // if the two surfaces are the same
       {
         // Declare the search locator definition
-        search_method_ = [this](int index, int k, std::vector<int> &k_indices,
+        search_method_ = [this](int index,
+                                int k,
+                                std::vector<int> &k_indices,
                                 std::vector<float> &k_distances) {
           return tree_->nearestKSearch (index, k, k_indices, k_distances);
         };
       } else {
         // Declare the search locator definition
-        search_method_surface_ = [this](const PointCloudIn &cloud, int index, int k,
+        search_method_surface_ = [this](const PointCloudIn &cloud,
+                                        int index,
+                                        int k,
                                         std::vector<int> &k_indices,
                                         std::vector<float> &k_distances) {
           return tree_->nearestKSearch (cloud, index, k, k_indices, k_distances);

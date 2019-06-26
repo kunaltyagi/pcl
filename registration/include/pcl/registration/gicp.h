@@ -116,9 +116,14 @@ namespace pcl
       transformation_epsilon_ = 5e-4;
       corr_dist_threshold_ = 5.;
       rigid_transformation_estimation_ =
-          boost::bind (&GeneralizedIterativeClosestPoint<
-                           PointSource, PointTarget>::estimateRigidTransformationBFGS,
-                       this, _1, _2, _3, _4, _5);
+          boost::bind (&GeneralizedIterativeClosestPoint<PointSource, PointTarget>::
+                           estimateRigidTransformationBFGS,
+                       this,
+                       _1,
+                       _2,
+                       _3,
+                       _4,
+                       _5);
     }
 
     /** \brief Provide a pointer to the input dataset
@@ -356,7 +361,8 @@ namespace pcl
      * \param distance vector of size 1 to store the distance to nearest neighbour found
      */
     inline bool
-    searchForNeighbors (const PointSource &query, std::vector<int> &index,
+    searchForNeighbors (const PointSource &query,
+                        std::vector<int> &index,
                         std::vector<float> &distance)
     {
       int k = tree_->nearestKSearch (query, 1, index, distance);

@@ -111,7 +111,8 @@ pcl::SpinImageEstimation<PointInT, PointNT, PointOutT>::computeSiForPoint (
     throw PCLException (
         "Too few points for spin image, use setMinPointCountInNeighbourhood() to "
         "decrease the threshold or use larger feature radius",
-        "spin_image.hpp", "computeSiForPoint");
+        "spin_image.hpp",
+        "computeSiForPoint");
   }
 
   // for all neighbor points
@@ -128,10 +129,12 @@ pcl::SpinImageEstimation<PointInT, PointNT, PointOutT>::computeSiForPoint (
       {
         PCL_ERROR ("[pcl::%s::computeSiForPoint] Normal for the point %d and/or the "
                    "point %d are not normalized, dot ptoduct is %f.\n",
-                   getClassName ().c_str (), nn_indices[i_neigh], index,
+                   getClassName ().c_str (),
+                   nn_indices[i_neigh],
+                   index,
                    cos_between_normals);
-        throw PCLException ("Some normals are not normalized", "spin_image.hpp",
-                            "computeSiForPoint");
+        throw PCLException (
+            "Some normals are not normalized", "spin_image.hpp", "computeSiForPoint");
       }
       cos_between_normals = std::max (-1.0, std::min (1.0, cos_between_normals));
 
@@ -164,8 +167,11 @@ pcl::SpinImageEstimation<PointInT, PointNT, PointOutT>::computeSiForPoint (
     {
       PCL_ERROR ("[pcl::%s::computeSiForPoint] Rotation axis for the point %d are not "
                  "normalized, dot ptoduct is %f.\n",
-                 getClassName ().c_str (), index, cos_dir_axis);
-      throw PCLException ("Some rotation axis is not normalized", "spin_image.hpp",
+                 getClassName ().c_str (),
+                 index,
+                 cos_dir_axis);
+      throw PCLException ("Some rotation axis is not normalized",
+                          "spin_image.hpp",
                           "computeSiForPoint");
     }
     cos_dir_axis = std::max (-1.0, std::min (1.0, cos_dir_axis));

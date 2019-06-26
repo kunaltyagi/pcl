@@ -50,7 +50,8 @@ pcl::PosesFromMatches::~PosesFromMatches () {}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::PosesFromMatches::estimatePosesUsing1Correspondence (
-    const pcl::PointCorrespondences6DVector &correspondences, int max_no_of_results,
+    const pcl::PointCorrespondences6DVector &correspondences,
+    int max_no_of_results,
     pcl::PosesFromMatches::PoseEstimatesVector &pose_estimates) const
 {
   if (max_no_of_results < 0)
@@ -75,7 +76,8 @@ pcl::PosesFromMatches::estimatePosesUsing1Correspondence (
 void
 pcl::PosesFromMatches::estimatePosesUsing2Correspondences (
     const pcl::PointCorrespondences6DVector &correspondences,
-    int max_no_of_tested_combinations, int max_no_of_results,
+    int max_no_of_tested_combinations,
+    int max_no_of_results,
     pcl::PosesFromMatches::PoseEstimatesVector &pose_estimates) const
 {
   const Eigen::Vector3f x_direction (1.0f, 0.0f, 0.0f), y_direction (0.0f, 1.0f, 0.0f),
@@ -95,7 +97,8 @@ pcl::PosesFromMatches::estimatePosesUsing2Correspondences (
   // long with one specific (possibly wrong) correspondence.
   bool done = false;
   for (int correspondence2_idx = 0;
-       correspondence2_idx < max_correspondence_idx && !done; ++correspondence2_idx) {
+       correspondence2_idx < max_correspondence_idx && !done;
+       ++correspondence2_idx) {
     const pcl::PointCorrespondence6D &correspondence2 =
         correspondences[correspondence2_idx];
     for (int correspondence1_idx = 0; correspondence1_idx < correspondence2_idx;
@@ -199,7 +202,8 @@ pcl::PosesFromMatches::estimatePosesUsing2Correspondences (
 void
 pcl::PosesFromMatches::estimatePosesUsing3Correspondences (
     const PointCorrespondences6DVector &correspondences,
-    int max_no_of_tested_combinations, int max_no_of_results,
+    int max_no_of_tested_combinations,
+    int max_no_of_results,
     PosesFromMatches::PoseEstimatesVector &pose_estimates) const
 {
   const Eigen::Vector3f x_direction (1.0f, 0.0f, 0.0f), y_direction (0.0f, 1.0f, 0.0f),
@@ -219,13 +223,15 @@ pcl::PosesFromMatches::estimatePosesUsing3Correspondences (
   // being stuck too long with one specific (possibly wrong) correspondence.
   bool done = false;
   for (int correspondence3_idx = 0;
-       correspondence3_idx < max_correspondence_idx && !done; ++correspondence3_idx) {
+       correspondence3_idx < max_correspondence_idx && !done;
+       ++correspondence3_idx) {
     const pcl::PointCorrespondence6D &correspondence3 =
         correspondences[correspondence3_idx];
     const Eigen::Vector3f &point3 = correspondence3.point1,
                           &corr3 = correspondence3.point2;
     for (int correspondence2_idx = 0;
-         correspondence2_idx < correspondence3_idx && !done; ++correspondence2_idx) {
+         correspondence2_idx < correspondence3_idx && !done;
+         ++correspondence2_idx) {
       const pcl::PointCorrespondence6D &correspondence2 =
           correspondences[correspondence2_idx];
       const Eigen::Vector3f &point2 = correspondence2.point1,

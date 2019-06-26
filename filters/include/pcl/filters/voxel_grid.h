@@ -54,8 +54,12 @@ namespace pcl
    * \param[out] max_pt the maximum data point
    */
   PCL_EXPORTS void
-  getMinMax3D (const pcl::PCLPointCloud2ConstPtr &cloud, int x_idx, int y_idx,
-               int z_idx, Eigen::Vector4f &min_pt, Eigen::Vector4f &max_pt);
+  getMinMax3D (const pcl::PCLPointCloud2ConstPtr &cloud,
+               int x_idx,
+               int y_idx,
+               int z_idx,
+               Eigen::Vector4f &min_pt,
+               Eigen::Vector4f &max_pt);
 
   /** \brief Obtain the maximum and minimum points in 3D from a given point cloud.
    * \note Performs internal data filtering as well.
@@ -72,9 +76,15 @@ namespace pcl
    * max_distance] interval should be considered, \b true otherwise.
    */
   PCL_EXPORTS void
-  getMinMax3D (const pcl::PCLPointCloud2ConstPtr &cloud, int x_idx, int y_idx,
-               int z_idx, const std::string &distance_field_name, float min_distance,
-               float max_distance, Eigen::Vector4f &min_pt, Eigen::Vector4f &max_pt,
+  getMinMax3D (const pcl::PCLPointCloud2ConstPtr &cloud,
+               int x_idx,
+               int y_idx,
+               int z_idx,
+               const std::string &distance_field_name,
+               float min_distance,
+               float max_distance,
+               Eigen::Vector4f &min_pt,
+               Eigen::Vector4f &max_pt,
                bool limit_negative = false);
 
   /** \brief Get the relative cell indices of the "upper half" 13 neighbors.
@@ -138,8 +148,11 @@ namespace pcl
   template <typename PointT>
   void
   getMinMax3D (const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-               const std::string &distance_field_name, float min_distance,
-               float max_distance, Eigen::Vector4f &min_pt, Eigen::Vector4f &max_pt,
+               const std::string &distance_field_name,
+               float min_distance,
+               float max_distance,
+               Eigen::Vector4f &min_pt,
+               Eigen::Vector4f &max_pt,
                bool limit_negative = false);
 
   /** \brief Get the minimum and maximum values on each of the 3 (x-y-z) dimensions
@@ -156,9 +169,13 @@ namespace pcl
   template <typename PointT>
   void
   getMinMax3D (const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-               const std::vector<int> &indices, const std::string &distance_field_name,
-               float min_distance, float max_distance, Eigen::Vector4f &min_pt,
-               Eigen::Vector4f &max_pt, bool limit_negative = false);
+               const std::vector<int> &indices,
+               const std::string &distance_field_name,
+               float min_distance,
+               float max_distance,
+               Eigen::Vector4f &min_pt,
+               Eigen::Vector4f &max_pt,
+               bool limit_negative = false);
 
   /** \brief VoxelGrid assembles a local 3D grid over a given PointCloud, and
    * downsamples + filters the data.
@@ -349,7 +366,8 @@ namespace pcl
       return (leaf_layout_.at (
           (Eigen::Vector4i (static_cast<int> (floor (p.x * inverse_leaf_size_[0])),
                             static_cast<int> (floor (p.y * inverse_leaf_size_[1])),
-                            static_cast<int> (floor (p.z * inverse_leaf_size_[2])), 0) -
+                            static_cast<int> (floor (p.z * inverse_leaf_size_[2])),
+                            0) -
            min_b_)
               .dot (divb_mul_)));
     }
@@ -370,7 +388,8 @@ namespace pcl
       Eigen::Vector4i ijk (
           static_cast<int> (floor (reference_point.x * inverse_leaf_size_[0])),
           static_cast<int> (floor (reference_point.y * inverse_leaf_size_[1])),
-          static_cast<int> (floor (reference_point.z * inverse_leaf_size_[2])), 0);
+          static_cast<int> (floor (reference_point.z * inverse_leaf_size_[2])),
+          0);
       Eigen::Array4i diff2min = min_b_ - ijk;
       Eigen::Array4i diff2max = max_b_ - ijk;
       std::vector<int> neighbors (relative_coordinates.cols ());
@@ -734,7 +753,8 @@ namespace pcl
       return (leaf_layout_.at (
           (Eigen::Vector4i (static_cast<int> (floor (x * inverse_leaf_size_[0])),
                             static_cast<int> (floor (y * inverse_leaf_size_[1])),
-                            static_cast<int> (floor (z * inverse_leaf_size_[2])), 0) -
+                            static_cast<int> (floor (z * inverse_leaf_size_[2])),
+                            0) -
            min_b_)
               .dot (divb_mul_)));
     }
@@ -752,12 +772,15 @@ namespace pcl
      * performed
      */
     inline std::vector<int>
-    getNeighborCentroidIndices (float x, float y, float z,
+    getNeighborCentroidIndices (float x,
+                                float y,
+                                float z,
                                 const Eigen::MatrixXi &relative_coordinates) const
     {
       Eigen::Vector4i ijk (static_cast<int> (floor (x * inverse_leaf_size_[0])),
                            static_cast<int> (floor (y * inverse_leaf_size_[1])),
-                           static_cast<int> (floor (z * inverse_leaf_size_[2])), 0);
+                           static_cast<int> (floor (z * inverse_leaf_size_[2])),
+                           0);
       Eigen::Array4i diff2min = min_b_ - ijk;
       Eigen::Array4i diff2max = max_b_ - ijk;
       std::vector<int> neighbors (relative_coordinates.cols ());
@@ -789,13 +812,16 @@ namespace pcl
      */
     inline std::vector<int>
     getNeighborCentroidIndices (
-        float x, float y, float z,
+        float x,
+        float y,
+        float z,
         const std::vector<Eigen::Vector3i, Eigen::aligned_allocator<Eigen::Vector3i>>
             &relative_coordinates) const
     {
       Eigen::Vector4i ijk (static_cast<int> (floorf (x * inverse_leaf_size_[0])),
                            static_cast<int> (floorf (y * inverse_leaf_size_[1])),
-                           static_cast<int> (floorf (z * inverse_leaf_size_[2])), 0);
+                           static_cast<int> (floorf (z * inverse_leaf_size_[2])),
+                           0);
       std::vector<int> neighbors;
       neighbors.reserve (relative_coordinates.size ());
       for (const auto &relative_coordinate : relative_coordinates)

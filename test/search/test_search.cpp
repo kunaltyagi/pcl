@@ -197,8 +197,10 @@ testOrder (const vector<float> &distances, const string &name)
 template <typename PointT>
 bool
 testResultValidity (const typename PointCloud<PointT>::ConstPtr point_cloud,
-                    const vector<bool> &indices_mask, const vector<bool> &nan_mask,
-                    const vector<int> &indices, const vector<int> & /*input_indices*/,
+                    const vector<bool> &indices_mask,
+                    const vector<bool> &nan_mask,
+                    const vector<int> &indices,
+                    const vector<int> & /*input_indices*/,
                     const string &name)
 {
   bool validness = true;
@@ -240,9 +242,13 @@ testResultValidity (const typename PointCloud<PointT>::ConstPtr point_cloud,
  * \return true if both sets are the same, false otherwise
  */
 bool
-compareResults (const std::vector<int> &indices1, const ::vector<float> &distances1,
-                const std::string &name1, const std::vector<int> &indices2,
-                const ::vector<float> &distances2, const std::string &name2, float eps)
+compareResults (const std::vector<int> &indices1,
+                const ::vector<float> &distances1,
+                const std::string &name1,
+                const std::vector<int> &indices2,
+                const ::vector<float> &distances2,
+                const std::string &name2,
+                float eps)
 {
   bool equal = true;
   if (indices1.size () != indices2.size ()) {
@@ -333,26 +339,31 @@ testKNNSearch (typename PointCloud<PointT>::ConstPtr point_cloud,
     for (const int &query_index : query_indices) {
 #pragma omp parallel for
       for (int sIdx = 0; sIdx < int(search_methods.size ()); ++sIdx) {
-        search_methods[sIdx]->nearestKSearch (point_cloud->points[query_index], knn,
-                                              indices[sIdx], distances[sIdx]);
+        search_methods[sIdx]->nearestKSearch (
+            point_cloud->points[query_index], knn, indices[sIdx], distances[sIdx]);
         passed[sIdx] = passed[sIdx] &&
                        testUniqueness (indices[sIdx], search_methods[sIdx]->getName ());
         passed[sIdx] = passed[sIdx] &&
                        testOrder (distances[sIdx], search_methods[sIdx]->getName ());
         passed[sIdx] = passed[sIdx] &&
-                       testResultValidity<PointT> (point_cloud, indices_mask, nan_mask,
-                                                   indices[sIdx], input_indices,
+                       testResultValidity<PointT> (point_cloud,
+                                                   indices_mask,
+                                                   nan_mask,
+                                                   indices[sIdx],
+                                                   input_indices,
                                                    search_methods[sIdx]->getName ());
       }
 
 // compare results to each other
 #pragma omp parallel for
       for (int sIdx = 1; sIdx < int(search_methods.size ()); ++sIdx) {
-        passed[sIdx] =
-            passed[sIdx] &&
-            compareResults (indices[0], distances[0], search_methods[0]->getName (),
-                            indices[sIdx], distances[sIdx],
-                            search_methods[sIdx]->getName (), 1e-6f);
+        passed[sIdx] = passed[sIdx] && compareResults (indices[0],
+                                                       distances[0],
+                                                       search_methods[0]->getName (),
+                                                       indices[sIdx],
+                                                       distances[sIdx],
+                                                       search_methods[sIdx]->getName (),
+                                                       1e-6f);
       }
     }
   }
@@ -411,26 +422,34 @@ testRadiusSearch (typename PointCloud<PointT>::ConstPtr point_cloud,
     for (const int &query_index : query_indices) {
 #pragma omp parallel for
       for (int sIdx = 0; sIdx < static_cast<int> (search_methods.size ()); ++sIdx) {
-        search_methods[sIdx]->radiusSearch (point_cloud->points[query_index], radius,
-                                            indices[sIdx], distances[sIdx], 0);
+        search_methods[sIdx]->radiusSearch (point_cloud->points[query_index],
+                                            radius,
+                                            indices[sIdx],
+                                            distances[sIdx],
+                                            0);
         passed[sIdx] = passed[sIdx] &&
                        testUniqueness (indices[sIdx], search_methods[sIdx]->getName ());
         passed[sIdx] = passed[sIdx] &&
                        testOrder (distances[sIdx], search_methods[sIdx]->getName ());
         passed[sIdx] = passed[sIdx] &&
-                       testResultValidity<PointT> (point_cloud, indices_mask, nan_mask,
-                                                   indices[sIdx], input_indices,
+                       testResultValidity<PointT> (point_cloud,
+                                                   indices_mask,
+                                                   nan_mask,
+                                                   indices[sIdx],
+                                                   input_indices,
                                                    search_methods[sIdx]->getName ());
       }
 
 // compare results to each other
 #pragma omp parallel for
       for (int sIdx = 1; sIdx < static_cast<int> (search_methods.size ()); ++sIdx) {
-        passed[sIdx] =
-            passed[sIdx] &&
-            compareResults (indices[0], distances[0], search_methods[0]->getName (),
-                            indices[sIdx], distances[sIdx],
-                            search_methods[sIdx]->getName (), 1e-6f);
+        passed[sIdx] = passed[sIdx] && compareResults (indices[0],
+                                                       distances[0],
+                                                       search_methods[0]->getName (),
+                                                       indices[sIdx],
+                                                       distances[sIdx],
+                                                       search_methods[sIdx]->getName (),
+                                                       1e-6f);
       }
     }
   }
@@ -445,7 +464,8 @@ testRadiusSearch (typename PointCloud<PointT>::ConstPtr point_cloud,
 // Test search on unorganized point clouds
 TEST (PCL, unorganized_dense_cloud_Complete_KNN)
 {
-  testKNNSearch (unorganized_dense_cloud, unorganized_search_methods,
+  testKNNSearch (unorganized_dense_cloud,
+                 unorganized_search_methods,
                  unorganized_dense_cloud_query_indices);
 }
 #endif
@@ -454,8 +474,10 @@ TEST (PCL, unorganized_dense_cloud_Complete_KNN)
 // Test search on unorganized point clouds
 TEST (PCL, unorganized_dense_cloud_View_KNN)
 {
-  testKNNSearch (unorganized_dense_cloud, unorganized_search_methods,
-                 unorganized_dense_cloud_query_indices, unorganized_input_indices);
+  testKNNSearch (unorganized_dense_cloud,
+                 unorganized_search_methods,
+                 unorganized_dense_cloud_query_indices,
+                 unorganized_input_indices);
 }
 #endif
 
@@ -463,7 +485,8 @@ TEST (PCL, unorganized_dense_cloud_View_KNN)
 // Test search on unorganized point clouds
 TEST (PCL, unorganized_sparse_cloud_Complete_KNN)
 {
-  testKNNSearch (unorganized_sparse_cloud, unorganized_search_methods,
+  testKNNSearch (unorganized_sparse_cloud,
+                 unorganized_search_methods,
                  unorganized_sparse_cloud_query_indices);
 }
 #endif
@@ -471,8 +494,10 @@ TEST (PCL, unorganized_sparse_cloud_Complete_KNN)
 #if TEST_unorganized_sparse_cloud_VIEW_KNN
 TEST (PCL, unorganized_sparse_cloud_View_KNN)
 {
-  testKNNSearch (unorganized_sparse_cloud, unorganized_search_methods,
-                 unorganized_sparse_cloud_query_indices, unorganized_input_indices);
+  testKNNSearch (unorganized_sparse_cloud,
+                 unorganized_search_methods,
+                 unorganized_sparse_cloud_query_indices,
+                 unorganized_input_indices);
 }
 #endif
 
@@ -480,7 +505,8 @@ TEST (PCL, unorganized_sparse_cloud_View_KNN)
 // Test search on unorganized point clouds
 TEST (PCL, unorganized_dense_cloud_Complete_Radius)
 {
-  testRadiusSearch (unorganized_dense_cloud, unorganized_search_methods,
+  testRadiusSearch (unorganized_dense_cloud,
+                    unorganized_search_methods,
                     unorganized_dense_cloud_query_indices);
 }
 #endif
@@ -507,8 +533,10 @@ TEST (PCL, unorganized_grid_cloud_Complete_Radius)
 // Test search on unorganized point clouds
 TEST (PCL, unorganized_dense_cloud_View_Radius)
 {
-  testRadiusSearch (unorganized_dense_cloud, unorganized_search_methods,
-                    unorganized_dense_cloud_query_indices, unorganized_input_indices);
+  testRadiusSearch (unorganized_dense_cloud,
+                    unorganized_search_methods,
+                    unorganized_dense_cloud_query_indices,
+                    unorganized_input_indices);
 }
 #endif
 
@@ -516,7 +544,8 @@ TEST (PCL, unorganized_dense_cloud_View_Radius)
 // Test search on unorganized point clouds
 TEST (PCL, unorganized_sparse_cloud_Complete_Radius)
 {
-  testRadiusSearch (unorganized_sparse_cloud, unorganized_search_methods,
+  testRadiusSearch (unorganized_sparse_cloud,
+                    unorganized_search_methods,
                     unorganized_sparse_cloud_query_indices);
 }
 #endif
@@ -524,40 +553,46 @@ TEST (PCL, unorganized_sparse_cloud_Complete_Radius)
 #if TEST_unorganized_sparse_cloud_VIEW_RADIUS
 TEST (PCL, unorganized_sparse_cloud_View_Radius)
 {
-  testRadiusSearch (unorganized_sparse_cloud, unorganized_search_methods,
-                    unorganized_sparse_cloud_query_indices, unorganized_input_indices);
+  testRadiusSearch (unorganized_sparse_cloud,
+                    unorganized_search_methods,
+                    unorganized_sparse_cloud_query_indices,
+                    unorganized_input_indices);
 }
 #endif
 
 #if TEST_ORGANIZED_SPARSE_COMPLETE_KNN
 TEST (PCL, Organized_Sparse_Complete_KNN)
 {
-  testKNNSearch (organized_sparse_cloud, organized_search_methods,
-                 organized_sparse_query_indices);
+  testKNNSearch (
+      organized_sparse_cloud, organized_search_methods, organized_sparse_query_indices);
 }
 #endif
 
 #if TEST_ORGANIZED_SPARSE_VIEW_KNN
 TEST (PCL, Organized_Sparse_View_KNN)
 {
-  testKNNSearch (organized_sparse_cloud, organized_search_methods,
-                 organized_sparse_query_indices, organized_input_indices);
+  testKNNSearch (organized_sparse_cloud,
+                 organized_search_methods,
+                 organized_sparse_query_indices,
+                 organized_input_indices);
 }
 #endif
 
 #if TEST_ORGANIZED_SPARSE_COMPLETE_RADIUS
 TEST (PCL, Organized_Sparse_Complete_Radius)
 {
-  testRadiusSearch (organized_sparse_cloud, organized_search_methods,
-                    organized_sparse_query_indices);
+  testRadiusSearch (
+      organized_sparse_cloud, organized_search_methods, organized_sparse_query_indices);
 }
 #endif
 
 #if TEST_ORGANIZED_SPARSE_VIEW_RADIUS
 TEST (PCL, Organized_Sparse_View_Radius)
 {
-  testRadiusSearch (organized_sparse_cloud, organized_search_methods,
-                    organized_sparse_query_indices, organized_input_indices);
+  testRadiusSearch (organized_sparse_cloud,
+                    organized_search_methods,
+                    organized_sparse_query_indices,
+                    organized_input_indices);
 }
 #endif
 
@@ -569,14 +604,16 @@ TEST (PCL, Organized_Sparse_View_Radius)
  */
 void
 createQueryIndices (std::vector<int> &query_indices,
-                    PointCloud<PointXYZ>::ConstPtr point_cloud, unsigned query_count)
+                    PointCloud<PointXYZ>::ConstPtr point_cloud,
+                    unsigned query_count)
 {
   query_indices.clear ();
   query_indices.reserve (query_count);
 
   unsigned skip = static_cast<unsigned> (point_cloud->size ()) / query_count;
   for (unsigned idx = 0;
-       idx < point_cloud->size () && query_indices.size () < query_count; ++idx)
+       idx < point_cloud->size () && query_indices.size () < query_count;
+       ++idx)
     if ((rand () % skip) == 0 && isFinite (point_cloud->points[idx]))
       query_indices.push_back (idx);
 }
@@ -677,12 +714,12 @@ main (int argc, char **argv)
   organized_search_methods.push_back (&octree_search);
   organized_search_methods.push_back (&organized);
 
-  createQueryIndices (unorganized_dense_cloud_query_indices, unorganized_dense_cloud,
-                      query_count);
-  createQueryIndices (unorganized_sparse_cloud_query_indices, unorganized_sparse_cloud,
-                      query_count);
-  createQueryIndices (organized_sparse_query_indices, organized_sparse_cloud,
-                      query_count);
+  createQueryIndices (
+      unorganized_dense_cloud_query_indices, unorganized_dense_cloud, query_count);
+  createQueryIndices (
+      unorganized_sparse_cloud_query_indices, unorganized_sparse_cloud, query_count);
+  createQueryIndices (
+      organized_sparse_query_indices, organized_sparse_cloud, query_count);
 
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

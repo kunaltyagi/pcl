@@ -80,8 +80,10 @@ namespace pcl
      *  * == 0 on success
      */
     int
-    readHeader (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
-                int &ifs_version, unsigned int &data_idx);
+    readHeader (const std::string &file_name,
+                pcl::PCLPointCloud2 &cloud,
+                int &ifs_version,
+                unsigned int &data_idx);
 
     /** \brief Read a point cloud data from an IFS file and store it into a
      * pcl/PCLPointCloud2. \param[in] file_name the name of the file containing the
@@ -154,7 +156,8 @@ namespace pcl
      * * < 0 on error
      */
     int
-    write (const std::string &file_name, const pcl::PCLPointCloud2 &cloud,
+    write (const std::string &file_name,
+           const pcl::PCLPointCloud2 &cloud,
            const std::string &cloud_name = "cloud");
 
     /** \brief Save point cloud data to an IFS file containing 3D points.
@@ -168,7 +171,8 @@ namespace pcl
      */
     template <typename PointT>
     int
-    write (const std::string &file_name, const pcl::PointCloud<PointT> &cloud,
+    write (const std::string &file_name,
+           const pcl::PointCloud<PointT> &cloud,
            const std::string &cloud_name = "cloud")
     {
       pcl::PCLPointCloud2 blob;

@@ -60,41 +60,75 @@ namespace pcl
       };
       template <class NodeAdjacencyFunction>
       void
-      __processNodeFaces (OctNode *node, NodeAdjacencyFunction *F, int cIndex1,
-                          int cIndex2, int cIndex3, int cIndex4);
+      __processNodeFaces (OctNode *node,
+                          NodeAdjacencyFunction *F,
+                          int cIndex1,
+                          int cIndex2,
+                          int cIndex3,
+                          int cIndex4);
       template <class NodeAdjacencyFunction>
       void
-      __processNodeEdges (OctNode *node, NodeAdjacencyFunction *F, int cIndex1,
+      __processNodeEdges (OctNode *node,
+                          NodeAdjacencyFunction *F,
+                          int cIndex1,
                           int cIndex2);
       template <class NodeAdjacencyFunction>
       void
       __processNodeNodes (OctNode *node, NodeAdjacencyFunction *F);
       template <class NodeAdjacencyFunction>
       static void
-      __ProcessNodeAdjacentNodes (int dx, int dy, int dz, OctNode *node1, int radius1,
-                                  OctNode *node2, int radius2, int cWidth2,
+      __ProcessNodeAdjacentNodes (int dx,
+                                  int dy,
+                                  int dz,
+                                  OctNode *node1,
+                                  int radius1,
+                                  OctNode *node2,
+                                  int radius2,
+                                  int cWidth2,
                                   NodeAdjacencyFunction *F);
       template <class TerminatingNodeAdjacencyFunction>
       static void
-      __ProcessTerminatingNodeAdjacentNodes (int dx, int dy, int dz, OctNode *node1,
-                                             int radius1, OctNode *node2, int radius2,
+      __ProcessTerminatingNodeAdjacentNodes (int dx,
+                                             int dy,
+                                             int dz,
+                                             OctNode *node1,
+                                             int radius1,
+                                             OctNode *node2,
+                                             int radius2,
                                              int cWidth2,
                                              TerminatingNodeAdjacencyFunction *F);
       template <class PointAdjacencyFunction>
       static void
-      __ProcessPointAdjacentNodes (int dx, int dy, int dz, OctNode *node2, int radius2,
-                                   int cWidth2, PointAdjacencyFunction *F);
+      __ProcessPointAdjacentNodes (int dx,
+                                   int dy,
+                                   int dz,
+                                   OctNode *node2,
+                                   int radius2,
+                                   int cWidth2,
+                                   PointAdjacencyFunction *F);
       template <class NodeAdjacencyFunction>
       static void
-      __ProcessFixedDepthNodeAdjacentNodes (int dx, int dy, int dz, OctNode *node1,
-                                            int radius1, OctNode *node2, int radius2,
-                                            int cWidth2, int depth,
+      __ProcessFixedDepthNodeAdjacentNodes (int dx,
+                                            int dy,
+                                            int dz,
+                                            OctNode *node1,
+                                            int radius1,
+                                            OctNode *node2,
+                                            int radius2,
+                                            int cWidth2,
+                                            int depth,
                                             NodeAdjacencyFunction *F);
       template <class NodeAdjacencyFunction>
       static void
-      __ProcessMaxDepthNodeAdjacentNodes (int dx, int dy, int dz, OctNode *node1,
-                                          int radius1, OctNode *node2, int radius2,
-                                          int cWidth2, int depth,
+      __ProcessMaxDepthNodeAdjacentNodes (int dx,
+                                          int dy,
+                                          int dz,
+                                          OctNode *node1,
+                                          int radius1,
+                                          OctNode *node2,
+                                          int radius2,
+                                          int cWidth2,
+                                          int depth,
                                           NodeAdjacencyFunction *F);
 
       // This is made private because the division by two has been pulled out.
@@ -189,78 +223,133 @@ namespace pcl
 
       template <class NodeAdjacencyFunction>
       void
-      processNodeFaces (OctNode *node, NodeAdjacencyFunction *F, int fIndex,
+      processNodeFaces (OctNode *node,
+                        NodeAdjacencyFunction *F,
+                        int fIndex,
                         int processCurrent = 1);
       template <class NodeAdjacencyFunction>
       void
-      processNodeEdges (OctNode *node, NodeAdjacencyFunction *F, int eIndex,
+      processNodeEdges (OctNode *node,
+                        NodeAdjacencyFunction *F,
+                        int eIndex,
                         int processCurrent = 1);
       template <class NodeAdjacencyFunction>
       void
-      processNodeCorners (OctNode *node, NodeAdjacencyFunction *F, int cIndex,
+      processNodeCorners (OctNode *node,
+                          NodeAdjacencyFunction *F,
+                          int cIndex,
                           int processCurrent = 1);
       template <class NodeAdjacencyFunction>
       void
-      processNodeNodes (OctNode *node, NodeAdjacencyFunction *F,
+      processNodeNodes (OctNode *node,
+                        NodeAdjacencyFunction *F,
                         int processCurrent = 1);
 
       template <class NodeAdjacencyFunction>
       static void
-      ProcessNodeAdjacentNodes (int maxDepth, OctNode *node1, int width1,
-                                OctNode *node2, int width2, NodeAdjacencyFunction *F,
+      ProcessNodeAdjacentNodes (int maxDepth,
+                                OctNode *node1,
+                                int width1,
+                                OctNode *node2,
+                                int width2,
+                                NodeAdjacencyFunction *F,
                                 int processCurrent = 1);
       template <class NodeAdjacencyFunction>
       static void
-      ProcessNodeAdjacentNodes (int dx, int dy, int dz, OctNode *node1, int radius1,
-                                OctNode *node2, int radius2, int width2,
-                                NodeAdjacencyFunction *F, int processCurrent = 1);
+      ProcessNodeAdjacentNodes (int dx,
+                                int dy,
+                                int dz,
+                                OctNode *node1,
+                                int radius1,
+                                OctNode *node2,
+                                int radius2,
+                                int width2,
+                                NodeAdjacencyFunction *F,
+                                int processCurrent = 1);
       template <class TerminatingNodeAdjacencyFunction>
       static void
-      ProcessTerminatingNodeAdjacentNodes (int maxDepth, OctNode *node1, int width1,
-                                           OctNode *node2, int width2,
+      ProcessTerminatingNodeAdjacentNodes (int maxDepth,
+                                           OctNode *node1,
+                                           int width1,
+                                           OctNode *node2,
+                                           int width2,
                                            TerminatingNodeAdjacencyFunction *F,
                                            int processCurrent = 1);
       template <class TerminatingNodeAdjacencyFunction>
       static void
-      ProcessTerminatingNodeAdjacentNodes (int dx, int dy, int dz, OctNode *node1,
-                                           int radius1, OctNode *node2, int radius2,
+      ProcessTerminatingNodeAdjacentNodes (int dx,
+                                           int dy,
+                                           int dz,
+                                           OctNode *node1,
+                                           int radius1,
+                                           OctNode *node2,
+                                           int radius2,
                                            int width2,
                                            TerminatingNodeAdjacencyFunction *F,
                                            int processCurrent = 1);
       template <class PointAdjacencyFunction>
       static void
-      ProcessPointAdjacentNodes (int maxDepth, const int center1[3], OctNode *node2,
-                                 int width2, PointAdjacencyFunction *F,
+      ProcessPointAdjacentNodes (int maxDepth,
+                                 const int center1[3],
+                                 OctNode *node2,
+                                 int width2,
+                                 PointAdjacencyFunction *F,
                                  int processCurrent = 1);
       template <class PointAdjacencyFunction>
       static void
-      ProcessPointAdjacentNodes (int dx, int dy, int dz, OctNode *node2, int radius2,
-                                 int width2, PointAdjacencyFunction *F,
+      ProcessPointAdjacentNodes (int dx,
+                                 int dy,
+                                 int dz,
+                                 OctNode *node2,
+                                 int radius2,
+                                 int width2,
+                                 PointAdjacencyFunction *F,
                                  int processCurrent = 1);
       template <class NodeAdjacencyFunction>
       static void
-      ProcessFixedDepthNodeAdjacentNodes (int maxDepth, OctNode *node1, int width1,
-                                          OctNode *node2, int width2, int depth,
+      ProcessFixedDepthNodeAdjacentNodes (int maxDepth,
+                                          OctNode *node1,
+                                          int width1,
+                                          OctNode *node2,
+                                          int width2,
+                                          int depth,
                                           NodeAdjacencyFunction *F,
                                           int processCurrent = 1);
       template <class NodeAdjacencyFunction>
       static void
-      ProcessFixedDepthNodeAdjacentNodes (int dx, int dy, int dz, OctNode *node1,
-                                          int radius1, OctNode *node2, int radius2,
-                                          int width2, int depth,
+      ProcessFixedDepthNodeAdjacentNodes (int dx,
+                                          int dy,
+                                          int dz,
+                                          OctNode *node1,
+                                          int radius1,
+                                          OctNode *node2,
+                                          int radius2,
+                                          int width2,
+                                          int depth,
                                           NodeAdjacencyFunction *F,
                                           int processCurrent = 1);
       template <class NodeAdjacencyFunction>
       static void
-      ProcessMaxDepthNodeAdjacentNodes (int maxDepth, OctNode *node1, int width1,
-                                        OctNode *node2, int width2, int depth,
+      ProcessMaxDepthNodeAdjacentNodes (int maxDepth,
+                                        OctNode *node1,
+                                        int width1,
+                                        OctNode *node2,
+                                        int width2,
+                                        int depth,
                                         NodeAdjacencyFunction *F,
                                         int processCurrent = 1);
       template <class NodeAdjacencyFunction>
       static void
-      ProcessMaxDepthNodeAdjacentNodes (int dx, int dy, int dz, OctNode *node1,
-                                        int radius1, OctNode *node2, int radius2,
-                                        int width2, int depth, NodeAdjacencyFunction *F,
+      ProcessMaxDepthNodeAdjacentNodes (int dx,
+                                        int dy,
+                                        int dz,
+                                        OctNode *node1,
+                                        int radius1,
+                                        OctNode *node2,
+                                        int radius2,
+                                        int width2,
+                                        int depth,
+                                        NodeAdjacencyFunction *F,
                                         int processCurrent = 1);
 
       static int
@@ -304,9 +393,12 @@ namespace pcl
       operator= (const OctNode<NodeData2, Real> &node);
 
       static inline int
-      Overlap2 (const int &depth1, const int offSet1[DIMENSION],
-                const Real &multiplier1, const int &depth2,
-                const int offSet2[DIMENSION], const Real &multiplier2);
+      Overlap2 (const int &depth1,
+                const int offSet1[DIMENSION],
+                const Real &multiplier1,
+                const int &depth2,
+                const int offSet2[DIMENSION],
+                const Real &multiplier2);
 
       int
       write (const char *fileName) const;
@@ -401,8 +493,13 @@ namespace pcl
         Neighbors5 &
         getNeighbors (OctNode *node);
         Neighbors5 &
-        setNeighbors (OctNode *node, int xStart = 0, int xEnd = 5, int yStart = 0,
-                      int yEnd = 5, int zStart = 0, int zEnd = 5);
+        setNeighbors (OctNode *node,
+                      int xStart = 0,
+                      int xEnd = 5,
+                      int yStart = 0,
+                      int yEnd = 5,
+                      int zStart = 0,
+                      int zEnd = 5);
       };
       class ConstNeighborKey5
       {

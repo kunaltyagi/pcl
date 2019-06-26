@@ -32,7 +32,7 @@ class ON_CLASS ON_MeshParameters
     render_mesh_fast = 1,    // Use ON_MeshParameters::FastRenderMesh
     render_mesh_quality = 2, // Use ON_MeshParameters::QualityRenderMesh
                              // 3 - 8 reserved for future predefined render mesh styles
-    render_mesh_custom = 9,     // Use ON_3dmSettings::m_CustomRenderMeshSettings
+    render_mesh_custom = 9,  // Use ON_3dmSettings::m_CustomRenderMeshSettings
     render_mesh_per_object = 10 // Use ON_Object::GetMeshParameters().
   };
 
@@ -965,7 +965,9 @@ class ON_CLASS ON_MappingTag
   SetDefaultSurfaceParameterMappingTag ();
 
   int
-  Compare (const ON_MappingTag &other, bool bCompareId = true, bool bCompareCRC = true,
+  Compare (const ON_MappingTag &other,
+           bool bCompareId = true,
+           bool bCompareCRC = true,
            bool bCompareXform = true) const;
 
   /*
@@ -1133,7 +1135,8 @@ class ON_CLASS ON_Mesh : public ON_Geometry
     bounding box.
   */
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   ON_BOOL32
@@ -1177,16 +1180,22 @@ class ON_CLASS ON_Mesh : public ON_Geometry
                    const ON_3fVector & // unit normal
   );
   bool
-  SetTextureCoord (int,           // vertex index
-                   double, double // texture coordinates
+  SetTextureCoord (int, // vertex index
+                   double,
+                   double // texture coordinates
   );
   bool
-  SetTriangle (int,          // face index
-               int, int, int // vertex indices
+  SetTriangle (int, // face index
+               int,
+               int,
+               int // vertex indices
   );
   bool
-  SetQuad (int,               // face index
-           int, int, int, int // vertex indices
+  SetQuad (int, // face index
+           int,
+           int,
+           int,
+           int // vertex indices
   );
 
   /*
@@ -1427,8 +1436,8 @@ class ON_CLASS ON_Mesh : public ON_Geometry
   /////////
   // Description:
   //		Reverse one coordinate direction of the texture coordinates, within texture
-  //domain m_tex_domain 	Parameters: 		dir  -[in]	-   dir=0  first texture coordinate is
-  //reversed 									  dir=1 second texture coordinate is reversed
+  // domain m_tex_domain 	Parameters: 		dir  -[in]	-   dir=0  first texture coordinate
+  // is reversed 									  dir=1 second texture coordinate is reversed
   //  Returns
   //			true  -  success
   bool
@@ -1455,7 +1464,8 @@ class ON_CLASS ON_Mesh : public ON_Geometry
   */
   bool
   SetTextureCoordinates (const class ON_TextureMapping &mapping,
-                         const class ON_Xform *mesh_xform = 0, bool bLazy = true);
+                         const class ON_Xform *mesh_xform = 0,
+                         bool bLazy = true);
 
   bool
   HasCachedTextureCoordinates () const;
@@ -1465,7 +1475,8 @@ class ON_CLASS ON_Mesh : public ON_Geometry
 
   const ON_TextureCoordinates *
   SetCachedTextureCoordinates (const class ON_TextureMapping &mapping,
-                               const class ON_Xform *mesh_xform = 0, bool bLazy = true);
+                               const class ON_Xform *mesh_xform = 0,
+                               bool bLazy = true);
 
   bool
   EvaluateMeshGeometry (const ON_Surface &); // evaluate surface at tcoords
@@ -1477,7 +1488,7 @@ class ON_CLASS ON_Mesh : public ON_Geometry
                                           // to be coincident
                              double       // cosine normal angle tolerance in radians
                                           // if vertices are coincident, then they are
-                                    // combined if NormalA o NormalB >= this value
+                                          // combined if NormalA o NormalB >= this value
   );
 
   /*
@@ -1576,7 +1587,8 @@ class ON_CLASS ON_Mesh : public ON_Geometry
     True if every mesh "edge" has at most two adjacent faces.
   */
   bool
-  IsManifold (bool bTopologicalTest, bool *pbIsOriented = NULL,
+  IsManifold (bool bTopologicalTest,
+              bool *pbIsOriented = NULL,
               bool *pbHasBoundary = NULL) const;
 
   /*
@@ -1653,7 +1665,9 @@ class ON_CLASS ON_Mesh : public ON_Geometry
     Number of ON_2dex values appended to the edges[] array.
   */
   int
-  GetVertexEdges (int vcount, const int *vertex_index, bool bNoDuplicates,
+  GetVertexEdges (int vcount,
+                  const int *vertex_index,
+                  bool bNoDuplicates,
                   ON_SimpleArray<ON_2dex> &edges) const;
 
   /*
@@ -2058,7 +2072,8 @@ class ON_CLASS ON_Mesh : public ON_Geometry
   */
 
   int
-  GetConnectedComponents (bool bUseVertexConnections, bool bTopologicalConnections,
+  GetConnectedComponents (bool bUseVertexConnections,
+                          bool bTopologicalConnections,
                           ON_SimpleArray<int> &facet_component_labels) const;
 
   /*
@@ -2084,7 +2099,8 @@ class ON_CLASS ON_Mesh : public ON_Geometry
   */
 
   int
-  GetConnectedComponents (bool bUseVertexConnections, bool bTopologicalConnections,
+  GetConnectedComponents (bool bUseVertexConnections,
+                          bool bTopologicalConnections,
                           ON_SimpleArray<ON_Mesh *> *components) const;
 
   /////////////////////////////////////////////////////////////////
@@ -2733,7 +2749,8 @@ Returns:
 */
 ON_DECL
 ON_Mesh *
-ON_ControlPolygonMesh (const ON_NurbsSurface &nurbs_surface, bool bCleanMesh,
+ON_ControlPolygonMesh (const ON_NurbsSurface &nurbs_surface,
+                       bool bCleanMesh,
                        ON_Mesh *input_mesh = NULL);
 
 /*
@@ -2772,8 +2789,13 @@ Returns:
 */
 ON_DECL
 bool
-ON_GetTrianglePlaneEquation (const ON_3dPoint &A, const ON_3dPoint &B,
-                             const ON_3dPoint &C, double *a, double *b, double *c,
-                             double *d, double *evaluation_tol);
+ON_GetTrianglePlaneEquation (const ON_3dPoint &A,
+                             const ON_3dPoint &B,
+                             const ON_3dPoint &C,
+                             double *a,
+                             double *b,
+                             double *c,
+                             double *d,
+                             double *evaluation_tol);
 
 #endif

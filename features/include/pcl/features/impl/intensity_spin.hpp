@@ -47,8 +47,12 @@
 template <typename PointInT, typename PointOutT>
 void
 pcl::IntensitySpinEstimation<PointInT, PointOutT>::computeIntensitySpinImage (
-    const PointCloudIn &cloud, float radius, float sigma, int k,
-    const std::vector<int> &indices, const std::vector<float> &squared_distances,
+    const PointCloudIn &cloud,
+    float radius,
+    float sigma,
+    int k,
+    const std::vector<int> &indices,
+    const std::vector<float> &squared_distances,
     Eigen::MatrixXf &intensity_spin_image)
 {
   // Determine the number of bins to use based on the size of intensity_spin_image
@@ -158,8 +162,13 @@ pcl::IntensitySpinEstimation<PointInT, PointOutT>::computeFeature (
     }
 
     // Compute the intensity spin image
-    computeIntensitySpinImage (*surface_, static_cast<float> (search_radius_), sigma_,
-                               k, nn_indices, nn_dist_sqr, intensity_spin_image);
+    computeIntensitySpinImage (*surface_,
+                               static_cast<float> (search_radius_),
+                               sigma_,
+                               k,
+                               nn_indices,
+                               nn_dist_sqr,
+                               intensity_spin_image);
 
     // Copy into the resultant cloud
     size_t bin = 0;

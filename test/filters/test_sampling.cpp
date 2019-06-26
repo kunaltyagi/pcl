@@ -259,8 +259,8 @@ main (int argc, char **argv)
 
   std::vector<int> aux_indices;
   removeNaNFromPointCloud (*cloud_walls_normals, *cloud_walls_normals, aux_indices);
-  removeNaNNormalsFromPointCloud (*cloud_walls_normals, *cloud_walls_normals,
-                                  aux_indices);
+  removeNaNNormalsFromPointCloud (
+      *cloud_walls_normals, *cloud_walls_normals, aux_indices);
 
   ne = NormalEstimation<PointXYZ, PointNormal> ();
   ne.setInputCloud (cloud_turtle);
@@ -268,8 +268,8 @@ main (int argc, char **argv)
   ne.compute (*cloud_turtle_normals);
   copyPointCloud (*cloud_turtle, *cloud_turtle_normals);
   removeNaNFromPointCloud (*cloud_turtle_normals, *cloud_turtle_normals, aux_indices);
-  removeNaNNormalsFromPointCloud (*cloud_turtle_normals, *cloud_turtle_normals,
-                                  aux_indices);
+  removeNaNNormalsFromPointCloud (
+      *cloud_turtle_normals, *cloud_turtle_normals, aux_indices);
 
   testing::InitGoogleTest (&argc, argv);
   return (RUN_ALL_TESTS ());

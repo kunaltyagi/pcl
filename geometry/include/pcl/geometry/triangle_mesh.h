@@ -59,11 +59,12 @@ namespace pcl
      */
     template <class MeshTraitsT>
     class TriangleMesh : public pcl::geometry::MeshBase<TriangleMesh<MeshTraitsT>,
-                                                        MeshTraitsT, TriangleMeshTag>
+                                                        MeshTraitsT,
+                                                        TriangleMeshTag>
     {
       public:
-      using Base = pcl::geometry::MeshBase<TriangleMesh<MeshTraitsT>, MeshTraitsT,
-                                           TriangleMeshTag>;
+      using Base = pcl::geometry::
+          MeshBase<TriangleMesh<MeshTraitsT>, MeshTraitsT, TriangleMeshTag>;
 
       using Self = TriangleMesh<MeshTraitsT>;
       using Ptr = boost::shared_ptr<Self>;
@@ -134,8 +135,10 @@ namespace pcl
        * behavior!
        */
       inline FaceIndex
-      addFace (const VertexIndex &idx_v_0, const VertexIndex &idx_v_1,
-               const VertexIndex &idx_v_2, const FaceData &face_data = FaceData (),
+      addFace (const VertexIndex &idx_v_0,
+               const VertexIndex &idx_v_1,
+               const VertexIndex &idx_v_2,
+               const FaceData &face_data = FaceData (),
                const EdgeData &edge_data = EdgeData (),
                const HalfEdgeData &half_edge_data = HalfEdgeData ())
       {
@@ -143,8 +146,8 @@ namespace pcl
         add_triangle_[1] = idx_v_1;
         add_triangle_[2] = idx_v_2;
 
-        return (this->addFaceImplBase (add_triangle_, face_data, edge_data,
-                                       half_edge_data));
+        return (this->addFaceImplBase (
+            add_triangle_, face_data, edge_data, half_edge_data));
       }
 
       /** \brief Add two triangles for the four given input vertices. When using a
@@ -169,8 +172,12 @@ namespace pcl
         if (vertices.size () != 4) {
           return (std::make_pair (FaceIndex (), FaceIndex ()));
         } else {
-          return (this->addTrianglePair (vertices[0], vertices[1], vertices[2],
-                                         vertices[3], face_data, edge_data,
+          return (this->addTrianglePair (vertices[0],
+                                         vertices[1],
+                                         vertices[2],
+                                         vertices[3],
+                                         face_data,
+                                         edge_data,
                                          half_edge_data));
         }
       }
@@ -191,8 +198,10 @@ namespace pcl
        * complying with this requirement results in undefined behavior!
        */
       inline FaceIndexPair
-      addTrianglePair (const VertexIndex &idx_v_0, const VertexIndex &idx_v_1,
-                       const VertexIndex &idx_v_2, const VertexIndex &idx_v_3,
+      addTrianglePair (const VertexIndex &idx_v_0,
+                       const VertexIndex &idx_v_1,
+                       const VertexIndex &idx_v_2,
+                       const VertexIndex &idx_v_3,
                        const FaceData &face_data = FaceData (),
                        const EdgeData &edge_data = EdgeData (),
                        const HalfEdgeData &half_edge_data = HalfEdgeData ())
@@ -207,7 +216,9 @@ namespace pcl
         if (idx_face_0.isValid ()) {
           return (std::make_pair (idx_face_0, idx_face_1));
         } else if (idx_face_1.isValid ()) {
-          idx_face_0 = this->addFace (idx_v_0, idx_v_1, idx_v_2,
+          idx_face_0 = this->addFace (idx_v_0,
+                                      idx_v_1,
+                                      idx_v_2,
                                       face_data); // might be possible to add now
           return (std::make_pair (idx_face_1, idx_face_0));
         }
@@ -222,7 +233,9 @@ namespace pcl
         if (idx_face_0.isValid ()) {
           return (std::make_pair (idx_face_0, idx_face_1));
         } else if (idx_face_1.isValid ()) {
-          idx_face_0 = this->addFace (idx_v_1, idx_v_2, idx_v_3,
+          idx_face_0 = this->addFace (idx_v_1,
+                                      idx_v_2,
+                                      idx_v_3,
                                       face_data); // might be possible to add now
           return (std::make_pair (idx_face_1, idx_face_0));
         }
@@ -232,27 +245,39 @@ namespace pcl
         }
 
         // Check manifoldness
-        if (!Base::checkTopology1 (idx_v_0, idx_v_1, inner_he_atp_[0], is_new_atp_[0],
-                                   IsManifold ()) ||
-            !Base::checkTopology1 (idx_v_1, idx_v_2, inner_he_atp_[1], is_new_atp_[1],
-                                   IsManifold ()) ||
-            !Base::checkTopology1 (idx_v_2, idx_v_3, inner_he_atp_[2], is_new_atp_[2],
-                                   IsManifold ()) ||
-            !Base::checkTopology1 (idx_v_3, idx_v_0, inner_he_atp_[3], is_new_atp_[3],
-                                   IsManifold ())) {
+        if (!Base::checkTopology1 (
+                idx_v_0, idx_v_1, inner_he_atp_[0], is_new_atp_[0], IsManifold ()) ||
+            !Base::checkTopology1 (
+                idx_v_1, idx_v_2, inner_he_atp_[1], is_new_atp_[1], IsManifold ()) ||
+            !Base::checkTopology1 (
+                idx_v_2, idx_v_3, inner_he_atp_[2], is_new_atp_[2], IsManifold ()) ||
+            !Base::checkTopology1 (
+                idx_v_3, idx_v_0, inner_he_atp_[3], is_new_atp_[3], IsManifold ())) {
           return (std::make_pair (FaceIndex (), FaceIndex ()));
         }
 
         // Connect the triangle pair
         if (!is_new_atp_[0] && is_new_atp_[1] && !is_new_atp_[2] && is_new_atp_[3]) {
-          return (this->connectTrianglePair (inner_he_atp_[0], inner_he_atp_[2],
-                                             idx_v_0, idx_v_1, idx_v_2, idx_v_3,
-                                             face_data, edge_data, half_edge_data));
+          return (this->connectTrianglePair (inner_he_atp_[0],
+                                             inner_he_atp_[2],
+                                             idx_v_0,
+                                             idx_v_1,
+                                             idx_v_2,
+                                             idx_v_3,
+                                             face_data,
+                                             edge_data,
+                                             half_edge_data));
         } else if (is_new_atp_[0] && !is_new_atp_[1] && is_new_atp_[2] &&
                    !is_new_atp_[3]) {
-          return (this->connectTrianglePair (inner_he_atp_[1], inner_he_atp_[3],
-                                             idx_v_1, idx_v_2, idx_v_3, idx_v_0,
-                                             face_data, edge_data, half_edge_data));
+          return (this->connectTrianglePair (inner_he_atp_[1],
+                                             inner_he_atp_[3],
+                                             idx_v_1,
+                                             idx_v_2,
+                                             idx_v_3,
+                                             idx_v_0,
+                                             face_data,
+                                             edge_data,
+                                             half_edge_data));
         } else {
           return (std::make_pair (FaceIndex (), FaceIndex ()));
         }
@@ -260,13 +285,16 @@ namespace pcl
 
       private:
       // NOTE: Can't use the typedef of Base as a friend.
-      friend class pcl::geometry::MeshBase<TriangleMesh<MeshTraitsT>, MeshTraitsT,
+      friend class pcl::geometry::MeshBase<TriangleMesh<MeshTraitsT>,
+                                           MeshTraitsT,
                                            pcl::geometry::TriangleMeshTag>;
 
       /** \brief addFace for the triangular mesh. */
       inline FaceIndex
-      addFaceImpl (const VertexIndices &vertices, const FaceData &face_data,
-                   const EdgeData &edge_data, const HalfEdgeData &half_edge_data)
+      addFaceImpl (const VertexIndices &vertices,
+                   const FaceData &face_data,
+                   const EdgeData &edge_data,
+                   const HalfEdgeData &half_edge_data)
       {
         if (vertices.size () == 3)
           return (
@@ -282,10 +310,14 @@ namespace pcl
       // a - b
       FaceIndexPair
       connectTrianglePair (const HalfEdgeIndex &idx_he_ab,
-                           const HalfEdgeIndex &idx_he_cd, const VertexIndex &idx_v_a,
-                           const VertexIndex &idx_v_b, const VertexIndex &idx_v_c,
-                           const VertexIndex &idx_v_d, const FaceData &face_data,
-                           const EdgeData &edge_data, const HalfEdgeData &he_data)
+                           const HalfEdgeIndex &idx_he_cd,
+                           const VertexIndex &idx_v_a,
+                           const VertexIndex &idx_v_b,
+                           const VertexIndex &idx_v_c,
+                           const VertexIndex &idx_v_d,
+                           const FaceData &face_data,
+                           const EdgeData &edge_data,
+                           const HalfEdgeData &he_data)
       {
         // Add new half-edges
         const HalfEdgeIndex idx_he_bc =

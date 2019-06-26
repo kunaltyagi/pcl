@@ -237,7 +237,8 @@ namespace pcl
         if (!searchForNeighbors (query, nn_indices, nn_dists)) {
           PCL_ERROR ("[pcl::%s::computeTransformation] Unable to find a nearest "
                      "neighbor in the target dataset for point %d in the source!\n",
-                     getClassName ().c_str (), (*indices_)[i]);
+                     getClassName ().c_str (),
+                     (*indices_)[i]);
           return;
         }
 
@@ -266,8 +267,8 @@ namespace pcl
       previous_transformation_ = transformation_;
       // optimization right here
       try {
-        rigid_transformation_estimation_ (output, source_indices, *target_,
-                                          target_indices, transformation_);
+        rigid_transformation_estimation_ (
+            output, source_indices, *target_, target_indices, transformation_);
         /* compute the delta from this iteration */
         delta = 0.;
         for (int k = 0; k < 4; k++) {
@@ -285,7 +286,8 @@ namespace pcl
         }
       } catch (PCLException &e) {
         PCL_DEBUG ("[pcl::%s::computeTransformation] Optimization issue %s\n",
-                   getClassName ().c_str (), e.what ());
+                   getClassName ().c_str (),
+                   e.what ());
         break;
       }
 
@@ -296,7 +298,9 @@ namespace pcl
         previous_transformation_ = transformation_;
         PCL_DEBUG ("[pcl::%s::computeTransformation] Convergence reached. Number of "
                    "iterations: %d out of %d. Transformation difference: %f\n",
-                   getClassName ().c_str (), nr_iterations_, max_iterations_,
+                   getClassName ().c_str (),
+                   nr_iterations_,
+                   max_iterations_,
                    (transformation_ - previous_transformation_).array ().abs ().sum ());
       } else
         PCL_DEBUG ("[pcl::%s::computeTransformation] Convergence failed\n",

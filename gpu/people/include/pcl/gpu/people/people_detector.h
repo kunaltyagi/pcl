@@ -170,7 +170,8 @@ namespace pcl
         allocate_buffers (int rows = 480, int cols = 640);
 
         void
-        shs5 (const pcl::PointCloud<PointT> &cloud, const std::vector<int> &indices,
+        shs5 (const pcl::PointCloud<PointT> &cloud,
+              const std::vector<int> &indices,
               unsigned char *mask);
 
         //!!! only for debug purposes TODO: remove this.

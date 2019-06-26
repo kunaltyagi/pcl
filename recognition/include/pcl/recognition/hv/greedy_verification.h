@@ -146,8 +146,8 @@ namespace pcl
 
       std::sort (indices_models_.begin (), indices_models_.end (), sortModelsIndicesOp);
       // sort also recognition models
-      std::sort (recognition_models_.begin (), recognition_models_.end (),
-                 sortModelsOp);
+      std::sort (
+          recognition_models_.begin (), recognition_models_.end (), sortModelsOp);
     }
 
     /** \brief Updates conflicting recognition hypotheses when a hypothesis is accepted

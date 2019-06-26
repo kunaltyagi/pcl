@@ -58,10 +58,16 @@ pcl::kinfuLS::WorldModel<PointT>::addSlice (PointCloudPtr new_cloud)
 template <typename PointT>
 void
 pcl::kinfuLS::WorldModel<PointT>::getExistingData (
-    const double previous_origin_x, const double previous_origin_y,
-    const double previous_origin_z, const double offset_x, const double offset_y,
-    const double offset_z, const double volume_x, const double volume_y,
-    const double volume_z, pcl::PointCloud<PointT> &existing_slice)
+    const double previous_origin_x,
+    const double previous_origin_y,
+    const double previous_origin_z,
+    const double offset_x,
+    const double offset_y,
+    const double offset_z,
+    const double volume_x,
+    const double volume_y,
+    const double volume_z,
+    pcl::PointCloud<PointT> &existing_slice)
 {
   double newOriginX = previous_origin_x + offset_x;
   double newOriginY = previous_origin_y + offset_y;
@@ -150,7 +156,8 @@ pcl::kinfuLS::WorldModel<PointT>::getExistingData (
 template <typename PointT>
 void
 pcl::kinfuLS::WorldModel<PointT>::getWorldAsCubes (
-    const double size, std::vector<typename WorldModel<PointT>::PointCloudPtr> &cubes,
+    const double size,
+    std::vector<typename WorldModel<PointT>::PointCloudPtr> &cubes,
     std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f>> &transforms,
     double overlap)
 {
@@ -202,7 +209,12 @@ pcl::kinfuLS::WorldModel<PointT>::getWorldAsCubes (
 
   PCL_INFO (
       "Bounding box for the world: \n\t [%f - %f] \n\t [%f - %f] \n\t [%f - %f] \n",
-      min.x, max.x, min.y, max.y, min.z, max.z);
+      min.x,
+      max.x,
+      min.y,
+      max.y,
+      min.z,
+      max.z);
 
   PointT origin = min;
 
@@ -295,10 +307,15 @@ pcl::kinfuLS::WorldModel<PointT>::setIndicesAsNans (PointCloudPtr cloud,
 
 template <typename PointT>
 void
-pcl::kinfuLS::WorldModel<PointT>::setSliceAsNans (
-    const double origin_x, const double origin_y, const double origin_z,
-    const double offset_x, const double offset_y, const double offset_z,
-    const int size_x, const int size_y, const int size_z)
+pcl::kinfuLS::WorldModel<PointT>::setSliceAsNans (const double origin_x,
+                                                  const double origin_y,
+                                                  const double origin_z,
+                                                  const double offset_x,
+                                                  const double offset_y,
+                                                  const double offset_z,
+                                                  const int size_x,
+                                                  const int size_y,
+                                                  const int size_z)
 {
   // PCL_DEBUG ("IN SETSLICE AS NANS\n");
 

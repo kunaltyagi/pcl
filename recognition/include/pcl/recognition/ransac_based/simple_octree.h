@@ -201,7 +201,8 @@ namespace pcl
       /** \brief Creates an empty octree with bounds at least as large as the ones
        * provided as input and with leaf size equal to 'voxel_size'. */
       void
-      build (const Scalar *bounds, Scalar voxel_size,
+      build (const Scalar *bounds,
+             Scalar voxel_size,
              NodeDataCreator *node_data_creator);
 
       /** \brief Creates the leaf containing p = (x, y, z) and returns a pointer to it,

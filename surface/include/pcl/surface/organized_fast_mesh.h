@@ -344,20 +344,26 @@ namespace pcl
      * \param[in] field_z_idx the Z coordinate of the point
      */
     inline void
-    resetPointData (const int &point_index, pcl::PolygonMesh &mesh,
-                    const float &value = 0.0f, int field_x_idx = 0, int field_y_idx = 1,
+    resetPointData (const int &point_index,
+                    pcl::PolygonMesh &mesh,
+                    const float &value = 0.0f,
+                    int field_x_idx = 0,
+                    int field_y_idx = 1,
                     int field_z_idx = 2)
     {
       float new_value = value;
       memcpy (&mesh.cloud.data[point_index * mesh.cloud.point_step +
                                mesh.cloud.fields[field_x_idx].offset],
-              &new_value, sizeof (float));
+              &new_value,
+              sizeof (float));
       memcpy (&mesh.cloud.data[point_index * mesh.cloud.point_step +
                                mesh.cloud.fields[field_y_idx].offset],
-              &new_value, sizeof (float));
+              &new_value,
+              sizeof (float));
       memcpy (&mesh.cloud.data[point_index * mesh.cloud.point_step +
                                mesh.cloud.fields[field_z_idx].offset],
-              &new_value, sizeof (float));
+              &new_value,
+              sizeof (float));
     }
 
     /** \brief Check if a point is shadowed by another point

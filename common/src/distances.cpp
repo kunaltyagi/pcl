@@ -37,8 +37,10 @@
 #include <pcl/common/distances.h>
 
 void
-pcl::lineToLineSegment (const Eigen::VectorXf &line_a, const Eigen::VectorXf &line_b,
-                        Eigen::Vector4f &pt1_seg, Eigen::Vector4f &pt2_seg)
+pcl::lineToLineSegment (const Eigen::VectorXf &line_a,
+                        const Eigen::VectorXf &line_b,
+                        Eigen::Vector4f &pt1_seg,
+                        Eigen::Vector4f &pt2_seg)
 {
   // point + direction = 2nd point
   Eigen::Vector4f p1 = Eigen::Vector4f::Zero ();

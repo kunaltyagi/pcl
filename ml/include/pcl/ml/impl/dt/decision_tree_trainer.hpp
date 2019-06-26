@@ -39,10 +39,13 @@
 #define PCL_ML_DT_DECISION_TREE_TRAINER_HPP_
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
-pcl::DecisionTreeTrainer<FeatureType, DataSet, LabelType, ExampleIndex,
-                         NodeType>::DecisionTreeTrainer ()
+pcl::DecisionTreeTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
+    DecisionTreeTrainer ()
     : max_tree_depth_ (15), num_of_features_ (1000), num_of_thresholds_ (10),
       feature_handler_ (nullptr), stats_estimator_ (nullptr), data_set_ (),
       label_data_ (), examples_ (), decision_tree_trainer_data_provider_ (),
@@ -51,19 +54,25 @@ pcl::DecisionTreeTrainer<FeatureType, DataSet, LabelType, ExampleIndex,
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
-pcl::DecisionTreeTrainer<FeatureType, DataSet, LabelType, ExampleIndex,
-                         NodeType>::~DecisionTreeTrainer ()
+pcl::DecisionTreeTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
+    ~DecisionTreeTrainer ()
 {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
 void
-pcl::DecisionTreeTrainer<FeatureType, DataSet, LabelType, ExampleIndex,
-                         NodeType>::train (pcl::DecisionTree<NodeType> &tree)
+pcl::DecisionTreeTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
+    train (pcl::DecisionTree<NodeType> &tree)
 {
   // create random features
   std::vector<FeatureType> features;
@@ -78,27 +87,31 @@ pcl::DecisionTreeTrainer<FeatureType, DataSet, LabelType, ExampleIndex,
   if (decision_tree_trainer_data_provider_) {
     std::cerr << "use decision_tree_trainer_data_provider_" << std::endl;
 
-    decision_tree_trainer_data_provider_->getDatasetAndLabels (data_set_, label_data_,
-                                                               examples_);
-    trainDecisionTreeNode (features, examples_, label_data_, max_tree_depth_,
-                           tree.getRoot ());
+    decision_tree_trainer_data_provider_->getDatasetAndLabels (
+        data_set_, label_data_, examples_);
+    trainDecisionTreeNode (
+        features, examples_, label_data_, max_tree_depth_, tree.getRoot ());
     label_data_.clear ();
     data_set_.clear ();
     examples_.clear ();
   } else {
-    trainDecisionTreeNode (features, examples_, label_data_, max_tree_depth_,
-                           tree.getRoot ());
+    trainDecisionTreeNode (
+        features, examples_, label_data_, max_tree_depth_, tree.getRoot ());
   }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
 void
 pcl::DecisionTreeTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
     trainDecisionTreeNode (std::vector<FeatureType> &features,
                            std::vector<ExampleIndex> &examples,
-                           std::vector<LabelType> &label_data, const size_t max_depth,
+                           std::vector<LabelType> &label_data,
+                           const size_t max_depth,
                            NodeType &node)
 {
   const size_t num_of_examples = examples.size ();
@@ -137,8 +150,8 @@ pcl::DecisionTreeTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType
   const size_t num_of_features = features.size ();
   for (size_t feature_index = 0; feature_index < num_of_features; ++feature_index) {
     // evaluate features
-    feature_handler_->evaluateFeature (features[feature_index], data_set_, examples,
-                                       feature_results, flags);
+    feature_handler_->evaluateFeature (
+        features[feature_index], data_set_, examples, feature_results, flags);
 
     // get list of thresholds
     if (!thresholds_.empty ()) {
@@ -147,9 +160,13 @@ pcl::DecisionTreeTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType
       for (size_t threshold_index = 0; threshold_index < thresholds_.size ();
            ++threshold_index) {
 
-        const float information_gain = stats_estimator_->computeInformationGain (
-            data_set_, examples, label_data, feature_results, flags,
-            thresholds_[threshold_index]);
+        const float information_gain =
+            stats_estimator_->computeInformationGain (data_set_,
+                                                      examples,
+                                                      label_data,
+                                                      feature_results,
+                                                      flags,
+                                                      thresholds_[threshold_index]);
 
         if (information_gain > best_feature_information_gain) {
           best_feature_information_gain = information_gain;
@@ -190,11 +207,11 @@ pcl::DecisionTreeTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType
   std::vector<unsigned char> branch_indices;
   branch_indices.reserve (num_of_examples);
   {
-    feature_handler_->evaluateFeature (features[best_feature_index], data_set_,
-                                       examples, feature_results, flags);
+    feature_handler_->evaluateFeature (
+        features[best_feature_index], data_set_, examples, feature_results, flags);
 
-    stats_estimator_->computeBranchIndices (feature_results, flags,
-                                            best_feature_threshold, branch_indices);
+    stats_estimator_->computeBranchIndices (
+        feature_results, flags, best_feature_threshold, branch_indices);
   }
 
   stats_estimator_->computeAndSetNodeStats (data_set_, examples, label_data, node);
@@ -215,8 +232,8 @@ pcl::DecisionTreeTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType
     for (size_t branch_index = 0; branch_index < num_of_branches; ++branch_index) {
       if (branch_counts[branch_index] == 0) {
         NodeType branch_node;
-        stats_estimator_->computeAndSetNodeStats (data_set_, examples, label_data,
-                                                  branch_node);
+        stats_estimator_->computeAndSetNodeStats (
+            data_set_, examples, label_data, branch_node);
         // branch_node->num_of_sub_nodes = 0;
 
         node.sub_nodes[branch_index] = branch_node;
@@ -236,18 +253,25 @@ pcl::DecisionTreeTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType
         }
       }
 
-      trainDecisionTreeNode (features, branch_examples, branch_labels, max_depth - 1,
+      trainDecisionTreeNode (features,
+                             branch_examples,
+                             branch_labels,
+                             max_depth - 1,
                              node.sub_nodes[branch_index]);
     }
   }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
 void
 pcl::DecisionTreeTrainer<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
-    createThresholdsUniform (const size_t num_of_thresholds, std::vector<float> &values,
+    createThresholdsUniform (const size_t num_of_thresholds,
+                             std::vector<float> &values,
                              std::vector<float> &thresholds)
 {
   // estimate range of values

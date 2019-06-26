@@ -122,7 +122,8 @@ pcl::computeRoots (const Matrix &m, Roots &roots)
 //////////////////////////////////////////////////////////////////////////////////////////
 template <typename Matrix, typename Vector>
 inline void
-pcl::eigen22 (const Matrix &mat, typename Matrix::Scalar &eigenvalue,
+pcl::eigen22 (const Matrix &mat,
+              typename Matrix::Scalar &eigenvalue,
               Vector &eigenvector)
 {
   // if diagonal matrix, the eigenvalues are the diagonal elements
@@ -252,7 +253,8 @@ pcl::computeCorrespondingEigenVector (const Matrix &mat,
 //////////////////////////////////////////////////////////////////////////////////////////
 template <typename Matrix, typename Vector>
 inline void
-pcl::eigen33 (const Matrix &mat, typename Matrix::Scalar &eigenvalue,
+pcl::eigen33 (const Matrix &mat,
+              typename Matrix::Scalar &eigenvalue,
               Vector &eigenvector)
 {
   using Scalar = typename Matrix::Scalar;
@@ -697,8 +699,10 @@ pcl::getTransformationFromTwoUnitVectorsAndOrigin (const Eigen::Vector3f &y_dire
 //////////////////////////////////////////////////////////////////////////////////////////
 template <typename Scalar>
 void
-pcl::getEulerAngles (const Eigen::Transform<Scalar, 3, Eigen::Affine> &t, Scalar &roll,
-                     Scalar &pitch, Scalar &yaw)
+pcl::getEulerAngles (const Eigen::Transform<Scalar, 3, Eigen::Affine> &t,
+                     Scalar &roll,
+                     Scalar &pitch,
+                     Scalar &yaw)
 {
   roll = atan2 (t (2, 1), t (2, 2));
   pitch = asin (-t (2, 0));
@@ -709,8 +713,12 @@ pcl::getEulerAngles (const Eigen::Transform<Scalar, 3, Eigen::Affine> &t, Scalar
 template <typename Scalar>
 void
 pcl::getTranslationAndEulerAngles (const Eigen::Transform<Scalar, 3, Eigen::Affine> &t,
-                                   Scalar &x, Scalar &y, Scalar &z, Scalar &roll,
-                                   Scalar &pitch, Scalar &yaw)
+                                   Scalar &x,
+                                   Scalar &y,
+                                   Scalar &z,
+                                   Scalar &roll,
+                                   Scalar &pitch,
+                                   Scalar &yaw)
 {
   x = t (0, 3);
   y = t (1, 3);
@@ -723,8 +731,13 @@ pcl::getTranslationAndEulerAngles (const Eigen::Transform<Scalar, 3, Eigen::Affi
 //////////////////////////////////////////////////////////////////////////////////////////
 template <typename Scalar>
 void
-pcl::getTransformation (Scalar x, Scalar y, Scalar z, Scalar roll, Scalar pitch,
-                        Scalar yaw, Eigen::Transform<Scalar, 3, Eigen::Affine> &t)
+pcl::getTransformation (Scalar x,
+                        Scalar y,
+                        Scalar z,
+                        Scalar roll,
+                        Scalar pitch,
+                        Scalar yaw,
+                        Eigen::Transform<Scalar, 3, Eigen::Affine> &t)
 {
   Scalar A = cos (yaw), B = sin (yaw), C = cos (pitch), D = sin (pitch), E = cos (roll),
          F = sin (roll), DE = D * E, DF = D * F;
@@ -790,7 +803,8 @@ pcl::loadBinary (Eigen::MatrixBase<Derived> const &matrix_, std::istream &file)
 template <typename Derived, typename OtherDerived>
 typename Eigen::internal::umeyama_transform_matrix_type<Derived, OtherDerived>::type
 pcl::umeyama (const Eigen::MatrixBase<Derived> &src,
-              const Eigen::MatrixBase<OtherDerived> &dst, bool with_scaling)
+              const Eigen::MatrixBase<OtherDerived> &dst,
+              bool with_scaling)
 {
 #if EIGEN_VERSION_AT_LEAST(3, 3, 0)
   return Eigen::umeyama (src, dst, with_scaling);
@@ -805,7 +819,8 @@ pcl::umeyama (const Eigen::MatrixBase<Derived> &src,
   static_assert (!Eigen::NumTraits<Scalar>::IsComplex, "Numeric type must be real.");
   static_assert (
       (Eigen::internal::is_same<
-          Scalar, typename Eigen::internal::traits<OtherDerived>::Scalar>::value),
+          Scalar,
+          typename Eigen::internal::traits<OtherDerived>::Scalar>::value),
       "You mixed different numeric types. You need to use the cast method of "
       "matrixbase to cast numeric types explicitly.");
 
@@ -931,7 +946,8 @@ template <typename Scalar>
 bool
 pcl::checkCoordinateSystem (const Eigen::Matrix<Scalar, Eigen::Dynamic, 1> &line_x,
                             const Eigen::Matrix<Scalar, Eigen::Dynamic, 1> &line_y,
-                            const Scalar norm_limit, const Scalar dot_limit)
+                            const Scalar norm_limit,
+                            const Scalar dot_limit)
 {
   if (line_x.innerSize () != 6 || line_y.innerSize () != 6) {
     PCL_DEBUG ("checkCoordinateSystem: lines size != 6\n");
@@ -966,19 +982,22 @@ pcl::checkCoordinateSystem (const Eigen::Matrix<Scalar, Eigen::Dynamic, 1> &line
 
   // Check vectors perendicularity
   if (std::abs (v_line_x.dot (v_line_y)) > dot_limit) {
-    PCL_DEBUG ("checkCSAxis: line_x dot line_y %e =  > %e\n", v_line_x.dot (v_line_y),
+    PCL_DEBUG ("checkCSAxis: line_x dot line_y %e =  > %e\n",
+               v_line_x.dot (v_line_y),
                dot_limit);
     return (false);
   }
 
   if (std::abs (v_line_x.dot (v_line_z)) > dot_limit) {
-    PCL_DEBUG ("checkCSAxis: line_x dot line_z = %e > %e\n", v_line_x.dot (v_line_z),
+    PCL_DEBUG ("checkCSAxis: line_x dot line_z = %e > %e\n",
+               v_line_x.dot (v_line_z),
                dot_limit);
     return (false);
   }
 
   if (std::abs (v_line_y.dot (v_line_z)) > dot_limit) {
-    PCL_DEBUG ("checkCSAxis: line_y dot line_z = %e > %e\n", v_line_y.dot (v_line_z),
+    PCL_DEBUG ("checkCSAxis: line_y dot line_z = %e > %e\n",
+               v_line_y.dot (v_line_z),
                dot_limit);
     return (false);
   }

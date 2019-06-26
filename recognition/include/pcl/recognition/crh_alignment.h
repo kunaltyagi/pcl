@@ -88,7 +88,8 @@ namespace pcl
      */
     void
     computeRollTransform (Eigen::Vector3f &centroidInput,
-                          Eigen::Vector3f &centroidResult, double roll_angle,
+                          Eigen::Vector3f &centroidResult,
+                          double roll_angle,
                           Eigen::Affine3f &final_trans)
     {
       Eigen::Affine3f transformInputToZ;

@@ -46,7 +46,8 @@ using namespace on_nurbs;
 using namespace Eigen;
 
 void
-NurbsTools::downsample_random (const vector_vec3d &data1, vector_vec3d &data2,
+NurbsTools::downsample_random (const vector_vec3d &data1,
+                               vector_vec3d &data2,
                                unsigned size)
 {
   if (data1.size () <= size && size > 0) {
@@ -118,8 +119,10 @@ NurbsTools::getClosestPoint (const Eigen::Vector3d &p, const vector_vec3d &data)
 }
 
 unsigned
-NurbsTools::getClosestPoint (const Eigen::Vector2d &p, const Eigen::Vector2d &dir,
-                             const vector_vec2d &data, unsigned &idxcp)
+NurbsTools::getClosestPoint (const Eigen::Vector2d &p,
+                             const Eigen::Vector2d &dir,
+                             const vector_vec2d &data,
+                             unsigned &idxcp)
 {
   if (data.empty ())
     throw std::runtime_error ("[NurbsTools::getClosestPoint(2d)] Data empty.\n");
@@ -212,7 +215,8 @@ NurbsTools::computeVariance (const Eigen::Vector2d &mean, const vector_vec2d &da
 }
 
 void
-NurbsTools::computeBoundingBox (const ON_NurbsCurve &nurbs, Eigen::Vector3d &_min,
+NurbsTools::computeBoundingBox (const ON_NurbsCurve &nurbs,
+                                Eigen::Vector3d &_min,
                                 Eigen::Vector3d &_max)
 {
   _min = Eigen::Vector3d (DBL_MAX, DBL_MAX, DBL_MAX);
@@ -238,7 +242,8 @@ NurbsTools::computeBoundingBox (const ON_NurbsCurve &nurbs, Eigen::Vector3d &_mi
 }
 
 void
-NurbsTools::computeBoundingBox (const ON_NurbsSurface &nurbs, Eigen::Vector3d &_min,
+NurbsTools::computeBoundingBox (const ON_NurbsSurface &nurbs,
+                                Eigen::Vector3d &_min,
                                 Eigen::Vector3d &_max)
 {
   _min = Eigen::Vector3d (DBL_MAX, DBL_MAX, DBL_MAX);
@@ -274,8 +279,10 @@ NurbsTools::computeRScale (const Eigen::Vector3d &_min, const Eigen::Vector3d &_
 }
 
 void
-NurbsTools::pca (const vector_vec3d &data, Eigen::Vector3d &mean,
-                 Eigen::Matrix3d &eigenvectors, Eigen::Vector3d &eigenvalues)
+NurbsTools::pca (const vector_vec3d &data,
+                 Eigen::Vector3d &mean,
+                 Eigen::Matrix3d &eigenvectors,
+                 Eigen::Vector3d &eigenvalues)
 {
   if (data.empty ()) {
     printf ("[NurbsTools::pca] Error, data is empty\n");
@@ -309,8 +316,10 @@ NurbsTools::pca (const vector_vec3d &data, Eigen::Vector3d &mean,
 }
 
 void
-NurbsTools::pca (const vector_vec2d &data, Eigen::Vector2d &mean,
-                 Eigen::Matrix2d &eigenvectors, Eigen::Vector2d &eigenvalues)
+NurbsTools::pca (const vector_vec2d &data,
+                 Eigen::Vector2d &mean,
+                 Eigen::Matrix2d &eigenvectors,
+                 Eigen::Vector2d &eigenvalues)
 {
   if (data.empty ()) {
     printf ("[NurbsTools::pca] Error, data is empty\n");

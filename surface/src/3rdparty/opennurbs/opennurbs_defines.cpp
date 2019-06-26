@@ -405,9 +405,12 @@ on_wcsicmp (const wchar_t *s1, const wchar_t *s2)
       ON_String b (s2);
 
       // Wide char conversion
-      int rc =
-          ::CompareStringA (g_s__windows_locale_id, NORM_IGNORECASE | NORM_IGNOREWIDTH,
-                            a.Array (), -1, b.Array (), -1);
+      int rc = ::CompareStringA (g_s__windows_locale_id,
+                                 NORM_IGNORECASE | NORM_IGNOREWIDTH,
+                                 a.Array (),
+                                 -1,
+                                 b.Array (),
+                                 -1);
       if (rc == CSTR_LESS_THAN)
         return -1;
       if (rc == CSTR_EQUAL)
@@ -416,8 +419,8 @@ on_wcsicmp (const wchar_t *s1, const wchar_t *s2)
         return 1;
     } else {
       // a version of Windows with working UNICODE support
-      int rc = ::CompareStringW (g_s__windows_locale_id,
-                                 NORM_IGNORECASE | NORM_IGNOREWIDTH, s1, -1, s2, -1);
+      int rc = ::CompareStringW (
+          g_s__windows_locale_id, NORM_IGNORECASE | NORM_IGNOREWIDTH, s1, -1, s2, -1);
 
       if (rc == CSTR_LESS_THAN)
         return -1;
@@ -525,8 +528,12 @@ ON_wString::MakeUpper ()
         out.SetLength (max_len_out + 1);
 
         // Wide char conversion
-        int rc = ::LCMapStringA (g_s__windows_locale_id, LCMAP_UPPERCASE, in.Array (),
-                                 len_in, out.Array (), max_len_out);
+        int rc = ::LCMapStringA (g_s__windows_locale_id,
+                                 LCMAP_UPPERCASE,
+                                 in.Array (),
+                                 len_in,
+                                 out.Array (),
+                                 max_len_out);
         if (rc > 0 && rc <= max_len_out) {
           out.SetLength (rc);
           operator= (out); // multi-byte to wchar conversion
@@ -541,8 +548,12 @@ ON_wString::MakeUpper ()
         out.SetLength (max_len_out + 1);
 
         // Wide char conversion
-        int rc = ::LCMapStringW (g_s__windows_locale_id, LCMAP_UPPERCASE, Array (),
-                                 len_in, out.Array (), max_len_out);
+        int rc = ::LCMapStringW (g_s__windows_locale_id,
+                                 LCMAP_UPPERCASE,
+                                 Array (),
+                                 len_in,
+                                 out.Array (),
+                                 max_len_out);
         if (rc > 0 && rc <= max_len_out) {
           out.SetLength (rc);
           operator= (out); // very fast - simply changes reference count
@@ -581,8 +592,12 @@ ON_wString::MakeLower ()
         out.SetLength (max_len_out + 1);
 
         // Wide char conversion to multi-byte lower case string
-        int rc = ::LCMapStringA (g_s__windows_locale_id, LCMAP_LOWERCASE, in.Array (),
-                                 len_in, out.Array (), max_len_out);
+        int rc = ::LCMapStringA (g_s__windows_locale_id,
+                                 LCMAP_LOWERCASE,
+                                 in.Array (),
+                                 len_in,
+                                 out.Array (),
+                                 max_len_out);
         if (rc > 0 && rc <= max_len_out) {
           out.SetLength (rc);
           operator= (out); // multi-byte to wchar conversion
@@ -608,8 +623,12 @@ ON_wString::MakeLower ()
         // Wide char conversion to lower case.
         // Note that changing to lower case in some languages
         // can change the string length.
-        int rc = ::LCMapStringW (g_s__windows_locale_id, LCMAP_LOWERCASE, Array (),
-                                 len_in, out.Array (), max_len_out);
+        int rc = ::LCMapStringW (g_s__windows_locale_id,
+                                 LCMAP_LOWERCASE,
+                                 Array (),
+                                 len_in,
+                                 out.Array (),
+                                 max_len_out);
         if (rc > 0 && rc <= max_len_out) {
           out.SetLength (rc);
           operator= (out); // very fast - simply changes reference count
@@ -662,8 +681,10 @@ on_wcsrev (wchar_t *s)
 }
 
 int
-on_WideCharToMultiByte (const wchar_t *lpWideCharStr, int cchWideChar,
-                        char *lpMultiByteStr, int cchMultiByte)
+on_WideCharToMultiByte (const wchar_t *lpWideCharStr,
+                        int cchWideChar,
+                        char *lpMultiByteStr,
+                        int cchMultiByte)
 {
   // 14 March 2011 Dale Lear
   //   It turns out that Windows WideCharToMultiByte does correctly
@@ -676,9 +697,15 @@ on_WideCharToMultiByte (const wchar_t *lpWideCharStr, int cchWideChar,
   unsigned int error_mask = 0xFFFFFFFF;
   ON__UINT32 error_code_point = 0xFFFD;
   const wchar_t *p1 = 0;
-  int count = ON_ConvertWideCharToUTF8 (false, lpWideCharStr, cchWideChar,
-                                        lpMultiByteStr, cchMultiByte, &error_status,
-                                        error_mask, error_code_point, &p1);
+  int count = ON_ConvertWideCharToUTF8 (false,
+                                        lpWideCharStr,
+                                        cchWideChar,
+                                        lpMultiByteStr,
+                                        cchMultiByte,
+                                        &error_status,
+                                        error_mask,
+                                        error_code_point,
+                                        &p1);
   if (0 != error_status) {
     ON_ERROR (
         "Error converting UTF-16 encoded wchar_t string to UTF-8 encoded char string.");
@@ -687,8 +714,10 @@ on_WideCharToMultiByte (const wchar_t *lpWideCharStr, int cchWideChar,
 }
 
 int
-on_MultiByteToWideChar (const char *lpMultiByteStr, int cchMultiByte,
-                        wchar_t *lpWideCharStr, int cchWideChar)
+on_MultiByteToWideChar (const char *lpMultiByteStr,
+                        int cchMultiByte,
+                        wchar_t *lpWideCharStr,
+                        int cchWideChar)
 {
   // 14 March 2011 Dale Lear
   //   It turns out that Windows WideCharToMultiByte does correctly
@@ -701,9 +730,14 @@ on_MultiByteToWideChar (const char *lpMultiByteStr, int cchMultiByte,
   unsigned int error_mask = 0xFFFFFFFF;
   ON__UINT32 error_code_point = 0xFFFD;
   const char *p1 = 0;
-  int count = ON_ConvertUTF8ToWideChar (lpMultiByteStr, cchMultiByte, lpWideCharStr,
-                                        cchWideChar, &error_status, error_mask,
-                                        error_code_point, &p1);
+  int count = ON_ConvertUTF8ToWideChar (lpMultiByteStr,
+                                        cchMultiByte,
+                                        lpWideCharStr,
+                                        cchWideChar,
+                                        &error_status,
+                                        error_mask,
+                                        error_code_point,
+                                        &p1);
   if (0 != error_status) {
     ON_ERROR (
         "Error converting UTF-8 encoded char string to UTF-16 encoded wchar_t string.");
@@ -755,8 +789,11 @@ on_vsnwprintf (wchar_t *buffer, size_t count, const wchar_t *format, va_list arg
 }
 
 void
-on_splitpath (const char *path, const char **drive, const char **dir,
-              const char **fname, const char **ext)
+on_splitpath (const char *path,
+              const char **drive,
+              const char **dir,
+              const char **fname,
+              const char **ext)
 {
   // The "const char* path" parameter is a UTF-8 encoded string.
   // Since the unicode code point values for the characters we
@@ -845,8 +882,11 @@ on_splitpath (const char *path, const char **drive, const char **dir,
 }
 
 void
-on_wsplitpath (const wchar_t *path, const wchar_t **drive, const wchar_t **dir,
-               const wchar_t **fname, const wchar_t **ext)
+on_wsplitpath (const wchar_t *path,
+               const wchar_t **drive,
+               const wchar_t **dir,
+               const wchar_t **fname,
+               const wchar_t **ext)
 {
   // The "const wchar_t* path" parameter is a UTF-8, UTF-16 or UTF-32
   // encoded string. Since the unicode code point values for the

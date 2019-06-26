@@ -73,10 +73,13 @@ using namespace visualization;
 void
 run (float pair_width, float voxel_size, float max_coplanarity_angle);
 void
-showModelOpps (PCLVisualizer &viz, const ModelLibrary::HashTable &hash_table,
-               const ModelLibrary::Model *model, float pair_width);
+showModelOpps (PCLVisualizer &viz,
+               const ModelLibrary::HashTable &hash_table,
+               const ModelLibrary::Model *model,
+               float pair_width);
 bool
-vtk_to_pointcloud (const char *file_name, PointCloud<PointXYZ> &pcl_points,
+vtk_to_pointcloud (const char *file_name,
+                   PointCloud<PointXYZ> &pcl_points,
                    PointCloud<Normal> &pcl_normals);
 
 //===========================================================================================================================================
@@ -88,17 +91,19 @@ main (int argc, char **argv)
           "<max_coplanarity_angle>\n\n");
 
   const int num_params = 3;
-  float parameters[num_params] = {10.0f /*pair width*/, 5.0f /*voxel size*/,
-                                  5.0f /*max co-planarity angle*/};
-  string parameter_names[num_params] = {"pair_width", "voxel_size",
-                                        "max_coplanarity_angle"};
+  float parameters[num_params] = {
+      10.0f /*pair width*/, 5.0f /*voxel size*/, 5.0f /*max co-planarity angle*/};
+  string parameter_names[num_params] = {
+      "pair_width", "voxel_size", "max_coplanarity_angle"};
 
   // Read the user input if any
   for (int i = 0; i < argc - 1 && i < num_params; ++i) {
     parameters[i] = static_cast<float> (atof (argv[i + 1]));
     if (parameters[i] <= 0.0f) {
-      fprintf (stderr, "ERROR: the %i-th parameter has to be positive and not %f\n",
-               i + 1, parameters[i]);
+      fprintf (stderr,
+               "ERROR: the %i-th parameter has to be positive and not %f\n",
+               i + 1,
+               parameters[i]);
       return (-1);
     }
   }
@@ -155,18 +160,18 @@ run (float pair_width, float voxel_size, float max_coplanarity_angle)
 
   model->getOctree ().getFullLeavesPoints (*octree_points);
   viz.addPointCloud (octree_points, "octree points");
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
-                                        5, "octree points");
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 1.0,
-                                        0.0, 0.0, "octree points");
+  viz.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "octree points");
+  viz.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 0.0, 0.0, "octree points");
 #endif
 
 #if defined _SHOW_MODEL_OCTREE_NORMALS_ && defined _SHOW_MODEL_OCTREE_POINTS_
   PointCloud<Normal>::Ptr octree_normals (new PointCloud<Normal> ());
 
   model->getOctree ().getNormalsOfFullLeaves (*octree_normals);
-  viz.addPointCloudNormals<PointXYZ, Normal> (octree_points, octree_normals, 1, 6.0f,
-                                              "octree normals");
+  viz.addPointCloudNormals<PointXYZ, Normal> (
+      octree_points, octree_normals, 1, 6.0f, "octree normals");
 #endif
 
   // Enter the main loop
@@ -180,8 +185,10 @@ run (float pair_width, float voxel_size, float max_coplanarity_angle)
 //===============================================================================================================================
 
 void
-showModelOpps (PCLVisualizer &viz, const ModelLibrary::HashTable &hash_table,
-               const ModelLibrary::Model *model, float pair_width)
+showModelOpps (PCLVisualizer &viz,
+               const ModelLibrary::HashTable &hash_table,
+               const ModelLibrary::Model *model,
+               float pair_width)
 {
   printf ("Visualizing ... ");
   fflush (stdout);
@@ -243,8 +250,8 @@ showModelOpps (PCLVisualizer &viz, const ModelLibrary::HashTable &hash_table,
 #endif
 
   viz.addModelFromPolyData (vtk_opps, "opps");
-  viz.setShapeRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 1.0,
-                                   0.0, "opps");
+  viz.setShapeRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 1.0, 0.0, "opps");
 
   printf ("done.\n");
 }
@@ -252,7 +259,8 @@ showModelOpps (PCLVisualizer &viz, const ModelLibrary::HashTable &hash_table,
 //===============================================================================================================================
 
 bool
-vtk_to_pointcloud (const char *file_name, PointCloud<PointXYZ> &pcl_points,
+vtk_to_pointcloud (const char *file_name,
+                   PointCloud<PointXYZ> &pcl_points,
                    PointCloud<Normal> &pcl_normals)
 {
   size_t len = strlen (file_name);

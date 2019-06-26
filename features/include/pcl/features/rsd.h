@@ -91,8 +91,12 @@ namespace pcl
   template <typename PointInT, typename PointNT, typename PointOutT>
   Eigen::MatrixXf
   computeRSD (const pcl::PointCloud<PointInT> &surface,
-              const pcl::PointCloud<PointNT> &normals, const std::vector<int> &indices,
-              double max_dist, int nr_subdiv, double plane_radius, PointOutT &radii,
+              const pcl::PointCloud<PointNT> &normals,
+              const std::vector<int> &indices,
+              double max_dist,
+              int nr_subdiv,
+              double plane_radius,
+              PointOutT &radii,
               bool compute_histogram = false);
 
   template <typename PointInT, typename PointNT, typename PointOutT>
@@ -100,11 +104,21 @@ namespace pcl
                 "reference")]] Eigen::MatrixXf
   computeRSD (typename pcl::PointCloud<PointInT>::ConstPtr &surface,
               typename pcl::PointCloud<PointNT>::ConstPtr &normals,
-              const std::vector<int> &indices, double max_dist, int nr_subdiv,
-              double plane_radius, PointOutT &radii, bool compute_histogram = false)
+              const std::vector<int> &indices,
+              double max_dist,
+              int nr_subdiv,
+              double plane_radius,
+              PointOutT &radii,
+              bool compute_histogram = false)
   {
-    return computeRSD (*surface, *normals, indices, max_dist, nr_subdiv, plane_radius,
-                       radii, compute_histogram);
+    return computeRSD (*surface,
+                       *normals,
+                       indices,
+                       max_dist,
+                       nr_subdiv,
+                       plane_radius,
+                       radii,
+                       compute_histogram);
   }
 
   /** \brief Estimate the Radius-based Surface Descriptor (RSD) for a given point based
@@ -121,20 +135,35 @@ namespace pcl
    */
   template <typename PointNT, typename PointOutT>
   Eigen::MatrixXf
-  computeRSD (const pcl::PointCloud<PointNT> &normals, const std::vector<int> &indices,
-              const std::vector<float> &sqr_dists, double max_dist, int nr_subdiv,
-              double plane_radius, PointOutT &radii, bool compute_histogram = false);
+  computeRSD (const pcl::PointCloud<PointNT> &normals,
+              const std::vector<int> &indices,
+              const std::vector<float> &sqr_dists,
+              double max_dist,
+              int nr_subdiv,
+              double plane_radius,
+              PointOutT &radii,
+              bool compute_histogram = false);
 
   template <typename PointNT, typename PointOutT>
   [[deprecated ("use computeRSD() overload that takes input point cloud by const "
                 "reference")]] Eigen::MatrixXf
   computeRSD (typename pcl::PointCloud<PointNT>::ConstPtr &normals,
-              const std::vector<int> &indices, const std::vector<float> &sqr_dists,
-              double max_dist, int nr_subdiv, double plane_radius, PointOutT &radii,
+              const std::vector<int> &indices,
+              const std::vector<float> &sqr_dists,
+              double max_dist,
+              int nr_subdiv,
+              double plane_radius,
+              PointOutT &radii,
               bool compute_histogram = false)
   {
-    return computeRSD (*normals, indices, sqr_dists, max_dist, nr_subdiv, plane_radius,
-                       radii, compute_histogram);
+    return computeRSD (*normals,
+                       indices,
+                       sqr_dists,
+                       max_dist,
+                       nr_subdiv,
+                       plane_radius,
+                       radii,
+                       compute_histogram);
   }
 
   /** \brief @b RSDEstimation estimates the Radius-based Surface Descriptor (minimal and

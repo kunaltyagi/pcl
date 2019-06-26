@@ -30,7 +30,9 @@ namespace pcl
 
       public:
       bool
-      estimate (PointInTPtr &in, PointInTPtr &processed, PointInTPtr &keypoints,
+      estimate (PointInTPtr &in,
+                PointInTPtr &processed,
+                PointInTPtr &keypoints,
                 FeatureTPtr &signatures) override
       {
 

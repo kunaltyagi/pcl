@@ -174,7 +174,8 @@ ON_ArcCurve::IsValid (ON_TextLog *text_log) const
   if (!m_t.IsIncreasing ()) {
     if (0 != text_log)
       text_log->Print (
-          "ON_ArcCurve - m_t=(%g,%g) - it should be an increasing interval.\n", m_t[0],
+          "ON_ArcCurve - m_t=(%g,%g) - it should be an increasing interval.\n",
+          m_t[0],
           m_t[1]);
     return false;
   }
@@ -851,7 +852,7 @@ ON_Arc::GetRadianFromNurbFormParameter (double NurbParameter,
   //
   //	GetNurbFormParameterFromRadian( *RadianParameter, &np2);
   //	ON_ASSERT(fabs(np2-NurbParameter)<=100* ON_EPSILON*( fabs(NurbParameter) +
-  //AP.MaximumCoordinate()+1.0) ); #endif
+  // AP.MaximumCoordinate()+1.0) ); #endif
 
   return true;
 }
@@ -979,7 +980,8 @@ ON_ArcCurve::GetNurbForm ( // returns 0: unable to create NURBS representation
                            //            curve's parameterization and the NURBS
                            //            parameterization may not match to the
                            //            desired accuracy.
-    ON_NurbsCurve &c, double tolerance,
+    ON_NurbsCurve &c,
+    double tolerance,
     const ON_Interval *subdomain // OPTIONAL subdomain of arc
     ) const
 {
@@ -1099,7 +1101,10 @@ CreateNewON_CircleCurve ()
 }
 
 const ON_ClassId ON__OBSOLETE__CircleCurve::m_ON_CircleCurve_class_id (
-    "ON__OBSOLETE__CircleCurve", "ON_ArcCurve", CreateNewON_CircleCurve, 0,
+    "ON__OBSOLETE__CircleCurve",
+    "ON_ArcCurve",
+    CreateNewON_CircleCurve,
+    0,
     "CF33BE29-09B4-11d4-BFFB-0010830122F0");
 
 const ON_ClassId *

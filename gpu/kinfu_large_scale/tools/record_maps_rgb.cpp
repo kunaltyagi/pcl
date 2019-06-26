@@ -201,8 +201,8 @@ writeToDisk (const boost::shared_ptr<const MapsBuffer::MapsRgb> &map_rbg)
   // save depth map
   ext = " -depth.png";
   fname = prefix + ss.str () + ext;
-  pcl::io::saveShortPNGFile (fname, (short unsigned int *)map_rbg->depth_.data, 640,
-                             480, 1);
+  pcl::io::saveShortPNGFile (
+      fname, (short unsigned int *)map_rbg->depth_.data, 640, 480, 1);
 
   counter++;
   FPS_CALC ("maps write");
@@ -221,8 +221,8 @@ grabberMapsCallBack (const boost::shared_ptr<openni_wrapper::Image> &image_wrapp
   rgb_depth.depth_.rows = depth_wrapper->getHeight ();
   rgb_depth.depth_.step = rgb_depth.depth_.cols * rgb_depth.depth_.elemSize ();
   source_depth_data_.resize (rgb_depth.depth_.cols * rgb_depth.depth_.rows);
-  depth_wrapper->fillDepthImageRaw (rgb_depth.depth_.cols, rgb_depth.depth_.rows,
-                                    &source_depth_data_[0]);
+  depth_wrapper->fillDepthImageRaw (
+      rgb_depth.depth_.cols, rgb_depth.depth_.rows, &source_depth_data_[0]);
   rgb_depth.depth_.data = &source_depth_data_[0];
 
   // fill in rgb values
@@ -230,7 +230,8 @@ grabberMapsCallBack (const boost::shared_ptr<openni_wrapper::Image> &image_wrapp
   rgb_depth.rgb_.rows = image_wrapper->getHeight ();
   rgb_depth.rgb_.step = rgb_depth.rgb_.cols * rgb_depth.rgb_.elemSize ();
   source_image_data_.resize (rgb_depth.rgb_.cols * rgb_depth.rgb_.rows);
-  image_wrapper->fillRGB (rgb_depth.rgb_.cols, rgb_depth.rgb_.rows,
+  image_wrapper->fillRGB (rgb_depth.rgb_.cols,
+                          rgb_depth.rgb_.rows,
                           (unsigned char *)&source_image_data_[0]);
   rgb_depth.rgb_.data = &source_image_data_[0];
 

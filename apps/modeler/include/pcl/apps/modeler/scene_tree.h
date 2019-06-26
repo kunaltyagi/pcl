@@ -110,7 +110,9 @@ namespace pcl
       dropEvent (QDropEvent *event) override;
 
       bool
-      dropMimeData (QTreeWidgetItem *parent, int index, const QMimeData *data,
+      dropMimeData (QTreeWidgetItem *parent,
+                    int index,
+                    const QMimeData *data,
                     Qt::DropAction action) override;
 
       private Q_SLOTS:

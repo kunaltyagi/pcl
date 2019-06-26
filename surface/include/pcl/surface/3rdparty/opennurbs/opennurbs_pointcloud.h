@@ -96,7 +96,8 @@ class ON_CLASS ON_PointCloud : public ON_Geometry
 
   // virtual ON_Geometry override
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   // virtual ON_Geometry override
@@ -134,7 +135,8 @@ class ON_CLASS ON_PointCloud : public ON_Geometry
     ON_GetClosestPointInPointList
   */
   bool
-  GetClosestPoint (ON_3dPoint P, int *closest_point_index,
+  GetClosestPoint (ON_3dPoint P,
+                   int *closest_point_index,
                    double maximum_distance = 0.0) const;
 
   /////////////////////////////////////////////////////////////////

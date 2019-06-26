@@ -308,9 +308,18 @@ ON_TextLog::Print (const ON_Xform &xform)
 void
 ON_TextLog::Print (const ON_UUID &uuid)
 {
-  Print ("%08X-%04X-%04x-%02X%02X-%02X%02X%02X%02X%02X%02X", uuid.Data1, uuid.Data2,
-         uuid.Data3, uuid.Data4[0], uuid.Data4[1], uuid.Data4[2], uuid.Data4[3],
-         uuid.Data4[4], uuid.Data4[5], uuid.Data4[6], uuid.Data4[7]);
+  Print ("%08X-%04X-%04x-%02X%02X-%02X%02X%02X%02X%02X%02X",
+         uuid.Data1,
+         uuid.Data2,
+         uuid.Data3,
+         uuid.Data4[0],
+         uuid.Data4[1],
+         uuid.Data4[2],
+         uuid.Data4[3],
+         uuid.Data4[4],
+         uuid.Data4[5],
+         uuid.Data4[6],
+         uuid.Data4[7]);
 }
 
 void
@@ -418,12 +427,27 @@ ON_TextLog::PrintTime (const struct tm &t)
 {
   if (0 != t.tm_sec || 0 != t.tm_min || 0 != t.tm_hour || 0 != t.tm_mday ||
       0 != t.tm_mon || 0 != t.tm_year || 0 != t.tm_wday) {
-    const char *sDayName[8] = {"Sunday",   "Monday", "Tuesday",  "Wednesday",
-                               "Thursday", "Friday", "Saturday", "<invalid day>"};
-    const char *sMonName[13] = {
-        "January",  "February", "March",          "April",     "May",
-        "June",     "July",     "August",         "September", "October",
-        "November", "December", "<invalid month>"};
+    const char *sDayName[8] = {"Sunday",
+                               "Monday",
+                               "Tuesday",
+                               "Wednesday",
+                               "Thursday",
+                               "Friday",
+                               "Saturday",
+                               "<invalid day>"};
+    const char *sMonName[13] = {"January",
+                                "February",
+                                "March",
+                                "April",
+                                "May",
+                                "June",
+                                "July",
+                                "August",
+                                "September",
+                                "October",
+                                "November",
+                                "December",
+                                "<invalid month>"};
     int wday = t.tm_wday;
     if (wday < 0 || wday > 6)
       wday = 7;
@@ -431,14 +455,20 @@ ON_TextLog::PrintTime (const struct tm &t)
     if (mon < 0 || mon > 11)
       mon = 12;
 
-    Print ("%s %s %02d %02d:%02d:%02d %4d", sDayName[wday], sMonName[mon], t.tm_mday,
-           t.tm_hour, t.tm_min, t.tm_sec, t.tm_year + 1900);
+    Print ("%s %s %02d %02d:%02d:%02d %4d",
+           sDayName[wday],
+           sMonName[mon],
+           t.tm_mday,
+           t.tm_hour,
+           t.tm_min,
+           t.tm_sec,
+           t.tm_year + 1900);
   }
 }
 
 void
-ON_TextLog::PrintPointList (int dim, int is_rat, int count, int stride, const double *P,
-                            const char *sPreamble)
+ON_TextLog::PrintPointList (
+    int dim, int is_rat, int count, int stride, const double *P, const char *sPreamble)
 {
   double w, x;
   int i, j, cvdim;
@@ -484,8 +514,13 @@ ON_TextLog::PrintPointList (int dim, int is_rat, int count, int stride, const do
 }
 
 void
-ON_TextLog::PrintPointGrid (int dim, int is_rat, int point_count0, int point_count1,
-                            int point_stride0, int point_stride1, const double *P,
+ON_TextLog::PrintPointGrid (int dim,
+                            int is_rat,
+                            int point_count0,
+                            int point_count1,
+                            int point_stride0,
+                            int point_stride1,
+                            const double *P,
                             const char *sPreamble)
 {
   char s[1024];

@@ -77,7 +77,8 @@ pcl::visualization::PCLHistogramVisualizer::spinOnce (int time)
 
               // Set the correct interactor for callbacks
               exit_main_loop_timer_callback_->interact = win.second.interactor_;
-              win.second.interactor_->Start (); win.second.interactor_->DestroyTimer (
+              win.second.interactor_->Start ();
+              win.second.interactor_->DestroyTimer (
                   exit_main_loop_timer_callback_->right_timer_id););
   }
 }
@@ -168,7 +169,8 @@ pcl::visualization::PCLHistogramVisualizer::updateWindowPositions ()
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::PCLHistogramVisualizer::reCreateActor (
-    const vtkSmartPointer<vtkDoubleArray> &xy_array, RenWinInteract *renwinupd,
+    const vtkSmartPointer<vtkDoubleArray> &xy_array,
+    RenWinInteract *renwinupd,
     const int hsize)
 {
   renwinupd->ren_->RemoveActor2D (renwinupd->xy_plot_);
@@ -197,8 +199,10 @@ pcl::visualization::PCLHistogramVisualizer::reCreateActor (
 void
 pcl::visualization::PCLHistogramVisualizer::createActor (
     const vtkSmartPointer<vtkDoubleArray> &xy_array,
-    pcl::visualization::RenWinInteract &renwinint, const std::string &id,
-    const int win_width, const int win_height)
+    pcl::visualization::RenWinInteract &renwinint,
+    const std::string &id,
+    const int win_width,
+    const int win_height)
 {
   // Create the actor
   renwinint.xy_plot_->SetDataObjectPlotModeToColumns ();
@@ -285,8 +289,11 @@ pcl::visualization::PCLHistogramVisualizer::createActor (
 ////////////////////////////////////////////////////////////////////////////////////////////
 bool
 pcl::visualization::PCLHistogramVisualizer::addFeatureHistogram (
-    const pcl::PCLPointCloud2 &cloud, const std::string &field_name,
-    const std::string &id, int win_width, int win_height)
+    const pcl::PCLPointCloud2 &cloud,
+    const std::string &field_name,
+    const std::string &id,
+    int win_width,
+    int win_height)
 {
   // Get the field
   int field_idx = pcl::getFieldIndex (cloud, field_name);
@@ -313,7 +320,8 @@ pcl::visualization::PCLHistogramVisualizer::addFeatureHistogram (
     xy[0] = d;
     float data;
     // TODO: replace float with the real data type
-    memcpy (&data, &cloud.data[cloud.fields[field_idx].offset + d * sizeof (float)],
+    memcpy (&data,
+            &cloud.data[cloud.fields[field_idx].offset + d * sizeof (float)],
             sizeof (float));
     xy[1] = data;
     xy_array->SetTuple (d, xy);
@@ -329,8 +337,12 @@ pcl::visualization::PCLHistogramVisualizer::addFeatureHistogram (
 ////////////////////////////////////////////////////////////////////////////////////////////
 bool
 pcl::visualization::PCLHistogramVisualizer::addFeatureHistogram (
-    const pcl::PCLPointCloud2 &cloud, const std::string &field_name, const int index,
-    const std::string &id, int win_width, int win_height)
+    const pcl::PCLPointCloud2 &cloud,
+    const std::string &field_name,
+    const int index,
+    const std::string &id,
+    int win_width,
+    int win_height)
 {
   if (index < 0 || index >= static_cast<int> (cloud.width * cloud.height)) {
     PCL_ERROR ("[addFeatureHistogram] Invalid point index (%d) given!\n", index);
@@ -386,7 +398,8 @@ pcl::visualization::PCLHistogramVisualizer::addFeatureHistogram (
 //////////////////////////////////////////////////////////////////////////////////////////////
 bool
 pcl::visualization::PCLHistogramVisualizer::updateFeatureHistogram (
-    const pcl::PCLPointCloud2 &cloud, const std::string &field_name,
+    const pcl::PCLPointCloud2 &cloud,
+    const std::string &field_name,
     const std::string &id)
 {
   RenWinInteractMap::iterator am_it = wins_.find (id);
@@ -413,7 +426,8 @@ pcl::visualization::PCLHistogramVisualizer::updateFeatureHistogram (
   for (unsigned int d = 0; d < cloud.fields[field_idx].count; ++d) {
     xy[0] = d;
     float data;
-    memcpy (&data, &cloud.data[cloud.fields[field_idx].offset + d * sizeof (float)],
+    memcpy (&data,
+            &cloud.data[cloud.fields[field_idx].offset + d * sizeof (float)],
             sizeof (float));
     xy[1] = data;
     xy_array->SetTuple (d, xy);
@@ -425,7 +439,9 @@ pcl::visualization::PCLHistogramVisualizer::updateFeatureHistogram (
 //////////////////////////////////////////////////////////////////////////////////////////////
 bool
 pcl::visualization::PCLHistogramVisualizer::updateFeatureHistogram (
-    const pcl::PCLPointCloud2 &cloud, const std::string &field_name, const int index,
+    const pcl::PCLPointCloud2 &cloud,
+    const std::string &field_name,
+    const int index,
     const std::string &id)
 {
   if (index < 0 || index >= static_cast<int> (cloud.width * cloud.height)) {

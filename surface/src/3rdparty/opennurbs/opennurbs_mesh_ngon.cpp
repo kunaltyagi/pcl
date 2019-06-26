@@ -176,7 +176,8 @@ class /* DO NOT EXPORT THIS CLASS */ ON_MeshNgonUserData : public ON_UserData
   int m_mesh_V_count;
 };
 
-ON_OBJECT_IMPLEMENT (ON_MeshNgonUserData, ON_UserData,
+ON_OBJECT_IMPLEMENT (ON_MeshNgonUserData,
+                     ON_UserData,
                      "31F55AA3-71FB-49f5-A975-757584D937FF");
 
 ON_MeshNgonUserData::ON_MeshNgonUserData ()
@@ -223,10 +224,7 @@ ON_MeshNgonUserData::operator= (const ON_MeshNgonUserData &src)
 }
 
 ON_BOOL32
-ON_MeshNgonUserData::IsValid (ON_TextLog *text_log) const
-{
-  return true;
-}
+ON_MeshNgonUserData::IsValid (ON_TextLog *text_log) const { return true; }
 
 unsigned int
 ON_MeshNgonList::SizeOf () const

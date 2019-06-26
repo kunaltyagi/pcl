@@ -11,13 +11,15 @@ pcl::cloud_composer::NormalsItem::NormalsItem (
   pcl::PointCloud<pcl::Normal>::ConstPtr normals_const = normals_ptr;
   this->setData (QVariant::fromValue (normals_const), ItemDataRole::CLOUD_TEMPLATED);
   properties_->addCategory ("Core Properties");
-  properties_->addProperty ("Radius", QVariant (radius), Qt::ItemIsSelectable,
-                            "Core Properties");
+  properties_->addProperty (
+      "Radius", QVariant (radius), Qt::ItemIsSelectable, "Core Properties");
   properties_->addCategory ("Display Variables");
-  properties_->addProperty ("Scale", QVariant (0.02),
+  properties_->addProperty ("Scale",
+                            QVariant (0.02),
                             Qt::ItemIsEditable | Qt::ItemIsEnabled,
                             "Display Variables");
-  properties_->addProperty ("Level", QVariant (100),
+  properties_->addProperty ("Level",
+                            QVariant (100),
                             Qt::ItemIsEditable | Qt::ItemIsEnabled,
                             "Display Variables");
 }

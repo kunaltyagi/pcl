@@ -69,7 +69,8 @@ namespace pcl
          * nb_voxels_per_axis number of voxels per axis of the volume represented by the
          * TSDF buffer.
          */
-        CyclicalBuffer (const double distance_threshold, const double cube_size = 3.f,
+        CyclicalBuffer (const double distance_threshold,
+                        const double cube_size = 3.f,
                         const int nb_voxels_per_axis = 512)
         {
           distance_threshold_ = distance_threshold;
@@ -92,9 +93,12 @@ namespace pcl
          * \param[in] nb_voxels_z number of voxels for Z axis of the volume represented
          * by the TSDF buffer.
          */
-        CyclicalBuffer (const double distance_threshold, const double volume_size_x,
-                        const double volume_size_y, const double volume_size_z,
-                        const int nb_voxels_x, const int nb_voxels_y,
+        CyclicalBuffer (const double distance_threshold,
+                        const double volume_size_x,
+                        const double volume_size_y,
+                        const double volume_size_z,
+                        const int nb_voxels_x,
+                        const int nb_voxels_y,
                         const int nb_voxels_z)
         {
           distance_threshold_ = distance_threshold;
@@ -122,9 +126,11 @@ namespace pcl
           * \return true is the cube needs to be or has been shifted.
           */
         bool
-        checkForShift (const TsdfVolume::Ptr volume, const Eigen::Affine3f &cam_pose,
+        checkForShift (const TsdfVolume::Ptr volume,
+                       const Eigen::Affine3f &cam_pose,
                        const double distance_camera_target,
-                       const bool perform_shift = true, const bool last_shift = false,
+                       const bool perform_shift = true,
+                       const bool last_shift = false,
                        const bool force_shift = false);
 
         /** \brief Perform shifting operations:
@@ -142,7 +148,8 @@ namespace pcl
           is used to push the whole cube to the world model.
           */
         void
-        performShift (const TsdfVolume::Ptr volume, const pcl::PointXYZ &target_point,
+        performShift (const TsdfVolume::Ptr volume,
+                      const pcl::PointXYZ &target_point,
                       const bool last_shift = false);
 
         /** \brief Sets the distance threshold between cube's center and target point
@@ -205,7 +212,9 @@ namespace pcl
          */
         void
         computeAndSetNewCubeMetricOrigin (const pcl::PointXYZ &target_point,
-                                          int &shiftX, int &shiftY, int &shiftZ);
+                                          int &shiftX,
+                                          int &shiftY,
+                                          int &shiftZ);
 
         /** \brief Initializes memory pointers of the  cyclical buffer (start, end,
          * current origin) \param[in] tsdf_volume pointer to the TSDF volume managed by
@@ -273,8 +282,10 @@ namespace pcl
          * offset in indices on axis Y \param[in] offset_z offset in indices on axis Z
          */
         void
-        shiftOrigin (TsdfVolume::Ptr tsdf_volume, const int offset_x,
-                     const int offset_y, const int offset_z)
+        shiftOrigin (TsdfVolume::Ptr tsdf_volume,
+                     const int offset_x,
+                     const int offset_y,
+                     const int offset_z)
         {
           // shift rolling origin (making sure they keep in [0 - NbVoxels[ )
           buffer_.origin_GRID.x += offset_x;

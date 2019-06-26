@@ -116,7 +116,8 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS bool
-    savePolygonFile (const std::string &file_name, const pcl::PolygonMesh &mesh,
+    savePolygonFile (const std::string &file_name,
+                     const pcl::PolygonMesh &mesh,
                      const bool binary_format = true);
 
     /** \brief Load a VTK file into a \ref PolygonMesh object
@@ -169,7 +170,8 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS bool
-    savePolygonFileVTK (const std::string &file_name, const pcl::PolygonMesh &mesh,
+    savePolygonFileVTK (const std::string &file_name,
+                        const pcl::PolygonMesh &mesh,
                         const bool binary_format = true);
 
     /** \brief Save a \ref PolygonMesh object into a PLY file
@@ -180,7 +182,8 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS bool
-    savePolygonFilePLY (const std::string &file_name, const pcl::PolygonMesh &mesh,
+    savePolygonFilePLY (const std::string &file_name,
+                        const pcl::PolygonMesh &mesh,
                         const bool binary_format = true);
 
     /** \brief Save a \ref PolygonMesh object into an STL file
@@ -191,7 +194,8 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS bool
-    savePolygonFileSTL (const std::string &file_name, const pcl::PolygonMesh &mesh,
+    savePolygonFileSTL (const std::string &file_name,
+                        const pcl::PolygonMesh &mesh,
                         const bool binary_format = true);
 
     /** \brief Write a \ref RangeImagePlanar object to a PNG file

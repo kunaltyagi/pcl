@@ -90,8 +90,8 @@ namespace pcl
       }
 
       // Create root_node_node
-      root_node_ = new OutofcoreOctreeBaseNode<ContainerT, PointT> (root_name, nullptr,
-                                                                    load_all);
+      root_node_ = new OutofcoreOctreeBaseNode<ContainerT, PointT> (
+          root_name, nullptr, load_all);
       // Set root_node_nodes tree to the newly created tree
       root_node_->m_tree_ = this;
 
@@ -109,8 +109,10 @@ namespace pcl
 
     template <typename ContainerT, typename PointT>
     OutofcoreOctreeBase<ContainerT, PointT>::OutofcoreOctreeBase (
-        const Eigen::Vector3d &min, const Eigen::Vector3d &max,
-        const double resolution_arg, const boost::filesystem::path &root_node_name,
+        const Eigen::Vector3d &min,
+        const Eigen::Vector3d &max,
+        const double resolution_arg,
+        const boost::filesystem::path &root_node_name,
         const std::string &coord_sys)
         : root_node_ (), read_write_mutex_ (),
           metadata_ (new OutofcoreOctreeBaseMetadata ()), sample_percent_ (0.125),
@@ -132,8 +134,10 @@ namespace pcl
 
     template <typename ContainerT, typename PointT>
     OutofcoreOctreeBase<ContainerT, PointT>::OutofcoreOctreeBase (
-        const boost::uint64_t max_depth, const Eigen::Vector3d &min,
-        const Eigen::Vector3d &max, const boost::filesystem::path &root_node_name,
+        const boost::uint64_t max_depth,
+        const Eigen::Vector3d &min,
+        const Eigen::Vector3d &max,
+        const boost::filesystem::path &root_node_name,
         const std::string &coord_sys)
         : root_node_ (), read_write_mutex_ (),
           metadata_ (new OutofcoreOctreeBaseMetadata ()), sample_percent_ (0.125),
@@ -147,8 +151,11 @@ namespace pcl
     template <typename ContainerT, typename PointT>
     void
     OutofcoreOctreeBase<ContainerT, PointT>::init (
-        const uint64_t &depth, const Eigen::Vector3d &min, const Eigen::Vector3d &max,
-        const boost::filesystem::path &root_name, const std::string &coord_sys)
+        const uint64_t &depth,
+        const Eigen::Vector3d &min,
+        const Eigen::Vector3d &max,
+        const boost::filesystem::path &root_name,
+        const std::string &coord_sys)
     {
       // Validate the extension of the pathname
       if (!this->checkExtension (root_name)) {
@@ -180,8 +187,8 @@ namespace pcl
       this->enlargeToCube (tmp_min, tmp_max);
 
       // Create root node
-      root_node_ = new OutofcoreOctreeBaseNode<ContainerT, PointT> (tmp_min, tmp_max,
-                                                                    this, root_name);
+      root_node_ = new OutofcoreOctreeBaseNode<ContainerT, PointT> (
+          tmp_min, tmp_max, this, root_name);
       root_node_->m_tree_ = this;
 
       // Set root nodes file path
@@ -286,7 +293,9 @@ namespace pcl
 
       PCL_DEBUG ("[pcl::outofcore::OutofcoreOctreeBase::%s] Points added %lu, points "
                  "in input cloud, %lu\n",
-                 __FUNCTION__, pt_added, input_cloud->width * input_cloud->height);
+                 __FUNCTION__,
+                 pt_added,
+                 input_cloud->width * input_cloud->height);
 
       assert (input_cloud->width * input_cloud->height == pt_added);
 
@@ -322,7 +331,8 @@ namespace pcl
     template <typename Container, typename PointT>
     void
     OutofcoreOctreeBase<Container, PointT>::queryFrustum (
-        const double *planes, std::list<std::string> &file_names,
+        const double *planes,
+        std::list<std::string> &file_names,
         const boost::uint32_t query_depth) const
     {
       std::shared_lock<std::shared_timed_mutex> lock (read_write_mutex_);
@@ -334,13 +344,15 @@ namespace pcl
     template <typename Container, typename PointT>
     void
     OutofcoreOctreeBase<Container, PointT>::queryFrustum (
-        const double *planes, const Eigen::Vector3d &eye,
+        const double *planes,
+        const Eigen::Vector3d &eye,
         const Eigen::Matrix4d &view_projection_matrix,
-        std::list<std::string> &file_names, const boost::uint32_t query_depth) const
+        std::list<std::string> &file_names,
+        const boost::uint32_t query_depth) const
     {
       std::shared_lock<std::shared_timed_mutex> lock (read_write_mutex_);
-      root_node_->queryFrustum (planes, eye, view_projection_matrix, file_names,
-                                query_depth);
+      root_node_->queryFrustum (
+          planes, eye, view_projection_matrix, file_names, query_depth);
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -348,14 +360,21 @@ namespace pcl
     template <typename ContainerT, typename PointT>
     void
     OutofcoreOctreeBase<ContainerT, PointT>::queryBBIncludes (
-        const Eigen::Vector3d &min, const Eigen::Vector3d &max,
-        const boost::uint64_t query_depth, AlignedPointTVector &dst) const
+        const Eigen::Vector3d &min,
+        const Eigen::Vector3d &max,
+        const boost::uint64_t query_depth,
+        AlignedPointTVector &dst) const
     {
       std::shared_lock<std::shared_timed_mutex> lock (read_write_mutex_);
       dst.clear ();
       PCL_DEBUG ("[pcl::outofcore::OutofcoreOctreeBaseNode] Querying Bounding Box "
                  "%.2lf %.2lf %.2lf, %.2lf %.2lf %.2lf",
-                 min[0], min[1], min[2], max[0], max[1], max[2]);
+                 min[0],
+                 min[1],
+                 min[2],
+                 max[0],
+                 max[1],
+                 max[2]);
       root_node_->queryBBIncludes (min, max, query_depth, dst);
     }
 
@@ -364,7 +383,8 @@ namespace pcl
     template <typename ContainerT, typename PointT>
     void
     OutofcoreOctreeBase<ContainerT, PointT>::queryBBIncludes (
-        const Eigen::Vector3d &min, const Eigen::Vector3d &max,
+        const Eigen::Vector3d &min,
+        const Eigen::Vector3d &max,
         const boost::uint64_t query_depth,
         const pcl::PCLPointCloud2::Ptr &dst_blob) const
     {
@@ -382,8 +402,10 @@ namespace pcl
     template <typename ContainerT, typename PointT>
     void
     OutofcoreOctreeBase<ContainerT, PointT>::queryBBIncludes_subsample (
-        const Eigen::Vector3d &min, const Eigen::Vector3d &max,
-        const boost::uint64_t query_depth, const double percent,
+        const Eigen::Vector3d &min,
+        const Eigen::Vector3d &max,
+        const boost::uint64_t query_depth,
+        const double percent,
         AlignedPointTVector &dst) const
     {
       std::shared_lock<std::shared_timed_mutex> lock (read_write_mutex_);
@@ -395,14 +417,17 @@ namespace pcl
     template <typename ContainerT, typename PointT>
     void
     OutofcoreOctreeBase<ContainerT, PointT>::queryBoundingBox (
-        const Eigen::Vector3d &min, const Eigen::Vector3d &max, const int query_depth,
-        const pcl::PCLPointCloud2::Ptr &dst_blob, double percent)
+        const Eigen::Vector3d &min,
+        const Eigen::Vector3d &max,
+        const int query_depth,
+        const pcl::PCLPointCloud2::Ptr &dst_blob,
+        double percent)
     {
       if (percent == 1.0) {
         root_node_->queryBBIncludes (min, max, query_depth, dst_blob);
       } else {
-        root_node_->queryBBIncludes_subsample (min, max, query_depth, dst_blob,
-                                               percent);
+        root_node_->queryBBIncludes_subsample (
+            min, max, query_depth, dst_blob, percent);
       }
     }
 
@@ -470,8 +495,10 @@ namespace pcl
     template <typename ContainerT, typename PointT>
     void
     OutofcoreOctreeBase<ContainerT, PointT>::queryBBIntersects (
-        const Eigen::Vector3d &min, const Eigen::Vector3d &max,
-        const boost::uint32_t query_depth, std::list<std::string> &bin_name) const
+        const Eigen::Vector3d &min,
+        const Eigen::Vector3d &max,
+        const boost::uint32_t query_depth,
+        std::list<std::string> &bin_name) const
     {
       std::shared_lock<std::shared_timed_mutex> lock (read_write_mutex_);
       bin_name.clear ();
@@ -661,7 +688,13 @@ namespace pcl
       node.getBoundingBox (min, max);
       PCL_INFO ("[pcl::outofcore::OutofcoreOctreeBase::%s] min(%lf,%lf,%lf), "
                 "max(%lf,%lf,%lf)\n",
-                __FUNCTION__, min[0], min[1], min[2], max[0], max[1], max[2]);
+                __FUNCTION__,
+                min[0],
+                min[1],
+                min[2],
+                max[0],
+                max[1],
+                max[2]);
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -671,8 +704,8 @@ namespace pcl
     OutofcoreOctreeBase<ContainerT, PointT>::buildLODRecursive (
         const std::vector<BranchNode *> &current_branch)
     {
-      PCL_DEBUG ("%s Building LOD at depth %d", __PRETTY_FUNCTION__,
-                 current_branch.size ());
+      PCL_DEBUG (
+          "%s Building LOD at depth %d", __PRETTY_FUNCTION__, current_branch.size ());
 
       if (!current_branch.back ()) {
         return;
@@ -692,7 +725,8 @@ namespace pcl
         // go up the tree, re-downsampling the full resolution leaf cloud at lower and
         // lower resolution
         for (int64_t level = static_cast<int64_t> (current_branch.size () - 1);
-             level >= 1; level--) {
+             level >= 1;
+             level--) {
           BranchNode *target_parent = current_branch[level - 1];
           assert (target_parent != 0);
           double exponent =
@@ -773,7 +807,8 @@ namespace pcl
         PCL_ERROR (
             "[pcl::outofcore::OutofcoreOctreeBase::incrementPointsInLOD] Overflow "
             "error. Too many points in depth %d of outofcore octree with root at %s\n",
-            depth, metadata_->getMetadataFilename ().c_str ());
+            depth,
+            metadata_->getMetadataFilename ().c_str ());
         PCL_THROW_EXCEPTION (PCLException, "Overflow error");
       }
 
@@ -825,7 +860,8 @@ namespace pcl
     template <typename ContainerT, typename PointT>
     boost::uint64_t
     OutofcoreOctreeBase<ContainerT, PointT>::calculateDepth (
-        const Eigen::Vector3d &min_bb, const Eigen::Vector3d &max_bb,
+        const Eigen::Vector3d &min_bb,
+        const Eigen::Vector3d &max_bb,
         const double leaf_resolution)
     {
       // Assume cube

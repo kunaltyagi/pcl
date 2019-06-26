@@ -159,8 +159,10 @@ class ObjectSelection
    * object of interest \param[out] object the segmented resultant object
    */
   void
-  segmentObject (int picked_idx, const typename PointCloud<PointT>::ConstPtr &cloud,
-                 const PointIndices::Ptr &plane_indices, PointCloud<PointT> &object)
+  segmentObject (int picked_idx,
+                 const typename PointCloud<PointT>::ConstPtr &cloud,
+                 const PointIndices::Ptr &plane_indices,
+                 PointCloud<PointT> &object)
   {
     typename PointCloud<PointT>::Ptr plane_hull (new PointCloud<PointT>);
 
@@ -187,7 +189,8 @@ class ObjectSelection
     exppd.setInputCloud (cloud);
     exppd.setIndices (indices_but_the_plane);
     exppd.setInputPlanarHull (plane_hull);
-    exppd.setViewPoint (cloud->points[picked_idx].x, cloud->points[picked_idx].y,
+    exppd.setViewPoint (cloud->points[picked_idx].x,
+                        cloud->points[picked_idx].y,
                         cloud->points[picked_idx].z);
     exppd.setHeightLimits (0.001, 0.5); // up to half a meter
     exppd.segment (*points_above_plane);
@@ -263,7 +266,9 @@ class ObjectSelection
 
   /////////////////////////////////////////////////////////////////////////
   void
-  segment (const PointT &picked_point, int picked_idx, PlanarRegion<PointT> &region,
+  segment (const PointT &picked_point,
+           int picked_idx,
+           PlanarRegion<PointT> &region,
            typename PointCloud<PointT>::Ptr &object)
   {
     object.reset ();
@@ -302,8 +307,12 @@ class ObjectSelection
       // that we want out
       PointCloud<Label>::Ptr labels (new PointCloud<Label>);
       vector<PointIndices> label_indices;
-      mps.segmentAndRefine (regions, model_coefficients, inlier_indices, labels,
-                            label_indices, boundary_indices);
+      mps.segmentAndRefine (regions,
+                            model_coefficients,
+                            inlier_indices,
+                            labels,
+                            label_indices,
+                            boundary_indices);
     } else {
       SACSegmentation<PointT> seg;
       seg.setOptimizeCoefficients (true);
@@ -358,7 +367,8 @@ class ObjectSelection
     }
     print_highlight (
         "Number of planar regions detected: %lu for a cloud of %lu points\n",
-        regions.size (), cloud_->size ());
+        regions.size (),
+        cloud_->size ());
 
     double max_dist = numeric_limits<double>::max ();
     // Compute the distances from all the planar regions to the picked point, and select
@@ -380,7 +390,8 @@ class ObjectSelection
         approximatePolygon (regions[idx], region, 0.01f, false, true);
         print_highlight (
             "Planar region: %lu points initial, %lu points after refinement.\n",
-            regions[idx].getContour ().size (), region.getContour ().size ());
+            regions[idx].getContour ().size (),
+            region.getContour ().size ());
       } else {
         // Save the current region
         region = regions[idx];
@@ -444,8 +455,12 @@ class ObjectSelection
     PointT picked_pt;
     event.getPoint (picked_pt.x, picked_pt.y, picked_pt.z);
 
-    print_info (stderr, "Picked point with index %d, and coordinates %f, %f, %f.\n",
-                idx, picked_pt.x, picked_pt.y, picked_pt.z);
+    print_info (stderr,
+                "Picked point with index %d, and coordinates %f, %f, %f.\n",
+                idx,
+                picked_pt.x,
+                picked_pt.y,
+                picked_pt.z);
 
     // Add a sphere to it in the PCLVisualizer window
     stringstream ss;
@@ -465,10 +480,10 @@ class ObjectSelection
       int v = height - indices[0] / width, u = indices[0] % width;
 
       image_viewer_->addCircle (u, v, 5, 1.0, 0.0, 0.0, "circles", 1.0);
-      image_viewer_->addFilledRectangle (u - 5, u + 5, v - 5, v + 5, 0.0, 1.0, 0.0,
-                                         "boxes", 0.5);
-      image_viewer_->markPoint (u, v, visualization::red_color,
-                                visualization::blue_color, 10);
+      image_viewer_->addFilledRectangle (
+          u - 5, u + 5, v - 5, v + 5, 0.0, 1.0, 0.0, "boxes", 0.5);
+      image_viewer_->markPoint (
+          u, v, visualization::red_color, visualization::blue_color, 10);
     }
 
     // Segment the region that we're interested in, by employing a two step process:
@@ -493,8 +508,8 @@ class ObjectSelection
 
       // Draw in image space
       if (image_viewer_) {
-        image_viewer_->addPlanarPolygon (search_->getInputCloud (), region, 0.0, 0.0,
-                                         1.0, "refined_region", 1.0);
+        image_viewer_->addPlanarPolygon (
+            search_->getInputCloud (), region, 0.0, 0.0, 1.0, "refined_region", 1.0);
       }
     }
 
@@ -570,7 +585,8 @@ class ObjectSelection
         rgb_data_ = new unsigned char[cloud_->width * cloud_->height * 3];
         for (uint32_t i = 0; i < cloud_->width * cloud_->height; ++i) {
           RGB rgb;
-          memcpy (&rgb, reinterpret_cast<unsigned char *> (&cloud_->points[i]) + poff,
+          memcpy (&rgb,
+                  reinterpret_cast<unsigned char *> (&cloud_->points[i]) + poff,
                   sizeof (rgb));
 
           rgb_data_[i * 3 + 0] = rgb.r;
@@ -633,7 +649,8 @@ class ObjectSelection
       w.writeBinaryCompressed (plane_file, *plane_);
       print_highlight (
           "Object successfully segmented. Saving results in: %s, and %s.\n",
-          object_file.c_str (), plane_file.c_str ());
+          object_file.c_str (),
+          plane_file.c_str ());
     }
   }
 

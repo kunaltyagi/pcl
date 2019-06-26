@@ -414,8 +414,10 @@ pcl::TfQuadraticXYZComparison<PointT>::TfQuadraticXYZComparison () : comp_scalar
 //////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 pcl::TfQuadraticXYZComparison<PointT>::TfQuadraticXYZComparison (
-    const pcl::ComparisonOps::CompareOp op, const Eigen::Matrix3f &comparison_matrix,
-    const Eigen::Vector3f &comparison_vector, const float &comparison_scalar,
+    const pcl::ComparisonOps::CompareOp op,
+    const Eigen::Matrix3f &comparison_matrix,
+    const Eigen::Vector3f &comparison_vector,
+    const float &comparison_scalar,
     const Eigen::Affine3f &comparison_transform)
     : comp_scalar_ (comparison_scalar)
 {
@@ -714,9 +716,9 @@ pcl::ConditionalRemoval<PointT>::applyFilter (PointCloud &output)
       if (cp == static_cast<size_t> (indices[ci])) {
         if (ci < indices.size () - 1) {
           ci++;
-          if (cp ==
-              static_cast<size_t> (indices[ci])) // check whether the next index will
-                                                 // have the same value. TODO: necessary?
+          if (cp == static_cast<size_t> (
+                        indices[ci])) // check whether the next index will
+                                      // have the same value. TODO: necessary?
             continue;
         }
 

@@ -64,19 +64,24 @@ namespace pcl
       ~ZBuffering ();
       void
       computeDepthMap (typename pcl::PointCloud<SceneT>::ConstPtr &scene,
-                       bool compute_focal = false, bool smooth = false, int wsize = 3);
+                       bool compute_focal = false,
+                       bool smooth = false,
+                       int wsize = 3);
       void
       filter (typename pcl::PointCloud<ModelT>::ConstPtr &model,
-              typename pcl::PointCloud<ModelT>::Ptr &filtered, float thres = 0.01);
+              typename pcl::PointCloud<ModelT>::Ptr &filtered,
+              float thres = 0.01);
       void
       filter (typename pcl::PointCloud<ModelT>::ConstPtr &model,
-              std::vector<int> &indices, float thres = 0.01);
+              std::vector<int> &indices,
+              float thres = 0.01);
     };
 
     template <typename ModelT, typename SceneT>
     typename pcl::PointCloud<ModelT>::Ptr
     filter (typename pcl::PointCloud<SceneT>::ConstPtr &organized_cloud,
-            typename pcl::PointCloud<ModelT>::ConstPtr &to_be_filtered, float f,
+            typename pcl::PointCloud<ModelT>::ConstPtr &to_be_filtered,
+            float f,
             float threshold)
     {
       float cx = (static_cast<float> (organized_cloud->width) / 2.f - 0.5f);
@@ -123,8 +128,10 @@ namespace pcl
     template <typename ModelT, typename SceneT>
     typename pcl::PointCloud<ModelT>::Ptr
     filter (typename pcl::PointCloud<SceneT>::Ptr &organized_cloud,
-            typename pcl::PointCloud<ModelT>::Ptr &to_be_filtered, float f,
-            float threshold, bool check_invalid_depth = true)
+            typename pcl::PointCloud<ModelT>::Ptr &to_be_filtered,
+            float f,
+            float threshold,
+            bool check_invalid_depth = true)
     {
       float cx = (static_cast<float> (organized_cloud->width) / 2.f - 0.5f);
       float cy = (static_cast<float> (organized_cloud->height) / 2.f - 0.5f);
@@ -172,8 +179,10 @@ namespace pcl
     template <typename ModelT, typename SceneT>
     typename pcl::PointCloud<ModelT>::Ptr
     getOccludedCloud (typename pcl::PointCloud<SceneT>::Ptr &organized_cloud,
-                      typename pcl::PointCloud<ModelT>::Ptr &to_be_filtered, float f,
-                      float threshold, bool check_invalid_depth = true)
+                      typename pcl::PointCloud<ModelT>::Ptr &to_be_filtered,
+                      float f,
+                      float threshold,
+                      bool check_invalid_depth = true)
     {
       float cx = (static_cast<float> (organized_cloud->width) / 2.f - 0.5f);
       float cy = (static_cast<float> (organized_cloud->height) / 2.f - 0.5f);

@@ -108,8 +108,8 @@ openni_wrapper::DevicePrimesense::isImageResizeSupported (unsigned input_width,
                                                           unsigned output_height) const
     throw ()
 {
-  return (ImageYUV422::resizingSupported (input_width, input_height, output_width,
-                                          output_height));
+  return (ImageYUV422::resizingSupported (
+      input_width, input_height, output_width, output_height));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

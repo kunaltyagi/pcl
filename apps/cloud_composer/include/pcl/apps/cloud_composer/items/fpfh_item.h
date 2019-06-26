@@ -53,7 +53,8 @@ namespace pcl
     class FPFHItem : public CloudComposerItem
     {
       public:
-      FPFHItem (QString name, pcl::PointCloud<pcl::FPFHSignature33>::Ptr fpfh_ptr,
+      FPFHItem (QString name,
+                pcl::PointCloud<pcl::FPFHSignature33>::Ptr fpfh_ptr,
                 double radius);
       FPFHItem (const FPFHItem &to_copy);
       ~FPFHItem ();

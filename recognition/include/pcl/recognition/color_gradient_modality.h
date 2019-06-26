@@ -170,7 +170,9 @@ namespace pcl
      * features. \param[out] features the destination for the extracted features.
      */
     void
-    extractFeatures (const MaskMap &mask, size_t nr_features, size_t modalityIndex,
+    extractFeatures (const MaskMap &mask,
+                     size_t nr_features,
+                     size_t modalityIndex,
                      std::vector<QuantizedMultiModFeature> &features) const override;
 
     /** \brief Extracts all possible features from the modality within the specified
@@ -180,7 +182,9 @@ namespace pcl
      * \param[out] features the destination for the extracted features.
      */
     void
-    extractAllFeatures (const MaskMap &mask, size_t nr_features, size_t modalityIndex,
+    extractAllFeatures (const MaskMap &mask,
+                        size_t nr_features,
+                        size_t modalityIndex,
                         std::vector<QuantizedMultiModFeature> &features) const override;
 
     /** \brief Provide a pointer to the input dataset (overwrites the
@@ -209,7 +213,8 @@ namespace pcl
      * \param[in] sigma the sigma.
      * \param[out] kernel_values the destination for the values of the kernel. */
     void
-    computeGaussianKernel (const size_t kernel_size, const float sigma,
+    computeGaussianKernel (const size_t kernel_size,
+                           const float sigma,
                            std::vector<float> &kernel_values);
 
     /** \brief Computes the max-RGB gradients for the specified cloud.
@@ -405,7 +410,9 @@ pcl::ColorGradientModality<PointInT>::processInputDataFromFiltered ()
 template <typename PointInT>
 void
 pcl::ColorGradientModality<PointInT>::extractFeatures (
-    const MaskMap &mask, const size_t nr_features, const size_t modality_index,
+    const MaskMap &mask,
+    const size_t nr_features,
+    const size_t modality_index,
     std::vector<QuantizedMultiModFeature> &features) const
 {
   const size_t width = mask.getWidth ();
@@ -442,11 +449,13 @@ pcl::ColorGradientModality<PointInT>::extractFeatures (
         float best_score = 0.0f;
         typename std::list<Candidate>::iterator best_iter = list1.end ();
         for (typename std::list<Candidate>::iterator iter1 = list1.begin ();
-             iter1 != list1.end (); ++iter1) {
+             iter1 != list1.end ();
+             ++iter1) {
           // find smallest distance
           float smallest_distance = std::numeric_limits<float>::max ();
           for (typename std::list<Candidate>::iterator iter2 = list2.begin ();
-               iter2 != list2.end (); ++iter2) {
+               iter2 != list2.end ();
+               ++iter2) {
             const float dx =
                 static_cast<float> (iter1->x) - static_cast<float> (iter2->x);
             const float dy =
@@ -470,10 +479,12 @@ pcl::ColorGradientModality<PointInT>::extractFeatures (
         float min_min_sqr_distance = std::numeric_limits<float>::max ();
         float max_min_sqr_distance = 0;
         for (typename std::list<Candidate>::iterator iter2 = list2.begin ();
-             iter2 != list2.end (); ++iter2) {
+             iter2 != list2.end ();
+             ++iter2) {
           float min_sqr_distance = std::numeric_limits<float>::max ();
           for (typename std::list<Candidate>::iterator iter3 = list2.begin ();
-               iter3 != list2.end (); ++iter3) {
+               iter3 != list2.end ();
+               ++iter3) {
             if (iter2 == iter3)
               continue;
 
@@ -531,7 +542,8 @@ pcl::ColorGradientModality<PointInT>::extractFeatures (
     } else {
       if (list1.size () <= nr_features) {
         for (typename std::list<Candidate>::iterator iter1 = list1.begin ();
-             iter1 != list1.end (); ++iter1) {
+             iter1 != list1.end ();
+             ++iter1) {
           QuantizedMultiModFeature feature;
 
           feature.x = iter1->x;
@@ -550,11 +562,13 @@ pcl::ColorGradientModality<PointInT>::extractFeatures (
         float best_score = 0.0f;
         typename std::list<Candidate>::iterator best_iter = list1.end ();
         for (typename std::list<Candidate>::iterator iter1 = list1.begin ();
-             iter1 != list1.end (); ++iter1) {
+             iter1 != list1.end ();
+             ++iter1) {
           // find smallest distance
           float smallest_distance = std::numeric_limits<float>::max ();
           for (typename std::list<Candidate>::iterator iter2 = list2.begin ();
-               iter2 != list2.end (); ++iter2) {
+               iter2 != list2.end ();
+               ++iter2) {
             const float dx =
                 static_cast<float> (iter1->x) - static_cast<float> (iter2->x);
             const float dy =
@@ -612,7 +626,8 @@ pcl::ColorGradientModality<PointInT>::extractFeatures (
 
     if (list1.size () <= nr_features) {
       for (typename std::list<Candidate>::iterator iter1 = list1.begin ();
-           iter1 != list1.end (); ++iter1) {
+           iter1 != list1.end ();
+           ++iter1) {
         QuantizedMultiModFeature feature;
 
         feature.x = iter1->x;
@@ -630,11 +645,13 @@ pcl::ColorGradientModality<PointInT>::extractFeatures (
     while (list2.size () != nr_features) {
       const size_t sqr_distance = distance * distance;
       for (typename std::list<Candidate>::iterator iter1 = list1.begin ();
-           iter1 != list1.end (); ++iter1) {
+           iter1 != list1.end ();
+           ++iter1) {
         bool candidate_accepted = true;
 
         for (typename std::list<Candidate>::iterator iter2 = list2.begin ();
-             iter2 != list2.end (); ++iter2) {
+             iter2 != list2.end ();
+             ++iter2) {
           const int dx = iter1->x - iter2->x;
           const int dy = iter1->y - iter2->y;
           const unsigned int tmp_distance = dx * dx + dy * dy;
@@ -657,7 +674,8 @@ pcl::ColorGradientModality<PointInT>::extractFeatures (
   }
 
   for (typename std::list<Candidate>::iterator iter2 = list2.begin ();
-       iter2 != list2.end (); ++iter2) {
+       iter2 != list2.end ();
+       ++iter2) {
     QuantizedMultiModFeature feature;
 
     feature.x = iter2->x;
@@ -673,7 +691,9 @@ pcl::ColorGradientModality<PointInT>::extractFeatures (
 template <typename PointInT>
 void
 pcl::ColorGradientModality<PointInT>::extractAllFeatures (
-    const MaskMap &mask, const size_t, const size_t modality_index,
+    const MaskMap &mask,
+    const size_t,
+    const size_t modality_index,
     std::vector<QuantizedMultiModFeature> &features) const
 {
   const size_t width = mask.getWidth ();
@@ -702,7 +722,8 @@ pcl::ColorGradientModality<PointInT>::extractAllFeatures (
   list1.sort ();
 
   for (typename std::list<Candidate>::iterator iter1 = list1.begin ();
-       iter1 != list1.end (); ++iter1) {
+       iter1 != list1.end ();
+       ++iter1) {
     QuantizedMultiModFeature feature;
 
     feature.x = iter1->x;

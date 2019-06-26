@@ -52,7 +52,8 @@ namespace pcl
      * \ingroup octree
      * \author Julius Kammerl (julius@kammerl.de)
      */
-    template <typename PointT, typename LeafContainerT = OctreeContainerPointIndices,
+    template <typename PointT,
+              typename LeafContainerT = OctreeContainerPointIndices,
               typename BranchContainerT = OctreeContainerEmpty>
     class OctreePointCloudSearch
         : public OctreePointCloud<PointT, LeafContainerT, BranchContainerT>
@@ -117,8 +118,11 @@ namespace pcl
        * number of neighbors found
        */
       inline int
-      nearestKSearch (const PointCloud &cloud, int index, int k,
-                      std::vector<int> &k_indices, std::vector<float> &k_sqr_distances)
+      nearestKSearch (const PointCloud &cloud,
+                      int index,
+                      int k,
+                      std::vector<int> &k_indices,
+                      std::vector<float> &k_sqr_distances)
       {
         return (nearestKSearch (cloud[index], k, k_indices, k_sqr_distances));
       }
@@ -132,7 +136,9 @@ namespace pcl
        * number of neighbors found
        */
       int
-      nearestKSearch (const PointT &p_q, int k, std::vector<int> &k_indices,
+      nearestKSearch (const PointT &p_q,
+                      int k,
+                      std::vector<int> &k_indices,
                       std::vector<float> &k_sqr_distances);
 
       /** \brief Search for k-nearest neighbors at query point
@@ -145,7 +151,9 @@ namespace pcl
        * number of neighbors found
        */
       int
-      nearestKSearch (int index, int k, std::vector<int> &k_indices,
+      nearestKSearch (int index,
+                      int k,
+                      std::vector<int> &k_indices,
                       std::vector<float> &k_sqr_distances);
 
       /** \brief Search for approx. nearest neighbor at the query point.
@@ -156,11 +164,13 @@ namespace pcl
        * point \return number of neighbors found
        */
       inline void
-      approxNearestSearch (const PointCloud &cloud, int query_index, int &result_index,
+      approxNearestSearch (const PointCloud &cloud,
+                           int query_index,
+                           int &result_index,
                            float &sqr_distance)
       {
-        return (approxNearestSearch (cloud.points[query_index], result_index,
-                                     sqr_distance));
+        return (approxNearestSearch (
+            cloud.points[query_index], result_index, sqr_distance));
       }
 
       /** \brief Search for approx. nearest neighbor at the query point.
@@ -192,12 +202,15 @@ namespace pcl
        * this value \return number of neighbors found in radius
        */
       int
-      radiusSearch (const PointCloud &cloud, int index, double radius,
-                    std::vector<int> &k_indices, std::vector<float> &k_sqr_distances,
+      radiusSearch (const PointCloud &cloud,
+                    int index,
+                    double radius,
+                    std::vector<int> &k_indices,
+                    std::vector<float> &k_sqr_distances,
                     unsigned int max_nn = 0)
       {
-        return (radiusSearch (cloud.points[index], radius, k_indices, k_sqr_distances,
-                              max_nn));
+        return (radiusSearch (
+            cloud.points[index], radius, k_indices, k_sqr_distances, max_nn));
       }
 
       /** \brief Search for all neighbors of query point that are within a given radius.
@@ -209,8 +222,11 @@ namespace pcl
        * this value \return number of neighbors found in radius
        */
       int
-      radiusSearch (const PointT &p_q, const double radius, std::vector<int> &k_indices,
-                    std::vector<float> &k_sqr_distances, unsigned int max_nn = 0) const;
+      radiusSearch (const PointT &p_q,
+                    const double radius,
+                    std::vector<int> &k_indices,
+                    std::vector<float> &k_sqr_distances,
+                    unsigned int max_nn = 0) const;
 
       /** \brief Search for all neighbors of query point that are within a given radius.
        * \param[in] index index representing the query point in the dataset given by \a
@@ -222,8 +238,11 @@ namespace pcl
        * returned neighbors to this value \return number of neighbors found in radius
        */
       int
-      radiusSearch (int index, const double radius, std::vector<int> &k_indices,
-                    std::vector<float> &k_sqr_distances, unsigned int max_nn = 0) const;
+      radiusSearch (int index,
+                    const double radius,
+                    std::vector<int> &k_indices,
+                    std::vector<float> &k_sqr_distances,
+                    unsigned int max_nn = 0) const;
 
       /** \brief Get a PointT vector of centers of all voxels that intersected by a ray
        * (origin, direction). \param[in] origin ray origin \param[in] direction ray
@@ -232,7 +251,8 @@ namespace pcl
        * many voxels intersected (0: disable) \return number of intersected voxels
        */
       int
-      getIntersectedVoxelCenters (Eigen::Vector3f origin, Eigen::Vector3f direction,
+      getIntersectedVoxelCenters (Eigen::Vector3f origin,
+                                  Eigen::Vector3f direction,
                                   AlignedPointTVector &voxel_center_list,
                                   int max_voxel_count = 0) const;
 
@@ -243,7 +263,8 @@ namespace pcl
        * (0: disable) \return number of intersected voxels
        */
       int
-      getIntersectedVoxelIndices (Eigen::Vector3f origin, Eigen::Vector3f direction,
+      getIntersectedVoxelIndices (Eigen::Vector3f origin,
+                                  Eigen::Vector3f direction,
                                   std::vector<int> &k_indices,
                                   int max_voxel_count = 0) const;
 
@@ -255,7 +276,8 @@ namespace pcl
        * \return number of points found within search area
        */
       int
-      boxSearch (const Eigen::Vector3f &min_pt, const Eigen::Vector3f &max_pt,
+      boxSearch (const Eigen::Vector3f &min_pt,
+                 const Eigen::Vector3f &max_pt,
                  std::vector<int> &k_indices) const;
 
       protected:
@@ -361,10 +383,14 @@ namespace pcl
        * \param[in] max_nn maximum of neighbors to be found
        */
       void
-      getNeighborsWithinRadiusRecursive (
-          const PointT &point, const double radiusSquared, const BranchNode *node,
-          const OctreeKey &key, unsigned int tree_depth, std::vector<int> &k_indices,
-          std::vector<float> &k_sqr_distances, unsigned int max_nn) const;
+      getNeighborsWithinRadiusRecursive (const PointT &point,
+                                         const double radiusSquared,
+                                         const BranchNode *node,
+                                         const OctreeKey &key,
+                                         unsigned int tree_depth,
+                                         std::vector<int> &k_indices,
+                                         std::vector<float> &k_sqr_distances,
+                                         unsigned int max_nn) const;
 
       /** \brief Recursive search method that explores the octree and finds the K
        * nearest neighbors \param[in] point query point \param[in] K amount of nearest
@@ -377,8 +403,11 @@ namespace pcl
        */
       double
       getKNearestNeighborRecursive (
-          const PointT &point, unsigned int K, const BranchNode *node,
-          const OctreeKey &key, unsigned int tree_depth,
+          const PointT &point,
+          unsigned int K,
+          const BranchNode *node,
+          const OctreeKey &key,
+          unsigned int tree_depth,
           const double squared_search_radius,
           std::vector<prioPointQueueEntry> &point_candidates) const;
 
@@ -390,9 +419,12 @@ namespace pcl
        * squared distance to search
        */
       void
-      approxNearestSearchRecursive (const PointT &point, const BranchNode *node,
-                                    const OctreeKey &key, unsigned int tree_depth,
-                                    int &result_index, float &sqr_distance);
+      approxNearestSearchRecursive (const PointT &point,
+                                    const BranchNode *node,
+                                    const OctreeKey &key,
+                                    unsigned int tree_depth,
+                                    int &result_index,
+                                    float &sqr_distance);
 
       /** \brief Recursively search the tree for all intersected leaf nodes and return a
        * vector of voxel centers. This algorithm is based off the paper An Efficient
@@ -412,9 +444,14 @@ namespace pcl
        * intersected (0: disable) \return number of voxels found
        */
       int
-      getIntersectedVoxelCentersRecursive (double min_x, double min_y, double min_z,
-                                           double max_x, double max_y, double max_z,
-                                           unsigned char a, const OctreeNode *node,
+      getIntersectedVoxelCentersRecursive (double min_x,
+                                           double min_y,
+                                           double min_z,
+                                           double max_x,
+                                           double max_y,
+                                           double max_z,
+                                           unsigned char a,
+                                           const OctreeNode *node,
                                            const OctreeKey &key,
                                            AlignedPointTVector &voxel_center_list,
                                            int max_voxel_count) const;
@@ -428,9 +465,12 @@ namespace pcl
        * \param[out] k_indices the resultant point indices
        */
       void
-      boxSearchRecursive (const Eigen::Vector3f &min_pt, const Eigen::Vector3f &max_pt,
-                          const BranchNode *node, const OctreeKey &key,
-                          unsigned int tree_depth, std::vector<int> &k_indices) const;
+      boxSearchRecursive (const Eigen::Vector3f &min_pt,
+                          const Eigen::Vector3f &max_pt,
+                          const BranchNode *node,
+                          const OctreeKey &key,
+                          unsigned int tree_depth,
+                          std::vector<int> &k_indices) const;
 
       /** \brief Recursively search the tree for all intersected leaf nodes and return a
        * vector of indices. This algorithm is based off the paper An Efficient
@@ -450,9 +490,14 @@ namespace pcl
        * (0: disable) \return number of voxels found
        */
       int
-      getIntersectedVoxelIndicesRecursive (double min_x, double min_y, double min_z,
-                                           double max_x, double max_y, double max_z,
-                                           unsigned char a, const OctreeNode *node,
+      getIntersectedVoxelIndicesRecursive (double min_x,
+                                           double min_y,
+                                           double min_z,
+                                           double max_x,
+                                           double max_y,
+                                           double max_z,
+                                           unsigned char a,
+                                           const OctreeNode *node,
                                            const OctreeKey &key,
                                            std::vector<int> &k_indices,
                                            int max_voxel_count) const;
@@ -469,9 +514,15 @@ namespace pcl
        * \param a
        */
       inline void
-      initIntersectedVoxel (Eigen::Vector3f &origin, Eigen::Vector3f &direction,
-                            double &min_x, double &min_y, double &min_z, double &max_x,
-                            double &max_y, double &max_z, unsigned char &a) const
+      initIntersectedVoxel (Eigen::Vector3f &origin,
+                            Eigen::Vector3f &direction,
+                            double &min_x,
+                            double &min_y,
+                            double &min_z,
+                            double &max_x,
+                            double &max_y,
+                            double &max_z,
+                            unsigned char &a) const
       {
         // Account for division by zero when direction vector is 0.0
         const float epsilon = 1e-10f;
@@ -522,8 +573,12 @@ namespace pcl
        * \return the first child node ray will enter
        */
       inline int
-      getFirstIntersectedNode (double min_x, double min_y, double min_z, double mid_x,
-                               double mid_y, double mid_z) const
+      getFirstIntersectedNode (double min_x,
+                               double min_y,
+                               double min_z,
+                               double mid_x,
+                               double mid_y,
+                               double mid_z) const
       {
         int currNode = 0;
 

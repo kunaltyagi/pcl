@@ -60,7 +60,8 @@ pcl::common::CloudGenerator<PointT, GeneratorT>::CloudGenerator (
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT, typename GeneratorT>
 pcl::common::CloudGenerator<PointT, GeneratorT>::CloudGenerator (
-    const GeneratorParameters &x_params, const GeneratorParameters &y_params,
+    const GeneratorParameters &x_params,
+    const GeneratorParameters &y_params,
     const GeneratorParameters &z_params)
     : x_generator_ (x_params), y_generator_ (y_params), z_generator_ (z_params)
 {
@@ -155,7 +156,8 @@ pcl::common::CloudGenerator<PointT, GeneratorT>::fill (pcl::PointCloud<PointT> &
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT, typename GeneratorT>
 int
-pcl::common::CloudGenerator<PointT, GeneratorT>::fill (int width, int height,
+pcl::common::CloudGenerator<PointT, GeneratorT>::fill (int width,
+                                                       int height,
                                                        pcl::PointCloud<PointT> &cloud)
 {
   if (width < 1) {
@@ -178,7 +180,8 @@ pcl::common::CloudGenerator<PointT, GeneratorT>::fill (int width, int height,
   cloud.resize (cloud.width * cloud.height);
   cloud.is_dense = true;
   for (typename pcl::PointCloud<PointT>::iterator points_it = cloud.begin ();
-       points_it != cloud.end (); ++points_it) {
+       points_it != cloud.end ();
+       ++points_it) {
     points_it->x = x_generator_.run ();
     points_it->y = y_generator_.run ();
     points_it->z = z_generator_.run ();

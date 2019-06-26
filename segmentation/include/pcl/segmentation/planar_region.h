@@ -84,7 +84,8 @@ namespace pcl
      * \param[in] contour the contour / boudnary for the region
      * \param[in] coefficients the model coefficients (a,b,c,d) for the plane
      */
-    PlanarRegion (const Eigen::Vector3f &centroid, const Eigen::Matrix3f &covariance,
+    PlanarRegion (const Eigen::Vector3f &centroid,
+                  const Eigen::Matrix3f &covariance,
                   unsigned count,
                   const typename pcl::PointCloud<PointT>::VectorType &contour,
                   const Eigen::Vector4f &coefficients)

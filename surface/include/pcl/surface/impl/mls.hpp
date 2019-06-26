@@ -79,7 +79,9 @@ pcl::MovingLeastSquares<PointInT, PointOutT>::process (PointCloudOut &output)
   if (search_radius_ <= 0 || sqr_gauss_param_ <= 0) {
     PCL_ERROR (
         "[pcl::%s::process] Invalid search radius (%f) or Gaussian parameter (%f)!\n",
-        getClassName ().c_str (), search_radius_, sqr_gauss_param_);
+        getClassName ().c_str (),
+        search_radius_,
+        sqr_gauss_param_);
     return;
   }
 
@@ -167,22 +169,29 @@ pcl::MovingLeastSquares<PointInT, PointOutT>::process (PointCloudOut &output)
 template <typename PointInT, typename PointOutT>
 void
 pcl::MovingLeastSquares<PointInT, PointOutT>::computeMLSPointNormal (
-    int index, const std::vector<int> &nn_indices, PointCloudOut &projected_points,
-    NormalCloud &projected_points_normals, PointIndices &corresponding_input_indices,
+    int index,
+    const std::vector<int> &nn_indices,
+    PointCloudOut &projected_points,
+    NormalCloud &projected_points_normals,
+    PointIndices &corresponding_input_indices,
     MLSResult &mls_result) const
 {
   // Note: this method is const because it needs to be thread-safe
   //       (MovingLeastSquaresOMP calls it from multiple threads)
 
-  mls_result.computeMLSSurface<PointInT> (*input_, index, nn_indices, search_radius_,
-                                          order_);
+  mls_result.computeMLSSurface<PointInT> (
+      *input_, index, nn_indices, search_radius_, order_);
 
   switch (upsample_method_) {
   case (NONE): {
     const MLSResult::MLSProjectionResults proj =
         mls_result.projectQueryPoint (projection_method_, nr_coeff_);
-    addProjectedPointNormal (index, proj.point, proj.normal, mls_result.curvature,
-                             projected_points, projected_points_normals,
+    addProjectedPointNormal (index,
+                             proj.point,
+                             proj.normal,
+                             mls_result.curvature,
+                             projected_points,
+                             projected_points_normals,
                              corresponding_input_indices);
     break;
   }
@@ -191,7 +200,8 @@ pcl::MovingLeastSquares<PointInT, PointOutT>::computeMLSPointNormal (
     // Uniformly sample a circle around the query point using the radius and step
     // parameters
     for (float u_disp = -static_cast<float> (upsampling_radius_);
-         u_disp <= upsampling_radius_; u_disp += static_cast<float> (upsampling_step_))
+         u_disp <= upsampling_radius_;
+         u_disp += static_cast<float> (upsampling_step_))
       for (float v_disp = -static_cast<float> (upsampling_radius_);
            v_disp <= upsampling_radius_;
            v_disp += static_cast<float> (upsampling_step_))
@@ -199,8 +209,12 @@ pcl::MovingLeastSquares<PointInT, PointOutT>::computeMLSPointNormal (
             upsampling_radius_ * upsampling_radius_) {
           MLSResult::MLSProjectionResults proj =
               mls_result.projectPointSimpleToPolynomialSurface (u_disp, v_disp);
-          addProjectedPointNormal (index, proj.point, proj.normal, mls_result.curvature,
-                                   projected_points, projected_points_normals,
+          addProjectedPointNormal (index,
+                                   proj.point,
+                                   proj.normal,
+                                   mls_result.curvature,
+                                   projected_points,
+                                   projected_points_normals,
                                    corresponding_input_indices);
         }
     break;
@@ -217,8 +231,12 @@ pcl::MovingLeastSquares<PointInT, PointOutT>::computeMLSPointNormal (
       // Just add the current point
       const MLSResult::MLSProjectionResults proj =
           mls_result.projectQueryPoint (projection_method_, nr_coeff_);
-      addProjectedPointNormal (index, proj.point, proj.normal, mls_result.curvature,
-                               projected_points, projected_points_normals,
+      addProjectedPointNormal (index,
+                               proj.point,
+                               proj.normal,
+                               mls_result.curvature,
+                               projected_points,
+                               projected_points_normals,
                                corresponding_input_indices);
     } else {
       // Sample the local plane
@@ -236,8 +254,12 @@ pcl::MovingLeastSquares<PointInT, PointOutT>::computeMLSPointNormal (
         else
           proj = mls_result.projectPointToMLSPlane (u, v);
 
-        addProjectedPointNormal (index, proj.point, proj.normal, mls_result.curvature,
-                                 projected_points, projected_points_normals,
+        addProjectedPointNormal (index,
+                                 proj.point,
+                                 proj.normal,
+                                 mls_result.curvature,
+                                 projected_points,
+                                 projected_points_normals,
                                  corresponding_input_indices);
 
         num_added++;
@@ -254,8 +276,11 @@ pcl::MovingLeastSquares<PointInT, PointOutT>::computeMLSPointNormal (
 template <typename PointInT, typename PointOutT>
 void
 pcl::MovingLeastSquares<PointInT, PointOutT>::addProjectedPointNormal (
-    int index, const Eigen::Vector3d &point, const Eigen::Vector3d &normal,
-    double curvature, PointCloudOut &projected_points,
+    int index,
+    const Eigen::Vector3d &point,
+    const Eigen::Vector3d &normal,
+    double curvature,
+    PointCloudOut &projected_points,
     NormalCloud &projected_points_normals,
     PointIndices &corresponding_input_indices) const
 {
@@ -331,24 +356,31 @@ pcl::MovingLeastSquares<PointInT, PointOutT>::performProcessing (PointCloudOut &
           mls_result_index = index; // otherwise we give it a dummy location.
 
 #ifdef _OPENMP
-        computeMLSPointNormal (
-            index, nn_indices, projected_points[tn], projected_points_normals[tn],
-            corresponding_input_indices[tn], mls_results_[mls_result_index]);
+        computeMLSPointNormal (index,
+                               nn_indices,
+                               projected_points[tn],
+                               projected_points_normals[tn],
+                               corresponding_input_indices[tn],
+                               mls_results_[mls_result_index]);
 
         // Copy all information from the input cloud to the output points (not doing any
         // interpolation)
         for (size_t pp = pp_size; pp < projected_points[tn].size (); ++pp)
           copyMissingFields (input_->points[(*indices_)[cp]], projected_points[tn][pp]);
 #else
-        computeMLSPointNormal (index, nn_indices, projected_points,
-                               projected_points_normals, *corresponding_input_indices_,
+        computeMLSPointNormal (index,
+                               nn_indices,
+                               projected_points,
+                               projected_points_normals,
+                               *corresponding_input_indices_,
                                mls_results_[mls_result_index]);
 
         // Append projected points to output
-        output.insert (output.end (), projected_points.begin (),
-                       projected_points.end ());
+        output.insert (
+            output.end (), projected_points.begin (), projected_points.end ());
         if (compute_normals_)
-          normals_->insert (normals_->end (), projected_points_normals.begin (),
+          normals_->insert (normals_->end (),
+                            projected_points_normals.begin (),
                             projected_points_normals.end ());
 #endif
       }
@@ -358,14 +390,15 @@ pcl::MovingLeastSquares<PointInT, PointOutT>::performProcessing (PointCloudOut &
 #ifdef _OPENMP
   // Combine all threads' results into the output vectors
   for (unsigned int tn = 0; tn < threads; ++tn) {
-    output.insert (output.end (), projected_points[tn].begin (),
-                   projected_points[tn].end ());
+    output.insert (
+        output.end (), projected_points[tn].begin (), projected_points[tn].end ());
     corresponding_input_indices_->indices.insert (
         corresponding_input_indices_->indices.end (),
         corresponding_input_indices[tn].indices.begin (),
         corresponding_input_indices[tn].indices.end ());
     if (compute_normals_)
-      normals_->insert (normals_->end (), projected_points_normals[tn].begin (),
+      normals_->insert (normals_->end (),
+                        projected_points_normals[tn].begin (),
                         projected_points_normals[tn].end ());
   }
 #endif
@@ -405,8 +438,12 @@ pcl::MovingLeastSquares<PointInT, PointOutT>::performUpsampling (PointCloudOut &
           distinct_cloud_->points[dp_i].getVector3fMap ().template cast<double> ();
       MLSResult::MLSProjectionResults proj = mls_results_[input_index].projectPoint (
           add_point, projection_method_, 5 * nr_coeff_);
-      addProjectedPointNormal (input_index, proj.point, proj.normal,
-                               mls_results_[input_index].curvature, output, *normals_,
+      addProjectedPointNormal (input_index,
+                               proj.point,
+                               proj.normal,
+                               mls_results_[input_index].curvature,
+                               output,
+                               *normals_,
                                *corresponding_input_indices_);
     }
   }
@@ -422,7 +459,8 @@ pcl::MovingLeastSquares<PointInT, PointOutT>::performUpsampling (PointCloudOut &
 
     for (typename MLSVoxelGrid::HashMap::iterator m_it =
              voxel_grid.voxel_grid_.begin ();
-         m_it != voxel_grid.voxel_grid_.end (); ++m_it) {
+         m_it != voxel_grid.voxel_grid_.end ();
+         ++m_it) {
       // Get 3D position of point
       Eigen::Vector3f pos;
       voxel_grid.getPosition (m_it->first, pos);
@@ -445,8 +483,12 @@ pcl::MovingLeastSquares<PointInT, PointOutT>::performUpsampling (PointCloudOut &
       Eigen::Vector3d add_point = p.getVector3fMap ().template cast<double> ();
       MLSResult::MLSProjectionResults proj = mls_results_[input_index].projectPoint (
           add_point, projection_method_, 5 * nr_coeff_);
-      addProjectedPointNormal (input_index, proj.point, proj.normal,
-                               mls_results_[input_index].curvature, output, *normals_,
+      addProjectedPointNormal (input_index,
+                               proj.point,
+                               proj.normal,
+                               mls_results_[input_index].curvature,
+                               output,
+                               *normals_,
                                *corresponding_input_indices_);
     }
   }
@@ -456,9 +498,12 @@ pcl::MovingLeastSquares<PointInT, PointOutT>::performUpsampling (PointCloudOut &
 pcl::MLSResult::MLSResult (const Eigen::Vector3d &a_query_point,
                            const Eigen::Vector3d &a_mean,
                            const Eigen::Vector3d &a_plane_normal,
-                           const Eigen::Vector3d &a_u, const Eigen::Vector3d &a_v,
-                           const Eigen::VectorXd &a_c_vec, const int a_num_neighbors,
-                           const float a_curvature, const int a_order)
+                           const Eigen::Vector3d &a_u,
+                           const Eigen::Vector3d &a_v,
+                           const Eigen::VectorXd &a_c_vec,
+                           const int a_num_neighbors,
+                           const float a_curvature,
+                           const int a_order)
     : query_point (a_query_point), mean (a_mean), plane_normal (a_plane_normal),
       u_axis (a_u), v_axis (a_v), c_vec (a_c_vec), num_neighbors (a_num_neighbors),
       curvature (a_curvature), order (a_order), valid (true)
@@ -466,7 +511,9 @@ pcl::MLSResult::MLSResult (const Eigen::Vector3d &a_query_point,
 }
 
 void
-pcl::MLSResult::getMLSCoordinates (const Eigen::Vector3d &pt, double &u, double &v,
+pcl::MLSResult::getMLSCoordinates (const Eigen::Vector3d &pt,
+                                   double &u,
+                                   double &v,
                                    double &w) const
 {
   Eigen::Vector3d delta = pt - mean;
@@ -476,7 +523,8 @@ pcl::MLSResult::getMLSCoordinates (const Eigen::Vector3d &pt, double &u, double 
 }
 
 void
-pcl::MLSResult::getMLSCoordinates (const Eigen::Vector3d &pt, double &u,
+pcl::MLSResult::getMLSCoordinates (const Eigen::Vector3d &pt,
+                                   double &u,
                                    double &v) const
 {
   Eigen::Vector3d delta = pt - mean;
@@ -686,7 +734,8 @@ pcl::MLSResult::projectPointSimpleToPolynomialSurface (const double u,
 }
 
 pcl::MLSResult::MLSProjectionResults
-pcl::MLSResult::projectPoint (const Eigen::Vector3d &pt, ProjectionMethod method,
+pcl::MLSResult::projectPoint (const Eigen::Vector3d &pt,
+                              ProjectionMethod method,
                               int required_neighbors) const
 {
   double u, v, w;
@@ -737,9 +786,11 @@ pcl::MLSResult::projectQueryPoint (ProjectionMethod method,
 
 template <typename PointT>
 void
-pcl::MLSResult::computeMLSSurface (const pcl::PointCloud<PointT> &cloud, int index,
+pcl::MLSResult::computeMLSSurface (const pcl::PointCloud<PointT> &cloud,
+                                   int index,
                                    const std::vector<int> &nn_indices,
-                                   double search_radius, int polynomial_order,
+                                   double search_radius,
+                                   int polynomial_order,
                                    std::function<double(const double)> weight_func)
 {
   // Compute the plane coefficients
@@ -884,7 +935,8 @@ pcl::MovingLeastSquares<PointInT, PointOutT>::MLSVoxelGrid::dilate ()
 {
   HashMap new_voxel_grid = voxel_grid_;
   for (typename MLSVoxelGrid::HashMap::iterator m_it = voxel_grid_.begin ();
-       m_it != voxel_grid_.end (); ++m_it) {
+       m_it != voxel_grid_.end ();
+       ++m_it) {
     Eigen::Vector3i index;
     getIndexIn3D (m_it->first, index);
 

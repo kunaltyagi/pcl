@@ -39,11 +39,12 @@ subsampleAndCalculateNormals (PointCloud<PointXYZ>::Ptr cloud)
 
   PointCloud<PointNormal>::Ptr cloud_subsampled_with_normals (
       new PointCloud<PointNormal> ());
-  concatenateFields (*cloud_subsampled, *cloud_subsampled_normals,
-                     *cloud_subsampled_with_normals);
+  concatenateFields (
+      *cloud_subsampled, *cloud_subsampled_normals, *cloud_subsampled_with_normals);
 
   PCL_INFO ("Cloud dimensions before / after subsampling: %u / %u\n",
-            cloud->points.size (), cloud_subsampled->points.size ());
+            cloud->points.size (),
+            cloud_subsampled->points.size ());
   return cloud_subsampled_with_normals;
 }
 
@@ -150,8 +151,8 @@ main (int argc, char **argv)
     //  cloud_output_subsampled);
 
     PointCloud<PointXYZ>::Ptr cloud_output (new PointCloud<PointXYZ> ());
-    pcl::transformPointCloud (*cloud_models[model_i], *cloud_output,
-                              final_transformation);
+    pcl::transformPointCloud (
+        *cloud_models[model_i], *cloud_output, final_transformation);
 
     stringstream ss;
     ss << "model_" << model_i;

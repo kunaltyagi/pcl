@@ -145,20 +145,28 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::createEmpty (float angular_resolution, const Eigen::Affine3f &sensor_pose,
+  RangeImage::createEmpty (float angular_resolution,
+                           const Eigen::Affine3f &sensor_pose,
                            RangeImage::CoordinateFrame coordinate_frame,
-                           float angle_width, float angle_height)
+                           float angle_width,
+                           float angle_height)
   {
-    createEmpty (angular_resolution, angular_resolution, sensor_pose, coordinate_frame,
-                 angle_width, angle_height);
+    createEmpty (angular_resolution,
+                 angular_resolution,
+                 sensor_pose,
+                 coordinate_frame,
+                 angle_width,
+                 angle_height);
   }
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::createEmpty (float angular_resolution_x, float angular_resolution_y,
+  RangeImage::createEmpty (float angular_resolution_x,
+                           float angular_resolution_y,
                            const Eigen::Affine3f &sensor_pose,
                            RangeImage::CoordinateFrame coordinate_frame,
-                           float angle_width, float angle_height)
+                           float angle_width,
+                           float angle_height)
   {
     setAngularResolution (angular_resolution_x, angular_resolution_y);
     width = static_cast<uint32_t> (
@@ -292,8 +300,8 @@ namespace pcl
       for (int x = 0; x < static_cast<int> (width); ++x) {
         PointWithRange &point = points[y * width + x];
         if (!std::isinf (point.range))
-          calculate3DPoint (static_cast<float> (x), static_cast<float> (y), point.range,
-                            point);
+          calculate3DPoint (
+              static_cast<float> (x), static_cast<float> (y), point.range, point);
       }
     }
   }
@@ -398,9 +406,12 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::getSubImage (int sub_image_image_offset_x, int sub_image_image_offset_y,
-                           int sub_image_width, int sub_image_height,
-                           int combine_pixels, RangeImage &sub_image) const
+  RangeImage::getSubImage (int sub_image_image_offset_x,
+                           int sub_image_image_offset_y,
+                           int sub_image_width,
+                           int sub_image_height,
+                           int combine_pixels,
+                           RangeImage &sub_image) const
   {
     sub_image.setAngularResolution (
         static_cast<float> (combine_pixels) * angular_resolution_x_,
@@ -465,7 +476,8 @@ namespace pcl
   /////////////////////////////////////////////////////////////////////////
   float *
   RangeImage::getInterpolatedSurfaceProjection (const Eigen::Affine3f &pose,
-                                                int pixel_size, float world_size) const
+                                                int pixel_size,
+                                                float world_size) const
   {
     float max_dist = 0.5f * world_size, cell_size = world_size / float(pixel_size);
     float world2cell_factor = 1.0f / cell_size,
@@ -550,15 +562,15 @@ namespace pcl
                 cell3_y = world2cell_factor * point3[1] + world2cell_offset,
                 cell3_z = point3[2];
 
-          int min_cell_x = (std::max) (
-                  0, int(pcl_lrint (
-                         ceil ((std::min) (cell1_x, (std::min) (cell2_x, cell3_x)))))),
+          int min_cell_x = (std::max) (0,
+                                       int(pcl_lrint (ceil ((std::min) (
+                                           cell1_x, (std::min) (cell2_x, cell3_x)))))),
               max_cell_x = (std::min) (pixel_size - 1,
                                        int(pcl_lrint (floor ((std::max) (
                                            cell1_x, (std::max) (cell2_x, cell3_x)))))),
-              min_cell_y = (std::max) (
-                  0, int(pcl_lrint (
-                         ceil ((std::min) (cell1_y, (std::min) (cell2_y, cell3_y)))))),
+              min_cell_y = (std::max) (0,
+                                       int(pcl_lrint (ceil ((std::min) (
+                                           cell1_y, (std::min) (cell2_y, cell3_y)))))),
               max_cell_y = (std::min) (pixel_size - 1,
                                        int(pcl_lrint (floor ((std::max) (
                                            cell1_y, (std::max) (cell2_y, cell3_y))))));
@@ -625,7 +637,8 @@ namespace pcl
                                  0.6f * static_cast<float> (cell_y - cell2_y);
               Eigen::Vector3f fake_point (
                   cell2world_factor * (cell_pos_x) + cell2world_offset,
-                  cell2world_factor * cell_pos_y + cell2world_offset, neighbor_value);
+                  cell2world_factor * cell_pos_y + cell2world_offset,
+                  neighbor_value);
               fake_point = inverse_pose * fake_point;
               float range_difference = getRangeDifference (fake_point);
               if (range_difference > max_dist) {
@@ -659,7 +672,8 @@ namespace pcl
   /////////////////////////////////////////////////////////////////////////
   float *
   RangeImage::getInterpolatedSurfaceProjection (const Eigen::Vector3f &point,
-                                                int pixel_size, float world_size) const
+                                                int pixel_size,
+                                                float world_size) const
   {
     Eigen::Affine3f pose = getTransformationToViewerCoordinateFrame (point);
     return (getInterpolatedSurfaceProjection (pose, pixel_size, world_size));
@@ -668,7 +682,8 @@ namespace pcl
   /////////////////////////////////////////////////////////////////////////
   bool
   RangeImage::getNormalBasedUprightTransformation (
-      const Eigen::Vector3f &point, float max_dist,
+      const Eigen::Vector3f &point,
+      float max_dist,
       Eigen::Affine3f &transformation) const
   {
     int x, y;
@@ -717,8 +732,8 @@ namespace pcl
           (normal.dot (vector_average.getMean ()) - normal.dot (point)) * normal +
           point;
     } else {
-      if (!getNormalForClosestNeighbors (x, y, 2, point, 15, normal, &point_on_plane,
-                                         1))
+      if (!getNormalForClosestNeighbors (
+              x, y, 2, point, 15, normal, &point_on_plane, 1))
         return false;
     }
     getTransformationFromTwoUnitVectorsAndOrigin (
@@ -729,7 +744,8 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::getSurfaceAngleChangeImages (int radius, float *&angle_change_image_x,
+  RangeImage::getSurfaceAngleChangeImages (int radius,
+                                           float *&angle_change_image_x,
                                            float *&angle_change_image_y) const
   {
     MEASURE_FUNCTION_TIME;
@@ -739,8 +755,8 @@ namespace pcl
     for (int y = 0; y < int(height); ++y) {
       for (int x = 0; x < int(width); ++x) {
         int index = y * width + x;
-        getSurfaceAngleChange (x, y, radius, angle_change_image_x[index],
-                               angle_change_image_y[index]);
+        getSurfaceAngleChange (
+            x, y, radius, angle_change_image_x[index], angle_change_image_y[index]);
       }
     }
   }
@@ -800,17 +816,24 @@ namespace pcl
           continue;
         Eigen::Vector3f normal, mean, eigen_values;
         float used_squared_max_distance;
-        getSurfaceInformation (x, y, radius, point.getVector3fMap (),
-                               no_of_nearest_neighbors, step_size,
-                               used_squared_max_distance, normal, mean, eigen_values);
+        getSurfaceInformation (x,
+                               y,
+                               radius,
+                               point.getVector3fMap (),
+                               no_of_nearest_neighbors,
+                               step_size,
+                               used_squared_max_distance,
+                               normal,
+                               mean,
+                               eigen_values);
 
         Eigen::Vector3f viewing_direction =
             (point.getVector3fMap () - sensor_pos).normalized ();
         float new_range =
             normal.dot (mean - sensor_pos) / normal.dot (viewing_direction);
         point.range = new_range;
-        calculate3DPoint (static_cast<float> (x), static_cast<float> (y), point.range,
-                          point);
+        calculate3DPoint (
+            static_cast<float> (x), static_cast<float> (y), point.range, point);
 
         const PointWithRange &original_point = getPoint (x, y);
         float distance_squared = squaredEuclideanDistance (original_point, point);
@@ -860,7 +883,8 @@ namespace pcl
         distance_offset = point_cloud_data.fields[distance_idx].offset;
 
     for (size_t point_idx = 0;
-         point_idx < point_cloud_data.width * point_cloud_data.height; ++point_idx) {
+         point_idx < point_cloud_data.width * point_cloud_data.height;
+         ++point_idx) {
       float x = *reinterpret_cast<const float *> (data + x_offset),
             y = *reinterpret_cast<const float *> (data + y_offset),
             z = *reinterpret_cast<const float *> (data + z_offset),
@@ -890,7 +914,9 @@ namespace pcl
   float
   RangeImage::getOverlap (const RangeImage &other_range_image,
                           const Eigen::Affine3f &relative_transformation,
-                          int search_radius, float max_distance, int pixel_step) const
+                          int search_radius,
+                          float max_distance,
+                          int pixel_step) const
   {
     int hits_counter = 0, valid_points_counter = 0;
 
@@ -914,9 +940,11 @@ namespace pcl
         Eigen::Vector3f closest_point (0.0f, 0.0f, 0.0f);
         bool found_neighbor = false;
         for (int y2 = y - pixel_step * search_radius;
-             y2 <= y + pixel_step * search_radius; y2 += pixel_step) {
+             y2 <= y + pixel_step * search_radius;
+             y2 += pixel_step) {
           for (int x2 = x - pixel_step * search_radius;
-               x2 <= x + pixel_step * search_radius; x2 += pixel_step) {
+               x2 <= x + pixel_step * search_radius;
+               x2 += pixel_step) {
             const PointWithRange &neighbor = getPoint (x2, y2);
             if (!std::isfinite (neighbor.range))
               continue;
@@ -941,7 +969,8 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::getBlurredImageUsingIntegralImage (int blur_radius, float *integral_image,
+  RangeImage::getBlurredImageUsingIntegralImage (int blur_radius,
+                                                 float *integral_image,
                                                  int *valid_points_num_image,
                                                  RangeImage &blurred_image) const
   {
@@ -997,8 +1026,8 @@ namespace pcl
       float *integral_image;
       int *valid_points_num_image;
       getIntegralImage (integral_image, valid_points_num_image);
-      getBlurredImageUsingIntegralImage (blur_radius, integral_image,
-                                         valid_points_num_image, blurred_image);
+      getBlurredImageUsingIntegralImage (
+          blur_radius, integral_image, valid_points_num_image, blurred_image);
       delete[] integral_image;
       delete[] valid_points_num_image;
       return;

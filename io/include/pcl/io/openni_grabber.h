@@ -97,10 +97,12 @@ namespace pcl
         void(const boost::shared_ptr<openni_wrapper::IRImage> &);
     using sig_cb_openni_image_depth_image =
         void(const boost::shared_ptr<openni_wrapper::Image> &,
-             const boost::shared_ptr<openni_wrapper::DepthImage> &, float);
+             const boost::shared_ptr<openni_wrapper::DepthImage> &,
+             float);
     using sig_cb_openni_ir_depth_image =
         void(const boost::shared_ptr<openni_wrapper::IRImage> &,
-             const boost::shared_ptr<openni_wrapper::DepthImage> &, float);
+             const boost::shared_ptr<openni_wrapper::DepthImage> &,
+             float);
     using sig_cb_openni_point_cloud =
         void(const boost::shared_ptr<const pcl::PointCloud<pcl::PointXYZ>> &);
     using sig_cb_openni_point_cloud_rgb =
@@ -183,7 +185,8 @@ namespace pcl
      * \param[out] rgb_principal_point_y the RGB principal point (cy)
      */
     inline void
-    getRGBCameraIntrinsics (double &rgb_focal_length_x, double &rgb_focal_length_y,
+    getRGBCameraIntrinsics (double &rgb_focal_length_x,
+                            double &rgb_focal_length_y,
                             double &rgb_principal_point_x,
                             double &rgb_principal_point_y) const
     {
@@ -311,7 +314,8 @@ namespace pcl
      * \param[in] size of shift and depth buffer
      */
     inline void
-    convertShiftToDepth (const uint16_t *shift_data_ptr, uint16_t *depth_data_ptr,
+    convertShiftToDepth (const uint16_t *shift_data_ptr,
+                         uint16_t *depth_data_ptr,
                          std::size_t size) const
     {
       // get openni device instance
@@ -333,12 +337,14 @@ namespace pcl
     protected:
     /** \brief On initialization processing. */
     void
-    onInit (const std::string &device_id, const Mode &depth_mode,
+    onInit (const std::string &device_id,
+            const Mode &depth_mode,
             const Mode &image_mode);
 
     /** \brief Sets up an OpenNI device. */
     void
-    setupDevice (const std::string &device_id, const Mode &depth_mode,
+    setupDevice (const std::string &device_id,
+                 const Mode &depth_mode,
                  const Mode &image_mode);
 
     /** \brief Update mode maps. */

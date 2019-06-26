@@ -830,9 +830,14 @@ class ON_CLASS ON_Annotation2 : public ON_Geometry
       True if text_xform is set.
   */
   bool
-  GetTextXform (ON_RECT gdi_text_rect, int gdi_height_of_I, double dimstyle_textheight,
-                double dimstyle_textgap, ON::eTextDisplayMode dimstyle_textalignment,
-                double dimscale, ON_3dVector cameraX, ON_3dVector cameraY,
+  GetTextXform (ON_RECT gdi_text_rect,
+                int gdi_height_of_I,
+                double dimstyle_textheight,
+                double dimstyle_textgap,
+                ON::eTextDisplayMode dimstyle_textalignment,
+                double dimscale,
+                ON_3dVector cameraX,
+                ON_3dVector cameraY,
                 const ON_Xform *model_xform,
                 ON_Xform &text_xform // output
                 ) const;
@@ -878,9 +883,14 @@ class ON_CLASS ON_Annotation2 : public ON_Geometry
       True if xform is set.
   */
   bool
-  GetTextXform (ON_RECT gdi_text_rect, int gdi_height_of_I, double dimstyle_textheight,
-                double dimstyle_textgap, ON::eTextDisplayMode dimstyle_textalignment,
-                double dimscale, ON_3dVector cameraX, ON_3dVector cameraY,
+  GetTextXform (ON_RECT gdi_text_rect,
+                int gdi_height_of_I,
+                double dimstyle_textheight,
+                double dimstyle_textgap,
+                ON::eTextDisplayMode dimstyle_textalignment,
+                double dimscale,
+                ON_3dVector cameraX,
+                ON_3dVector cameraY,
                 ON_Xform &xform) const;
 
   /*
@@ -918,8 +928,11 @@ class ON_CLASS ON_Annotation2 : public ON_Geometry
   //    ON_Xform& text_xform  // output
   //    ) const;
   bool
-  GetTextXform (const ON_RECT gdi_text_rect, const ON_Font &font,
-                const ON_DimStyle *dimstyle, double dimscale, const ON_Viewport *vp,
+  GetTextXform (const ON_RECT gdi_text_rect,
+                const ON_Font &font,
+                const ON_DimStyle *dimstyle,
+                double dimscale,
+                const ON_Viewport *vp,
                 const ON_Xform *model_xform,
                 ON_Xform &text_xform // output
                 ) const;
@@ -951,8 +964,12 @@ class ON_CLASS ON_Annotation2 : public ON_Geometry
       True if xform is set.
   */
   bool
-  GetTextXform (ON_RECT gdi_text_rect, const ON_Font &font, const ON_DimStyle &dimstyle,
-                double dimscale, const ON_Viewport *vp, ON_Xform &xform) const;
+  GetTextXform (ON_RECT gdi_text_rect,
+                const ON_Font &font,
+                const ON_DimStyle &dimstyle,
+                double dimscale,
+                const ON_Viewport *vp,
+                ON_Xform &xform) const;
 
   /*
   Description:
@@ -1162,7 +1179,8 @@ class ON_CLASS ON_LinearDimension2 : public ON_Annotation2
 
   // overrides virual ON_Geometry::GetTightBoundingBox
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   /*
@@ -1201,7 +1219,8 @@ class ON_CLASS ON_LinearDimension2 : public ON_Annotation2
   GetV2Form (ON_LinearDimension &dim);
 
   bool
-  CreateFromV2 (const ON_Annotation &v2_ann, const ON_3dmAnnotationSettings &settings,
+  CreateFromV2 (const ON_Annotation &v2_ann,
+                const ON_3dmAnnotationSettings &settings,
                 int dimstyle_index);
 
   /*
@@ -1232,9 +1251,13 @@ class ON_CLASS ON_LinearDimension2 : public ON_Annotation2
 
   */
   int
-  GetDimensionLineSegments (ON_RECT gdi_text_rect, int gdi_height_of_I,
-                            ON_Xform gdi_to_world, const ON_DimStyle &dimstyle,
-                            double dimscale, const ON_Viewport *vp, double a[6],
+  GetDimensionLineSegments (ON_RECT gdi_text_rect,
+                            int gdi_height_of_I,
+                            ON_Xform gdi_to_world,
+                            const ON_DimStyle &dimstyle,
+                            double dimscale,
+                            const ON_Viewport *vp,
+                            double a[6],
                             bool &bInside) const;
 
   // Added for V5. 4/24/07 LW
@@ -1340,7 +1363,8 @@ class ON_CLASS ON_RadialDimension2 : public ON_Annotation2
 
   // overrides virual ON_Geometry::GetTightBoundingBox
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   /*
@@ -1358,8 +1382,11 @@ class ON_CLASS ON_RadialDimension2 : public ON_Annotation2
       false    Failure
   */
   bool
-  CreateFromPoints (ON_3dPoint center, ON_3dPoint arrowtip, ON_3dVector xaxis,
-                    ON_3dVector normal, double offset_distance);
+  CreateFromPoints (ON_3dPoint center,
+                    ON_3dPoint arrowtip,
+                    ON_3dVector xaxis,
+                    ON_3dVector normal,
+                    double offset_distance);
 
   /*
   Description:
@@ -1400,7 +1427,8 @@ class ON_CLASS ON_RadialDimension2 : public ON_Annotation2
   GetV2Form (ON_RadialDimension &dim);
 
   bool
-  CreateFromV2 (const ON_Annotation &v2_ann, const ON_3dmAnnotationSettings &settings,
+  CreateFromV2 (const ON_Annotation &v2_ann,
+                const ON_3dmAnnotationSettings &settings,
                 int dimstyle_index);
 
   bool
@@ -1516,7 +1544,8 @@ class ON_CLASS ON_AngularDimension2 : public ON_Annotation2
 
   // overrides virual ON_Geometry::GetTightBoundingBox
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   /*
@@ -1551,8 +1580,11 @@ class ON_CLASS ON_AngularDimension2 : public ON_Annotation2
       false    Failure
   */
   bool
-  CreateFromPoints (const ON_3dPoint &apex, const ON_3dPoint &p0, const ON_3dPoint &p1,
-                    ON_3dPoint &arcpt, ON_3dVector &Normal);
+  CreateFromPoints (const ON_3dPoint &apex,
+                    const ON_3dPoint &p0,
+                    const ON_3dPoint &p1,
+                    ON_3dPoint &arcpt,
+                    ON_3dVector &Normal);
 
   /*
     Description:
@@ -1568,7 +1600,8 @@ class ON_CLASS ON_AngularDimension2 : public ON_Annotation2
   CreateFromArc (const ON_Arc &arc);
 
   bool
-  CreateFromV2 (const ON_Annotation &v2_ann, const ON_3dmAnnotationSettings &settings,
+  CreateFromV2 (const ON_Annotation &v2_ann,
+                const ON_3dmAnnotationSettings &settings,
                 int dimstyle_index);
 
   bool
@@ -1663,9 +1696,13 @@ class ON_CLASS ON_AngularDimension2 : public ON_Annotation2
        Arrowheads are at a[4] & a[5].
   */
   int
-  GetDimensionArcSegments (ON_RECT gdi_text_rect, int gdi_height_of_I,
-                           ON_Xform gdi_to_world, const ON_DimStyle &dimstyle,
-                           double dimscale, const ON_Viewport *vp, double a[6],
+  GetDimensionArcSegments (ON_RECT gdi_text_rect,
+                           int gdi_height_of_I,
+                           ON_Xform gdi_to_world,
+                           const ON_DimStyle &dimstyle,
+                           double dimscale,
+                           const ON_Viewport *vp,
+                           double a[6],
                            bool &bInside) const;
 
   /*
@@ -1810,7 +1847,8 @@ class ON_CLASS ON_OrdinateDimension2 : public ON_Annotation2
 
   // overrides virual ON_Geometry::GetTightBoundingBox
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   /*
@@ -1934,8 +1972,12 @@ class ON_CLASS ON_OrdinateDimension2 : public ON_Annotation2
       If they are ON_UNSET_VALUE, they will be set to the defaults
   */
   void
-  CalcKinkPoints (ON_2dPoint p0, ON_2dPoint p1, int direction, double default_offset,
-                  ON_2dPoint &k0, ON_2dPoint &k1) const;
+  CalcKinkPoints (ON_2dPoint p0,
+                  ON_2dPoint p1,
+                  int direction,
+                  double default_offset,
+                  ON_2dPoint &k0,
+                  ON_2dPoint &k1) const;
 };
 
 //////////
@@ -1976,7 +2018,8 @@ class ON_CLASS ON_TextEntity2 : public ON_Annotation2
   // This just adds the text base point to the box
   // There is no calculation of the size of the text or its bounds
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   /*
@@ -2140,7 +2183,8 @@ class ON_CLASS ON_Leader2 : public ON_Annotation2
 
   // overrides virual ON_Geometry::GetTightBoundingBox
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   /*
@@ -2168,7 +2212,8 @@ class ON_CLASS ON_Leader2 : public ON_Annotation2
   void
   GetV2Form (ON_Leader &leader);
   bool
-  CreateFromV2 (const ON_Annotation &v2_ann, const ON_3dmAnnotationSettings &settings,
+  CreateFromV2 (const ON_Annotation &v2_ann,
+                const ON_3dmAnnotationSettings &settings,
                 int dimstyle_index);
 
   // April 22, 2010 Lowell - Added to support right justified text on left pointing

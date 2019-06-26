@@ -77,7 +77,9 @@ openni_wrapper::DeviceXtionPro::~DeviceXtionPro () throw ()
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool
-openni_wrapper::DeviceXtionPro::isImageResizeSupported (unsigned, unsigned, unsigned,
+openni_wrapper::DeviceXtionPro::isImageResizeSupported (unsigned,
+                                                        unsigned,
+                                                        unsigned,
                                                         unsigned) const throw ()
 {
   return (false);

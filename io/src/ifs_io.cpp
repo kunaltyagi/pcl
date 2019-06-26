@@ -46,8 +46,10 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 int
-pcl::IFSReader::readHeader (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
-                            int &ifs_version, unsigned int &data_idx)
+pcl::IFSReader::readHeader (const std::string &file_name,
+                            pcl::PCLPointCloud2 &cloud,
+                            int &ifs_version,
+                            unsigned int &data_idx)
 {
   // Default values
   data_idx = 0;
@@ -71,7 +73,8 @@ pcl::IFSReader::readHeader (const std::string &file_name, pcl::PCLPointCloud2 &c
   fs.open (file_name.c_str (), std::ios::binary);
   if (!fs.is_open () || fs.fail ()) {
     PCL_ERROR ("[pcl::IFSReader::readHeader] Could not open file '%s'! Error : %s\n",
-               file_name.c_str (), strerror (errno));
+               file_name.c_str (),
+               strerror (errno));
     fs.close ();
     return (-1);
   }
@@ -163,7 +166,8 @@ pcl::IFSReader::readHeader (const std::string &file_name, pcl::PCLPointCloud2 &c
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 int
-pcl::IFSReader::read (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
+pcl::IFSReader::read (const std::string &file_name,
+                      pcl::PCLPointCloud2 &cloud,
                       int &ifs_version)
 {
   pcl::console::TicToc tt;
@@ -205,14 +209,18 @@ pcl::IFSReader::read (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
   double total_time = tt.toc ();
   PCL_DEBUG ("[pcl::IFSReader::read] Loaded %s as a %s cloud in %g ms with %d points. "
              "Available dimensions: %s.\n",
-             file_name.c_str (), cloud.is_dense ? "dense" : "non-dense", total_time,
-             cloud.width * cloud.height, pcl::getFieldsList (cloud).c_str ());
+             file_name.c_str (),
+             cloud.is_dense ? "dense" : "non-dense",
+             total_time,
+             cloud.width * cloud.height,
+             pcl::getFieldsList (cloud).c_str ());
   return (0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 int
-pcl::IFSReader::read (const std::string &file_name, pcl::PolygonMesh &mesh,
+pcl::IFSReader::read (const std::string &file_name,
+                      pcl::PolygonMesh &mesh,
                       int &ifs_version)
 {
   pcl::console::TicToc tt;
@@ -256,7 +264,8 @@ pcl::IFSReader::read (const std::string &file_name, pcl::PolygonMesh &mesh,
   fs.open (file_name.c_str (), std::ios::binary);
   if (!fs.is_open () || fs.fail ()) {
     PCL_ERROR ("[pcl::IFSReader::read] Could not open file '%s'! Error : %s\n",
-               file_name.c_str (), strerror (errno));
+               file_name.c_str (),
+               strerror (errno));
     fs.close ();
     return (-1);
   }
@@ -298,14 +307,17 @@ pcl::IFSReader::read (const std::string &file_name, pcl::PolygonMesh &mesh,
   double total_time = tt.toc ();
   PCL_DEBUG ("[pcl::IFSReader::read] Loaded %s as a polygon mesh in %g ms with %d "
              "points and %d facets.\n",
-             file_name.c_str (), total_time, mesh.cloud.width * mesh.cloud.height,
+             file_name.c_str (),
+             total_time,
+             mesh.cloud.width * mesh.cloud.height,
              mesh.polygons.size ());
   return (0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 int
-pcl::IFSWriter::write (const std::string &file_name, const pcl::PCLPointCloud2 &cloud,
+pcl::IFSWriter::write (const std::string &file_name,
+                       const pcl::PCLPointCloud2 &cloud,
                        const std::string &cloud_name)
 {
   if (cloud.data.empty ()) {
@@ -368,7 +380,8 @@ pcl::IFSWriter::write (const std::string &file_name, const pcl::PCLPointCloud2 &
 
   if (!sink.is_open ()) {
     PCL_ERROR ("[pcl::IFSWriter::write] Could not open file '%s'! Error : %s\n",
-               file_name.c_str (), strerror (errno));
+               file_name.c_str (),
+               strerror (errno));
     sink.close ();
     return (-1);
   }

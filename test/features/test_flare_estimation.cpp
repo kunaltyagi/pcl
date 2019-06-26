@@ -73,7 +73,8 @@ TEST (PCL, FLARELocalReferenceFrameEstimation)
   ne.compute (*normals);
 
   // Compute FLARE LRF
-  pcl::FLARELocalReferenceFrameEstimation<pcl::PointXYZ, pcl::Normal,
+  pcl::FLARELocalReferenceFrameEstimation<pcl::PointXYZ,
+                                          pcl::Normal,
                                           pcl::ReferenceFrame>
       lrf_estimator;
 
@@ -128,14 +129,14 @@ TEST (PCL, FLARELocalReferenceFrameEstimation)
     EXPECT_NEAR (point_253_y[d], bunny_LRF.at (253).y_axis[d], 1E-3);
     EXPECT_NEAR (point_253_z[d], bunny_LRF.at (253).z_axis[d], 1E-3);
   }
-  EXPECT_NEAR (score_15, lrf_estimator.getSignedDistancesFromHighestPoints ()[15],
-               1E-4);
-  EXPECT_NEAR (score_45, lrf_estimator.getSignedDistancesFromHighestPoints ()[45],
-               1E-4);
-  EXPECT_NEAR (score_163, lrf_estimator.getSignedDistancesFromHighestPoints ()[163],
-               1E-4);
-  EXPECT_NEAR (score_253, lrf_estimator.getSignedDistancesFromHighestPoints ()[253],
-               1E-4);
+  EXPECT_NEAR (
+      score_15, lrf_estimator.getSignedDistancesFromHighestPoints ()[15], 1E-4);
+  EXPECT_NEAR (
+      score_45, lrf_estimator.getSignedDistancesFromHighestPoints ()[45], 1E-4);
+  EXPECT_NEAR (
+      score_163, lrf_estimator.getSignedDistancesFromHighestPoints ()[163], 1E-4);
+  EXPECT_NEAR (
+      score_253, lrf_estimator.getSignedDistancesFromHighestPoints ()[253], 1E-4);
 }
 
 /* ---[ */

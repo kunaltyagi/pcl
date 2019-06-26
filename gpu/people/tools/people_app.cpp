@@ -191,8 +191,8 @@ class PeoplePCDApp
       people_detector_.depth_device1_.download (depth_host_.points, c);
     }
 
-    depth_view_.showShortImage (&depth_host_.points[0], depth_host_.width,
-                                depth_host_.height, 0, 5000, true);
+    depth_view_.showShortImage (
+        &depth_host_.points[0], depth_host_.width, depth_host_.height, 0, 5000, true);
     depth_view_.spinOnce (1, true);
 
     if (write_) {
@@ -223,7 +223,8 @@ class PeoplePCDApp
 
   void
   source_cb2 (const boost::shared_ptr<openni_wrapper::Image> &image_wrapper,
-              const boost::shared_ptr<openni_wrapper::DepthImage> &depth_wrapper, float)
+              const boost::shared_ptr<openni_wrapper::DepthImage> &depth_wrapper,
+              float)
   {
     {
       std::unique_lock<std::mutex> lock (data_ready_mutex_, std::try_to_lock);

@@ -328,7 +328,8 @@ namespace pcl
          **/
         inline void
         sortIndicesToBlob2 (
-            const pcl::PointCloud<pcl::PointXYZ> &cloud_in, unsigned int sizeThres,
+            const pcl::PointCloud<pcl::PointXYZ> &cloud_in,
+            unsigned int sizeThres,
             std::vector<std::vector<Blob2, Eigen::aligned_allocator<Blob2>>> &sorted,
             std::vector<std::vector<pcl::PointIndices>> &indices)
         {
@@ -348,8 +349,8 @@ namespace pcl
 
                 pcl::compute3DCentroid (cloud_in, b.indices, b.mean);
 #ifdef NEED_STATS
-                pcl::computeCovarianceMatrixNormalized (cloud_in, b.indices, b.mean,
-                                                        b.cov);
+                pcl::computeCovarianceMatrixNormalized (
+                    cloud_in, b.indices, b.mean, b.cov);
                 pcl::getMinMax3D (cloud_in, b.indices, b.min, b.max);
                 pcl::eigen33 (b.cov, b.eigenvect, b.eigenval);
 #endif

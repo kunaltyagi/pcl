@@ -58,8 +58,13 @@ namespace pcl
     using namespace cv::gpu;
     using namespace pcl::cuda::detail;
     void
-    meanShiftSegmentation (const GpuMat &src, Mat &dst, int sp, int sr, int minsize,
-                           DjSets &comps, TermCriteria criteria)
+    meanShiftSegmentation (const GpuMat &src,
+                           Mat &dst,
+                           int sp,
+                           int sr,
+                           int minsize,
+                           DjSets &comps,
+                           TermCriteria criteria)
 
     {
       CV_Assert (TargetArchs::builtWith (FEATURE_SET_COMPUTE_12) &&
@@ -119,13 +124,15 @@ namespace pcl
           dr[3] = dist2 (r1, r2[3]);
           dsp[3] = dist2 (sp1, sp2[3]);
 
-          g.addEdge (pix (y, x, ncols), pix (y, x + 1, ncols),
-                     SegmLinkVal (dr[0], dsp[0]));
-          g.addEdge (pix (y, x, ncols), pix (y + 1, x, ncols),
-                     SegmLinkVal (dr[1], dsp[1]));
-          g.addEdge (pix (y, x, ncols), pix (y + 1, x + 1, ncols),
+          g.addEdge (
+              pix (y, x, ncols), pix (y, x + 1, ncols), SegmLinkVal (dr[0], dsp[0]));
+          g.addEdge (
+              pix (y, x, ncols), pix (y + 1, x, ncols), SegmLinkVal (dr[1], dsp[1]));
+          g.addEdge (pix (y, x, ncols),
+                     pix (y + 1, x + 1, ncols),
                      SegmLinkVal (dr[2], dsp[2]));
-          g.addEdge (pix (y, x + 1, ncols), pix (y + 1, x, ncols),
+          g.addEdge (pix (y, x + 1, ncols),
+                     pix (y + 1, x, ncols),
                      SegmLinkVal (dr[3], dsp[3]));
         }
       }
@@ -136,7 +143,8 @@ namespace pcl
         sp2[0] = spmap.at<Vec2s> (y + 1, ncols - 1);
         dr[0] = dist2 (r1, r2[0]);
         dsp[0] = dist2 (sp1, sp2[0]);
-        g.addEdge (pix (y, ncols - 1, ncols), pix (y + 1, ncols - 1, ncols),
+        g.addEdge (pix (y, ncols - 1, ncols),
+                   pix (y + 1, ncols - 1, ncols),
                    SegmLinkVal (dr[0], dsp[0]));
       }
       for (int x = 0; x < ncols - 1; ++x) {
@@ -146,7 +154,8 @@ namespace pcl
         sp2[0] = spmap.at<Vec2s> (nrows - 1, x + 1);
         dr[0] = dist2 (r1, r2[0]);
         dsp[0] = dist2 (sp1, sp2[0]);
-        g.addEdge (pix (nrows - 1, x, ncols), pix (nrows - 1, x + 1, ncols),
+        g.addEdge (pix (nrows - 1, x, ncols),
+                   pix (nrows - 1, x + 1, ncols),
                    SegmLinkVal (dr[0], dsp[0]));
       }
 

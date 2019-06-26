@@ -91,8 +91,11 @@ namespace pcl
       /** \brief Add minimization constraint: point-to-surface distance
        * (tangent-distance-minimization). */
       virtual void
-      addPointConstraint (const double &param, const Eigen::Vector2d &point,
-                          const Eigen::Vector2d &normal, double weight, unsigned &row);
+      addPointConstraint (const double &param,
+                          const Eigen::Vector2d &point,
+                          const Eigen::Vector2d &normal,
+                          double weight,
+                          unsigned &row);
 
       /** \brief Add minimization constraint: smoothness by control point
        * regularisation. */

@@ -68,8 +68,12 @@ float plane_coeffs_[] = {-0.8964f, -0.5868f, -1.208f};
 
 template <typename ModelType, typename SacType>
 void
-verifyPlaneSac (ModelType &model, SacType &sac, unsigned int inlier_number = 2000,
-                float tol = 1e-1f, float refined_tol = 1e-1f, float proj_tol = 1e-3f)
+verifyPlaneSac (ModelType &model,
+                SacType &sac,
+                unsigned int inlier_number = 2000,
+                float tol = 1e-1f,
+                float refined_tol = 1e-1f,
+                float proj_tol = 1e-3f)
 {
   // Algorithm tests
   bool result = sac.computeModel ();
@@ -103,12 +107,12 @@ verifyPlaneSac (ModelType &model, SacType &sac, unsigned int inlier_number = 200
   // Projection tests
   PointCloud<PointXYZ> proj_points;
   model->projectPoints (inliers, coeff_refined, proj_points);
-  EXPECT_XYZ_NEAR (PointXYZ (1.1266, 0.0152, -0.0156), proj_points.points[20],
-                   proj_tol);
-  EXPECT_XYZ_NEAR (PointXYZ (1.1843, -0.0635, -0.0201), proj_points.points[30],
-                   proj_tol);
-  EXPECT_XYZ_NEAR (PointXYZ (1.0749, -0.0586, 0.0587), proj_points.points[50],
-                   proj_tol);
+  EXPECT_XYZ_NEAR (
+      PointXYZ (1.1266, 0.0152, -0.0156), proj_points.points[20], proj_tol);
+  EXPECT_XYZ_NEAR (
+      PointXYZ (1.1843, -0.0635, -0.0201), proj_points.points[30], proj_tol);
+  EXPECT_XYZ_NEAR (
+      PointXYZ (1.0749, -0.0586, 0.0587), proj_points.points[50], proj_tol);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -287,7 +291,8 @@ TEST (SampleConsensusModelNormalParallelPlane, RANSAC)
 
   // test axis slightly in valid range
   {
-    model->setAxis (Eigen::Vector3f (0, sin (max_angle_rad * (1 - angle_eps)),
+    model->setAxis (Eigen::Vector3f (0,
+                                     sin (max_angle_rad * (1 - angle_eps)),
                                      cos (max_angle_rad * (1 - angle_eps))));
     RandomSampleConsensus<PointXYZ> sac (model, 0.03);
     sac.computeModel ();
@@ -299,7 +304,8 @@ TEST (SampleConsensusModelNormalParallelPlane, RANSAC)
 
   // test axis slightly out of valid range
   {
-    model->setAxis (Eigen::Vector3f (0, sin (max_angle_rad * (1 + angle_eps)),
+    model->setAxis (Eigen::Vector3f (0,
+                                     sin (max_angle_rad * (1 + angle_eps)),
                                      cos (max_angle_rad * (1 + angle_eps))));
     RandomSampleConsensus<PointXYZ> sac (model, 0.03);
     sac.computeModel ();

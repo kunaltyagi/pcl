@@ -103,8 +103,11 @@ loadCloud (const string &filename, pcl::PCLPointCloud2 &cloud)
 }
 
 void
-compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output,
-         int max_iterations = 1000, double threshold = 0.05, bool negative = false)
+compute (const pcl::PCLPointCloud2::ConstPtr &input,
+         pcl::PCLPointCloud2 &output,
+         int max_iterations = 1000,
+         double threshold = 0.05,
+         bool negative = false)
 {
   // Convert data to PointCloud<T>
   PointCloud<PointXYZ>::Ptr xyz (new PointCloud<PointXYZ>);
@@ -143,7 +146,10 @@ compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output
   print_info (" points]\n");
 
   print_info ("Model coefficients: [");
-  print_value ("%g %g %g %g", coefficients[0], coefficients[1], coefficients[2],
+  print_value ("%g %g %g %g",
+               coefficients[0],
+               coefficients[1],
+               coefficients[2],
                coefficients[3]);
   print_info ("]\n");
 
@@ -157,7 +163,9 @@ compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output
       indices_fullset[p_it] = p_it;
 
     std::sort (inliers.begin (), inliers.end ());
-    set_difference (indices_fullset.begin (), indices_fullset.end (), inliers.begin (),
+    set_difference (indices_fullset.begin (),
+                    indices_fullset.end (),
+                    inliers.begin (),
                     inliers.end (),
                     inserter (everything_but_the_plane->indices,
                               everything_but_the_plane->indices.begin ()));
@@ -200,8 +208,11 @@ saveCloud (const string &filename, const pcl::PCLPointCloud2 &output)
 }
 
 int
-batchProcess (const vector<string> &pcd_files, string &output_dir, int max_it,
-              double thresh, bool negative)
+batchProcess (const vector<string> &pcd_files,
+              string &output_dir,
+              int max_it,
+              double thresh,
+              bool negative)
 {
   vector<string> st;
   for (const auto &pcd_file : pcd_files) {

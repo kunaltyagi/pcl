@@ -131,8 +131,8 @@ namespace pcl
           return;
         }
 
-        pcl::getRejectedQueryIndices (*input_correspondences_, correspondences,
-                                      indices);
+        pcl::getRejectedQueryIndices (
+            *input_correspondences_, correspondences, indices);
       }
 
       /** \brief Get a string representation of the name of this class. */

@@ -251,7 +251,8 @@ pcl::StaticRangeCoder::encodeIntVectorToStream (
       }
 
       // init new frequency range with zero
-      memset (&cFreqTable_[static_cast<std::size_t> (oldfrequencyTableSize + 1)], 0,
+      memset (&cFreqTable_[static_cast<std::size_t> (oldfrequencyTableSize + 1)],
+              0,
               sizeof (uint64_t) * static_cast<std::size_t> (frequencyTableSize -
                                                             oldfrequencyTableSize));
     }
@@ -368,7 +369,8 @@ pcl::StaticRangeCoder::decodeStreamToIntVector (
   }
 
   // init with zero
-  memset (&cFreqTable_[0], 0,
+  memset (&cFreqTable_[0],
+          0,
           sizeof (uint64_t) * static_cast<std::size_t> (frequencyTableSize));
 
   // read cumulative frequency table

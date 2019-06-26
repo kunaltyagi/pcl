@@ -139,7 +139,8 @@ namespace mets
     {
     }
 
-    noimprove_termination_criteria (termination_criteria_chain *next, int max,
+    noimprove_termination_criteria (termination_criteria_chain *next,
+                                    int max,
                                     gol_type epsilon = 1e-7)
         : termination_criteria_chain (next),
           best_cost_m (std::numeric_limits<gol_type>::max ()), max_noimprove_m (max),
@@ -197,7 +198,8 @@ namespace mets
     {
     }
 
-    threshold_termination_criteria (termination_criteria_chain *next, gol_type level,
+    threshold_termination_criteria (termination_criteria_chain *next,
+                                    gol_type level,
                                     gol_type epsilon = 1e-7)
         : termination_criteria_chain (next), level_m (level), epsilon_m (epsilon)
     {

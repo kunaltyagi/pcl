@@ -84,7 +84,8 @@ static inline void
 clone (T *&dst, S *src, int n)
 {
   dst = new T[n];
-  memcpy (reinterpret_cast<void *> (dst), reinterpret_cast<const void *> (src),
+  memcpy (reinterpret_cast<void *> (dst),
+          reinterpret_cast<const void *> (src),
           sizeof (T) * n);
 }
 
@@ -534,8 +535,16 @@ class Solver
   };
 
   void
-  Solve (int l, const QMatrix &Q, const double *p_, const schar *y_, double *alpha_,
-         double Cp, double Cn, double eps, SolutionInfo *si, int shrinking);
+  Solve (int l,
+         const QMatrix &Q,
+         const double *p_,
+         const schar *y_,
+         double *alpha_,
+         double Cp,
+         double Cn,
+         double eps,
+         SolutionInfo *si,
+         int shrinking);
 
   protected:
   int active_size;
@@ -659,8 +668,15 @@ Solver::reconstruct_gradient ()
 }
 
 void
-Solver::Solve (int l, const QMatrix &Q, const double *p_, const schar *y_,
-               double *alpha_, double Cp, double Cn, double eps, SolutionInfo *si,
+Solver::Solve (int l,
+               const QMatrix &Q,
+               const double *p_,
+               const schar *y_,
+               double *alpha_,
+               double Cp,
+               double Cn,
+               double eps,
+               SolutionInfo *si,
                int shrinking)
 {
   this->l = l;
@@ -1154,8 +1170,16 @@ class Solver_NU : public Solver
   Solver_NU () {}
 
   void
-  Solve (int l, const QMatrix &Q, const double *p, const schar *y, double *alpha,
-         double Cp, double Cn, double eps, SolutionInfo *si, int shrinking)
+  Solve (int l,
+         const QMatrix &Q,
+         const double *p,
+         const schar *y,
+         double *alpha,
+         double Cp,
+         double Cn,
+         double eps,
+         SolutionInfo *si,
+         int shrinking)
   {
     this->si = si;
     Solver::Solve (l, Q, p, y, alpha, Cp, Cn, eps, si, shrinking);
@@ -1599,8 +1623,12 @@ class SVR_Q : public Kernel
 // construct and solve various formulations
 //
 static void
-solve_c_svc (const svm_problem *prob, const svm_parameter *param, double *alpha,
-             Solver::SolutionInfo *si, double Cp, double Cn)
+solve_c_svc (const svm_problem *prob,
+             const svm_parameter *param,
+             double *alpha,
+             Solver::SolutionInfo *si,
+             double Cp,
+             double Cn)
 {
   int l = prob->l;
   double *minus_ones = new double[l];
@@ -1618,7 +1646,15 @@ solve_c_svc (const svm_problem *prob, const svm_parameter *param, double *alpha,
 
   Solver s;
 
-  s.Solve (l, SVC_Q (*prob, *param, y), minus_ones, y, alpha, Cp, Cn, param->eps, si,
+  s.Solve (l,
+           SVC_Q (*prob, *param, y),
+           minus_ones,
+           y,
+           alpha,
+           Cp,
+           Cn,
+           param->eps,
+           si,
            param->shrinking);
 
   double sum_alpha = 0;
@@ -1638,7 +1674,9 @@ solve_c_svc (const svm_problem *prob, const svm_parameter *param, double *alpha,
 }
 
 static void
-solve_nu_svc (const svm_problem *prob, const svm_parameter *param, double *alpha,
+solve_nu_svc (const svm_problem *prob,
+              const svm_parameter *param,
+              double *alpha,
               Solver::SolutionInfo *si)
 {
   int l = prob->l;
@@ -1672,7 +1710,15 @@ solve_nu_svc (const svm_problem *prob, const svm_parameter *param, double *alpha
 
   Solver_NU s;
 
-  s.Solve (l, SVC_Q (*prob, *param, y), zeros, y, alpha, 1.0, 1.0, param->eps, si,
+  s.Solve (l,
+           SVC_Q (*prob, *param, y),
+           zeros,
+           y,
+           alpha,
+           1.0,
+           1.0,
+           param->eps,
+           si,
            param->shrinking);
 
   double r = si->r;
@@ -1696,7 +1742,9 @@ solve_nu_svc (const svm_problem *prob, const svm_parameter *param, double *alpha
 }
 
 static void
-solve_one_class (const svm_problem *prob, const svm_parameter *param, double *alpha,
+solve_one_class (const svm_problem *prob,
+                 const svm_parameter *param,
+                 double *alpha,
                  Solver::SolutionInfo *si)
 {
   int l = prob->l;
@@ -1721,7 +1769,15 @@ solve_one_class (const svm_problem *prob, const svm_parameter *param, double *al
 
   Solver s;
 
-  s.Solve (l, ONE_CLASS_Q (*prob, *param), zeros, ones, alpha, 1.0, 1.0, param->eps, si,
+  s.Solve (l,
+           ONE_CLASS_Q (*prob, *param),
+           zeros,
+           ones,
+           alpha,
+           1.0,
+           1.0,
+           param->eps,
+           si,
            param->shrinking);
 
   delete[] zeros;
@@ -1729,7 +1785,9 @@ solve_one_class (const svm_problem *prob, const svm_parameter *param, double *al
 }
 
 static void
-solve_epsilon_svr (const svm_problem *prob, const svm_parameter *param, double *alpha,
+solve_epsilon_svr (const svm_problem *prob,
+                   const svm_parameter *param,
+                   double *alpha,
                    Solver::SolutionInfo *si)
 {
   int l = prob->l;
@@ -1749,8 +1807,16 @@ solve_epsilon_svr (const svm_problem *prob, const svm_parameter *param, double *
 
   Solver s;
 
-  s.Solve (2 * l, SVR_Q (*prob, *param), linear_term, y, alpha2, param->C, param->C,
-           param->eps, si, param->shrinking);
+  s.Solve (2 * l,
+           SVR_Q (*prob, *param),
+           linear_term,
+           y,
+           alpha2,
+           param->C,
+           param->C,
+           param->eps,
+           si,
+           param->shrinking);
 
   double sum_alpha = 0;
 
@@ -1767,7 +1833,9 @@ solve_epsilon_svr (const svm_problem *prob, const svm_parameter *param, double *
 }
 
 static void
-solve_nu_svr (const svm_problem *prob, const svm_parameter *param, double *alpha,
+solve_nu_svr (const svm_problem *prob,
+              const svm_parameter *param,
+              double *alpha,
               Solver::SolutionInfo *si)
 {
   int l = prob->l;
@@ -1791,7 +1859,15 @@ solve_nu_svr (const svm_problem *prob, const svm_parameter *param, double *alpha
 
   Solver_NU s;
 
-  s.Solve (2 * l, SVR_Q (*prob, *param), linear_term, y, alpha2, C, C, param->eps, si,
+  s.Solve (2 * l,
+           SVR_Q (*prob, *param),
+           linear_term,
+           y,
+           alpha2,
+           C,
+           C,
+           param->eps,
+           si,
            param->shrinking);
 
   info ("epsilon = %f\n", -si->r);
@@ -1816,7 +1892,9 @@ struct decision_function {
 };
 
 static decision_function
-svm_train_one (const svm_problem *prob, const svm_parameter *param, double Cp,
+svm_train_one (const svm_problem *prob,
+               const svm_parameter *param,
+               double Cp,
                double Cn)
 {
   double *alpha = Malloc (double, prob->l);
@@ -1876,8 +1954,8 @@ svm_train_one (const svm_problem *prob, const svm_parameter *param, double Cp,
 
 // Platt's binary SVM Probabilistic Output: an improvement from Lin et al.
 static void
-sigmoid_train (int l, const double *dec_values, const double *labels, double &A,
-               double &B)
+sigmoid_train (
+    int l, const double *dec_values, const double *labels, double &A, double &B)
 {
   double prior1 = 0, prior0 = 0;
 
@@ -2094,8 +2172,12 @@ multiclass_probability (int k, double **r, double *p)
 
 // Cross-validation decision values for probability estimates
 static void
-svm_binary_svc_probability (const svm_problem *prob, const svm_parameter *param,
-                            double Cp, double Cn, double &probA, double &probB)
+svm_binary_svc_probability (const svm_problem *prob,
+                            const svm_parameter *param,
+                            double Cp,
+                            double Cn,
+                            double &probA,
+                            double &probB)
 {
   int nr_fold = 5;
   int *perm = Malloc (int, prob->l);
@@ -2231,8 +2313,12 @@ svm_svr_probability (const svm_problem *prob, const svm_parameter *param)
 // label: label name, start: begin of each class, count: #data of classes, perm: indices
 // to the original data perm, length l, must be allocated before calling this subroutine
 static void
-svm_group_classes (const svm_problem *prob, int *nr_class_ret, int **label_ret,
-                   int **start_ret, int **count_ret, int *perm)
+svm_group_classes (const svm_problem *prob,
+                   int *nr_class_ret,
+                   int **label_ret,
+                   int **start_ret,
+                   int **count_ret,
+                   int *perm)
 {
   int l = prob->l;
   int max_nr_class = 16;
@@ -2386,7 +2472,8 @@ svm_train (const svm_problem *prob, const svm_parameter *param)
           break;
 
       if (j == nr_class)
-        fprintf (stderr, "WARNING: class label %d specified in weight is not found\n",
+        fprintf (stderr,
+                 "WARNING: class label %d specified in weight is not found\n",
                  param->weight_label[i]);
       else
         weighted_C[j] *= param->weight[i];
@@ -2430,8 +2517,8 @@ svm_train (const svm_problem *prob, const svm_parameter *param)
         }
 
         if (param->probability)
-          svm_binary_svc_probability (&sub_prob, param, weighted_C[i], weighted_C[j],
-                                      probA[p], probB[p]);
+          svm_binary_svc_probability (
+              &sub_prob, param, weighted_C[i], weighted_C[j], probA[p], probB[p]);
 
         f[p] = svm_train_one (&sub_prob, param, weighted_C[i], weighted_C[j]);
 
@@ -2572,7 +2659,9 @@ svm_train (const svm_problem *prob, const svm_parameter *param)
 
 // Stratified cross validation
 void
-svm_cross_validation (const svm_problem *prob, const svm_parameter *param, int nr_fold,
+svm_cross_validation (const svm_problem *prob,
+                      const svm_parameter *param,
+                      int nr_fold,
                       double *target)
 {
   int *fold_start = Malloc (int, nr_fold + 1);
@@ -2842,7 +2931,8 @@ svm_predict (const svm_model *model, const svm_node *x)
 }
 
 double
-svm_predict_probability (const svm_model *model, const svm_node *x,
+svm_predict_probability (const svm_model *model,
+                         const svm_node *x,
                          double *prob_estimates)
 {
   if ((model->param.svm_type == C_SVC || model->param.svm_type == NU_SVC) &&
@@ -2889,11 +2979,11 @@ svm_predict_probability (const svm_model *model, const svm_node *x,
     return svm_predict (model, x);
 }
 
-static const char *svm_type_table[] = {"c_svc",       "nu_svc", "one_class",
-                                       "epsilon_svr", "nu_svr", nullptr};
+static const char *svm_type_table[] = {
+    "c_svc", "nu_svc", "one_class", "epsilon_svr", "nu_svr", nullptr};
 
-static const char *kernel_type_table[] = {"linear",  "polynomial",  "rbf",
-                                          "sigmoid", "precomputed", nullptr};
+static const char *kernel_type_table[] = {
+    "linear", "polynomial", "rbf", "sigmoid", "precomputed", nullptr};
 
 int
 svm_save_model (const char *model_file_name, const svm_model *model)

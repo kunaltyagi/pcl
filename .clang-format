@@ -10,3 +10,5 @@ Standard: Cpp11
 TabWidth: 2
 UseTab: Never
 ColumnLimit: 88
+BinPackArguments: false  # either on one line, or one line per argument (like Python)
+BinPackParameters: false # same as above, but for parameters

@@ -60,7 +60,8 @@ KdTreePtr tree;
 ///////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 void
-shotCopyPointCloud (const PointCloud<PointT> &cloud_in, const std::vector<int> &indices,
+shotCopyPointCloud (const PointCloud<PointT> &cloud_in,
+                    const std::vector<int> &indices,
                     PointCloud<PointT> &cloud_out)
 {
   pcl::copyPointCloud<PointT> (cloud_in, indices, cloud_out);
@@ -126,12 +127,16 @@ checkDesc<UniqueShapeContext1960> (const pcl::PointCloud<UniqueShapeContext1960>
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-template <typename FeatureEstimation, typename PointT, typename NormalT,
+template <typename FeatureEstimation,
+          typename PointT,
+          typename NormalT,
           typename OutputT>
 struct createSHOTDesc {
   FeatureEstimation
   operator() (const typename PointCloud<NormalT>::Ptr &normals,
-              const int nr_shape_bins_ = 10, const int = 30, const bool = true,
+              const int nr_shape_bins_ = 10,
+              const int = 30,
+              const bool = true,
               const bool = false) const
   {
     FeatureEstimation f (nr_shape_bins_);
@@ -144,8 +149,11 @@ struct createSHOTDesc {
 template <typename FeatureEstimation, typename PointT, typename NormalT>
 struct createSHOTDesc<FeatureEstimation, PointT, NormalT, SHOT352> {
   FeatureEstimation
-  operator() (const typename PointCloud<NormalT>::Ptr &normals, const int = 10,
-              const int = 30, const bool = true, const bool = false) const
+  operator() (const typename PointCloud<NormalT>::Ptr &normals,
+              const int = 10,
+              const int = 30,
+              const bool = true,
+              const bool = false) const
   {
     FeatureEstimation f;
     f.setInputNormals (normals);
@@ -157,8 +165,10 @@ struct createSHOTDesc<FeatureEstimation, PointT, NormalT, SHOT352> {
 template <typename FeatureEstimation, typename PointT, typename NormalT>
 struct createSHOTDesc<FeatureEstimation, PointT, NormalT, SHOT1344> {
   FeatureEstimation
-  operator() (const typename PointCloud<NormalT>::Ptr &normals, const int = 10,
-              const int = 30, const bool describe_shape = true,
+  operator() (const typename PointCloud<NormalT>::Ptr &normals,
+              const int = 10,
+              const int = 30,
+              const bool describe_shape = true,
               const bool describe_color = false) const
   {
     FeatureEstimation f (describe_shape, describe_color);
@@ -169,11 +179,16 @@ struct createSHOTDesc<FeatureEstimation, PointT, NormalT, SHOT1344> {
 
 ///////////////////////////////////////////////////////////////////////////////////
 template <typename PointT, typename NormalT, typename OutputT>
-struct createSHOTDesc<ShapeContext3DEstimation<PointT, NormalT, OutputT>, PointT,
-                      NormalT, OutputT> {
+struct createSHOTDesc<ShapeContext3DEstimation<PointT, NormalT, OutputT>,
+                      PointT,
+                      NormalT,
+                      OutputT> {
   ShapeContext3DEstimation<PointT, NormalT, OutputT>
-  operator() (const typename PointCloud<NormalT>::Ptr &normals, const int, const int,
-              const bool, const bool) const
+  operator() (const typename PointCloud<NormalT>::Ptr &normals,
+              const int,
+              const int,
+              const bool,
+              const bool) const
   {
     ShapeContext3DEstimation<PointT, NormalT, OutputT> sc3d;
     // sc3d.setAzimuthBins (4);
@@ -190,8 +205,11 @@ struct createSHOTDesc<ShapeContext3DEstimation<PointT, NormalT, OutputT>, PointT
 template <typename PointT, typename NormalT, typename OutputT>
 struct createSHOTDesc<UniqueShapeContext<PointT, OutputT>, PointT, NormalT, OutputT> {
   UniqueShapeContext<PointT, OutputT>
-  operator() (const typename PointCloud<NormalT>::Ptr &, const int, const int,
-              const bool, const bool) const
+  operator() (const typename PointCloud<NormalT>::Ptr &,
+              const int,
+              const int,
+              const bool,
+              const bool) const
   {
     UniqueShapeContext<PointT, OutputT> usc;
     usc.setMinimalRadius (0.004);
@@ -202,7 +220,9 @@ struct createSHOTDesc<UniqueShapeContext<PointT, OutputT>, PointT, NormalT, Outp
 };
 
 ///////////////////////////////////////////////////////////////////////////////////
-template <typename FeatureEstimation, typename PointT, typename NormalT,
+template <typename FeatureEstimation,
+          typename PointT,
+          typename NormalT,
           typename OutputT>
 void
 testSHOTIndicesAndSearchSurface (const typename PointCloud<PointT>::Ptr &points,
@@ -282,7 +302,8 @@ testSHOTIndicesAndSearchSurface (const typename PointCloud<PointT>::Ptr &points,
   est3.compute (output3);
 
   // Start with features for each point in "subpoints" and then subsample the results
-  shotCopyPointCloud<OutputT> (output0, *indices2,
+  shotCopyPointCloud<OutputT> (output0,
+                               *indices2,
                                output4); // (Re-using "output0" from above)
 
   // The two cases above should produce equivalent results
@@ -290,13 +311,16 @@ testSHOTIndicesAndSearchSurface (const typename PointCloud<PointT>::Ptr &points,
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-template <typename FeatureEstimation, typename PointT, typename NormalT,
+template <typename FeatureEstimation,
+          typename PointT,
+          typename NormalT,
           typename OutputT>
 void
 testSHOTLocalReferenceFrame (const typename PointCloud<PointT>::Ptr &points,
                              const typename PointCloud<NormalT>::Ptr &normals,
                              const pcl::IndicesPtr &indices,
-                             const int nr_shape_bins = 10, const int nr_color_bins = 30,
+                             const int nr_shape_bins = 10,
+                             const int nr_color_bins = 30,
                              const bool describe_shape = true,
                              const bool describe_color = false)
 {
@@ -789,7 +813,9 @@ TEST (PCL, 3DSCEstimation)
     test_indices->push_back (static_cast<int> (i));
 
   testSHOTIndicesAndSearchSurface<
-      ShapeContext3DEstimation<PointXYZ, Normal, ShapeContext1980>, PointXYZ, Normal,
+      ShapeContext3DEstimation<PointXYZ, Normal, ShapeContext1980>,
+      PointXYZ,
+      Normal,
       ShapeContext1980> (cloudptr, normals, test_indices);
 }
 
@@ -846,10 +872,14 @@ TEST (PCL, USCEstimation)
 
   PointCloud<Normal>::Ptr normals (new PointCloud<Normal> ());
   testSHOTIndicesAndSearchSurface<UniqueShapeContext<PointXYZ, UniqueShapeContext1960>,
-                                  PointXYZ, Normal, UniqueShapeContext1960> (
+                                  PointXYZ,
+                                  Normal,
+                                  UniqueShapeContext1960> (
       cloud.makeShared (), normals, test_indices);
   testSHOTLocalReferenceFrame<UniqueShapeContext<PointXYZ, UniqueShapeContext1960>,
-                              PointXYZ, Normal, UniqueShapeContext1960> (
+                              PointXYZ,
+                              Normal,
+                              UniqueShapeContext1960> (
       cloud.makeShared (), normals, test_indices);
 }
 

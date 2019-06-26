@@ -283,19 +283,20 @@ class ON_CLASS ON_OffsetSurface : public ON_SurfaceProxy
   GetBBox (double *bbox_min, double *bbox_max, int bGrowBox = false) const;
 
   ON_BOOL32
-  Evaluate (          // returns false if unable to evaluate
-      double, double, // evaluation parameters
-      int,            // number of derivatives (>=0)
-      int,            // array stride (>=Dimension())
-      double *,       // array of length stride*(ndir+1)*(ndir+2)/2
-      int = 0,        // optional - determines which quadrant to evaluate from
-                      //         0 = default
-                      //         1 from NE quadrant
-                      //         2 from NW quadrant
-                      //         3 from SW quadrant
-                      //         4 from SE quadrant
-      int * = 0       // optional - evaluation hint (int[2]) used to speed
-                      //            repeated evaluations
+  Evaluate ( // returns false if unable to evaluate
+      double,
+      double,   // evaluation parameters
+      int,      // number of derivatives (>=0)
+      int,      // array stride (>=Dimension())
+      double *, // array of length stride*(ndir+1)*(ndir+2)/2
+      int = 0,  // optional - determines which quadrant to evaluate from
+                //         0 = default
+                //         1 from NE quadrant
+                //         2 from NW quadrant
+                //         3 from SW quadrant
+                //         4 from SE quadrant
+      int * = 0 // optional - evaluation hint (int[2]) used to speed
+                //            repeated evaluations
       ) const;
 
   /*

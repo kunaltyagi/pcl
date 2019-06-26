@@ -46,7 +46,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 inline void
 pcl::registration::getCorDistMeanStd (const pcl::Correspondences &correspondences,
-                                      double &mean, double &stddev)
+                                      double &mean,
+                                      double &stddev)
 {
   if (correspondences.empty ())
     return;

@@ -67,8 +67,8 @@ pcl::visualization::PointCloudColorHandlerCustom<PointT>::getColor () const
     colors[cp * 3 + 1] = static_cast<unsigned char> (g_);
     colors[cp * 3 + 2] = static_cast<unsigned char> (b_);
   }
-  scalars->SetArray (colors, 3 * nr_points, 0,
-                     vtkUnsignedCharArray::VTK_DATA_ARRAY_DELETE);
+  scalars->SetArray (
+      colors, 3 * nr_points, 0, vtkUnsignedCharArray::VTK_DATA_ARRAY_DELETE);
   return scalars;
 }
 
@@ -101,8 +101,8 @@ pcl::visualization::PointCloudColorHandlerRandom<PointT>::getColor () const
     colors[cp * 3 + 1] = static_cast<unsigned char> (g_);
     colors[cp * 3 + 2] = static_cast<unsigned char> (b_);
   }
-  scalars->SetArray (colors, 3 * nr_points, 0,
-                     vtkUnsignedCharArray::VTK_DATA_ARRAY_DELETE);
+  scalars->SetArray (
+      colors, 3 * nr_points, 0, vtkUnsignedCharArray::VTK_DATA_ARRAY_DELETE);
   return scalars;
 }
 
@@ -439,7 +439,8 @@ pcl::visualization::PointCloudColorHandlerGenericField<PointT>::getColor () cons
         continue;
 
       const uint8_t *pt_data = reinterpret_cast<const uint8_t *> (&cloud_->points[cp]);
-      memcpy (&field_data, pt_data + fields_[field_idx_].offset,
+      memcpy (&field_data,
+              pt_data + fields_[field_idx_].offset,
               pcl::getFieldSize (fields_[field_idx_].datatype));
 
       colors[j] = field_data;
@@ -449,7 +450,8 @@ pcl::visualization::PointCloudColorHandlerGenericField<PointT>::getColor () cons
     // Color every point
     for (vtkIdType cp = 0; cp < nr_points; ++cp) {
       const uint8_t *pt_data = reinterpret_cast<const uint8_t *> (&cloud_->points[cp]);
-      memcpy (&field_data, pt_data + fields_[field_idx_].offset,
+      memcpy (&field_data,
+              pt_data + fields_[field_idx_].offset,
               pcl::getFieldSize (fields_[field_idx_].datatype));
 
       if (!std::isfinite (field_data))

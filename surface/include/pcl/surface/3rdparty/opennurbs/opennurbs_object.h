@@ -51,11 +51,15 @@ class ON_CLASS ON_ClassId
   //   create - [in] function to create a new object(like CreateNewON_Geometry())
   //   copy - [in] function to copy
   //   sUUID - [in] UUID in registry format from Windows guidgen.exe
-  ON_ClassId (const char *sClassName, const char *sBaseClassName,
-              ON_Object *(*create) (), const char *sUUID);
+  ON_ClassId (const char *sClassName,
+              const char *sBaseClassName,
+              ON_Object *(*create) (),
+              const char *sUUID);
 
-  ON_ClassId (const char *sClassName, const char *sBaseClassName,
-              ON_Object *(*create) (), bool (*copy) (const ON_Object *, ON_Object *),
+  ON_ClassId (const char *sClassName,
+              const char *sBaseClassName,
+              ON_Object *(*create) (),
+              bool (*copy) (const ON_Object *, ON_Object *),
               const char *sUUID);
 
   ~ON_ClassId ();
@@ -203,7 +207,8 @@ class ON_CLASS ON_ClassId
   operator= (const ON_ClassId &);
 
   void
-  ConstructorHelper (const char *sClassName, const char *sBaseClassName,
+  ConstructorHelper (const char *sClassName,
+                     const char *sBaseClassName,
                      const char *sUUID);
 
   // This is a temporary way to add simple virtual functions
@@ -324,8 +329,8 @@ in a .CPP file.
 #define ON_OBJECT_IMPLEMENT(cls, basecls, uuid)                                        \
   void *cls::m_s_##cls##_ptr = 0;                                                      \
   static ON_Object *CreateNew##cls () { return new cls (); }                           \
-  const ON_ClassId cls::m_##cls##_class_id (#cls, #basecls, CreateNew##cls,            \
-                                            cls::Copy##cls, uuid);                     \
+  const ON_ClassId cls::m_##cls##_class_id (                                           \
+      #cls, #basecls, CreateNew##cls, cls::Copy##cls, uuid);                           \
   cls *cls::Cast (ON_Object *p) { return (cls *)Cast ((const ON_Object *)p); }         \
   const cls *cls::Cast (const ON_Object *p)                                            \
   {                                                                                    \

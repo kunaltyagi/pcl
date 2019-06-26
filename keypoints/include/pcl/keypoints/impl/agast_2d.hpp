@@ -76,8 +76,8 @@ pcl::AgastKeypoint2D<PointInT, PointOutT>::detectKeypoints (PointCloudOut &outpu
     image_data[i] = static_cast<unsigned char> (intensity_ ((*input_)[i]));
 
   if (!detector_)
-    detector_.reset (new pcl::keypoints::agast::AgastDetector7_12s (width, height,
-                                                                    threshold_, bmax_));
+    detector_.reset (new pcl::keypoints::agast::AgastDetector7_12s (
+        width, height, threshold_, bmax_));
 
   detector_->setMaxKeypoints (nr_max_keypoints_);
 
@@ -88,8 +88,8 @@ pcl::AgastKeypoint2D<PointInT, PointOutT>::detectKeypoints (PointCloudOut &outpu
     pcl::keypoints::internal::AgastApplyNonMaxSuppresion<PointOutT> anms (
         image_data, tmp_cloud, detector_, output);
   } else {
-    pcl::keypoints::internal::AgastDetector<PointOutT> dec (image_data, detector_,
-                                                            output);
+    pcl::keypoints::internal::AgastDetector<PointOutT> dec (
+        image_data, detector_, output);
   }
 
   // we do not change the denseness

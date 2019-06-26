@@ -52,7 +52,9 @@ namespace pcl
    * \author Nizar Sallem
    * \ingroup keypoints
    */
-  template <typename PointInT, typename PointOutT, typename NormalT = pcl::Normal,
+  template <typename PointInT,
+            typename PointOutT,
+            typename NormalT = pcl::Normal,
             typename IntensityT = pcl::common::IntensityFieldAccessor<PointInT>>
   class SUSANKeypoint : public Keypoint<PointInT, PointOutT>
   {
@@ -88,8 +90,10 @@ namespace pcl
      * from the centroid \param[in] angular_threshold to test if normals are parallel
      * \param[in] intensity_threshold to test if points are of same color
      */
-    SUSANKeypoint (float radius = 0.01f, float distance_threshold = 0.001f,
-                   float angular_threshold = 0.0001f, float intensity_threshold = 7.0f)
+    SUSANKeypoint (float radius = 0.01f,
+                   float distance_threshold = 0.001f,
+                   float angular_threshold = 0.0001f,
+                   float intensity_threshold = 7.0f)
         : distance_threshold_ (distance_threshold),
           angular_threshold_ (angular_threshold),
           intensity_threshold_ (intensity_threshold),
@@ -171,7 +175,8 @@ namespace pcl
      */
     bool
     isWithinNucleusCentroid (const Eigen::Vector3f &nucleus,
-                             const Eigen::Vector3f &centroid, const Eigen::Vector3f &nc,
+                             const Eigen::Vector3f &centroid,
+                             const Eigen::Vector3f &nc,
                              const PointInT &point) const;
 
     private:

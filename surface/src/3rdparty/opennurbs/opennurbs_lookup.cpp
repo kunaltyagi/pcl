@@ -328,15 +328,16 @@ ON_SerialNumberMap::SN_BLOCK::IsValidBlock (ON_TextLog *textlog,
 
   if (m_count > SN_BLOCK_CAPACITY) {
     if (textlog)
-      textlog->Print ("SN_BLOCK m_count = %u (should be >=0 and <%u).\n", m_count,
+      textlog->Print ("SN_BLOCK m_count = %u (should be >=0 and <%u).\n",
+                      m_count,
                       SN_BLOCK_CAPACITY);
     return ON_SerialNumberMap_IsNotValidBlock ();
   }
 
   if (m_purged > m_count) {
     if (textlog)
-      textlog->Print ("SN_BLOCK m_purged = %u (should be >0 and <=%u).\n", m_purged,
-                      m_count);
+      textlog->Print (
+          "SN_BLOCK m_purged = %u (should be >0 and <=%u).\n", m_purged, m_count);
     return ON_SerialNumberMap_IsNotValidBlock ();
   }
 
@@ -736,7 +737,9 @@ ON_SerialNumberMap::FindId (ON_UUID id) const
 }
 
 size_t
-ON_SerialNumberMap::GetElements (unsigned int sn0, unsigned int sn1, size_t max_count,
+ON_SerialNumberMap::GetElements (unsigned int sn0,
+                                 unsigned int sn1,
+                                 size_t max_count,
                                  ON_SimpleArray<SN_ELEMENT> &elements) const
 {
   size_t i, j, k, c;
@@ -1069,8 +1072,8 @@ ON_SerialNumberMap::IsValid (ON_TextLog *textlog) const
     pc += m_snblk_list[i]->m_purged;
     if (i > 0 && m_snblk_list[i]->m_sn0 <= m_snblk_list[i - 1]->m_sn1) {
       if (textlog)
-        textlog->Print ("m_snblk_list[%d]->m_sn0 <= m_snblk_list[%d]->m_sn1\n", i,
-                        i - 1);
+        textlog->Print (
+            "m_snblk_list[%d]->m_sn0 <= m_snblk_list[%d]->m_sn1\n", i, i - 1);
       return ON_SerialNumberMap_IsNotValid ();
     }
   }
@@ -1083,22 +1086,24 @@ ON_SerialNumberMap::IsValid (ON_TextLog *textlog) const
 
   if (pc != m_sn_purged) {
     if (textlog)
-      textlog->Print ("m_sn_purged=%d (should be %d) is not correct\n", m_sn_purged,
-                      pc);
+      textlog->Print (
+          "m_sn_purged=%d (should be %d) is not correct\n", m_sn_purged, pc);
     return ON_SerialNumberMap_IsNotValid ();
   }
 
   if (m_active_id_count != aic) {
     if (textlog)
       textlog->Print ("m_active_id_count=%d (should be %d) is not correct\n",
-                      m_active_id_count, aic);
+                      m_active_id_count,
+                      aic);
     return ON_SerialNumberMap_IsNotValid ();
   }
 
   if (m_active_id_count + m_sn_purged > m_sn_count) {
     if (textlog)
       textlog->Print ("m_active_id_count=%d > %d = (m_sn_count-m_sn_purged)\n",
-                      m_active_id_count, m_sn_count - m_sn_purged);
+                      m_active_id_count,
+                      m_sn_count - m_sn_purged);
     return ON_SerialNumberMap_IsNotValid ();
   }
 
@@ -1219,7 +1224,9 @@ ON_SerialNumberMap::GarbageCollectHelper ()
       for (j = i + 1; j < m_snblk_list_count; j++) {
         if (m_snblk_list[j]->m_count > 0) {
           // ... and m_snblk_list[j] is not empty
-          ON_qsort (m_snblk_list + i, m_snblk_list_count - i, sizeof (*m_snblk_list),
+          ON_qsort (m_snblk_list + i,
+                    m_snblk_list_count - i,
+                    sizeof (*m_snblk_list),
                     SN_BLOCK::CompareMaxSN);
           break;
         }
@@ -1273,7 +1280,8 @@ ON_SerialNumberMap::GarbageCollectHelper ()
       }
       n = (snarray_count > SN_BLOCK_CAPACITY) ? SN_BLOCK_CAPACITY : snarray_count;
       if (k < m_sn_block0.m_count) {
-        memcpy (&snarray[snarray_count], &m_sn_block0.m_sn[k],
+        memcpy (&snarray[snarray_count],
+                &m_sn_block0.m_sn[k],
                 (m_sn_block0.m_count - k) * sizeof (snarray[0]));
         snarray_count += (m_sn_block0.m_count - k);
       }
@@ -1285,7 +1293,8 @@ ON_SerialNumberMap::GarbageCollectHelper ()
         // put the end of snarray[] (the largest serial numbers)
         // in m_sn_block0.m_sn[].
         m_sn_block0.m_count = (snarray_count - n);
-        memcpy (&m_sn_block0.m_sn[0], &snarray[n],
+        memcpy (&m_sn_block0.m_sn[0],
+                &snarray[n],
                 m_sn_block0.m_count * sizeof (m_sn_block0.m_sn[0]));
         m_sn_block0.m_sn0 = m_sn_block0.m_sn[0].m_sn;
         m_sn_block0.m_sn1 = m_sn_block0.m_sn[m_sn_block0.m_count - 1].m_sn;

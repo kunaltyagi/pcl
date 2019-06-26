@@ -101,8 +101,13 @@ loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
 }
 
 void
-compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output,
-         std::string field_name, float min, float max, bool inside, bool keep_organized)
+compute (const pcl::PCLPointCloud2::ConstPtr &input,
+         pcl::PCLPointCloud2 &output,
+         std::string field_name,
+         float min,
+         float max,
+         bool inside,
+         bool keep_organized)
 {
   // Estimate
   TicToc tt;
@@ -145,8 +150,12 @@ saveCloud (const std::string &filename, const pcl::PCLPointCloud2 &output)
 }
 
 int
-batchProcess (const vector<string> &pcd_files, string &output_dir,
-              const std::string &field_name, float min, float max, bool inside,
+batchProcess (const vector<string> &pcd_files,
+              string &output_dir,
+              const std::string &field_name,
+              float min,
+              float max,
+              bool inside,
               bool keep_organized)
 {
   vector<string> st;
@@ -246,8 +255,8 @@ main (int argc, char **argv)
                     itr->path ().string ().c_str ());
         }
       }
-      batchProcess (pcd_files, output_dir, field_name, min, max, inside,
-                    keep_organized);
+      batchProcess (
+          pcd_files, output_dir, field_name, min, max, inside, keep_organized);
     } else {
       PCL_ERROR (
           "Batch processing mode enabled, but invalid input directory (%s) given!\n",

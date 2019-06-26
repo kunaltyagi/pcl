@@ -215,10 +215,10 @@ main (int argc, char **argv)
   if (boost::iequals (format, std::string ("XYZ"))) {
     std::vector<double> fcolor (3);
     fcolor[0] = fcolor[1] = fcolor[2] = 255.0;
-    pcl::console::parse_3x_arguments (argc, argv, "-fc", fcolor[0], fcolor[1],
-                                      fcolor[2]);
-    PointCloudColorHandlerCustom<PointXYZ> color_handler (fcolor[0], fcolor[1],
-                                                          fcolor[2]);
+    pcl::console::parse_3x_arguments (
+        argc, argv, "-fc", fcolor[0], fcolor[1], fcolor[2]);
+    PointCloudColorHandlerCustom<PointXYZ> color_handler (
+        fcolor[0], fcolor[1], fcolor[2]);
 
     SimpleHDLViewer<PointXYZ> v (grabber, color_handler);
     v.run ();

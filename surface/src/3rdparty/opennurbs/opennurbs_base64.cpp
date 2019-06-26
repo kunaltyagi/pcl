@@ -1054,8 +1054,8 @@ ON_Base64EncodeStream::End ()
 
     ON__UINT32 crc1 = ON_CRC32 (m_out_crc, out_buffer_size, imp->m_out_buffer);
     rc = (0 != m_out_callback_function)
-             ? m_out_callback_function (m_out_callback_context, out_buffer_size,
-                                        imp->m_out_buffer)
+             ? m_out_callback_function (
+                   m_out_callback_context, out_buffer_size, imp->m_out_buffer)
              : Out (m_out_callback_context, out_buffer_size, imp->m_out_buffer);
     if (rc) {
       m_in_crc = ON_CRC32 (m_in_crc, imp->m_in_buffer_size, imp->m_in_buffer);
@@ -1100,25 +1100,13 @@ ON_Base64EncodeStream::CallbackContext () const
 }
 
 ON__UINT64
-ON_Base64EncodeStream::InSize () const
-{
-  return m_in_size;
-}
+ON_Base64EncodeStream::InSize () const { return m_in_size; }
 
 ON__UINT64
-ON_Base64EncodeStream::OutSize () const
-{
-  return m_out_size;
-}
+ON_Base64EncodeStream::OutSize () const { return m_out_size; }
 
 ON__UINT32
-ON_Base64EncodeStream::InCRC () const
-{
-  return m_in_crc;
-}
+ON_Base64EncodeStream::InCRC () const { return m_in_crc; }
 
 ON__UINT32
-ON_Base64EncodeStream::OutCRC () const
-{
-  return m_out_crc;
-}
+ON_Base64EncodeStream::OutCRC () const { return m_out_crc; }

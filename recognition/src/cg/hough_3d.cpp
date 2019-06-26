@@ -84,7 +84,8 @@ pcl::recognition::HoughSpace3D::reset ()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int
 pcl::recognition::HoughSpace3D::vote (const Eigen::Vector3d &single_vote_coord,
-                                      double weight, int voter_id)
+                                      double weight,
+                                      int voter_id)
 {
   int index = 0;
 
@@ -111,7 +112,8 @@ pcl::recognition::HoughSpace3D::vote (const Eigen::Vector3d &single_vote_coord,
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int
 pcl::recognition::HoughSpace3D::voteInt (const Eigen::Vector3d &single_vote_coord,
-                                         double weight, int voter_id)
+                                         double weight,
+                                         int voter_id)
 {
   int central_bin_index = 0;
 
@@ -204,7 +206,8 @@ pcl::recognition::HoughSpace3D::voteInt (const Eigen::Vector3d &single_vote_coor
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 double
 pcl::recognition::HoughSpace3D::findMaxima (
-    double min_threshold, std::vector<double> &maxima_values,
+    double min_threshold,
+    std::vector<double> &maxima_values,
     std::vector<std::vector<int>> &maxima_voter_ids)
 {
   // If min_threshold between -1 and 0 use it as a percentage of maximum vote

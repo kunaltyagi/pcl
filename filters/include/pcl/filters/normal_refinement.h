@@ -53,7 +53,8 @@ namespace pcl
    */
   template <typename NormalT>
   inline std::vector<float>
-  assignNormalWeights (const PointCloud<NormalT> &, int,
+  assignNormalWeights (const PointCloud<NormalT> &,
+                       int,
                        const std::vector<int> &k_indices,
                        const std::vector<float> &k_sqr_distances)
   {
@@ -83,9 +84,11 @@ namespace pcl
    */
   template <typename NormalT>
   inline bool
-  refineNormal (const PointCloud<NormalT> &cloud, int index,
+  refineNormal (const PointCloud<NormalT> &cloud,
+                int index,
                 const std::vector<int> &k_indices,
-                const std::vector<float> &k_sqr_distances, NormalT &point)
+                const std::vector<float> &k_sqr_distances,
+                NormalT &point)
   {
     // Start by zeroing result
     point.normal_x = 0.0f;

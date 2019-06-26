@@ -154,7 +154,10 @@ pcl::ApproximateProgressiveMorphologicalFilter<PointT>::extract (
   for (size_t i = 0; i < window_sizes.size (); ++i) {
     PCL_DEBUG ("      Iteration %d (height threshold = %f, window size = %f, half size "
                "= %d)...",
-               i, height_thresholds[i], window_sizes[i], half_sizes[i]);
+               i,
+               height_thresholds[i],
+               window_sizes[i],
+               half_sizes[i]);
 
     // Limit filtering to those points currently considered ground returns
     typename pcl::PointCloud<PointT>::Ptr cloud (new pcl::PointCloud<PointT>);

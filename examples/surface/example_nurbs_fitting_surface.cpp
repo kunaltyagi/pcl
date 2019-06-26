@@ -14,7 +14,8 @@ PointCloud2Vector3d (pcl::PointCloud<Point>::Ptr cloud,
                      pcl::on_nurbs::vector_vec3d &data);
 
 void
-visualizeCurve (ON_NurbsCurve &curve, ON_NurbsSurface &surface,
+visualizeCurve (ON_NurbsCurve &curve,
+                ON_NurbsSurface &surface,
                 pcl::visualization::PCLVisualizer &viewer);
 
 int
@@ -77,8 +78,8 @@ main (int argc, char *argv[])
   pcl::PointCloud<pcl::PointXYZ>::Ptr mesh_cloud (new pcl::PointCloud<pcl::PointXYZ>);
   std::vector<pcl::Vertices> mesh_vertices;
   std::string mesh_id = "mesh_nurbs";
-  pcl::on_nurbs::Triangulation::convertSurface2PolygonMesh (fit.m_nurbs, mesh,
-                                                            mesh_resolution);
+  pcl::on_nurbs::Triangulation::convertSurface2PolygonMesh (
+      fit.m_nurbs, mesh, mesh_resolution);
   viewer.addPolygonMesh (mesh, mesh_id);
 
   // surface refinement
@@ -180,14 +181,15 @@ PointCloud2Vector3d (pcl::PointCloud<Point>::Ptr cloud,
 }
 
 void
-visualizeCurve (ON_NurbsCurve &curve, ON_NurbsSurface &surface,
+visualizeCurve (ON_NurbsCurve &curve,
+                ON_NurbsSurface &surface,
                 pcl::visualization::PCLVisualizer &viewer)
 {
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr curve_cloud (
       new pcl::PointCloud<pcl::PointXYZRGB>);
 
-  pcl::on_nurbs::Triangulation::convertCurve2PointCloud (curve, surface, curve_cloud,
-                                                         4);
+  pcl::on_nurbs::Triangulation::convertCurve2PointCloud (
+      curve, surface, curve_cloud, 4);
   for (std::size_t i = 0; i < curve_cloud->size () - 1; i++) {
     pcl::PointXYZRGB &p1 = curve_cloud->at (i);
     pcl::PointXYZRGB &p2 = curve_cloud->at (i + 1);

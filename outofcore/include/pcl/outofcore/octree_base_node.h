@@ -76,7 +76,8 @@ namespace pcl
     template <typename ContainerT, typename PointT>
     void
     queryBBIntersects_noload (const boost::filesystem::path &root_node,
-                              const Eigen::Vector3d &min, const Eigen::Vector3d &max,
+                              const Eigen::Vector3d &min,
+                              const Eigen::Vector3d &max,
                               const boost::uint32_t query_depth,
                               std::list<std::string> &bin_name);
 
@@ -84,7 +85,8 @@ namespace pcl
     template <typename ContainerT, typename PointT>
     void
     queryBBIntersects_noload (OutofcoreOctreeBaseNode<ContainerT, PointT> *current,
-                              const Eigen::Vector3d &, const Eigen::Vector3d &max,
+                              const Eigen::Vector3d &,
+                              const Eigen::Vector3d &max,
                               const boost::uint32_t query_depth,
                               std::list<std::string> &bin_name);
 
@@ -118,15 +120,19 @@ namespace pcl
 
       friend void
       queryBBIntersects_noload<ContainerT, PointT> (
-          const boost::filesystem::path &rootnode, const Eigen::Vector3d &min,
-          const Eigen::Vector3d &max, const boost::uint32_t query_depth,
+          const boost::filesystem::path &rootnode,
+          const Eigen::Vector3d &min,
+          const Eigen::Vector3d &max,
+          const boost::uint32_t query_depth,
           std::list<std::string> &bin_name);
 
       friend void
       queryBBIntersects_noload<ContainerT, PointT> (
           OutofcoreOctreeBaseNode<ContainerT, PointT> *current,
-          const Eigen::Vector3d &min, const Eigen::Vector3d &max,
-          const boost::uint32_t query_depth, std::list<std::string> &bin_name);
+          const Eigen::Vector3d &min,
+          const Eigen::Vector3d &max,
+          const boost::uint32_t query_depth,
+          std::list<std::string> &bin_name);
 
       public:
       using octree_disk =
@@ -187,12 +193,14 @@ namespace pcl
       queryFrustum (const double planes[24], std::list<std::string> &file_names);
 
       void
-      queryFrustum (const double planes[24], std::list<std::string> &file_names,
+      queryFrustum (const double planes[24],
+                    std::list<std::string> &file_names,
                     const boost::uint32_t query_depth,
                     const bool skip_vfc_check = false);
 
       void
-      queryFrustum (const double planes[24], const Eigen::Vector3d &eye,
+      queryFrustum (const double planes[24],
+                    const Eigen::Vector3d &eye,
                     const Eigen::Matrix4d &view_projection_matrix,
                     std::list<std::string> &file_names,
                     const boost::uint32_t query_depth,
@@ -209,8 +217,10 @@ namespace pcl
        * returned by the queries
        */
       virtual void
-      queryBBIncludes (const Eigen::Vector3d &min_bb, const Eigen::Vector3d &max_bb,
-                       size_t query_depth, AlignedPointTVector &dst);
+      queryBBIncludes (const Eigen::Vector3d &min_bb,
+                       const Eigen::Vector3d &max_bb,
+                       size_t query_depth,
+                       AlignedPointTVector &dst);
 
       /** \brief Recursively add points that fall into the queried bounding box up to
        * the \b query_depth
@@ -222,8 +232,10 @@ namespace pcl
        * points returned by the queries
        */
       virtual void
-      queryBBIncludes (const Eigen::Vector3d &min_bb, const Eigen::Vector3d &max_bb,
-                       size_t query_depth, const pcl::PCLPointCloud2::Ptr &dst_blob);
+      queryBBIncludes (const Eigen::Vector3d &min_bb,
+                       const Eigen::Vector3d &max_bb,
+                       size_t query_depth,
+                       const pcl::PCLPointCloud2::Ptr &dst_blob);
 
       /** \brief Recursively add points that fall into the queried bounding box up to
        * the \b query_depth
@@ -236,7 +248,8 @@ namespace pcl
       virtual void
       queryBBIncludes_subsample (const Eigen::Vector3d &min_bb,
                                  const Eigen::Vector3d &max_bb,
-                                 boost::uint64_t query_depth, const double percent,
+                                 boost::uint64_t query_depth,
+                                 const double percent,
                                  AlignedPointTVector &v);
 
       virtual void
@@ -250,7 +263,8 @@ namespace pcl
        * bounding box intersects (at query_depth only).
        */
       virtual void
-      queryBBIntersects (const Eigen::Vector3d &min_bb, const Eigen::Vector3d &max_bb,
+      queryBBIntersects (const Eigen::Vector3d &min_bb,
+                         const Eigen::Vector3d &max_bb,
                          const boost::uint32_t query_depth,
                          std::list<std::string> &file_names);
 
@@ -394,7 +408,8 @@ namespace pcl
        * \throws PCLException if the specified path already exists
        */
       void
-      init_root_node (const Eigen::Vector3d &bb_min, const Eigen::Vector3d &bb_max,
+      init_root_node (const Eigen::Vector3d &bb_min,
+                      const Eigen::Vector3d &bb_max,
                       OutofcoreOctreeBase<ContainerT, PointT> *const tree,
                       const boost::filesystem::path &rootname);
 
@@ -426,13 +441,15 @@ namespace pcl
       /** \brief Randomly sample point data
        */
       void
-      randomSample (const AlignedPointTVector &p, AlignedPointTVector &insertBuff,
+      randomSample (const AlignedPointTVector &p,
+                    AlignedPointTVector &insertBuff,
                     const bool skip_bb_check);
 
       /** \brief Subdivide points to pass to child nodes */
       void
       subdividePoints (const AlignedPointTVector &p,
-                       std::vector<AlignedPointTVector> &c, const bool skip_bb_check);
+                       std::vector<AlignedPointTVector> &c,
+                       const bool skip_bb_check);
       /** \brief Subdivide a single point into a specific child node */
       void
       subdividePoint (const PointT &point, std::vector<AlignedPointTVector> &c);
@@ -493,7 +510,8 @@ namespace pcl
        *  \param[in] point The test point
        */
       bool
-      pointInBoundingBox (const Eigen::Vector3d &min_bb, const Eigen::Vector3d &max_bb,
+      pointInBoundingBox (const Eigen::Vector3d &min_bb,
+                          const Eigen::Vector3d &max_bb,
                           const Eigen::Vector3d &point);
 
       /** \brief Tests whether \c p falls within the input bounding box
@@ -502,7 +520,8 @@ namespace pcl
        *  \param[in] p The point to be tested
        **/
       static bool
-      pointInBoundingBox (const Eigen::Vector3d &min_bb, const Eigen::Vector3d &max_bb,
+      pointInBoundingBox (const Eigen::Vector3d &min_bb,
+                          const Eigen::Vector3d &max_bb,
                           const PointT &p);
 
       /** \brief Tests whether \c x, \c y, and \c z fall within the input bounding box
@@ -513,8 +532,11 @@ namespace pcl
        *  \param z
        **/
       static bool
-      pointInBoundingBox (const Eigen::Vector3d &min_bb, const Eigen::Vector3d &max_bb,
-                          const double x, const double y, const double z);
+      pointInBoundingBox (const Eigen::Vector3d &min_bb,
+                          const Eigen::Vector3d &max_bb,
+                          const double x,
+                          const double y,
+                          const double z);
 
       /** \brief Tests if specified point is within bounds of current node's bounding
        * box */
@@ -561,7 +583,8 @@ namespace pcl
       /** \brief Private constructor used for children
        */
       OutofcoreOctreeBaseNode (const Eigen::Vector3d &bb_min,
-                               const Eigen::Vector3d &bb_max, const char *dir,
+                               const Eigen::Vector3d &bb_max,
+                               const char *dir,
                                OutofcoreOctreeBaseNode<ContainerT, PointT> *super);
 
       /** \brief Copies points from this and all children into a single point container

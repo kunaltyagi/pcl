@@ -317,7 +317,8 @@ pcl::RegionGrowingRGB<PointT, NormalT>::findSegmentNeighbours ()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT, typename NormalT>
 void
-pcl::RegionGrowingRGB<PointT, NormalT>::findRegionsKNN (int index, int nghbr_number,
+pcl::RegionGrowingRGB<PointT, NormalT>::findRegionsKNN (int index,
+                                                        int nghbr_number,
                                                         std::vector<int> &nghbrs,
                                                         std::vector<float> &dist)
 {
@@ -508,7 +509,8 @@ pcl::RegionGrowingRGB<PointT, NormalT>::applyRegionMergingAlgorithm ()
       }
       region_neighbours[i_reg].clear ();
       std::sort (region_neighbours[reg_index].begin (),
-                 region_neighbours[reg_index].end (), comparePair);
+                 region_neighbours[reg_index].end (),
+                 comparePair);
     }
   }
 
@@ -565,8 +567,8 @@ pcl::RegionGrowingRGB<PointT, NormalT>::findRegionNeighbours (
         }
       } // next neighbour
     }   // next segment
-    std::sort (neighbours_out[i_reg].begin (), neighbours_out[i_reg].end (),
-               comparePair);
+    std::sort (
+        neighbours_out[i_reg].begin (), neighbours_out[i_reg].end (), comparePair);
   } // next homogeneous region
 }
 
@@ -619,8 +621,10 @@ pcl::RegionGrowingRGB<PointT, NormalT>::assembleRegions (
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT, typename NormalT>
 bool
-pcl::RegionGrowingRGB<PointT, NormalT>::validatePoint (int initial_seed, int point,
-                                                       int nghbr, bool &is_a_seed) const
+pcl::RegionGrowingRGB<PointT, NormalT>::validatePoint (int initial_seed,
+                                                       int point,
+                                                       int nghbr,
+                                                       bool &is_a_seed) const
 {
   is_a_seed = true;
 
@@ -755,7 +759,8 @@ pcl::RegionGrowingRGB<PointT, NormalT>::getSegmentFromPoint (int index,
           segment_was_found = true;
           cluster.indices.clear ();
           cluster.indices.reserve (i_segment->indices.size ());
-          std::copy (i_segment->indices.begin (), i_segment->indices.end (),
+          std::copy (i_segment->indices.begin (),
+                     i_segment->indices.end (),
                      std::back_inserter (cluster.indices));
           break;
         }

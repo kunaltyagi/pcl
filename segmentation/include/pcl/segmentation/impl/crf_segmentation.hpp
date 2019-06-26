@@ -96,7 +96,8 @@ pcl::CrfSegmentation<PointT>::setNormalCloud (
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 void
-pcl::CrfSegmentation<PointT>::setVoxelGridLeafSize (const float x, const float y,
+pcl::CrfSegmentation<PointT>::setVoxelGridLeafSize (const float x,
+                                                    const float y,
                                                     const float z)
 {
   voxel_grid_leaf_size_.x () = x;
@@ -121,10 +122,8 @@ pcl::CrfSegmentation<PointT>::setSmoothnessKernelParameters (const float sx,
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 void
-pcl::CrfSegmentation<PointT>::setAppearanceKernelParameters (float sx, float sy,
-                                                             float sz, float sr,
-                                                             float sg, float sb,
-                                                             float w)
+pcl::CrfSegmentation<PointT>::setAppearanceKernelParameters (
+    float sx, float sy, float sz, float sr, float sg, float sb, float w)
 {
   appearance_kernel_param_[0] = sx;
   appearance_kernel_param_[1] = sy;
@@ -138,9 +137,8 @@ pcl::CrfSegmentation<PointT>::setAppearanceKernelParameters (float sx, float sy,
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 void
-pcl::CrfSegmentation<PointT>::setSurfaceKernelParameters (float sx, float sy, float sz,
-                                                          float snx, float sny,
-                                                          float snz, float w)
+pcl::CrfSegmentation<PointT>::setSurfaceKernelParameters (
+    float sx, float sy, float sz, float snx, float sny, float snz, float w)
 {
   surface_kernel_param_[0] = sx;
   surface_kernel_param_[1] = sy;
@@ -160,7 +158,8 @@ pcl::CrfSegmentation<PointT>::createVoxelGrid ()
   // Set the voxel grid input cloud
   voxel_grid_.setInputCloud (input_cloud_);
   // Set the voxel grid leaf size
-  voxel_grid_.setLeafSize (voxel_grid_leaf_size_.x (), voxel_grid_leaf_size_.y (),
+  voxel_grid_.setLeafSize (voxel_grid_leaf_size_.x (),
+                           voxel_grid_leaf_size_.y (),
                            voxel_grid_leaf_size_.z ());
   // Only downsample XYZ (if this is set to false, color values set to 0)
   voxel_grid_.setDownsampleAllData (true);
@@ -175,7 +174,8 @@ pcl::CrfSegmentation<PointT>::createVoxelGrid ()
 
     vg.setInputCloud (anno_cloud_);
     // Set the voxel grid leaf size
-    vg.setLeafSize (voxel_grid_leaf_size_.x (), voxel_grid_leaf_size_.y (),
+    vg.setLeafSize (voxel_grid_leaf_size_.x (),
+                    voxel_grid_leaf_size_.y (),
                     voxel_grid_leaf_size_.z ());
     // Only downsample XYZ
     vg.setDownsampleAllData (true);
@@ -190,7 +190,8 @@ pcl::CrfSegmentation<PointT>::createVoxelGrid ()
     pcl::VoxelGrid<pcl::PointNormal> vg;
     vg.setInputCloud (normal_cloud_);
     // Set the voxel grid leaf size
-    vg.setLeafSize (voxel_grid_leaf_size_.x (), voxel_grid_leaf_size_.y (),
+    vg.setLeafSize (voxel_grid_leaf_size_.x (),
+                    voxel_grid_leaf_size_.y (),
                     voxel_grid_leaf_size_.z ());
     // Only downsample XYZ
     vg.setDownsampleAllData (true);
@@ -285,7 +286,8 @@ pcl::CrfSegmentation<PointT>::createDataVectorFromVoxelGrid ()
 
   // fill the data vector
   for (size_t i = 0; i < filtered_cloud_->points.size (); i++) {
-    Eigen::Vector3f p (filtered_anno_->points[i].x, filtered_anno_->points[i].y,
+    Eigen::Vector3f p (filtered_anno_->points[i].x,
+                       filtered_anno_->points[i].y,
                        filtered_anno_->points[i].z);
     Eigen::Vector3i c = voxel_grid_.getGridCoordinates (p.x (), p.y (), p.y ());
     data_[i] = c;
@@ -491,21 +493,31 @@ pcl::CrfSegmentation<PointT>::segmentPoints (pcl::PointCloud<pcl::PointXYZRGBL> 
   std::cout << "create dense CRF - DONE" << std::endl;
 
   // add the smoothness kernel
-  crf.addPairwiseGaussian (smoothness_kernel_param_[0], smoothness_kernel_param_[1],
-                           smoothness_kernel_param_[2], smoothness_kernel_param_[3]);
+  crf.addPairwiseGaussian (smoothness_kernel_param_[0],
+                           smoothness_kernel_param_[1],
+                           smoothness_kernel_param_[2],
+                           smoothness_kernel_param_[3]);
   std::cout << "add smoothness kernel - DONE" << std::endl;
 
   // add the appearance kernel
-  crf.addPairwiseBilateral (appearance_kernel_param_[0], appearance_kernel_param_[1],
-                            appearance_kernel_param_[2], appearance_kernel_param_[3],
-                            appearance_kernel_param_[4], appearance_kernel_param_[5],
+  crf.addPairwiseBilateral (appearance_kernel_param_[0],
+                            appearance_kernel_param_[1],
+                            appearance_kernel_param_[2],
+                            appearance_kernel_param_[3],
+                            appearance_kernel_param_[4],
+                            appearance_kernel_param_[5],
                             appearance_kernel_param_[6]);
   std::cout << "add appearance kernel - DONE" << std::endl;
 
-  crf.addPairwiseNormals (data_, normal_, surface_kernel_param_[0],
-                          surface_kernel_param_[1], surface_kernel_param_[2],
-                          surface_kernel_param_[3], surface_kernel_param_[4],
-                          surface_kernel_param_[5], surface_kernel_param_[6]);
+  crf.addPairwiseNormals (data_,
+                          normal_,
+                          surface_kernel_param_[0],
+                          surface_kernel_param_[1],
+                          surface_kernel_param_[2],
+                          surface_kernel_param_[3],
+                          surface_kernel_param_[4],
+                          surface_kernel_param_[5],
+                          surface_kernel_param_[6]);
   std::cout << "add surface kernel - DONE" << std::endl;
 
   // map inference

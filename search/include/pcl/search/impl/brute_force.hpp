@@ -53,7 +53,8 @@ pcl::search::BruteForce<PointT>::getDistSqr (const PointT &point1,
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 int
-pcl::search::BruteForce<PointT>::nearestKSearch (const PointT &point, int k,
+pcl::search::BruteForce<PointT>::nearestKSearch (const PointT &point,
+                                                 int k,
                                                  std::vector<int> &k_indices,
                                                  std::vector<float> &k_distances) const
 {
@@ -74,7 +75,8 @@ pcl::search::BruteForce<PointT>::nearestKSearch (const PointT &point, int k,
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 int
-pcl::search::BruteForce<PointT>::denseKSearch (const PointT &point, int k,
+pcl::search::BruteForce<PointT>::denseKSearch (const PointT &point,
+                                               int k,
                                                std::vector<int> &k_indices,
                                                std::vector<float> &k_distances) const
 {
@@ -140,7 +142,8 @@ pcl::search::BruteForce<PointT>::denseKSearch (const PointT &point, int k,
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 int
-pcl::search::BruteForce<PointT>::sparseKSearch (const PointT &point, int k,
+pcl::search::BruteForce<PointT>::sparseKSearch (const PointT &point,
+                                                int k,
                                                 std::vector<int> &k_indices,
                                                 std::vector<float> &k_distances) const
 {
@@ -213,7 +216,8 @@ pcl::search::BruteForce<PointT>::sparseKSearch (const PointT &point, int k,
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 int
-pcl::search::BruteForce<PointT>::denseRadiusSearch (const PointT &point, double radius,
+pcl::search::BruteForce<PointT>::denseRadiusSearch (const PointT &point,
+                                                    double radius,
                                                     std::vector<int> &k_indices,
                                                     std::vector<float> &k_sqr_distances,
                                                     unsigned int max_nn) const
@@ -232,7 +236,8 @@ pcl::search::BruteForce<PointT>::denseRadiusSearch (const PointT &point, double 
   float distance;
   if (indices_) {
     for (std::vector<int>::const_iterator iIt = indices_->begin ();
-         iIt != indices_->end (); ++iIt) {
+         iIt != indices_->end ();
+         ++iIt) {
       distance = getDistSqr (input_->points[*iIt], point);
       if (distance <= radius) {
         k_indices.push_back (*iIt);
@@ -263,8 +268,11 @@ pcl::search::BruteForce<PointT>::denseRadiusSearch (const PointT &point, double 
 template <typename PointT>
 int
 pcl::search::BruteForce<PointT>::sparseRadiusSearch (
-    const PointT &point, double radius, std::vector<int> &k_indices,
-    std::vector<float> &k_sqr_distances, unsigned int max_nn) const
+    const PointT &point,
+    double radius,
+    std::vector<int> &k_indices,
+    std::vector<float> &k_sqr_distances,
+    unsigned int max_nn) const
 {
   radius *= radius;
 
@@ -281,7 +289,8 @@ pcl::search::BruteForce<PointT>::sparseRadiusSearch (
   float distance;
   if (indices_) {
     for (std::vector<int>::const_iterator iIt = indices_->begin ();
-         iIt != indices_->end (); ++iIt) {
+         iIt != indices_->end ();
+         ++iIt) {
       if (!std::isfinite (input_->points[*iIt].x))
         continue;
 
@@ -316,7 +325,8 @@ pcl::search::BruteForce<PointT>::sparseRadiusSearch (
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 int
-pcl::search::BruteForce<PointT>::radiusSearch (const PointT &point, double radius,
+pcl::search::BruteForce<PointT>::radiusSearch (const PointT &point,
+                                               double radius,
                                                std::vector<int> &k_indices,
                                                std::vector<float> &k_sqr_distances,
                                                unsigned int max_nn) const

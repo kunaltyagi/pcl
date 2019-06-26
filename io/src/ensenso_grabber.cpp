@@ -53,7 +53,9 @@ void
 ensensoExceptionHandling (const NxLibException &ex, std::string func_nam)
 {
   PCL_ERROR ("%s: NxLib error %s (%d) occurred while accessing item %s.\n",
-             func_nam.c_str (), ex.getErrorText ().c_str (), ex.getErrorCode (),
+             func_nam.c_str (),
+             ex.getErrorText ().c_str (),
+             ex.getErrorCode (),
              ex.getItemPath ().c_str ());
   if (ex.getErrorCode () == NxLibExecutionFailed) {
     NxLibCommand cmd ("");
@@ -115,7 +117,8 @@ pcl::EnsensoGrabber::enumDevices () const
     PCL_INFO ("Serial No    Model   Status\n");
 
     for (int n = 0; n < cams.count (); ++n) {
-      PCL_INFO ("%s   %s   %s\n", cams[n][itmSerialNumber].asString ().c_str (),
+      PCL_INFO ("%s   %s   %s\n",
+                cams[n][itmSerialNumber].asString ().c_str (),
                 cams[n][itmModelName].asString ().c_str (),
                 cams[n][itmStatus].asString ().c_str ());
     }
@@ -230,10 +233,19 @@ pcl::EnsensoGrabber::getName () const
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool
 pcl::EnsensoGrabber::configureCapture (
-    const bool auto_exposure, const bool auto_gain, const int bining,
-    const float exposure, const bool front_light, const int gain, const bool gain_boost,
-    const bool hardware_gamma, const bool hdr, const int pixel_clock,
-    const bool projector, const int target_brightness, const std::string trigger_mode,
+    const bool auto_exposure,
+    const bool auto_gain,
+    const int bining,
+    const float exposure,
+    const bool front_light,
+    const int gain,
+    const bool gain_boost,
+    const bool hardware_gamma,
+    const bool hdr,
+    const int pixel_clock,
+    const bool projector,
+    const int target_brightness,
+    const std::string trigger_mode,
     const bool use_disparity_map_area_of_interest) const
 {
   if (!device_open_)
@@ -331,8 +343,20 @@ pcl::EnsensoGrabber::initExtrinsicCalibration (const int grid_spacing) const
     // (the 3D calibration is based on stereo images, not on 3D depth map)
 
     // Most important parameters are: projector=off, front_light=on
-    configureCapture (true, true, 1, 0.32, true, 1, false, false, false, 10, false, 80,
-                      "Software", false);
+    configureCapture (true,
+                      true,
+                      1,
+                      0.32,
+                      true,
+                      1,
+                      false,
+                      false,
+                      false,
+                      10,
+                      false,
+                      80,
+                      "Software",
+                      false);
   } catch (NxLibException &ex) {
     ensensoExceptionHandling (ex, "initExtrinsicCalibration");
     return (false);
@@ -412,8 +436,11 @@ bool
 pcl::EnsensoGrabber::computeCalibrationMatrix (
     const std::vector<Eigen::Affine3d, Eigen::aligned_allocator<Eigen::Affine3d>>
         &robot_poses,
-    std::string &json, const std::string setup, const std::string target,
-    const Eigen::Affine3d &guess_tf, const bool pretty_format) const
+    std::string &json,
+    const std::string setup,
+    const std::string target,
+    const Eigen::Affine3d &guess_tf,
+    const bool pretty_format) const
 {
   if ((*root_)[itmVersion][itmMajor] < 2 && (*root_)[itmVersion][itmMinor] < 3)
     PCL_WARN ("EnsensoSDK 1.3.x fixes bugs into extrinsic calibration matrix "
@@ -653,8 +680,11 @@ pcl::EnsensoGrabber::getResultAsJson (const bool pretty_format) const
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool
 pcl::EnsensoGrabber::jsonTransformationToEulerAngles (const std::string &json,
-                                                      double &x, double &y, double &z,
-                                                      double &w, double &p,
+                                                      double &x,
+                                                      double &y,
+                                                      double &z,
+                                                      double &w,
+                                                      double &p,
                                                       double &r) const
 {
   try {
@@ -748,9 +778,12 @@ pcl::EnsensoGrabber::jsonTransformationToMatrix (const std::string transformatio
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::EnsensoGrabber::eulerAnglesTransformationToJson (const double x, const double y,
-                                                      const double z, const double w,
-                                                      const double p, const double r,
+pcl::EnsensoGrabber::eulerAnglesTransformationToJson (const double x,
+                                                      const double y,
+                                                      const double z,
+                                                      const double w,
+                                                      const double p,
+                                                      const double r,
                                                       std::string &json,
                                                       const bool pretty_format) const
 {
@@ -781,9 +814,12 @@ pcl::EnsensoGrabber::eulerAnglesTransformationToJson (const double x, const doub
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::EnsensoGrabber::angleAxisTransformationToJson (const double x, const double y,
-                                                    const double z, const double rx,
-                                                    const double ry, const double rz,
+pcl::EnsensoGrabber::angleAxisTransformationToJson (const double x,
+                                                    const double y,
+                                                    const double z,
+                                                    const double rx,
+                                                    const double ry,
+                                                    const double rz,
                                                     const double alpha,
                                                     std::string &json,
                                                     const bool pretty_format) const
@@ -901,8 +937,8 @@ pcl::EnsensoGrabber::processGrabbing ()
 
         NxLibCommand (cmdCapture).execute ();
         double timestamp;
-        camera_[itmImages][itmRaw][itmLeft].getBinaryDataInfo (0, 0, 0, 0, 0,
-                                                               &timestamp);
+        camera_[itmImages][itmRaw][itmLeft].getBinaryDataInfo (
+            0, 0, 0, 0, 0, &timestamp);
 
         // Gather images
         if (num_slots<sig_cb_ensenso_images> () > 0 ||
@@ -971,8 +1007,8 @@ pcl::EnsensoGrabber::processGrabbing ()
           // Get info about the computed point map and copy it into a std::vector
           std::vector<float> pointMap;
           int width, height;
-          camera_[itmImages][itmPointMap].getBinaryDataInfo (&width, &height, 0, 0, 0,
-                                                             0);
+          camera_[itmImages][itmPointMap].getBinaryDataInfo (
+              &width, &height, 0, 0, 0, 0);
           camera_[itmImages][itmPointMap].getBinaryData (pointMap, 0);
 
           // Copy point cloud and convert in meters

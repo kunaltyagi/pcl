@@ -68,19 +68,25 @@ namespace pcl
         /** \brief This will merge the votes from the different trees into one final
          * vote, including probabilistic's **/
         void
-        SelectLabel (const Depth &depth, Labels &labels,
+        SelectLabel (const Depth &depth,
+                     Labels &labels,
                      pcl::device::LabelProbability &probabilities);
 
         /** \brief This will combine two probabilities according their weight **/
         void
-        CombineProb (const Depth &depth, pcl::device::LabelProbability &probIn1,
-                     float weight1, pcl::device::LabelProbability &probIn2,
-                     float weight2, pcl::device::LabelProbability &probOut);
+        CombineProb (const Depth &depth,
+                     pcl::device::LabelProbability &probIn1,
+                     float weight1,
+                     pcl::device::LabelProbability &probIn2,
+                     float weight2,
+                     pcl::device::LabelProbability &probOut);
 
         /** \brief This will sum a probability multiplied with it's weight **/
         void
-        WeightedSumProb (const Depth &depth, pcl::device::LabelProbability &probIn,
-                         float weight, pcl::device::LabelProbability &probOut);
+        WeightedSumProb (const Depth &depth,
+                         pcl::device::LabelProbability &probIn,
+                         float weight,
+                         pcl::device::LabelProbability &probOut);
 
         /** \brief This will create a Gaussian Kernel **/
         float *
@@ -88,13 +94,15 @@ namespace pcl
 
         /** \brief This will do a GaussianBlur over the LabelProbability **/
         int
-        GaussianBlur (const Depth &depth, pcl::device::LabelProbability &probIn,
+        GaussianBlur (const Depth &depth,
+                      pcl::device::LabelProbability &probIn,
                       DeviceArray<float> &kernel,
                       pcl::device::LabelProbability &probOut);
 
         /** \brief This will do a GaussianBlur over the LabelProbability **/
         int
-        GaussianBlur (const Depth &depth, pcl::device::LabelProbability &probIn,
+        GaussianBlur (const Depth &depth,
+                      pcl::device::LabelProbability &probIn,
                       DeviceArray<float> &kernel,
                       pcl::device::LabelProbability &probTemp,
                       pcl::device::LabelProbability &probOut);

@@ -56,8 +56,8 @@ loadCloud (const string &filename, PointCloud<PointXYZ> &cloud)
   ifstream fs;
   fs.open (filename.c_str (), ios::binary);
   if (!fs.is_open () || fs.fail ()) {
-    PCL_ERROR ("Could not open file '%s'! Error : %s\n", filename.c_str (),
-               strerror (errno));
+    PCL_ERROR (
+        "Could not open file '%s'! Error : %s\n", filename.c_str (), strerror (errno));
     fs.close ();
     return (false);
   }

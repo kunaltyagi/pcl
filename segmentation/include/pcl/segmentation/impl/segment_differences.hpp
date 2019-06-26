@@ -44,7 +44,8 @@
 //////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 void
-pcl::getPointCloudDifference (const pcl::PointCloud<PointT> &src, double threshold,
+pcl::getPointCloudDifference (const pcl::PointCloud<PointT> &src,
+                              double threshold,
                               const typename pcl::search::Search<PointT>::Ptr &tree,
                               pcl::PointCloud<PointT> &output)
 {
@@ -63,8 +64,11 @@ pcl::getPointCloudDifference (const pcl::PointCloud<PointT> &src, double thresho
     // Search for the closest point in the target data set (number of neighbors to find
     // = 1)
     if (!tree->nearestKSearch (src.points[i], 1, nn_indices, nn_distances)) {
-      PCL_WARN ("No neighbor found for point %lu (%f %f %f)!\n", i, src.points[i].x,
-                src.points[i].y, src.points[i].z);
+      PCL_WARN ("No neighbor found for point %lu (%f %f %f)!\n",
+                i,
+                src.points[i].x,
+                src.points[i].y,
+                src.points[i].z);
       continue;
     }
     // Add points without a corresponding point in the target cloud to the output cloud
@@ -119,7 +123,9 @@ pcl::SegmentDifferences<PointT>::segment (PointCloud &output)
   template class PCL_EXPORTS pcl::SegmentDifferences<T>;
 #define PCL_INSTANTIATE_getPointCloudDifference(T)                                     \
   template PCL_EXPORTS void pcl::getPointCloudDifference<T> (                          \
-      const pcl::PointCloud<T> &, double,                                              \
-      const typename pcl::search::Search<T>::Ptr &, pcl::PointCloud<T> &);
+      const pcl::PointCloud<T> &,                                                      \
+      double,                                                                          \
+      const typename pcl::search::Search<T>::Ptr &,                                    \
+      pcl::PointCloud<T> &);
 
 #endif // PCL_SEGMENTATION_IMPL_SEGMENT_DIFFERENCES_H_

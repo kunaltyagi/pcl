@@ -103,7 +103,8 @@ pcl::segmentation::grabcut::BoykovKolmogorov::preAugmentPaths ()
 
     // augment s-u-v-t paths
     for (std::map<int, double>::iterator it = nodes_[u].begin ();
-         it != nodes_[u].end (); ++it) {
+         it != nodes_[u].end ();
+         ++it) {
       const int v = it->first;
       if ((it->second == 0.0) || (target_edges_[v] == 0.0))
         continue;
@@ -162,7 +163,9 @@ pcl::segmentation::grabcut::BoykovKolmogorov::addTargetEdge (int u, double cap)
 }
 
 void
-pcl::segmentation::grabcut::BoykovKolmogorov::addEdge (int u, int v, double cap_uv,
+pcl::segmentation::grabcut::BoykovKolmogorov::addEdge (int u,
+                                                       int v,
+                                                       double cap_uv,
                                                        double cap_vu)
 {
   assert ((u >= 0) && (u < (int)nodes_.size ()));
@@ -457,7 +460,8 @@ pcl::segmentation::grabcut::BoykovKolmogorov::adoptOrphans (std::deque<int> &orp
     // free the orphan subtree and remove it from the active set
     if (b_free_orphan) {
       for (capacitated_edge::const_iterator jt = nodes_[u].begin ();
-           jt != nodes_[u].end (); ++jt) {
+           jt != nodes_[u].end ();
+           ++jt) {
         if ((cut_[jt->first] == tree_label) && (parents_[jt->first].first == u)) {
           orphans.push_front (jt->first);
           markActive (jt->first);
@@ -478,8 +482,8 @@ pcl::segmentation::grabcut::BoykovKolmogorov::clearActive ()
 {
   active_head_ = active_tail_ = TERMINAL;
   active_list_.resize (nodes_.size ());
-  std::fill (active_list_.begin (), active_list_.end (),
-             std::make_pair (TERMINAL, TERMINAL));
+  std::fill (
+      active_list_.begin (), active_list_.end (), std::make_pair (TERMINAL, TERMINAL));
 }
 
 void
@@ -539,7 +543,8 @@ pcl::segmentation::grabcut::GaussianFitter::add (const Color &c)
 
 // Build the gaussian out of all the added colors
 void
-pcl::segmentation::grabcut::GaussianFitter::fit (Gaussian &g, std::size_t total_count,
+pcl::segmentation::grabcut::GaussianFitter::fit (Gaussian &g,
+                                                 std::size_t total_count,
                                                  bool compute_eigens) const
 {
   if (count_ == 0) {
@@ -651,9 +656,12 @@ pcl::segmentation::grabcut::GMM::probabilityDensity (std::size_t i, const Color 
 
 void
 pcl::segmentation::grabcut::buildGMMs (
-    const Image &image, const std::vector<int> &indices,
+    const Image &image,
+    const std::vector<int> &indices,
     const std::vector<SegmentationValue> &hard_segmentation,
-    std::vector<std::size_t> &components, GMM &background_GMM, GMM &foreground_GMM)
+    std::vector<std::size_t> &components,
+    GMM &background_GMM,
+    GMM &foreground_GMM)
 {
   // Step 3: Build GMMs using Orchard-Bouman clustering algorithm
 
@@ -760,9 +768,12 @@ pcl::segmentation::grabcut::buildGMMs (
 
 void
 pcl::segmentation::grabcut::learnGMMs (
-    const Image &image, const std::vector<int> &indices,
+    const Image &image,
+    const std::vector<int> &indices,
     const std::vector<SegmentationValue> &hard_segmentation,
-    std::vector<std::size_t> &components, GMM &background_GMM, GMM &foreground_GMM)
+    std::vector<std::size_t> &components,
+    GMM &background_GMM,
+    GMM &foreground_GMM)
 {
   const std::size_t indices_size = static_cast<std::size_t> (indices.size ());
   // Step 4: Assign each pixel to the component which maximizes its probability

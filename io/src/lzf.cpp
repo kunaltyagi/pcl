@@ -85,7 +85,9 @@ using u16 = unsigned int;
 //
 //
 unsigned int
-pcl::lzfCompress (const void *const in_data, unsigned int in_len, void *out_data,
+pcl::lzfCompress (const void *const in_data,
+                  unsigned int in_len,
+                  void *out_data,
                   unsigned int out_len)
 {
   LZF_STATE htab;
@@ -299,7 +301,9 @@ pcl::lzfCompress (const void *const in_data, unsigned int in_len, void *out_data
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 unsigned int
-pcl::lzfDecompress (const void *const in_data, unsigned int in_len, void *out_data,
+pcl::lzfDecompress (const void *const in_data,
+                    unsigned int in_len,
+                    void *out_data,
                     unsigned int out_len)
 {
   unsigned char const *ip = static_cast<const unsigned char *> (in_data);

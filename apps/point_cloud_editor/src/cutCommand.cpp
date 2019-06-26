@@ -42,7 +42,8 @@
 #include <pcl/apps/point_cloud_editor/cutCommand.h>
 #include <pcl/apps/point_cloud_editor/selection.h>
 
-CutCommand::CutCommand (CopyBufferPtr copy_buffer_ptr, SelectionPtr selection_ptr,
+CutCommand::CutCommand (CopyBufferPtr copy_buffer_ptr,
+                        SelectionPtr selection_ptr,
                         CloudPtr cloud_ptr)
     : selection_ptr_ (selection_ptr), cloud_ptr_ (cloud_ptr),
       copy_buffer_ptr_ (copy_buffer_ptr), cut_selection_ (cloud_ptr)

@@ -53,8 +53,8 @@ namespace pcl
           : texref (&tex)
       {
         cudaChannelFormatDesc desc = cudaCreateChannelDesc<T> ();
-        cudaSafeCall (cudaBindTexture2D (0, tex, arr.ptr (), desc, arr.cols (),
-                                         arr.rows (), arr.step ()));
+        cudaSafeCall (cudaBindTexture2D (
+            0, tex, arr.ptr (), desc, arr.cols (), arr.rows (), arr.step ()));
       }
 
       template <class T, enum cudaTextureReadMode readMode>

@@ -150,7 +150,8 @@ namespace pcl
           support_angle_cos > 1.0) // may be permit negative cosine?
       {
         throw PCLException ("Cosine of support angle should be between 0 and 1",
-                            "spin_image.h", "setSupportAngle");
+                            "spin_image.h",
+                            "setSupportAngle");
       }
 
       support_angle_cos_ = support_angle_cos;

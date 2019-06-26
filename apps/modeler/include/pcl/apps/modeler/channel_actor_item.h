@@ -56,7 +56,8 @@ namespace pcl
     class ChannelActorItem : public QTreeWidgetItem, public AbstractItem
     {
       public:
-      ChannelActorItem (QTreeWidgetItem *parent, const CloudMesh::Ptr &cloud_mesh,
+      ChannelActorItem (QTreeWidgetItem *parent,
+                        const CloudMesh::Ptr &cloud_mesh,
                         const vtkSmartPointer<vtkRenderWindow> &render_window,
                         const vtkSmartPointer<vtkActor> &actor,
                         const std::string &channel_name);

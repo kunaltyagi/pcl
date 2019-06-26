@@ -50,16 +50,16 @@ pcl::cloud_composer::SupervoxelsToolFactory::createToolParameterModel (QObject *
 {
   PropertiesModel *parameter_model = new PropertiesModel (parent);
 
-  parameter_model->addProperty ("Resolution", 0.008,
-                                Qt::ItemIsEditable | Qt::ItemIsEnabled);
-  parameter_model->addProperty ("Seed Resolution", 0.08,
-                                Qt::ItemIsEditable | Qt::ItemIsEnabled);
-  parameter_model->addProperty ("RGB Weight", 0.2,
-                                Qt::ItemIsEditable | Qt::ItemIsEnabled);
-  parameter_model->addProperty ("Normals Weight", 0.8,
-                                Qt::ItemIsEditable | Qt::ItemIsEnabled);
-  parameter_model->addProperty ("Spatial Weight", 0.4,
-                                Qt::ItemIsEditable | Qt::ItemIsEnabled);
+  parameter_model->addProperty (
+      "Resolution", 0.008, Qt::ItemIsEditable | Qt::ItemIsEnabled);
+  parameter_model->addProperty (
+      "Seed Resolution", 0.08, Qt::ItemIsEditable | Qt::ItemIsEnabled);
+  parameter_model->addProperty (
+      "RGB Weight", 0.2, Qt::ItemIsEditable | Qt::ItemIsEnabled);
+  parameter_model->addProperty (
+      "Normals Weight", 0.8, Qt::ItemIsEditable | Qt::ItemIsEnabled);
+  parameter_model->addProperty (
+      "Spatial Weight", 0.4, Qt::ItemIsEditable | Qt::ItemIsEnabled);
 
   return parameter_model;
 }

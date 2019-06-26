@@ -57,7 +57,8 @@ namespace pcl
           : fitness_score (FLT_MAX), transformation (Eigen::Matrix4f::Identity ()){};
 
       /** \brief Value constructor. */
-      MatchingCandidate (float s, const pcl::Correspondences &c,
+      MatchingCandidate (float s,
+                         const pcl::Correspondences &c,
                          const Eigen::Matrix4f &m)
           : fitness_score (s), correspondences (c), transformation (m){};
 

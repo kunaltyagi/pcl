@@ -466,8 +466,8 @@ TEST (PCL, TransformationEstimationDualQuaternion)
   corr.reserve (source->size ());
   for (size_t i = 0; i < source->size (); ++i)
     corr.push_back (pcl::Correspondence (i, i, 0.f));
-  trans_est_dual_quaternion.estimateRigidTransformation (*source, *target, corr,
-                                                         T_DQ_2);
+  trans_est_dual_quaternion.estimateRigidTransformation (
+      *source, *target, corr, T_DQ_2);
 
   const Eigen::Quaternionf R_DQ_2 (T_DQ_2.topLeftCorner<3, 3> ());
   const Eigen::Translation3f t_DQ_2 (T_DQ_2.topRightCorner<3, 1> ());
@@ -603,8 +603,8 @@ TEST (PCL, TransformationEstimationLM)
   corr.reserve (source->size ());
   for (size_t i = 0; i < source->size (); ++i)
     corr.push_back (pcl::Correspondence (i, i, 0.f));
-  trans_est_lm_double.estimateRigidTransformation (*source, *target, corr,
-                                                   T_LM_2_double);
+  trans_est_lm_double.estimateRigidTransformation (
+      *source, *target, corr, T_LM_2_double);
 
   const Eigen::Quaterniond R_LM_2_double (T_LM_2_double.topLeftCorner<3, 3> ());
   const Eigen::Translation3d t_LM_2_double (T_LM_2_double.topRightCorner<3, 1> ());
@@ -622,9 +622,9 @@ TEST (PCL, TransformationEstimationLM)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TEST (PCL, TransformationEstimationPointToPlane)
 {
-  pcl::registration::TransformationEstimationPointToPlane<pcl::PointNormal,
-                                                          pcl::PointNormal, float>
-      transform_estimator_float;
+  pcl::registration::
+      TransformationEstimationPointToPlane<pcl::PointNormal, pcl::PointNormal, float>
+          transform_estimator_float;
 
   // Create a test cloud
   pcl::PointCloud<pcl::PointNormal>::Ptr src (new pcl::PointCloud<pcl::PointNormal>);
@@ -664,19 +664,19 @@ TEST (PCL, TransformationEstimationPointToPlane)
   pcl::transformPointCloudWithNormals (*src, *tgt, ground_truth_tform);
 
   Eigen::Matrix4f estimated_transform_float;
-  transform_estimator_float.estimateRigidTransformation (*src, *tgt,
-                                                         estimated_transform_float);
+  transform_estimator_float.estimateRigidTransformation (
+      *src, *tgt, estimated_transform_float);
 
   for (int i = 0; i < 4; ++i)
     for (int j = 0; j < 4; ++j)
       EXPECT_NEAR (estimated_transform_float (i, j), ground_truth_tform (i, j), 1e-3);
 
-  pcl::registration::TransformationEstimationPointToPlane<pcl::PointNormal,
-                                                          pcl::PointNormal, double>
-      transform_estimator_double;
+  pcl::registration::
+      TransformationEstimationPointToPlane<pcl::PointNormal, pcl::PointNormal, double>
+          transform_estimator_double;
   Eigen::Matrix4d estimated_transform_double;
-  transform_estimator_double.estimateRigidTransformation (*src, *tgt,
-                                                          estimated_transform_double);
+  transform_estimator_double.estimateRigidTransformation (
+      *src, *tgt, estimated_transform_double);
 
   for (int i = 0; i < 4; ++i)
     for (int j = 0; j < 4; ++j)

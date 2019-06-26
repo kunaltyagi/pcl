@@ -86,7 +86,8 @@ class ON_CLASS ON_Line
     True if a valid tight_bbox is returned.
   */
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   /*
@@ -244,11 +245,14 @@ class ON_CLASS ON_Line
 
   // rotate line about a point and axis
   bool
-  Rotate (double sin_angle, double cos_angle, const ON_3dVector &axis_of_rotation,
+  Rotate (double sin_angle,
+          double cos_angle,
+          const ON_3dVector &axis_of_rotation,
           const ON_3dPoint &center_of_rotation);
 
   bool
-  Rotate (double angle_in_radians, const ON_3dVector &axis_of_rotation,
+  Rotate (double angle_in_radians,
+          const ON_3dVector &axis_of_rotation,
           const ON_3dPoint &center_of_rotation);
 
   bool

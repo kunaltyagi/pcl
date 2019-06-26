@@ -192,7 +192,8 @@ pcl::SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::initCompute ()
 template <typename PointInT, typename PointNT, typename PointOutT, typename PointRFT>
 void
 pcl::SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::
-    createBinDistanceShape (int index, const std::vector<int> &indices,
+    createBinDistanceShape (int index,
+                            const std::vector<int> &indices,
                             std::vector<double> &bin_distance_shape)
 {
   bin_distance_shape.resize (indices.size ());
@@ -201,8 +202,8 @@ pcl::SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::
   // if (!std::isfinite (current_frame.rf[0]) || !std::isfinite (current_frame.rf[4]) ||
   // !std::isfinite (current_frame.rf[11])) return;
 
-  Eigen::Vector4f current_frame_z (current_frame.z_axis[0], current_frame.z_axis[1],
-                                   current_frame.z_axis[2], 0);
+  Eigen::Vector4f current_frame_z (
+      current_frame.z_axis[0], current_frame.z_axis[1], current_frame.z_axis[2], 0);
 
   unsigned nan_counter = 0;
   for (size_t i_idx = 0; i_idx < indices.size (); ++i_idx) {
@@ -229,7 +230,9 @@ pcl::SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::
   if (nan_counter > 0)
     PCL_WARN ("[pcl::%s::createBinDistanceShape] Point %d has %d (%f%%) NaN normals in "
               "its neighbourhood\n",
-              getClassName ().c_str (), index, nan_counter,
+              getClassName ().c_str (),
+              index,
+              nan_counter,
               (static_cast<float> (nan_counter) * 100.f /
                static_cast<float> (indices.size ())));
 }
@@ -258,20 +261,22 @@ template <typename PointInT, typename PointNT, typename PointOutT, typename Poin
 void
 pcl::SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::
     interpolateSingleChannel (const std::vector<int> &indices,
-                              const std::vector<float> &sqr_dists, const int index,
-                              std::vector<double> &binDistance, const int nr_bins,
+                              const std::vector<float> &sqr_dists,
+                              const int index,
+                              std::vector<double> &binDistance,
+                              const int nr_bins,
                               Eigen::VectorXf &shot)
 {
   const Eigen::Vector4f &central_point =
       (*input_)[(*indices_)[index]].getVector4fMap ();
   const PointRFT &current_frame = (*frames_)[index];
 
-  Eigen::Vector4f current_frame_x (current_frame.x_axis[0], current_frame.x_axis[1],
-                                   current_frame.x_axis[2], 0);
-  Eigen::Vector4f current_frame_y (current_frame.y_axis[0], current_frame.y_axis[1],
-                                   current_frame.y_axis[2], 0);
-  Eigen::Vector4f current_frame_z (current_frame.z_axis[0], current_frame.z_axis[1],
-                                   current_frame.z_axis[2], 0);
+  Eigen::Vector4f current_frame_x (
+      current_frame.x_axis[0], current_frame.x_axis[1], current_frame.x_axis[2], 0);
+  Eigen::Vector4f current_frame_y (
+      current_frame.y_axis[0], current_frame.y_axis[1], current_frame.y_axis[2], 0);
+  Eigen::Vector4f current_frame_z (
+      current_frame.z_axis[0], current_frame.z_axis[1], current_frame.z_axis[2], 0);
 
   for (size_t i_idx = 0; i_idx < indices.size (); ++i_idx) {
     if (!std::isfinite (binDistance[i_idx]))
@@ -442,10 +447,12 @@ template <typename PointInT, typename PointNT, typename PointOutT, typename Poin
 void
 pcl::SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT>::
     interpolateDoubleChannel (const std::vector<int> &indices,
-                              const std::vector<float> &sqr_dists, const int index,
+                              const std::vector<float> &sqr_dists,
+                              const int index,
                               std::vector<double> &binDistanceShape,
                               std::vector<double> &binDistanceColor,
-                              const int nr_bins_shape, const int nr_bins_color,
+                              const int nr_bins_shape,
+                              const int nr_bins_color,
                               Eigen::VectorXf &shot)
 {
   const Eigen::Vector4f &central_point =
@@ -454,12 +461,12 @@ pcl::SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT>::
 
   int shapeToColorStride = nr_grid_sector_ * (nr_bins_shape + 1);
 
-  Eigen::Vector4f current_frame_x (current_frame.x_axis[0], current_frame.x_axis[1],
-                                   current_frame.x_axis[2], 0);
-  Eigen::Vector4f current_frame_y (current_frame.y_axis[0], current_frame.y_axis[1],
-                                   current_frame.y_axis[2], 0);
-  Eigen::Vector4f current_frame_z (current_frame.z_axis[0], current_frame.z_axis[1],
-                                   current_frame.z_axis[2], 0);
+  Eigen::Vector4f current_frame_x (
+      current_frame.x_axis[0], current_frame.x_axis[1], current_frame.x_axis[2], 0);
+  Eigen::Vector4f current_frame_y (
+      current_frame.y_axis[0], current_frame.y_axis[1], current_frame.y_axis[2], 0);
+  Eigen::Vector4f current_frame_z (
+      current_frame.z_axis[0], current_frame.z_axis[1], current_frame.z_axis[2], 0);
 
   for (size_t i_idx = 0; i_idx < indices.size (); ++i_idx) {
     if (!std::isfinite (binDistanceShape[i_idx]))
@@ -696,8 +703,10 @@ pcl::SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT>::
 template <typename PointInT, typename PointNT, typename PointOutT, typename PointRFT>
 void
 pcl::SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT>::computePointSHOT (
-    const int index, const std::vector<int> &indices,
-    const std::vector<float> &sqr_dists, Eigen::VectorXf &shot)
+    const int index,
+    const std::vector<int> &indices,
+    const std::vector<float> &sqr_dists,
+    Eigen::VectorXf &shot)
 {
   // Clear the resultant shot
   shot.setZero ();
@@ -709,7 +718,8 @@ pcl::SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT>::computePointSH
   if (nNeighbors < 5) {
     PCL_WARN ("[pcl::%s::computePointSHOT] Warning! Neighborhood has less than 5 "
               "vertexes. Aborting description of point with index %d\n",
-              getClassName ().c_str (), (*indices_)[index]);
+              getClassName ().c_str (),
+              (*indices_)[index]);
 
     shot.setConstant (descLength_, 1, std::numeric_limits<float>::quiet_NaN ());
 
@@ -773,14 +783,20 @@ pcl::SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT>::computePointSH
   // histogram(s)
 
   if (b_describe_shape_ && b_describe_color_)
-    interpolateDoubleChannel (indices, sqr_dists, index, binDistanceShape,
-                              binDistanceColor, nr_shape_bins_, nr_color_bins_, shot);
+    interpolateDoubleChannel (indices,
+                              sqr_dists,
+                              index,
+                              binDistanceShape,
+                              binDistanceColor,
+                              nr_shape_bins_,
+                              nr_color_bins_,
+                              shot);
   else if (b_describe_color_)
-    interpolateSingleChannel (indices, sqr_dists, index, binDistanceColor,
-                              nr_color_bins_, shot);
+    interpolateSingleChannel (
+        indices, sqr_dists, index, binDistanceColor, nr_color_bins_, shot);
   else
-    interpolateSingleChannel (indices, sqr_dists, index, binDistanceShape,
-                              nr_shape_bins_, shot);
+    interpolateSingleChannel (
+        indices, sqr_dists, index, binDistanceShape, nr_shape_bins_, shot);
 
   // Normalize the final histogram
   this->normalizeHistogram (shot, descLength_);
@@ -790,15 +806,18 @@ pcl::SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT>::computePointSH
 template <typename PointInT, typename PointNT, typename PointOutT, typename PointRFT>
 void
 pcl::SHOTEstimation<PointInT, PointNT, PointOutT, PointRFT>::computePointSHOT (
-    const int index, const std::vector<int> &indices,
-    const std::vector<float> &sqr_dists, Eigen::VectorXf &shot)
+    const int index,
+    const std::vector<int> &indices,
+    const std::vector<float> &sqr_dists,
+    Eigen::VectorXf &shot)
 {
   // Skip the current feature if the number of its neighbors is not sufficient for its
   // description
   if (indices.size () < 5) {
     PCL_WARN ("[pcl::%s::computePointSHOT] Warning! Neighborhood has less than 5 "
               "vertexes. Aborting description of point with index %d\n",
-              getClassName ().c_str (), (*indices_)[index]);
+              getClassName ().c_str (),
+              (*indices_)[index]);
 
     shot.setConstant (descLength_, 1, std::numeric_limits<float>::quiet_NaN ());
 
@@ -811,8 +830,8 @@ pcl::SHOTEstimation<PointInT, PointNT, PointOutT, PointRFT>::computePointSHOT (
 
   // Interpolate
   shot.setZero ();
-  interpolateSingleChannel (indices, sqr_dists, index, binDistanceShape, nr_shape_bins_,
-                            shot);
+  interpolateSingleChannel (
+      indices, sqr_dists, index, binDistanceShape, nr_shape_bins_, shot);
 
   // Normalize the final histogram
   this->normalizeHistogram (shot, descLength_);
@@ -852,13 +871,14 @@ pcl::SHOTEstimation<PointInT, PointNT, PointOutT, PointRFT>::computeFeature (
         !std::isfinite (current_frame.z_axis[0])) {
       PCL_WARN ("[pcl::%s::computeFeature] The local reference frame is not valid! "
                 "Aborting description of point with index %d\n",
-                getClassName ().c_str (), (*indices_)[idx]);
+                getClassName ().c_str (),
+                (*indices_)[idx]);
       lrf_is_nan = true;
     }
 
     if (!isFinite ((*input_)[(*indices_)[idx]]) || lrf_is_nan ||
-        this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                  nn_dists) == 0) {
+        this->searchForNeighbors (
+            (*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0) {
       // Copy into the resultant cloud
       for (int d = 0; d < descLength_; ++d)
         output.points[idx].descriptor[d] = std::numeric_limits<float>::quiet_NaN ();
@@ -922,13 +942,14 @@ pcl::SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT>::computeFeature
         !std::isfinite (current_frame.z_axis[0])) {
       PCL_WARN ("[pcl::%s::computeFeature] The local reference frame is not valid! "
                 "Aborting description of point with index %d\n",
-                getClassName ().c_str (), (*indices_)[idx]);
+                getClassName ().c_str (),
+                (*indices_)[idx]);
       lrf_is_nan = true;
     }
 
     if (!isFinite ((*input_)[(*indices_)[idx]]) || lrf_is_nan ||
-        this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                  nn_dists) == 0) {
+        this->searchForNeighbors (
+            (*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0) {
       // Copy into the resultant cloud
       for (int d = 0; d < descLength_; ++d)
         output.points[idx].descriptor[d] = std::numeric_limits<float>::quiet_NaN ();

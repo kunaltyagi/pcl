@@ -78,7 +78,8 @@ namespace pcl
     };
 
     template <typename PointInT, typename PointOutT>
-    struct CopyPointHelper<PointInT, PointOutT,
+    struct CopyPointHelper<PointInT,
+                           PointOutT,
                            std::enable_if_t<std::is_same<PointInT, PointOutT>::value>> {
       void
       operator() (const PointInT &point_in, PointOutT &point_out) const
@@ -89,7 +90,8 @@ namespace pcl
 
     template <typename PointInT, typename PointOutT>
     struct CopyPointHelper<
-        PointInT, PointOutT,
+        PointInT,
+        PointOutT,
         std::enable_if_t<boost::mpl::and_<
             boost::mpl::not_<std::is_same<PointInT, PointOutT>>,
             boost::mpl::or_<
@@ -113,7 +115,8 @@ namespace pcl
 
     template <typename PointInT, typename PointOutT>
     struct CopyPointHelper<
-        PointInT, PointOutT,
+        PointInT,
+        PointOutT,
         std::enable_if_t<boost::mpl::and_<
             boost::mpl::not_<std::is_same<PointInT, PointOutT>>,
             boost::mpl::or_<
@@ -139,7 +142,8 @@ namespace pcl
         pcl::for_each_type<FieldList> (
             pcl::NdConcatenateFunctor<PointInT, PointOutT> (point_in, point_out));
         memcpy (reinterpret_cast<char *> (&point_out) + offset_out,
-                reinterpret_cast<const char *> (&point_in) + offset_in, 4);
+                reinterpret_cast<const char *> (&point_in) + offset_in,
+                4);
       }
     };
 

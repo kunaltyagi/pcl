@@ -46,8 +46,10 @@
 template <typename PointT, typename PointNT>
 void
 pcl::SmoothedSurfacesKeypoint<PointT, PointNT>::addSmoothedPointCloud (
-    const PointCloudTConstPtr &cloud, const PointCloudNTConstPtr &normals,
-    KdTreePtr &kdtree, float &scale)
+    const PointCloudTConstPtr &cloud,
+    const PointCloudNTConstPtr &normals,
+    KdTreePtr &kdtree,
+    float &scale)
 {
   clouds_.push_back (cloud);
   cloud_normals_.push_back (normals);
@@ -99,8 +101,8 @@ pcl::SmoothedSurfacesKeypoint<PointT, PointNT>::detectKeypoints (PointCloudT &ou
        ++point_i) {
     std::vector<int> nn_indices;
     std::vector<float> nn_distances;
-    input_tree->radiusSearch (point_i, input_scale_ * neighborhood_constant_,
-                              nn_indices, nn_distances);
+    input_tree->radiusSearch (
+        point_i, input_scale_ * neighborhood_constant_, nn_indices, nn_distances);
 
     bool is_min = true, is_max = true;
     for (const int &nn_index : nn_indices)
@@ -123,9 +125,11 @@ pcl::SmoothedSurfacesKeypoint<PointT, PointNT>::detectKeypoints (PointCloudT &ou
 
         nn_indices.clear ();
         nn_distances.clear ();
-        cloud_trees_[cloud_i]->radiusSearch (
-            point_i, scales_[scale_i].first * neighborhood_constant_, nn_indices,
-            nn_distances);
+        cloud_trees_[cloud_i]->radiusSearch (point_i,
+                                             scales_[scale_i].first *
+                                                 neighborhood_constant_,
+                                             nn_indices,
+                                             nn_distances);
 
         bool is_min_other_scale = true, is_max_other_scale = true;
         for (const int &nn_index : nn_indices)

@@ -49,7 +49,8 @@ namespace pcl
    * \author Nizar Sallem
    * \ingroup keypoints
    */
-  template <typename PointInT, typename PointOutT,
+  template <typename PointInT,
+            typename PointOutT,
             typename IntensityT = pcl::common::IntensityFieldAccessor<PointInT>>
   class HarrisKeypoint2D : public Keypoint<PointInT, PointOutT>
   {
@@ -77,8 +78,10 @@ namespace pcl
      * \param min_distance
      * \param[in] threshold the threshold to filter out weak corners
      */
-    HarrisKeypoint2D (ResponseMethod method = HARRIS, int window_width = 3,
-                      int window_height = 3, int min_distance = 5,
+    HarrisKeypoint2D (ResponseMethod method = HARRIS,
+                      int window_width = 3,
+                      int window_height = 3,
+                      int min_distance = 5,
                       float threshold = 0.0)
         : threshold_ (threshold), refine_ (false), nonmax_ (true), method_ (method),
           threads_ (0), response_ (new pcl::PointCloud<PointOutT> ()),

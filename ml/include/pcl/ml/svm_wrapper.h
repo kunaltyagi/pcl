@@ -306,8 +306,8 @@ namespace pcl
     void
     setInputTrainingSet (std::vector<SVMData> training_set)
     {
-      training_set_.insert (training_set_.end (), training_set.begin (),
-                            training_set.end ());
+      training_set_.insert (
+          training_set_.end (), training_set.begin (), training_set.end ());
     }
 
     /** \brief Return the current training set. */
@@ -417,8 +417,8 @@ namespace pcl
         return;
       }
 
-      training_set_.insert (training_set_.end (), training_set.begin (),
-                            training_set.end ());
+      training_set_.insert (
+          training_set_.end (), training_set.begin (), training_set.end ());
       SVM::adaptInputToLibSVM (training_set_, prob_);
     }
 

@@ -66,10 +66,13 @@ main (int, char **argv)
   for (int i = 0; i < static_cast<int> (xyz.points.size ()); ++i)
     img[i] = xyz.points[i].z;
 
-  depth_image_viewer_.showFloatImage (img, cloud.width, cloud.height,
+  depth_image_viewer_.showFloatImage (img,
+                                      cloud.width,
+                                      cloud.height,
                                       std::numeric_limits<float>::min (),
                                       // Scale so that the colors look brigher on screen
-                                      std::numeric_limits<float>::max () / 10, true);
+                                      std::numeric_limits<float>::max () / 10,
+                                      true);
   depth_image_viewer_.spin ();
   return (0);
 }

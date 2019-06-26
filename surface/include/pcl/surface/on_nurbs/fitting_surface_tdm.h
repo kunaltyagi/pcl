@@ -54,9 +54,15 @@ namespace pcl
         double interior_tangent_weight;
         double boundary_tangent_weight;
 
-        ParameterTDM (double intW = 1.0, double intS = 0.000001, double intR = 0.0,
-                      double intTW = 0.1, double bndW = 1.0, double bndS = 0.000001,
-                      double bndR = 0.0, double bndTW = 0.1, unsigned regU = 0,
+        ParameterTDM (double intW = 1.0,
+                      double intS = 0.000001,
+                      double intR = 0.0,
+                      double intTW = 0.1,
+                      double bndW = 1.0,
+                      double bndS = 0.000001,
+                      double bndR = 0.0,
+                      double bndTW = 0.1,
+                      unsigned regU = 0,
                       unsigned regV = 0)
             : Parameter (intW, intS, intR, bndW, bndS, bndR, regU, regV),
               interior_tangent_weight (intTW), boundary_tangent_weight (bndTW)
@@ -73,7 +79,8 @@ namespace pcl
        * \param[in] order the polynomial order of the B-Spline surface.
        * \param[in] data pointer to the 2D point-cloud data to be fit.
        * \param[in] z vector defining front face of surface.        */
-      FittingSurfaceTDM (int order, NurbsDataSurface *data,
+      FittingSurfaceTDM (int order,
+                         NurbsDataSurface *data,
                          Eigen::Vector3d z = Eigen::Vector3d (0.0, 0.0, 1.0));
 
       /** \brief Assemble the system of equations for fitting
@@ -105,10 +112,14 @@ namespace pcl
       /** \brief Add minimization constraint: point-to-surface distance
        * (point-distance-minimization). */
       virtual void
-      addPointConstraint (const Eigen::Vector2d &params, const Eigen::Vector3d &point,
-                          const Eigen::Vector3d &normal, const Eigen::Vector3d &tu,
-                          const Eigen::Vector3d &tv, double tangent_weight,
-                          double weight, unsigned &row);
+      addPointConstraint (const Eigen::Vector2d &params,
+                          const Eigen::Vector3d &point,
+                          const Eigen::Vector3d &normal,
+                          const Eigen::Vector3d &tu,
+                          const Eigen::Vector3d &tv,
+                          double tangent_weight,
+                          double weight,
+                          unsigned &row);
 
       /** \brief Add minimization constraint: interior smoothness by control point
        * regularisation. */

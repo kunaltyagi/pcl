@@ -76,7 +76,9 @@ loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
 }
 
 void
-saveCloud (const std::string &filename, const pcl::PCLPointCloud2 &cloud, bool binary,
+saveCloud (const std::string &filename,
+           const pcl::PCLPointCloud2 &cloud,
+           bool binary,
            bool use_camera)
 {
   TicToc tt;
@@ -86,8 +88,12 @@ saveCloud (const std::string &filename, const pcl::PCLPointCloud2 &cloud, bool b
   print_value ("%s ", filename.c_str ());
 
   pcl::PLYWriter writer;
-  writer.write (filename, cloud, Eigen::Vector4f::Zero (),
-                Eigen::Quaternionf::Identity (), binary, use_camera);
+  writer.write (filename,
+                cloud,
+                Eigen::Vector4f::Zero (),
+                Eigen::Quaternionf::Identity (),
+                binary,
+                use_camera);
 
   print_info ("[done, ");
   print_value ("%g", tt.toc ());

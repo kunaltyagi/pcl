@@ -64,8 +64,12 @@ namespace pcl
        * time where this event was triggered \param[in] shift     whether the shift was
        * pressed at the time where this event was triggered
        */
-      inline KeyboardEvent (bool action, const std::string &key_sym, unsigned char key,
-                            bool alt, bool ctrl, bool shift);
+      inline KeyboardEvent (bool action,
+                            const std::string &key_sym,
+                            unsigned char key,
+                            bool alt,
+                            bool ctrl,
+                            bool shift);
 
       /**
        * \return   whether the alt key was pressed at the time where this event was
@@ -120,8 +124,12 @@ namespace pcl
       std::string key_sym_;
     };
 
-    KeyboardEvent::KeyboardEvent (bool action, const std::string &key_sym,
-                                  unsigned char key, bool alt, bool ctrl, bool shift)
+    KeyboardEvent::KeyboardEvent (bool action,
+                                  const std::string &key_sym,
+                                  unsigned char key,
+                                  bool alt,
+                                  bool ctrl,
+                                  bool shift)
         : action_ (action), modifiers_ (0), key_code_ (key), key_sym_ (key_sym)
     {
       if (alt)

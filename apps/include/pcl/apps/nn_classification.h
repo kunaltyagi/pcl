@@ -118,7 +118,8 @@ namespace pcl
       // Save the mapping from labels to indices in the class list
       std::map<std::string, int> label2idx;
       for (std::vector<std::string>::const_iterator it = classes_.begin ();
-           it != classes_.end (); it++)
+           it != classes_.end ();
+           it++)
         label2idx[*it] = int(it - classes_.begin ());
 
       // Create a list holding the class index of each label
@@ -186,7 +187,9 @@ namespace pcl
      * and score for each training class from the neighborhood
      */
     ResultPtr
-    classify (const PointT &p_q, double radius, float gaussian_param,
+    classify (const PointT &p_q,
+              double radius,
+              float gaussian_param,
               int max_nn = INT_MAX)
     {
       std::vector<int> k_indices;
@@ -204,7 +207,9 @@ namespace pcl
      * \return number of neighbors found
      */
     int
-    getKNearestExemplars (const PointT &p_q, int k, std::vector<int> &k_indices,
+    getKNearestExemplars (const PointT &p_q,
+                          int k,
+                          std::vector<int> &k_indices,
                           std::vector<float> &k_sqr_distances)
     {
       k_indices.resize (k);
@@ -220,8 +225,11 @@ namespace pcl
      * to this value \return number of neighbors found in radius
      */
     int
-    getSimilarExemplars (const PointT &p_q, double radius, std::vector<int> &k_indices,
-                         std::vector<float> &k_sqr_distances, int max_nn = INT_MAX)
+    getSimilarExemplars (const PointT &p_q,
+                         double radius,
+                         std::vector<int> &k_indices,
+                         std::vector<float> &k_sqr_distances,
+                         int max_nn = INT_MAX)
     {
       return (tree_->radiusSearch (p_q, radius, k_indices, k_sqr_distances, max_nn));
     }
@@ -241,7 +249,8 @@ namespace pcl
 
       // Select square distance to each class
       for (std::vector<int>::const_iterator i = k_indices.begin ();
-           i != k_indices.end (); ++i)
+           i != k_indices.end ();
+           ++i)
         if ((*sqr_distances)[labels_idx_[*i]] > k_sqr_distances[i - k_indices.begin ()])
           (*sqr_distances)[labels_idx_[*i]] = k_sqr_distances[i - k_indices.begin ()];
       return (sqr_distances);
@@ -268,7 +277,8 @@ namespace pcl
       result->first.reserve (classes_.size ());
       result->second.reserve (classes_.size ());
       for (std::vector<float>::const_iterator it = sqr_distances->begin ();
-           it != sqr_distances->end (); ++it)
+           it != sqr_distances->end ();
+           ++it)
         if (*it != FLT_MAX) {
           result->first.push_back (classes_[it - sqr_distances->begin ()]);
           result->second.push_back (sqrt (*it));
@@ -289,7 +299,8 @@ namespace pcl
      * score for each training class from the neighborhood
      */
     ResultPtr
-    getGaussianBestScores (float gaussian_param, std::vector<int> &k_indices,
+    getGaussianBestScores (float gaussian_param,
+                           std::vector<int> &k_indices,
                            std::vector<float> &k_sqr_distances)
     {
       // Get smallest squared distances and transform them to a score for each class
@@ -302,7 +313,8 @@ namespace pcl
       result->first.reserve (classes_.size ());
       result->second.reserve (classes_.size ());
       for (std::vector<float>::const_iterator it = sqr_distances->begin ();
-           it != sqr_distances->end (); ++it)
+           it != sqr_distances->end ();
+           ++it)
         if (*it != FLT_MAX) {
           result->first.push_back (classes_[it - sqr_distances->begin ()]);
           // TODO leave it squared, and relate param to sigma...

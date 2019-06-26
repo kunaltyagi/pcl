@@ -87,7 +87,8 @@ pcl::PPFRegistration<PointSource, PointTarget>::computeTransformation (
     std::vector<unsigned int> aux (aux_size);
     accumulator_array[i] = aux;
   }
-  PCL_INFO ("Accumulator array size: %u x %u.\n", accumulator_array.size (),
+  PCL_INFO ("Accumulator array size: %u x %u.\n",
+            accumulator_array.size (),
             accumulator_array.back ().size ());
 
   // Consider every <scene_reference_point_sampling_rate>-th point as the reference
@@ -118,7 +119,8 @@ pcl::PPFRegistration<PointSource, PointTarget>::computeTransformation (
     std::vector<int> indices;
     std::vector<float> distances;
     scene_search_tree_->radiusSearch (target_->points[scene_reference_index],
-                                      search_method_->getModelDiameter () / 2, indices,
+                                      search_method_->getModelDiameter () / 2,
+                                      indices,
                                       distances);
     for (const size_t &scene_point_index : indices)
     //    for(size_t i = 0; i < target_->points.size (); ++i)
@@ -129,7 +131,10 @@ pcl::PPFRegistration<PointSource, PointTarget>::computeTransformation (
             target_->points[scene_reference_index].getVector4fMap (),
             target_->points[scene_reference_index].getNormalVector4fMap (),
             target_->points[scene_point_index].getVector4fMap (),
-            target_->points[scene_point_index].getNormalVector4fMap (), f1, f2, f3,
+            target_->points[scene_point_index].getNormalVector4fMap (),
+            f1,
+            f2,
+            f3,
             f4)) {
           std::vector<std::pair<size_t, size_t>> nearest_indices;
           search_method_->nearestNeighborSearch (f1, f2, f3, f4, nearest_indices);
@@ -161,7 +166,8 @@ pcl::PPFRegistration<PointSource, PointTarget>::computeTransformation (
         } else
           PCL_ERROR ("[pcl::PPFRegistration::computeTransformation] Computing pair "
                      "feature vector between points %u and %u went wrong.\n",
-                     scene_reference_index, scene_point_index);
+                     scene_reference_index,
+                     scene_point_index);
       }
     }
 
@@ -269,7 +275,8 @@ pcl::PPFRegistration<PointSource, PointTarget>::clusterPoses (
     Eigen::Vector4f rotation_average (0.0, 0.0, 0.0, 0.0);
     for (typename PoseWithVotesList::iterator v_it =
              clusters[cluster_votes[cluster_i].first].begin ();
-         v_it != clusters[cluster_votes[cluster_i].first].end (); ++v_it) {
+         v_it != clusters[cluster_votes[cluster_i].first].end ();
+         ++v_it) {
       translation_average += v_it->pose.translation ();
       /// averaging rotations by just averaging the quaternions in 4D space - reference
       /// "On Averaging Rotations" by CLAUS GRAMKOW
@@ -330,6 +337,6 @@ pcl::PPFRegistration<PointSource, PointTarget>::clusterVotesCompareFunction (
 }
 
 //#define PCL_INSTANTIATE_PPFRegistration(PointSource,PointTarget) template class
-//PCL_EXPORTS pcl::PPFRegistration<PointSource, PointTarget>;
+// PCL_EXPORTS pcl::PPFRegistration<PointSource, PointTarget>;
 
 #endif // PCL_REGISTRATION_IMPL_PPF_REGISTRATION_H_

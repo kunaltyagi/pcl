@@ -81,10 +81,12 @@ namespace pcl
         void(const boost::shared_ptr<openni_wrapper::IRImage> &);
     using sig_cb_openni_image_depth_image =
         void(const boost::shared_ptr<openni_wrapper::Image> &,
-             const boost::shared_ptr<openni_wrapper::DepthImage> &, float);
+             const boost::shared_ptr<openni_wrapper::DepthImage> &,
+             float);
     using sig_cb_openni_ir_depth_image =
         void(const boost::shared_ptr<openni_wrapper::IRImage> &,
-             const boost::shared_ptr<openni_wrapper::DepthImage> &, float);
+             const boost::shared_ptr<openni_wrapper::DepthImage> &,
+             float);
     using sig_cb_openni_point_cloud =
         void(const boost::shared_ptr<const pcl::PointCloud<pcl::PointXYZ>> &);
     using sig_cb_openni_point_cloud_rgb =

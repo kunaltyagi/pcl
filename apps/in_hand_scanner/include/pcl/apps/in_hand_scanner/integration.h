@@ -100,7 +100,8 @@ namespace pcl
        * \return true if success.
        */
       bool
-      merge (const CloudXYZRGBNormalConstPtr &cloud_data, MeshPtr &mesh_model,
+      merge (const CloudXYZRGBNormalConstPtr &cloud_data,
+             MeshPtr &mesh_model,
              const Eigen::Matrix4f &T) const;
 
       /** \brief Outlier rejection. In each merge step points that have not been
@@ -183,27 +184,40 @@ namespace pcl
 
       /** \brief Adds two triangles between points 0-1-3 and 1-2-3 to the mesh. */
       void
-      addToMesh (const PointIHS &pt_0, const PointIHS &pt_1, const PointIHS &pt_2,
-                 const PointIHS &pt_3, VertexIndex &vi_0, VertexIndex &vi_1,
-                 VertexIndex &vi_2, VertexIndex &vi_3, const MeshPtr &mesh) const;
+      addToMesh (const PointIHS &pt_0,
+                 const PointIHS &pt_1,
+                 const PointIHS &pt_2,
+                 const PointIHS &pt_3,
+                 VertexIndex &vi_0,
+                 VertexIndex &vi_1,
+                 VertexIndex &vi_2,
+                 VertexIndex &vi_3,
+                 const MeshPtr &mesh) const;
 
       /** \brief Adds a triangle between the points 0-1-2 to the mesh. */
       void
-      addToMesh (const PointIHS &pt_0, const PointIHS &pt_1, const PointIHS &pt_2,
-                 VertexIndex &vi_0, VertexIndex &vi_1, VertexIndex &vi_2,
+      addToMesh (const PointIHS &pt_0,
+                 const PointIHS &pt_1,
+                 const PointIHS &pt_2,
+                 VertexIndex &vi_0,
+                 VertexIndex &vi_1,
+                 VertexIndex &vi_2,
                  const MeshPtr &mesh) const;
 
       /** \brief Returns true if the distance between the three points is below a
        * threshold. */
       bool
-      distanceThreshold (const PointIHS &pt_0, const PointIHS &pt_1,
+      distanceThreshold (const PointIHS &pt_0,
+                         const PointIHS &pt_1,
                          const PointIHS &pt_2) const;
 
       /** \brief Returns true if the distance between the four points is below a
        * threshold. */
       bool
-      distanceThreshold (const PointIHS &pt_0, const PointIHS &pt_1,
-                         const PointIHS &pt_2, const PointIHS &pt_3) const;
+      distanceThreshold (const PointIHS &pt_0,
+                         const PointIHS &pt_1,
+                         const PointIHS &pt_2,
+                         const PointIHS &pt_3) const;
 
       ////////////////////////////////////////////////////////////////////////
       // Members

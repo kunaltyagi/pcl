@@ -196,7 +196,8 @@ namespace pcl
 
       // Avoid infinite compile-time recursion
       BOOST_MPL_ASSERT_MSG ((!std::is_same<PointT, typename POD<PointT>::type>::value),
-                            POINT_TYPE_NOT_PROPERLY_REGISTERED, (PointT &));
+                            POINT_TYPE_NOT_PROPERLY_REGISTERED,
+                            (PointT &));
     };
 
     // offset
@@ -207,7 +208,8 @@ namespace pcl
 
       // Avoid infinite compile-time recursion
       BOOST_MPL_ASSERT_MSG ((!std::is_same<PointT, typename POD<PointT>::type>::value),
-                            POINT_TYPE_NOT_PROPERLY_REGISTERED, (PointT &));
+                            POINT_TYPE_NOT_PROPERLY_REGISTERED,
+                            (PointT &));
     };
 
     // datatype
@@ -220,7 +222,8 @@ namespace pcl
 
       // Avoid infinite compile-time recursion
       BOOST_MPL_ASSERT_MSG ((!std::is_same<PointT, typename POD<PointT>::type>::value),
-                            POINT_TYPE_NOT_PROPERLY_REGISTERED, (PointT &));
+                            POINT_TYPE_NOT_PROPERLY_REGISTERED,
+                            (PointT &));
     };
 
     // fields
@@ -231,7 +234,8 @@ namespace pcl
 
       // Avoid infinite compile-time recursion
       BOOST_MPL_ASSERT_MSG ((!std::is_same<PointT, typename POD<PointT>::type>::value),
-                            POINT_TYPE_NOT_PROPERLY_REGISTERED, (PointT &));
+                            POINT_TYPE_NOT_PROPERLY_REGISTERED,
+                            (PointT &));
     };
   } // namespace traits
 
@@ -273,7 +277,9 @@ namespace pcl
      * \param[out] exists set to true if the field exists, false otherwise
      * \param[out] value the copied field value
      */
-    CopyIfFieldExists (const PointInT &pt, const std::string &field, bool &exists,
+    CopyIfFieldExists (const PointInT &pt,
+                       const std::string &field,
+                       bool &exists,
                        OutT &value)
         : pt_ (reinterpret_cast<const Pod &> (pt)), name_ (field), exists_ (exists),
           value_ (value)

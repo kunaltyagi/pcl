@@ -196,17 +196,19 @@ class SimpleKinectTool
       std::cerr << "[RANSAC] Using GPU..." << std::endl;
       std::function<void(
           const boost::shared_ptr<openni_wrapper::Image> &image,
-          const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image, float)>
-          f = boost::bind (&SimpleKinectTool::cloud_cb<pcl_cuda::Device>, this, _1, _2,
-                           _3);
+          const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image,
+          float)>
+          f = boost::bind (
+              &SimpleKinectTool::cloud_cb<pcl_cuda::Device>, this, _1, _2, _3);
       c = interface->registerCallback (f);
     } else {
       std::cerr << "[RANSAC] Using CPU..." << std::endl;
       std::function<void(
           const boost::shared_ptr<openni_wrapper::Image> &image,
-          const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image, float)>
-          f = boost::bind (&SimpleKinectTool::cloud_cb<pcl_cuda::Host>, this, _1, _2,
-                           _3);
+          const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image,
+          float)>
+          f = boost::bind (
+              &SimpleKinectTool::cloud_cb<pcl_cuda::Host>, this, _1, _2, _3);
       c = interface->registerCallback (f);
     }
 

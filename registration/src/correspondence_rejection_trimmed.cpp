@@ -53,7 +53,8 @@ pcl::registration::CorrespondenceRejectorTrimmed::getRemainingCorrespondences (
       std::max (number_valid_correspondences, nr_min_correspondences_);
 
   if (number_valid_correspondences < remaining_correspondences.size ()) {
-    std::sort (remaining_correspondences.begin (), remaining_correspondences.end (),
+    std::sort (remaining_correspondences.begin (),
+               remaining_correspondences.end (),
                pcl::registration::sortCorrespondencesByDistance ());
     remaining_correspondences.resize (number_valid_correspondences);
   }

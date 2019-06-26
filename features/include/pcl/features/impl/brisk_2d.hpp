@@ -41,7 +41,9 @@
 #define PCL_FEATURES_IMPL_BRISK_2D_HPP_
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointOutT, typename KeypointT,
+template <typename PointInT,
+          typename PointOutT,
+          typename KeypointT,
           typename IntensityT>
 pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::BRISK2DEstimation ()
     : rotation_invariance_enabled_ (true), scale_invariance_enabled_ (true),
@@ -78,10 +80,12 @@ pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::BRISK2DEstim
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointOutT, typename KeypointT,
+template <typename PointInT,
+          typename PointOutT,
+          typename KeypointT,
           typename IntensityT>
-pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT,
-                       IntensityT>::~BRISK2DEstimation ()
+pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::
+    ~BRISK2DEstimation ()
 {
   if (pattern_points_)
     delete[] pattern_points_;
@@ -96,12 +100,17 @@ pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT,
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointOutT, typename KeypointT,
+template <typename PointInT,
+          typename PointOutT,
+          typename KeypointT,
           typename IntensityT>
 void
 pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::generateKernel (
-    std::vector<float> &radius_list, std::vector<int> &number_list, float d_max,
-    float d_min, std::vector<int> index_change)
+    std::vector<float> &radius_list,
+    std::vector<int> &number_list,
+    float d_max,
+    float d_min,
+    std::vector<int> index_change)
 {
   d_max_ = d_max;
   d_min_ = d_min;
@@ -218,14 +227,22 @@ pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::generateKern
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointOutT, typename KeypointT,
+template <typename PointInT,
+          typename PointOutT,
+          typename KeypointT,
           typename IntensityT>
 inline int
 pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::smoothedIntensity (
-    const std::vector<unsigned char> &image, int image_width, int,
+    const std::vector<unsigned char> &image,
+    int image_width,
+    int,
     // const Stefan& integral,
-    const std::vector<int> &integral_image, const float key_x, const float key_y,
-    const unsigned int scale, const unsigned int rot, const unsigned int point) const
+    const std::vector<int> &integral_image,
+    const float key_x,
+    const float key_y,
+    const unsigned int scale,
+    const unsigned int rot,
+    const unsigned int point) const
 {
   // get the float position
   const BriskPatternPoint &brisk_point =
@@ -442,18 +459,25 @@ pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::smoothedInte
 }
 
 //////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointOutT, typename KeypointT,
+template <typename PointInT,
+          typename PointOutT,
+          typename KeypointT,
           typename IntensityT>
 bool
 pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::RoiPredicate (
-    const float min_x, const float min_y, const float max_x, const float max_y,
+    const float min_x,
+    const float min_y,
+    const float max_x,
+    const float max_y,
     const KeypointT &pt)
 {
   return ((pt.x < min_x) || (pt.x >= max_x) || (pt.y < min_y) || (pt.y >= max_y));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointOutT, typename KeypointT,
+template <typename PointInT,
+          typename PointOutT,
+          typename KeypointT,
           typename IntensityT>
 void
 pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::compute (
@@ -518,7 +542,10 @@ pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::compute (
     const int border_x = width - border;
     const int border_y = height - border;
 
-    if (RoiPredicate (float(border), float(border), float(border_x), float(border_y),
+    if (RoiPredicate (float(border),
+                      float(border),
+                      float(border_x),
+                      float(border_y),
                       keypoints_->points[k])) {
       // std::cerr << "remove keypoint" << std::endl;
       keypoints_->points.erase (beginning + k);
@@ -586,8 +613,8 @@ pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::compute (
       else {
         // get the gray values in the unrotated pattern
         for (unsigned int i = 0; i < points_; i++)
-          *(pvalues++) = smoothedIntensity (image_data, width, height, integral, x, y,
-                                            scale, 0, i);
+          *(pvalues++) = smoothedIntensity (
+              image_data, width, height, integral, x, y, scale, 0, i);
 
         direction0 = 0;
         direction1 = 0;
@@ -635,8 +662,8 @@ pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::compute (
     pvalues = values;
     // get the gray values in the rotated pattern
     for (unsigned int i = 0; i < points_; i++)
-      *(pvalues++) = smoothedIntensity (image_data, width, height, integral, x, y,
-                                        scale, theta, i);
+      *(pvalues++) = smoothedIntensity (
+          image_data, width, height, integral, x, y, scale, theta, i);
 
 #ifdef __GNUC__
     using UINT32_ALIAS = uint32_t;

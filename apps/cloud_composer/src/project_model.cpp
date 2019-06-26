@@ -28,23 +28,37 @@ pcl::cloud_composer::ProjectModel::ProjectModel (QObject *parent)
   work_queue_ = new WorkQueue ();
   work_queue_->moveToThread (work_thread_);
 
-  connect (this, SIGNAL (enqueueNewAction (AbstractTool *, ConstItemList)), work_queue_,
+  connect (this,
+           SIGNAL (enqueueNewAction (AbstractTool *, ConstItemList)),
+           work_queue_,
            SLOT (enqueueNewAction (AbstractTool *, ConstItemList)));
-  connect (work_queue_, SIGNAL (commandComplete (CloudCommand *)), this,
+  connect (work_queue_,
+           SIGNAL (commandComplete (CloudCommand *)),
+           this,
            SLOT (commandCompleted (CloudCommand *)));
   work_thread_->start ();
 
-  connect (this, SIGNAL (rowsInserted (const QModelIndex, int, int)), this,
+  connect (this,
+           SIGNAL (rowsInserted (const QModelIndex, int, int)),
+           this,
            SIGNAL (modelChanged ()));
-  connect (this, SIGNAL (rowsRemoved (const QModelIndex, int, int)), this,
+  connect (this,
+           SIGNAL (rowsRemoved (const QModelIndex, int, int)),
+           this,
            SIGNAL (modelChanged ()));
 
-  connect (this, SIGNAL (rowsAboutToBeRemoved (const QModelIndex, int, int)), this,
+  connect (this,
+           SIGNAL (rowsAboutToBeRemoved (const QModelIndex, int, int)),
+           this,
            SLOT (clearSelection ()));
-  connect (selection_model_, SIGNAL (selectionChanged (QItemSelection, QItemSelection)),
-           this, SLOT (emitAllStateSignals ()));
-  connect (selection_model_, SIGNAL (selectionChanged (QItemSelection, QItemSelection)),
-           this, SLOT (itemSelectionChanged (QItemSelection, QItemSelection)));
+  connect (selection_model_,
+           SIGNAL (selectionChanged (QItemSelection, QItemSelection)),
+           this,
+           SLOT (emitAllStateSignals ()));
+  connect (selection_model_,
+           SIGNAL (selectionChanged (QItemSelection, QItemSelection)),
+           this,
+           SLOT (itemSelectionChanged (QItemSelection, QItemSelection)));
 
   selected_style_map_.insert (interactor_styles::PCL_VISUALIZER, true);
   selected_style_map_.insert (interactor_styles::CLICK_TRACKBALL, false);
@@ -156,7 +170,8 @@ void
 pcl::cloud_composer::ProjectModel::insertNewCloudFromFile ()
 {
   qDebug () << "Inserting cloud from file...";
-  QString filename = QFileDialog::getOpenFileName (nullptr, tr ("Select cloud to open"),
+  QString filename = QFileDialog::getOpenFileName (nullptr,
+                                                   tr ("Select cloud to open"),
                                                    last_directory_.absolutePath (),
                                                    tr ("PointCloud(*.pcd)"));
   if (filename.isNull ()) {
@@ -206,9 +221,11 @@ void
 pcl::cloud_composer::ProjectModel::insertNewCloudFromRGBandDepth ()
 {
   qDebug () << "Inserting cloud from RGB and Depth files...";
-  QString rgb_filename = QFileDialog::getOpenFileName (
-      nullptr, tr ("Select rgb image file to open"), last_directory_.absolutePath (),
-      tr ("Images(*.png *.bmp *.tif *.ppm)"));
+  QString rgb_filename =
+      QFileDialog::getOpenFileName (nullptr,
+                                    tr ("Select rgb image file to open"),
+                                    last_directory_.absolutePath (),
+                                    tr ("Images(*.png *.bmp *.tif *.ppm)"));
   QString depth_filename;
   if (rgb_filename.isNull ()) {
     qWarning () << "No file selected, no cloud loaded";
@@ -339,12 +356,14 @@ pcl::cloud_composer::ProjectModel::saveSelectedCloudToFile ()
   QModelIndexList selected_indexes = selection_model_->selectedIndexes ();
   if (selected_indexes.empty ()) {
     QMessageBox::warning (
-        qobject_cast<QWidget *> (this->parent ()), "No Cloud Selected",
+        qobject_cast<QWidget *> (this->parent ()),
+        "No Cloud Selected",
         "Cannot save, no cloud is selected in the browser or cloud view");
     return;
   } else if (selected_indexes.size () > 1) {
     QMessageBox::warning (
-        qobject_cast<QWidget *> (this->parent ()), "Too many clouds Selected",
+        qobject_cast<QWidget *> (this->parent ()),
+        "Too many clouds Selected",
         "Cannot save, currently only support saving one cloud at a time");
     return;
   }
@@ -352,12 +371,14 @@ pcl::cloud_composer::ProjectModel::saveSelectedCloudToFile ()
   QStandardItem *item = this->itemFromIndex (selected_indexes.value (0));
   CloudItem *cloud_to_save = dynamic_cast<CloudItem *> (item);
   if (!cloud_to_save) {
-    QMessageBox::warning (qobject_cast<QWidget *> (this->parent ()), "Not a Cloud!",
+    QMessageBox::warning (qobject_cast<QWidget *> (this->parent ()),
+                          "Not a Cloud!",
                           "Selected item is not a cloud, not saving!");
     return;
   }
 
-  QString filename = QFileDialog::getSaveFileName (nullptr, tr ("Save Cloud"),
+  QString filename = QFileDialog::getSaveFileName (nullptr,
+                                                   tr ("Save Cloud"),
                                                    last_directory_.absolutePath (),
                                                    tr ("PointCloud(*.pcd)"));
   if (filename.isNull ()) {
@@ -387,7 +408,8 @@ pcl::cloud_composer::ProjectModel::enqueueToolAction (AbstractTool *tool)
   QModelIndexList selected_indexes = selection_model_->selectedIndexes ();
   if (selected_indexes.empty ()) {
     QMessageBox::warning (
-        qobject_cast<QWidget *> (this->parent ()), "No Items Selected",
+        qobject_cast<QWidget *> (this->parent ()),
+        "No Items Selected",
         "Cannot use tool, no item is selected in the browser or cloud view");
     return;
   }

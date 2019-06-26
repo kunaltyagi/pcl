@@ -47,7 +47,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 openni_wrapper::DeviceONI::DeviceONI (xn::Context &context,
-                                      const std::string &file_name, bool repeat,
+                                      const std::string &file_name,
+                                      bool repeat,
                                       bool streaming)
     : OpenNIDevice (context), streaming_ (streaming), depth_stream_running_ (false),
       image_stream_running_ (false), ir_stream_running_ (false)
@@ -73,11 +74,13 @@ openni_wrapper::DeviceONI::DeviceONI (xn::Context &context,
   status = context_.FindExistingNode (XN_NODE_TYPE_DEPTH, depth_generator_);
   if (status != XN_STATUS_OK)
     THROW_OPENNI_EXCEPTION ("could not find depth stream in file %s. Reason: %s",
-                            file_name.c_str (), xnGetStatusString (status));
+                            file_name.c_str (),
+                            xnGetStatusString (status));
   else {
     available_depth_modes_.push_back (getDepthOutputMode ());
     depth_generator_.RegisterToNewDataAvailable (
-        static_cast<xn::StateChangedHandler> (NewONIDepthDataAvailable), this,
+        static_cast<xn::StateChangedHandler> (NewONIDepthDataAvailable),
+        this,
         depth_callback_handle_);
   }
 
@@ -85,14 +88,16 @@ openni_wrapper::DeviceONI::DeviceONI (xn::Context &context,
   if (status == XN_STATUS_OK) {
     available_image_modes_.push_back (getImageOutputMode ());
     image_generator_.RegisterToNewDataAvailable (
-        static_cast<xn::StateChangedHandler> (NewONIImageDataAvailable), this,
+        static_cast<xn::StateChangedHandler> (NewONIImageDataAvailable),
+        this,
         image_callback_handle_);
   }
 
   status = context_.FindExistingNode (XN_NODE_TYPE_IR, ir_generator_);
   if (status == XN_STATUS_OK)
     ir_generator_.RegisterToNewDataAvailable (
-        static_cast<xn::StateChangedHandler> (NewONIIRDataAvailable), this,
+        static_cast<xn::StateChangedHandler> (NewONIIRDataAvailable),
+        this,
         ir_callback_handle_);
 
   device_node_info_ = player_.GetInfo ();
@@ -190,8 +195,8 @@ openni_wrapper::DeviceONI::trigger (int relative_offset)
         "Virtual device is in streaming mode. Trigger not available.");
 
   if (relative_offset < 0) {
-    XnStatus res = player_.SeekToFrame (depth_generator_.GetName (), relative_offset,
-                                        XN_PLAYER_SEEK_CUR);
+    XnStatus res = player_.SeekToFrame (
+        depth_generator_.GetName (), relative_offset, XN_PLAYER_SEEK_CUR);
     if (res != XN_STATUS_OK)
       return (false);
   } else {
@@ -263,8 +268,8 @@ openni_wrapper::DeviceONI::isImageResizeSupported (unsigned input_width,
                                                    unsigned output_height) const
     throw ()
 {
-  return (openni_wrapper::ImageRGB24::resizingSupported (input_width, input_height,
-                                                         output_width, output_height));
+  return (openni_wrapper::ImageRGB24::resizingSupported (
+      input_width, input_height, output_width, output_height));
 }
 
 #endif // HAVE_OPENNI

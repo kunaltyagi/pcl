@@ -57,7 +57,8 @@ pcl::cloud_composer::ClickTrackballStyleInteractor::OnLeftButtonUp ()
     pcl::visualization::CloudActorMap::const_iterator end = actors_->end ();
     QString manipulated_id;
     for (pcl::visualization::CloudActorMap::const_iterator itr = actors_->begin ();
-         itr != end; ++itr) {
+         itr != end;
+         ++itr) {
       // qDebug () << "Id = "<<QString::fromStdString (itr->first);
       if ((itr->second).actor == selected_actor) {
         manipulated_id = (QString::fromStdString (itr->first));
@@ -88,7 +89,8 @@ pcl::cloud_composer::ClickTrackballStyleInteractor::OnRightButtonUp ()
     pcl::visualization::CloudActorMap::const_iterator end = actors_->end ();
     QString manipulated_id;
     for (pcl::visualization::CloudActorMap::const_iterator itr = actors_->begin ();
-         itr != end; ++itr) {
+         itr != end;
+         ++itr) {
       // qDebug () << "Id = "<<QString::fromStdString (itr->first);
       if ((itr->second).actor == selected_actor) {
         manipulated_id = (QString::fromStdString (itr->first));

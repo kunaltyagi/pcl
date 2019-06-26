@@ -30,8 +30,16 @@ namespace pcl
     }
 
     inline void
-    randomPointTriangle (double a1, double a2, double a3, double b1, double b2,
-                         double b3, double c1, double c2, double c3, Eigen::Vector4f &p)
+    randomPointTriangle (double a1,
+                         double a2,
+                         double a3,
+                         double b1,
+                         double b2,
+                         double b3,
+                         double c1,
+                         double c2,
+                         double c3,
+                         Eigen::Vector4f &p)
     {
       float r1 = static_cast<float> (uniform_deviate (rand ()));
       float r2 = static_cast<float> (uniform_deviate (rand ()));
@@ -54,8 +62,10 @@ namespace pcl
     }
 
     inline void
-    randPSurface (vtkPolyData *polydata, std::vector<double> *cumulativeAreas,
-                  double totalArea, Eigen::Vector4f &p)
+    randPSurface (vtkPolyData *polydata,
+                  std::vector<double> *cumulativeAreas,
+                  double totalArea,
+                  Eigen::Vector4f &p)
     {
       float r = static_cast<float> (uniform_deviate (rand ()) * totalArea);
 
@@ -79,7 +89,8 @@ namespace pcl
 
     template <typename PointT>
     inline void
-    uniform_sampling (vtkSmartPointer<vtkPolyData> polydata, size_t n_samples,
+    uniform_sampling (vtkSmartPointer<vtkPolyData> polydata,
+                      size_t n_samples,
                       typename pcl::PointCloud<PointT> &cloud_out)
     {
       polydata->BuildCells ();
@@ -112,8 +123,10 @@ namespace pcl
 
     template <typename PointT>
     inline void
-    uniform_sampling (std::string &file, size_t n_samples,
-                      typename pcl::PointCloud<PointT> &cloud_out, float scale = 1.f)
+    uniform_sampling (std::string &file,
+                      size_t n_samples,
+                      typename pcl::PointCloud<PointT> &cloud_out,
+                      float scale = 1.f)
     {
 
       vtkSmartPointer<vtkPLYReader> reader = vtkSmartPointer<vtkPLYReader>::New ();

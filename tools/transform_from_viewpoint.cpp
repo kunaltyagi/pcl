@@ -97,8 +97,8 @@ transform (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &outp
   if (has_normals) {
     PointCloud<PointNormal> xyznormals;
     fromPCLPointCloud2 (*input, xyznormals);
-    pcl::transformPointCloud<PointNormal> (xyznormals, xyznormals,
-                                           translation.head<3> (), orientation);
+    pcl::transformPointCloud<PointNormal> (
+        xyznormals, xyznormals, translation.head<3> (), orientation);
     // Copy back the xyz and normals
     pcl::PCLPointCloud2 output_xyznormals;
     toPCLPointCloud2 (xyznormals, output_xyznormals);

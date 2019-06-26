@@ -197,8 +197,10 @@ namespace pcl
      * voxel state.
      */
     int
-    rayTraversal (const Eigen::Vector3i &target_voxel, const Eigen::Vector4f &origin,
-                  const Eigen::Vector4f &direction, const float t_min);
+    rayTraversal (const Eigen::Vector3i &target_voxel,
+                  const Eigen::Vector4f &origin,
+                  const Eigen::Vector4f &direction,
+                  const float t_min);
 
     /** \brief Returns the state of the target voxel (0 = visible, 1 = occupied) and
      * the voxels penetrated by the ray unsing a ray traversal algorithm.
@@ -211,8 +213,10 @@ namespace pcl
     int
     rayTraversal (std::vector<Eigen::Vector3i,
                               Eigen::aligned_allocator<Eigen::Vector3i>> &out_ray,
-                  const Eigen::Vector3i &target_voxel, const Eigen::Vector4f &origin,
-                  const Eigen::Vector4f &direction, const float t_min);
+                  const Eigen::Vector3i &target_voxel,
+                  const Eigen::Vector4f &origin,
+                  const Eigen::Vector4f &direction,
+                  const float t_min);
 
     /** \brief Returns a rounded value.
      * \param[in] d

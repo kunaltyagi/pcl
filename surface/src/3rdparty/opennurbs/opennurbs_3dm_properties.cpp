@@ -256,10 +256,7 @@ ON_3dmNotes::Default ()
 }
 
 ON_BOOL32
-ON_3dmNotes::IsValid () const
-{
-  return m_notes.IsEmpty () ? false : true;
-}
+ON_3dmNotes::IsValid () const { return m_notes.IsEmpty () ? false : true; }
 
 ON_BOOL32
 ON_3dmNotes::Read (ON_BinaryArchive &file)

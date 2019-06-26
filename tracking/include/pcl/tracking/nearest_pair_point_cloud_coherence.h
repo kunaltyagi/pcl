@@ -101,7 +101,8 @@ namespace pcl
        */
       void
       computeCoherence (const PointCloudInConstPtr &cloud,
-                        const IndicesConstPtr &indices, float &w_j) override;
+                        const IndicesConstPtr &indices,
+                        float &w_j) override;
     };
   } // namespace tracking
 } // namespace pcl

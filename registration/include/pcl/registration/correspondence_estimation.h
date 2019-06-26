@@ -383,26 +383,26 @@ namespace pcl
       using ConstPtr = boost::shared_ptr<
           const CorrespondenceEstimation<PointSource, PointTarget, Scalar>>;
 
-      using CorrespondenceEstimationBase<PointSource, PointTarget,
-                                         Scalar>::point_representation_;
-      using CorrespondenceEstimationBase<PointSource, PointTarget,
-                                         Scalar>::input_transformed_;
+      using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::
+          point_representation_;
+      using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::
+          input_transformed_;
       using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::tree_;
-      using CorrespondenceEstimationBase<PointSource, PointTarget,
-                                         Scalar>::tree_reciprocal_;
+      using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::
+          tree_reciprocal_;
       using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::target_;
       using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::corr_name_;
-      using CorrespondenceEstimationBase<PointSource, PointTarget,
-                                         Scalar>::target_indices_;
-      using CorrespondenceEstimationBase<PointSource, PointTarget,
-                                         Scalar>::getClassName;
+      using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::
+          target_indices_;
+      using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::
+          getClassName;
       using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::initCompute;
-      using CorrespondenceEstimationBase<PointSource, PointTarget,
-                                         Scalar>::initComputeReciprocal;
+      using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::
+          initComputeReciprocal;
       using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::input_;
       using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::indices_;
-      using CorrespondenceEstimationBase<PointSource, PointTarget,
-                                         Scalar>::input_fields_;
+      using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::
+          input_fields_;
       using PCLBase<PointSource>::deinitCompute;
 
       using KdTree = pcl::search::KdTree<PointTarget>;

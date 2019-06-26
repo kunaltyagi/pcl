@@ -252,11 +252,11 @@ class OpenNIViewer
         }
 
         if (image->getEncoding () == openni_wrapper::Image::RGB)
-          image_viewer_->addRGBImage (image->getMetaData ().Data (), image->getWidth (),
-                                      image->getHeight ());
+          image_viewer_->addRGBImage (
+              image->getMetaData ().Data (), image->getWidth (), image->getHeight ());
         else
-          image_viewer_->addRGBImage (rgb_data_, image->getWidth (),
-                                      image->getHeight ());
+          image_viewer_->addRGBImage (
+              rgb_data_, image->getWidth (), image->getHeight ());
         image_viewer_->spinOnce ();
       }
 
@@ -277,8 +277,12 @@ class OpenNIViewer
           markers.push_back (uv.v);
         }
         image_viewer_->removeLayer ("tracked");
-        image_viewer_->markPoints (markers, pcl::visualization::blue_color,
-                                   pcl::visualization::red_color, 5, "tracked", 1.0);
+        image_viewer_->markPoints (markers,
+                                   pcl::visualization::blue_color,
+                                   pcl::visualization::red_color,
+                                   5,
+                                   "tracked",
+                                   1.0);
       }
     }
 
@@ -335,7 +339,8 @@ main (int argc, char **argv)
             grabber.getAvailableDepthModes ();
         for (std::vector<std::pair<int, XnMapOutputMode>>::const_iterator it =
                  modes.begin ();
-             it != modes.end (); ++it) {
+             it != modes.end ();
+             ++it) {
           cout << it->first << " = " << it->second.nXRes << " x " << it->second.nYRes
                << " @ " << it->second.nFPS << endl;
         }
@@ -347,7 +352,8 @@ main (int argc, char **argv)
           modes = grabber.getAvailableImageModes ();
           for (std::vector<std::pair<int, XnMapOutputMode>>::const_iterator it =
                    modes.begin ();
-               it != modes.end (); ++it) {
+               it != modes.end ();
+               ++it) {
             cout << it->first << " = " << it->second.nXRes << " x " << it->second.nYRes
                  << " @ " << it->second.nFPS << endl;
           }

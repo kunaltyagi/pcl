@@ -95,7 +95,8 @@ openni_wrapper::OpenNIDriver::updateDeviceList ()
     return 0; // no exception
 
   for (xn::NodeInfoList::Iterator nodeIt = node_info_list.Begin ();
-       nodeIt != node_info_list.End (); ++nodeIt) {
+       nodeIt != node_info_list.End ();
+       ++nodeIt) {
     connection_string_map_[(*nodeIt).GetCreationInfo ()] =
         static_cast<unsigned int> (device_context_.size ());
     device_context_.emplace_back (*nodeIt);
@@ -103,17 +104,19 @@ openni_wrapper::OpenNIDriver::updateDeviceList ()
 
   // enumerate depth nodes
   static xn::NodeInfoList depth_nodes;
-  status = context_.EnumerateProductionTrees (XN_NODE_TYPE_DEPTH, nullptr, depth_nodes,
-                                              nullptr);
+  status = context_.EnumerateProductionTrees (
+      XN_NODE_TYPE_DEPTH, nullptr, depth_nodes, nullptr);
   if (status != XN_STATUS_OK)
     THROW_OPENNI_EXCEPTION ("enumerating depth generators failed. Reason: %s",
                             xnGetStatusString (status));
 
   for (xn::NodeInfoList::Iterator nodeIt = depth_nodes.Begin ();
-       nodeIt != depth_nodes.End (); ++nodeIt) {
+       nodeIt != depth_nodes.End ();
+       ++nodeIt) {
     // check if to which device this node is assigned to
     for (xn::NodeInfoList::Iterator neededIt = (*nodeIt).GetNeededNodes ().Begin ();
-         neededIt != (*nodeIt).GetNeededNodes ().End (); ++neededIt) {
+         neededIt != (*nodeIt).GetNeededNodes ().End ();
+         ++neededIt) {
       if (connection_string_map_.count ((*neededIt).GetCreationInfo ())) {
         unsigned device_index = connection_string_map_[(*neededIt).GetCreationInfo ()];
         device_context_[device_index].depth_node.reset (new xn::NodeInfo (*nodeIt));
@@ -123,8 +126,8 @@ openni_wrapper::OpenNIDriver::updateDeviceList ()
 
   // enumerate image nodes
   static xn::NodeInfoList image_nodes;
-  status = context_.EnumerateProductionTrees (XN_NODE_TYPE_IMAGE, nullptr, image_nodes,
-                                              nullptr);
+  status = context_.EnumerateProductionTrees (
+      XN_NODE_TYPE_IMAGE, nullptr, image_nodes, nullptr);
 
   // Suat: This is an ugly ASUS Xtion workaround.
   if (status == XN_STATUS_OK) {
@@ -132,10 +135,12 @@ openni_wrapper::OpenNIDriver::updateDeviceList ()
     // xnGetStatusString (status));
 
     for (xn::NodeInfoList::Iterator nodeIt = image_nodes.Begin ();
-         nodeIt != image_nodes.End (); ++nodeIt) {
+         nodeIt != image_nodes.End ();
+         ++nodeIt) {
       // check to which device this node is assigned to
       for (xn::NodeInfoList::Iterator neededIt = (*nodeIt).GetNeededNodes ().Begin ();
-           neededIt != (*nodeIt).GetNeededNodes ().End (); ++neededIt) {
+           neededIt != (*nodeIt).GetNeededNodes ().End ();
+           ++neededIt) {
         if (connection_string_map_.count ((*neededIt).GetCreationInfo ())) {
           unsigned device_index =
               connection_string_map_[(*neededIt).GetCreationInfo ()];
@@ -157,7 +162,8 @@ openni_wrapper::OpenNIDriver::updateDeviceList ()
        ++nodeIt) {
     // check if to which device this node is assigned to
     for (xn::NodeInfoList::Iterator neededIt = (*nodeIt).GetNeededNodes ().Begin ();
-         neededIt != (*nodeIt).GetNeededNodes ().End (); ++neededIt) {
+         neededIt != (*nodeIt).GetNeededNodes ().End ();
+         ++neededIt) {
       if (connection_string_map_.count ((*neededIt).GetCreationInfo ())) {
         unsigned device_index = connection_string_map_[(*neededIt).GetCreationInfo ()];
         device_context_[device_index].ir_node.reset (new xn::NodeInfo (*nodeIt));
@@ -174,7 +180,11 @@ openni_wrapper::OpenNIDriver::updateDeviceList ()
     unsigned char bus;
     unsigned char address;
     sscanf (device_context_[deviceIdx].device_node.GetCreationInfo (),
-            "%hx/%hx@%hhu/%hhu", &vendor_id, &product_id, &bus, &address);
+            "%hx/%hx@%hhu/%hhu",
+            &vendor_id,
+            &product_id,
+            &bus,
+            &address);
     bus_map_[bus][address] = deviceIdx;
   }
 
@@ -243,7 +253,8 @@ openni_wrapper::OpenNIDriver::~OpenNIDriver () throw ()
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 boost::shared_ptr<openni_wrapper::OpenNIDevice>
-openni_wrapper::OpenNIDriver::createVirtualDevice (const std::string &path, bool repeat,
+openni_wrapper::OpenNIDriver::createVirtualDevice (const std::string &path,
+                                                   bool repeat,
                                                    bool stream) const
 {
   return (
@@ -259,35 +270,39 @@ openni_wrapper::OpenNIDriver::getDeviceByIndex (unsigned index) const
   if (index >= device_context_.size ())
     THROW_OPENNI_EXCEPTION (
         "Device index out of range. Only %d devices connected but device %d requested.",
-        device_context_.size (), index);
+        device_context_.size (),
+        index);
   boost::shared_ptr<openni_wrapper::OpenNIDevice> device =
       device_context_[index].device.lock ();
   if (!device) {
     unsigned short vendor_id;
     unsigned short product_id;
-    getDeviceType (device_context_[index].device_node.GetCreationInfo (), vendor_id,
-                   product_id);
+    getDeviceType (
+        device_context_[index].device_node.GetCreationInfo (), vendor_id, product_id);
 
     if (vendor_id == 0x45e) {
-      device.reset (new DeviceKinect (context_, device_context_[index].device_node,
+      device.reset (new DeviceKinect (context_,
+                                      device_context_[index].device_node,
                                       *device_context_[index].image_node,
                                       *device_context_[index].depth_node,
                                       *device_context_[index].ir_node));
       device_context_[index].device = device;
     } else if (vendor_id == 0x1d27) {
       if (device_context_[index].image_node.get ())
-        device.reset (new DevicePrimesense (
-            context_, device_context_[index].device_node,
-            *device_context_[index].image_node, *device_context_[index].depth_node,
-            *device_context_[index].ir_node));
+        device.reset (new DevicePrimesense (context_,
+                                            device_context_[index].device_node,
+                                            *device_context_[index].image_node,
+                                            *device_context_[index].depth_node,
+                                            *device_context_[index].ir_node));
       else
-        device.reset (new DeviceXtionPro (context_, device_context_[index].device_node,
+        device.reset (new DeviceXtionPro (context_,
+                                          device_context_[index].device_node,
                                           *device_context_[index].depth_node,
                                           *device_context_[index].ir_node));
       device_context_[index].device = device;
     } else {
-      THROW_OPENNI_EXCEPTION ("Vendor %s (%s) unknown!", getVendorName (index),
-                              vendor_id);
+      THROW_OPENNI_EXCEPTION (
+          "Vendor %s (%s) unknown!", getVendorName (index), vendor_id);
     }
   }
   return (device);
@@ -385,12 +400,12 @@ openni_wrapper::OpenNIDriver::getDeviceInfos () throw ()
         current_node.SetInstanceName ("");
       } else {
         unsigned char buffer[1024];
-        libusb_get_string_descriptor_ascii (dev_handle, descriptor.iManufacturer,
-                                            buffer, 1024);
+        libusb_get_string_descriptor_ascii (
+            dev_handle, descriptor.iManufacturer, buffer, 1024);
         strcpy (description.strVendor, reinterpret_cast<char *> (buffer));
 
-        libusb_get_string_descriptor_ascii (dev_handle, descriptor.iProduct, buffer,
-                                            1024);
+        libusb_get_string_descriptor_ascii (
+            dev_handle, descriptor.iProduct, buffer, 1024);
         strcpy (description.strName, reinterpret_cast<char *> (buffer));
 
         int len = libusb_get_string_descriptor_ascii (
@@ -457,7 +472,11 @@ openni_wrapper::OpenNIDriver::getDeviceType (const std::string &connectionString
 #else
   unsigned char bus;
   unsigned char address;
-  sscanf (connectionString.c_str (), "%hx/%hx@%hhu/%hhu", &vendorId, &productId, &bus,
+  sscanf (connectionString.c_str (),
+          "%hx/%hx@%hhu/%hhu",
+          &vendorId,
+          &productId,
+          &bus,
           &address);
 #endif
 }
@@ -492,12 +511,16 @@ openni_wrapper::OpenNIDriver::getVendorID (unsigned index) const throw ()
 #ifndef _WIN32
   unsigned char bus;
   unsigned char address;
-  sscanf (device_context_[index].device_node.GetCreationInfo (), "%hx/%hx@%hhu/%hhu",
-          &vendor_id, &product_id, &bus, &address);
+  sscanf (device_context_[index].device_node.GetCreationInfo (),
+          "%hx/%hx@%hhu/%hhu",
+          &vendor_id,
+          &product_id,
+          &bus,
+          &address);
 
 #else
-  getDeviceType (device_context_[index].device_node.GetCreationInfo (), vendor_id,
-                 product_id);
+  getDeviceType (
+      device_context_[index].device_node.GetCreationInfo (), vendor_id, product_id);
 #endif
   return (vendor_id);
 }
@@ -511,12 +534,16 @@ openni_wrapper::OpenNIDriver::getProductID (unsigned index) const throw ()
 #ifndef _WIN32
   unsigned char bus;
   unsigned char address;
-  sscanf (device_context_[index].device_node.GetCreationInfo (), "%hx/%hx@%hhu/%hhu",
-          &vendor_id, &product_id, &bus, &address);
+  sscanf (device_context_[index].device_node.GetCreationInfo (),
+          "%hx/%hx@%hhu/%hhu",
+          &vendor_id,
+          &product_id,
+          &bus,
+          &address);
 
 #else
-  getDeviceType (device_context_[index].device_node.GetCreationInfo (), vendor_id,
-                 product_id);
+  getDeviceType (
+      device_context_[index].device_node.GetCreationInfo (), vendor_id, product_id);
 #endif
   return (product_id);
 }
@@ -530,8 +557,12 @@ openni_wrapper::OpenNIDriver::getBus (unsigned index) const throw ()
   unsigned short vendor_id;
   unsigned short product_id;
   unsigned char address;
-  sscanf (device_context_[index].device_node.GetCreationInfo (), "%hx/%hx@%hhu/%hhu",
-          &vendor_id, &product_id, &bus, &address);
+  sscanf (device_context_[index].device_node.GetCreationInfo (),
+          "%hx/%hx@%hhu/%hhu",
+          &vendor_id,
+          &product_id,
+          &bus,
+          &address);
 #endif
   return (bus);
 }
@@ -545,8 +576,12 @@ openni_wrapper::OpenNIDriver::getAddress (unsigned index) const throw ()
   unsigned short vendor_id;
   unsigned short product_id;
   unsigned char bus;
-  sscanf (device_context_[index].device_node.GetCreationInfo (), "%hx/%hx@%hhu/%hhu",
-          &vendor_id, &product_id, &bus, &address);
+  sscanf (device_context_[index].device_node.GetCreationInfo (),
+          "%hx/%hx@%hhu/%hhu",
+          &vendor_id,
+          &product_id,
+          &bus,
+          &address);
 #endif
   return (address);
 }

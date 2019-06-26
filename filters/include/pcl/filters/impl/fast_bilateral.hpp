@@ -135,7 +135,8 @@ pcl::FastBilateralFilter<PointT>::applyFilter (PointCloud &output)
     for (std::vector<Eigen::Vector2f,
                      Eigen::aligned_allocator<Eigen::Vector2f>>::iterator d =
              data.begin ();
-         d != data.end (); ++d)
+         d != data.end ();
+         ++d)
       *d /= ((*d)[0] != 0) ? (*d)[1] : 1;
 
     for (size_t x = 0; x < input_->width; x++)
@@ -143,7 +144,8 @@ pcl::FastBilateralFilter<PointT>::applyFilter (PointCloud &output)
         const float z = output (x, y).z - base_min;
         const Eigen::Vector2f D = data.trilinear_interpolation (
             static_cast<float> (x) / sigma_s_ + padding_xy,
-            static_cast<float> (y) / sigma_s_ + padding_xy, z / sigma_r_ + padding_z);
+            static_cast<float> (y) / sigma_s_ + padding_xy,
+            z / sigma_r_ + padding_z);
         output (x, y).z = D[0];
       }
   } else {
@@ -152,7 +154,8 @@ pcl::FastBilateralFilter<PointT>::applyFilter (PointCloud &output)
         const float z = output (x, y).z - base_min;
         const Eigen::Vector2f D = data.trilinear_interpolation (
             static_cast<float> (x) / sigma_s_ + padding_xy,
-            static_cast<float> (y) / sigma_s_ + padding_xy, z / sigma_r_ + padding_z);
+            static_cast<float> (y) / sigma_s_ + padding_xy,
+            z / sigma_r_ + padding_z);
         output (x, y).z = D[0] / D[1];
       }
   }

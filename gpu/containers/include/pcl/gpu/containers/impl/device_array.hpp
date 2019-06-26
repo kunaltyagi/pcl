@@ -166,7 +166,9 @@ inline pcl::gpu::DeviceArray2D<T>::DeviceArray2D (int rows, int cols)
 {
 }
 template <class T>
-inline pcl::gpu::DeviceArray2D<T>::DeviceArray2D (int rows, int cols, void *data,
+inline pcl::gpu::DeviceArray2D<T>::DeviceArray2D (int rows,
+                                                  int cols,
+                                                  void *data,
                                                   size_t stepBytes)
     : DeviceMemory2D (rows, cols * elem_size, data, stepBytes)
 {
@@ -205,7 +207,9 @@ pcl::gpu::DeviceArray2D<T>::copyTo (DeviceArray2D &other) const
 }
 template <class T>
 inline void
-pcl::gpu::DeviceArray2D<T>::upload (const void *host_ptr, size_t host_step, int rows,
+pcl::gpu::DeviceArray2D<T>::upload (const void *host_ptr,
+                                    size_t host_step,
+                                    int rows,
                                     int cols)
 {
   DeviceMemory2D::upload (host_ptr, host_step, rows, cols * elem_size);

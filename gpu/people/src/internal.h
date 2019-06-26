@@ -77,13 +77,19 @@ namespace pcl
     };
 
     void
-    smoothLabelImage (const Labels &src, const Depth &depth, Labels &dst, int num_parts,
-                      int patch_size, int depthThres);
+    smoothLabelImage (const Labels &src,
+                      const Depth &depth,
+                      Labels &dst,
+                      int num_parts,
+                      int patch_size,
+                      int depthThres);
     void
     colorLMap (const Labels &labels, const DeviceArray<uchar4> &cmap, Image &rgb);
     void
-    mixedColorMap (const Labels &labels, const DeviceArray<uchar4> &map,
-                   const Image &rgba, Image &output);
+    mixedColorMap (const Labels &labels,
+                   const DeviceArray<uchar4> &map,
+                   const Image &rgba,
+                   Image &output);
 
     ////////////// connected components ///////////////////
 
@@ -93,8 +99,11 @@ namespace pcl
       // static void computeEdges(const Labels& labels, const Cloud& cloud, int
       // num_parts, float sq_radius, DeviceArray2D<unsigned char>& edges);
       static void
-      computeEdges (const Labels &labels, const Depth &depth, int num_parts,
-                    float sq_radius, DeviceArray2D<unsigned char> &edges);
+      computeEdges (const Labels &labels,
+                    const Depth &depth,
+                    int num_parts,
+                    float sq_radius,
+                    DeviceArray2D<unsigned char> &edges);
       static void
       labelComponents (const DeviceArray2D<unsigned char> &edges,
                        DeviceArray2D<int> &comps);
@@ -142,7 +151,8 @@ namespace pcl
       DeviceArray<Node> nodes_device;
       DeviceArray<Label> leaves_device;
 
-      CUDATree (int treeHeight_, const std::vector<Node> &nodes,
+      CUDATree (int treeHeight_,
+                const std::vector<Node> &nodes,
                 const std::vector<Label> &leaves);
     };
 
@@ -168,7 +178,9 @@ namespace pcl
 
       /** \brief output a probability map from the RDF.**/
       void
-      processProb (const Depth &dmap, Labels &lmap, LabelProbability &prob,
+      processProb (const Depth &dmap,
+                   Labels &lmap,
+                   LabelProbability &prob,
                    int FGThresh);
 
       std::vector<CUDATree> trees;
@@ -195,29 +207,39 @@ namespace pcl
       /** \brief This will merge the votes from the different trees into one final vote,
        * including probabilistic's **/
       void
-      CUDA_SelectLabel (const Depth &depth, Labels &labels,
+      CUDA_SelectLabel (const Depth &depth,
+                        Labels &labels,
                         LabelProbability &probabilities);
 
       /** \brief This will combine two probabilities according their weight **/
       void
-      CUDA_CombineProb (const Depth &depth, LabelProbability &probIn1, float weight1,
-                        LabelProbability &probIn2, float weight2,
+      CUDA_CombineProb (const Depth &depth,
+                        LabelProbability &probIn1,
+                        float weight1,
+                        LabelProbability &probIn2,
+                        float weight2,
                         LabelProbability &probOut);
 
       /** \brief This will sum a probability multiplied with it's weight **/
       void
-      CUDA_WeightedSumProb (const Depth &depth, LabelProbability &probIn, float weight,
+      CUDA_WeightedSumProb (const Depth &depth,
+                            LabelProbability &probIn,
+                            float weight,
                             LabelProbability &probOut);
 
       /** \brief This will blur the input labelprobability with the given kernel **/
       int
-      CUDA_GaussianBlur (const Depth &depth, LabelProbability &probIn,
-                         DeviceArray<float> &kernel, LabelProbability &probOut);
+      CUDA_GaussianBlur (const Depth &depth,
+                         LabelProbability &probIn,
+                         DeviceArray<float> &kernel,
+                         LabelProbability &probOut);
       /** \brief This will blur the input labelprobability with the given kernel, this
        * version avoids extended allocation **/
       int
-      CUDA_GaussianBlur (const Depth &depth, LabelProbability &probIn,
-                         DeviceArray<float> &kernel, LabelProbability &probTemp,
+      CUDA_GaussianBlur (const Depth &depth,
+                         LabelProbability &probIn,
+                         DeviceArray<float> &kernel,
+                         LabelProbability &probTemp,
                          LabelProbability &probOut);
     };
   } // namespace device

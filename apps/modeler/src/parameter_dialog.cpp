@@ -72,8 +72,8 @@ pcl::modeler::ParameterDialog::ParameterDialog (const std::string &title,
 int
 pcl::modeler::ParameterDialog::exec ()
 {
-  pcl::modeler::ParameterModel parameterModel (int(name_parameter_map_.size ()), 2,
-                                               this);
+  pcl::modeler::ParameterModel parameterModel (
+      int(name_parameter_map_.size ()), 2, this);
   parameter_model_ = &parameterModel;
 
   QStringList headerLabels;

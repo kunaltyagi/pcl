@@ -184,7 +184,9 @@ pcl::BivariatePolynomialT<real>::getValue (real x, real y) const
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename real>
 void
-pcl::BivariatePolynomialT<real>::getValueOfGradient (real x, real y, real &gradX,
+pcl::BivariatePolynomialT<real>::getValueOfGradient (real x,
+                                                     real y,
+                                                     real &gradX,
                                                      real &gradY)
 {
   calculateGradient ();

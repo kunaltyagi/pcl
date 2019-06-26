@@ -53,7 +53,8 @@ printHelp (int, char **argv)
 }
 
 bool
-loadPCLZF (const std::string &filename_rgb, const std::string &filename_depth,
+loadPCLZF (const std::string &filename_rgb,
+           const std::string &filename_depth,
            const std::string &filename_params,
            pcl::PointCloud<pcl::PointXYZRGBA> &cloud)
 {
@@ -90,7 +91,8 @@ loadPCLZF (const std::string &filename_rgb, const std::string &filename_depth,
 }
 
 bool
-loadPCLZF (const std::string &filename_depth, const std::string &filename_params,
+loadPCLZF (const std::string &filename_depth,
+           const std::string &filename_params,
            pcl::PointCloud<pcl::PointXYZ> &cloud)
 {
   TicToc tt;

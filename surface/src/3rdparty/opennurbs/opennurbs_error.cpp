@@ -76,7 +76,8 @@ static bool
 ON_FormatMessage (const char *, va_list);
 
 void
-ON_MathError (const char *sModuleName, const char *sErrorType,
+ON_MathError (const char *sModuleName,
+              const char *sErrorType,
               const char *sFunctionName)
 {
   ON_MATH_ERROR_COUNT++; // <- Good location for a debugger breakpoint.
@@ -88,11 +89,13 @@ ON_MathError (const char *sModuleName, const char *sErrorType,
   if (!sFunctionName)
     sFunctionName = "";
 
-  ON_Error (__FILE__, __LINE__,
+  ON_Error (__FILE__,
+            __LINE__,
             "Math library or floating point ERROR # %d module=%s type=%s function=%s",
             ON_MATH_ERROR_COUNT,
             sModuleName, // rhino.exe, opennurbs.dll, etc.
-            sErrorType, sFunctionName);
+            sErrorType,
+            sFunctionName);
 }
 
 static void
@@ -115,7 +118,9 @@ ON_IsNotValid ()
 
 static bool
 ON_PrintErrorHeader (int type, // 0 = warning, 1 = error, 2 = assert
-                     const char *sFileName, int line_number, const char *sFunctionName)
+                     const char *sFileName,
+                     int line_number,
+                     const char *sFunctionName)
 {
   bool bPrintMessage = false;
   sMessage[0] = 0;
@@ -141,10 +146,15 @@ ON_PrintErrorHeader (int type, // 0 = warning, 1 = error, 2 = assert
         if (0 == sFileName)
           sFileName = "";
         if (sFunctionName && sFunctionName[0])
-          ON_SPRINTF4 ("openNURBS WARNING # %d %s.%d %s(): ", ON_WARNING_COUNT,
-                       sFileName, line_number, sFunctionName);
+          ON_SPRINTF4 ("openNURBS WARNING # %d %s.%d %s(): ",
+                       ON_WARNING_COUNT,
+                       sFileName,
+                       line_number,
+                       sFunctionName);
         else
-          ON_SPRINTF3 ("openNURBS WARNING # %d %s.%d ", ON_WARNING_COUNT, sFileName,
+          ON_SPRINTF3 ("openNURBS WARNING # %d %s.%d ",
+                       ON_WARNING_COUNT,
+                       sFileName,
                        line_number);
         bPrintMessage = true;
       } else if (50 == ON_ERROR_COUNT) {
@@ -158,11 +168,14 @@ ON_PrintErrorHeader (int type, // 0 = warning, 1 = error, 2 = assert
         if (0 == sFileName)
           sFileName = "";
         if (sFunctionName && sFunctionName[0])
-          ON_SPRINTF4 ("openNURBS ERROR # %d %s.%d %s(): ", ON_ERROR_COUNT, sFileName,
-                       line_number, sFunctionName);
+          ON_SPRINTF4 ("openNURBS ERROR # %d %s.%d %s(): ",
+                       ON_ERROR_COUNT,
+                       sFileName,
+                       line_number,
+                       sFunctionName);
         else
-          ON_SPRINTF3 ("openNURBS ERROR # %d %s.%d ", ON_ERROR_COUNT, sFileName,
-                       line_number);
+          ON_SPRINTF3 (
+              "openNURBS ERROR # %d %s.%d ", ON_ERROR_COUNT, sFileName, line_number);
         bPrintMessage = true;
       } else if (50 == ON_ERROR_COUNT) {
         ON_SPRINTF1 (
@@ -201,8 +214,11 @@ ON_Error (const char *sFileName, int line_number, const char *sFormat, ...)
 }
 
 void
-ON_ErrorEx (const char *sFileName, int line_number, const char *sFunctionName,
-            const char *sFormat, ...)
+ON_ErrorEx (const char *sFileName,
+            int line_number,
+            const char *sFunctionName,
+            const char *sFormat,
+            ...)
 {
   ON_IncrementErrorCount ();
 
@@ -242,8 +258,11 @@ ON_Warning (const char *sFileName, int line_number, const char *sFormat, ...)
 }
 
 void
-ON_WarningEx (const char *sFileName, int line_number, const char *sFunctionName,
-              const char *sFormat, ...)
+ON_WarningEx (const char *sFileName,
+              int line_number,
+              const char *sFunctionName,
+              const char *sFormat,
+              ...)
 {
   ON_IncrementWarningCount ();
 
@@ -263,8 +282,8 @@ ON_WarningEx (const char *sFileName, int line_number, const char *sFunctionName,
 }
 
 void
-ON_Assert (int bCondition, const char *sFileName, int line_number, const char *sFormat,
-           ...)
+ON_Assert (
+    int bCondition, const char *sFileName, int line_number, const char *sFormat, ...)
 {
   if (!bCondition) {
     ON_IncrementErrorCount ();
@@ -286,8 +305,12 @@ ON_Assert (int bCondition, const char *sFileName, int line_number, const char *s
 }
 
 void
-ON_AssertEx (int bCondition, const char *sFileName, int line_number,
-             const char *sFunctionName, const char *sFormat, ...)
+ON_AssertEx (int bCondition,
+             const char *sFileName,
+             int line_number,
+             const char *sFunctionName,
+             const char *sFormat,
+             ...)
 {
   if (!bCondition) {
     ON_IncrementErrorCount ();

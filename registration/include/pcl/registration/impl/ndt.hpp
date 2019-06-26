@@ -120,8 +120,8 @@ pcl::NormalDistributionsTransform<PointSource, PointTarget>::computeTransformati
 
     // Solve for decent direction using newton method, line 23 in Algorithm 2 [Magnusson
     // 2009]
-    Eigen::JacobiSVD<Eigen::Matrix<double, 6, 6>> sv (hessian, Eigen::ComputeFullU |
-                                                                   Eigen::ComputeFullV);
+    Eigen::JacobiSVD<Eigen::Matrix<double, 6, 6>> sv (
+        hessian, Eigen::ComputeFullU | Eigen::ComputeFullV);
     // Negative for maximization as opposed to minimization
     delta_p = sv.solve (-score_gradient);
 
@@ -135,9 +135,15 @@ pcl::NormalDistributionsTransform<PointSource, PointTarget>::computeTransformati
     }
 
     delta_p.normalize ();
-    delta_p_norm = computeStepLengthMT (p, delta_p, delta_p_norm, step_size_,
-                                        transformation_epsilon_ / 2, score,
-                                        score_gradient, hessian, output);
+    delta_p_norm = computeStepLengthMT (p,
+                                        delta_p,
+                                        delta_p_norm,
+                                        step_size_,
+                                        transformation_epsilon_ / 2,
+                                        score,
+                                        score_gradient,
+                                        hessian,
+                                        output);
     delta_p *= delta_p_norm;
 
     transformation_ = (Eigen::Translation<float, 3> (static_cast<float> (delta_p (0)),
@@ -190,8 +196,11 @@ pcl::NormalDistributionsTransform<PointSource, PointTarget>::computeTransformati
 template <typename PointSource, typename PointTarget>
 double
 pcl::NormalDistributionsTransform<PointSource, PointTarget>::computeDerivatives (
-    Eigen::Matrix<double, 6, 1> &score_gradient, Eigen::Matrix<double, 6, 6> &hessian,
-    PointCloudSource &trans_cloud, Eigen::Matrix<double, 6, 1> &p, bool compute_hessian)
+    Eigen::Matrix<double, 6, 1> &score_gradient,
+    Eigen::Matrix<double, 6, 6> &hessian,
+    PointCloudSource &trans_cloud,
+    Eigen::Matrix<double, 6, 1> &p,
+    bool compute_hessian)
 {
   // Original Point and Transformed Point
   PointSource x_pt, x_trans_pt;
@@ -221,7 +230,8 @@ pcl::NormalDistributionsTransform<PointSource, PointTarget>::computeDerivatives 
 
     for (typename std::vector<TargetGridLeafConstPtr>::iterator neighborhood_it =
              neighborhood.begin ();
-         neighborhood_it != neighborhood.end (); neighborhood_it++) {
+         neighborhood_it != neighborhood.end ();
+         neighborhood_it++) {
       cell = *neighborhood_it;
       x_pt = input_->points[idx];
       x = Eigen::Vector3d (x_pt.x, x_pt.y, x_pt.z);
@@ -365,8 +375,11 @@ pcl::NormalDistributionsTransform<PointSource, PointTarget>::computePointDerivat
 template <typename PointSource, typename PointTarget>
 double
 pcl::NormalDistributionsTransform<PointSource, PointTarget>::updateDerivatives (
-    Eigen::Matrix<double, 6, 1> &score_gradient, Eigen::Matrix<double, 6, 6> &hessian,
-    Eigen::Vector3d &x_trans, Eigen::Matrix3d &c_inv, bool compute_hessian)
+    Eigen::Matrix<double, 6, 1> &score_gradient,
+    Eigen::Matrix<double, 6, 6> &hessian,
+    Eigen::Vector3d &x_trans,
+    Eigen::Matrix3d &c_inv,
+    bool compute_hessian)
 {
   Eigen::Vector3d cov_dxd_pi;
   // e^(-d_2/2 * (x_k - mu_k)^T Sigma_k^-1 (x_k - mu_k)) Equation 6.9 [Magnusson 2009]
@@ -411,7 +424,8 @@ pcl::NormalDistributionsTransform<PointSource, PointTarget>::updateDerivatives (
 template <typename PointSource, typename PointTarget>
 void
 pcl::NormalDistributionsTransform<PointSource, PointTarget>::computeHessian (
-    Eigen::Matrix<double, 6, 6> &hessian, PointCloudSource &trans_cloud,
+    Eigen::Matrix<double, 6, 6> &hessian,
+    PointCloudSource &trans_cloud,
     Eigen::Matrix<double, 6, 1> &)
 {
   // Original Point and Transformed Point
@@ -440,7 +454,8 @@ pcl::NormalDistributionsTransform<PointSource, PointTarget>::computeHessian (
 
     for (typename std::vector<TargetGridLeafConstPtr>::iterator neighborhood_it =
              neighborhood.begin ();
-         neighborhood_it != neighborhood.end (); neighborhood_it++) {
+         neighborhood_it != neighborhood.end ();
+         neighborhood_it++) {
       cell = *neighborhood_it;
 
       {
@@ -469,7 +484,8 @@ pcl::NormalDistributionsTransform<PointSource, PointTarget>::computeHessian (
 template <typename PointSource, typename PointTarget>
 void
 pcl::NormalDistributionsTransform<PointSource, PointTarget>::updateHessian (
-    Eigen::Matrix<double, 6, 6> &hessian, Eigen::Vector3d &x_trans,
+    Eigen::Matrix<double, 6, 6> &hessian,
+    Eigen::Vector3d &x_trans,
     Eigen::Matrix3d &c_inv)
 {
   Eigen::Vector3d cov_dxd_pi;
@@ -503,8 +519,15 @@ pcl::NormalDistributionsTransform<PointSource, PointTarget>::updateHessian (
 template <typename PointSource, typename PointTarget>
 bool
 pcl::NormalDistributionsTransform<PointSource, PointTarget>::updateIntervalMT (
-    double &a_l, double &f_l, double &g_l, double &a_u, double &f_u, double &g_u,
-    double a_t, double f_t, double g_t)
+    double &a_l,
+    double &f_l,
+    double &g_l,
+    double &a_u,
+    double &f_u,
+    double &g_u,
+    double a_t,
+    double f_t,
+    double g_t)
 {
   // Case U1 in Update Algorithm and Case a in Modified Update Algorithm [More, Thuente
   // 1994]
@@ -543,8 +566,15 @@ pcl::NormalDistributionsTransform<PointSource, PointTarget>::updateIntervalMT (
 template <typename PointSource, typename PointTarget>
 double
 pcl::NormalDistributionsTransform<PointSource, PointTarget>::trialValueSelectionMT (
-    double a_l, double f_l, double g_l, double a_u, double f_u, double g_u, double a_t,
-    double f_t, double g_t)
+    double a_l,
+    double f_l,
+    double g_l,
+    double a_u,
+    double f_u,
+    double g_u,
+    double a_t,
+    double f_t,
+    double g_t)
 {
   // Case 1 in Trial Value Selection [More, Thuente 1994]
   if (f_t > f_l) {
@@ -621,9 +651,14 @@ pcl::NormalDistributionsTransform<PointSource, PointTarget>::trialValueSelection
 template <typename PointSource, typename PointTarget>
 double
 pcl::NormalDistributionsTransform<PointSource, PointTarget>::computeStepLengthMT (
-    const Eigen::Matrix<double, 6, 1> &x, Eigen::Matrix<double, 6, 1> &step_dir,
-    double step_init, double step_max, double step_min, double &score,
-    Eigen::Matrix<double, 6, 1> &score_gradient, Eigen::Matrix<double, 6, 6> &hessian,
+    const Eigen::Matrix<double, 6, 1> &x,
+    Eigen::Matrix<double, 6, 1> &step_dir,
+    double step_init,
+    double step_max,
+    double step_min,
+    double &score,
+    Eigen::Matrix<double, 6, 1> &score_gradient,
+    Eigen::Matrix<double, 6, 6> &hessian,
     PointCloudSource &trans_cloud)
 {
   // Set the value of phi(0), Equation 1.3 [More, Thuente 1994]

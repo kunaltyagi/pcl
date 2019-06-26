@@ -50,8 +50,10 @@ namespace pcl
   template <typename PointT>
   void
   approximatePolygon (const PlanarPolygon<PointT> &polygon,
-                      PlanarPolygon<PointT> &approx_polygon, float threshold,
-                      bool refine = false, bool closed = true);
+                      PlanarPolygon<PointT> &approx_polygon,
+                      float threshold,
+                      bool refine = false,
+                      bool closed = true);
 
   /** \brief returns an approximate polygon to given 2D contour. Uses just X and Y
    * values. \note  if refinement is not turned on, the resulting polygon will contain
@@ -68,7 +70,9 @@ namespace pcl
   void
   approximatePolygon2D (const typename PointCloud<PointT>::VectorType &polygon,
                         typename PointCloud<PointT>::VectorType &approx_polygon,
-                        float threshold, bool refine = false, bool closed = true);
+                        float threshold,
+                        bool refine = false,
+                        bool closed = true);
 
 } // namespace pcl
 

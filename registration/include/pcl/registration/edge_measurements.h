@@ -62,8 +62,10 @@ namespace pcl
       InformationT information_matrix;
       EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-      PoseMeasurement (const VertexT &v_s, const VertexT &v_e,
-                       const Eigen::Matrix4f &tr, const InformationT &mtx)
+      PoseMeasurement (const VertexT &v_s,
+                       const VertexT &v_e,
+                       const Eigen::Matrix4f &tr,
+                       const InformationT &mtx)
           : v_start (v_s), v_end (v_e), relative_transformation (tr),
             information_matrix (mtx)
       {

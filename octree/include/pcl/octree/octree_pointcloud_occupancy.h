@@ -57,10 +57,13 @@ namespace pcl
      *  \author Julius Kammerl (julius@kammerl.de)
      */
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <typename PointT, typename LeafContainerT = OctreeContainerEmpty,
+    template <typename PointT,
+              typename LeafContainerT = OctreeContainerEmpty,
               typename BranchContainerT = OctreeContainerEmpty>
     class OctreePointCloudOccupancy
-        : public OctreePointCloud<PointT, LeafContainerT, BranchContainerT,
+        : public OctreePointCloud<PointT,
+                                  LeafContainerT,
+                                  BranchContainerT,
                                   OctreeBase<LeafContainerT, BranchContainerT>>
 
     {
@@ -73,19 +76,23 @@ namespace pcl
           OctreePointCloudOccupancy<PointT, LeafContainerT, BranchContainerT>;
 
       // public point cloud typedefs
-      using PointCloud = typename OctreePointCloud<PointT, LeafContainerT,
+      using PointCloud = typename OctreePointCloud<PointT,
+                                                   LeafContainerT,
                                                    BranchContainerT>::PointCloud;
-      using PointCloudPtr = typename OctreePointCloud<PointT, LeafContainerT,
+      using PointCloudPtr = typename OctreePointCloud<PointT,
+                                                      LeafContainerT,
                                                       BranchContainerT>::PointCloudPtr;
       using PointCloudConstPtr =
-          typename OctreePointCloud<PointT, LeafContainerT,
-                                    BranchContainerT>::PointCloudConstPtr;
+          typename OctreePointCloud<PointT, LeafContainerT, BranchContainerT>::
+              PointCloudConstPtr;
 
       /** \brief Constructor.
        *  \param resolution_arg:  octree resolution at lowest octree level
        * */
       OctreePointCloudOccupancy (const double resolution_arg)
-          : OctreePointCloud<PointT, LeafContainerT, BranchContainerT,
+          : OctreePointCloud<PointT,
+                             LeafContainerT,
+                             BranchContainerT,
                              OctreeBase<LeafContainerT, BranchContainerT>> (
                 resolution_arg)
       {

@@ -66,15 +66,20 @@ namespace pcl
       }
 
       void
-      fillRGB (unsigned width, unsigned height, unsigned char *rgb_buffer,
+      fillRGB (unsigned width,
+               unsigned height,
+               unsigned char *rgb_buffer,
                unsigned rgb_line_step = 0) const override;
 
       void
-      fillGrayscale (unsigned width, unsigned height, unsigned char *gray_buffer,
+      fillGrayscale (unsigned width,
+                     unsigned height,
+                     unsigned char *gray_buffer,
                      unsigned gray_line_step = 0) const override;
 
       bool
-      isResizingSupported (unsigned input_width, unsigned input_height,
+      isResizingSupported (unsigned input_width,
+                           unsigned input_height,
                            unsigned output_width,
                            unsigned output_height) const override;
 

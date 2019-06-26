@@ -327,8 +327,8 @@ pcl::computeCovarianceMatrix (const pcl::PointCloud<PointT> &cloud,
                               const Eigen::Matrix<Scalar, 4, 1> &centroid,
                               Eigen::Matrix<Scalar, 3, 3> &covariance_matrix)
 {
-  return (pcl::computeCovarianceMatrix (cloud, indices.indices, centroid,
-                                        covariance_matrix));
+  return (pcl::computeCovarianceMatrix (
+      cloud, indices.indices, centroid, covariance_matrix));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -355,8 +355,8 @@ pcl::computeCovarianceMatrixNormalized (const pcl::PointCloud<PointT> &cloud,
                                         const Eigen::Matrix<Scalar, 4, 1> &centroid,
                                         Eigen::Matrix<Scalar, 3, 3> &covariance_matrix)
 {
-  unsigned int point_count = pcl::computeCovarianceMatrix (cloud, indices.indices,
-                                                           centroid, covariance_matrix);
+  unsigned int point_count = pcl::computeCovarianceMatrix (
+      cloud, indices.indices, centroid, covariance_matrix);
   if (point_count != 0)
     covariance_matrix /= static_cast<Scalar> (point_count);
 
@@ -614,8 +614,8 @@ pcl::computeMeanAndCovarianceMatrix (const pcl::PointCloud<PointT> &cloud,
                                      Eigen::Matrix<Scalar, 3, 3> &covariance_matrix,
                                      Eigen::Matrix<Scalar, 4, 1> &centroid)
 {
-  return (computeMeanAndCovarianceMatrix (cloud, indices.indices, covariance_matrix,
-                                          centroid));
+  return (computeMeanAndCovarianceMatrix (
+      cloud, indices.indices, covariance_matrix, centroid));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -623,7 +623,8 @@ template <typename PointT, typename Scalar>
 void
 pcl::demeanPointCloud (ConstCloudIterator<PointT> &cloud_iterator,
                        const Eigen::Matrix<Scalar, 4, 1> &centroid,
-                       pcl::PointCloud<PointT> &cloud_out, int npts)
+                       pcl::PointCloud<PointT> &cloud_out,
+                       int npts)
 {
   // Calculate the number of points if not given
   if (npts == 0) {
@@ -897,7 +898,8 @@ pcl::computeCentroid (const pcl::PointCloud<PointInT> &cloud, PointOutT &centroi
 template <typename PointInT, typename PointOutT>
 size_t
 pcl::computeCentroid (const pcl::PointCloud<PointInT> &cloud,
-                      const std::vector<int> &indices, PointOutT &centroid)
+                      const std::vector<int> &indices,
+                      PointOutT &centroid)
 {
   pcl::CentroidPoint<PointInT> cp;
 

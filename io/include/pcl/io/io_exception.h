@@ -60,8 +60,10 @@ namespace pcl
     class IOException : public std::exception
     {
       public:
-      IOException (const std::string &function_name, const std::string &file_name,
-                   unsigned line_number, const std::string &message);
+      IOException (const std::string &function_name,
+                   const std::string &file_name,
+                   unsigned line_number,
+                   const std::string &message);
 
       ~IOException () throw ();
 
@@ -89,8 +91,8 @@ namespace pcl
     };
 
     inline void
-    throwIOException (const char *function, const char *file, unsigned line,
-                      const char *format, ...)
+    throwIOException (
+        const char *function, const char *file, unsigned line, const char *format, ...)
     {
       static char msg[1024];
       va_list args;

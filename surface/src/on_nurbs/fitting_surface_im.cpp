@@ -318,16 +318,18 @@ FittingSurfaceIM::assemble (bool inverse_mapping)
 }
 
 void
-FittingSurfaceIM::addPointConstraint (const Eigen::Vector2i &params, double z,
-                                      double weight, unsigned &row)
+FittingSurfaceIM::addPointConstraint (const Eigen::Vector2i &params,
+                                      double z,
+                                      double weight,
+                                      unsigned &row)
 {
   double *N0 = new double[m_nurbs.Order (0) * m_nurbs.Order (0)];
   double *N1 = new double[m_nurbs.Order (1) * m_nurbs.Order (1)];
 
-  int E = ON_NurbsSpanIndex (m_nurbs.m_order[0], m_nurbs.m_cv_count[0],
-                             m_nurbs.m_knot[0], params (0), 0, 0);
-  int F = ON_NurbsSpanIndex (m_nurbs.m_order[1], m_nurbs.m_cv_count[1],
-                             m_nurbs.m_knot[1], params (1), 0, 0);
+  int E = ON_NurbsSpanIndex (
+      m_nurbs.m_order[0], m_nurbs.m_cv_count[0], m_nurbs.m_knot[0], params (0), 0, 0);
+  int F = ON_NurbsSpanIndex (
+      m_nurbs.m_order[1], m_nurbs.m_cv_count[1], m_nurbs.m_knot[1], params (1), 0, 0);
 
   ON_EvaluateNurbsBasis (m_nurbs.Order (0), m_nurbs.m_knot[0] + E, params (0), N0);
   ON_EvaluateNurbsBasis (m_nurbs.Order (1), m_nurbs.m_knot[1] + F, params (1), N1);
@@ -532,9 +534,13 @@ FittingSurfaceIM::findClosestElementMidPoint (const ON_NurbsSurface &nurbs,
 Eigen::Vector2d
 FittingSurfaceIM::inverseMapping (const ON_NurbsSurface &nurbs,
                                   const Eigen::Vector3d &pt,
-                                  const Eigen::Vector2d &hint, double &error,
-                                  Eigen::Vector3d &p, Eigen::Vector3d &tu,
-                                  Eigen::Vector3d &tv, int maxSteps, double accuracy,
+                                  const Eigen::Vector2d &hint,
+                                  double &error,
+                                  Eigen::Vector3d &p,
+                                  Eigen::Vector3d &tu,
+                                  Eigen::Vector3d &tv,
+                                  int maxSteps,
+                                  double accuracy,
                                   bool quiet)
 {
 
@@ -603,7 +609,8 @@ FittingSurfaceIM::inverseMapping (const ON_NurbsSurface &nurbs,
   if (!quiet) {
     printf (
         "[FittingSurface::inverseMapping] Warning: Method did not converge (%e %d)\n",
-        accuracy, maxSteps);
+        accuracy,
+        maxSteps);
     printf ("  %f %f ... %f %f\n", hint (0), hint (1), current (0), current (1));
   }
 

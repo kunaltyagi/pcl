@@ -67,7 +67,8 @@ namespace pcl
     {
       QComboBox *editor = new QComboBox (parent);
       for (typename std::map<T, std::string>::const_iterator it = candidates_.begin ();
-           it != candidates_.end (); ++it) {
+           it != candidates_.end ();
+           ++it) {
         editor->addItem (it->second.c_str ());
       }
 
@@ -102,7 +103,8 @@ namespace pcl
     {
       std::pair<QVariant, int> model_data;
       for (typename std::map<T, std::string>::const_iterator it = candidates_.begin ();
-           it != candidates_.end (); ++it) {
+           it != candidates_.end ();
+           ++it) {
         if (it->first == value) {
           model_data.first = it->second;
           break;

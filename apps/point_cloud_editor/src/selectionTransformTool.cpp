@@ -91,14 +91,15 @@ SelectionTransformTool::update (int x, int y, BitMask, BitMask buttons)
     // as such we can not update x and y immediately
     float scale = 1.0f / cloud_ptr_->getScalingFactor ();
     cloud_ptr_->setSelectionTranslation ((float)dx * translate_factor_ * scale,
-                                         (float)-dy * translate_factor_ * scale, 0.0f);
+                                         (float)-dy * translate_factor_ * scale,
+                                         0.0f);
     return;
   } else if (modifiers_ & ALT) {
     // selection motion is not applied directly (waits for end)
     // as such we can not update x and y immediately
     float scale = 1.0f / cloud_ptr_->getScalingFactor ();
-    cloud_ptr_->setSelectionTranslation (0.0f, 0.0f,
-                                         (float)dy * translate_factor_ * scale);
+    cloud_ptr_->setSelectionTranslation (
+        0.0f, 0.0f, (float)dy * translate_factor_ * scale);
     return;
   }
   float transform[MATRIX_SIZE];
@@ -128,13 +129,20 @@ SelectionTransformTool::end (int x, int y, BitMask modifiers, BitMask buttons)
   update (x, y, modifiers, buttons);
   if (modifiers_ & CTRL) {
     boost::shared_ptr<TransformCommand> c (
-        new TransformCommand (selection_ptr_, cloud_ptr_, transform_matrix_,
+        new TransformCommand (selection_ptr_,
+                              cloud_ptr_,
+                              transform_matrix_,
                               (float)dx * translate_factor_ * scale,
-                              (float)-dy * translate_factor_ * scale, 0.0f));
+                              (float)-dy * translate_factor_ * scale,
+                              0.0f));
     command_queue_ptr_->execute (c);
   } else if (modifiers_ & ALT) {
     boost::shared_ptr<TransformCommand> c (
-        new TransformCommand (selection_ptr_, cloud_ptr_, transform_matrix_, 0.0f, 0.0f,
+        new TransformCommand (selection_ptr_,
+                              cloud_ptr_,
+                              transform_matrix_,
+                              0.0f,
+                              0.0f,
                               (float)dy * translate_factor_ * scale));
     command_queue_ptr_->execute (c);
   } else {

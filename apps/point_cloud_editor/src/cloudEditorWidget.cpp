@@ -108,8 +108,8 @@ CloudEditorWidget::load ()
   try {
     loadFile (file_path.toStdString ());
   } catch (...) {
-    QMessageBox::information (this, tr ("Point Cloud Editor"),
-                              tr ("Can not load %1.").arg (file_path));
+    QMessageBox::information (
+        this, tr ("Point Cloud Editor"), tr ("Can not load %1.").arg (file_path));
   }
   update ();
   updateGL ();
@@ -119,8 +119,8 @@ void
 CloudEditorWidget::save ()
 {
   if (!cloud_ptr_) {
-    QMessageBox::information (this, tr ("Point Cloud Editor"),
-                              tr ("No cloud is loaded."));
+    QMessageBox::information (
+        this, tr ("Point Cloud Editor"), tr ("No cloud is loaded."));
     return;
   }
 
@@ -136,8 +136,8 @@ CloudEditorWidget::save ()
     try {
       pcl::io::savePCDFile (file_path_std, cloud_ptr_->getInternalCloud ());
     } catch (...) {
-      QMessageBox::information (this, tr ("Point Cloud Editor"),
-                                tr ("Can not save %1.").arg (file_path));
+      QMessageBox::information (
+          this, tr ("Point Cloud Editor"), tr ("Can not save %1.").arg (file_path));
     }
     swapRBValues ();
   } else {
@@ -146,8 +146,8 @@ CloudEditorWidget::save ()
     try {
       pcl::io::savePCDFile (file_path_std, uncolored_cloud);
     } catch (...) {
-      QMessageBox::information (this, tr ("Point Cloud Editor"),
-                                tr ("Can not save %1.").arg (file_path));
+      QMessageBox::information (
+          this, tr ("Point Cloud Editor"), tr ("Can not save %1.").arg (file_path));
     }
   }
 }
@@ -598,13 +598,20 @@ void
 CloudEditorWidget::initTexture ()
 {
   static GLfloat colorWheel[14][3] = {
-      {0.0f, 0.0f, 1.0000f},       {0.0f, 0.2500f, 1.0000f},
-      {0.0f, 0.5000f, 1.0000f},    {0.0f, 0.7500f, 1.0000f},
-      {0.0f, 1.0000f, 1.0000f},    {0.2500f, 1.0000f, 1.0000f},
-      {0.5000f, 1.0000f, 0.7500f}, {0.7500f, 1.0000f, 0.5000f},
-      {1.0000f, 1.0000f, 0.2500f}, {1.0000f, 1.0000f, 0.0f},
-      {1.0000f, 0.7500f, 0.0f},    {1.0000f, 0.5000f, 0.0f},
-      {1.0000f, 0.2500f, 0.0f},    {1.0000f, 0.0f, 0.0f},
+      {0.0f, 0.0f, 1.0000f},
+      {0.0f, 0.2500f, 1.0000f},
+      {0.0f, 0.5000f, 1.0000f},
+      {0.0f, 0.7500f, 1.0000f},
+      {0.0f, 1.0000f, 1.0000f},
+      {0.2500f, 1.0000f, 1.0000f},
+      {0.5000f, 1.0000f, 0.7500f},
+      {0.7500f, 1.0000f, 0.5000f},
+      {1.0000f, 1.0000f, 0.2500f},
+      {1.0000f, 1.0000f, 0.0f},
+      {1.0000f, 0.7500f, 0.0f},
+      {1.0000f, 0.5000f, 0.0f},
+      {1.0000f, 0.2500f, 0.0f},
+      {1.0000f, 0.0f, 0.0f},
   };
   GLuint textures;
   glGenTextures (1, &textures);

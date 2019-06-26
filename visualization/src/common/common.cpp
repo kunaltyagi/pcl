@@ -46,8 +46,8 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::getRandomColors (double &r, double &g, double &b, double min,
-                                     double max)
+pcl::visualization::getRandomColors (
+    double &r, double &g, double &b, double min, double max)
 {
   double sum;
   static unsigned stepRGBA = 100;
@@ -104,7 +104,8 @@ pcl::visualization::vtkToEigen (vtkMatrix4x4 *vtk_matrix)
 Eigen::Vector2i
 pcl::visualization::worldToView (const Eigen::Vector4d &world_pt,
                                  const Eigen::Matrix4d &view_projection_matrix,
-                                 int width, int height)
+                                 int width,
+                                 int height)
 {
   // Transform world to clipping coordinates
   Eigen::Vector4d world (view_projection_matrix * world_pt);
@@ -156,7 +157,8 @@ pcl::visualization::getViewFrustum (const Eigen::Matrix4d &view_projection_matri
 }
 
 int
-pcl::visualization::cullFrustum (double frustum[24], const Eigen::Vector3d &min_bb,
+pcl::visualization::cullFrustum (double frustum[24],
+                                 const Eigen::Vector3d &min_bb,
                                  const Eigen::Vector3d &max_bb)
 {
   int result = PCL_INSIDE_FRUSTUM;
@@ -257,7 +259,8 @@ pcl::visualization::viewScreenArea (const Eigen::Vector3d &eye,
                                     const Eigen::Vector3d &min_bb,
                                     const Eigen::Vector3d &max_bb,
                                     const Eigen::Matrix4d &view_projection_matrix,
-                                    int width, int height)
+                                    int width,
+                                    int height)
 {
   Eigen::Vector4d bounding_box[8];
   bounding_box[0] = Eigen::Vector4d (min_bb.x (), min_bb.y (), min_bb.z (), 1.0);
@@ -409,14 +412,16 @@ pcl::visualization::getColormapLUT (LookUpTableRepresentationProperties colormap
 
     for (size_t i = 0; i < 128; i++) {
       double weight = static_cast<double> (i) / 128.0;
-      table->SetTableValue (i, white[0] * weight + blue[0] * (1 - weight),
+      table->SetTableValue (i,
+                            white[0] * weight + blue[0] * (1 - weight),
                             white[1] * weight + blue[1] * (1 - weight),
                             white[2] * weight + blue[2] * (1 - weight));
     }
 
     for (size_t i = 128; i < 256; i++) {
       double weight = (static_cast<double> (i) - 128.0) / 128.0;
-      table->SetTableValue (i, red[0] * weight + white[0] * (1 - weight),
+      table->SetTableValue (i,
+                            red[0] * weight + white[0] * (1 - weight),
                             red[1] * weight + white[1] * (1 - weight),
                             red[2] * weight + white[2] * (1 - weight));
     }
@@ -429,7 +434,8 @@ pcl::visualization::getColormapLUT (LookUpTableRepresentationProperties colormap
     table->SetNumberOfTableValues (pcl::ViridisLUT::size ());
     for (size_t i = 0; i < pcl::ViridisLUT::size (); i++) {
       pcl::RGB c = pcl::ViridisLUT::at (i);
-      table->SetTableValue (i, static_cast<double> (c.r) / 255.0,
+      table->SetTableValue (i,
+                            static_cast<double> (c.r) / 255.0,
                             static_cast<double> (c.g) / 255.0,
                             static_cast<double> (c.b) / 255.0);
     }

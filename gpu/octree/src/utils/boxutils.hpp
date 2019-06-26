@@ -44,7 +44,9 @@ namespace pcl
   namespace device
   {
     __device__ __host__ __forceinline__ static bool
-    checkIfNodeInsideSphere (const float3 &minp, const float3 &maxp, const float3 &c,
+    checkIfNodeInsideSphere (const float3 &minp,
+                             const float3 &maxp,
+                             const float3 &c,
                              float r)
     {
       r *= r;
@@ -87,7 +89,9 @@ namespace pcl
     }
 
     __device__ __host__ __forceinline__ static bool
-    checkIfNodeOutsideSphere (const float3 &minp, const float3 &maxp, const float3 &c,
+    checkIfNodeOutsideSphere (const float3 &minp,
+                              const float3 &maxp,
+                              const float3 &c,
                               float r)
     {
       if (maxp.x < (c.x - r) || maxp.y < (c.y - r) || maxp.z < (c.z - r))

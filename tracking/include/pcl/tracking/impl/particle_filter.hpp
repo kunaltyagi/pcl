@@ -59,7 +59,8 @@ pcl::tracking::ParticleFilterTracker<PointInT, StateT>::sampleWithReplacement (
 template <typename PointInT, typename StateT>
 void
 pcl::tracking::ParticleFilterTracker<PointInT, StateT>::genAliasTable (
-    std::vector<int> &a, std::vector<double> &q,
+    std::vector<int> &a,
+    std::vector<double> &q,
     const PointCloudStateConstPtr &particles)
 {
   /* generate an alias table, a and q */
@@ -187,9 +188,12 @@ pcl::tracking::ParticleFilterTracker<PointInT, StateT>::cropInputPointCloud (
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointInT, typename StateT>
 void
-pcl::tracking::ParticleFilterTracker<PointInT, StateT>::calcBoundingBox (
-    double &x_min, double &x_max, double &y_min, double &y_max, double &z_min,
-    double &z_max)
+pcl::tracking::ParticleFilterTracker<PointInT, StateT>::calcBoundingBox (double &x_min,
+                                                                         double &x_max,
+                                                                         double &y_min,
+                                                                         double &y_max,
+                                                                         double &z_min,
+                                                                         double &z_max)
 {
   x_min = y_min = z_min = std::numeric_limits<double>::max ();
   x_max = y_max = z_max = -std::numeric_limits<double>::max ();
@@ -244,14 +248,14 @@ pcl::tracking::ParticleFilterTracker<PointInT, StateT>::weight ()
     coherence_->initCompute ();
     for (size_t i = 0; i < particles_->points.size (); i++) {
       IndicesPtr indices;
-      coherence_->compute (transed_reference_vector_[i], indices,
-                           particles_->points[i].weight);
+      coherence_->compute (
+          transed_reference_vector_[i], indices, particles_->points[i].weight);
     }
   } else {
     for (size_t i = 0; i < particles_->points.size (); i++) {
       IndicesPtr indices (new std::vector<int>);
-      computeTransformedPointCloudWithNormal (particles_->points[i], *indices,
-                                              *transed_reference_vector_[i]);
+      computeTransformedPointCloudWithNormal (
+          particles_->points[i], *indices, *transed_reference_vector_[i]);
     }
 
     PointCloudInPtr coherence_input (new PointCloudIn);
@@ -261,8 +265,8 @@ pcl::tracking::ParticleFilterTracker<PointInT, StateT>::weight ()
     coherence_->initCompute ();
     for (size_t i = 0; i < particles_->points.size (); i++) {
       IndicesPtr indices (new std::vector<int>);
-      coherence_->compute (transed_reference_vector_[i], indices,
-                           particles_->points[i].weight);
+      coherence_->compute (
+          transed_reference_vector_[i], indices, particles_->points[i].weight);
     }
   }
 

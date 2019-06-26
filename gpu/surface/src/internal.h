@@ -121,7 +121,8 @@ namespace pcl
     size_t
     remove_duplicates (DeviceArray<int> &indeces);
     void
-    pack_hull (const DeviceArray<PointType> &points, const DeviceArray<int> &indeces,
+    pack_hull (const DeviceArray<PointType> &points,
+               const DeviceArray<int> &indeces,
                DeviceArray<PointType> &output);
   } // namespace device
 } // namespace pcl

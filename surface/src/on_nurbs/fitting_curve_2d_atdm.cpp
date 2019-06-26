@@ -80,8 +80,8 @@ FittingCurve2dATDM::assemble (const FittingCurve2dAPDM::Parameter &parameter)
   if (wInt > 0.0)
     assembleInterior (wInt, parameter.interior_sigma2, parameter.rScale, row);
 
-  assembleClosestPoints (elements, parameter.closest_point_weight,
-                         parameter.closest_point_sigma2, row);
+  assembleClosestPoints (
+      elements, parameter.closest_point_weight, parameter.closest_point_sigma2, row);
 
   if (wCageReg > 0.0)
     addCageRegularisation (wCageReg, row, elements, parameter.smooth_concavity);
@@ -89,7 +89,8 @@ FittingCurve2dATDM::assemble (const FittingCurve2dAPDM::Parameter &parameter)
   if (row < nrows) {
     m_solver.resize (row);
     if (!m_quiet)
-      printf ("[FittingCurve2dATDM::assemble] Warning: rows do not match: %d %d\n", row,
+      printf ("[FittingCurve2dATDM::assemble] Warning: rows do not match: %d %d\n",
+              row,
               nrows);
   }
 }
@@ -144,15 +145,16 @@ FittingCurve2dATDM::updateCurve (double damp)
 void
 FittingCurve2dATDM::addPointConstraint (const double &param,
                                         const Eigen::Vector2d &point,
-                                        const Eigen::Vector2d &normal, double weight,
+                                        const Eigen::Vector2d &normal,
+                                        double weight,
                                         unsigned &row)
 {
   int cp_red = m_nurbs.m_order - 2;
   int ncp = m_nurbs.m_cv_count - 2 * cp_red;
   double *N = new double[m_nurbs.m_order * m_nurbs.m_order];
 
-  int E = ON_NurbsSpanIndex (m_nurbs.m_order, m_nurbs.m_cv_count, m_nurbs.m_knot, param,
-                             0, 0);
+  int E = ON_NurbsSpanIndex (
+      m_nurbs.m_order, m_nurbs.m_cv_count, m_nurbs.m_knot, param, 0, 0);
 
   ON_EvaluateNurbsBasis (m_nurbs.m_order, m_nurbs.m_knot + E, param, N);
 
@@ -172,7 +174,8 @@ FittingCurve2dATDM::addPointConstraint (const double &param,
 }
 
 void
-FittingCurve2dATDM::addCageRegularisation (double weight, unsigned &row,
+FittingCurve2dATDM::addCageRegularisation (double weight,
+                                           unsigned &row,
                                            const std::vector<double> &elements,
                                            double wConcav)
 {
@@ -230,7 +233,9 @@ FittingCurve2dATDM::addCageRegularisation (double weight, unsigned &row,
 }
 
 void
-FittingCurve2dATDM::assembleInterior (double wInt, double sigma2, double rScale,
+FittingCurve2dATDM::assembleInterior (double wInt,
+                                      double sigma2,
+                                      double rScale,
                                       unsigned &row)
 {
   int nInt = int(m_data->interior.size ());
@@ -249,13 +254,29 @@ FittingCurve2dATDM::assembleInterior (double wInt, double sigma2, double rScale,
     double error;
     if (p < int(m_data->interior_param.size ())) {
       param = findClosestElementMidPoint (m_nurbs, pcp, m_data->interior_param[p]);
-      param = inverseMapping (m_nurbs, pcp, param, error, pt, t, rScale, in_max_steps,
-                              in_accuracy, m_quiet);
+      param = inverseMapping (m_nurbs,
+                              pcp,
+                              param,
+                              error,
+                              pt,
+                              t,
+                              rScale,
+                              in_max_steps,
+                              in_accuracy,
+                              m_quiet);
       m_data->interior_param[p] = param;
     } else {
       param = findClosestElementMidPoint (m_nurbs, pcp);
-      param = inverseMapping (m_nurbs, pcp, param, error, pt, t, rScale, in_max_steps,
-                              in_accuracy, m_quiet);
+      param = inverseMapping (m_nurbs,
+                              pcp,
+                              param,
+                              error,
+                              pt,
+                              t,
+                              rScale,
+                              in_max_steps,
+                              in_accuracy,
+                              m_quiet);
       m_data->interior_param.push_back (param);
     }
 
@@ -307,7 +328,9 @@ FittingCurve2dATDM::assembleInterior (double wInt, double sigma2, double rScale,
 
 void
 FittingCurve2dATDM::assembleClosestPoints (const std::vector<double> &elements,
-                                           double weight, double sigma2, unsigned &row)
+                                           double weight,
+                                           double sigma2,
+                                           unsigned &row)
 {
   m_data->closest_points.clear ();
   m_data->closest_points_param.clear ();

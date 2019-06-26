@@ -61,7 +61,8 @@ pcl::io::ImageYUV422::ImageYUV422 (FrameWrapper::Ptr image_metadata,
 pcl::io::ImageYUV422::~ImageYUV422 () throw () {}
 
 bool
-pcl::io::ImageYUV422::isResizingSupported (unsigned input_width, unsigned input_height,
+pcl::io::ImageYUV422::isResizingSupported (unsigned input_width,
+                                           unsigned input_height,
                                            unsigned output_width,
                                            unsigned output_height) const
 {
@@ -70,8 +71,10 @@ pcl::io::ImageYUV422::isResizingSupported (unsigned input_width, unsigned input_
 }
 
 void
-pcl::io::ImageYUV422::fillRGB (unsigned width, unsigned height,
-                               unsigned char *rgb_buffer, unsigned rgb_line_step) const
+pcl::io::ImageYUV422::fillRGB (unsigned width,
+                               unsigned height,
+                               unsigned char *rgb_buffer,
+                               unsigned rgb_line_step) const
 {
   // 0  1   2  3
   // u  y1  v  y2
@@ -79,14 +82,20 @@ pcl::io::ImageYUV422::fillRGB (unsigned width, unsigned height,
   if (wrapper_->getWidth () != width && wrapper_->getHeight () != height) {
     if (width > wrapper_->getWidth () || height > wrapper_->getHeight ())
       THROW_IO_EXCEPTION ("Upsampling not supported. Request was: %d x %d -> %d x %d",
-                          wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+                          wrapper_->getWidth (),
+                          wrapper_->getHeight (),
+                          width,
+                          height);
 
     if (wrapper_->getWidth () % width != 0 || wrapper_->getHeight () % height != 0 ||
         (wrapper_->getWidth () / width) & 0x01 ||
         (wrapper_->getHeight () / height & 0x01))
       THROW_IO_EXCEPTION ("Downsampling only possible for power of two scale in both "
                           "dimensions. Request was %d x %d -> %d x %d.",
-                          wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+                          wrapper_->getWidth (),
+                          wrapper_->getHeight (),
+                          width,
+                          height);
   }
 
   const uint8_t *yuv_buffer = (uint8_t *)wrapper_->getData ();
@@ -136,19 +145,26 @@ pcl::io::ImageYUV422::fillRGB (unsigned width, unsigned height,
 }
 
 void
-pcl::io::ImageYUV422::fillGrayscale (unsigned width, unsigned height,
+pcl::io::ImageYUV422::fillGrayscale (unsigned width,
+                                     unsigned height,
                                      unsigned char *gray_buffer,
                                      unsigned gray_line_step) const
 {
   // u y1 v y2
   if (width > wrapper_->getWidth () || height > wrapper_->getHeight ())
     THROW_IO_EXCEPTION ("Upsampling not supported. Request was: %d x %d -> %d x %d",
-                        wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+                        wrapper_->getWidth (),
+                        wrapper_->getHeight (),
+                        width,
+                        height);
 
   if (wrapper_->getWidth () % width != 0 || wrapper_->getHeight () % height != 0)
     THROW_IO_EXCEPTION ("Downsampling only possible for integer scales in both "
                         "dimensions. Request was %d x %d -> %d x %d.",
-                        wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+                        wrapper_->getWidth (),
+                        wrapper_->getHeight (),
+                        width,
+                        height);
 
   unsigned gray_line_skip = 0;
   if (gray_line_step != 0)

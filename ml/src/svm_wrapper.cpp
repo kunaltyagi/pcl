@@ -281,8 +281,8 @@ pcl::SVM::loadProblem (const char *filename, svm_problem &prob)
   char *idx, *val, *label;
 
   if (fp == nullptr) {
-    PCL_ERROR ("[pcl::%s] Can't open input file %s.\n", getClassName ().c_str (),
-               filename);
+    PCL_ERROR (
+        "[pcl::%s] Can't open input file %s.\n", getClassName ().c_str (), filename);
     return false;
   }
 
@@ -431,8 +431,8 @@ pcl::SVM::saveProblem (const char *filename, bool labelled = false)
   myfile.open (filename);
 
   if (!myfile.is_open ()) {
-    PCL_ERROR ("[pcl::%s] Can't open/create file %s.\n", getClassName ().c_str (),
-               filename);
+    PCL_ERROR (
+        "[pcl::%s] Can't open/create file %s.\n", getClassName ().c_str (), filename);
     return false;
   }
 
@@ -457,12 +457,14 @@ pcl::SVM::saveProblem (const char *filename, bool labelled = false)
 }
 
 bool
-pcl::SVM::saveProblemNorm (const char *filename, svm_problem prob_,
+pcl::SVM::saveProblemNorm (const char *filename,
+                           svm_problem prob_,
                            bool labelled = false)
 {
   if (prob_.l == 0) {
     PCL_ERROR ("[pcl::%s] Can't save file %s. Input data not set.\n",
-               getClassName ().c_str (), filename);
+               getClassName ().c_str (),
+               filename);
     return false;
   }
 
@@ -471,8 +473,8 @@ pcl::SVM::saveProblemNorm (const char *filename, svm_problem prob_,
   myfile.open (filename);
 
   if (!myfile.is_open ()) {
-    PCL_ERROR ("[pcl::%s] Can't open/create file %s.\n", getClassName ().c_str (),
-               filename);
+    PCL_ERROR (
+        "[pcl::%s] Can't open/create file %s.\n", getClassName ().c_str (), filename);
     return false;
   }
 
@@ -504,7 +506,8 @@ pcl::SVMClassify::loadClassifierModel (const char *filename)
   out = static_cast<SVMModel *> (svm_load_model (filename));
   if (out == nullptr) {
     PCL_ERROR ("[pcl::%s::loadClassifierModel] Can't open classifier model %s.\n",
-               getClassName ().c_str (), filename);
+               getClassName ().c_str (),
+               filename);
     return false;
   }
 
@@ -513,7 +516,8 @@ pcl::SVMClassify::loadClassifierModel (const char *filename)
 
   if (model_.l == 0) {
     PCL_ERROR ("[pcl::%s::loadClassifierModel] Can't open classifier model %s.\n",
-               getClassName ().c_str (), filename);
+               getClassName ().c_str (),
+               filename);
     return false;
   }
 
@@ -581,7 +585,8 @@ pcl::SVMClassify::classificationTest ()
       PCL_WARN ("[pcl::%s::classificationTest] Prob. model for test data: target value "
                 "= predicted value + z,\nz: Laplace distribution "
                 "e^(-|z|/sigma)/(2sigma),sigma=%g\n",
-                getClassName ().c_str (), svm_get_svr_probability (&model_));
+                getClassName ().c_str (),
+                svm_get_svr_probability (&model_));
     else {
       prob_estimates = static_cast<double *> (malloc (nr_class * sizeof (double)));
     }
@@ -632,12 +637,13 @@ pcl::SVMClassify::classificationTest ()
 
     pcl::console::print_info (" - Squared correlation coefficient (regression) = ");
     pcl::console::print_value (
-        "%g\n", ((total * sumpt - sump * sumt) * (total * sumpt - sump * sumt)) /
-                    ((total * sumpp - sump * sump) * (total * sumtt - sumt * sumt)));
+        "%g\n",
+        ((total * sumpt - sump * sumt) * (total * sumpt - sump * sumt)) /
+            ((total * sumpp - sump * sump) * (total * sumtt - sumt * sumt)));
   } else {
     pcl::console::print_info (" - Accuracy (classification) = ");
-    pcl::console::print_value ("%g%% (%d/%d)\n", double(correct) / total * 100, correct,
-                               total);
+    pcl::console::print_value (
+        "%g%% (%d/%d)\n", double(correct) / total * 100, correct, total);
   }
 
   if (predict_probability_)
@@ -689,7 +695,8 @@ pcl::SVMClassify::classification ()
       PCL_WARN ("[pcl::%s::classificationTest] Prob. model for test data: target value "
                 "= predicted value + z,\nz: Laplace distribution "
                 "e^(-|z|/sigma)/(2sigma),sigma=%g\n",
-                getClassName ().c_str (), svm_get_svr_probability (&model_));
+                getClassName ().c_str (),
+                svm_get_svr_probability (&model_));
     else {
       prob_estimates = static_cast<double *> (malloc (nr_class * sizeof (double)));
     }
@@ -779,7 +786,8 @@ pcl::SVMClassify::classification (pcl::SVMData in)
       PCL_WARN ("[pcl::%s::classification] Prob. model for test data: target value = "
                 "predicted value + z,\nz: Laplace distribution "
                 "e^(-|z|/sigma)/(2sigma),sigma=%g\n",
-                getClassName ().c_str (), svm_get_svr_probability (&model_));
+                getClassName ().c_str (),
+                svm_get_svr_probability (&model_));
     else {
       prob_estimates = static_cast<double *> (malloc (nr_class * sizeof (double)));
     }

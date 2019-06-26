@@ -117,7 +117,8 @@ class ON_CLASS ON_PointGrid : public ON_Geometry
     bounding box.
   */
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   ON_BOOL32
@@ -171,14 +172,16 @@ class ON_CLASS ON_PointGrid : public ON_Geometry
       ) const;
 
   ON_BOOL32
-  SetPoint (    // set a single point
-      int, int, // point index ( 0 <= i <= PointCount(0), 0 <= j <= PointCount(1)
+  SetPoint ( // set a single point
+      int,
+      int, // point index ( 0 <= i <= PointCount(0), 0 <= j <= PointCount(1)
       const ON_3dPoint & // value of point
   );
 
   ON_BOOL32
-  GetPoint (       // get a single control vertex
-      int, int,    // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
+  GetPoint ( // get a single control vertex
+      int,
+      int,         // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
       ON_3dPoint & // gets euclidean cv when NURBS is rational
       ) const;
 

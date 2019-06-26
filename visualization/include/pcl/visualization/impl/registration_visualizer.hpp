@@ -80,15 +80,15 @@ pcl::RegistrationVisualizer<PointSource, PointTarget>::runDisplay ()
   int v1 (0);
   viewer_->createViewPort (0.0, 0.0, 0.5, 1.0, v1);
   viewer_->setBackgroundColor (0, 0, 0, v1);
-  viewer_->addText ("Initial position of source and target point clouds", 10, 50,
-                    "title v1", v1);
+  viewer_->addText (
+      "Initial position of source and target point clouds", 10, 50, "title v1", v1);
   viewer_->addText ("Blue -> target", 10, 30, 0.0, 0.0, 1.0, "legend target v1", v1);
   viewer_->addText ("Red  -> source", 10, 10, 1.0, 0.0, 0.0, "legend source v1", v1);
   //
-  viewer_->addPointCloud<PointSource> (cloud_source_.makeShared (),
-                                       cloud_source_handler_, "cloud source v1", v1);
-  viewer_->addPointCloud<PointTarget> (cloud_target_.makeShared (),
-                                       cloud_target_handler_, "cloud target v1", v1);
+  viewer_->addPointCloud<PointSource> (
+      cloud_source_.makeShared (), cloud_source_handler_, "cloud source v1", v1);
+  viewer_->addPointCloud<PointTarget> (
+      cloud_target_.makeShared (), cloud_target_handler_, "cloud target v1", v1);
 
   // Create the view port for displaying the registration process of source to target
   // point cloud
@@ -99,18 +99,19 @@ pcl::RegistrationVisualizer<PointSource, PointTarget>::runDisplay ()
       "Registration using " + registration_method_name_;
   viewer_->addText (registration_port_title_, 10, 90, "title v2", v2);
 
-  viewer_->addText ("Yellow -> intermediate", 10, 50, 1.0, 1.0, 0.0,
-                    "legend intermediate v2", v2);
+  viewer_->addText (
+      "Yellow -> intermediate", 10, 50, 1.0, 1.0, 0.0, "legend intermediate v2", v2);
   viewer_->addText ("Blue   -> target", 10, 30, 0.0, 0.0, 1.0, "legend target v2", v2);
   viewer_->addText ("Red    -> source", 10, 10, 1.0, 0.0, 0.0, "legend source v2", v1);
 
   //    viewer_->addPointCloud<PointSource> (cloud_source_.makeShared (),
   //    cloud_source_handler_, "cloud source v2", v2);
-  viewer_->addPointCloud<PointTarget> (cloud_target_.makeShared (),
-                                       cloud_target_handler_, "cloud target v2", v2);
+  viewer_->addPointCloud<PointTarget> (
+      cloud_target_.makeShared (), cloud_target_handler_, "cloud target v2", v2);
   viewer_->addPointCloud<PointSource> (cloud_intermediate_.makeShared (),
                                        cloud_intermediate_handler_,
-                                       "cloud intermediate v2", v2);
+                                       "cloud intermediate v2",
+                                       v2);
 
   // Used to remove all old correspondences
   size_t correspondeces_old_size = 0;
@@ -133,7 +134,8 @@ pcl::RegistrationVisualizer<PointSource, PointTarget>::runDisplay ()
     // Add the new point cloud
     viewer_->addPointCloud<PointSource> (cloud_intermediate_.makeShared (),
                                          cloud_intermediate_handler_,
-                                         "cloud intermediate v2", v2);
+                                         "cloud intermediate v2",
+                                         v2);
 
     // Updating the correspondece lines
 
@@ -154,8 +156,8 @@ pcl::RegistrationVisualizer<PointSource, PointTarget>::runDisplay ()
     std::stringstream stream_;
     stream_ << "Random -> correspondences " << correspondences_new_size;
     viewer_->removeShape ("correspondences_size", 0);
-    viewer_->addText (stream_.str (), 10, 70, 0.0, 1.0, 0.0, "correspondences_size",
-                      v2);
+    viewer_->addText (
+        stream_.str (), 10, 70, 0.0, 1.0, 0.0, "correspondences_size", v2);
 
     // Display entire set of correspondece lines if no maximum displayed correspondences
     // is set
@@ -180,8 +182,12 @@ pcl::RegistrationVisualizer<PointSource, PointTarget>::runDisplay ()
       // Add the new correspondence line.
       viewer_->addLine (
           cloud_intermediate_[cloud_intermediate_indices_[correspondence_id]],
-          cloud_target_[cloud_target_indices_[correspondence_id]], random_red,
-          random_green, random_blue, line_name_, v2);
+          cloud_target_[cloud_target_indices_[correspondence_id]],
+          random_red,
+          random_green,
+          random_blue,
+          line_name_,
+          v2);
     }
 
     // Unlock access to visualizer buffers
@@ -198,8 +204,10 @@ pcl::RegistrationVisualizer<PointSource, PointTarget>::runDisplay ()
 template <typename PointSource, typename PointTarget>
 void
 pcl::RegistrationVisualizer<PointSource, PointTarget>::updateIntermediateCloud (
-    const pcl::PointCloud<PointSource> &cloud_src, const std::vector<int> &indices_src,
-    const pcl::PointCloud<PointTarget> &cloud_tgt, const std::vector<int> &indices_tgt)
+    const pcl::PointCloud<PointSource> &cloud_src,
+    const std::vector<int> &indices_src,
+    const pcl::PointCloud<PointTarget> &cloud_tgt,
+    const std::vector<int> &indices_tgt)
 {
   // Lock local buffers
   visualizer_updating_mutex_.lock ();

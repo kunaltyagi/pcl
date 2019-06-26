@@ -152,10 +152,7 @@ ON_TextExtra::Archive () const
 }
 
 ON_UUID
-ON_TextExtra::ParentUUID () const
-{
-  return m_parent_uuid;
-}
+ON_TextExtra::ParentUUID () const { return m_parent_uuid; }
 
 void
 ON_TextExtra::SetParentUUID (ON_UUID parent_uuid)
@@ -217,7 +214,8 @@ ON_TextExtra::SetMaskOffsetFactor (double offset)
 //--------------------
 
 // Added for v5 - 4-20-07 LW
-ON_OBJECT_IMPLEMENT (ON_DimensionExtra, ON_UserData,
+ON_OBJECT_IMPLEMENT (ON_DimensionExtra,
+                     ON_UserData,
                      "8AD5B9FC-0D5C-47fb-ADFD-74C28B6F661E");
 
 ON_DimensionExtra::ON_DimensionExtra ()
@@ -393,10 +391,7 @@ ON_DimensionExtra::Archive () const
 }
 
 ON_UUID
-ON_DimensionExtra::ParentUUID () const
-{
-  return m_partent_uuid;
-}
+ON_DimensionExtra::ParentUUID () const { return m_partent_uuid; }
 
 void
 ON_DimensionExtra::SetParentUUID (ON_UUID partent_uuid)
@@ -551,20 +546,27 @@ void ON_DimensionExtra::SetAlternateToleranceLowerString( ON_wString& lower_stri
 
 //--------------------
 
-ON_VIRTUAL_OBJECT_IMPLEMENT (ON_Annotation2, ON_Geometry,
+ON_VIRTUAL_OBJECT_IMPLEMENT (ON_Annotation2,
+                             ON_Geometry,
                              "8D820224-BC6C-46b4-9066-BF39CC13AEFB");
-ON_OBJECT_IMPLEMENT (ON_LinearDimension2, ON_Annotation2,
+ON_OBJECT_IMPLEMENT (ON_LinearDimension2,
+                     ON_Annotation2,
                      "BD57F33B-A1B2-46e9-9C6E-AF09D30FFDDE");
-ON_OBJECT_IMPLEMENT (ON_RadialDimension2, ON_Annotation2,
+ON_OBJECT_IMPLEMENT (ON_RadialDimension2,
+                     ON_Annotation2,
                      "B2B683FC-7964-4e96-B1F9-9B356A76B08B");
-ON_OBJECT_IMPLEMENT (ON_AngularDimension2, ON_Annotation2,
+ON_OBJECT_IMPLEMENT (ON_AngularDimension2,
+                     ON_Annotation2,
                      "841BC40B-A971-4a8e-94E5-BBA26D67348E");
-ON_OBJECT_IMPLEMENT (ON_TextEntity2, ON_Annotation2,
+ON_OBJECT_IMPLEMENT (ON_TextEntity2,
+                     ON_Annotation2,
                      "46F75541-F46B-48be-AA7E-B353BBE068A7");
-ON_OBJECT_IMPLEMENT (ON_Leader2, ON_Annotation2,
+ON_OBJECT_IMPLEMENT (ON_Leader2,
+                     ON_Annotation2,
                      "14922B7A-5B65-4f11-8345-D415A9637129");
 ON_OBJECT_IMPLEMENT (ON_TextDot, ON_Geometry, "74198302-CDF4-4f95-9609-6D684F22AB37");
-ON_OBJECT_IMPLEMENT (ON_OrdinateDimension2, ON_Annotation2,
+ON_OBJECT_IMPLEMENT (ON_OrdinateDimension2,
+                     ON_Annotation2,
                      "C8288D69-5BD8-4f50-9BAF-525A0086B0C3");
 
 // class ON_Annotation2
@@ -1662,8 +1664,14 @@ ON_BOOL32
 ON_Annotation2::GetECStoWCSXform (ON_Xform &xform) const
 {
   ON_3dVector z = ON_CrossProduct (m_plane.xaxis, m_plane.yaxis);
-  return xform.ChangeBasis (m_plane.origin, m_plane.xaxis, m_plane.yaxis, z, ON_origin,
-                            ON_xaxis, ON_yaxis, ON_zaxis);
+  return xform.ChangeBasis (m_plane.origin,
+                            m_plane.xaxis,
+                            m_plane.yaxis,
+                            z,
+                            ON_origin,
+                            ON_xaxis,
+                            ON_yaxis,
+                            ON_zaxis);
 }
 
 // Converts from WCS 3d points to 2d points in annotation
@@ -1671,8 +1679,14 @@ ON_BOOL32
 ON_Annotation2::GetWCStoECSXform (ON_Xform &xform) const
 {
   ON_3dVector z = ON_CrossProduct (m_plane.xaxis, m_plane.yaxis);
-  return xform.ChangeBasis (ON_origin, ON_xaxis, ON_yaxis, ON_zaxis, m_plane.origin,
-                            m_plane.xaxis, m_plane.yaxis, z);
+  return xform.ChangeBasis (ON_origin,
+                            ON_xaxis,
+                            ON_yaxis,
+                            ON_zaxis,
+                            m_plane.origin,
+                            m_plane.xaxis,
+                            m_plane.yaxis,
+                            z);
 }
 
 void
@@ -1784,7 +1798,8 @@ ON_LinearDimension2::IsValid (ON_TextLog *text_log) const
     if (text_log) {
       text_log->Print ("ON_LinearDimension2 - m_points[1].x = %g != %g = m_points[0].x "
                        "(should be equal)\n",
-                       m_points[1].x, m_points[0].x);
+                       m_points[1].x,
+                       m_points[0].x);
     }
     return false;
   }
@@ -1793,7 +1808,8 @@ ON_LinearDimension2::IsValid (ON_TextLog *text_log) const
     if (text_log) {
       text_log->Print (
           "ON_LinearDimension2 - m_points[3].x = %g != %g = m_points[2].x\n",
-          m_points[3].x, m_points[2].x);
+          m_points[3].x,
+          m_points[2].x);
     }
     return false;
   }
@@ -1802,7 +1818,8 @@ ON_LinearDimension2::IsValid (ON_TextLog *text_log) const
     if (text_log) {
       text_log->Print (
           "ON_LinearDimension2 - m_points[3].y = %g != %g = m_points[1].y\n",
-          m_points[3].y, m_points[1].y);
+          m_points[3].y,
+          m_points[1].y);
     }
     return false;
   }
@@ -1860,8 +1877,8 @@ ON_LinearDimension2::Read (ON_BinaryArchive &archive)
   bool bInChunk = (archive.Archive3dmVersion () >= 5 &&
                    archive.ArchiveOpenNURBSVersion () >= 200710180);
   if (bInChunk) {
-    rc = archive.BeginRead3dmChunk (TCODE_ANONYMOUS_CHUNK, &major_version,
-                                    &minor_version);
+    rc = archive.BeginRead3dmChunk (
+        TCODE_ANONYMOUS_CHUNK, &major_version, &minor_version);
     if (!rc)
       return false;
   } else {
@@ -1939,7 +1956,8 @@ ON_LinearDimension2::GetBBox (double *boxmax, double *boxmin, ON_BOOL32 bGrowBox
 }
 
 bool
-ON_LinearDimension2::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_LinearDimension2::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                          int bGrowBox,
                                           const ON_Xform *xform) const
 {
   if (5 == m_points.Count ()) {
@@ -2294,8 +2312,10 @@ ON_LinearDimension2::GetDimensionLineSegments (ON_RECT gdi_text_rect,
                                                int gdi_height_of_I,
                                                ON_Xform gdi_to_world,
                                                const ON_DimStyle &dimstyle,
-                                               double dimscale, const ON_Viewport *vp,
-                                               double x[6], bool &bInside) const
+                                               double dimscale,
+                                               const ON_Viewport *vp,
+                                               double x[6],
+                                               bool &bInside) const
 {
   int rc = 0;
 
@@ -2627,8 +2647,8 @@ ON_RadialDimension2::Read (ON_BinaryArchive &archive)
   bool bInChunk = (archive.Archive3dmVersion () >= 5 &&
                    archive.ArchiveOpenNURBSVersion () >= 200710180);
   if (bInChunk) {
-    rc = archive.BeginRead3dmChunk (TCODE_ANONYMOUS_CHUNK, &major_version,
-                                    &minor_version);
+    rc = archive.BeginRead3dmChunk (
+        TCODE_ANONYMOUS_CHUNK, &major_version, &minor_version);
     if (!rc)
       return false;
   } else {
@@ -2705,7 +2725,8 @@ ON_RadialDimension2::GetBBox (double *boxmax, double *boxmin, ON_BOOL32 bGrowBox
 }
 
 bool
-ON_RadialDimension2::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_RadialDimension2::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                          int bGrowBox,
                                           const ON_Xform *xform) const
 {
   if (4 == m_points.Count ()) {
@@ -2763,8 +2784,10 @@ ON_RadialDimension2::Dim3dPoint (int point_index) const
 // set the plane, center, and point on curve.
 // the rest will be set by the Rhino dimension
 bool
-ON_RadialDimension2::CreateFromPoints (ON_3dPoint center, ON_3dPoint arrowtip,
-                                       ON_3dVector xaxis, ON_3dVector normal,
+ON_RadialDimension2::CreateFromPoints (ON_3dPoint center,
+                                       ON_3dPoint arrowtip,
+                                       ON_3dVector xaxis,
+                                       ON_3dVector normal,
                                        double offset_distance)
 {
   if (m_type != ON::dtDimDiameter)
@@ -2945,7 +2968,8 @@ class ON_AngularDimension2Extra : public ON_UserData
   double m_dimpoint_offset[2];
 };
 
-ON_OBJECT_IMPLEMENT (ON_AngularDimension2Extra, ON_UserData,
+ON_OBJECT_IMPLEMENT (ON_AngularDimension2Extra,
+                     ON_UserData,
                      "A68B151F-C778-4a6e-BCB4-23DDD1835677");
 
 ON_AngularDimension2Extra *
@@ -3184,7 +3208,8 @@ ON_AngularDimension2::IsValid (ON_TextLog *text_log) const
     if (text_log) {
       text_log->Print (
           "ON_AngularDimension2 - m_angle = %g != %g = (end angle - start angle)\n",
-          m_angle, a2 - a1);
+          m_angle,
+          a2 - a1);
     }
     return false;
   }
@@ -3192,8 +3217,8 @@ ON_AngularDimension2::IsValid (ON_TextLog *text_log) const
   double r = ON_2dVector (m_points[3]).Length ();
   if (fabs (r - m_radius) > ON_ZERO_TOLERANCE + m_radius * ON_SQRT_EPSILON) {
     if (text_log) {
-      text_log->Print ("ON_AngularDimension2 - m_radius = %g != %g = |m_point[3])|\n",
-                       m_radius, r);
+      text_log->Print (
+          "ON_AngularDimension2 - m_radius = %g != %g = |m_point[3])|\n", m_radius, r);
     }
     return false;
   }
@@ -3247,7 +3272,8 @@ ON_AngularDimension2::GetBBox (double *boxmax, double *boxmin, ON_BOOL32 bGrowBo
 }
 
 bool
-ON_AngularDimension2::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_AngularDimension2::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                           int bGrowBox,
                                            const ON_Xform *xform) const
 {
   ON_Arc arc;
@@ -3625,8 +3651,10 @@ ON_AngularDimension2::GetExtensionLines (ON_Line extensions[2]) const
 }
 
 bool
-ON_AngularDimension2::CreateFromPoints (const ON_3dPoint &pc, const ON_3dPoint &p0in,
-                                        const ON_3dPoint &p1in, ON_3dPoint &arcpt,
+ON_AngularDimension2::CreateFromPoints (const ON_3dPoint &pc,
+                                        const ON_3dPoint &p0in,
+                                        const ON_3dPoint &p1in,
+                                        ON_3dPoint &arcpt,
                                         ON_3dVector &Normal)
 {
   ON_3dPoint p0, p1;
@@ -3790,8 +3818,10 @@ ON_AngularDimension2::GetDimensionArcSegments (ON_RECT gdi_text_rect,
                                                int gdi_height_of_I,
                                                ON_Xform gdi_to_world,
                                                const ON_DimStyle &dimstyle,
-                                               double dimscale, const ON_Viewport *vp,
-                                               double a[6], bool &bInside) const
+                                               double dimscale,
+                                               const ON_Viewport *vp,
+                                               double a[6],
+                                               bool &bInside) const
 {
   int rc = 0;
 
@@ -4348,8 +4378,8 @@ ON_OrdinateDimension2::Read (ON_BinaryArchive &file)
 
       // subchunk wraps ON_Annotation2 field so this
       // function won't break if ON_Annotation2 changes.
-      rc = file.BeginRead3dmChunk (TCODE_ANONYMOUS_CHUNK, &submajor_version,
-                                   &subminor_version);
+      rc = file.BeginRead3dmChunk (
+          TCODE_ANONYMOUS_CHUNK, &submajor_version, &subminor_version);
       if (rc) {
         if (1 != submajor_version)
           rc = false;
@@ -4399,7 +4429,8 @@ ON_OrdinateDimension2::SetStyleIndex (int i)
 }
 
 ON_BOOL32
-ON_OrdinateDimension2::GetBBox (double *boxmin, double *boxmax,
+ON_OrdinateDimension2::GetBBox (double *boxmin,
+                                double *boxmax,
                                 ON_BOOL32 bGrowBox) const
 {
   ON_BoundingBox bbox;
@@ -4437,7 +4468,8 @@ ON_OrdinateDimension2::GetBBox (double *boxmin, double *boxmax,
 }
 
 bool
-ON_OrdinateDimension2::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_OrdinateDimension2::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                            int bGrowBox,
                                             const ON_Xform *xform) const
 {
   if (m_points.Count () == 2) {
@@ -4509,8 +4541,11 @@ ON_OrdinateDimension2::SetKinkOffset (int index, double offset)
 }
 
 void
-ON_OrdinateDimension2::CalcKinkPoints (ON_2dPoint p0, ON_2dPoint p1, int direction,
-                                       double default_offset, ON_2dPoint &k0,
+ON_OrdinateDimension2::CalcKinkPoints (ON_2dPoint p0,
+                                       ON_2dPoint p1,
+                                       int direction,
+                                       double default_offset,
+                                       ON_2dPoint &k0,
                                        ON_2dPoint &k1) const
 {
   double offset0 = KinkOffset (0);
@@ -4677,8 +4712,8 @@ ON_TextEntity2::Read (ON_BinaryArchive &archive)
   bool bInChunk = (archive.Archive3dmVersion () >= 5 &&
                    archive.ArchiveOpenNURBSVersion () >= 200710180);
   if (bInChunk) {
-    rc = archive.BeginRead3dmChunk (TCODE_ANONYMOUS_CHUNK, &major_version,
-                                    &minor_version);
+    rc = archive.BeginRead3dmChunk (
+        TCODE_ANONYMOUS_CHUNK, &major_version, &minor_version);
     if (!rc)
       return false;
   } else {
@@ -4747,7 +4782,8 @@ ON_TextEntity2::GetBBox (double *boxmax, double *boxmin, ON_BOOL32 bGrowBox) con
 }
 
 bool
-ON_TextEntity2::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_TextEntity2::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                     int bGrowBox,
                                      const ON_Xform *xform) const
 {
   if (1 == m_points.Count ()) {
@@ -5002,8 +5038,8 @@ ON_Leader2::Read (ON_BinaryArchive &archive)
   bool bInChunk = (archive.Archive3dmVersion () >= 5 &&
                    archive.ArchiveOpenNURBSVersion () >= 200710180);
   if (bInChunk) {
-    rc = archive.BeginRead3dmChunk (TCODE_ANONYMOUS_CHUNK, &major_version,
-                                    &minor_version);
+    rc = archive.BeginRead3dmChunk (
+        TCODE_ANONYMOUS_CHUNK, &major_version, &minor_version);
     if (!rc)
       return false;
   } else {
@@ -5071,7 +5107,8 @@ ON_Leader2::GetBBox (double *boxmax, double *boxmin, ON_BOOL32 bGrowBox) const
 }
 
 bool
-ON_Leader2::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_Leader2::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                 int bGrowBox,
                                  const ON_Xform *xform) const
 {
   const int point_count = m_points.Count ();
@@ -5256,7 +5293,8 @@ ON_Leader2::GetV2Form (ON_Leader &leader)
 
 bool
 ON_Leader2::CreateFromV2 (const ON_Annotation &v2_ann,
-                          const ON_3dmAnnotationSettings &settings, int dimstyle_index)
+                          const ON_3dmAnnotationSettings &settings,
+                          int dimstyle_index)
 {
   bool rc = false;
   if (ON::dtLeader == v2_ann.m_type && v2_ann.m_points.Count () >= 2) {
@@ -5384,11 +5422,12 @@ ON_TextDot::Dimension () const
 }
 
 ON_BOOL32
-ON_TextDot::GetBBox (double *box_min, double *box_max,
+ON_TextDot::GetBBox (double *box_min,
+                     double *box_max,
                      ON_BOOL32 grow_box /*= false*/) const
 {
-  return ON_GetPointListBoundingBox (3, 0, 1, 3, &m_point.x, box_min, box_max,
-                                     grow_box ? true : false);
+  return ON_GetPointListBoundingBox (
+      3, 0, 1, 3, &m_point.x, box_min, box_max, grow_box ? true : false);
 }
 
 ON_BOOL32
@@ -5588,9 +5627,12 @@ ON_Annotation2Text::SetText (const wchar_t *s)
 // SDKBREAK Oct 30, 07 - LW
 // This function should not be used any longer
 bool
-ON_Annotation2::GetTextXform (ON_RECT gdi_text_rect, const ON_Font &font,
-                              const ON_DimStyle &dimstyle, double dimscale,
-                              const ON_Viewport *vp, ON_Xform &xform) const
+ON_Annotation2::GetTextXform (ON_RECT gdi_text_rect,
+                              const ON_Font &font,
+                              const ON_DimStyle &dimstyle,
+                              double dimscale,
+                              const ON_Viewport *vp,
+                              ON_Xform &xform) const
 {
   ON_ERROR ("This function should not be used. Use the version that takes a model "
             "transform argument.");
@@ -5639,9 +5681,12 @@ bool ON_Annotation2::GetTextXform(
 #endif
 
 bool
-ON_Annotation2::GetTextXform (ON_RECT gdi_text_rect, const ON_Font &font,
-                              const ON_DimStyle *dimstyle, double dimscale,
-                              const ON_Viewport *vp, const ON_Xform *model_xform,
+ON_Annotation2::GetTextXform (ON_RECT gdi_text_rect,
+                              const ON_Font &font,
+                              const ON_DimStyle *dimstyle,
+                              double dimscale,
+                              const ON_Viewport *vp,
+                              const ON_Xform *model_xform,
                               ON_Xform &xform) const
 {
   int gdi_height_of_I = font.HeightOfI ();
@@ -5658,8 +5703,16 @@ ON_Annotation2::GetTextXform (ON_RECT gdi_text_rect, const ON_Font &font,
         (Type () == ON::dtDimLinear || Type () == ON::dtDimAligned))
       textgap += textheight * 0.5;
   }
-  return GetTextXform (gdi_text_rect, gdi_height_of_I, textheight, textgap,
-                       textalignment, dimscale, cameraX, cameraY, model_xform, xform);
+  return GetTextXform (gdi_text_rect,
+                       gdi_height_of_I,
+                       textheight,
+                       textgap,
+                       textalignment,
+                       dimscale,
+                       cameraX,
+                       cameraY,
+                       model_xform,
+                       xform);
 }
 
 static bool
@@ -5727,10 +5780,14 @@ GetLeaderEndAndDirection (const ON_Annotation2 *pAnn, ON_2dPoint &E, ON_2dVector
 // SDKBREAK Oct 30, 07 - LW
 // This function should not be used any longer
 bool
-ON_Annotation2::GetTextXform (ON_RECT gdi_text_rect, int gdi_height_of_I,
-                              double dimstyle_textheight, double dimstyle_textgap,
+ON_Annotation2::GetTextXform (ON_RECT gdi_text_rect,
+                              int gdi_height_of_I,
+                              double dimstyle_textheight,
+                              double dimstyle_textgap,
                               ON::eTextDisplayMode dimstyle_textalignment,
-                              double dimscale, ON_3dVector cameraX, ON_3dVector cameraY,
+                              double dimscale,
+                              ON_3dVector cameraX,
+                              ON_3dVector cameraY,
                               ON_Xform &xform) const
 {
   ON_ERROR ("This function should not be used. Use the version that takes a model "
@@ -5778,7 +5835,7 @@ ON_Annotation2::GetTextXform (ON_RECT gdi_text_rect, int gdi_height_of_I,
   // const double text_line_width  = gdi_to_plane_scale*(gdi_text_rect.right -
   // gdi_text_rect.left);
   ////const double text_line_height = gdi_to_plane_scale*(gdi_text_rect.bottom -
-  ///gdi_text_rect.top);
+  /// gdi_text_rect.top);
 
   // if ( ON::dtTextBlock == ann_type )
   //{
@@ -6082,11 +6139,16 @@ ON_Annotation2::GetTextXform (ON_RECT gdi_text_rect, int gdi_height_of_I,
 // New function added Oct 30, 07 - LW
 // To use model xform to draw annotation in blocks correctly
 bool
-ON_Annotation2::GetTextXform (ON_RECT gdi_text_rect, int gdi_height_of_I,
-                              double dimstyle_textheight, double dimstyle_textgap,
+ON_Annotation2::GetTextXform (ON_RECT gdi_text_rect,
+                              int gdi_height_of_I,
+                              double dimstyle_textheight,
+                              double dimstyle_textgap,
                               ON::eTextDisplayMode dimstyle_textalignment,
-                              double dimscale, ON_3dVector cameraX, ON_3dVector cameraY,
-                              const ON_Xform *model_xform, ON_Xform &xform) const
+                              double dimscale,
+                              ON_3dVector cameraX,
+                              ON_3dVector cameraY,
+                              const ON_Xform *model_xform,
+                              ON_Xform &xform) const
 {
   ON_Xform mxi;
   if (model_xform) {
@@ -6373,8 +6435,13 @@ ON_Annotation2::GetTextXform (ON_RECT gdi_text_rect, int gdi_height_of_I,
   if (ON::dtHorizontal == dimstyle_textalignment) {
     ON_3dPoint fixed_point =
         ann->m_plane.PointAt (text_offset_translation.x, text_offset_translation.y);
-    horizonal_xform.Rotation (fixed_point, ann->m_plane.xaxis, ann->m_plane.yaxis,
-                              ann->m_plane.zaxis, fixed_point, cameraX, cameraY,
+    horizonal_xform.Rotation (fixed_point,
+                              ann->m_plane.xaxis,
+                              ann->m_plane.yaxis,
+                              ann->m_plane.zaxis,
+                              fixed_point,
+                              cameraX,
+                              cameraY,
                               cameraZ);
 
     if (2 == position_style) {
@@ -6496,7 +6563,8 @@ class /*NEVER PUT THIS CLASS IN THE SDK*/ ON_AnnotationTextFormula : public ON_U
 
 #undef BOZO_VACCINE_699FCC4262D4488c9109F1B7A37CE926
 
-ON_OBJECT_IMPLEMENT (ON_AnnotationTextFormula, ON_UserData,
+ON_OBJECT_IMPLEMENT (ON_AnnotationTextFormula,
+                     ON_UserData,
                      "699FCC42-62D4-488c-9109-F1B7A37CE926");
 
 ON_AnnotationTextFormula::~ON_AnnotationTextFormula () {}

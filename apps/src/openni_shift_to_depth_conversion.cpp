@@ -76,7 +76,8 @@ class SimpleOpenNIViewer
 
   void
   image_callback (const openni_wrapper::Image::Ptr &image,
-                  const openni_wrapper::DepthImage::Ptr &depth_image, float)
+                  const openni_wrapper::DepthImage::Ptr &depth_image,
+                  float)
   {
 
     vector<uint16_t> raw_shift_data;
@@ -90,19 +91,23 @@ class SimpleOpenNIViewer
     // copy raw shift data from depth_image
     raw_shift_data.resize (width * height);
     depth_image->fillDepthImageRaw (
-        width, height, &raw_shift_data[0],
+        width,
+        height,
+        &raw_shift_data[0],
         static_cast<unsigned int> (width * sizeof (uint16_t)));
 
     // convert raw shift data to raw depth data
     raw_depth_data.resize (width * height);
-    grabber_->convertShiftToDepth (&raw_shift_data[0], &raw_depth_data[0],
-                                   raw_shift_data.size ());
+    grabber_->convertShiftToDepth (
+        &raw_shift_data[0], &raw_depth_data[0], raw_shift_data.size ());
 
     // check for color data
     if (image->getEncoding () != openni_wrapper::Image::RGB) {
       // copy raw rgb data from image
       rgb_data.resize (width * height * 3);
-      image->fillRGB (width, height, &rgb_data[0],
+      image->fillRGB (width,
+                      height,
+                      &rgb_data[0],
                       static_cast<unsigned int> (width * sizeof (uint8_t) * 3));
     }
 
@@ -112,7 +117,11 @@ class SimpleOpenNIViewer
             new pcl::PointCloud<pcl::PointXYZRGB> ());
 
     // convert raw depth and rgb data to pointcloud
-    convert (raw_depth_data, rgb_data, width, height, depth_image->getFocalLength (),
+    convert (raw_depth_data,
+             rgb_data,
+             width,
+             height,
+             depth_image->getFocalLength (),
              *cloud);
 
     // display pointcloud
@@ -126,8 +135,8 @@ class SimpleOpenNIViewer
     pcl::OpenNIGrabber::Mode image_mode = pcl::OpenNIGrabber::OpenNI_Default_Mode;
     int depthformat = openni_wrapper::OpenNIDevice::OpenNI_shift_values;
 
-    grabber_ = new pcl::OpenNIGrabber ("", pcl::OpenNIGrabber::OpenNI_Default_Mode,
-                                       image_mode);
+    grabber_ = new pcl::OpenNIGrabber (
+        "", pcl::OpenNIGrabber::OpenNI_Default_Mode, image_mode);
 
     // Set the depth output format
     grabber_->getDevice ()->setDepthOutputFormat (
@@ -135,7 +144,8 @@ class SimpleOpenNIViewer
 
     // define image callback
     std::function<void(const openni_wrapper::Image::Ptr &,
-                       const openni_wrapper::DepthImage::Ptr &, float)>
+                       const openni_wrapper::DepthImage::Ptr &,
+                       float)>
         image_cb = boost::bind (&SimpleOpenNIViewer::image_callback, this, _1, _2, _3);
     boost::signals2::connection image_connection =
         grabber_->registerCallback (image_cb);
@@ -151,8 +161,11 @@ class SimpleOpenNIViewer
   protected:
   /* helper method to convert depth&rgb data to pointcloud*/
   void
-  convert (std::vector<uint16_t> &depthData_arg, std::vector<uint8_t> &rgbData_arg,
-           size_t width_arg, size_t height_arg, float focalLength_arg,
+  convert (std::vector<uint16_t> &depthData_arg,
+           std::vector<uint8_t> &rgbData_arg,
+           size_t width_arg,
+           size_t height_arg,
+           float focalLength_arg,
            pcl::PointCloud<PointXYZRGB> &cloud_arg) const
   {
     size_t cloud_size = width_arg * height_arg;

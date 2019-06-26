@@ -19,7 +19,8 @@
 #define ON_BOZO_VACCINE_11EE2C1FF90D4C6AA7CDEC8532E1E32D
 #define ON_BOZO_VACCINE_F42D967121EB46929B9ABC3507FF28F5
 
-ON_OBJECT_IMPLEMENT (ON_InstanceDefinition, ON_Geometry,
+ON_OBJECT_IMPLEMENT (ON_InstanceDefinition,
+                     ON_Geometry,
                      "26F8BFF6-2618-417f-A158-153D64A94989");
 
 ON_InstanceDefinition::ON_InstanceDefinition ()
@@ -105,7 +106,8 @@ ON_InstanceDefinition::Dump (ON_TextLog &text_log) const
       const wchar_t *wsAlternateArchive = str;
       if (0 == wsAlternateArchive || 0 == wsAlternateArchive[0])
         wsAlternateArchive = L"";
-      text_log.Print ("Alternate archive: \"%ls\" (%s)\n", wsAlternateArchive,
+      text_log.Print ("Alternate archive: \"%ls\" (%s)\n",
+                      wsAlternateArchive,
                       bRel ? "relative" : "absolute");
     }
 
@@ -510,7 +512,8 @@ ON_InstanceDefinition::Dimension () const
 }
 
 ON_BOOL32
-ON_InstanceDefinition::GetBBox (double *boxmin, double *boxmax,
+ON_InstanceDefinition::GetBBox (double *boxmin,
+                                double *boxmax,
                                 ON_BOOL32 bGrowBox) const
 {
   if (boxmin) {
@@ -585,10 +588,7 @@ ON_InstanceDefinition::SetURL_Tag (const wchar_t *url_tag)
 }
 
 ON_UUID
-ON_InstanceDefinition::Uuid () const
-{
-  return m_uuid;
-}
+ON_InstanceDefinition::Uuid () const { return m_uuid; }
 
 void
 ON_InstanceDefinition::SetUuid (ON_UUID uuid)
@@ -621,7 +621,8 @@ ON_InstanceDefinition::SetBoundingBox (ON_BoundingBox bbox)
 
 void
 ON_InstanceDefinition::SetSourceArchive (
-    const wchar_t *source_archive, ON_CheckSum checksum,
+    const wchar_t *source_archive,
+    ON_CheckSum checksum,
     ON_InstanceDefinition::IDEF_UPDATE_TYPE idef_update_type)
 {
   ON_wString s (source_archive);
@@ -698,7 +699,8 @@ ON_InstanceDefinition::SetUnitSystem (const ON_UnitSystem &us)
   }
 }
 
-ON_OBJECT_IMPLEMENT (ON_InstanceRef, ON_Geometry,
+ON_OBJECT_IMPLEMENT (ON_InstanceRef,
+                     ON_Geometry,
                      "F9CFB638-B9D4-4340-87E3-C56E7865D96A");
 
 const double ON_InstanceRef::m_singular_xform_tol = 1.0e-6;
@@ -954,7 +956,8 @@ class /*NEVER EXPORT THIS CLASS DEFINITION*/ ON__IDefLayerSettingsUserData
 
 #undef ON_BOZO_VACCINE_11EE2C1FF90D4C6AA7CDEC8532E1E32D
 
-ON_OBJECT_IMPLEMENT (ON__IDefLayerSettingsUserData, ON_UserData,
+ON_OBJECT_IMPLEMENT (ON__IDefLayerSettingsUserData,
+                     ON_UserData,
                      "11EE2C1F-F90D-4C6A-A7CD-EC8532E1E32D");
 
 ON__IDefLayerSettingsUserData *
@@ -1007,10 +1010,7 @@ ON__IDefLayerSettingsUserData::operator= (const ON__IDefLayerSettingsUserData &s
 
 // virtual ON_Object override
 ON_BOOL32
-ON__IDefLayerSettingsUserData::IsValid (ON_TextLog *text_log) const
-{
-  return true;
-}
+ON__IDefLayerSettingsUserData::IsValid (ON_TextLog *text_log) const { return true; }
 
 // virtual ON_Object override
 unsigned int
@@ -1070,8 +1070,8 @@ ON__IDefLayerSettingsUserData::Read (ON_BinaryArchive &binary_archive)
 
   int major_version = 0;
   int minor_version = 0;
-  bool rc = binary_archive.BeginRead3dmChunk (TCODE_ANONYMOUS_CHUNK, &major_version,
-                                              &minor_version);
+  bool rc = binary_archive.BeginRead3dmChunk (
+      TCODE_ANONYMOUS_CHUNK, &major_version, &minor_version);
   if (!rc)
     return false;
 
@@ -1151,7 +1151,7 @@ ON_InstanceDefinition::HasLinkedIdefLayerSettings () const
 //////    corresponding layers in the current context.
 //////*/
 //////void GetLinkedIdefLayerSettings( class ON_ObjectArray<ON_Layer>& layer_settings )
-///const;
+/// const;
 //////
 ///////*
 //////Description:
@@ -1165,14 +1165,14 @@ ON_InstanceDefinition::HasLinkedIdefLayerSettings () const
 //////    you are managing.
 //////*/
 //////void GetLinkedIdefLayerReferenceSettings( class ON_SimpleArray<const ON_Layer*>&
-///layer_settings ) const;
+/// layer_settings ) const;
 //////
 //////
 //////void ON_InstanceDefinition::GetLinkedIdefLayerReferenceSettings( class
-///ON_SimpleArray<const ON_Layer*>& layer_settings ) const
+/// ON_SimpleArray<const ON_Layer*>& layer_settings ) const
 //////{
 //////  const ON__IDefLayerSettingsUserData* ud =
-///ON__IDefLayerSettingsUserData::LayerSettings(*this,false);
+/// ON__IDefLayerSettingsUserData::LayerSettings(*this,false);
 //////  const int count = 0 != ud ? ud->m_layers.Count() : 0;
 //////  if ( count > 0 )
 //////  {
@@ -1190,7 +1190,7 @@ ON_InstanceDefinition::HasLinkedIdefLayerSettings () const
 //////}
 //////
 //////void ON_InstanceDefinition::GetLinkedIdefLayerSettings( class
-///ON_ObjectArray<ON_Layer>& layer_settings ) const
+/// ON_ObjectArray<ON_Layer>& layer_settings ) const
 //////{
 //////  layer_settings.SetCount(0);
 //////
@@ -1199,7 +1199,7 @@ ON_InstanceDefinition::HasLinkedIdefLayerSettings () const
 //////  GetLinkedIdefLayerReferenceSettings(layers);
 //////
 //////  // Update those settings with any modifications made in the idef's current
-///context.
+/// context.
 //////  layer_settings.Reserve(layers.Count());
 //////  unsigned int settings;
 //////  for ( int i = 0; i < layers.Count(); i++ )
@@ -1302,8 +1302,12 @@ ON_InstanceDefinition::UpdateLinkedIdefReferenceFileLayerSettings (
   // by layer_settings[]->m_layer_id
   ON_Workspace ws;
   int *index_map = (int *)ws.GetMemory (layer_count * sizeof (index_map[0]));
-  ON_Sort (ON::quick_sort, index_map, layer_settings, layer_count,
-           sizeof (layer_settings[0]), compareLayerPtrId);
+  ON_Sort (ON::quick_sort,
+           index_map,
+           layer_settings,
+           layer_count,
+           sizeof (layer_settings[0]),
+           compareLayerPtrId);
 
   // Use index_map[] to get a unique list of layers with valid ids
   ON_UuidIndex *iddex = (ON_UuidIndex *)ws.GetMemory (layer_count * sizeof (iddex[0]));
@@ -1404,8 +1408,11 @@ ON_InstanceDefinition::UpdateLinkedIdefLayerSettings (
     const ON_Layer *layer1 = layer_settings[i];
     if (!ud->m_runtime_layer_id_map.FindId1 (layer1->m_layer_id, &layerId.m_layer_id))
       layerId.m_layer_id = layer1->m_layer_id;
-    ON_Layer **pp = (ON_Layer **)bsearch (&layerPtrId, ud_layers, ud_layers_count,
-                                          sizeof (ud_layers[0]), compareLayerPtrId);
+    ON_Layer **pp = (ON_Layer **)bsearch (&layerPtrId,
+                                          ud_layers,
+                                          ud_layers_count,
+                                          sizeof (ud_layers[0]),
+                                          compareLayerPtrId);
     ON_Layer *layer0 = (0 != pp) ? *pp : 0;
     if (0 == layer0)
       continue;
@@ -1494,7 +1501,8 @@ class /*NEVER EXPORT THIS CLASS DEFINITION*/ ON__IDefAlternativePathUserData
 
 #undef ON_BOZO_VACCINE_F42D967121EB46929B9ABC3507FF28F5
 
-ON_OBJECT_IMPLEMENT (ON__IDefAlternativePathUserData, ON_UserData,
+ON_OBJECT_IMPLEMENT (ON__IDefAlternativePathUserData,
+                     ON_UserData,
                      "F42D9671-21EB-4692-9B9A-BC3507FF28F5");
 
 ON__IDefAlternativePathUserData *
@@ -1606,8 +1614,8 @@ ON__IDefAlternativePathUserData::Read (ON_BinaryArchive &binary_archive)
 
   int major_version = 0;
   int minor_version = 0;
-  bool rc = binary_archive.BeginRead3dmChunk (TCODE_ANONYMOUS_CHUNK, &major_version,
-                                              &minor_version);
+  bool rc = binary_archive.BeginRead3dmChunk (
+      TCODE_ANONYMOUS_CHUNK, &major_version, &minor_version);
   if (!rc)
     return false;
 

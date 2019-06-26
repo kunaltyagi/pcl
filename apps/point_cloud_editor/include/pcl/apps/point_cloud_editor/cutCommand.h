@@ -52,7 +52,8 @@ class CutCommand : public Command
   /// @param copy_buffer_ptr a shared pointer pointing to the copy buffer.
   /// @param selection_ptr a shared pointer pointing to the selection object.
   /// @param cloud_ptr a shared pointer pointing to the cloud object.
-  CutCommand (CopyBufferPtr copy_buffer_ptr, SelectionPtr selection_ptr,
+  CutCommand (CopyBufferPtr copy_buffer_ptr,
+              SelectionPtr selection_ptr,
               CloudPtr cloud_ptr);
 
   /// @brief Copy constructor - commands are non-copyable

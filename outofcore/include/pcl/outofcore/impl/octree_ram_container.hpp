@@ -125,7 +125,9 @@ namespace pcl
     template <typename PointT>
     void
     OutofcoreOctreeRamContainer<PointT>::readRangeSubSample (
-        const boost::uint64_t start, const boost::uint64_t count, const double percent,
+        const boost::uint64_t start,
+        const boost::uint64_t count,
+        const double percent,
         AlignedPointTVector &v)
     {
       uint64_t samplesize =

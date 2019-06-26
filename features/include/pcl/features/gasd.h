@@ -87,7 +87,8 @@ namespace pcl
      * \param[in] shape_hists_size shape histograms size
      * \param[in] shape_interp shape histograms interpolation method
      */
-    GASDEstimation (const Eigen::Vector3f &view_direction = Eigen::Vector3f (0.0f, 0.0f,
+    GASDEstimation (const Eigen::Vector3f &view_direction = Eigen::Vector3f (0.0f,
+                                                                             0.0f,
                                                                              1.0f),
                     const size_t shape_half_grid_size = 4,
                     const size_t shape_hists_size = 1,
@@ -187,10 +188,13 @@ namespace pcl
      * factor of sample contribution \param[in,out] hists updated histograms
      */
     void
-    addSampleToHistograms (const Eigen::Vector4f &p, const float max_coord,
+    addSampleToHistograms (const Eigen::Vector4f &p,
+                           const float max_coord,
                            const size_t half_grid_size,
-                           const HistogramInterpolationMethod interp, const float hbin,
-                           const float hist_incr, std::vector<Eigen::VectorXf> &hists);
+                           const HistogramInterpolationMethod interp,
+                           const float hbin,
+                           const float hist_incr,
+                           std::vector<Eigen::VectorXf> &hists);
 
     /** \brief Estimate GASD descriptor
      *
@@ -231,9 +235,11 @@ namespace pcl
      * \param[in,out] pos current position of output descriptor point cloud
      */
     void
-    copyShapeHistogramsToOutput (const size_t grid_size, const size_t hists_size,
+    copyShapeHistogramsToOutput (const size_t grid_size,
+                                 const size_t hists_size,
                                  const std::vector<Eigen::VectorXf> &hists,
-                                 PointCloudOut &output, size_t &pos);
+                                 PointCloudOut &output,
+                                 size_t &pos);
   };
 
   /** \brief GASDColorEstimation estimates the Globally Aligned Spatial Distribution
@@ -274,14 +280,17 @@ namespace pcl
      * \param[in] shape_interp shape histograms interpolation method
      * \param[in] color_interp color histograms interpolation method
      */
-    GASDColorEstimation (
-        const Eigen::Vector3f &view_direction = Eigen::Vector3f (0.0f, 0.0f, 1.0f),
-        const size_t shape_half_grid_size = 3, const size_t shape_hists_size = 1,
-        const size_t color_half_grid_size = 2, const size_t color_hists_size = 12,
-        const HistogramInterpolationMethod shape_interp = INTERP_NONE,
-        const HistogramInterpolationMethod color_interp = INTERP_NONE)
-        : GASDEstimation<PointInT, PointOutT> (view_direction, shape_half_grid_size,
-                                               shape_hists_size, shape_interp),
+    GASDColorEstimation (const Eigen::Vector3f &view_direction = Eigen::Vector3f (0.0f,
+                                                                                  0.0f,
+                                                                                  1.0f),
+                         const size_t shape_half_grid_size = 3,
+                         const size_t shape_hists_size = 1,
+                         const size_t color_half_grid_size = 2,
+                         const size_t color_hists_size = 12,
+                         const HistogramInterpolationMethod shape_interp = INTERP_NONE,
+                         const HistogramInterpolationMethod color_interp = INTERP_NONE)
+        : GASDEstimation<PointInT, PointOutT> (
+              view_direction, shape_half_grid_size, shape_hists_size, shape_interp),
           color_half_grid_size_ (color_half_grid_size),
           color_hists_size_ (color_hists_size), color_interp_ (color_interp)
     {
@@ -345,9 +354,11 @@ namespace pcl
      * current position of output descriptor point cloud
      */
     void
-    copyColorHistogramsToOutput (const size_t grid_size, const size_t hists_size,
+    copyColorHistogramsToOutput (const size_t grid_size,
+                                 const size_t hists_size,
                                  std::vector<Eigen::VectorXf> &hists,
-                                 PointCloudOut &output, size_t &pos);
+                                 PointCloudOut &output,
+                                 size_t &pos);
 
     /** \brief Estimate GASD color descriptor
      *

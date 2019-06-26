@@ -45,13 +45,16 @@
 void
 pcl::seededHueSegmentation (const PointCloud<PointXYZRGB> &cloud,
                             const search::Search<PointXYZRGB>::Ptr &tree,
-                            float tolerance, PointIndices &indices_in,
-                            PointIndices &indices_out, float delta_hue)
+                            float tolerance,
+                            PointIndices &indices_in,
+                            PointIndices &indices_out,
+                            float delta_hue)
 {
   if (tree->getInputCloud ()->points.size () != cloud.points.size ()) {
     PCL_ERROR ("[pcl::seededHueSegmentation] Tree built for a different point cloud "
                "dataset (%lu) than the input cloud (%lu)!\n",
-               tree->getInputCloud ()->points.size (), cloud.points.size ());
+               tree->getInputCloud ()->points.size (),
+               cloud.points.size ());
     return;
   }
   // Create a bool vector of processed point indices, and initialize it to false
@@ -77,8 +80,11 @@ pcl::seededHueSegmentation (const PointCloud<PointXYZRGB> &cloud,
     PointXYZRGBtoXYZHSV (p, h);
 
     while (sq_idx < static_cast<int> (seed_queue.size ())) {
-      int ret = tree->radiusSearch (seed_queue[sq_idx], tolerance, nn_indices,
-                                    nn_distances, std::numeric_limits<int>::max ());
+      int ret = tree->radiusSearch (seed_queue[sq_idx],
+                                    tolerance,
+                                    nn_indices,
+                                    nn_distances,
+                                    std::numeric_limits<int>::max ());
       if (ret == -1)
         PCL_ERROR ("[pcl::seededHueSegmentation] radiusSearch returned error code -1");
       // Search for sq_idx
@@ -116,13 +122,16 @@ pcl::seededHueSegmentation (const PointCloud<PointXYZRGB> &cloud,
 void
 pcl::seededHueSegmentation (const PointCloud<PointXYZRGB> &cloud,
                             const search::Search<PointXYZRGBL>::Ptr &tree,
-                            float tolerance, PointIndices &indices_in,
-                            PointIndices &indices_out, float delta_hue)
+                            float tolerance,
+                            PointIndices &indices_in,
+                            PointIndices &indices_out,
+                            float delta_hue)
 {
   if (tree->getInputCloud ()->points.size () != cloud.points.size ()) {
     PCL_ERROR ("[pcl::seededHueSegmentation] Tree built for a different point cloud "
                "dataset (%lu) than the input cloud (%lu)!\n",
-               tree->getInputCloud ()->points.size (), cloud.points.size ());
+               tree->getInputCloud ()->points.size (),
+               cloud.points.size ());
     return;
   }
   // Create a bool vector of processed point indices, and initialize it to false
@@ -148,8 +157,11 @@ pcl::seededHueSegmentation (const PointCloud<PointXYZRGB> &cloud,
     PointXYZRGBtoXYZHSV (p, h);
 
     while (sq_idx < static_cast<int> (seed_queue.size ())) {
-      int ret = tree->radiusSearch (seed_queue[sq_idx], tolerance, nn_indices,
-                                    nn_distances, std::numeric_limits<int>::max ());
+      int ret = tree->radiusSearch (seed_queue[sq_idx],
+                                    tolerance,
+                                    nn_indices,
+                                    nn_distances,
+                                    std::numeric_limits<int>::max ());
       if (ret == -1)
         PCL_ERROR ("[pcl::seededHueSegmentation] radiusSearch returned error code -1");
       // Search for sq_idx
@@ -205,8 +217,12 @@ pcl::SeededHueSegmentation::segment (PointIndices &indices_in,
 
   // Send the input dataset to the spatial locator
   tree_->setInputCloud (input_);
-  seededHueSegmentation (*input_, tree_, static_cast<float> (cluster_tolerance_),
-                         indices_in, indices_out, delta_hue_);
+  seededHueSegmentation (*input_,
+                         tree_,
+                         static_cast<float> (cluster_tolerance_),
+                         indices_in,
+                         indices_out,
+                         delta_hue_);
   deinitCompute ();
 }
 

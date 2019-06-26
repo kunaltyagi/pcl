@@ -37,7 +37,8 @@ class ON_CLASS ON_Ellipse
 
   ON_BOOL32
   Create (const ON_Plane &, // point on the plane
-          double, double    // radii for x and y vectors
+          double,
+          double // radii for x and y vectors
   );
 
   ON_BOOL32

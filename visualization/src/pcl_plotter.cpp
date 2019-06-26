@@ -74,7 +74,7 @@ pcl::visualization::PCLPlotter::PCLPlotter (char const *name)
   view_->GetRenderWindow ()->SetWindowName (name);
 
   //###WARNING: hardcoding logic ;) :-/.. please see plot() and spin*() functions for
-  //the logic
+  // the logic
   exit_loop_timer_->interactor = view_->GetInteractor ();
   exit_callback_->plotter = this;
 
@@ -97,9 +97,11 @@ pcl::visualization::PCLPlotter::~PCLPlotter () {}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::PCLPlotter::addPlotData (double const *array_X,
-                                             double const *array_Y, unsigned long size,
+                                             double const *array_Y,
+                                             unsigned long size,
                                              char const *name /* = "Y Axis" */,
-                                             int type, char const *color)
+                                             int type,
+                                             char const *color)
 {
   // updating the current plot ID
   current_plot_++;
@@ -145,8 +147,11 @@ pcl::visualization::PCLPlotter::addPlotData (std::vector<double> const &array_X,
                                              int type /* = vtkChart::LINE */,
                                              std::vector<char> const &color)
 {
-  this->addPlotData (&array_X[0], &array_Y[0],
-                     static_cast<unsigned long> (array_X.size ()), name, type,
+  this->addPlotData (&array_X[0],
+                     &array_Y[0],
+                     static_cast<unsigned long> (array_X.size ()),
+                     name,
+                     type,
                      (color.empty ()) ? nullptr : &color[0]);
 }
 
@@ -154,7 +159,9 @@ pcl::visualization::PCLPlotter::addPlotData (std::vector<double> const &array_X,
 void
 pcl::visualization::PCLPlotter::addPlotData (
     std::vector<std::pair<double, double>> const &plot_data,
-    char const *name /* = "Y Axis" */, int type, std::vector<char> const &color)
+    char const *name /* = "Y Axis" */,
+    int type,
+    std::vector<char> const &color)
 {
   double *array_x = new double[plot_data.size ()];
   double *array_y = new double[plot_data.size ()];
@@ -163,15 +170,22 @@ pcl::visualization::PCLPlotter::addPlotData (
     array_x[i] = plot_data[i].first;
     array_y[i] = plot_data[i].second;
   }
-  this->addPlotData (array_x, array_y, static_cast<unsigned long> (plot_data.size ()),
-                     name, type, (color.empty ()) ? nullptr : &color[0]);
+  this->addPlotData (array_x,
+                     array_y,
+                     static_cast<unsigned long> (plot_data.size ()),
+                     name,
+                     type,
+                     (color.empty ()) ? nullptr : &color[0]);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::PCLPlotter::addPlotData (PolynomialFunction const &p_function,
-                                             double x_min, double x_max,
-                                             char const *name, int num_points, int type,
+                                             double x_min,
+                                             double x_max,
+                                             char const *name,
+                                             int num_points,
+                                             int type,
                                              std::vector<char> const &color)
 {
   std::vector<double> array_x (num_points), array_y (num_points);
@@ -189,8 +203,11 @@ pcl::visualization::PCLPlotter::addPlotData (PolynomialFunction const &p_functio
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::PCLPlotter::addPlotData (RationalFunction const &r_function,
-                                             double x_min, double x_max,
-                                             char const *name, int num_points, int type,
+                                             double x_min,
+                                             double x_max,
+                                             char const *name,
+                                             int num_points,
+                                             int type,
                                              std::vector<char> const &color)
 {
   std::vector<double> array_x (num_points), array_y (num_points);
@@ -210,9 +227,12 @@ pcl::visualization::PCLPlotter::addPlotData (RationalFunction const &r_function,
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::PCLPlotter::addPlotData (double (*function) (double), double x_min,
-                                             double x_max, char const *name,
-                                             int num_points, int type,
+pcl::visualization::PCLPlotter::addPlotData (double (*function) (double),
+                                             double x_min,
+                                             double x_max,
+                                             char const *name,
+                                             int num_points,
+                                             int type,
                                              std::vector<char> const &color)
 {
   std::vector<double> array_x (num_points), array_y (num_points);
@@ -271,7 +291,8 @@ pcl::visualization::PCLPlotter::addPlotData (char const *filename, int type)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::PCLPlotter::addHistogramData (std::vector<double> const &data,
-                                                  int const nbins, char const *name,
+                                                  int const nbins,
+                                                  char const *name,
                                                   std::vector<char> const &color)
 {
   std::vector<std::pair<double, double>> histogram;
@@ -280,12 +301,13 @@ pcl::visualization::PCLPlotter::addHistogramData (std::vector<double> const &dat
 }
 
 ////////////////////////////////HistVizualizer
-///Functions//////////////////////////////////////
+/// Functions//////////////////////////////////////
 bool
 pcl::visualization::PCLPlotter::addFeatureHistogram (const pcl::PCLPointCloud2 &cloud,
                                                      const std::string &field_name,
                                                      const std::string &id,
-                                                     int win_width, int win_height)
+                                                     int win_width,
+                                                     int win_height)
 {
   // Get the field
   int field_idx = pcl::getFieldIndex (cloud, field_name);
@@ -302,7 +324,8 @@ pcl::visualization::PCLPlotter::addFeatureHistogram (const pcl::PCLPointCloud2 &
     array_x[i] = i;
     float data;
     // TODO: replace float with the real data type
-    memcpy (&data, &cloud.data[cloud.fields[field_idx].offset + i * sizeof (float)],
+    memcpy (&data,
+            &cloud.data[cloud.fields[field_idx].offset + i * sizeof (float)],
             sizeof (float));
     array_y[i] = data;
   }
@@ -318,7 +341,8 @@ pcl::visualization::PCLPlotter::addFeatureHistogram (const pcl::PCLPointCloud2 &
                                                      const std::string &field_name,
                                                      const int index,
                                                      const std::string &id,
-                                                     int win_width, int win_height)
+                                                     int win_width,
+                                                     int win_height)
 {
   if (index < 0 || index >= static_cast<int> (cloud.width * cloud.height)) {
     PCL_ERROR ("[addFeatureHistogram] Invalid point index (%d) given!\n", index);
@@ -442,7 +466,8 @@ pcl::visualization::PCLPlotter::clearPlots ()
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::PCLPlotter::setBackgroundColor (const double r, const double g,
+pcl::visualization::PCLPlotter::setBackgroundColor (const double r,
+                                                    const double g,
                                                     const double b)
 {
   bkg_color_[0] = r;
@@ -561,7 +586,8 @@ pcl::visualization::PCLPlotter::startInteractor ()
 ///////////////////////IMPORTANT PRIVATE FUNCTIONS///////////////////////////////
 void
 pcl::visualization::PCLPlotter::computeHistogram (
-    std::vector<double> const &data, int const nbins,
+    std::vector<double> const &data,
+    int const nbins,
     std::vector<std::pair<double, double>> &histogram)
 {
   // resizing the vector to nbins to store histogram;
@@ -678,7 +704,8 @@ pcl::visualization::PCLPlotter::ExitMainLoopTimerCallback::Execute (
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::PCLPlotter::ExitCallback::Execute (vtkObject *,
-                                                       unsigned long event_id, void *)
+                                                       unsigned long event_id,
+                                                       void *)
 {
   if (event_id != vtkCommand::ExitEvent)
     return;

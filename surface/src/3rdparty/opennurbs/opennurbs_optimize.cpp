@@ -17,9 +17,15 @@
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
 int
-ON_FindLocalMinimum (int (*f) (void *, double, double *, double *), void *farg,
-                     double ax, double bx, double cx, double rel_stepsize_tol,
-                     double abs_stepsize_tol, int max_it, double *t_addr)
+ON_FindLocalMinimum (int (*f) (void *, double, double *, double *),
+                     void *farg,
+                     double ax,
+                     double bx,
+                     double cx,
+                     double rel_stepsize_tol,
+                     double abs_stepsize_tol,
+                     int max_it,
+                     double *t_addr)
 /* Use Brent's algorithm (with derivative) to Find a (local) minimum of a function
  *
  * INPUT:
@@ -400,8 +406,8 @@ ON_LocalZero1::FindZero (double *t)
 }
 
 ON_BOOL32
-ON_LocalZero1::NewtonRaphson (double s0, double f0, double s1, double f1, int maxit,
-                              double *t)
+ON_LocalZero1::NewtonRaphson (
+    double s0, double f0, double s1, double f1, int maxit, double *t)
 {
   // private function - input must satisfy
   //

@@ -150,7 +150,8 @@ namespace pcl
       inline int
       noChildBlobVector (
           std::vector<std::vector<Blob2, Eigen::aligned_allocator<Blob2>>> &sorted,
-          int label, int child_number)
+          int label,
+          int child_number)
       {
         if (sorted[label].empty ())
           return 0;
@@ -167,7 +168,8 @@ namespace pcl
       inline bool
       hasThisLabelChildren (
           std::vector<std::vector<Blob2, Eigen::aligned_allocator<Blob2>>> &sorted,
-          part_t label, int child_number)
+          part_t label,
+          int child_number)
       {
         if (sorted[label].empty ())
           return false;
@@ -213,7 +215,9 @@ namespace pcl
        *of elbow for arm)
        **/
       inline float
-      evaluateBlobs (Blob2 &parent, Blob2 &child, int child_nr,
+      evaluateBlobs (Blob2 &parent,
+                     Blob2 &child,
+                     int child_nr,
                      PersonAttribs::Ptr person_attribs)
       {
         float root = sqrt (pow (parent.mean (0) - child.mean (0), 2) +
@@ -242,7 +246,9 @@ namespace pcl
       inline int
       evaluateBlobVector (
           std::vector<std::vector<Blob2, Eigen::aligned_allocator<Blob2>>> &sorted,
-          unsigned int parent_label, int child_label, int child_number)
+          unsigned int parent_label,
+          int child_label,
+          int child_number)
       {
         // Check the input data
         assert (parent_label < NUM_PARTS);
@@ -267,8 +273,8 @@ namespace pcl
 
           // go over all children in this vector
           for (size_t c = 0; c < sorted[child_label].size (); c++) {
-            value = evaluateBlobs (sorted[parent_label][p], sorted[child_label][c],
-                                   child_number);
+            value = evaluateBlobs (
+                sorted[parent_label][p], sorted[child_label][c], child_number);
             // Value should contain offset from the ideal position
             // Is -1 if it goes above threshold
             if (value < best_value && value != -1.0) {
@@ -305,7 +311,9 @@ namespace pcl
       inline int
       evaluateBlobVector (
           std::vector<std::vector<Blob2, Eigen::aligned_allocator<Blob2>>> &sorted,
-          unsigned int parent_label, int child_label, int child_number,
+          unsigned int parent_label,
+          int child_label,
+          int child_number,
           PersonAttribs::Ptr person_attribs)
       {
         // Check the input data
@@ -331,8 +339,10 @@ namespace pcl
 
           // go over all children in this vector
           for (size_t c = 0; c < sorted[child_label].size (); c++) {
-            value = evaluateBlobs (sorted[parent_label][p], sorted[child_label][c],
-                                   child_number, person_attribs);
+            value = evaluateBlobs (sorted[parent_label][p],
+                                   sorted[child_label][c],
+                                   child_number,
+                                   person_attribs);
             // Value should contain offset from the ideal position
             // Is -1 if it goes above threshold
             if (value < best_value && value != -1.0) {
@@ -577,7 +587,9 @@ namespace pcl
       inline int
       browseTree (const std::vector<std::vector<Blob2, Eigen::aligned_allocator<Blob2>>>
                       &sorted,
-                  Tree2 &tree, int part_label, int part_lid)
+                  Tree2 &tree,
+                  int part_label,
+                  int part_lid)
       {
         int nr_children = LUT_nr_children[part_label];
         tree.nr_parts++;
@@ -587,8 +599,8 @@ namespace pcl
 
         // iterate over the number of pixels that are part of this label
         const std::vector<int> &indices = blob.indices.indices;
-        tree.indices.indices.insert (tree.indices.indices.end (), indices.begin (),
-                                     indices.end ());
+        tree.indices.indices.insert (
+            tree.indices.indices.end (), indices.begin (), indices.end ());
 
         if (nr_children == 0)
           return 0;
@@ -607,7 +619,9 @@ namespace pcl
       inline int
       browseTree (const std::vector<std::vector<Blob2, Eigen::aligned_allocator<Blob2>>>
                       &sorted,
-                  Tree2 &tree, int part_label, int part_lid,
+                  Tree2 &tree,
+                  int part_label,
+                  int part_lid,
                   PersonAttribs::Ptr person_attribs)
       {
         int nr_children = person_attribs->nr_of_children_[part_label];
@@ -618,8 +632,8 @@ namespace pcl
 
         // iterate over the number of pixels that are part of this label
         const std::vector<int> &indices = blob.indices.indices;
-        tree.indices.indices.insert (tree.indices.indices.end (), indices.begin (),
-                                     indices.end ());
+        tree.indices.indices.insert (
+            tree.indices.indices.end (), indices.begin (), indices.end ());
 
         if (nr_children == 0)
           return 0;
@@ -638,8 +652,10 @@ namespace pcl
       inline int
       buildTree (const std::vector<std::vector<Blob2, Eigen::aligned_allocator<Blob2>>>
                      &sorted,
-                 const pcl::PointCloud<pcl::PointXYZ> &cloud_in, part_t part_label,
-                 int part_lid, Tree2 &tree)
+                 const pcl::PointCloud<pcl::PointXYZ> &cloud_in,
+                 part_t part_label,
+                 int part_lid,
+                 Tree2 &tree)
       {
         if (sorted.empty ()) {
           std::cout << "(E) : buildTree(): hey man, don't fool me, you gave me an "
@@ -656,8 +672,8 @@ namespace pcl
 
         pcl::getMinMax3D (cloud_in, tree.indices, tree.min, tree.max);
         pcl::compute3DCentroid (cloud_in, tree.indices, tree.mean);
-        pcl::computeCovarianceMatrixNormalized (cloud_in, tree.indices, tree.mean,
-                                                tree.cov);
+        pcl::computeCovarianceMatrixNormalized (
+            cloud_in, tree.indices, tree.mean, tree.cov);
 
         pcl::eigen33 (tree.cov, tree.eigenvect, tree.eigenval);
 
@@ -669,8 +685,11 @@ namespace pcl
       inline int
       buildTree (const std::vector<std::vector<Blob2, Eigen::aligned_allocator<Blob2>>>
                      &sorted,
-                 const pcl::PointCloud<pcl::PointXYZ> &cloud_in, part_t part_label,
-                 int part_lid, Tree2 &tree, PersonAttribs::Ptr person_attribs)
+                 const pcl::PointCloud<pcl::PointXYZ> &cloud_in,
+                 part_t part_label,
+                 int part_lid,
+                 Tree2 &tree,
+                 PersonAttribs::Ptr person_attribs)
       {
         if (sorted.empty ()) {
           std::cout << "(E) : buildTree(): hey man, don't fool me, you gave me an "
@@ -687,8 +706,8 @@ namespace pcl
 
         pcl::getMinMax3D (cloud_in, tree.indices, tree.min, tree.max);
         pcl::compute3DCentroid (cloud_in, tree.indices, tree.mean);
-        pcl::computeCovarianceMatrixNormalized (cloud_in, tree.indices, tree.mean,
-                                                tree.cov);
+        pcl::computeCovarianceMatrixNormalized (
+            cloud_in, tree.indices, tree.mean, tree.cov);
 
         pcl::eigen33 (tree.cov, tree.eigenvect, tree.eigenval);
 

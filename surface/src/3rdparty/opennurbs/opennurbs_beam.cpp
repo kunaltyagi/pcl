@@ -71,7 +71,8 @@ ON_Extrusion::IsValidPolyCurveProfile (const ON_PolyCurve &polycurve,
         if (text_log) {
           text_log->Print ("polycurve.Segment(%d).Domain() does not match "
                            "polycurve.SegmentDomain(%d).\n",
-                           i, i);
+                           i,
+                           i);
         }
         return ON_ExtrusionPolyCurveProfileIsNotValid ();
       }
@@ -168,9 +169,13 @@ ON_Extrusion::CleanupPolyCurveProfile (ON_PolyCurve &polycurve)
 }
 
 bool
-ON_GetEndCapTransformation (ON_3dPoint P, ON_3dVector T, ON_3dVector U,
-                            const ON_3dVector *Normal, ON_Xform &xform,
-                            ON_Xform *scale2d, ON_Xform *rot3d)
+ON_GetEndCapTransformation (ON_3dPoint P,
+                            ON_3dVector T,
+                            ON_3dVector U,
+                            const ON_3dVector *Normal,
+                            ON_Xform &xform,
+                            ON_Xform *scale2d,
+                            ON_Xform *rot3d)
 {
   if (scale2d)
     scale2d->Identity ();
@@ -579,19 +584,29 @@ ON_Extrusion::GetProfileTransformation (double s, ON_Xform &xform) const
   // const ON_3dVector* N = (end?(m_bHaveN[1]?&m_N[1]:0):(m_bHaveN[0]?&m_N[0]:0));
   const ON_3dVector T = m_path.Tangent ();
   if (0.0 == s) {
-    return ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[0]), T, m_up,
-                                       m_bHaveN[0] ? &m_N[0] : 0, xform, 0, 0);
+    return ON_GetEndCapTransformation (
+        m_path.PointAt (m_t.m_t[0]), T, m_up, m_bHaveN[0] ? &m_N[0] : 0, xform, 0, 0);
   }
   if (1.0 == s) {
-    return ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[1]), T, m_up,
-                                       m_bHaveN[1] ? &m_N[1] : 0, xform, 0, 0);
+    return ON_GetEndCapTransformation (
+        m_path.PointAt (m_t.m_t[1]), T, m_up, m_bHaveN[1] ? &m_N[1] : 0, xform, 0, 0);
   }
   ON_Xform xform0, xform1;
-  if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[0]), T, m_up,
-                                   m_bHaveN[0] ? &m_N[0] : 0, xform0, 0, 0))
+  if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[0]),
+                                   T,
+                                   m_up,
+                                   m_bHaveN[0] ? &m_N[0] : 0,
+                                   xform0,
+                                   0,
+                                   0))
     return false;
-  if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[1]), T, m_up,
-                                   m_bHaveN[1] ? &m_N[1] : 0, xform1, 0, 0))
+  if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[1]),
+                                   T,
+                                   m_up,
+                                   m_bHaveN[1] ? &m_N[1] : 0,
+                                   xform1,
+                                   0,
+                                   0))
     return false;
 
   const double s0 = 1.0 - s;
@@ -1005,8 +1020,8 @@ ON_Extrusion::ProfileIndex (double profile_parameter) const
   if (polycurve_t.Count () != m_profile_count + 1)
     return -1;
 
-  int profile_index = ON_SearchMonotoneArray (polycurve_t.Array (),
-                                              polycurve_t.Count (), profile_parameter);
+  int profile_index = ON_SearchMonotoneArray (
+      polycurve_t.Array (), polycurve_t.Count (), profile_parameter);
   if (profile_index == m_profile_count)
     profile_index = m_profile_count - 1;
   else if (profile_index < 0 || profile_index > m_profile_count)
@@ -1250,8 +1265,8 @@ ON_Extrusion::Dump (ON_TextLog &text_log) const
     text_log.Print (", ");
     text_log.Print (m_N[1]);
     text_log.Print ("\n");
-    text_log.Print ("m_path_domain = (%.17g, %.17g)\n", m_path_domain[0],
-                    m_path_domain[1]);
+    text_log.Print (
+        "m_path_domain = (%.17g, %.17g)\n", m_path_domain[0], m_path_domain[1]);
     text_log.Print ("m_bTransposed = %d\n", m_bTransposed);
     text_log.Print ("Profile Count: %d\n", m_profile_count);
     text_log.Print ("Profile:\n");
@@ -1364,8 +1379,8 @@ ON_Extrusion::Read (ON_BinaryArchive &binary_archive)
   Destroy ();
   int major_version = 0;
   int minor_version = 0;
-  bool rc = binary_archive.BeginRead3dmChunk (TCODE_ANONYMOUS_CHUNK, &major_version,
-                                              &minor_version);
+  bool rc = binary_archive.BeginRead3dmChunk (
+      TCODE_ANONYMOUS_CHUNK, &major_version, &minor_version);
   if (!rc)
     return false;
   for (;;) {
@@ -1459,7 +1474,8 @@ ON_Extrusion::Dimension () const
 }
 
 static bool
-GetBoundingBoxHelper (const ON_Extrusion &extrusion, ON_BoundingBox &bbox,
+GetBoundingBoxHelper (const ON_Extrusion &extrusion,
+                      ON_BoundingBox &bbox,
                       const ON_Xform *xform)
 {
   // input bbox = profile curve bounding box.
@@ -1538,7 +1554,8 @@ ON_Extrusion::GetBBox (double *boxmin, double *boxmax, int bGrowBox) const
 }
 
 bool
-ON_Extrusion::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_Extrusion::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                   int bGrowBox,
                                    const ON_Xform *xform) const
 {
   bool rc = false;
@@ -2227,9 +2244,11 @@ MakeCapPlaneHelper (ON_ClassArray<ON_Extrusion_BrepForm_FaceInfo> &finfo,
 }
 
 static int
-MakeCapLoopHelper (ON_ClassArray<ON_Extrusion_BrepForm_FaceInfo> &finfo, int fi0,
+MakeCapLoopHelper (ON_ClassArray<ON_Extrusion_BrepForm_FaceInfo> &finfo,
+                   int fi0,
                    int cap_index, // 0 = bottom, 1 = top
-                   ON_BrepFace *capface, ON_BrepLoop::TYPE loop_type,
+                   ON_BrepFace *capface,
+                   ON_BrepLoop::TYPE loop_type,
                    bool *bTrimsWereModified)
 {
   ON_BrepEdge *edge;
@@ -2302,7 +2321,9 @@ MakeCapLoopHelper (ON_ClassArray<ON_Extrusion_BrepForm_FaceInfo> &finfo, int fi0
 
 static bool
 MakeCap2dCurvesHelper (ON_ClassArray<ON_Extrusion_BrepForm_FaceInfo> &finfo,
-                       int is_capped, const ON_Xform &scale0, const ON_Xform &scale1)
+                       int is_capped,
+                       const ON_Xform &scale0,
+                       const ON_Xform &scale1)
 {
   switch (is_capped) {
   case 1:
@@ -2346,14 +2367,21 @@ MakeCap2dCurvesHelper (ON_ClassArray<ON_Extrusion_BrepForm_FaceInfo> &finfo,
 }
 
 static bool
-GetNextProfileSegmentDiscontinuity (const ON_Curve *profile_segment, double t0,
-                                    double t1, double *t)
+GetNextProfileSegmentDiscontinuity (const ON_Curve *profile_segment,
+                                    double t0,
+                                    double t1,
+                                    double *t)
 {
   // Do NOT change ON_DEFAULT_ANGLE_TOLERANCE_COSINE to another value.
   // See comments in CRhinoDoc::AddObject() for details.
   if (0 == profile_segment)
     return false;
-  return profile_segment->GetNextDiscontinuity (ON::Gsmooth_continuous, t0, t1, t, 0, 0,
+  return profile_segment->GetNextDiscontinuity (ON::Gsmooth_continuous,
+                                                t0,
+                                                t1,
+                                                t,
+                                                0,
+                                                0,
                                                 ON_DEFAULT_ANGLE_TOLERANCE_COSINE,
                                                 ON_SQRT_EPSILON);
 }
@@ -2431,12 +2459,22 @@ ON_Extrusion::BrepForm (ON_Brep *brep, bool bSmoothFaces) const
 
   ON_Xform xform0 (1.0), xform1 (1.0), scale0 (1.0), scale1 (1.0), rot0 (1.0),
       rot1 (1.0);
-  if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[0]), T, m_up,
-                                   m_bHaveN[0] ? &m_N[0] : 0, xform0, &scale0, &rot0))
+  if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[0]),
+                                   T,
+                                   m_up,
+                                   m_bHaveN[0] ? &m_N[0] : 0,
+                                   xform0,
+                                   &scale0,
+                                   &rot0))
     return 0;
 
-  if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[1]), T, m_up,
-                                   m_bHaveN[1] ? &m_N[1] : 0, xform1, &scale1, &rot1))
+  if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[1]),
+                                   T,
+                                   m_up,
+                                   m_bHaveN[1] ? &m_N[1] : 0,
+                                   xform1,
+                                   &scale1,
+                                   &rot1))
     return 0;
 
   ON_Brep *newbrep = brep ? brep : ON_Brep::New ();
@@ -2747,8 +2785,8 @@ ON_Extrusion::BrepForm (ON_Brep *brep, bool bSmoothFaces) const
           break;
         ON_BrepLoop::TYPE loop_type =
             (0 == profile_index) ? ON_BrepLoop::outer : ON_BrepLoop::inner;
-        fi1 = MakeCapLoopHelper (finfo, fi0, cap_index, capface, loop_type,
-                                 &bSetEdgeTolerances);
+        fi1 = MakeCapLoopHelper (
+            finfo, fi0, cap_index, capface, loop_type, &bSetEdgeTolerances);
         if (fi1 <= fi0)
           break;
         fi0 = fi1;
@@ -2794,14 +2832,16 @@ ON_Extrusion::GetBrepFormComponentIndex (ON_COMPONENT_INDEX extrusion_ci,
                                          ON_COMPONENT_INDEX &brep_ci) const
 {
   const ON_Brep *null_brep_pointer = 0;
-  return GetBrepFormComponentIndex (extrusion_ci, ON_UNSET_VALUE, *null_brep_pointer,
-                                    brep_ci);
+  return GetBrepFormComponentIndex (
+      extrusion_ci, ON_UNSET_VALUE, *null_brep_pointer, brep_ci);
 }
 
 static bool
-GetBrepFormFaceIndex (const ON_Extrusion &extrusion, int extrusion_profile_index,
+GetBrepFormFaceIndex (const ON_Extrusion &extrusion,
+                      int extrusion_profile_index,
                       double extrusion_profile_parameter,
-                      bool bCountProfileDiscontinuities, int *brep_form_face_index,
+                      bool bCountProfileDiscontinuities,
+                      int *brep_form_face_index,
                       ON_Interval *profile_segment_domain)
 {
   // When extrusion_profile_index = profile_count,
@@ -2904,8 +2944,11 @@ ON_Extrusion::GetBrepFormComponentIndex (ON_COMPONENT_INDEX extrusion_ci,
   case ON_COMPONENT_INDEX::extrusion_top_profile:
     if (extrusion_ci.m_index < 0 || extrusion_ci.m_index >= profile_count)
       return false;
-    if (!GetBrepFormFaceIndex (*this, extrusion_ci.m_index, extrusion_profile_parameter,
-                               bCountProfileDiscontinuities, &face_index,
+    if (!GetBrepFormFaceIndex (*this,
+                               extrusion_ci.m_index,
+                               extrusion_profile_parameter,
+                               bCountProfileDiscontinuities,
+                               &face_index,
                                &face_profile_domain))
       return false;
     brep_ci.m_index = edges_per_wall_face * face_index;
@@ -2917,9 +2960,12 @@ ON_Extrusion::GetBrepFormComponentIndex (ON_COMPONENT_INDEX extrusion_ci,
   case ON_COMPONENT_INDEX::extrusion_wall_edge:
     if (extrusion_ci.m_index < 0 || extrusion_ci.m_index >= 2 * profile_count)
       return false;
-    if (!GetBrepFormFaceIndex (
-            *this, extrusion_ci.m_index / 2, extrusion_profile_parameter,
-            bCountProfileDiscontinuities, &face_index, &face_profile_domain))
+    if (!GetBrepFormFaceIndex (*this,
+                               extrusion_ci.m_index / 2,
+                               extrusion_profile_parameter,
+                               bCountProfileDiscontinuities,
+                               &face_index,
+                               &face_profile_domain))
       return false;
     brep_ci.m_index = edges_per_wall_face * face_index + 1;
     if (!bClosedProfile && 1 == (face_index % 1))
@@ -2930,8 +2976,11 @@ ON_Extrusion::GetBrepFormComponentIndex (ON_COMPONENT_INDEX extrusion_ci,
   case ON_COMPONENT_INDEX::extrusion_wall_surface:
     if (extrusion_ci.m_index < 0 || extrusion_ci.m_index >= profile_count)
       return false;
-    if (!GetBrepFormFaceIndex (*this, extrusion_ci.m_index, extrusion_profile_parameter,
-                               bCountProfileDiscontinuities, &face_index,
+    if (!GetBrepFormFaceIndex (*this,
+                               extrusion_ci.m_index,
+                               extrusion_profile_parameter,
+                               bCountProfileDiscontinuities,
+                               &face_index,
                                &face_profile_domain))
       return false;
     brep_ci.m_index = face_index;
@@ -2947,8 +2996,11 @@ ON_Extrusion::GetBrepFormComponentIndex (ON_COMPONENT_INDEX extrusion_ci,
       return false;
     if (0 != brep) {
       face_index = brep->m_F.Count () - cap_count;
-    } else if (!GetBrepFormFaceIndex (*this, profile_count, extrusion_profile_parameter,
-                                      bCountProfileDiscontinuities, &face_index,
+    } else if (!GetBrepFormFaceIndex (*this,
+                                      profile_count,
+                                      extrusion_profile_parameter,
+                                      bCountProfileDiscontinuities,
+                                      &face_index,
                                       &face_profile_domain)) {
       return false;
     }
@@ -2977,7 +3029,8 @@ ON_Extrusion::GetBrepFormComponentIndex (ON_COMPONENT_INDEX extrusion_ci,
 ON_BOOL32
 ON_Extrusion::SetDomain (
     int dir, // 0 sets first parameter's domain, 1 gets second parameter's domain
-    double t0, double t1)
+    double t0,
+    double t1)
 {
   bool rc = false;
   if (ON_IsValid (t0) && ON_IsValid (t1) && t0 < t1) {
@@ -3191,27 +3244,37 @@ ON_Extrusion::IsPeriodic (int dir) const
 }
 
 bool
-ON_Extrusion::GetNextDiscontinuity (int dir, ON::continuity c, double t0, double t1,
-                                    double *t, int *hint, int *dtype,
+ON_Extrusion::GetNextDiscontinuity (int dir,
+                                    ON::continuity c,
+                                    double t0,
+                                    double t1,
+                                    double *t,
+                                    int *hint,
+                                    int *dtype,
                                     double cos_angle_tolerance,
                                     double curvature_tolerance) const
 {
   const int path_dir = PathParameter ();
   if (path_dir == dir) {
-    return ON_Surface::GetNextDiscontinuity (dir, c, t0, t1, t, hint, dtype,
-                                             cos_angle_tolerance, curvature_tolerance);
+    return ON_Surface::GetNextDiscontinuity (
+        dir, c, t0, t1, t, hint, dtype, cos_angle_tolerance, curvature_tolerance);
   }
   if (1 - path_dir == dir && m_profile) {
-    return m_profile->GetNextDiscontinuity (c, t0, t1, t, hint, dtype,
-                                            cos_angle_tolerance, curvature_tolerance);
+    return m_profile->GetNextDiscontinuity (
+        c, t0, t1, t, hint, dtype, cos_angle_tolerance, curvature_tolerance);
   }
   return false;
 }
 
 bool
-ON_Extrusion::IsContinuous (ON::continuity c, double s, double t, int *hint,
-                            double point_tolerance, double d1_tolerance,
-                            double d2_tolerance, double cos_angle_tolerance,
+ON_Extrusion::IsContinuous (ON::continuity c,
+                            double s,
+                            double t,
+                            int *hint,
+                            double point_tolerance,
+                            double d1_tolerance,
+                            double d2_tolerance,
+                            double cos_angle_tolerance,
                             double curvature_tolerance) const
 {
   if (!m_profile)
@@ -3225,8 +3288,13 @@ ON_Extrusion::IsContinuous (ON::continuity c, double s, double t, int *hint,
     curvet = t;
     crv_hint = hint ? hint + 1 : 0;
   }
-  return m_profile->IsContinuous (c, curvet, crv_hint, point_tolerance, d1_tolerance,
-                                  d2_tolerance, cos_angle_tolerance,
+  return m_profile->IsContinuous (c,
+                                  curvet,
+                                  crv_hint,
+                                  point_tolerance,
+                                  d1_tolerance,
+                                  d2_tolerance,
+                                  cos_angle_tolerance,
                                   curvature_tolerance);
 }
 
@@ -3293,18 +3361,19 @@ ON_Extrusion::Transpose () // transpose surface parameterization (swap "s" and "
 
 ON_BOOL32
 ON_Extrusion::Evaluate ( // returns false if unable to evaluate
-    double u, double v,  // evaluation parameters
-    int num_der,         // number of derivatives (>=0)
-    int array_stride,    // array stride (>=Dimension())
-    double *der_array,   // array of length stride*(ndir+1)*(ndir+2)/2
-    int quadrant,        // optional - determines which quadrant to evaluate from
-                         //         0 = default
-                         //         1 from NE quadrant
-                         //         2 from NW quadrant
-                         //         3 from SW quadrant
-                         //         4 from SE quadrant
-    int *hint            // optional - evaluation hint (int[2]) used to speed
-                         //            repeated evaluations
+    double u,
+    double v,          // evaluation parameters
+    int num_der,       // number of derivatives (>=0)
+    int array_stride,  // array stride (>=Dimension())
+    double *der_array, // array of length stride*(ndir+1)*(ndir+2)/2
+    int quadrant,      // optional - determines which quadrant to evaluate from
+                       //         0 = default
+                       //         1 from NE quadrant
+                       //         2 from NW quadrant
+                       //         3 from SW quadrant
+                       //         4 from SE quadrant
+    int *hint          // optional - evaluation hint (int[2]) used to speed
+                       //            repeated evaluations
     ) const
 {
   if (!m_profile)
@@ -3322,7 +3391,10 @@ ON_Extrusion::Evaluate ( // returns false if unable to evaluate
       quadrant = 4;
   }
 
-  if (!m_profile->Evaluate (u, num_der, array_stride, der_array,
+  if (!m_profile->Evaluate (u,
+                            num_der,
+                            array_stride,
+                            der_array,
                             (1 == quadrant || 4 == quadrant)
                                 ? 1
                                 : ((2 == quadrant || 3 == quadrant) ? -1 : 0),
@@ -3338,15 +3410,25 @@ ON_Extrusion::Evaluate ( // returns false if unable to evaluate
   ON_Xform xform0, xform1;
   const ON_3dVector T = m_path.Tangent ();
   if (0.0 != t0 || num_der > 0) {
-    if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[0]), T, m_up,
-                                     m_bHaveN[0] ? &m_N[0] : 0, xform0, 0, 0))
+    if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[0]),
+                                     T,
+                                     m_up,
+                                     m_bHaveN[0] ? &m_N[0] : 0,
+                                     xform0,
+                                     0,
+                                     0))
       return false;
   } else {
     xform0.Zero ();
   }
   if (0.0 != t1 || num_der > 0) {
-    if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[1]), T, m_up,
-                                     m_bHaveN[1] ? &m_N[1] : 0, xform1, 0, 0))
+    if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[1]),
+                                     T,
+                                     m_up,
+                                     m_bHaveN[1] ? &m_N[1] : 0,
+                                     xform1,
+                                     0,
+                                     0))
       return false;
   } else {
     xform1.Zero ();
@@ -3464,11 +3546,21 @@ ON_Extrusion::IsoCurve (int dir, double c) const
   const ON_3dVector T = m_path.Tangent ();
 
   ON_Xform xform0, xform1;
-  if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[0]), T, m_up,
-                                   m_bHaveN[0] ? &m_N[0] : 0, xform0, 0, 0))
+  if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[0]),
+                                   T,
+                                   m_up,
+                                   m_bHaveN[0] ? &m_N[0] : 0,
+                                   xform0,
+                                   0,
+                                   0))
     return 0;
-  if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[1]), T, m_up,
-                                   m_bHaveN[1] ? &m_N[1] : 0, xform1, 0, 0))
+  if (!ON_GetEndCapTransformation (m_path.PointAt (m_t.m_t[1]),
+                                   T,
+                                   m_up,
+                                   m_bHaveN[1] ? &m_N[1] : 0,
+                                   xform1,
+                                   0,
+                                   0))
     return 0;
 
   ON_Curve *isocurve = 0;
@@ -3622,7 +3714,9 @@ ON_Extrusion::Extend (int dir, const ON_Interval &domain)
 }
 
 ON_BOOL32
-ON_Extrusion::Split (int dir, double c, ON_Surface *&west_or_south_side,
+ON_Extrusion::Split (int dir,
+                     double c,
+                     ON_Surface *&west_or_south_side,
                      ON_Surface *&east_or_north_side) const
 {
   if (dir < 0 || dir > 1 || !ON_IsValid (c))
@@ -3793,7 +3887,8 @@ ON_Extrusion::GetNurbForm (ON_NurbsSurface &nurbs_surface, double tolerance) con
   nc1.Transform (xform1);
 
   nurbs_surface.Create (3, nc0.m_is_rat, nc0.m_order, 2, nc0.m_cv_count, 2);
-  memcpy (nurbs_surface.m_knot[0], nc0.m_knot,
+  memcpy (nurbs_surface.m_knot[0],
+          nc0.m_knot,
           nurbs_surface.KnotCount (0) * sizeof (nurbs_surface.m_knot[0][0]));
   nurbs_surface.m_knot[1][0] = m_path_domain[0];
   nurbs_surface.m_knot[1][1] = m_path_domain[1];
@@ -3815,7 +3910,8 @@ ON_Extrusion::HasNurbForm () const
 }
 
 bool
-ON_Extrusion::GetSurfaceParameterFromNurbFormParameter (double nurbs_s, double nurbs_t,
+ON_Extrusion::GetSurfaceParameterFromNurbFormParameter (double nurbs_s,
+                                                        double nurbs_t,
                                                         double *surface_s,
                                                         double *surface_t) const
 {
@@ -3966,7 +4062,9 @@ ON_Extrusion::SumSurfaceForm (ON_SumSurface *sum_surface) const
 }
 
 ON_Extrusion *
-ON_Extrusion::Cylinder (const ON_Cylinder &cylinder, bool bCapBottom, bool bCapTop,
+ON_Extrusion::Cylinder (const ON_Cylinder &cylinder,
+                        bool bCapBottom,
+                        bool bCapTop,
                         ON_Extrusion *extrusion)
 {
   if (!cylinder.IsValid () || !cylinder.IsFinite ())
@@ -4003,7 +4101,8 @@ ON_Extrusion::Cylinder (const ON_Cylinder &cylinder, bool bCapBottom, bool bCapT
       !extrusion_cylinder->SetOuterProfile (circle_curve, false) ||
       !extrusion_cylinder->IsValid () ||
       !extrusion_cylinder->SetDomain (extrusion_cylinder->PathParameter (),
-                                      cylinder.height[0], cylinder.height[1])) {
+                                      cylinder.height[0],
+                                      cylinder.height[1])) {
     if (0 == extrusion)
       delete extrusion_cylinder;
     return 0;
@@ -4022,8 +4121,11 @@ ON_Extrusion::Cylinder (const ON_Cylinder &cylinder, bool bCapBottom, bool bCapT
 }
 
 ON_Extrusion *
-ON_Extrusion::Pipe (const ON_Cylinder &cylinder, double other_radius, bool bCapBottom,
-                    bool bCapTop, ON_Extrusion *extrusion)
+ON_Extrusion::Pipe (const ON_Cylinder &cylinder,
+                    double other_radius,
+                    bool bCapBottom,
+                    bool bCapTop,
+                    ON_Extrusion *extrusion)
 {
   if (!cylinder.IsValid () || !ON_IsValid (other_radius) ||
       !(fabs (other_radius - cylinder.circle.Radius ()) > ON_ZERO_TOLERANCE)) {
@@ -4081,8 +4183,11 @@ ON_Extrusion::Pipe (const ON_Cylinder &cylinder, double other_radius, bool bCapB
 }
 
 ON_Extrusion *
-ON_Extrusion::CreateFrom3dCurve (const ON_Curve &curve, const ON_Plane *plane,
-                                 double height, bool bCap, ON_Extrusion *extrusion)
+ON_Extrusion::CreateFrom3dCurve (const ON_Curve &curve,
+                                 const ON_Plane *plane,
+                                 double height,
+                                 bool bCap,
+                                 ON_Extrusion *extrusion)
 {
   if (0 != extrusion)
     extrusion->Destroy ();
@@ -4129,7 +4234,8 @@ ON_Extrusion::CreateFrom3dCurve (const ON_Curve &curve, const ON_Plane *plane,
       result = extrusion;
 
     if (!result->SetPathAndUp (plane->PointAt (0.0, 0.0, z[0]),
-                               plane->PointAt (0.0, 0.0, z[1]), plane->yaxis))
+                               plane->PointAt (0.0, 0.0, z[1]),
+                               plane->yaxis))
       break;
 
     if (!result->SetOuterProfile (curve2d, bCap))

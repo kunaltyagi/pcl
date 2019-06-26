@@ -85,8 +85,11 @@ saveCloud (const std::string &filename, const pcl::PCLPointCloud2 &cloud, bool f
   print_value ("%s ", filename.c_str ());
 
   pcl::PCDWriter writer;
-  writer.write (filename, cloud, Eigen::Vector4f::Zero (),
-                Eigen::Quaternionf::Identity (), format);
+  writer.write (filename,
+                cloud,
+                Eigen::Vector4f::Zero (),
+                Eigen::Quaternionf::Identity (),
+                format);
 
   print_info ("[done, ");
   print_value ("%g", tt.toc ());

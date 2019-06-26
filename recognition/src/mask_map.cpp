@@ -63,7 +63,8 @@ pcl::MaskMap::resize (const size_t width, const size_t height)
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::MaskMap::getDifferenceMask (const MaskMap &mask0, const MaskMap &mask1,
+pcl::MaskMap::getDifferenceMask (const MaskMap &mask0,
+                                 const MaskMap &mask1,
                                  MaskMap &diff_mask)
 {
   const size_t width = mask0.getWidth ();

@@ -120,9 +120,13 @@ namespace pcl
      * \return 0 on success.
      */
     int
-    readHeader (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
-                Eigen::Vector4f &origin, Eigen::Quaternionf &orientation,
-                int &file_version, int &data_type, unsigned int &data_idx,
+    readHeader (const std::string &file_name,
+                pcl::PCLPointCloud2 &cloud,
+                Eigen::Vector4f &origin,
+                Eigen::Quaternionf &orientation,
+                int &file_version,
+                int &data_type,
+                unsigned int &data_idx,
                 const int offset) override;
 
     /** \brief Read a point cloud data from a FILE file and store it into a
@@ -141,8 +145,11 @@ namespace pcl
      * \return 0 on success.
      */
     int
-    read (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
-          Eigen::Vector4f &origin, Eigen::Quaternionf &orientation, int &file_version,
+    read (const std::string &file_name,
+          pcl::PCLPointCloud2 &cloud,
+          Eigen::Vector4f &origin,
+          Eigen::Quaternionf &orientation,
+          int &file_version,
           const int offset = 0) override;
 
     /** \brief Read a point cloud data from a FILE file and store it into a
@@ -158,7 +165,8 @@ namespace pcl
      * \return 0 on success.
      */
     int
-    read (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
+    read (const std::string &file_name,
+          pcl::PCLPointCloud2 &cloud,
           const int offset = 0);
 
     /** \brief Read a point cloud data from a FILE file and store it into a
@@ -174,8 +182,12 @@ namespace pcl
      * \return 0 on success.
      */
     int
-    read (const std::string &file_name, pcl::TextureMesh &mesh, Eigen::Vector4f &origin,
-          Eigen::Quaternionf &orientation, int &file_version, const int offset = 0);
+    read (const std::string &file_name,
+          pcl::TextureMesh &mesh,
+          Eigen::Vector4f &origin,
+          Eigen::Quaternionf &orientation,
+          int &file_version,
+          const int offset = 0);
 
     /** \brief Read a point cloud data from a FILE file and store it into a
      * pcl/TextureMesh.
@@ -202,8 +214,12 @@ namespace pcl
      * \return 0 on success.
      */
     int
-    read (const std::string &file_name, pcl::PolygonMesh &mesh, Eigen::Vector4f &origin,
-          Eigen::Quaternionf &orientation, int &file_version, const int offset = 0);
+    read (const std::string &file_name,
+          pcl::PolygonMesh &mesh,
+          Eigen::Vector4f &origin,
+          Eigen::Quaternionf &orientation,
+          int &file_version,
+          const int offset = 0);
 
     /** \brief Read a point cloud data from a FILE file and store it into a
      * pcl/PolygonMesh.
@@ -229,13 +245,18 @@ namespace pcl
      */
     template <typename PointT>
     inline int
-    read (const std::string &file_name, pcl::PointCloud<PointT> &cloud,
+    read (const std::string &file_name,
+          pcl::PointCloud<PointT> &cloud,
           const int offset = 0)
     {
       pcl::PCLPointCloud2 blob;
       int file_version;
-      int res = read (file_name, blob, cloud.sensor_origin_, cloud.sensor_orientation_,
-                      file_version, offset);
+      int res = read (file_name,
+                      blob,
+                      cloud.sensor_origin_,
+                      cloud.sensor_orientation_,
+                      file_version,
+                      offset);
       if (res < 0)
         return (res);
 
@@ -258,8 +279,10 @@ namespace pcl
      * \ingroup io
      */
     inline int
-    loadOBJFile (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
-                 Eigen::Vector4f &origin, Eigen::Quaternionf &orientation)
+    loadOBJFile (const std::string &file_name,
+                 pcl::PCLPointCloud2 &cloud,
+                 Eigen::Vector4f &origin,
+                 Eigen::Quaternionf &orientation)
     {
       pcl::OBJReader p;
       int obj_version;
@@ -328,7 +351,8 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS int
-    saveOBJFile (const std::string &file_name, const pcl::TextureMesh &tex_mesh,
+    saveOBJFile (const std::string &file_name,
+                 const pcl::TextureMesh &tex_mesh,
                  unsigned precision = 5);
 
     /** \brief Saves a PolygonMesh in ascii PLY format.
@@ -338,7 +362,8 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS int
-    saveOBJFile (const std::string &file_name, const pcl::PolygonMesh &mesh,
+    saveOBJFile (const std::string &file_name,
+                 const pcl::PolygonMesh &mesh,
                  unsigned precision = 5);
 
   } // namespace io

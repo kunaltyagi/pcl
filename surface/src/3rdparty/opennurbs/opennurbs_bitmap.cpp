@@ -16,16 +16,20 @@
 
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-ON_VIRTUAL_OBJECT_IMPLEMENT (ON_Bitmap, ON_Object,
+ON_VIRTUAL_OBJECT_IMPLEMENT (ON_Bitmap,
+                             ON_Object,
                              "390465E9-3721-11d4-800B-0010830122F0");
 
-ON_OBJECT_IMPLEMENT (ON_WindowsBitmap, ON_Bitmap,
+ON_OBJECT_IMPLEMENT (ON_WindowsBitmap,
+                     ON_Bitmap,
                      "390465EB-3721-11d4-800B-0010830122F0");
 
-ON_OBJECT_IMPLEMENT (ON_EmbeddedBitmap, ON_Bitmap,
+ON_OBJECT_IMPLEMENT (ON_EmbeddedBitmap,
+                     ON_Bitmap,
                      "772E6FC1-B17B-4fc4-8F54-5FDA511D76D2");
 
-ON_OBJECT_IMPLEMENT (ON_WindowsBitmapEx, ON_WindowsBitmap,
+ON_OBJECT_IMPLEMENT (ON_WindowsBitmapEx,
+                     ON_WindowsBitmap,
                      "203AFC17-BCC9-44fb-A07B-7F5C31BD5ED9");
 
 void
@@ -194,7 +198,8 @@ ON_WindowsBitmapHelper_AllocBMI (size_t sizeof_palette, size_t sizeof_image)
 #endif
 
 bool
-ON_WindowsBitmap::Create (int width, int height,
+ON_WindowsBitmap::Create (int width,
+                          int height,
                           int bits_per_pixel // 1, 2, 4, 8, 16, 24, or 32
 )
 {
@@ -937,7 +942,8 @@ ON_WindowsBitmap::Create (const BITMAPINFO *bmi, const unsigned char *bits, bool
         int color_count = ON_WindowsBitmapHelper_PaletteColorCount (
             bmi->bmiHeader.biClrUsed, bmi->bmiHeader.biBitCount);
         if (color_count > 0) {
-          memcpy (&m_bmi->bmiColors[0], &bmi->bmiColors[0],
+          memcpy (&m_bmi->bmiColors[0],
+                  &bmi->bmiColors[0],
                   color_count * sizeof (m_bmi->bmiColors[0]));
         }
         if (bCopy && sizeof_image > 0) {

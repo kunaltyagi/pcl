@@ -84,7 +84,8 @@ namespace pcl
 
     void
     addSmoothedPointCloud (const PointCloudTConstPtr &cloud,
-                           const PointCloudNTConstPtr &normals, KdTreePtr &kdtree,
+                           const PointCloudNTConstPtr &normals,
+                           KdTreePtr &kdtree,
                            float &scale);
 
     void

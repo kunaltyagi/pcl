@@ -97,7 +97,8 @@ namespace pcl
      * 2=saddle point
      *  !!Currently only implemented for degree 2!! */
     void
-    findCriticalPoints (std::vector<real> &x_values, std::vector<real> &y_values,
+    findCriticalPoints (std::vector<real> &x_values,
+                        std::vector<real> &y_values,
                         std::vector<int> &types) const;
 
     /** write as binary to a stream */

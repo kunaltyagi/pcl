@@ -292,25 +292,29 @@ namespace pcl
       if (!cjson_outofcore_version) {
         PCL_ERROR ("[pcl::outofcore::OutofcoreOctreeNodeMetadata::%s] Failed to parse "
                    "\"version\" field of node metadata %s\n",
-                   __FUNCTION__, metadata_filename_.c_str ());
+                   __FUNCTION__,
+                   metadata_filename_.c_str ());
         parse_failure = true;
       }
       if (!cjson_bb_min) {
         PCL_ERROR ("[pcl::outofcore::OutofcoreOctreeNodeMetadata::%s] Failed to parse "
                    "\"bb_min\" field of node metadata %s\n",
-                   __FUNCTION__, metadata_filename_.c_str ());
+                   __FUNCTION__,
+                   metadata_filename_.c_str ());
         parse_failure = true;
       }
       if (!cjson_bb_max) {
         PCL_ERROR ("[pcl::outofcore::OutofcoreOctreeNodeMetadata::%s] Failed to parse "
                    "\"bb_max\" field of node metadata %s\n",
-                   __FUNCTION__, metadata_filename_.c_str ());
+                   __FUNCTION__,
+                   metadata_filename_.c_str ());
         parse_failure = true;
       }
       if (!cjson_bin_point_filename) {
         PCL_ERROR ("[pcl::outofcore::OutofcoreOctreeNodeMetadata::%s] Failed to parse "
                    "\"bin\" field of node metadata %s\n",
-                   __FUNCTION__, metadata_filename_.c_str ());
+                   __FUNCTION__,
+                   metadata_filename_.c_str ());
         parse_failure = true;
       }
 

@@ -246,7 +246,8 @@ class ON_SimpleArray
     true if successful
   */
   bool
-  Sort (ON::sort_algorithm sort_algorithm, int * /* index[] */,
+  Sort (ON::sort_algorithm sort_algorithm,
+        int * /* index[] */,
         int (*) (const T *, const T *)) const;
 
   /*
@@ -273,7 +274,8 @@ class ON_SimpleArray
   bool
   Sort (ON::sort_algorithm sort_algorithm,
         int *, // index[]
-        int (*) (const T *, const T *,
+        int (*) (const T *,
+                 const T *,
                  void *), // int compare(const T*,const T*,void* p)
         void *            // p
         ) const;
@@ -462,7 +464,8 @@ class ON_CLASS ON_2dPointArray : public ON_SimpleArray<ON_2dPoint>
 
   bool
   GetBBox ( // returns true if successful
-      double boxmin[2], double boxmax[2],
+      double boxmin[2],
+      double boxmax[2],
       int bGrowBox = false // true means grow box
       ) const;
 
@@ -487,7 +490,8 @@ class ON_CLASS ON_2fPointArray : public ON_SimpleArray<ON_2fPoint>
 
   bool
   GetBBox ( // returns true if successful
-      float boxmin[2], float boxmax[2],
+      float boxmin[2],
+      float boxmax[2],
       int bGrowBox = false // true means grow box
       ) const;
   bool
@@ -521,7 +525,10 @@ class ON_CLASS ON_3dPointArray : public ON_SimpleArray<ON_3dPoint>
   //   point_stride - [in] number of doubles to skip between points
   //   points - [in] array of point coordinates
   bool
-  Create (int point_dimension, int bRational, int point_count, int point_stride,
+  Create (int point_dimension,
+          int bRational,
+          int point_count,
+          int point_stride,
           const double *points);
 
   // Description:
@@ -533,7 +540,10 @@ class ON_CLASS ON_3dPointArray : public ON_SimpleArray<ON_3dPoint>
   //   point_stride - [in] number of doubles to skip between points
   //   points - [in] array of point coordinates
   bool
-  Create (int point_dimension, int bRational, int point_count, int point_stride,
+  Create (int point_dimension,
+          int bRational,
+          int point_count,
+          int point_stride,
           const float *points);
 
   // Description:
@@ -588,7 +598,8 @@ class ON_CLASS ON_3dPointArray : public ON_SimpleArray<ON_3dPoint>
     bounding box.
   */
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   // Description:
@@ -625,7 +636,9 @@ class ON_CLASS ON_3dPointArray : public ON_SimpleArray<ON_3dPoint>
   // Returns:
   //   true if successful.
   bool
-  Rotate (double sin_angle, double cos_angle, const ON_3dVector &axis_of_rotation,
+  Rotate (double sin_angle,
+          double cos_angle,
+          const ON_3dVector &axis_of_rotation,
           const ON_3dPoint &center_of_rotation);
 
   // Description:
@@ -640,7 +653,8 @@ class ON_CLASS ON_3dPointArray : public ON_SimpleArray<ON_3dPoint>
   // Returns:
   //   true if successful.
   bool
-  Rotate (double angle_in_radians, const ON_3dVector &axis_of_rotation,
+  Rotate (double angle_in_radians,
+          const ON_3dVector &axis_of_rotation,
           const ON_3dPoint &center_of_rotation);
 
   // Description:
@@ -671,7 +685,8 @@ class ON_CLASS ON_3dPointArray : public ON_SimpleArray<ON_3dPoint>
     ON_PointCloud::GetClosestPoint
   */
   bool
-  GetClosestPoint (ON_3dPoint P, int *closest_point_index,
+  GetClosestPoint (ON_3dPoint P,
+                   int *closest_point_index,
                    double maximum_distance = 0.0) const;
 };
 
@@ -1020,7 +1035,8 @@ class ON_ClassArray
     true if successful
   */
   bool
-  Sort (ON::sort_algorithm sort_algorithm, int * /* index[] */,
+  Sort (ON::sort_algorithm sort_algorithm,
+        int * /* index[] */,
         int (*) (const T *, const T *)) const;
 
   /*
@@ -1047,7 +1063,8 @@ class ON_ClassArray
   bool
   Sort (ON::sort_algorithm sort_algorithm,
         int *, // index[]
-        int (*) (const T *, const T *,
+        int (*) (const T *,
+                 const T *,
                  void *), // int compare(const T*,const T*,void* p)
         void *            // p
         ) const;

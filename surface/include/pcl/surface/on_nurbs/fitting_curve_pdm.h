@@ -119,7 +119,9 @@ namespace pcl
        * data 3D point-cloud \return B-Spline curve.
        */
       static ON_NurbsCurve
-      initNurbsCurvePCA (int order, const vector_vec3d &data, int ncps = 0,
+      initNurbsCurvePCA (int order,
+                         const vector_vec3d &data,
+                         int ncps = 0,
                          double rf = 1.0);
 
       /** \brief Inverse mapping / point inversion: Given a point pt, this function
@@ -135,9 +137,14 @@ namespace pcl
        * function returns \return closest point on curve in parametric domain.
        */
       static double
-      inverseMapping (const ON_NurbsCurve &nurbs, const Eigen::Vector3d &pt,
-                      const double &hint, double &error, Eigen::Vector3d &p,
-                      Eigen::Vector3d &t, int maxSteps = 100, double accuracy = 1e-6,
+      inverseMapping (const ON_NurbsCurve &nurbs,
+                      const Eigen::Vector3d &pt,
+                      const double &hint,
+                      double &error,
+                      Eigen::Vector3d &p,
+                      Eigen::Vector3d &t,
+                      int maxSteps = 100,
+                      double accuracy = 1e-6,
                       bool quiet = true);
 
       /** \brief Given a point pt, the function finds the closest midpoint of the
@@ -165,8 +172,10 @@ namespace pcl
       /** \brief Add minimization constraint: point-to-surface distance
        * (point-distance-minimization). */
       void
-      addPointConstraint (const double &param, const Eigen::Vector3d &point,
-                          double weight, unsigned &row);
+      addPointConstraint (const double &param,
+                          const Eigen::Vector3d &point,
+                          double weight,
+                          unsigned &row);
 
       /** \brief Add minimization constraint: smoothness by control point
        * regularisation. */

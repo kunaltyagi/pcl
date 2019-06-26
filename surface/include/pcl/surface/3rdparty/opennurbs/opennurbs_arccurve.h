@@ -157,7 +157,8 @@ class ON_CLASS ON_ArcCurve : public ON_Curve
     bounding box.
   */
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   ON_BOOL32
@@ -216,7 +217,7 @@ class ON_CLASS ON_ArcCurve : public ON_Curve
   ON_BOOL32
   IsPlanar (ON_Plane * = NULL, // if not NULL and true is returned, then plane
                                // parameters are filled in
-            double = 0.0 // tolerance to use when checking
+            double = 0.0       // tolerance to use when checking
             ) const;
 
   ON_BOOL32
@@ -235,7 +236,9 @@ class ON_CLASS ON_ArcCurve : public ON_Curve
       void) const;
 
   bool
-  IsContinuous (ON::continuity c, double t, int *hint = NULL,
+  IsContinuous (ON::continuity c,
+                double t,
+                int *hint = NULL,
                 double point_tolerance = ON_ZERO_TOLERANCE,
                 double d1_tolerance = ON_ZERO_TOLERANCE,
                 double d2_tolerance = ON_ZERO_TOLERANCE,
@@ -344,7 +347,8 @@ class ON_CLASS ON_ArcCurve : public ON_Curve
                 //            curve's parameterization and the NURBS
                 //            parameterization may not match to the
                 //            desired accuracy.
-      ON_NurbsCurve &, double = 0.0,
+      ON_NurbsCurve &,
+      double = 0.0,
       const ON_Interval * = NULL // OPTIONAL subdomain of arc curve
       ) const;
 

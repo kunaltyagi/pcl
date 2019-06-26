@@ -101,8 +101,12 @@ pcl::gpu::people::OrganizedPlaneDetector::process (
   mps_.setInputNormals (normal_cloud);
   mps_.setInputCloud (cloud);
   if (mps_use_planar_refinement_) {
-    mps_.segmentAndRefine (regions, model_coefficients, inlier_indices, labels,
-                           label_indices, boundary_indices);
+    mps_.segmentAndRefine (regions,
+                           model_coefficients,
+                           inlier_indices,
+                           labels,
+                           label_indices,
+                           boundary_indices);
   } else {
     // mps_.segment (regions);
     mps_.segment (model_coefficients, inlier_indices);

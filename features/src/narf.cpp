@@ -114,7 +114,8 @@ namespace pcl
       delete[] surface_patch_;
       surface_patch_ = new float[surface_patch_pixel_size_ * surface_patch_pixel_size_];
     }
-    memcpy (surface_patch_, other.surface_patch_,
+    memcpy (surface_patch_,
+            other.surface_patch_,
             sizeof (*surface_patch_) * surface_patch_pixel_size_ *
                 surface_patch_pixel_size_);
     surface_patch_world_size_ = other.surface_patch_world_size_;
@@ -205,8 +206,10 @@ namespace pcl
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   bool
   Narf::extractFromRangeImage (const RangeImage &range_image,
-                               const Eigen::Affine3f &pose, int descriptor_size,
-                               float support_size, int surface_patch_pixel_size)
+                               const Eigen::Affine3f &pose,
+                               int descriptor_size,
+                               float support_size,
+                               int surface_patch_pixel_size)
   {
     reset ();
     transformation_ = pose;
@@ -228,8 +231,11 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   bool
-  Narf::extractFromRangeImage (const RangeImage &range_image, float x, float y,
-                               int descriptor_size, float support_size)
+  Narf::extractFromRangeImage (const RangeImage &range_image,
+                               float x,
+                               float y,
+                               int descriptor_size,
+                               float support_size)
   {
     if (!range_image.isValid (static_cast<int> (pcl_lrint (x)),
                               static_cast<int> (pcl_lrint (y))))
@@ -237,40 +243,44 @@ namespace pcl
     Eigen::Vector3f feature_pos;
     range_image.calculate3DPoint (x, y, feature_pos);
 
-    return (extractFromRangeImage (range_image, feature_pos, descriptor_size,
-                                   support_size));
+    return (extractFromRangeImage (
+        range_image, feature_pos, descriptor_size, support_size));
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   bool
   Narf::extractFromRangeImage (const RangeImage &range_image,
-                               const InterestPoint &interest_point, int descriptor_size,
+                               const InterestPoint &interest_point,
+                               int descriptor_size,
                                float support_size)
   {
     return extractFromRangeImage (
         range_image,
         Eigen::Vector3f (interest_point.x, interest_point.y, interest_point.z),
-        descriptor_size, support_size);
+        descriptor_size,
+        support_size);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   bool
   Narf::extractFromRangeImage (const RangeImage &range_image,
                                const Eigen::Vector3f &interest_point,
-                               int descriptor_size, float support_size)
+                               int descriptor_size,
+                               float support_size)
   {
     if (!range_image.getNormalBasedUprightTransformation (
             interest_point, 0.5f * support_size, transformation_))
       return false;
-    return extractFromRangeImage (range_image, transformation_, descriptor_size,
-                                  support_size);
+    return extractFromRangeImage (
+        range_image, transformation_, descriptor_size, support_size);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   bool
   Narf::extractFromRangeImageWithBestRotation (const RangeImage &range_image,
                                                const Eigen::Vector3f &interest_point,
-                                               int descriptor_size, float support_size)
+                                               int descriptor_size,
+                                               float support_size)
   {
     extractFromRangeImage (range_image, interest_point, descriptor_size, support_size);
     vector<float> rotations, strengths;
@@ -361,13 +371,14 @@ namespace pcl
   void
   Narf::extractFromRangeImageAndAddToList (const RangeImage &range_image,
                                            const Eigen::Vector3f &interest_point,
-                                           int descriptor_size, float support_size,
+                                           int descriptor_size,
+                                           float support_size,
                                            bool rotation_invariant,
                                            std::vector<Narf *> &feature_list)
   {
     Narf *feature = new Narf;
-    if (!feature->extractFromRangeImage (range_image, interest_point, descriptor_size,
-                                         support_size)) {
+    if (!feature->extractFromRangeImage (
+            range_image, interest_point, descriptor_size, support_size)) {
       delete feature;
       return;
     }
@@ -383,9 +394,12 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   void
-  Narf::extractFromRangeImageAndAddToList (const RangeImage &range_image, float image_x,
-                                           float image_y, int descriptor_size,
-                                           float support_size, bool rotation_invariant,
+  Narf::extractFromRangeImageAndAddToList (const RangeImage &range_image,
+                                           float image_x,
+                                           float image_y,
+                                           int descriptor_size,
+                                           float support_size,
+                                           bool rotation_invariant,
                                            std::vector<Narf *> &feature_list)
   {
     if (!range_image.isValid (static_cast<int> (pcl_lrint (image_x)),
@@ -393,15 +407,20 @@ namespace pcl
       return;
     Eigen::Vector3f feature_pos;
     range_image.calculate3DPoint (image_x, image_y, feature_pos);
-    extractFromRangeImageAndAddToList (range_image, feature_pos, descriptor_size,
-                                       support_size, rotation_invariant, feature_list);
+    extractFromRangeImageAndAddToList (range_image,
+                                       feature_pos,
+                                       descriptor_size,
+                                       support_size,
+                                       rotation_invariant,
+                                       feature_list);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   void
   Narf::extractForInterestPoints (const RangeImage &range_image,
                                   const PointCloud<InterestPoint> &interest_points,
-                                  int descriptor_size, float support_size,
+                                  int descriptor_size,
+                                  float support_size,
                                   bool rotation_invariant,
                                   std::vector<Narf *> &feature_list)
   {
@@ -415,8 +434,8 @@ namespace pcl
       Vector3fMapConst point = interest_point.getVector3fMap ();
 
       Narf *feature = new Narf;
-      if (!feature->extractFromRangeImage (range_image, point, descriptor_size,
-                                           support_size)) {
+      if (!feature->extractFromRangeImage (
+              range_image, point, descriptor_size, support_size)) {
         delete feature;
       } else {
         if (!rotation_invariant) {
@@ -461,9 +480,13 @@ namespace pcl
   {
     for (unsigned int y = 0; y < range_image.height; ++y) {
       for (unsigned int x = 0; x < range_image.width; ++x) {
-        extractFromRangeImageAndAddToList (
-            range_image, static_cast<float> (x), static_cast<float> (y),
-            descriptor_size, support_size, rotation_invariant, feature_list);
+        extractFromRangeImageAndAddToList (range_image,
+                                           static_cast<float> (x),
+                                           static_cast<float> (y),
+                                           descriptor_size,
+                                           support_size,
+                                           rotation_invariant,
+                                           feature_list);
       }
     }
   }
@@ -532,7 +555,8 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   void
-  Narf::getRotatedVersions (const RangeImage &, const std::vector<float> &rotations,
+  Narf::getRotatedVersions (const RangeImage &,
+                            const std::vector<float> &rotations,
                             std::vector<Narf *> &features) const
   {
     for (const float &rotation : rotations) {
@@ -705,16 +729,24 @@ namespace pcl
         int point_index = (*indices_)[indices_idx];
         int y = point_index / range_image_->width,
             x = point_index - y * range_image_->width;
-        Narf::extractFromRangeImageAndAddToList (
-            *range_image_, static_cast<float> (x), static_cast<float> (y), 36,
-            parameters_.support_size, parameters_.rotation_invariant, feature_list);
+        Narf::extractFromRangeImageAndAddToList (*range_image_,
+                                                 static_cast<float> (x),
+                                                 static_cast<float> (y),
+                                                 36,
+                                                 parameters_.support_size,
+                                                 parameters_.rotation_invariant,
+                                                 feature_list);
       }
     } else {
       for (unsigned int y = 0; y < range_image_->height; ++y) {
         for (unsigned int x = 0; x < range_image_->width; ++x) {
-          Narf::extractFromRangeImageAndAddToList (
-              *range_image_, static_cast<float> (x), static_cast<float> (y), 36,
-              parameters_.support_size, parameters_.rotation_invariant, feature_list);
+          Narf::extractFromRangeImageAndAddToList (*range_image_,
+                                                   static_cast<float> (x),
+                                                   static_cast<float> (y),
+                                                   36,
+                                                   parameters_.support_size,
+                                                   parameters_.rotation_invariant,
+                                                   feature_list);
         }
       }
     }

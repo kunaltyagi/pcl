@@ -241,10 +241,15 @@ namespace pcl
     } // namespace detail
 
     PCL_EXPORTS void
-    meanShiftSegmentation (const cv::gpu::GpuMat &src, cv::Mat &dst, int sp, int sr,
-                           int minsize, detail::DjSets &comps,
+    meanShiftSegmentation (const cv::gpu::GpuMat &src,
+                           cv::Mat &dst,
+                           int sp,
+                           int sr,
+                           int minsize,
+                           detail::DjSets &comps,
                            cv::TermCriteria criteria = cv::TermCriteria (
-                               cv::TermCriteria::MAX_ITER + cv::TermCriteria::EPS, 5,
+                               cv::TermCriteria::MAX_ITER + cv::TermCriteria::EPS,
+                               5,
                                1));
 
   } // namespace cuda

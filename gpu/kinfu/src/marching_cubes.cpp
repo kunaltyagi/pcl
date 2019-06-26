@@ -72,13 +72,17 @@ pcl::gpu::MarchingCubes::run (const TsdfVolume &tsdf,
     return DeviceArray<PointType> ();
   }
 
-  DeviceArray2D<int> occupied_voxels (3, active_voxels, occupied_voxels_buffer_.ptr (),
+  DeviceArray2D<int> occupied_voxels (3,
+                                      active_voxels,
+                                      occupied_voxels_buffer_.ptr (),
                                       occupied_voxels_buffer_.step ());
 
   int total_vertexes = device::computeOffsetsAndTotalVertexes (occupied_voxels);
 
   float3 volume_size = device_cast<const float3> (tsdf.getSize ());
-  device::generateTriangles (tsdf.data (), occupied_voxels, volume_size,
+  device::generateTriangles (tsdf.data (),
+                             occupied_voxels,
+                             volume_size,
                              (DeviceArray<device::PointType> &)triangles_buffer);
 
   device::unbindTextures ();

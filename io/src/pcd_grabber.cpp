@@ -46,10 +46,13 @@
 ///////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////// GrabberImplementation //////////////////////
 struct pcl::PCDGrabberBase::PCDGrabberImpl {
-  PCDGrabberImpl (pcl::PCDGrabberBase &grabber, const std::string &pcd_path,
-                  float frames_per_second, bool repeat);
   PCDGrabberImpl (pcl::PCDGrabberBase &grabber,
-                  const std::vector<std::string> &pcd_files, float frames_per_second,
+                  const std::string &pcd_path,
+                  float frames_per_second,
+                  bool repeat);
+  PCDGrabberImpl (pcl::PCDGrabberBase &grabber,
+                  const std::vector<std::string> &pcd_files,
+                  float frames_per_second,
                   bool repeat);
   void
   trigger ();
@@ -70,7 +73,9 @@ struct pcl::PCDGrabberBase::PCDGrabberImpl {
 
   //! Get cloud at a particular location
   bool
-  getCloudAt (size_t idx, pcl::PCLPointCloud2 &blob, Eigen::Vector4f &origin,
+  getCloudAt (size_t idx,
+              pcl::PCLPointCloud2 &blob,
+              Eigen::Vector4f &origin,
               Eigen::Quaternionf &orientation);
 
   //! Returns the size
@@ -128,8 +133,10 @@ pcl::PCDGrabberBase::PCDGrabberImpl::PCDGrabberImpl (pcl::PCDGrabberBase &grabbe
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 pcl::PCDGrabberBase::PCDGrabberImpl::PCDGrabberImpl (
-    pcl::PCDGrabberBase &grabber, const std::vector<std::string> &pcd_files,
-    float frames_per_second, bool repeat)
+    pcl::PCDGrabberBase &grabber,
+    const std::vector<std::string> &pcd_files,
+    float frames_per_second,
+    bool repeat)
     : grabber_ (grabber), frames_per_second_ (frames_per_second), repeat_ (repeat),
       running_ (false),
       time_trigger_ (1.0 / static_cast<double> (std::max (frames_per_second, 0.001f)),
@@ -153,8 +160,10 @@ pcl::PCDGrabberBase::PCDGrabberImpl::readAhead ()
   if (tar_fd_ != -1) {
     if (!readTARHeader ())
       return;
-    valid_ = (reader.read (tar_file_, next_cloud_, origin_, orientation_, pcd_version,
-                           tar_offset_) == 0);
+    valid_ =
+        (reader.read (
+             tar_file_, next_cloud_, origin_, orientation_, pcd_version, tar_offset_) ==
+         0);
     if (!valid_)
       closeTARFile ();
     else {
@@ -170,15 +179,20 @@ pcl::PCDGrabberBase::PCDGrabberImpl::readAhead ()
   else {
     if (pcd_iterator_ != pcd_files_.end ()) {
       // Try to read in the file as a PCD first
-      valid_ = (reader.read (*pcd_iterator_, next_cloud_, origin_, orientation_,
-                             pcd_version) == 0);
+      valid_ =
+          (reader.read (
+               *pcd_iterator_, next_cloud_, origin_, orientation_, pcd_version) == 0);
 
       // Has an error occurred? Check if we can interpret the file as a TAR file first
       // before going onto the next
       if (!valid_ && openTARFile (*pcd_iterator_) >= 0 && readTARHeader ()) {
         tar_file_ = *pcd_iterator_;
-        valid_ = (reader.read (tar_file_, next_cloud_, origin_, orientation_,
-                               pcd_version, tar_offset_) == 0);
+        valid_ = (reader.read (tar_file_,
+                               next_cloud_,
+                               origin_,
+                               orientation_,
+                               pcd_version,
+                               tar_offset_) == 0);
         if (!valid_)
           closeTARFile ();
         else {
@@ -325,7 +339,8 @@ pcl::PCDGrabberBase::PCDGrabberImpl::scrapeForClouds (bool force)
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::PCDGrabberBase::PCDGrabberImpl::getCloudAt (size_t idx, pcl::PCLPointCloud2 &blob,
+pcl::PCDGrabberBase::PCDGrabberImpl::getCloudAt (size_t idx,
+                                                 pcl::PCLPointCloud2 &blob,
                                                  Eigen::Vector4f &origin,
                                                  Eigen::Quaternionf &orientation)
 {
@@ -336,8 +351,8 @@ pcl::PCDGrabberBase::PCDGrabberImpl::getCloudAt (size_t idx, pcl::PCLPointCloud2
   PCDReader reader;
   int pcd_version;
   std::string filename = pcd_files_[cloud_idx_to_file_idx_[idx]];
-  return (reader.read (filename, blob, origin, orientation, pcd_version,
-                       tar_offsets_[idx]));
+  return (reader.read (
+      filename, blob, origin, orientation, pcd_version, tar_offsets_[idx]));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -351,14 +366,16 @@ pcl::PCDGrabberBase::PCDGrabberImpl::numFrames ()
 ///////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////// GrabberBase //////////////////////
 pcl::PCDGrabberBase::PCDGrabberBase (const std::string &pcd_path,
-                                     float frames_per_second, bool repeat)
+                                     float frames_per_second,
+                                     bool repeat)
     : impl_ (new PCDGrabberImpl (*this, pcd_path, frames_per_second, repeat))
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 pcl::PCDGrabberBase::PCDGrabberBase (const std::vector<std::string> &pcd_files,
-                                     float frames_per_second, bool repeat)
+                                     float frames_per_second,
+                                     bool repeat)
     : impl_ (new PCDGrabberImpl (*this, pcd_files, frames_per_second, repeat))
 {
 }
@@ -437,7 +454,8 @@ pcl::PCDGrabberBase::isRepeatOn () const
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::PCDGrabberBase::getCloudAt (size_t idx, pcl::PCLPointCloud2 &blob,
+pcl::PCDGrabberBase::getCloudAt (size_t idx,
+                                 pcl::PCLPointCloud2 &blob,
                                  Eigen::Vector4f &origin,
                                  Eigen::Quaternionf &orientation) const
 {

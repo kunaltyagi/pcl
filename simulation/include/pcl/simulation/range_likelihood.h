@@ -49,8 +49,8 @@ namespace pcl
        *                computing likelihoods.
        *
        */
-      RangeLikelihood (int rows, int cols, int row_height, int col_width,
-                       Scene::Ptr scene);
+      RangeLikelihood (
+          int rows, int cols, int row_height, int col_width, Scene::Ptr scene);
 
       /**
        * Destroy the RangeLikelihood object and release any memory allocated.
@@ -77,9 +77,12 @@ namespace pcl
        * Set the basic camera intrinsic parameters
        */
       void
-      setCameraIntrinsicsParameters (int camera_width_in, int camera_height_in,
-                                     float camera_fx_in, float camera_fy_in,
-                                     float camera_cx_in, float camera_cy_in)
+      setCameraIntrinsicsParameters (int camera_width_in,
+                                     int camera_height_in,
+                                     float camera_fx_in,
+                                     float camera_fy_in,
+                                     float camera_cx_in,
+                                     float camera_cy_in)
       {
         camera_width_ = camera_width_in;
         camera_height_ = camera_height_in;
@@ -93,9 +96,12 @@ namespace pcl
        * Get the basic camera intrinsic parameters
        */
       void
-      getCameraIntrinsicsParameters (int &camera_width_in, int &camera_height_in,
-                                     float &camera_fx_in, float &camera_fy_in,
-                                     float &camera_cx_in, float &camera_cy_in) const
+      getCameraIntrinsicsParameters (int &camera_width_in,
+                                     int &camera_height_in,
+                                     float &camera_fx_in,
+                                     float &camera_fy_in,
+                                     float &camera_cx_in,
+                                     float &camera_cy_in) const
       {
         camera_width_in = camera_width_;
         camera_height_in = camera_height_;
@@ -161,8 +167,10 @@ namespace pcl
       // global=true  - PointCloud is transformed into the model/world frame using the
       // camera pose
       void
-      getPointCloud (pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc, bool make_global,
-                     const Eigen::Isometry3d &pose, bool organized = false) const;
+      getPointCloud (pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc,
+                     bool make_global,
+                     const Eigen::Isometry3d &pose,
+                     bool organized = false) const;
 
       // Convenience function to return RangeImagePlanar containing
       // simulated RGB-D:
@@ -244,9 +252,8 @@ namespace pcl
                                 Eigen::aligned_allocator<Eigen::Isometry3d>> &poses);
 
       void
-      drawParticles (
-          std::vector<Eigen::Isometry3d, Eigen::aligned_allocator<Eigen::Isometry3d>>
-              poses);
+      drawParticles (std::vector<Eigen::Isometry3d,
+                                 Eigen::aligned_allocator<Eigen::Isometry3d>> poses);
 
       void
       applyCameraTransform (const Eigen::Isometry3d &pose);

@@ -51,9 +51,10 @@ pcl::cloud_composer::SanitizeCloudTool::performAction (ConstItemList input_data,
     Eigen::Quaternionf source_orientation =
         input_item->data (ItemDataRole::ORIENTATION).value<Eigen::Quaternionf> ();
     // Put the modified cloud into an item, stick in output
-    CloudItem *cloud_item =
-        new CloudItem (input_item->text () + tr (" sanitized"), cloud_filtered,
-                       source_origin, source_orientation);
+    CloudItem *cloud_item = new CloudItem (input_item->text () + tr (" sanitized"),
+                                           cloud_filtered,
+                                           source_origin,
+                                           source_orientation);
 
     output.append (cloud_item);
   } else {
@@ -70,8 +71,8 @@ pcl::cloud_composer::SanitizeCloudToolFactory::createToolParameterModel (
 {
   PropertiesModel *parameter_model = new PropertiesModel (parent);
 
-  parameter_model->addProperty ("Keep Organized", false,
-                                Qt::ItemIsEditable | Qt::ItemIsEnabled);
+  parameter_model->addProperty (
+      "Keep Organized", false, Qt::ItemIsEditable | Qt::ItemIsEnabled);
 
   return parameter_model;
 }

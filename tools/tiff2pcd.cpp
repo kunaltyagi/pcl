@@ -61,9 +61,14 @@ using namespace pcl;
 
 void
 processAndSave (vtkSmartPointer<vtkImageData> depth_data,
-                vtkSmartPointer<vtkImageData> rgb_data, const std::string &time,
-                float focal_length, bool format, bool color, bool depth,
-                bool use_output_path, const std::string &output_path)
+                vtkSmartPointer<vtkImageData> rgb_data,
+                const std::string &time,
+                float focal_length,
+                bool format,
+                bool color,
+                bool depth,
+                bool use_output_path,
+                const std::string &output_path)
 {
   // Retrieve the entries from the image data and copy them into the output RGB cloud
   int rgb_components = rgb_data->GetNumberOfScalarComponents ();
@@ -357,8 +362,15 @@ main (int argc, char **argv)
             depth_reader->Update ();
             depth_data = depth_reader->GetOutput ();
 
-            processAndSave (depth_data, rgb_data, depth_time, focal_length, format,
-                            color, depth, use_output_path, output_path_);
+            processAndSave (depth_data,
+                            rgb_data,
+                            depth_time,
+                            focal_length,
+                            format,
+                            color,
+                            depth,
+                            use_output_path,
+                            output_path_);
           }
 
           // TODO: remove this depth entry from vector before break > speed up search

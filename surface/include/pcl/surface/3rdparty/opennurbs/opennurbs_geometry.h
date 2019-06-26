@@ -90,7 +90,8 @@ class ON_CLASS ON_Geometry : public ON_Object
   // Returns:
   //   true if successful.
   ON_BOOL32
-  GetBoundingBox (ON_3dPoint &bbox_min, ON_3dPoint &bbox_max,
+  GetBoundingBox (ON_3dPoint &bbox_min,
+                  ON_3dPoint &bbox_max,
                   int bGrowBox = false) const;
 
   // Description:
@@ -107,7 +108,9 @@ class ON_CLASS ON_Geometry : public ON_Object
   // Remarks:
   //   Uses virtual Transform() function to calculate the result.
   ON_BOOL32
-  Rotate (double sin_angle, double cos_angle, const ON_3dVector &rotation_axis,
+  Rotate (double sin_angle,
+          double cos_angle,
+          const ON_3dVector &rotation_axis,
           const ON_3dPoint &rotation_center);
 
   // Description:
@@ -123,7 +126,8 @@ class ON_CLASS ON_Geometry : public ON_Object
   // Remarks:
   //   Uses virtual Transform() function to calculate the result.
   ON_BOOL32
-  Rotate (double rotation_angle, const ON_3dVector &rotation_axis,
+  Rotate (double rotation_angle,
+          const ON_3dVector &rotation_axis,
           const ON_3dPoint &rotation_center);
 
   // Description:
@@ -194,7 +198,8 @@ class ON_CLASS ON_Geometry : public ON_Object
     especially when xform is not null.
   */
   virtual bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   // Description:

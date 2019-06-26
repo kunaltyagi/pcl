@@ -114,7 +114,8 @@ pcl::MarchingCubesRBF<PointNT>::voxelizeData ()
         for (std::vector<Eigen::Vector3d,
                          Eigen::aligned_allocator<Eigen::Vector3d>>::const_iterator
                  c_it = centers.begin ();
-             c_it != centers.end (); ++c_it, ++w_it)
+             c_it != centers.end ();
+             ++c_it, ++w_it)
           f += *w_it * kernel (*c_it, point);
 
         grid_[x * res_y_ * res_z_ + y * res_z_ + z] = float(f);

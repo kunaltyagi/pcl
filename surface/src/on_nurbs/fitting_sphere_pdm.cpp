@@ -92,8 +92,11 @@ FittingSphere::assemble (double smoothness)
   int nrows = nInt + nCageRegInt + nCageRegBnd;
 
   if (!m_quiet)
-    printf ("[FittingSphere::assemble] %dx%d (invmap: %f %d)\n", nrows, ncp,
-            in_accuracy, in_max_steps);
+    printf ("[FittingSphere::assemble] %dx%d (invmap: %f %d)\n",
+            nrows,
+            ncp,
+            in_accuracy,
+            in_max_steps);
 
   m_solver.assign (nrows, ncp, 3);
 
@@ -300,13 +303,20 @@ FittingSphere::assembleInterior (double wInt, unsigned &row)
     Vector3d pt, tu, tv, n;
     double error;
     if (p < m_data->interior_param.size ()) {
-      params = inverseMapping (m_nurbs, pcp, m_data->interior_param[p], error, pt, tu,
-                               tv, in_max_steps, in_accuracy);
+      params = inverseMapping (m_nurbs,
+                               pcp,
+                               m_data->interior_param[p],
+                               error,
+                               pt,
+                               tu,
+                               tv,
+                               in_max_steps,
+                               in_accuracy);
       m_data->interior_param[p] = params;
     } else {
       params = findClosestElementMidPoint (m_nurbs, pcp);
-      params = inverseMapping (m_nurbs, pcp, params, error, pt, tu, tv, in_max_steps,
-                               in_accuracy);
+      params = inverseMapping (
+          m_nurbs, pcp, params, error, pt, tu, tv, in_max_steps, in_accuracy);
       m_data->interior_param.push_back (params);
     }
     m_data->interior_error.push_back (error);
@@ -324,16 +334,17 @@ FittingSphere::assembleInterior (double wInt, unsigned &row)
 
 void
 FittingSphere::addPointConstraint (const Eigen::Vector2d &params,
-                                   const Eigen::Vector3d &point, double weight,
+                                   const Eigen::Vector3d &point,
+                                   double weight,
                                    unsigned &row)
 {
   double *N0 = new double[m_nurbs.m_order[0] * m_nurbs.m_order[0]];
   double *N1 = new double[m_nurbs.m_order[1] * m_nurbs.m_order[1]];
 
-  int E = ON_NurbsSpanIndex (m_nurbs.m_order[0], m_nurbs.m_cv_count[0],
-                             m_nurbs.m_knot[0], params (0), 0, 0);
-  int F = ON_NurbsSpanIndex (m_nurbs.m_order[1], m_nurbs.m_cv_count[1],
-                             m_nurbs.m_knot[1], params (1), 0, 0);
+  int E = ON_NurbsSpanIndex (
+      m_nurbs.m_order[0], m_nurbs.m_cv_count[0], m_nurbs.m_knot[0], params (0), 0, 0);
+  int F = ON_NurbsSpanIndex (
+      m_nurbs.m_order[1], m_nurbs.m_cv_count[1], m_nurbs.m_knot[1], params (1), 0, 0);
 
   ON_EvaluateNurbsBasis (m_nurbs.m_order[0], m_nurbs.m_knot[0] + E, params (0), N0);
   ON_EvaluateNurbsBasis (m_nurbs.m_order[1], m_nurbs.m_knot[1] + F, params (1), N1);
@@ -409,10 +420,16 @@ FittingSphere::addCageBoundaryRegularisation (double weight, int side, unsigned 
 }
 
 Vector2d
-FittingSphere::inverseMapping (const ON_NurbsSurface &nurbs, const Vector3d &pt,
-                               const Vector2d &hint, double &error, Vector3d &p,
-                               Vector3d &tu, Vector3d &tv, int maxSteps,
-                               double accuracy, bool quiet)
+FittingSphere::inverseMapping (const ON_NurbsSurface &nurbs,
+                               const Vector3d &pt,
+                               const Vector2d &hint,
+                               double &error,
+                               Vector3d &p,
+                               Vector3d &tu,
+                               Vector3d &tv,
+                               int maxSteps,
+                               double accuracy,
+                               bool quiet)
 {
   double pointAndTangents[9];
 
@@ -478,7 +495,8 @@ FittingSphere::inverseMapping (const ON_NurbsSurface &nurbs, const Vector3d &pt,
   if (!quiet) {
     printf (
         "[FittingSphere::inverseMapping] Warning: Method did not converge (%e %d)\n",
-        accuracy, maxSteps);
+        accuracy,
+        maxSteps);
     printf ("  %f %f ... %f %f\n", hint (0), hint (1), current (0), current (1));
   }
 

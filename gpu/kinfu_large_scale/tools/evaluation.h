@@ -75,13 +75,15 @@ class Evaluation
    * accociated frame pair (stamps are not implemented) \param depth \param rgb24
    */
   bool
-  grab (double stamp, pcl::gpu::PtrStepSz<const unsigned short> &depth,
+  grab (double stamp,
+        pcl::gpu::PtrStepSz<const unsigned short> &depth,
         pcl::gpu::PtrStepSz<const RGB> &rgb24);
 
   const static float fx, fy, cx, cy;
 
   void
-  saveAllPoses (const pcl::gpu::kinfuLS::KinfuTracker &kinfu, int frame_number = -1,
+  saveAllPoses (const pcl::gpu::kinfuLS::KinfuTracker &kinfu,
+                int frame_number = -1,
                 const std::string &logfile = "kinfu_poses.txt") const;
 
   private:

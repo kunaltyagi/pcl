@@ -116,7 +116,8 @@ namespace pcl
   void
   getRejectedQueryIndices (const pcl::Correspondences &correspondences_before,
                            const pcl::Correspondences &correspondences_after,
-                           std::vector<int> &indices, bool presorting_required = true);
+                           std::vector<int> &indices,
+                           bool presorting_required = true);
 
   /**
    * \brief Representation of a (possible) correspondence between two 3D points in two

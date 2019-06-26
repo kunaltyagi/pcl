@@ -257,7 +257,8 @@ namespace pcl
        */
       void
       setCameraParameters (const Eigen::Matrix3f &intrinsics,
-                           const Eigen::Matrix4f &extrinsics, int viewport = 0);
+                           const Eigen::Matrix4f &extrinsics,
+                           int viewport = 0);
 
       /** \brief Set the camera parameters by given a full camera data structure.
        * \param[in] camera camera structure containing all the camera parameters.

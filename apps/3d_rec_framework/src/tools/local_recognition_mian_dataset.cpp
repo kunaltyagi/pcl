@@ -22,7 +22,8 @@
 #include <pcl/visualization/pcl_visualizer.h>
 
 void
-getScenesInDirectory (bf::path &dir, std::string &rel_path_so_far,
+getScenesInDirectory (bf::path &dir,
+                      std::string &rel_path_so_far,
                       std::vector<std::string> &relative_paths)
 {
   // list models in MODEL_FILES_DIR_ and return list
@@ -78,7 +79,9 @@ void
 recognizeAndVisualize (
     typename pcl::rec_3d_framework::LocalRecognitionPipeline<DistT, PointT, FeatureT>
         &local,
-    std::string &scenes_dir, int scene = -1, bool single_model = false)
+    std::string &scenes_dir,
+    int scene = -1,
+    bool single_model = false)
 {
 
   // read mians scenes
@@ -230,8 +233,10 @@ recognizeAndVisualize (
 }
 
 void
-getModelsInDirectory (bf::path &dir, std::string &rel_path_so_far,
-                      std::vector<std::string> &relative_paths, std::string &ext)
+getModelsInDirectory (bf::path &dir,
+                      std::string &rel_path_so_far,
+                      std::vector<std::string> &relative_paths,
+                      std::string &ext)
 {
   bf::directory_iterator end_itr;
   for (bf::directory_iterator itr (dir); itr != end_itr; ++itr) {
@@ -446,9 +451,9 @@ main (int argc, char **argv)
         pcl::rec_3d_framework::LocalEstimator<pcl::PointXYZ, pcl::Histogram<352>>> (
         estimator);
 
-    pcl::rec_3d_framework::LocalRecognitionPipeline<flann::L1, pcl::PointXYZ,
-                                                    pcl::Histogram<352>>
-        local;
+    pcl::rec_3d_framework::
+        LocalRecognitionPipeline<flann::L1, pcl::PointXYZ, pcl::Histogram<352>>
+            local;
     local.setDataSource (cast_source);
     local.setTrainingDir (training_dir);
     local.setDescriptorName (desc_name);
@@ -469,8 +474,8 @@ main (int argc, char **argv)
 
   if (desc_name == "shot_omp") {
     desc_name = std::string ("shot");
-    boost::shared_ptr<pcl::rec_3d_framework::SHOTLocalEstimationOMP<
-        pcl::PointXYZ, pcl::Histogram<352>>>
+    boost::shared_ptr<pcl::rec_3d_framework::
+                          SHOTLocalEstimationOMP<pcl::PointXYZ, pcl::Histogram<352>>>
         estimator;
     estimator.reset (
         new pcl::rec_3d_framework::SHOTLocalEstimationOMP<pcl::PointXYZ,
@@ -487,9 +492,9 @@ main (int argc, char **argv)
         pcl::rec_3d_framework::LocalEstimator<pcl::PointXYZ, pcl::Histogram<352>>> (
         estimator);
 
-    pcl::rec_3d_framework::LocalRecognitionPipeline<flann::L1, pcl::PointXYZ,
-                                                    pcl::Histogram<352>>
-        local;
+    pcl::rec_3d_framework::
+        LocalRecognitionPipeline<flann::L1, pcl::PointXYZ, pcl::Histogram<352>>
+            local;
     local.setDataSource (cast_source);
     local.setTrainingDir (training_dir);
     local.setDescriptorName (desc_name);
@@ -528,9 +533,9 @@ main (int argc, char **argv)
         pcl::rec_3d_framework::LocalEstimator<pcl::PointXYZ, pcl::FPFHSignature33>> (
         estimator);
 
-    pcl::rec_3d_framework::LocalRecognitionPipeline<flann::L1, pcl::PointXYZ,
-                                                    pcl::FPFHSignature33>
-        local;
+    pcl::rec_3d_framework::
+        LocalRecognitionPipeline<flann::L1, pcl::PointXYZ, pcl::FPFHSignature33>
+            local;
     local.setDataSource (cast_source);
     local.setTrainingDir (training_dir);
     local.setDescriptorName (desc_name);

@@ -48,8 +48,12 @@
 
 //////////////////////////////////////////////////////////////////////////////
 void
-pcl::keypoint::harrisCorner (ImageType &output, ImageType &input, const float sigma_d,
-                             const float sigma_i, const float alpha, const float thresh)
+pcl::keypoint::harrisCorner (ImageType &output,
+                             ImageType &input,
+                             const float sigma_d,
+                             const float sigma_i,
+                             const float alpha,
+                             const float thresh)
 {
 
   /*creating the gaussian kernels*/
@@ -113,7 +117,9 @@ pcl::keypoint::harrisCorner (ImageType &output, ImageType &input, const float si
 
 //////////////////////////////////////////////////////////////////////////////
 void
-pcl::keypoint::hessianBlob (ImageType &output, ImageType &input, const float sigma,
+pcl::keypoint::hessianBlob (ImageType &output,
+                            ImageType &input,
+                            const float sigma,
                             bool SCALED)
 {
   /*creating the gaussian kernels*/
@@ -171,8 +177,10 @@ pcl::keypoint::hessianBlob (ImageType &output, ImageType &input, const float sig
 
 //////////////////////////////////////////////////////////////////////////////
 void
-pcl::keypoint::hessianBlob (ImageType &output, ImageType &input,
-                            const float start_scale, const float scaling_factor,
+pcl::keypoint::hessianBlob (ImageType &output,
+                            ImageType &input,
+                            const float start_scale,
+                            const float scaling_factor,
                             const int num_scales)
 {
   const size_t height = input.size ();
@@ -233,7 +241,8 @@ pcl::keypoint::hessianBlob (ImageType &output, ImageType &input,
 
 //////////////////////////////////////////////////////////////////////////////
 void
-pcl::keypoint::imageElementMultiply (ImageType &output, ImageType &input1,
+pcl::keypoint::imageElementMultiply (ImageType &output,
+                                     ImageType &input1,
                                      ImageType &input2)
 {
   const size_t height = input1.size ();

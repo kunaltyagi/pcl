@@ -109,7 +109,8 @@ namespace pcl
     }
 
     static void
-    spreadQuantizedMap (const QuantizedMap &input_map, QuantizedMap &output_map,
+    spreadQuantizedMap (const QuantizedMap &input_map,
+                        QuantizedMap &output_map,
                         size_t spreading_size);
 
     void

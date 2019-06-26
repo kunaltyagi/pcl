@@ -272,7 +272,8 @@ TEST (PCL, KdTreeWrapper_nearestKSearch)
   float max_dist = 0.0f;
   unsigned int counter = 0;
   for (multimap<float, int>::iterator it = sorted_brute_force_result.begin ();
-       it != sorted_brute_force_result.end () && counter < no_of_neighbors; ++it) {
+       it != sorted_brute_force_result.end () && counter < no_of_neighbors;
+       ++it) {
     max_dist = max (max_dist, it->first);
     ++counter;
   }
@@ -304,8 +305,8 @@ TEST (PCL, KdTreeWrapper_nearestKSearch)
     // kdtree->initSearchDS ();
     kdtree->setInputCloud (cloud_big.makeShared ());
     for (size_t i = 0; i < cloud_big.points.size (); ++i)
-      kdtree->nearestKSearch (cloud_big.points[i], no_of_neighbors, k_indices,
-                              k_distances);
+      kdtree->nearestKSearch (
+          cloud_big.points[i], no_of_neighbors, k_indices, k_distances);
   }
 }
 

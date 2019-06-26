@@ -141,8 +141,15 @@ saveCloud (const std::string &filename, const PointCloud<PointInT> &cloud, bool 
 }
 
 inline void
-depth2xyz (float v_viewing_angle, float h_viewing_angle, int image_width,
-           int image_height, int image_x, int image_y, float depth, float &x, float &y,
+depth2xyz (float v_viewing_angle,
+           float h_viewing_angle,
+           int image_width,
+           int image_height,
+           int image_x,
+           int image_y,
+           float depth,
+           float &x,
+           float &y,
            float &z)
 {
   constexpr float PI = 3.1415927;
@@ -307,8 +314,16 @@ main (int argc, char **argv)
                       depth_unit_magic;
 
               PointXYZI xyzi;
-              depth2xyz (v_viewing_angle, h_viewing_angle, mono_depth_cloud.width,
-                         mono_depth_cloud.height, x, y, depth, xyzi.x, xyzi.y, xyzi.z);
+              depth2xyz (v_viewing_angle,
+                         h_viewing_angle,
+                         mono_depth_cloud.width,
+                         mono_depth_cloud.height,
+                         x,
+                         y,
+                         depth,
+                         xyzi.x,
+                         xyzi.y,
+                         xyzi.z);
               xyzi.intensity = static_cast<float> (pixel[0]) / MAX_COLOR_INTENSITY;
 
               mono_depth_cloud (x, dimensions[1] - y - 1) = xyzi;
@@ -378,8 +393,15 @@ main (int argc, char **argv)
                     depth_unit_magic;
 
             PointXYZRGB xyzrgb;
-            depth2xyz (v_viewing_angle, h_viewing_angle, rgb_depth_cloud.width,
-                       rgb_depth_cloud.height, x, y, depth, xyzrgb.x, xyzrgb.y,
+            depth2xyz (v_viewing_angle,
+                       h_viewing_angle,
+                       rgb_depth_cloud.width,
+                       rgb_depth_cloud.height,
+                       x,
+                       y,
+                       depth,
+                       xyzrgb.x,
+                       xyzrgb.y,
                        xyzrgb.z);
             xyzrgb.r = static_cast<uint8_t> (pixel[0]);
             xyzrgb.g = static_cast<uint8_t> (pixel[1]);
@@ -443,8 +465,15 @@ main (int argc, char **argv)
                     depth_unit_magic;
 
             PointXYZRGBA xyzrgba;
-            depth2xyz (v_viewing_angle, h_viewing_angle, rgba_depth_cloud.width,
-                       rgba_depth_cloud.height, x, y, depth, xyzrgba.x, xyzrgba.y,
+            depth2xyz (v_viewing_angle,
+                       h_viewing_angle,
+                       rgba_depth_cloud.width,
+                       rgba_depth_cloud.height,
+                       x,
+                       y,
+                       depth,
+                       xyzrgba.x,
+                       xyzrgba.y,
                        xyzrgba.z);
             xyzrgba.r = static_cast<uint8_t> (pixel[0]);
             xyzrgba.g = static_cast<uint8_t> (pixel[1]);
@@ -517,8 +546,16 @@ main (int argc, char **argv)
                   depth_unit_magic;
 
           PointXYZRGBA color;
-          depth2xyz (v_viewing_angle, h_viewing_angle, cloud.width, cloud.height, x, y,
-                     depth, color.x, color.y, color.z);
+          depth2xyz (v_viewing_angle,
+                     h_viewing_angle,
+                     cloud.width,
+                     cloud.height,
+                     x,
+                     y,
+                     depth,
+                     color.x,
+                     color.y,
+                     color.z);
           color.r = 0;
           color.g = 0;
           color.b = 0;
@@ -644,8 +681,16 @@ main (int argc, char **argv)
                   depth_unit_magic;
 
           PointXYZI gray;
-          depth2xyz (v_viewing_angle, h_viewing_angle, cloud.width, cloud.height, x, y,
-                     depth, gray.x, gray.y, gray.z);
+          depth2xyz (v_viewing_angle,
+                     h_viewing_angle,
+                     cloud.width,
+                     cloud.height,
+                     x,
+                     y,
+                     depth,
+                     gray.x,
+                     gray.y,
+                     gray.z);
 
           switch (components) {
           case 1:
@@ -684,8 +729,8 @@ main (int argc, char **argv)
       PointCloud<Intensity> cloud;
       PointCloud<Intensity8u> cloud8u;
 
-      if (pcl::console::parse_argument (argc, argv, "--intensity_type",
-                                        intensity_type) != -1) {
+      if (pcl::console::parse_argument (
+              argc, argv, "--intensity_type", intensity_type) != -1) {
         if (intensity_type == "FLOAT") {
           cloud.width = dimensions[0];
           cloud.height =

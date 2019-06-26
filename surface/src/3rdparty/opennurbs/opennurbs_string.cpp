@@ -162,10 +162,11 @@ ON_String::ReserveArray (size_t array_capacity)
       p1->string_length = size;
     }
   } else if (capacity > p->string_capacity) {
-    p = (ON_aStringHeader *)onrealloc (p, sizeof (ON_aStringHeader) +
-                                              (capacity + 1) * sizeof (*m_s));
+    p = (ON_aStringHeader *)onrealloc (
+        p, sizeof (ON_aStringHeader) + (capacity + 1) * sizeof (*m_s));
     m_s = p->string_array ();
-    memset (&m_s[p->string_capacity], 0,
+    memset (&m_s[p->string_capacity],
+            0,
             (1 + capacity - p->string_capacity) * sizeof (*m_s));
     p->string_capacity = capacity;
   }
@@ -187,8 +188,8 @@ ON_String::ShrinkArray ()
       m_s[p1->string_length] = 0;
     } else if (p->string_length < p->string_capacity) {
       // onrealloc string
-      p = (ON_aStringHeader *)onrealloc (p, sizeof (ON_aStringHeader) +
-                                                (p->string_length + 1) * sizeof (*m_s));
+      p = (ON_aStringHeader *)onrealloc (
+          p, sizeof (ON_aStringHeader) + (p->string_length + 1) * sizeof (*m_s));
       p->string_capacity = p->string_length;
       m_s = p->string_array ();
       m_s[p->string_length] = 0;
@@ -1347,7 +1348,9 @@ ON_CheckSum::SetBufferCheckSum (size_t size, const void *buffer, time_t time)
 }
 
 bool
-ON::GetFileStats (const wchar_t *filename, size_t *filesize, time_t *create_time,
+ON::GetFileStats (const wchar_t *filename,
+                  size_t *filesize,
+                  time_t *create_time,
                   time_t *lastmodify_time)
 {
   bool rc = false;
@@ -1371,7 +1374,9 @@ ON::GetFileStats (const wchar_t *filename, size_t *filesize, time_t *create_time
 }
 
 bool
-ON::GetFileStats (FILE *fp, size_t *filesize, time_t *create_time,
+ON::GetFileStats (FILE *fp,
+                  size_t *filesize,
+                  time_t *create_time,
                   time_t *lastmodify_time)
 {
   bool rc = false;
@@ -1563,7 +1568,9 @@ ON_CheckSum::SetFileCheckSum (FILE *fp)
     for (int i = 0; i < 7; i++) {
       sz0 += maxsize;
       while (1024 == count && m_size < sz0) {
-        count = (int)fread (buffer, 1, 1024,
+        count = (int)fread (buffer,
+                            1,
+                            1024,
                             fp); // the (int) is for 64 bit size_t conversion
         if (count > 0) {
           m_size += count;
@@ -1773,8 +1780,14 @@ ON_CheckSum::Dump (ON_TextLog &text_log) const
     u = (unsigned long long)m_time;
     text_log.Print ("Last Modified Time: %u (seconds since January 1, 1970, UCT)\n", u);
     text_log.Print ("CRC List: %08x, %08x, %08x, %08x, %08x, %08x, %08x, %08x\n",
-                    m_crc[0], m_crc[1], m_crc[2], m_crc[3], m_crc[4], m_crc[5],
-                    m_crc[6], m_crc[7]);
+                    m_crc[0],
+                    m_crc[1],
+                    m_crc[2],
+                    m_crc[3],
+                    m_crc[4],
+                    m_crc[5],
+                    m_crc[6],
+                    m_crc[7]);
     text_log.PopIndent ();
   }
 }

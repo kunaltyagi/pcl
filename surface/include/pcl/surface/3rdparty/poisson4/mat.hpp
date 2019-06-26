@@ -137,7 +137,9 @@ namespace pcl
     template <class Real>
     void
     MinimalAreaTriangulation<Real>::GetTriangulation (
-        const size_t &i, const size_t &j, const std::vector<Point3D<Real>> &vertices,
+        const size_t &i,
+        const size_t &j,
+        const std::vector<Point3D<Real>> &vertices,
         std::vector<TriangleIndex> &triangles)
     {
       TriangleIndex tIndex;
@@ -160,7 +162,8 @@ namespace pcl
 
     template <class Real>
     Real
-    MinimalAreaTriangulation<Real>::GetArea (const size_t &i, const size_t &j,
+    MinimalAreaTriangulation<Real>::GetArea (const size_t &i,
+                                             const size_t &j,
                                              const std::vector<Point3D<Real>> &vertices)
     {
       Real a = FLT_MAX, temp;

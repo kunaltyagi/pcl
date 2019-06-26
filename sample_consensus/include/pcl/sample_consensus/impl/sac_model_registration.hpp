@@ -83,8 +83,8 @@ pcl::SampleConsensusModelRegistration<PointT>::computeModelCoefficients (
   for (int i = 0; i < 3; ++i)
     indices_tgt[i] = correspondences_.at (samples[i]);
 
-  estimateRigidTransformationSVD (*input_, samples, *target_, indices_tgt,
-                                  model_coefficients);
+  estimateRigidTransformationSVD (
+      *input_, samples, *target_, indices_tgt, model_coefficients);
   return (true);
 }
 
@@ -97,7 +97,8 @@ pcl::SampleConsensusModelRegistration<PointT>::getDistancesToModel (
   if (indices_->size () != indices_tgt_->size ()) {
     PCL_ERROR ("[pcl::SampleConsensusModelRegistration::getDistancesToModel] Number of "
                "source indices (%lu) differs than number of target indices (%lu)!\n",
-               indices_->size (), indices_tgt_->size ());
+               indices_->size (),
+               indices_tgt_->size ());
     distances.clear ();
     return;
   }
@@ -123,10 +124,12 @@ pcl::SampleConsensusModelRegistration<PointT>::getDistancesToModel (
   for (size_t i = 0; i < indices_->size (); ++i) {
     Eigen::Vector4f pt_src (input_->points[(*indices_)[i]].x,
                             input_->points[(*indices_)[i]].y,
-                            input_->points[(*indices_)[i]].z, 1);
+                            input_->points[(*indices_)[i]].z,
+                            1);
     Eigen::Vector4f pt_tgt (target_->points[(*indices_tgt_)[i]].x,
                             target_->points[(*indices_tgt_)[i]].y,
-                            target_->points[(*indices_tgt_)[i]].z, 1);
+                            target_->points[(*indices_tgt_)[i]].z,
+                            1);
 
     Eigen::Vector4f p_tr (transform * pt_src);
     // Calculate the distance from the transformed point to its correspondence
@@ -139,13 +142,15 @@ pcl::SampleConsensusModelRegistration<PointT>::getDistancesToModel (
 template <typename PointT>
 void
 pcl::SampleConsensusModelRegistration<PointT>::selectWithinDistance (
-    const Eigen::VectorXf &model_coefficients, const double threshold,
+    const Eigen::VectorXf &model_coefficients,
+    const double threshold,
     std::vector<int> &inliers)
 {
   if (indices_->size () != indices_tgt_->size ()) {
     PCL_ERROR ("[pcl::SampleConsensusModelRegistration::selectWithinDistance] Number "
                "of source indices (%lu) differs than number of target indices (%lu)!\n",
-               indices_->size (), indices_tgt_->size ());
+               indices_->size (),
+               indices_tgt_->size ());
     inliers.clear ();
     return;
   }
@@ -176,10 +181,12 @@ pcl::SampleConsensusModelRegistration<PointT>::selectWithinDistance (
   for (size_t i = 0; i < indices_->size (); ++i) {
     Eigen::Vector4f pt_src (input_->points[(*indices_)[i]].x,
                             input_->points[(*indices_)[i]].y,
-                            input_->points[(*indices_)[i]].z, 1);
+                            input_->points[(*indices_)[i]].z,
+                            1);
     Eigen::Vector4f pt_tgt (target_->points[(*indices_tgt_)[i]].x,
                             target_->points[(*indices_tgt_)[i]].y,
-                            target_->points[(*indices_tgt_)[i]].z, 1);
+                            target_->points[(*indices_tgt_)[i]].z,
+                            1);
 
     Eigen::Vector4f p_tr (transform * pt_src);
 
@@ -204,7 +211,8 @@ pcl::SampleConsensusModelRegistration<PointT>::countWithinDistance (
   if (indices_->size () != indices_tgt_->size ()) {
     PCL_ERROR ("[pcl::SampleConsensusModelRegistration::countWithinDistance] Number of "
                "source indices (%lu) differs than number of target indices (%lu)!\n",
-               indices_->size (), indices_tgt_->size ());
+               indices_->size (),
+               indices_tgt_->size ());
     return (0);
   }
   if (!target_) {
@@ -229,10 +237,12 @@ pcl::SampleConsensusModelRegistration<PointT>::countWithinDistance (
   for (size_t i = 0; i < indices_->size (); ++i) {
     Eigen::Vector4f pt_src (input_->points[(*indices_)[i]].x,
                             input_->points[(*indices_)[i]].y,
-                            input_->points[(*indices_)[i]].z, 1);
+                            input_->points[(*indices_)[i]].z,
+                            1);
     Eigen::Vector4f pt_tgt (target_->points[(*indices_tgt_)[i]].x,
                             target_->points[(*indices_tgt_)[i]].y,
-                            target_->points[(*indices_tgt_)[i]].z, 1);
+                            target_->points[(*indices_tgt_)[i]].z,
+                            1);
 
     Eigen::Vector4f p_tr (transform * pt_src);
     // Calculate the distance from the transformed point to its correspondence
@@ -246,14 +256,16 @@ pcl::SampleConsensusModelRegistration<PointT>::countWithinDistance (
 template <typename PointT>
 void
 pcl::SampleConsensusModelRegistration<PointT>::optimizeModelCoefficients (
-    const std::vector<int> &inliers, const Eigen::VectorXf &model_coefficients,
+    const std::vector<int> &inliers,
+    const Eigen::VectorXf &model_coefficients,
     Eigen::VectorXf &optimized_coefficients) const
 {
   if (indices_->size () != indices_tgt_->size ()) {
     PCL_ERROR (
         "[pcl::SampleConsensusModelRegistration::optimizeModelCoefficients] Number of "
         "source indices (%lu) differs than number of target indices (%lu)!\n",
-        indices_->size (), indices_tgt_->size ());
+        indices_->size (),
+        indices_tgt_->size ());
     optimized_coefficients = model_coefficients;
     return;
   }
@@ -271,16 +283,18 @@ pcl::SampleConsensusModelRegistration<PointT>::optimizeModelCoefficients (
     indices_tgt[i] = correspondences_.at (indices_src[i]);
   }
 
-  estimateRigidTransformationSVD (*input_, indices_src, *target_, indices_tgt,
-                                  optimized_coefficients);
+  estimateRigidTransformationSVD (
+      *input_, indices_src, *target_, indices_tgt, optimized_coefficients);
 }
 
 //////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 void
 pcl::SampleConsensusModelRegistration<PointT>::estimateRigidTransformationSVD (
-    const pcl::PointCloud<PointT> &cloud_src, const std::vector<int> &indices_src,
-    const pcl::PointCloud<PointT> &cloud_tgt, const std::vector<int> &indices_tgt,
+    const pcl::PointCloud<PointT> &cloud_src,
+    const std::vector<int> &indices_src,
+    const pcl::PointCloud<PointT> &cloud_tgt,
+    const std::vector<int> &indices_tgt,
     Eigen::VectorXf &transform) const
 {
   transform.resize (16);

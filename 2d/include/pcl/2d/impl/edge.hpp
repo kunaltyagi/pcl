@@ -83,7 +83,8 @@ pcl::Edge<PointInT, PointOutT>::detectEdgeSobel (pcl::PointCloud<PointOutT> &out
 template <typename PointInT, typename PointOutT>
 void
 pcl::Edge<PointInT, PointOutT>::sobelMagnitudeDirection (
-    const pcl::PointCloud<PointInT> &input_x, const pcl::PointCloud<PointInT> &input_y,
+    const pcl::PointCloud<PointInT> &input_x,
+    const pcl::PointCloud<PointInT> &input_y,
     pcl::PointCloud<PointOutT> &output)
 {
   convolution_.setInputCloud (input_x.makeShared ());
@@ -201,9 +202,8 @@ pcl::Edge<PointInT, PointOutT>::detectEdgeRoberts (pcl::PointCloud<PointOutT> &o
 //////////////////////////////////////////////////////////////////////////////
 template <typename PointInT, typename PointOutT>
 void
-pcl::Edge<PointInT, PointOutT>::cannyTraceEdge (int rowOffset, int colOffset, int row,
-                                                int col,
-                                                pcl::PointCloud<PointXYZI> &maxima)
+pcl::Edge<PointInT, PointOutT>::cannyTraceEdge (
+    int rowOffset, int colOffset, int row, int col, pcl::PointCloud<PointXYZI> &maxima)
 {
   int newRow = row + rowOffset;
   int newCol = col + colOffset;
@@ -257,7 +257,8 @@ pcl::Edge<PointInT, PointOutT>::discretizeAngles (pcl::PointCloud<PointOutT> &th
 template <typename PointInT, typename PointOutT>
 void
 pcl::Edge<PointInT, PointOutT>::suppressNonMaxima (
-    const pcl::PointCloud<PointXYZIEdge> &edges, pcl::PointCloud<PointXYZI> &maxima,
+    const pcl::PointCloud<PointXYZIEdge> &edges,
+    pcl::PointCloud<PointXYZI> &maxima,
     float tLow)
 {
   const int height = edges.height;

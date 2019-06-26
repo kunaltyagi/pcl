@@ -130,9 +130,16 @@ loadCloud (const std::string &filename, Cloud &cloud)
 }
 
 void
-compute (ConstCloudPtr &input, Cloud &output, int max_window_size, float slope,
-         float max_distance, float initial_distance, float cell_size, float base,
-         bool exponential, bool approximate)
+compute (ConstCloudPtr &input,
+         Cloud &output,
+         int max_window_size,
+         float slope,
+         float max_distance,
+         float initial_distance,
+         float cell_size,
+         float base,
+         bool exponential,
+         bool approximate)
 {
   // Estimate
   TicToc tt;
@@ -204,9 +211,16 @@ saveCloud (const std::string &filename, const Cloud &output)
 }
 
 int
-batchProcess (const vector<string> &pcd_files, string &output_dir, int max_window_size,
-              float slope, float max_distance, float initial_distance, float cell_size,
-              float base, bool exponential, bool approximate)
+batchProcess (const vector<string> &pcd_files,
+              string &output_dir,
+              int max_window_size,
+              float slope,
+              float max_distance,
+              float initial_distance,
+              float cell_size,
+              float base,
+              bool exponential,
+              bool approximate)
 {
   vector<string> st;
   for (const auto &pcd_file : pcd_files) {
@@ -217,8 +231,16 @@ batchProcess (const vector<string> &pcd_files, string &output_dir, int max_windo
 
     // Perform the feature estimation
     Cloud output;
-    compute (cloud, output, max_window_size, slope, max_distance, initial_distance,
-             cell_size, base, exponential, approximate);
+    compute (cloud,
+             output,
+             max_window_size,
+             slope,
+             max_distance,
+             initial_distance,
+             cell_size,
+             base,
+             exponential,
+             approximate);
 
     // Prepare output file name
     string filename = pcd_file;
@@ -322,8 +344,16 @@ main (int argc, char **argv)
 
     // Perform the feature estimation
     Cloud output;
-    compute (cloud, output, max_window_size, slope, max_distance, initial_distance,
-             cell_size, base, exponential, approximate);
+    compute (cloud,
+             output,
+             max_window_size,
+             slope,
+             max_distance,
+             initial_distance,
+             cell_size,
+             base,
+             exponential,
+             approximate);
 
     // Save into the second file
     saveCloud (argv[p_file_indices[1]], output);
@@ -342,8 +372,16 @@ main (int argc, char **argv)
                     itr->path ().string ().c_str ());
         }
       }
-      batchProcess (pcd_files, output_dir, max_window_size, slope, max_distance,
-                    initial_distance, cell_size, base, exponential, approximate);
+      batchProcess (pcd_files,
+                    output_dir,
+                    max_window_size,
+                    slope,
+                    max_distance,
+                    initial_distance,
+                    cell_size,
+                    base,
+                    exponential,
+                    approximate);
     } else {
       PCL_ERROR (
           "Batch processing mode enabled, but invalid input directory (%s) given!\n",

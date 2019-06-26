@@ -253,8 +253,13 @@ class ON_CLASS ON_PlaneSurface : public ON_Surface
       the ends of their domains.
   */
   bool
-  GetNextDiscontinuity (int dir, ON::continuity c, double t0, double t1, double *t,
-                        int *hint = NULL, int *dtype = NULL,
+  GetNextDiscontinuity (int dir,
+                        ON::continuity c,
+                        double t0,
+                        double t1,
+                        double *t,
+                        int *hint = NULL,
+                        int *dtype = NULL,
                         double cos_angle_tolerance = ON_DEFAULT_ANGLE_TOLERANCE_COSINE,
                         double curvature_tolerance = ON_SQRT_EPSILON) const;
 
@@ -286,7 +291,10 @@ class ON_CLASS ON_PlaneSurface : public ON_Surface
     Overrides virtual ON_Surface::IsContinuous
   */
   bool
-  IsContinuous (ON::continuity c, double s, double t, int *hint = NULL,
+  IsContinuous (ON::continuity c,
+                double s,
+                double t,
+                int *hint = NULL,
                 double point_tolerance = ON_ZERO_TOLERANCE,
                 double d1_tolerance = ON_ZERO_TOLERANCE,
                 double d2_tolerance = ON_ZERO_TOLERANCE,
@@ -302,19 +310,20 @@ class ON_CLASS ON_PlaneSurface : public ON_Surface
   Transpose (); // transpose surface parameterization (swap "s" and "t")
 
   ON_BOOL32
-  Evaluate (          // returns false if unable to evaluate
-      double, double, // evaluation parameters
-      int,            // number of derivatives (>=0)
-      int,            // array stride (>=Dimension())
-      double *,       // array of length stride*(ndir+1)*(ndir+2)/2
-      int = 0,        // optional - determines which quadrant to evaluate from
-                      //         0 = default
-                      //         1 from NE quadrant
-                      //         2 from NW quadrant
-                      //         3 from SW quadrant
-                      //         4 from SE quadrant
-      int * = 0       // optional - evaluation hint (int[2]) used to speed
-                      //            repeated evaluations
+  Evaluate ( // returns false if unable to evaluate
+      double,
+      double,   // evaluation parameters
+      int,      // number of derivatives (>=0)
+      int,      // array stride (>=Dimension())
+      double *, // array of length stride*(ndir+1)*(ndir+2)/2
+      int = 0,  // optional - determines which quadrant to evaluate from
+                //         0 = default
+                //         1 from NE quadrant
+                //         2 from NW quadrant
+                //         3 from SW quadrant
+                //         4 from SE quadrant
+      int * = 0 // optional - evaluation hint (int[2]) used to speed
+                //            repeated evaluations
       ) const;
 
   /*
@@ -401,7 +410,9 @@ class ON_CLASS ON_PlaneSurface : public ON_Surface
 
   */
   ON_BOOL32
-  Split (int dir, double c, ON_Surface *&west_or_south_side,
+  Split (int dir,
+         double c,
+         ON_Surface *&west_or_south_side,
          ON_Surface *&east_or_north_side) const;
 
   /*
@@ -429,8 +440,11 @@ class ON_CLASS ON_PlaneSurface : public ON_Surface
     ON_Surface::GetLocalClosestPoint.
   */
   bool
-  GetClosestPoint (const ON_3dPoint &P, double *s, double *t,
-                   double maximum_distance = 0.0, const ON_Interval *sdomain = 0,
+  GetClosestPoint (const ON_3dPoint &P,
+                   double *s,
+                   double *t,
+                   double maximum_distance = 0.0,
+                   const ON_Interval *sdomain = 0,
                    const ON_Interval *tdomain = 0) const;
 
   //////////
@@ -443,7 +457,8 @@ class ON_CLASS ON_PlaneSurface : public ON_Surface
   // the search fails.
   ON_BOOL32
   GetLocalClosestPoint (const ON_3dPoint &, // test_point
-                        double, double,     // seed_parameters
+                        double,
+                        double, // seed_parameters
                         double *,
                         double *, // parameters of local closest point returned here
                         const ON_Interval * = NULL, // first parameter sub_domain
@@ -481,7 +496,8 @@ class ON_CLASS ON_PlaneSurface : public ON_Surface
                 //            surface's parameterization and the NURBS
                 //            parameterization may not match to the
                 //            desired accuracy.
-      ON_NurbsSurface &, double = 0.0) const;
+      ON_NurbsSurface &,
+      double = 0.0) const;
 
   int HasNurbForm ( // returns 0: unable to create NURBS representation
                     //            with desired accuracy.
@@ -541,7 +557,8 @@ class ON_CLASS ON_PlaneSurface : public ON_Surface
   */
   bool
   CreatePseudoInfinitePlane (ON_PlaneEquation plane_equation,
-                             const ON_BoundingBox &bbox, double padding = 0.0625);
+                             const ON_BoundingBox &bbox,
+                             double padding = 0.0625);
 
   /*
   Description:
@@ -556,7 +573,8 @@ class ON_CLASS ON_PlaneSurface : public ON_Surface
     true if successful
   */
   bool
-  CreatePseudoInfinitePlane (const ON_Plane &plane, const ON_BoundingBox &bbox,
+  CreatePseudoInfinitePlane (const ON_Plane &plane,
+                             const ON_BoundingBox &bbox,
                              double padding = 0.0625);
 
   /*
@@ -573,8 +591,10 @@ class ON_CLASS ON_PlaneSurface : public ON_Surface
     true if successful
   */
   bool
-  CreatePseudoInfinitePlane (const ON_Plane &plane, int point_count,
-                             const ON_3dPoint *point_list, double padding = 0.0625);
+  CreatePseudoInfinitePlane (const ON_Plane &plane,
+                             int point_count,
+                             const ON_3dPoint *point_list,
+                             double padding = 0.0625);
 
   protected:
   // evaluation domain (always increasing)

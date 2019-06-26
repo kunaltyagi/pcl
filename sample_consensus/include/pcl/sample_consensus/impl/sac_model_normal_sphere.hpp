@@ -47,7 +47,8 @@
 template <typename PointT, typename PointNT>
 void
 pcl::SampleConsensusModelNormalSphere<PointT, PointNT>::selectWithinDistance (
-    const Eigen::VectorXf &model_coefficients, const double threshold,
+    const Eigen::VectorXf &model_coefficients,
+    const double threshold,
     std::vector<int> &inliers)
 {
   if (!normals_) {
@@ -77,11 +78,13 @@ pcl::SampleConsensusModelNormalSphere<PointT, PointNT>::selectWithinDistance (
     // between dist(point,sphere_origin) and sphere_radius
     Eigen::Vector4f p (input_->points[(*indices_)[i]].x,
                        input_->points[(*indices_)[i]].y,
-                       input_->points[(*indices_)[i]].z, 0);
+                       input_->points[(*indices_)[i]].z,
+                       0);
 
     Eigen::Vector4f n (normals_->points[(*indices_)[i]].normal[0],
                        normals_->points[(*indices_)[i]].normal[1],
-                       normals_->points[(*indices_)[i]].normal[2], 0);
+                       normals_->points[(*indices_)[i]].normal[2],
+                       0);
 
     Eigen::Vector4f n_dir = p - center;
     double d_euclid = fabs (n_dir.norm () - model_coefficients[3]);
@@ -132,11 +135,13 @@ pcl::SampleConsensusModelNormalSphere<PointT, PointNT>::countWithinDistance (
     // between dist(point,sphere_origin) and sphere_radius
     Eigen::Vector4f p (input_->points[(*indices_)[i]].x,
                        input_->points[(*indices_)[i]].y,
-                       input_->points[(*indices_)[i]].z, 0);
+                       input_->points[(*indices_)[i]].z,
+                       0);
 
     Eigen::Vector4f n (normals_->points[(*indices_)[i]].normal[0],
                        normals_->points[(*indices_)[i]].normal[1],
-                       normals_->points[(*indices_)[i]].normal[2], 0);
+                       normals_->points[(*indices_)[i]].normal[2],
+                       0);
 
     Eigen::Vector4f n_dir = (p - center);
     double d_euclid = fabs (n_dir.norm () - model_coefficients[3]);
@@ -182,11 +187,13 @@ pcl::SampleConsensusModelNormalSphere<PointT, PointNT>::getDistancesToModel (
     // dist(point,sphere_origin) and sphere_radius
     Eigen::Vector4f p (input_->points[(*indices_)[i]].x,
                        input_->points[(*indices_)[i]].y,
-                       input_->points[(*indices_)[i]].z, 0);
+                       input_->points[(*indices_)[i]].z,
+                       0);
 
     Eigen::Vector4f n (normals_->points[(*indices_)[i]].normal[0],
                        normals_->points[(*indices_)[i]].normal[1],
-                       normals_->points[(*indices_)[i]].normal[2], 0);
+                       normals_->points[(*indices_)[i]].normal[2],
+                       0);
 
     Eigen::Vector4f n_dir = (p - center);
     double d_euclid = fabs (n_dir.norm () - model_coefficients[3]);

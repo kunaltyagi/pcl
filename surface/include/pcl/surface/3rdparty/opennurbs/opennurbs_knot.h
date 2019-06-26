@@ -91,8 +91,8 @@ Returns:
 */
 ON_DECL
 int
-ON_NurbsSpanIndex (int order, int cv_count, const double *knot, double t, int side,
-                   int hint);
+ON_NurbsSpanIndex (
+    int order, int cv_count, const double *knot, double t, int side, int hint);
 
 ON_DECL
 int
@@ -101,7 +101,9 @@ ON_NextNurbsSpanIndex (
     //           cv_count-order: input span_index = cv_count-order
     //         -1: input span_index > cv_count-order;
     //     otherwise next span index
-    int order, int cv_count, const double *knot,
+    int order,
+    int cv_count,
+    const double *knot,
     int // current span_index
 );
 
@@ -109,7 +111,9 @@ ON_DECL
 int
 ON_GetSpanIndices ( // returns span count, which is one less than length of
                     // span_indices[]
-    int order, int cv_count, const double *knot,
+    int order,
+    int cv_count,
+    const double *knot,
     int * // span_indices[cv_count-order+2].
           // Indices of knots at end of group of mult knots
           // at start of span, and knot at start of group of mult knots
@@ -118,7 +122,9 @@ ON_GetSpanIndices ( // returns span count, which is one less than length of
 
 ON_DECL
 double
-ON_SuperfluousKnot (int order, int cv_count, const double *knot,
+ON_SuperfluousKnot (int order,
+                    int cv_count,
+                    const double *knot,
                     int // 0 = first superfluous knot
                         // 1 = last superfluous knot
 );
@@ -130,7 +136,9 @@ ON_IsKnotVectorPeriodic (int order, int cv_count, const double *knot);
 ON_DECL
 bool
 ON_IsKnotVectorClamped (
-    int order, int cv_count, const double *knot,
+    int order,
+    int cv_count,
+    const double *knot,
     int = 2 // 0 = check left end, 1 = check right end, 2 = check both
 );
 
@@ -172,7 +180,8 @@ bool
 ON_GetKnotVectorDomain (int,            // order (>=2)
                         int,            // cv count
                         const double *, // knot[] array
-                        double *, double *);
+                        double *,
+                        double *);
 
 ON_DECL
 bool
@@ -199,7 +208,9 @@ ON_CompareKnotVector ( // returns
 
 ON_DECL
 bool
-ON_IsValidKnotVector (int order, int cv_count, const double *knot,
+ON_IsValidKnotVector (int order,
+                      int cv_count,
+                      const double *knot,
                       ON_TextLog *text_log = 0);
 
 ON_DECL
@@ -243,7 +254,9 @@ See Also:
 */
 ON_DECL
 bool
-ON_MakeClampedUniformKnotVector (int order, int cv_count, double *knot,
+ON_MakeClampedUniformKnotVector (int order,
+                                 int cv_count,
+                                 double *knot,
                                  double delta = 1.0);
 
 /*
@@ -266,7 +279,9 @@ ON_MakeClampedUniformKnotVector (int order, int cv_count, double *knot,
 */
 ON_DECL
 bool
-ON_MakePeriodicUniformKnotVector (int order, int cv_count, double *knot,
+ON_MakePeriodicUniformKnotVector (int order,
+                                  int cv_count,
+                                  double *knot,
                                   double delta = 1.0);
 
 ON_DECL
@@ -353,8 +368,8 @@ Returns:
 */
 ON_DECL
 bool
-ON_ReparameterizeRationalBezierCurve (double c, int dim, int order, int cvstride,
-                                      double *cv);
+ON_ReparameterizeRationalBezierCurve (
+    double c, int dim, int order, int cvstride, double *cv);
 
 /*
 Description:
@@ -386,8 +401,8 @@ Remarks:
 */
 ON_DECL
 bool
-ON_ChangeRationalBezierCurveWeights (int dim, int order, int cvstride, double *cv,
-                                     int i0, double w0, int i1, double w1);
+ON_ChangeRationalBezierCurveWeights (
+    int dim, int order, int cvstride, double *cv, int i0, double w0, int i1, double w1);
 
 /*
 Description:
@@ -414,8 +429,8 @@ See Also:
 */
 ON_DECL
 bool
-ON_ReparameterizeRationalNurbsCurve (double c, int dim, int order, int cv_count,
-                                     int cvstride, double *cv, double *knot);
+ON_ReparameterizeRationalNurbsCurve (
+    double c, int dim, int order, int cv_count, int cvstride, double *cv, double *knot);
 
 /*
 Description:
@@ -440,7 +455,13 @@ See Also:
 */
 ON_DECL
 bool
-ON_ChangeRationalNurbsCurveEndWeights (int dim, int order, int cv_count, int cvstride,
-                                       double *cv, double *knot, double w0, double w1);
+ON_ChangeRationalNurbsCurveEndWeights (int dim,
+                                       int order,
+                                       int cv_count,
+                                       int cvstride,
+                                       double *cv,
+                                       double *knot,
+                                       double w0,
+                                       double w1);
 
 #endif

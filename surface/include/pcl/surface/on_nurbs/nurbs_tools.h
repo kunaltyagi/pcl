@@ -87,8 +87,10 @@ namespace pcl
        *  \param[in] data Vector containing the set of points for searching.
        *  \param[out] idxcp Closest point with respect to Euclidean metric. */
       static unsigned
-      getClosestPoint (const Eigen::Vector2d &point, const Eigen::Vector2d &dir,
-                       const vector_vec2d &data, unsigned &idxcp);
+      getClosestPoint (const Eigen::Vector2d &point,
+                       const Eigen::Vector2d &dir,
+                       const vector_vec2d &data,
+                       unsigned &idxcp);
 
       /** \brief Compute the mean of a set of points
        *  \param[in] data Set of points.     */
@@ -110,10 +112,12 @@ namespace pcl
 
       /** compute bounding box of curve control points */
       static void
-      computeBoundingBox (const ON_NurbsCurve &nurbs, Eigen::Vector3d &_min,
+      computeBoundingBox (const ON_NurbsCurve &nurbs,
+                          Eigen::Vector3d &_min,
                           Eigen::Vector3d &_max);
       static void
-      computeBoundingBox (const ON_NurbsSurface &nurbs, Eigen::Vector3d &_min,
+      computeBoundingBox (const ON_NurbsSurface &nurbs,
+                          Eigen::Vector3d &_min,
                           Eigen::Vector3d &_max);
 
       static double
@@ -126,8 +130,10 @@ namespace pcl
        * set of points. \param[out] eigenvalues The eigenvalues of the set of points
        * with respect to the eigenvectors. */
       static void
-      pca (const vector_vec3d &data, Eigen::Vector3d &mean,
-           Eigen::Matrix3d &eigenvectors, Eigen::Vector3d &eigenvalues);
+      pca (const vector_vec3d &data,
+           Eigen::Vector3d &mean,
+           Eigen::Matrix3d &eigenvectors,
+           Eigen::Vector3d &eigenvalues);
 
       /** \brief PCA - principal-component-analysis
        *  \param[in] data Set of points.
@@ -136,8 +142,10 @@ namespace pcl
        * set of points. \param[out] eigenvalues The eigenvalues of the set of points
        * with respect to the eigenvectors. */
       static void
-      pca (const vector_vec2d &data, Eigen::Vector2d &mean,
-           Eigen::Matrix2d &eigenvectors, Eigen::Vector2d &eigenvalues);
+      pca (const vector_vec2d &data,
+           Eigen::Vector2d &mean,
+           Eigen::Matrix2d &eigenvectors,
+           Eigen::Vector2d &eigenvalues);
 
       /** \brief Downsample data points to a certain size.
        *  \param[in] data1 The original set of points.

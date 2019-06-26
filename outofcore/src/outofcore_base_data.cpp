@@ -140,8 +140,8 @@ namespace pcl
       // use this api, will allow counts up to 2^52 points to be stored correctly
       // or split into LSB MSB?
       std::vector<double> lodPoints_db;
-      lodPoints_db.insert (lodPoints_db.begin (), LOD_num_points_.begin (),
-                           LOD_num_points_.end ());
+      lodPoints_db.insert (
+          lodPoints_db.begin (), LOD_num_points_.begin (), LOD_num_points_.end ());
 
       cJSON *numpts = cJSON_CreateDoubleArray (&(lodPoints_db.front ()),
                                                static_cast<int> (lodPoints_db.size ()));
@@ -209,14 +209,16 @@ namespace pcl
         PCL_ERROR ("[pcl::outofcore::OutofcoreOctreeBaseMetadata::loadMetadataFromDisk]"
                    " Outofcore version field (just read version:number = %.1lf) in %s "
                    "does not match the current supported versions\n",
-                   metadata_filename_.c_str (), version->valuedouble);
+                   metadata_filename_.c_str (),
+                   version->valuedouble);
         parse_failure = true;
       }
       if ((lod->valueint + 1) != cJSON_GetArraySize (numpts)) {
         PCL_ERROR ("[pcl::outofcore::OutofcoreOctreeBaseMetadata::loadMetadataFromDisk]"
                    " lod:num+1=%d+1 (i.e. height of tree) does not match size of LOD "
                    "array (%d) in %s\n",
-                   lod->valueint, cJSON_GetArraySize (numpts),
+                   lod->valueint,
+                   cJSON_GetArraySize (numpts),
                    metadata_filename_.c_str ());
         parse_failure = true;
       }

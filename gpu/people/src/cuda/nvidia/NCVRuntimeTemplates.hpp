@@ -178,10 +178,12 @@ namespace NCVRuntimeTemplateBool
       // Both versions are really instantiated
       if (val) {
         KernelCaller<Loki::Typelist<typename Loki::Int2Type<1>, TList>,
-                     NumArguments - 1, Func>::call (functor, templateParamList);
+                     NumArguments - 1,
+                     Func>::call (functor, templateParamList);
       } else {
         KernelCaller<Loki::Typelist<typename Loki::Int2Type<0>, TList>,
-                     NumArguments - 1, Func>::call (functor, templateParamList);
+                     NumArguments - 1,
+                     Func>::call (functor, templateParamList);
       }
     }
   };

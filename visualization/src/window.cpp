@@ -176,11 +176,12 @@ pcl::visualization::Window::spinOnce (int time, bool force_redraw)
     return;
   }
 
-  DO_EVERY (1.0 / interactor_->GetDesiredUpdateRate (), interactor_->Render ();
-            exit_main_loop_timer_callback_->right_timer_id =
-                interactor_->CreateRepeatingTimer (time);
-            interactor_->Start (); interactor_->DestroyTimer (
-                exit_main_loop_timer_callback_->right_timer_id););
+  DO_EVERY (
+      1.0 / interactor_->GetDesiredUpdateRate (), interactor_->Render ();
+      exit_main_loop_timer_callback_->right_timer_id =
+          interactor_->CreateRepeatingTimer (time);
+      interactor_->Start ();
+      interactor_->DestroyTimer (exit_main_loop_timer_callback_->right_timer_id););
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -223,8 +224,12 @@ pcl::visualization::Window::emitMouseEvent (unsigned long event_id)
 {
   int x, y;
   interactor_->GetMousePosition (&x, &y);
-  MouseEvent event (MouseEvent::MouseMove, MouseEvent::NoButton, x, y,
-                    interactor_->GetAltKey (), interactor_->GetControlKey (),
+  MouseEvent event (MouseEvent::MouseMove,
+                    MouseEvent::NoButton,
+                    x,
+                    y,
+                    interactor_->GetAltKey (),
+                    interactor_->GetControlKey (),
                     interactor_->GetShiftKey ());
   bool repeat = false;
   switch (event_id) {
@@ -298,16 +303,20 @@ void
 pcl::visualization::Window::emitKeyboardEvent (unsigned long event_id)
 {
   KeyboardEvent event (bool(event_id == vtkCommand::KeyPressEvent),
-                       interactor_->GetKeySym (), interactor_->GetKeyCode (),
-                       interactor_->GetAltKey (), interactor_->GetControlKey (),
+                       interactor_->GetKeySym (),
+                       interactor_->GetKeyCode (),
+                       interactor_->GetAltKey (),
+                       interactor_->GetControlKey (),
                        interactor_->GetShiftKey ());
   keyboard_signal_ (event);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::Window::MouseCallback (vtkObject *, unsigned long eid,
-                                           void *clientdata, void *)
+pcl::visualization::Window::MouseCallback (vtkObject *,
+                                           unsigned long eid,
+                                           void *clientdata,
+                                           void *)
 {
   Window *window = reinterpret_cast<Window *> (clientdata);
   window->emitMouseEvent (eid);
@@ -315,8 +324,10 @@ pcl::visualization::Window::MouseCallback (vtkObject *, unsigned long eid,
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::Window::KeyboardCallback (vtkObject *, unsigned long eid,
-                                              void *clientdata, void *)
+pcl::visualization::Window::KeyboardCallback (vtkObject *,
+                                              unsigned long eid,
+                                              void *clientdata,
+                                              void *)
 {
   Window *window = reinterpret_cast<Window *> (clientdata);
   window->emitKeyboardEvent (eid);
@@ -348,7 +359,8 @@ pcl::visualization::Window::ExitCallback::ExitCallback () : window (nullptr) {}
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::Window::ExitCallback::Execute (vtkObject *, unsigned long event_id,
+pcl::visualization::Window::ExitCallback::Execute (vtkObject *,
+                                                   unsigned long event_id,
                                                    void *)
 {
   if (event_id != vtkCommand::ExitEvent)

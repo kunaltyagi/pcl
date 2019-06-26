@@ -97,7 +97,8 @@ pcl::PassThrough<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
   // Create the first xyz_offset
   Eigen::Array4i xyz_offset (input_->fields[x_idx_].offset,
                              input_->fields[y_idx_].offset,
-                             input_->fields[z_idx_].offset, 0);
+                             input_->fields[z_idx_].offset,
+                             0);
 
   Eigen::Vector4f pt = Eigen::Vector4f::Zero ();
   // If we don't want to process the entire cloud, but rather filter points far away
@@ -107,7 +108,8 @@ pcl::PassThrough<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
     int distance_idx = pcl::getFieldIndex (*input_, filter_field_name_);
     if (distance_idx == -1) {
       PCL_WARN ("[pcl::%s::applyFilter] Invalid filter field name. Index is %d.\n",
-                getClassName ().c_str (), distance_idx);
+                getClassName ().c_str (),
+                distance_idx);
       output.width = output.height = 0;
       output.data.clear ();
       return;
@@ -132,7 +134,8 @@ pcl::PassThrough<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
       for (int cp = 0; cp < nr_points; ++cp, xyz_offset += input_->point_step) {
         // Copy all the fields
         memcpy (&output.data[cp * output.point_step],
-                &input_->data[cp * output.point_step], output.point_step);
+                &input_->data[cp * output.point_step],
+                output.point_step);
 
         // Get the distance value
         memcpy (&distance_value,
@@ -226,7 +229,8 @@ pcl::PassThrough<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
 
         // Copy all the fields
         memcpy (&output.data[nr_p * output.point_step],
-                &input_->data[cp * output.point_step], output.point_step);
+                &input_->data[cp * output.point_step],
+                output.point_step);
         nr_p++;
       }
       output.width = nr_p;
@@ -252,7 +256,8 @@ pcl::PassThrough<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
 
       // Copy all the fields
       memcpy (&output.data[nr_p * output.point_step],
-              &input_->data[cp * output.point_step], output.point_step);
+              &input_->data[cp * output.point_step],
+              output.point_step);
       nr_p++;
     }
     output.width = nr_p;

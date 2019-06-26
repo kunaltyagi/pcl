@@ -142,7 +142,8 @@ namespace pcl
        * memory
        */
       void
-      readRange (const uint64_t start, const uint64_t count,
+      readRange (const uint64_t start,
+                 const uint64_t count,
                  AlignedPointTVector &dst) override;
 
       void
@@ -165,8 +166,10 @@ namespace pcl
        * percentage*count
        */
       void
-      readRangeSubSample (const uint64_t start, const uint64_t count,
-                          const double percent, AlignedPointTVector &dst) override;
+      readRangeSubSample (const uint64_t start,
+                          const uint64_t count,
+                          const double percent,
+                          AlignedPointTVector &dst) override;
 
       /** \brief Use bernoulli trials to select points. All points selected will be
        * unique.
@@ -179,8 +182,10 @@ namespace pcl
        * percentage*count
        */
       void
-      readRangeSubSample_bernoulli (const uint64_t start, const uint64_t count,
-                                    const double percent, AlignedPointTVector &dst);
+      readRangeSubSample_bernoulli (const uint64_t start,
+                                    const uint64_t count,
+                                    const double percent,
+                                    AlignedPointTVector &dst);
 
       /** \brief Returns the total number of points for which this container is
        * responsible, \c filelen_ + points in \c writebuff_ that have not yet been

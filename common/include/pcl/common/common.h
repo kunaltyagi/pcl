@@ -56,7 +56,8 @@ namespace pcl
    * and anti-parallel vectors \ingroup common
    */
   inline double
-  getAngle3D (const Eigen::Vector4f &v1, const Eigen::Vector4f &v2,
+  getAngle3D (const Eigen::Vector4f &v1,
+              const Eigen::Vector4f &v2,
               const bool in_degree = false);
 
   /** \brief Compute the smallest angle between two 3D vectors in radians (default) or
@@ -66,7 +67,8 @@ namespace pcl
    * v2 in radians or degrees \ingroup common
    */
   inline double
-  getAngle3D (const Eigen::Vector3f &v1, const Eigen::Vector3f &v2,
+  getAngle3D (const Eigen::Vector3f &v1,
+              const Eigen::Vector3f &v2,
               const bool in_degree = false);
 
   /** \brief Compute both the mean and the standard deviation of an array of values
@@ -87,8 +89,10 @@ namespace pcl
    */
   template <typename PointT>
   inline void
-  getPointsInBox (const pcl::PointCloud<PointT> &cloud, Eigen::Vector4f &min_pt,
-                  Eigen::Vector4f &max_pt, std::vector<int> &indices);
+  getPointsInBox (const pcl::PointCloud<PointT> &cloud,
+                  Eigen::Vector4f &min_pt,
+                  Eigen::Vector4f &max_pt,
+                  std::vector<int> &indices);
 
   /** \brief Get the point at maximum distance from a given point and a given pointcloud
    * \param cloud the point cloud data message
@@ -98,7 +102,8 @@ namespace pcl
    */
   template <typename PointT>
   inline void
-  getMaxDistance (const pcl::PointCloud<PointT> &cloud, const Eigen::Vector4f &pivot_pt,
+  getMaxDistance (const pcl::PointCloud<PointT> &cloud,
+                  const Eigen::Vector4f &pivot_pt,
                   Eigen::Vector4f &max_pt);
 
   /** \brief Get the point at maximum distance from a given point and a given pointcloud
@@ -110,8 +115,10 @@ namespace pcl
    */
   template <typename PointT>
   inline void
-  getMaxDistance (const pcl::PointCloud<PointT> &cloud, const std::vector<int> &indices,
-                  const Eigen::Vector4f &pivot_pt, Eigen::Vector4f &max_pt);
+  getMaxDistance (const pcl::PointCloud<PointT> &cloud,
+                  const std::vector<int> &indices,
+                  const Eigen::Vector4f &pivot_pt,
+                  Eigen::Vector4f &max_pt);
 
   /** \brief Get the minimum and maximum values on each of the 3 (x-y-z) dimensions in a
    * given pointcloud \param cloud the point cloud data message \param min_pt the
@@ -127,7 +134,8 @@ namespace pcl
    */
   template <typename PointT>
   inline void
-  getMinMax3D (const pcl::PointCloud<PointT> &cloud, Eigen::Vector4f &min_pt,
+  getMinMax3D (const pcl::PointCloud<PointT> &cloud,
+               Eigen::Vector4f &min_pt,
                Eigen::Vector4f &max_pt);
 
   /** \brief Get the minimum and maximum values on each of the 3 (x-y-z) dimensions in a
@@ -137,8 +145,10 @@ namespace pcl
    */
   template <typename PointT>
   inline void
-  getMinMax3D (const pcl::PointCloud<PointT> &cloud, const std::vector<int> &indices,
-               Eigen::Vector4f &min_pt, Eigen::Vector4f &max_pt);
+  getMinMax3D (const pcl::PointCloud<PointT> &cloud,
+               const std::vector<int> &indices,
+               Eigen::Vector4f &min_pt,
+               Eigen::Vector4f &max_pt);
 
   /** \brief Get the minimum and maximum values on each of the 3 (x-y-z) dimensions in a
    * given pointcloud \param cloud the point cloud data message \param indices the
@@ -147,8 +157,10 @@ namespace pcl
    */
   template <typename PointT>
   inline void
-  getMinMax3D (const pcl::PointCloud<PointT> &cloud, const pcl::PointIndices &indices,
-               Eigen::Vector4f &min_pt, Eigen::Vector4f &max_pt);
+  getMinMax3D (const pcl::PointCloud<PointT> &cloud,
+               const pcl::PointIndices &indices,
+               Eigen::Vector4f &min_pt,
+               Eigen::Vector4f &max_pt);
 
   /** \brief Compute the radius of a circumscribed circle for a triangle formed of three
    * points pa, pb, and pc \param pa the first point \param pb the second point \param
@@ -187,8 +199,11 @@ namespace pcl
    * \ingroup common
    */
   PCL_EXPORTS void
-  getMinMax (const pcl::PCLPointCloud2 &cloud, int idx, const std::string &field_name,
-             float &min_p, float &max_p);
+  getMinMax (const pcl::PCLPointCloud2 &cloud,
+             int idx,
+             const std::string &field_name,
+             float &min_p,
+             float &max_p);
 
   /** \brief Compute both the mean and the standard deviation of an array of values
    * \param values the array of values

@@ -60,7 +60,9 @@ namespace pcl
    * \author Alioscia Petrelli
    * \ingroup features
    */
-  template <typename PointInT, typename PointNT, typename PointOutT = ReferenceFrame,
+  template <typename PointInT,
+            typename PointNT,
+            typename PointOutT = ReferenceFrame,
             typename SignedDistanceT = float>
   class FLARELocalReferenceFrameEstimation
       : public FeatureFromNormals<PointInT, PointNT, PointOutT>

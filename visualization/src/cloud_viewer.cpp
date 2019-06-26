@@ -55,7 +55,8 @@ namespace pcl
 
   template <typename CloudT>
   struct cloud_show : cloud_show_base {
-    cloud_show (const std::string &cloud_name, typename CloudT::ConstPtr cloud,
+    cloud_show (const std::string &cloud_name,
+                typename CloudT::ConstPtr cloud,
                 pcl::visualization::PCLVisualizer::Ptr viewer)
         : cloud_name (cloud_name), cloud (cloud), viewer (viewer), popped_ (false)
     {

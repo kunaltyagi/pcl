@@ -90,7 +90,8 @@ pcl::ShadowPoints<PointT, NormalT>::applyFilter (std::vector<int> &indices)
   unsigned int k = 0;
   unsigned int z = 0;
   for (std::vector<int>::const_iterator idx = indices_->begin ();
-       idx != indices_->end (); ++idx) {
+       idx != indices_->end ();
+       ++idx) {
     const NormalT &normal = input_normals_->points[*idx];
     const PointT &pt = input_->points[*idx];
 

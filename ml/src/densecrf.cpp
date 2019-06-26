@@ -83,7 +83,8 @@ pcl::DenseCrf::setUnaryEnergy (const std::vector<float> unary)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::DenseCrf::addPairwiseEnergy (const std::vector<float> &feature,
-                                  const int feature_dimension, const float w)
+                                  const int feature_dimension,
+                                  const float w)
 {
   pairwise_potential_.push_back (
       new PairwisePotential (feature, feature_dimension, N_, w));
@@ -110,8 +111,8 @@ pcl::DenseCrf::addPairwiseGaussian (float sx, float sy, float sz, float w)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::DenseCrf::addPairwiseBilateral (float sx, float sy, float sz, float sr, float sg,
-                                     float sb, float w)
+pcl::DenseCrf::addPairwiseBilateral (
+    float sx, float sy, float sz, float sr, float sg, float sb, float w)
 {
   // create feature vector
   std::vector<float> feature;
@@ -136,7 +137,13 @@ void
 pcl::DenseCrf::addPairwiseNormals (
     std::vector<Eigen::Vector3i, Eigen::aligned_allocator<Eigen::Vector3i>> &coord,
     std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f>> &normals,
-    float sx, float sy, float sz, float snx, float sny, float snz, float w)
+    float sx,
+    float sy,
+    float sz,
+    float snx,
+    float sny,
+    float snz,
+    float w)
 {
   std::cout << coord.size () << std::endl;
   std::cout << normals.size () << std::endl;
@@ -237,8 +244,10 @@ pcl::DenseCrf::mapInference (int n_iterations, std::vector<int> &result, float r
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::DenseCrf::expAndNormalize (std::vector<float> &out, const std::vector<float> &in,
-                                float scale, float relax)
+pcl::DenseCrf::expAndNormalize (std::vector<float> &out,
+                                const std::vector<float> &in,
+                                float scale,
+                                float relax)
 {
   std::vector<float> V (N_ + 10);
   for (int i = 0; i < N_; i++) {

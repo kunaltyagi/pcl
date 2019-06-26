@@ -47,9 +47,13 @@
 template <typename PointInT, typename GradientT, typename PointOutT>
 void
 pcl::RIFTEstimation<PointInT, GradientT, PointOutT>::computeRIFT (
-    const PointCloudIn &cloud, const PointCloudGradient &gradient, int p_idx,
-    float radius, const std::vector<int> &indices,
-    const std::vector<float> &sqr_distances, Eigen::MatrixXf &rift_descriptor)
+    const PointCloudIn &cloud,
+    const PointCloudGradient &gradient,
+    int p_idx,
+    float radius,
+    const std::vector<int> &indices,
+    const std::vector<float> &sqr_distances,
+    Eigen::MatrixXf &rift_descriptor)
 {
   if (indices.empty ()) {
     PCL_ERROR ("[pcl::RIFTEstimation] Null indices points passed!\n");
@@ -172,8 +176,12 @@ pcl::RIFTEstimation<PointInT, GradientT, PointOutT>::computeFeature (
     tree_->radiusSearch ((*indices_)[idx], search_radius_, nn_indices, nn_dist_sqr);
 
     // Compute the RIFT descriptor
-    computeRIFT (*surface_, *gradient_, (*indices_)[idx],
-                 static_cast<float> (search_radius_), nn_indices, nn_dist_sqr,
+    computeRIFT (*surface_,
+                 *gradient_,
+                 (*indices_)[idx],
+                 static_cast<float> (search_radius_),
+                 nn_indices,
+                 nn_dist_sqr,
                  rift_descriptor);
 
     // Copy into the resultant cloud

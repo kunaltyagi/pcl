@@ -101,8 +101,10 @@ namespace pcl
          * 0.6*volumeSize) in camera coordinates. \param[in] rows height of depth image
          * \param[in] cols width of depth image
          */
-        KinfuTracker (const Eigen::Vector3f &volumeSize, const float shiftingDistance,
-                      int rows = 480, int cols = 640);
+        KinfuTracker (const Eigen::Vector3f &volumeSize,
+                      const float shiftingDistance,
+                      int rows = 480,
+                      int cols = 640);
 
         /** \brief Sets Depth camera intrinsics
          * \param[in] fx focal length x
@@ -291,12 +293,14 @@ namespace pcl
          * \param[out] translationOut2 result of second translation conversion
          */
         inline void
-        convertTransforms (Matrix3frm &transform_in_1, Matrix3frm &transform_in_2,
+        convertTransforms (Matrix3frm &transform_in_1,
+                           Matrix3frm &transform_in_2,
                            Eigen::Vector3f &translation_in_1,
                            Eigen::Vector3f &translation_in_2,
                            pcl::device::kinfuLS::Mat33 &transform_out_1,
                            pcl::device::kinfuLS::Mat33 &transform_out_2,
-                           float3 &translation_out_1, float3 &translation_out_2);
+                           float3 &translation_out_1,
+                           float3 &translation_out_2);
 
         /** \brief helper function that converts transforms from host to device types
          * \param[in] transformIn1 first transform to convert
@@ -307,7 +311,8 @@ namespace pcl
          * \param[out] translationOut result of translation conversion
          */
         inline void
-        convertTransforms (Matrix3frm &transform_in_1, Matrix3frm &transform_in_2,
+        convertTransforms (Matrix3frm &transform_in_1,
+                           Matrix3frm &transform_in_2,
                            Eigen::Vector3f &translation_in,
                            pcl::device::kinfuLS::Mat33 &transform_out_1,
                            pcl::device::kinfuLS::Mat33 &transform_out_2,
@@ -320,7 +325,8 @@ namespace pcl
          * \param[out] translationOut result of translation conversion
          */
         inline void
-        convertTransforms (Matrix3frm &transform_in, Eigen::Vector3f &translation_in,
+        convertTransforms (Matrix3frm &transform_in,
+                           Eigen::Vector3f &translation_in,
                            pcl::device::kinfuLS::Mat33 &transform_out,
                            float3 &translation_out);
 

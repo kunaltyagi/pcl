@@ -389,8 +389,8 @@ pcl::people::GroundBasedPeopleDetectionApp<PointT>::compute (
   pcl::IndicesPtr inliers (new std::vector<int>);
   typename pcl::SampleConsensusModelPlane<PointT>::Ptr ground_model (
       new pcl::SampleConsensusModelPlane<PointT> (cloud_filtered_));
-  ground_model->selectWithinDistance (ground_coeffs_transformed_, 2 * voxel_size_,
-                                      *inliers);
+  ground_model->selectWithinDistance (
+      ground_coeffs_transformed_, 2 * voxel_size_, *inliers);
   no_ground_cloud_ = PointCloudPtr (new PointCloud);
   pcl::ExtractIndices<PointT> extract;
   extract.setInputCloud (cloud_filtered_);
@@ -399,8 +399,8 @@ pcl::people::GroundBasedPeopleDetectionApp<PointT>::compute (
   extract.filter (*no_ground_cloud_);
   if (inliers->size () >=
       (300 * 0.06 / voxel_size_ / std::pow (static_cast<double> (sampling_factor_), 2)))
-    ground_model->optimizeModelCoefficients (*inliers, ground_coeffs_transformed_,
-                                             ground_coeffs_transformed_);
+    ground_model->optimizeModelCoefficients (
+        *inliers, ground_coeffs_transformed_, ground_coeffs_transformed_);
   else
     PCL_INFO ("No groundplane update!\n");
 
@@ -433,7 +433,8 @@ pcl::people::GroundBasedPeopleDetectionApp<PointT>::compute (
   }
   for (typename std::vector<pcl::people::PersonCluster<PointT>>::iterator it =
            clusters.begin ();
-       it != clusters.end (); ++it) {
+       it != clusters.end ();
+       ++it) {
     // Evaluate confidence for the current PersonCluster:
     Eigen::Vector3f centroid = intrinsics_matrix_transformed_ * (it->getTCenter ());
     centroid /= centroid (2);

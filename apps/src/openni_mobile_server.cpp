@@ -105,8 +105,10 @@ class PCLMobileServer
   using CloudPtr = typename Cloud::Ptr;
   using CloudConstPtr = typename Cloud::ConstPtr;
 
-  PCLMobileServer (const std::string &device_id = "", int port = 11111,
-                   float leaf_size_x = 0.01, float leaf_size_y = 0.01,
+  PCLMobileServer (const std::string &device_id = "",
+                   int port = 11111,
+                   float leaf_size_x = 0.01,
+                   float leaf_size_y = 0.01,
                    float leaf_size_z = 0.01)
       : port_ (port), device_id_ (device_id), viewer_ ("PCL OpenNI Mobile Server")
   {
@@ -186,8 +188,9 @@ class PCLMobileServer
                             boost::asio::buffer (&buffers_to_send->points.front (),
                                                  nr_points * 3 * sizeof (short)));
         boost::asio::write (
-            socket, boost::asio::buffer (&buffers_to_send->rgb.front (),
-                                         nr_points * 3 * sizeof (unsigned char)));
+            socket,
+            boost::asio::buffer (&buffers_to_send->rgb.front (),
+                                 nr_points * 3 * sizeof (unsigned char)));
       }
 
       counter++;

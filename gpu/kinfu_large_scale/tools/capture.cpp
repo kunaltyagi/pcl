@@ -121,8 +121,8 @@ pcl::gpu::kinfuLS::CaptureOpenNI::open (int device)
   }
 
   xn::NodeInfoList devicesList;
-  rc = impl_->context.EnumerateProductionTrees (XN_NODE_TYPE_DEVICE, nullptr,
-                                                devicesList, nullptr);
+  rc = impl_->context.EnumerateProductionTrees (
+      XN_NODE_TYPE_DEVICE, nullptr, devicesList, nullptr);
   if (rc != XN_STATUS_OK) {
     sprintf (impl_->strError, "Init failed: %s\n", xnGetStatusString (rc));
     REPORT_ERROR (impl_->strError);

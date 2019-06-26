@@ -389,9 +389,13 @@ namespace pcl
     template <class T>
     template <class T2>
     int
-    SparseMatrix<T>::SolveSymmetric (const SparseMatrix<T> &M, const Vector<T2> &b,
-                                     int iters, Vector<T2> &solution, const T2 eps,
-                                     int reset, int threads)
+    SparseMatrix<T>::SolveSymmetric (const SparseMatrix<T> &M,
+                                     const Vector<T2> &b,
+                                     int iters,
+                                     Vector<T2> &solution,
+                                     const T2 eps,
+                                     int reset,
+                                     int threads)
     {
       if (reset) {
         solution.Resize (b.Dimensions ());
@@ -444,8 +448,11 @@ namespace pcl
     // Solve for x s.t. M(x)=b by solving for x s.t. M^tM(x)=M^t(b)
     template <class T>
     int
-    SparseMatrix<T>::Solve (const SparseMatrix<T> &M, const Vector<T> &b, int iters,
-                            Vector<T> &solution, const T eps)
+    SparseMatrix<T>::Solve (const SparseMatrix<T> &M,
+                            const Vector<T> &b,
+                            int iters,
+                            Vector<T> &solution,
+                            const T eps)
     {
       SparseMatrix mTranspose = M.Transpose ();
       Vector<T> bb = mTranspose * b;
@@ -501,7 +508,8 @@ namespace pcl
     template <class T>
     template <class T2>
     void
-    SparseSymmetricMatrix<T>::Multiply (const Vector<T2> &In, Vector<T2> &Out,
+    SparseSymmetricMatrix<T>::Multiply (const Vector<T2> &In,
+                                        Vector<T2> &Out,
                                         bool addDCTerm) const
     {
       Out.SetZero ();
@@ -533,7 +541,8 @@ namespace pcl
     template <class T>
     template <class T2>
     void
-    SparseSymmetricMatrix<T>::Multiply (const Vector<T2> &In, Vector<T2> &Out,
+    SparseSymmetricMatrix<T>::Multiply (const Vector<T2> &In,
+                                        Vector<T2> &Out,
                                         MapReduceVector<T2> &OutScratch,
                                         bool addDCTerm) const
     {
@@ -547,12 +556,14 @@ namespace pcl
           T2 *out = OutScratch[t];
           memset (out, 0, sizeof (T2) * dim);
           for (int i = (SparseMatrix<T>::rows * t) / threads;
-               i < (SparseMatrix<T>::rows * (t + 1)) / threads; i++) {
+               i < (SparseMatrix<T>::rows * (t + 1)) / threads;
+               i++) {
             const T2 &in_i_ = in[i];
             T2 &out_i_ = out[i];
             for (const MatrixEntry<T> *temp = SparseMatrix<T>::m_ppElements[i],
                                       *end = temp + SparseMatrix<T>::rowSizes[i];
-                 temp != end; temp++) {
+                 temp != end;
+                 temp++) {
               int j = temp->N;
               T2 v = temp->Value;
               out_i_ += v * in[j];
@@ -577,12 +588,14 @@ namespace pcl
           T2 *out = OutScratch[t];
           memset (out, 0, sizeof (T2) * dim);
           for (int i = (SparseMatrix<T>::rows * t) / threads;
-               i < (SparseMatrix<T>::rows * (t + 1)) / threads; i++) {
+               i < (SparseMatrix<T>::rows * (t + 1)) / threads;
+               i++) {
             const T2 &in_i_ = in[i];
             T2 &out_i_ = out[i];
             for (const MatrixEntry<T> *temp = SparseMatrix<T>::m_ppElements[i],
                                       *end = temp + SparseMatrix<T>::rowSizes[i];
-                 temp != end; temp++) {
+                 temp != end;
+                 temp++) {
               int j = temp->N;
               T2 v = temp->Value;
               out_i_ += v * in[j];
@@ -604,7 +617,8 @@ namespace pcl
     template <class T>
     template <class T2>
     void
-    SparseSymmetricMatrix<T>::Multiply (const Vector<T2> &In, Vector<T2> &Out,
+    SparseSymmetricMatrix<T>::Multiply (const Vector<T2> &In,
+                                        Vector<T2> &Out,
                                         std::vector<T2 *> &OutScratch,
                                         const std::vector<int> &bounds) const
     {
@@ -674,8 +688,11 @@ namespace pcl
 #endif // _AtomicIncrement_
     template <class T>
     void
-    MultiplyAtomic (const SparseSymmetricMatrix<T> &A, const Vector<float> &In,
-                    Vector<float> &Out, int threads, const int *partition = NULL)
+    MultiplyAtomic (const SparseSymmetricMatrix<T> &A,
+                    const Vector<float> &In,
+                    Vector<float> &Out,
+                    int threads,
+                    const int *partition = NULL)
     {
       Out.SetZero ();
       const float *in = &In[0];
@@ -714,8 +731,11 @@ namespace pcl
     }
     template <class T>
     void
-    MultiplyAtomic (const SparseSymmetricMatrix<T> &A, const Vector<double> &In,
-                    Vector<double> &Out, int threads, const int *partition = NULL)
+    MultiplyAtomic (const SparseSymmetricMatrix<T> &A,
+                    const Vector<double> &In,
+                    Vector<double> &Out,
+                    int threads,
+                    const int *partition = NULL)
     {
       Out.SetZero ();
       const double *in = &In[0];
@@ -758,9 +778,13 @@ namespace pcl
     template <class T2>
     int
     SparseSymmetricMatrix<T>::SolveAtomic (const SparseSymmetricMatrix<T> &A,
-                                           const Vector<T2> &b, int iters,
-                                           Vector<T2> &x, T2 eps, int reset,
-                                           int threads, bool solveNormal)
+                                           const Vector<T2> &b,
+                                           int iters,
+                                           Vector<T2> &x,
+                                           T2 eps,
+                                           int reset,
+                                           int threads,
+                                           bool solveNormal)
     {
       eps *= eps;
       int dim = b.Dimensions ();
@@ -812,8 +836,8 @@ namespace pcl
         delta_new += _r[i] * _r[i];
       delta_0 = delta_new;
       if (delta_new < eps) {
-        fprintf (stderr, "[WARNING] Initial residual too low: %g < %f\n", delta_new,
-                 eps);
+        fprintf (
+            stderr, "[WARNING] Initial residual too low: %g < %f\n", delta_new, eps);
         return 0;
       }
       int ii;
@@ -861,9 +885,14 @@ namespace pcl
     template <class T2>
     int
     SparseSymmetricMatrix<T>::Solve (const SparseSymmetricMatrix<T> &A,
-                                     const Vector<T2> &b, int iters, Vector<T2> &x,
-                                     MapReduceVector<T2> &scratch, T2 eps, int reset,
-                                     bool addDCTerm, bool solveNormal)
+                                     const Vector<T2> &b,
+                                     int iters,
+                                     Vector<T2> &x,
+                                     MapReduceVector<T2> &scratch,
+                                     T2 eps,
+                                     int reset,
+                                     bool addDCTerm,
+                                     bool solveNormal)
     {
       int threads = scratch.threads ();
       eps *= eps;
@@ -892,8 +921,8 @@ namespace pcl
       }
       delta_0 = delta_new;
       if (delta_new < eps) {
-        fprintf (stderr, "[WARNING] Initial residual too low: %g < %f\n", delta_new,
-                 eps);
+        fprintf (
+            stderr, "[WARNING] Initial residual too low: %g < %f\n", delta_new, eps);
         return 0;
       }
       int ii;
@@ -939,8 +968,13 @@ namespace pcl
     template <class T2>
     int
     SparseSymmetricMatrix<T>::Solve (const SparseSymmetricMatrix<T> &A,
-                                     const Vector<T2> &b, int iters, Vector<T2> &x,
-                                     T2 eps, int reset, int threads, bool addDCTerm,
+                                     const Vector<T2> &b,
+                                     int iters,
+                                     Vector<T2> &x,
+                                     T2 eps,
+                                     int reset,
+                                     int threads,
+                                     bool addDCTerm,
                                      bool solveNormal)
     {
       eps *= eps;
@@ -984,8 +1018,8 @@ namespace pcl
 
       delta_0 = delta_new;
       if (delta_new < eps) {
-        fprintf (stderr, "[WARNING] Initial residual too low: %g < %f\n", delta_new,
-                 eps);
+        fprintf (
+            stderr, "[WARNING] Initial residual too low: %g < %f\n", delta_new, eps);
         return 0;
       }
       int ii;
@@ -1048,8 +1082,11 @@ namespace pcl
     template <class T2>
     int
     SparseSymmetricMatrix<T>::Solve (const SparseSymmetricMatrix<T> &M,
-                                     const Vector<T2> &diagonal, const Vector<T2> &b,
-                                     int iters, Vector<T2> &solution, int reset)
+                                     const Vector<T2> &diagonal,
+                                     const Vector<T2> &b,
+                                     int iters,
+                                     Vector<T2> &solution,
+                                     int reset)
     {
       Vector<T2> d, r, Md;
 

@@ -56,8 +56,8 @@ pcl::recognition::SimpleOctree<NodeData, NodeDataCreator, Scalar>::Node::setBoun
 
 template <typename NodeData, typename NodeDataCreator, typename Scalar>
 inline void
-pcl::recognition::SimpleOctree<NodeData, NodeDataCreator,
-                               Scalar>::Node::computeRadius ()
+pcl::recognition::SimpleOctree<NodeData, NodeDataCreator, Scalar>::Node::
+    computeRadius ()
 {
   Scalar v[3] = {static_cast<Scalar> (0.5) * (bounds_[1] - bounds_[0]),
                  static_cast<Scalar> (0.5) * (bounds_[3] - bounds_[2]),
@@ -70,8 +70,8 @@ pcl::recognition::SimpleOctree<NodeData, NodeDataCreator,
 
 template <typename NodeData, typename NodeDataCreator, typename Scalar>
 inline bool
-pcl::recognition::SimpleOctree<NodeData, NodeDataCreator,
-                               Scalar>::Node::createChildren ()
+pcl::recognition::SimpleOctree<NodeData, NodeDataCreator, Scalar>::Node::
+    createChildren ()
 {
   if (children_)
     return (false);
@@ -170,8 +170,8 @@ pcl::recognition::SimpleOctree<NodeData, NodeDataCreator,
 
 template <typename NodeData, typename NodeDataCreator, typename Scalar>
 inline void
-pcl::recognition::SimpleOctree<NodeData, NodeDataCreator,
-                               Scalar>::Node::deleteChildren ()
+pcl::recognition::SimpleOctree<NodeData, NodeDataCreator, Scalar>::Node::
+    deleteChildren ()
 {
   if (children_) {
     delete[] children_;
@@ -208,8 +208,8 @@ pcl::recognition::SimpleOctree<NodeData, NodeDataCreator, Scalar>::Node::makeNei
 //===============================================================================================================================
 
 template <typename NodeData, typename NodeDataCreator, typename Scalar>
-inline pcl::recognition::SimpleOctree<NodeData, NodeDataCreator,
-                                      Scalar>::SimpleOctree ()
+inline pcl::recognition::SimpleOctree<NodeData, NodeDataCreator, Scalar>::
+    SimpleOctree ()
     : tree_levels_ (0), root_ (nullptr)
 {
 }
@@ -217,8 +217,8 @@ inline pcl::recognition::SimpleOctree<NodeData, NodeDataCreator,
 //===============================================================================================================================
 
 template <typename NodeData, typename NodeDataCreator, typename Scalar>
-inline pcl::recognition::SimpleOctree<NodeData, NodeDataCreator,
-                                      Scalar>::~SimpleOctree ()
+inline pcl::recognition::SimpleOctree<NodeData, NodeDataCreator, Scalar>::
+    ~SimpleOctree ()
 {
   this->clear ();
 }

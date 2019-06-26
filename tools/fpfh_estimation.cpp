@@ -96,7 +96,9 @@ loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
 }
 
 void
-compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output, int k,
+compute (const pcl::PCLPointCloud2::ConstPtr &input,
+         pcl::PCLPointCloud2 &output,
+         int k,
          double radius)
 {
   // Convert data to PointCloud<T>

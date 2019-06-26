@@ -65,8 +65,8 @@ class SimpleKinectTool
       // debayering.computeEdgeAware (image, rgb_image);
       // now fill image and show!
       pcl::ScopeTime t2 ("memcpy");
-      memcpy (cv_image.data, &rgb_image[0],
-              image->getWidth () * image->getHeight () * 3);
+      memcpy (
+          cv_image.data, &rgb_image[0], image->getWidth () * image->getHeight () * 3);
     }
     imshow ("test", cv_image);
   }

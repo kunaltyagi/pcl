@@ -112,9 +112,9 @@ float
 pcl::EarClipping::area (const std::vector<uint32_t> &vertices)
 {
   // if the polygon is projected onto the xy-plane, the area of the polygon is
-  // determined by the trapeze formula of Gauss. However this fails, if the projection is
-  // one 'line'. Therefore the following implementation determines the area of the flat
-  // polygon in 3D-space using Stoke's law:
+  // determined by the trapeze formula of Gauss. However this fails, if the projection
+  // is one 'line'. Therefore the following implementation determines the area of the
+  // flat polygon in 3D-space using Stoke's law:
   // http://code.activestate.com/recipes/578276-3d-polygon-area/
 
   int n = static_cast<int> (vertices.size ());
@@ -177,8 +177,10 @@ pcl::EarClipping::isEar (int u, int v, int w, const std::vector<uint32_t> &verti
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::EarClipping::isInsideTriangle (const Eigen::Vector3f &u, const Eigen::Vector3f &v,
-                                    const Eigen::Vector3f &w, const Eigen::Vector3f &p)
+pcl::EarClipping::isInsideTriangle (const Eigen::Vector3f &u,
+                                    const Eigen::Vector3f &v,
+                                    const Eigen::Vector3f &w,
+                                    const Eigen::Vector3f &p)
 {
   // see http://www.blackpawn.com/texts/pointinpoly/default.html
   // Barycentric Coordinates

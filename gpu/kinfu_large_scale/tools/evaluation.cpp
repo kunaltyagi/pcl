@@ -71,14 +71,16 @@ Evaluation::grab (double stamp, pcl::gpu::PtrStepSz<const unsigned short> &depth
   return false;
 }
 bool
-Evaluation::grab (double stamp, pcl::gpu::PtrStepSz<const unsigned short> &depth,
+Evaluation::grab (double stamp,
+                  pcl::gpu::PtrStepSz<const unsigned short> &depth,
                   pcl::gpu::PtrStepSz<const RGB> &rgb24)
 {
   return false;
 }
 void
 Evaluation::saveAllPoses (const pcl::gpu::kinfuLS::KinfuTracker &kinfu,
-                          int frame_number, const std::string &logfile) const
+                          int frame_number,
+                          const std::string &logfile) const
 {
 }
 
@@ -231,7 +233,8 @@ Evaluation::grab (double stamp, PtrStepSz<const unsigned short> &depth)
 }
 
 bool
-Evaluation::grab (double stamp, PtrStepSz<const unsigned short> &depth,
+Evaluation::grab (double stamp,
+                  PtrStepSz<const unsigned short> &depth,
                   PtrStepSz<const RGB> &rgb24)
 {
   if (accociations_.empty ()) {
@@ -283,7 +286,8 @@ Evaluation::grab (double stamp, PtrStepSz<const unsigned short> &depth,
 }
 
 void
-Evaluation::saveAllPoses (const pcl::gpu::KinfuTracker &kinfu, int frame_number,
+Evaluation::saveAllPoses (const pcl::gpu::KinfuTracker &kinfu,
+                          int frame_number,
                           const std::string &logfile) const
 {
   size_t total = accociations_.empty () ? depth_stamps_and_filenames_.size ()

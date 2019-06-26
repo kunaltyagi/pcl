@@ -110,8 +110,11 @@ namespace pcl
        * not passed (or NULL is passed) the plot is colored based on a color scheme
        */
       void
-      addPlotData (double const *array_X, double const *array_Y, unsigned long size,
-                   char const *name = "Y Axis", int type = vtkChart::LINE,
+      addPlotData (double const *array_X,
+                   double const *array_Y,
+                   unsigned long size,
+                   char const *name = "Y Axis",
+                   int type = vtkChart::LINE,
                    char const *color = nullptr);
 
       /** \brief Adds a plot with correspondences in vectors arrayX and arrayY. This is
@@ -127,7 +130,8 @@ namespace pcl
        */
       void
       addPlotData (std::vector<double> const &array_x,
-                   std::vector<double> const &array_y, char const *name = "Y Axis",
+                   std::vector<double> const &array_y,
+                   char const *name = "Y Axis",
                    int type = vtkChart::LINE,
                    std::vector<char> const &color = std::vector<char> ());
 
@@ -142,7 +146,8 @@ namespace pcl
        */
       void
       addPlotData (std::vector<std::pair<double, double>> const &plot_data,
-                   char const *name = "Y Axis", int type = vtkChart::LINE,
+                   char const *name = "Y Axis",
+                   int type = vtkChart::LINE,
                    std::vector<char> const &color = std::vector<char> ());
 
       /** \brief Adds a plot based on the given polynomial function and the range in X
@@ -160,8 +165,11 @@ namespace pcl
        * based on a color scheme
        */
       void
-      addPlotData (PolynomialFunction const &p_function, double x_min, double x_max,
-                   char const *name = "Y Axis", int num_points = 100,
+      addPlotData (PolynomialFunction const &p_function,
+                   double x_min,
+                   double x_max,
+                   char const *name = "Y Axis",
+                   int num_points = 100,
                    int type = vtkChart::LINE,
                    std::vector<char> const &color = std::vector<char> ());
 
@@ -180,8 +188,11 @@ namespace pcl
        * based on a color scheme
        */
       void
-      addPlotData (RationalFunction const &r_function, double x_min, double x_max,
-                   char const *name = "Y Axis", int num_points = 100,
+      addPlotData (RationalFunction const &r_function,
+                   double x_min,
+                   double x_max,
+                   char const *name = "Y Axis",
+                   int num_points = 100,
                    int type = vtkChart::LINE,
                    std::vector<char> const &color = std::vector<char> ());
 
@@ -199,8 +210,11 @@ namespace pcl
        * plot is colored based on a color scheme
        */
       void
-      addPlotData (double (*function) (double), double x_min, double x_max,
-                   char const *name = "Y Axis", int num_points = 100,
+      addPlotData (double (*function) (double),
+                   double x_min,
+                   double x_max,
+                   char const *name = "Y Axis",
+                   int num_points = 100,
                    int type = vtkChart::LINE,
                    std::vector<char> const &color = std::vector<char> ());
 
@@ -225,7 +239,8 @@ namespace pcl
        * the histogram is colored based on the current color scheme
        */
       void
-      addHistogramData (std::vector<double> const &data, int const nbins = 10,
+      addHistogramData (std::vector<double> const &data,
+                        int const nbins = 10,
                         char const *name = "Histogram",
                         std::vector<char> const &color = std::vector<char> ());
 
@@ -239,8 +254,10 @@ namespace pcl
        */
       template <typename PointT>
       bool
-      addFeatureHistogram (const pcl::PointCloud<PointT> &cloud, int hsize,
-                           const std::string &id = "cloud", int win_width = 640,
+      addFeatureHistogram (const pcl::PointCloud<PointT> &cloud,
+                           int hsize,
+                           const std::string &id = "cloud",
+                           int win_width = 640,
                            int win_height = 200);
 
       /** \brief Add a histogram feature to screen as a separate window from a cloud
@@ -253,7 +270,8 @@ namespace pcl
       bool
       addFeatureHistogram (const pcl::PCLPointCloud2 &cloud,
                            const std::string &field_name,
-                           const std::string &id = "cloud", int win_width = 640,
+                           const std::string &id = "cloud",
+                           int win_width = 640,
                            int win_height = 200);
 
       /** \brief Add a histogram feature to screen as a separate window.
@@ -267,8 +285,10 @@ namespace pcl
       template <typename PointT>
       bool
       addFeatureHistogram (const pcl::PointCloud<PointT> &cloud,
-                           const std::string &field_name, const int index,
-                           const std::string &id = "cloud", int win_width = 640,
+                           const std::string &field_name,
+                           const int index,
+                           const std::string &id = "cloud",
+                           int win_width = 640,
                            int win_height = 200);
 
       /** \brief Add a histogram feature to screen as a separate window.
@@ -281,8 +301,10 @@ namespace pcl
        */
       bool
       addFeatureHistogram (const pcl::PCLPointCloud2 &cloud,
-                           const std::string &field_name, const int index,
-                           const std::string &id = "cloud", int win_width = 640,
+                           const std::string &field_name,
+                           const int index,
+                           const std::string &id = "cloud",
+                           int win_width = 640,
                            int win_height = 200);
 
       /** \brief Draws all the plots added by addPlotData() or addHistogramData() till
@@ -480,7 +502,7 @@ namespace pcl
       vtkSmartPointer<ExitCallback> exit_callback_;
 
       ////////////////////////////////////IMPORTANT PRIVATE COMPUTING
-      ///FUNCTIONS////////////////////////////////////////////////////
+      /// FUNCTIONS////////////////////////////////////////////////////
       /** \brief computes the value of the polynomial function at val
        * \param[in] p_function polynomial function
        * \param[in] value the value at which the function is to be computed
@@ -505,7 +527,8 @@ namespace pcl
        * ignored!
        */
       void
-      computeHistogram (std::vector<double> const &data, int const nbins,
+      computeHistogram (std::vector<double> const &data,
+                        int const nbins,
                         std::vector<std::pair<double, double>> &histogram);
     };
   } // namespace visualization

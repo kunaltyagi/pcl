@@ -73,7 +73,8 @@ class OpenNIGrabFrame
 
   void
   image_callback (const openni_wrapper::Image::Ptr &image,
-                  const openni_wrapper::DepthImage::Ptr &depth_image, float)
+                  const openni_wrapper::DepthImage::Ptr &depth_image,
+                  float)
   {
     std::lock_guard<std::mutex> lock (image_mutex_);
     image_ = image;
@@ -141,8 +142,8 @@ class OpenNIGrabFrame
       } else
         data = reinterpret_cast<const void *> (image->getMetaData ().Data ());
 
-      importer_->SetWholeExtent (0, image->getWidth () - 1, 0, image->getHeight () - 1,
-                                 0, 0);
+      importer_->SetWholeExtent (
+          0, image->getWidth () - 1, 0, image->getHeight () - 1, 0, 0);
       importer_->SetDataExtentToWholeExtent ();
 
       std::stringstream ss;
@@ -159,8 +160,8 @@ class OpenNIGrabFrame
       std::stringstream ss;
       ss << "frame_" + time + "_depth.tiff";
 
-      depth_importer_->SetWholeExtent (0, depth_image->getWidth () - 1, 0,
-                                       depth_image->getHeight () - 1, 0, 0);
+      depth_importer_->SetWholeExtent (
+          0, depth_image->getWidth () - 1, 0, depth_image->getHeight () - 1, 0, 0);
       depth_importer_->SetDataExtentToWholeExtent ();
       depth_importer_->SetImportVoidPointer (
           const_cast<void *> (reinterpret_cast<const void *> (
@@ -188,7 +189,8 @@ class OpenNIGrabFrame
                                                   *this);
 
     std::function<void(const openni_wrapper::Image::Ptr &,
-                       const openni_wrapper::DepthImage::Ptr &, float)>
+                       const openni_wrapper::DepthImage::Ptr &,
+                       float)>
         image_cb = boost::bind (&OpenNIGrabFrame::image_callback, this, _1, _2, _3);
     boost::signals2::connection image_connection = grabber_.registerCallback (image_cb);
 
@@ -224,12 +226,12 @@ class OpenNIGrabFrame
           data = reinterpret_cast<const void *> (rgb_data);
         } else
           data = reinterpret_cast<const void *> (image->getMetaData ().Data ());
-        image_viewer_.addRGBImage ((const unsigned char *)data, image->getWidth (),
-                                   image->getHeight ());
+        image_viewer_.addRGBImage (
+            (const unsigned char *)data, image->getWidth (), image->getHeight ());
 
         if (continuous_ || trigger_) {
-          importer_->SetWholeExtent (0, image->getWidth () - 1, 0,
-                                     image->getHeight () - 1, 0, 0);
+          importer_->SetWholeExtent (
+              0, image->getWidth () - 1, 0, image->getHeight () - 1, 0, 0);
           importer_->SetDataExtentToWholeExtent ();
 
           std::stringstream ss;
@@ -251,19 +253,21 @@ class OpenNIGrabFrame
         depth_data = pcl::visualization::FloatImageUtils::getVisualImage (
             reinterpret_cast<const unsigned short *> (
                 depth_image->getDepthMetaData ().Data ()),
-            depth_image->getWidth (), depth_image->getHeight (),
+            depth_image->getWidth (),
+            depth_image->getHeight (),
             std::numeric_limits<unsigned short>::min (),
             // Scale so that the colors look brigher on screen
-            std::numeric_limits<unsigned short>::max () / 10, true);
+            std::numeric_limits<unsigned short>::max () / 10,
+            true);
 
-        depth_image_viewer_.addRGBImage (depth_data, depth_image->getWidth (),
-                                         depth_image->getHeight ());
+        depth_image_viewer_.addRGBImage (
+            depth_data, depth_image->getWidth (), depth_image->getHeight ());
         if (continuous_ || trigger_) {
           std::stringstream ss;
           ss << "frame_" + time + "_depth.tiff";
 
-          depth_importer_->SetWholeExtent (0, depth_image->getWidth () - 1, 0,
-                                           depth_image->getHeight () - 1, 0, 0);
+          depth_importer_->SetWholeExtent (
+              0, depth_image->getWidth () - 1, 0, depth_image->getHeight () - 1, 0, 0);
           depth_importer_->SetDataExtentToWholeExtent ();
           depth_importer_->SetImportVoidPointer (
               const_cast<void *> (reinterpret_cast<const void *> (
@@ -372,7 +376,8 @@ main (int argc, char **argv)
           modes = grabber.getAvailableImageModes ();
           for (std::vector<std::pair<int, XnMapOutputMode>>::const_iterator it =
                    modes.begin ();
-               it != modes.end (); ++it) {
+               it != modes.end ();
+               ++it) {
             cout << it->first << " = " << it->second.nXRes << " x " << it->second.nYRes
                  << " @ " << it->second.nFPS << endl;
           }
@@ -411,8 +416,8 @@ main (int argc, char **argv)
   int depthformat = openni_wrapper::OpenNIDevice::OpenNI_12_bit_depth;
   pcl::console::parse_argument (argc, argv, "-depthformat", depthformat);
 
-  pcl::OpenNIGrabber grabber (device_id, pcl::OpenNIGrabber::OpenNI_Default_Mode,
-                              image_mode);
+  pcl::OpenNIGrabber grabber (
+      device_id, pcl::OpenNIGrabber::OpenNI_Default_Mode, image_mode);
   // Set the depth output format
   grabber.getDevice ()->setDepthOutputFormat (
       static_cast<openni_wrapper::OpenNIDevice::DepthMode> (depthformat));

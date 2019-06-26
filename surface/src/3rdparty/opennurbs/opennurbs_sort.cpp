@@ -41,8 +41,11 @@ ON__QSORT_FASTER_THAN_HSORT.
 #define work_size 64
 
 void
-ON_qsort (void *base, size_t nel, size_t width,
-          int (*compar) (void *, const void *, const void *), void *context)
+ON_qsort (void *base,
+          size_t nel,
+          size_t width,
+          int (*compar) (void *, const void *, const void *),
+          void *context)
 {
 #if defined(ON__HAVE_RELIABLE_SYSTEM_CONTEXT_QSORT)
   // The call here must be a thread safe system qsort
@@ -60,7 +63,9 @@ ON_qsort (void *base, size_t nel, size_t width,
 }
 
 void
-ON_qsort (void *base, size_t nel, size_t width,
+ON_qsort (void *base,
+          size_t nel,
+          size_t width,
           int (*compar) (const void *, const void *))
 {
 #if defined(ON__HAVE_RELIABLE_SYSTEM_QSORT)
@@ -75,7 +80,9 @@ ON_qsort (void *base, size_t nel, size_t width,
 }
 
 void
-ON_hsort (void *base, size_t nel, size_t width,
+ON_hsort (void *base,
+          size_t nel,
+          size_t width,
           int (*compar) (const void *, const void *))
 {
   size_t i_end, k;
@@ -128,8 +135,11 @@ ON_hsort (void *base, size_t nel, size_t width,
 }
 
 void
-ON_hsort (void *base, size_t nel, size_t width,
-          int (*compar) (void *, const void *, const void *), void *context)
+ON_hsort (void *base,
+          size_t nel,
+          size_t width,
+          int (*compar) (void *, const void *, const void *),
+          void *context)
 {
   size_t i_end, k;
   unsigned char work_memory[work_size], *e_tmp, *e_end;

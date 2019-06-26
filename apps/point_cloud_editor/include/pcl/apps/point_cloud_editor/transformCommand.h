@@ -52,8 +52,11 @@ class TransformCommand : public Command
   /// @param cloud_ptr a shared pointer pointing to the cloud object.
   /// @param matrix a (4x4) transform matrix following OpenGL's format.
   /// @pre Assumes the selection_ptr is valid, non-NULL.
-  TransformCommand (ConstSelectionPtr selection_ptr, CloudPtr cloud_ptr,
-                    const float *matrix, float translate_x, float translate_y,
+  TransformCommand (ConstSelectionPtr selection_ptr,
+                    CloudPtr cloud_ptr,
+                    const float *matrix,
+                    float translate_x,
+                    float translate_y,
                     float translate_z);
 
   /// @brief Copy constructor - object is not copy-constructable

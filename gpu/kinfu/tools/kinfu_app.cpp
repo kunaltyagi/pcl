@@ -93,7 +93,8 @@ namespace pcl
   namespace gpu
   {
     void
-    paint3DView (const KinfuTracker::View &rgb24, KinfuTracker::View &view,
+    paint3DView (const KinfuTracker::View &rgb24,
+                 KinfuTracker::View &view,
                  float colors_weight = 0.5f);
     void
     mergePointNormal (const DeviceArray<PointXYZ> &cloud,
@@ -245,9 +246,15 @@ setViewerPose (visualization::PCLVisualizer &viewer, const Eigen::Affine3f &view
   Eigen::Vector3f look_at_vector =
       viewer_pose.rotation () * Eigen::Vector3f (0, 0, 1) + pos_vector;
   Eigen::Vector3f up_vector = viewer_pose.rotation () * Eigen::Vector3f (0, -1, 0);
-  viewer.setCameraPosition (pos_vector[0], pos_vector[1], pos_vector[2],
-                            look_at_vector[0], look_at_vector[1], look_at_vector[2],
-                            up_vector[0], up_vector[1], up_vector[2]);
+  viewer.setCameraPosition (pos_vector[0],
+                            pos_vector[1],
+                            pos_vector[2],
+                            look_at_vector[0],
+                            look_at_vector[1],
+                            look_at_vector[2],
+                            up_vector[0],
+                            up_vector[1],
+                            up_vector[2]);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -383,8 +390,10 @@ struct ImageView {
   }
 
   void
-  showScene (KinfuTracker &kinfu, const PtrStepSz<const KinfuTracker::PixelRGB> &rgb24,
-             bool registration, Eigen::Affine3f *pose_ptr = nullptr)
+  showScene (KinfuTracker &kinfu,
+             const PtrStepSz<const KinfuTracker::PixelRGB> &rgb24,
+             bool registration,
+             Eigen::Affine3f *pose_ptr = nullptr)
   {
     if (pose_ptr) {
       raycaster_ptr_->run (kinfu.volume (), *pose_ptr);
@@ -401,7 +410,8 @@ struct ImageView {
     view_device_.download (view_host_, cols);
     if (viz_)
       viewerScene_->showRGBImage (reinterpret_cast<unsigned char *> (&view_host_[0]),
-                                  view_device_.cols (), view_device_.rows (),
+                                  view_device_.cols (),
+                                  view_device_.rows (),
                                   "rgb_image");
 
       // viewerColor_.showRGBImage ((unsigned char*)&rgb24.data, rgb24.cols,
@@ -410,7 +420,8 @@ struct ImageView {
 #ifdef HAVE_OPENCV
     if (accumulate_views_) {
       views_.push_back (cv::Mat ());
-      cv::cvtColor (cv::Mat (480, 640, CV_8UC3, (void *)&view_host_[0]), views_.back (),
+      cv::cvtColor (cv::Mat (480, 640, CV_8UC3, (void *)&view_host_[0]),
+                    views_.back (),
                     CV_RGB2GRAY);
       // cv::copy(cv::Mat(480, 640, CV_8UC3, (void*)&view_host_[0]), views_.back());
     }
@@ -421,8 +432,8 @@ struct ImageView {
   showDepth (const PtrStepSz<const unsigned short> &depth)
   {
     if (viz_)
-      viewerDepth_->showShortImage (depth.data, depth.cols, depth.rows, 0, 5000, true,
-                                    "short_image");
+      viewerDepth_->showShortImage (
+          depth.data, depth.cols, depth.rows, 0, 5000, true, "short_image");
   }
 
   void
@@ -436,8 +447,12 @@ struct ImageView {
     generated_depth_.download (data, c);
 
     if (viz_)
-      viewerDepth_->showShortImage (&data[0], generated_depth_.cols (),
-                                    generated_depth_.rows (), 0, 5000, true,
+      viewerDepth_->showShortImage (&data[0],
+                                    generated_depth_.cols (),
+                                    generated_depth_.rows (),
+                                    0,
+                                    5000,
+                                    true,
                                     "short_image");
   }
 
@@ -566,8 +581,8 @@ struct SceneCloudView {
     if (cube_added_)
       cloud_viewer_->removeShape ("cube");
     else
-      cloud_viewer_->addCube (size * 0.5, Eigen::Quaternionf::Identity (), size (0),
-                              size (1), size (2));
+      cloud_viewer_->addCube (
+          size * 0.5, Eigen::Quaternionf::Identity (), size (0), size (1), size (2));
 
     cube_added_ = !cube_added_;
   }
@@ -670,7 +685,10 @@ struct SceneCloudView {
 struct KinFuApp {
   enum { PCD_BIN = 1, PCD_ASCII = 2, PLY = 3, MESH_PLY = 7, MESH_VTK = 8 };
 
-  KinFuApp (pcl::Grabber &source, float vsz, int icp, int viz,
+  KinFuApp (pcl::Grabber &source,
+            float vsz,
+            int icp,
+            int viz,
             boost::shared_ptr<CameraPoseProcessor> pose_processor =
                 boost::shared_ptr<CameraPoseProcessor> ())
       : exit_ (false), scan_ (false), scan_mesh_ (false), scan_volume_ (false),
@@ -796,24 +814,30 @@ struct KinFuApp {
     if (!match_file.empty ())
       evaluation_ptr_->setMatchFile (match_file);
 
-    kinfu_.setDepthIntrinsics (evaluation_ptr_->fx, evaluation_ptr_->fy,
-                               evaluation_ptr_->cx, evaluation_ptr_->cy);
-    image_view_.raycaster_ptr_ = RayCaster::Ptr (
-        new RayCaster (kinfu_.rows (), kinfu_.cols (), evaluation_ptr_->fx,
-                       evaluation_ptr_->fy, evaluation_ptr_->cx, evaluation_ptr_->cy));
+    kinfu_.setDepthIntrinsics (evaluation_ptr_->fx,
+                               evaluation_ptr_->fy,
+                               evaluation_ptr_->cx,
+                               evaluation_ptr_->cy);
+    image_view_.raycaster_ptr_ = RayCaster::Ptr (new RayCaster (kinfu_.rows (),
+                                                                kinfu_.cols (),
+                                                                evaluation_ptr_->fx,
+                                                                evaluation_ptr_->fy,
+                                                                evaluation_ptr_->cx,
+                                                                evaluation_ptr_->cy));
   }
 
   void
   execute (const PtrStepSz<const unsigned short> &depth,
-           const PtrStepSz<const KinfuTracker::PixelRGB> &rgb24, bool has_data)
+           const PtrStepSz<const KinfuTracker::PixelRGB> &rgb24,
+           bool has_data)
   {
     bool has_image = false;
 
     if (has_data) {
       depth_device_.upload (depth.data, depth.step, depth.rows, depth.cols);
       if (integrate_colors_)
-        image_view_.colors_device_.upload (rgb24.data, rgb24.step, rgb24.rows,
-                                           rgb24.cols);
+        image_view_.colors_device_.upload (
+            rgb24.data, rgb24.step, rgb24.rows, rgb24.cols);
 
       {
         SampledScopeTime fps (time_ms_);
@@ -862,8 +886,8 @@ struct KinFuApp {
 
     if (viz_ && has_image) {
       Eigen::Affine3f viewer_pose = getViewerPose (*scene_cloud_view_.cloud_viewer_);
-      image_view_.showScene (kinfu_, rgb24, registration_,
-                             independent_camera_ ? &viewer_pose : nullptr);
+      image_view_.showScene (
+          kinfu_, rgb24, registration_, independent_camera_ ? &viewer_pose : nullptr);
     }
 
     if (current_frame_cloud_view_)
@@ -886,8 +910,8 @@ struct KinFuApp {
       depth_.step = depth_.cols * depth_.elemSize ();
 
       source_depth_data_.resize (depth_.cols * depth_.rows);
-      depth_wrapper->fillDepthImageRaw (depth_.cols, depth_.rows,
-                                        &source_depth_data_[0]);
+      depth_wrapper->fillDepthImageRaw (
+          depth_.cols, depth_.rows, &source_depth_data_[0]);
       depth_.data = &source_depth_data_[0];
     }
     data_ready_cond_.notify_one ();
@@ -908,8 +932,8 @@ struct KinFuApp {
       depth_.step = depth_.cols * depth_.elemSize ();
 
       source_depth_data_.resize (depth_.cols * depth_.rows);
-      depth_wrapper->fillDepthImageRaw (depth_.cols, depth_.rows,
-                                        &source_depth_data_[0]);
+      depth_wrapper->fillDepthImageRaw (
+          depth_.cols, depth_.rows, &source_depth_data_[0]);
       depth_.data = &source_depth_data_[0];
 
       rgb24_.cols = image_wrapper->getWidth ();
@@ -917,8 +941,8 @@ struct KinFuApp {
       rgb24_.step = rgb24_.cols * rgb24_.elemSize ();
 
       source_image_data_.resize (rgb24_.cols * rgb24_.rows);
-      image_wrapper->fillRGB (rgb24_.cols, rgb24_.rows,
-                              (unsigned char *)&source_image_data_[0]);
+      image_wrapper->fillRGB (
+          rgb24_.cols, rgb24_.rows, (unsigned char *)&source_image_data_[0]);
       rgb24_.data = &source_image_data_[0];
     }
     data_ready_cond_.notify_one ();
@@ -937,8 +961,8 @@ struct KinFuApp {
       depth_.step = depth_.cols * depth_.elemSize ();
 
       source_depth_data_.resize (depth_.cols * depth_.rows);
-      depth_wrapper->fillDepthImageRaw (depth_.cols, depth_.rows,
-                                        &source_depth_data_[0]);
+      depth_wrapper->fillDepthImageRaw (
+          depth_.cols, depth_.rows, &source_depth_data_[0]);
       depth_.data = &source_depth_data_[0];
     }
     data_ready_cond_.notify_one ();
@@ -959,8 +983,8 @@ struct KinFuApp {
       depth_.step = depth_.cols * depth_.elemSize ();
 
       source_depth_data_.resize (depth_.cols * depth_.rows);
-      depth_wrapper->fillDepthImageRaw (depth_.cols, depth_.rows,
-                                        &source_depth_data_[0]);
+      depth_wrapper->fillDepthImageRaw (
+          depth_.cols, depth_.rows, &source_depth_data_[0]);
       depth_.data = &source_depth_data_[0];
 
       rgb24_.cols = image_wrapper->getWidth ();
@@ -968,8 +992,8 @@ struct KinFuApp {
       rgb24_.step = rgb24_.cols * rgb24_.elemSize ();
 
       source_image_data_.resize (rgb24_.cols * rgb24_.rows);
-      image_wrapper->fillRGB (rgb24_.cols, rgb24_.rows,
-                              (unsigned char *)&source_image_data_[0]);
+      image_wrapper->fillRGB (
+          rgb24_.cols, rgb24_.rows, (unsigned char *)&source_image_data_[0]);
       rgb24_.data = &source_image_data_[0];
     }
     data_ready_cond_.notify_one ();
@@ -1103,8 +1127,9 @@ struct KinFuApp {
           writeCloudFile (format, view.cloud_ptr_);
       } else {
         if (view.valid_combined_)
-          writeCloudFile (format, merge<PointXYZRGBNormal> (*view.combined_ptr_,
-                                                            *view.point_colors_ptr_));
+          writeCloudFile (
+              format,
+              merge<PointXYZRGBNormal> (*view.combined_ptr_, *view.point_colors_ptr_));
         else
           writeCloudFile (
               format, merge<PointXYZRGB> (*view.cloud_ptr_, *view.point_colors_ptr_));
@@ -1254,8 +1279,8 @@ struct KinFuApp {
         app->tsdf_volume_.save ("tsdf_volume.dat", true);
         cout << "done [" << app->tsdf_volume_.size () << " voxels]" << endl;
         cout << "Saving TSDF volume cloud to tsdf_cloud.pcd ... " << flush;
-        pcl::io::savePCDFile<pcl::PointXYZI> ("tsdf_cloud.pcd", *app->tsdf_cloud_ptr_,
-                                              true);
+        pcl::io::savePCDFile<pcl::PointXYZI> (
+            "tsdf_cloud.pcd", *app->tsdf_cloud_ptr_, true);
         cout << "done [" << app->tsdf_cloud_ptr_->size () << " points]" << endl;
         break;
 

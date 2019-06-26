@@ -90,8 +90,8 @@ TEST (PCL, PCLVisualizer_camera)
   // Next, check if setting the OpenGL settings translate well back
   // Look towards the x-axis, which equates to a 90 degree rotation around the y-axis
   Eigen::Vector3f trans (10.f, 2.f, 20.f);
-  visualizer.setCameraPosition (trans[0], trans[1], trans[2], trans[0] + 1., trans[1],
-                                trans[2], 0., 1., 0.);
+  visualizer.setCameraPosition (
+      trans[0], trans[1], trans[2], trans[0] + 1., trans[1], trans[2], 0., 1., 0.);
   viewer_pose = visualizer.getViewerPose ().matrix ();
   Eigen::Matrix3f expected_rotation =
       Eigen::AngleAxisf (M_PIf / 2.0f, Eigen::Vector3f (0.f, 1.f, 0.f)).matrix ();
@@ -120,33 +120,33 @@ TEST (PCL, PCLVisualizer_getPointCloudRenderingProperties)
 
   std::string cloud_id = "input_cloud";
   visualizer.addPointCloud (cloud, cloud_id);
-  ASSERT_TRUE (visualizer.setPointCloudRenderingProperties (PCL_VISUALIZER_COLOR, 1.,
-                                                            0., 0., cloud_id));
+  ASSERT_TRUE (visualizer.setPointCloudRenderingProperties (
+      PCL_VISUALIZER_COLOR, 1., 0., 0., cloud_id));
   double r, g, b;
-  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_POINT_SIZE,
-                                                             r, g, b, cloud_id));
-  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_OPACITY, r,
-                                                             g, b, cloud_id));
-  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_LINE_WIDTH,
-                                                             r, g, b, cloud_id));
-  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_FONT_SIZE,
-                                                             r, g, b, cloud_id));
+  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (
+      PCL_VISUALIZER_POINT_SIZE, r, g, b, cloud_id));
+  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (
+      PCL_VISUALIZER_OPACITY, r, g, b, cloud_id));
+  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (
+      PCL_VISUALIZER_LINE_WIDTH, r, g, b, cloud_id));
+  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (
+      PCL_VISUALIZER_FONT_SIZE, r, g, b, cloud_id));
   EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (
       PCL_VISUALIZER_REPRESENTATION, r, g, b, cloud_id));
   EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (
       PCL_VISUALIZER_IMMEDIATE_RENDERING, r, g, b, cloud_id));
-  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_SHADING, r,
-                                                             g, b, cloud_id));
-  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_LUT, r, g,
-                                                             b, cloud_id));
-  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_LUT_RANGE,
-                                                             r, g, b, cloud_id));
+  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (
+      PCL_VISUALIZER_SHADING, r, g, b, cloud_id));
+  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (
+      PCL_VISUALIZER_LUT, r, g, b, cloud_id));
+  EXPECT_FALSE (visualizer.getPointCloudRenderingProperties (
+      PCL_VISUALIZER_LUT_RANGE, r, g, b, cloud_id));
 
   r = 666.;
   g = 666.;
   b = 666.;
-  EXPECT_TRUE (visualizer.getPointCloudRenderingProperties (PCL_VISUALIZER_COLOR, r, g,
-                                                            b, cloud_id));
+  EXPECT_TRUE (visualizer.getPointCloudRenderingProperties (
+      PCL_VISUALIZER_COLOR, r, g, b, cloud_id));
 
   EXPECT_EQ (r, 1.);
   EXPECT_EQ (g, 0.);

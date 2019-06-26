@@ -56,8 +56,10 @@ namespace pcl
    */
   void
   seededHueSegmentation (const PointCloud<PointXYZRGB> &cloud,
-                         const search::Search<PointXYZRGB>::Ptr &tree, float tolerance,
-                         PointIndices &indices_in, PointIndices &indices_out,
+                         const search::Search<PointXYZRGB>::Ptr &tree,
+                         float tolerance,
+                         PointIndices &indices_in,
+                         PointIndices &indices_out,
                          float delta_hue = 0.0);
 
   /** \brief Decompose a region of space into clusters based on the Euclidean distance
@@ -71,8 +73,10 @@ namespace pcl
    */
   void
   seededHueSegmentation (const PointCloud<PointXYZRGB> &cloud,
-                         const search::Search<PointXYZRGBL>::Ptr &tree, float tolerance,
-                         PointIndices &indices_in, PointIndices &indices_out,
+                         const search::Search<PointXYZRGBL>::Ptr &tree,
+                         float tolerance,
+                         PointIndices &indices_in,
+                         PointIndices &indices_out,
                          float delta_hue = 0.0);
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

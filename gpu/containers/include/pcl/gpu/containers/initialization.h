@@ -78,7 +78,9 @@ namespace pcl
     /** \brief Error handler. All GPU functions call this to report an error. For
      * internal use only */
     void PCL_EXPORTS
-    error (const char *error_string, const char *file, const int line,
+    error (const char *error_string,
+           const char *file,
+           const int line,
            const char *func = "");
   } // namespace gpu
 } // namespace pcl

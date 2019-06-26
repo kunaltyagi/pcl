@@ -69,7 +69,8 @@ namespace pcl
      * and length respectively \param[in] translation the position of the box center
      * \param[in] box_size the size of the box for each dimension
      */
-    BoxClipper3D (const Eigen::Vector3f &rodrigues, const Eigen::Vector3f &translation,
+    BoxClipper3D (const Eigen::Vector3f &rodrigues,
+                  const Eigen::Vector3f &translation,
                   const Eigen::Vector3f &box_size);
 
     /**
@@ -113,7 +114,8 @@ namespace pcl
 
     void
     clipPointCloud3D (
-        const pcl::PointCloud<PointT> &cloud_in, std::vector<int> &clipped,
+        const pcl::PointCloud<PointT> &cloud_in,
+        std::vector<int> &clipped,
         const std::vector<int> &indices = std::vector<int> ()) const override;
 
     Clipper3D<PointT> *

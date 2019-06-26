@@ -92,8 +92,11 @@ namespace pcl
      * intensity_spin_image the resultant intensity-domain spin image descriptor
      */
     void
-    computeIntensitySpinImage (const PointCloudIn &cloud, float radius, float sigma,
-                               int k, const std::vector<int> &indices,
+    computeIntensitySpinImage (const PointCloudIn &cloud,
+                               float radius,
+                               float sigma,
+                               int k,
+                               const std::vector<int> &indices,
                                const std::vector<float> &squared_distances,
                                Eigen::MatrixXf &intensity_spin_image);
 

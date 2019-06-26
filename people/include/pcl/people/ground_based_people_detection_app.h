@@ -179,7 +179,9 @@ namespace pcl
        * (default = 8.0).
        */
       void
-      setPersonClusterLimits (float min_height, float max_height, float min_width,
+      setPersonClusterLimits (float min_height,
+                              float max_height,
+                              float min_width,
                               float max_width);
 
       /**
@@ -201,7 +203,9 @@ namespace pcl
        * \param[out] max_width Maximum width for a person cluster.
        */
       void
-      getPersonClusterLimits (float &min_height, float &max_height, float &min_width,
+      getPersonClusterLimits (float &min_height,
+                              float &max_height,
+                              float &min_width,
                               float &max_width);
 
       /**

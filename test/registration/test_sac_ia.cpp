@@ -60,8 +60,8 @@ TEST (PCL, SampleConsensusInitialAlignment)
   float angle = static_cast<float> (M_PI) / 2.0f;
   Eigen::Quaternionf initial_rotation (cos (angle / 2), 0, 0, sin (angle / 2));
   PointCloud<PointXYZ> cloud_source_transformed;
-  transformPointCloud (cloud_source, cloud_source_transformed, initial_offset,
-                       initial_rotation);
+  transformPointCloud (
+      cloud_source, cloud_source_transformed, initial_offset, initial_rotation);
 
   // Create shared pointers
   PointCloud<PointXYZ>::Ptr cloud_source_ptr, cloud_target_ptr;
@@ -150,8 +150,8 @@ TEST (PCL, SampleConsensusPrerejective)
   float angle = static_cast<float> (M_PI) / 2.0f;
   Eigen::Quaternionf initial_rotation (cos (angle / 2), 0, 0, sin (angle / 2));
   PointCloud<PointXYZ> cloud_source_transformed;
-  transformPointCloud (cloud_source, cloud_source_transformed, initial_offset,
-                       initial_rotation);
+  transformPointCloud (
+      cloud_source, cloud_source_transformed, initial_offset, initial_rotation);
 
   // Create shared pointers
   PointCloud<PointXYZ>::Ptr cloud_source_ptr, cloud_target_ptr;

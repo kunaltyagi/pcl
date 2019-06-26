@@ -94,27 +94,34 @@ namespace pcl
       void
       build ();
       void
-      radiusSearchHost (const PointType &center, float radius, std::vector<int> &out,
+      radiusSearchHost (const PointType &center,
+                        float radius,
+                        std::vector<int> &out,
                         int max_nn) const;
       void
-      approxNearestSearchHost (const PointType &query, int &out_index,
+      approxNearestSearchHost (const PointType &query,
+                               int &out_index,
                                float &sqr_dist) const;
 
       void
       radiusSearch (const Queries &queries, float radius, NeighborIndices &results);
       void
-      radiusSearch (const Queries &queries, const Radiuses &radiuses,
+      radiusSearch (const Queries &queries,
+                    const Radiuses &radiuses,
                     NeighborIndices &results);
 
       void
-      radiusSearch (const Queries &queries, const Indices &indices, float radius,
+      radiusSearch (const Queries &queries,
+                    const Indices &indices,
+                    float radius,
                     NeighborIndices &results);
 
       void
       approxNearestSearch (const Queries &queries, NeighborIndices &results) const;
 
       void
-      nearestKSearchBatch (const Queries &queries, int k,
+      nearestKSearchBatch (const Queries &queries,
+                           int k,
                            NeighborIndices &results) const;
 
       // just reference
@@ -152,14 +159,17 @@ namespace pcl
       private:
       template <typename BatchType>
       void
-      radiusSearchEx (BatchType &batch, const Queries &queries,
+      radiusSearchEx (BatchType &batch,
+                      const Queries &queries,
                       NeighborIndices &results);
     };
 
     void
     bruteForceRadiusSearch (const OctreeImpl::PointCloud &cloud,
-                            const OctreeImpl::PointType &query, float radius,
-                            DeviceArray<int> &result, DeviceArray<int> &buffer);
+                            const OctreeImpl::PointType &query,
+                            float radius,
+                            DeviceArray<int> &result,
+                            DeviceArray<int> &buffer);
 
   } // namespace device
 } // namespace pcl

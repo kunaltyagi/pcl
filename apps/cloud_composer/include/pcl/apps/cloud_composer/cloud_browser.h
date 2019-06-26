@@ -73,7 +73,8 @@ namespace pcl
       }
 
       void
-      paint (QPainter *painter, const QStyleOptionViewItem &option,
+      paint (QPainter *painter,
+             const QStyleOptionViewItem &option,
              const QModelIndex &index) const override;
     };
 

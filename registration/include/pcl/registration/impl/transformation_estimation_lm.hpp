@@ -47,8 +47,8 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename MatScalar>
-pcl::registration::TransformationEstimationLM<PointSource, PointTarget,
-                                              MatScalar>::TransformationEstimationLM ()
+pcl::registration::TransformationEstimationLM<PointSource, PointTarget, MatScalar>::
+    TransformationEstimationLM ()
     : tmp_src_ (), tmp_tgt_ (), tmp_idx_src_ (), tmp_idx_tgt_ (),
       warp_point_ (new WarpPointRigid6D<PointSource, PointTarget, MatScalar>){};
 
@@ -66,7 +66,8 @@ pcl::registration::TransformationEstimationLM<PointSource, PointTarget, MatScala
     PCL_ERROR ("[pcl::registration::TransformationEstimationLM::"
                "estimateRigidTransformation] ");
     PCL_ERROR ("Number or points in source (%lu) differs than target (%lu)!\n",
-               cloud_src.points.size (), cloud_tgt.points.size ());
+               cloud_src.points.size (),
+               cloud_tgt.points.size ());
     return;
   }
   if (cloud_src.points.size () < 4) // need at least 4 samples
@@ -99,7 +100,8 @@ pcl::registration::TransformationEstimationLM<PointSource, PointTarget, MatScala
   PCL_DEBUG (
       "[pcl::registration::TransformationEstimationLM::estimateRigidTransformation]");
   PCL_DEBUG ("LM solver finished with exit code %i, having a residual norm of %g. \n",
-             info, lm.fvec.norm ());
+             info,
+             lm.fvec.norm ());
   PCL_DEBUG ("Final solution: [%f", x[0]);
   for (int i = 1; i < n_unknowns; ++i)
     PCL_DEBUG (" %f", x[i]);
@@ -126,7 +128,8 @@ pcl::registration::TransformationEstimationLM<PointSource, PointTarget, MatScala
     PCL_ERROR (
         "[pcl::registration::TransformationEstimationLM::estimateRigidTransformation] "
         "Number or points in source (%lu) differs than target (%lu)!\n",
-        indices_src.size (), cloud_tgt.points.size ());
+        indices_src.size (),
+        cloud_tgt.points.size ());
     return;
   }
 
@@ -139,8 +142,8 @@ pcl::registration::TransformationEstimationLM<PointSource, PointTarget, MatScala
   for (int i = 0; i < nr_correspondences; ++i)
     indices_tgt[i] = i;
 
-  estimateRigidTransformation (cloud_src, indices_src, cloud_tgt, indices_tgt,
-                               transformation_matrix);
+  estimateRigidTransformation (
+      cloud_src, indices_src, cloud_tgt, indices_tgt, transformation_matrix);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,7 +160,8 @@ pcl::registration::TransformationEstimationLM<PointSource, PointTarget, MatScala
     PCL_ERROR (
         "[pcl::registration::TransformationEstimationLM::estimateRigidTransformation] "
         "Number or points in source (%lu) differs than target (%lu)!\n",
-        indices_src.size (), indices_tgt.size ());
+        indices_src.size (),
+        indices_tgt.size ());
     return;
   }
 
@@ -193,7 +197,8 @@ pcl::registration::TransformationEstimationLM<PointSource, PointTarget, MatScala
   PCL_DEBUG (
       "[pcl::registration::TransformationEstimationLM::estimateRigidTransformation] LM "
       "solver finished with exit code %i, having a residual norm of %g. \n",
-      info, lm.fvec.norm ());
+      info,
+      lm.fvec.norm ());
   PCL_DEBUG ("Final solution: [%f", x[0]);
   for (int i = 1; i < n_unknowns; ++i)
     PCL_DEBUG (" %f", x[i]);
@@ -225,16 +230,15 @@ pcl::registration::TransformationEstimationLM<PointSource, PointTarget, MatScala
     indices_tgt[i] = correspondences[i].index_match;
   }
 
-  estimateRigidTransformation (cloud_src, indices_src, cloud_tgt, indices_tgt,
-                               transformation_matrix);
+  estimateRigidTransformation (
+      cloud_src, indices_src, cloud_tgt, indices_tgt, transformation_matrix);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename MatScalar>
 int
-pcl::registration::TransformationEstimationLM<PointSource, PointTarget,
-                                              MatScalar>::OptimizationFunctor::
-operator() (const VectorX &x, VectorX &fvec) const
+pcl::registration::TransformationEstimationLM<PointSource, PointTarget, MatScalar>::
+    OptimizationFunctor::operator() (const VectorX &x, VectorX &fvec) const
 {
   const PointCloud<PointSource> &src_points = *estimator_->tmp_src_;
   const PointCloud<PointTarget> &tgt_points = *estimator_->tmp_tgt_;
@@ -261,9 +265,8 @@ operator() (const VectorX &x, VectorX &fvec) const
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename MatScalar>
 int
-pcl::registration::TransformationEstimationLM<
-    PointSource, PointTarget, MatScalar>::OptimizationFunctorWithIndices::
-operator() (const VectorX &x, VectorX &fvec) const
+pcl::registration::TransformationEstimationLM<PointSource, PointTarget, MatScalar>::
+    OptimizationFunctorWithIndices::operator() (const VectorX &x, VectorX &fvec) const
 {
   const PointCloud<PointSource> &src_points = *estimator_->tmp_src_;
   const PointCloud<PointTarget> &tgt_points = *estimator_->tmp_tgt_;
@@ -290,6 +293,6 @@ operator() (const VectorX &x, VectorX &fvec) const
 }
 
 //#define PCL_INSTANTIATE_TransformationEstimationLM(T,U) template class PCL_EXPORTS
-//pcl::registration::TransformationEstimationLM<T,U>;
+// pcl::registration::TransformationEstimationLM<T,U>;
 
 #endif /* PCL_REGISTRATION_TRANSFORMATION_ESTIMATION_LM_HPP_ */

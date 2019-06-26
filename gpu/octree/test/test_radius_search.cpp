@@ -105,26 +105,26 @@ TEST (PCL_OctreeGPU, batchRadiusSearch)
   }
 
   // search GPU shared
-  octree_device.radiusSearch (queries_device, data.shared_radius, max_answers,
-                              result_device1);
+  octree_device.radiusSearch (
+      queries_device, data.shared_radius, max_answers, result_device1);
 
   // search GPU individual
-  octree_device.radiusSearch (queries_device, radiuses_device, max_answers,
-                              result_device2);
+  octree_device.radiusSearch (
+      queries_device, radiuses_device, max_answers, result_device2);
 
   // search GPU shared with indices
   pcl::gpu::Octree::Indices indices;
   indices.upload (data.indices);
-  octree_device.radiusSearch (queries_device, indices, data.shared_radius, max_answers,
-                              result_device3);
+  octree_device.radiusSearch (
+      queries_device, indices, data.shared_radius, max_answers, result_device3);
 
   // search CPU
   octree_device.internalDownload ();
   for (size_t i = 0; i < data.tests_num; ++i) {
-    octree_device.radiusSearchHost (data.queries[i], data.shared_radius,
-                                    host_search1[i], max_answers);
-    octree_device.radiusSearchHost (data.queries[i], data.radiuses[i], host_search2[i],
-                                    max_answers);
+    octree_device.radiusSearchHost (
+        data.queries[i], data.shared_radius, host_search1[i], max_answers);
+    octree_device.radiusSearchHost (
+        data.queries[i], data.radiuses[i], host_search2[i], max_answers);
   }
 
   // download results

@@ -41,8 +41,11 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::getMinMax (const pcl::PCLPointCloud2 &cloud, int, const std::string &field_name,
-                float &min_p, float &max_p)
+pcl::getMinMax (const pcl::PCLPointCloud2 &cloud,
+                int,
+                const std::string &field_name,
+                float &min_p,
+                float &max_p)
 {
   min_p = FLT_MAX;
   max_p = -FLT_MAX;
@@ -60,7 +63,8 @@ pcl::getMinMax (const pcl::PCLPointCloud2 &cloud, int, const std::string &field_
   for (unsigned int i = 0; i < cloud.fields[field_idx].count; ++i) {
     float data;
     // TODO: replace float with the real data type
-    memcpy (&data, &cloud.data[cloud.fields[field_idx].offset + i * sizeof (float)],
+    memcpy (&data,
+            &cloud.data[cloud.fields[field_idx].offset + i * sizeof (float)],
             sizeof (float));
     min_p = (data > min_p) ? min_p : data;
     max_p = (data < max_p) ? max_p : data;

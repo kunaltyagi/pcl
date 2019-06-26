@@ -150,7 +150,8 @@ class ON_CLASS ON_Light : public ON_Geometry
     true if successful.
   */
   ON_BOOL32
-  GetLightXform (const ON_Viewport &vp, ON::coordinate_system dest_cs,
+  GetLightXform (const ON_Viewport &vp,
+                 ON::coordinate_system dest_cs,
                  ON_Xform &xform) const;
 
   void

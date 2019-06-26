@@ -114,10 +114,10 @@ class MultiRansac
       } else
         first_time = false;
 
-      viz.addPointCloudNormals<pcl::PointXYZRGBNormal> (normal_cloud, 200, 0.1,
-                                                        "normalcloud");
-      viz.addPointCloud<pcl::PointXYZRGBNormal> (normal_cloud, Color_handler,
-                                                 std::string ("cloud"), 0);
+      viz.addPointCloudNormals<pcl::PointXYZRGBNormal> (
+          normal_cloud, 200, 0.1, "normalcloud");
+      viz.addPointCloud<pcl::PointXYZRGBNormal> (
+          normal_cloud, Color_handler, std::string ("cloud"), 0);
       new_cloud = false;
     }
   }
@@ -187,8 +187,11 @@ class MultiRansac
             createIndicesImage<Storage> (ptr, region_mask);
 
             typename ImageType<Storage>::type dst (
-                data->height, data->width, CV_8UC1,
-                thrust::raw_pointer_cast<char4> (ptr), data->width);
+                data->height,
+                data->width,
+                CV_8UC1,
+                thrust::raw_pointer_cast<char4> (ptr),
+                data->width);
             cv::imshow ("Result", cv::Mat (dst));
             cv::waitKey (2);
 
@@ -246,14 +249,16 @@ class MultiRansac
       std::cerr << "[RANSAC] Using GPU..." << std::endl;
       std::function<void(
           const boost::shared_ptr<openni_wrapper::Image> &image,
-          const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image, float)>
+          const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image,
+          float)>
           f = boost::bind (&MultiRansac::cloud_cb<pcl_cuda::Device>, this, _1, _2, _3);
       c = interface->registerCallback (f);
     } else {
       std::cerr << "[RANSAC] Using CPU..." << std::endl;
       std::function<void(
           const boost::shared_ptr<openni_wrapper::Image> &image,
-          const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image, float)>
+          const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image,
+          float)>
           f = boost::bind (&MultiRansac::cloud_cb<pcl_cuda::Host>, this, _1, _2, _3);
       c = interface->registerCallback (f);
     }

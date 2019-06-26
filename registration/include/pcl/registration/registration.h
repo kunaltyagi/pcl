@@ -87,16 +87,14 @@ namespace pcl
 
     using PointRepresentationConstPtr = typename KdTree::PointRepresentationConstPtr;
 
-    using TransformationEstimation =
-        typename pcl::registration::TransformationEstimation<PointSource, PointTarget,
-                                                             Scalar>;
+    using TransformationEstimation = typename pcl::registration::
+        TransformationEstimation<PointSource, PointTarget, Scalar>;
     using TransformationEstimationPtr = typename TransformationEstimation::Ptr;
     using TransformationEstimationConstPtr =
         typename TransformationEstimation::ConstPtr;
 
-    using CorrespondenceEstimation =
-        pcl::registration::CorrespondenceEstimationBase<PointSource, PointTarget,
-                                                        Scalar>;
+    using CorrespondenceEstimation = pcl::registration::
+        CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>;
     using CorrespondenceEstimationPtr = typename CorrespondenceEstimation::Ptr;
     using CorrespondenceEstimationConstPtr =
         typename CorrespondenceEstimation::ConstPtr;
@@ -676,8 +674,10 @@ namespace pcl
      * k-nearest neighbors
      */
     inline bool
-    searchForNeighbors (const PointCloudSource &cloud, int index,
-                        std::vector<int> &indices, std::vector<float> &distances)
+    searchForNeighbors (const PointCloudSource &cloud,
+                        int index,
+                        std::vector<int> &indices,
+                        std::vector<float> &distances)
     {
       int k = tree_->nearestKSearch (cloud, index, 1, indices, distances);
       if (k == 0)

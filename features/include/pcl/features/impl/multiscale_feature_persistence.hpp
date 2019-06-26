@@ -123,8 +123,8 @@ float
 pcl::MultiscaleFeaturePersistence<PointSource, PointFeature>::distanceBetweenFeatures (
     const std::vector<float> &a, const std::vector<float> &b)
 {
-  return (pcl::selectNorm<std::vector<float>> (a, b, static_cast<int> (a.size ()),
-                                               distance_metric_));
+  return (pcl::selectNorm<std::vector<float>> (
+      a, b, static_cast<int> (a.size ()), distance_metric_));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,7 +139,8 @@ pcl::MultiscaleFeaturePersistence<PointSource, PointFeature>::calculateMeanFeatu
   float normalization_factor = 0.0f;
   for (std::vector<std::vector<std::vector<float>>>::iterator scale_it =
            features_at_scale_vectorized_.begin ();
-       scale_it != features_at_scale_vectorized_.end (); ++scale_it) {
+       scale_it != features_at_scale_vectorized_.end ();
+       ++scale_it) {
     normalization_factor += static_cast<float> (scale_it->size ());
     for (const auto &feature : *scale_it)
       for (int dim_i = 0; dim_i < feature_representation_->getNumberOfDimensions ();
@@ -175,7 +176,8 @@ pcl::MultiscaleFeaturePersistence<PointSource, PointFeature>::extractUniqueFeatu
                    static_cast<float> (features_at_scale_vectorized_[scale_i].size ()));
     PCL_DEBUG ("[pcl::MultiscaleFeaturePersistence::extractUniqueFeatures] Standard "
                "deviation for scale %f is %f\n",
-               scale_values_[scale_i], standard_dev);
+               scale_values_[scale_i],
+               standard_dev);
 
     // Select only points outside (mean +/- alpha * standard_dev)
     std::list<size_t> indices_per_scale;
@@ -240,7 +242,8 @@ pcl::MultiscaleFeaturePersistence<PointSource, PointFeature>::
   // Method 2: a feature is considered persistent if it is 'unique' in all the scales
   for (std::list<size_t>::iterator feature_it =
            unique_features_indices_.front ().begin ();
-       feature_it != unique_features_indices_.front ().end (); ++feature_it) {
+       feature_it != unique_features_indices_.front ().end ();
+       ++feature_it) {
     bool present_in_all = true;
     for (size_t scale_i = 0; scale_i < features_at_scale_.size (); ++scale_i)
       present_in_all = present_in_all && unique_features_table_[scale_i][*feature_it];

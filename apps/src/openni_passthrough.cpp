@@ -83,7 +83,9 @@ OpenNIPassthrough::OpenNIPassthrough (pcl::OpenNIGrabber &grabber)
 
   ui_->fieldValueSlider->setRange (5, 50);
   ui_->fieldValueSlider->setValue (50);
-  connect (ui_->fieldValueSlider, SIGNAL (valueChanged (int)), this,
+  connect (ui_->fieldValueSlider,
+           SIGNAL (valueChanged (int)),
+           this,
            SLOT (adjustPassThroughValues (int)));
 }
 

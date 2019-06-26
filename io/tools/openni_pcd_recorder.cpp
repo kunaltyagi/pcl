@@ -410,7 +410,8 @@ main (int argc, char **argv)
             grabber.getAvailableDepthModes ();
         for (std::vector<std::pair<int, XnMapOutputMode>>::const_iterator it =
                  modes.begin ();
-             it != modes.end (); ++it) {
+             it != modes.end ();
+             ++it) {
           cout << it->first << " = " << it->second.nXRes << " x " << it->second.nYRes
                << " @ " << it->second.nFPS << endl;
         }
@@ -422,7 +423,8 @@ main (int argc, char **argv)
           modes = grabber.getAvailableImageModes ();
           for (std::vector<std::pair<int, XnMapOutputMode>>::const_iterator it =
                    modes.begin ();
-               it != modes.end (); ++it) {
+               it != modes.end ();
+               ++it) {
             cout << it->first << " = " << it->second.nXRes << " x " << it->second.nYRes
                  << " @ " << it->second.nFPS << endl;
           }

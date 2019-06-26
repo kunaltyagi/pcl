@@ -161,7 +161,8 @@ namespace pcl
      * \param[in] threshold The threshold for which the information gain is computed.
      */
     float
-    computeInformationGain (DataSet &data_set, std::vector<ExampleIndex> &examples,
+    computeInformationGain (DataSet &data_set,
+                            std::vector<ExampleIndex> &examples,
                             std::vector<LabelDataType> &label_data,
                             std::vector<float> &results,
                             std::vector<unsigned char> &flags,
@@ -182,8 +183,8 @@ namespace pcl
 
       for (size_t example_index = 0; example_index < num_of_examples; ++example_index) {
         unsigned char branch_index;
-        computeBranchIndex (results[example_index], flags[example_index], threshold,
-                            branch_index);
+        computeBranchIndex (
+            results[example_index], flags[example_index], threshold, branch_index);
 
         LabelDataType label = label_data[example_index];
 
@@ -227,7 +228,8 @@ namespace pcl
      */
     void
     computeBranchIndices (std::vector<float> &results,
-                          std::vector<unsigned char> &flags, const float threshold,
+                          std::vector<unsigned char> &flags,
+                          const float threshold,
                           std::vector<unsigned char> &branch_indices) const
     {
       const size_t num_of_results = results.size ();
@@ -236,8 +238,8 @@ namespace pcl
       branch_indices.resize (num_of_results);
       for (size_t result_index = 0; result_index < num_of_results; ++result_index) {
         unsigned char branch_index;
-        computeBranchIndex (results[result_index], flags[result_index], threshold,
-                            branch_index);
+        computeBranchIndex (
+            results[result_index], flags[result_index], threshold, branch_index);
         branch_indices[result_index] = branch_index;
       }
     }
@@ -249,8 +251,10 @@ namespace pcl
      * \param[out] branch_index The destination for the computed branch index.
      */
     inline void
-    computeBranchIndex (const float result, const unsigned char flag,
-                        const float threshold, unsigned char &branch_index) const
+    computeBranchIndex (const float result,
+                        const unsigned char flag,
+                        const float threshold,
+                        unsigned char &branch_index) const
     {
       branch_estimator_->computeBranchIndex (result, flag, threshold, branch_index);
       // branch_index = (result > threshold) ? 1 : 0;
@@ -263,7 +267,8 @@ namespace pcl
      * examples. \param[out] node The destination node for the statistics.
      */
     void
-    computeAndSetNodeStats (DataSet &data_set, std::vector<ExampleIndex> &examples,
+    computeAndSetNodeStats (DataSet &data_set,
+                            std::vector<ExampleIndex> &examples,
                             std::vector<LabelDataType> &label_data,
                             NodeType &node) const
     {

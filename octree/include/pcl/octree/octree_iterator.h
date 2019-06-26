@@ -71,9 +71,11 @@ namespace pcl
      * \author Julius Kammerl (julius@kammerl.de)
      */
     template <typename OctreeT>
-    class OctreeIteratorBase
-        : public std::iterator<std::forward_iterator_tag, const OctreeNode, void,
-                               const OctreeNode *, const OctreeNode &>
+    class OctreeIteratorBase : public std::iterator<std::forward_iterator_tag,
+                                                    const OctreeNode,
+                                                    void,
+                                                    const OctreeNode *,
+                                                    const OctreeNode &>
     {
       public:
       using LeafNode = typename OctreeT::LeafNode;
@@ -107,7 +109,8 @@ namespace pcl
        *
        *  \warning For advanced users only.
        */
-      explicit OctreeIteratorBase (OctreeT *octree_arg, unsigned int max_depth_arg,
+      explicit OctreeIteratorBase (OctreeT *octree_arg,
+                                   unsigned int max_depth_arg,
                                    IteratorState *current_state)
           : octree_ (octree_arg), current_state_ (current_state),
             max_octree_depth_ (max_depth_arg)
@@ -379,7 +382,9 @@ namespace pcl
        *  \warning For advanced users only.
        */
       explicit OctreeDepthFirstIterator (
-          OctreeT *octree_arg, unsigned int max_depth_arg, IteratorState *current_state,
+          OctreeT *octree_arg,
+          unsigned int max_depth_arg,
+          IteratorState *current_state,
           const std::vector<IteratorState> &stack = std::vector<IteratorState> ())
           : OctreeIteratorBase<OctreeT> (octree_arg, max_depth_arg, current_state),
             stack_ (stack)
@@ -480,7 +485,9 @@ namespace pcl
        *  \warning For advanced users only.
        */
       explicit OctreeBreadthFirstIterator (
-          OctreeT *octree_arg, unsigned int max_depth_arg, IteratorState *current_state,
+          OctreeT *octree_arg,
+          unsigned int max_depth_arg,
+          IteratorState *current_state,
           const std::deque<IteratorState> &fifo = std::deque<IteratorState> ())
           : OctreeIteratorBase<OctreeT> (octree_arg, max_depth_arg, current_state),
             FIFO_ (fifo)
@@ -577,11 +584,12 @@ namespace pcl
        *  \warning For advanced users only.
        */
       OctreeFixedDepthIterator (
-          OctreeT *octree_arg, unsigned int fixed_depth_arg,
+          OctreeT *octree_arg,
+          unsigned int fixed_depth_arg,
           IteratorState *current_state,
           const std::deque<IteratorState> &fifo = std::deque<IteratorState> ())
-          : OctreeBreadthFirstIterator<OctreeT> (octree_arg, fixed_depth_arg,
-                                                 current_state, fifo),
+          : OctreeBreadthFirstIterator<OctreeT> (
+                octree_arg, fixed_depth_arg, current_state, fifo),
             fixed_depth_ (fixed_depth_arg)
       {
       }
@@ -671,10 +679,12 @@ namespace pcl
        *  \warning For advanced users only.
        */
       explicit OctreeLeafNodeDepthFirstIterator (
-          OctreeT *octree_arg, unsigned int max_depth_arg, IteratorState *current_state,
+          OctreeT *octree_arg,
+          unsigned int max_depth_arg,
+          IteratorState *current_state,
           const std::vector<IteratorState> &stack = std::vector<IteratorState> ())
-          : OctreeDepthFirstIterator<OctreeT> (octree_arg, max_depth_arg, current_state,
-                                               stack)
+          : OctreeDepthFirstIterator<OctreeT> (
+                octree_arg, max_depth_arg, current_state, stack)
       {
       }
 
@@ -763,7 +773,9 @@ namespace pcl
        *  \warning For advanced users only.
        */
       explicit OctreeLeafNodeBreadthFirstIterator (
-          OctreeT *octree_arg, unsigned int max_depth_arg, IteratorState *current_state,
+          OctreeT *octree_arg,
+          unsigned int max_depth_arg,
+          IteratorState *current_state,
           const std::deque<IteratorState> &fifo = std::deque<IteratorState> ());
 
       /** \brief Reset the iterator to the first leaf in the breadth first way.

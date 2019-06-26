@@ -94,9 +94,12 @@ namespace pcl
 
     inline MLSResult (const Eigen::Vector3d &a_query_point,
                       const Eigen::Vector3d &a_mean,
-                      const Eigen::Vector3d &a_plane_normal, const Eigen::Vector3d &a_u,
-                      const Eigen::Vector3d &a_v, const Eigen::VectorXd &a_c_vec,
-                      const int a_num_neighbors, const float a_curvature,
+                      const Eigen::Vector3d &a_plane_normal,
+                      const Eigen::Vector3d &a_u,
+                      const Eigen::Vector3d &a_v,
+                      const Eigen::VectorXd &a_c_vec,
+                      const int a_num_neighbors,
+                      const float a_curvature,
                       const int a_order);
 
     /** \brief Given a point calculate it's 3D location in the MLS frame.
@@ -106,7 +109,9 @@ namespace pcl
      * \param[out] w The w-coordinate of the point in local MLS frame.
      */
     inline void
-    getMLSCoordinates (const Eigen::Vector3d &pt, double &u, double &v,
+    getMLSCoordinates (const Eigen::Vector3d &pt,
+                       double &u,
+                       double &v,
                        double &w) const;
 
     /** \brief Given a point calculate it's 2D location in the MLS frame.
@@ -153,7 +158,8 @@ namespace pcl
      * https://math.stackexchange.com/questions/1497093/shortest-distance-between-point-and-surface
      */
     inline MLSProjectionResults
-    projectPointOrthogonalToPolynomialSurface (const double u, const double v,
+    projectPointOrthogonalToPolynomialSurface (const double u,
+                                               const double v,
                                                const double w) const;
 
     /** \brief Project a point onto the MLS plane.
@@ -184,7 +190,8 @@ namespace pcl
      * \return The MLSProjectionResults for the input data.
      */
     inline MLSProjectionResults
-    projectPoint (const Eigen::Vector3d &pt, ProjectionMethod method,
+    projectPoint (const Eigen::Vector3d &pt,
+                  ProjectionMethod method,
                   int required_neighbors = 0) const;
 
     /**
@@ -208,8 +215,10 @@ namespace pcl
      */
     template <typename PointT>
     void
-    computeMLSSurface (const pcl::PointCloud<PointT> &cloud, int index,
-                       const std::vector<int> &nn_indices, double search_radius,
+    computeMLSSurface (const pcl::PointCloud<PointT> &cloud,
+                       int index,
+                       const std::vector<int> &nn_indices,
+                       double search_radius,
                        int polynomial_order = 2,
                        std::function<double(const double)> weight_func = {});
 
@@ -341,7 +350,8 @@ namespace pcl
     {
       tree_ = tree;
       // Declare the search locator definition
-      int (KdTree::*radiusSearch) (int index, double radius,
+      int (KdTree::*radiusSearch) (int index,
+                                   double radius,
                                    std::vector<int> &k_indices,
                                    std::vector<float> &k_sqr_distances,
                                    unsigned int max_nn) const = &KdTree::radiusSearch;
@@ -768,7 +778,8 @@ namespace pcl
      * k-nearest neighbors
      */
     inline int
-    searchForNeighbors (int index, std::vector<int> &indices,
+    searchForNeighbors (int index,
+                        std::vector<int> &indices,
                         std::vector<float> &sqr_distances) const
     {
       return (search_method_ (index, search_radius_, indices, sqr_distances));
@@ -788,7 +799,8 @@ namespace pcl
      * DISTINCT_CLOUD upsampling)
      */
     void
-    computeMLSPointNormal (int index, const std::vector<int> &nn_indices,
+    computeMLSPointNormal (int index,
+                           const std::vector<int> &nn_indices,
                            PointCloudOut &projected_points,
                            NormalCloud &projected_points_normals,
                            PointIndices &corresponding_input_indices,
@@ -805,8 +817,10 @@ namespace pcl
      * in output having the corresponding point in input
      */
     void
-    addProjectedPointNormal (int index, const Eigen::Vector3d &point,
-                             const Eigen::Vector3d &normal, double curvature,
+    addProjectedPointNormal (int index,
+                             const Eigen::Vector3d &point,
+                             const Eigen::Vector3d &normal,
+                             double curvature,
                              PointCloudOut &projected_points,
                              NormalCloud &projected_points_normals,
                              PointIndices &corresponding_input_indices) const;

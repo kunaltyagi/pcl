@@ -229,17 +229,18 @@ class ON_DimStyleExtra : public ON_UserData
 };
 
 // Added for v5 - 5/01/07 LW
-ON_OBJECT_IMPLEMENT (ON_DimStyleExtra, ON_UserData,
+ON_OBJECT_IMPLEMENT (ON_DimStyleExtra,
+                     ON_UserData,
                      "513FDE53-7284-4065-8601-06CEA8B28D6F");
 
 ////// 26 Oct 2010 - Lowell - Changed to always create ON_DimStyleExtra if there's not
-///one /ON_DimStyleExtra* ON_DimStyleExtra::DimStyleExtension( ON_DimStyle* pDimStyle)
+/// one /ON_DimStyleExtra* ON_DimStyleExtra::DimStyleExtension( ON_DimStyle* pDimStyle)
 ////{
 ////  ON_DimStyleExtra* pExtra = 0;
 ////  if( pDimStyle)
 ////  {
 ////    pExtra = ON_DimStyleExtra::Cast( pDimStyle->GetUserData(
-///ON_DimStyleExtra::m_ON_DimStyleExtra_class_id.Uuid())); /    if( pExtra == 0) /    {
+/// ON_DimStyleExtra::m_ON_DimStyleExtra_class_id.Uuid())); /    if( pExtra == 0) /    {
 ////      pExtra = new ON_DimStyleExtra;
 ////      if( pExtra)
 ////      {
@@ -675,10 +676,7 @@ ON_DimStyleExtra::SetSourceDimstyle (ON_UUID source_uuid)
 }
 
 ON_UUID
-ON_DimStyleExtra::SourceDimstyle () const
-{
-  return m_source_dimstyle;
-}
+ON_DimStyleExtra::SourceDimstyle () const { return m_source_dimstyle; }
 
 // returns true if they are the same
 bool

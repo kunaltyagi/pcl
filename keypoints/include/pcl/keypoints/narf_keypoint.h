@@ -88,18 +88,20 @@ namespace pcl
                           //!< meters)
       int max_no_of_interest_points; //!< The maximum number of interest points that
                                      //!< will be returned
-      float min_distance_between_interest_points; /**< Minimum distance between maximas
-                                                   *  (this is a factor for
-                                                   * support_size, i.e. the distance is
-                                                   *  min_distance_between_interest_points*support_size)
-                                                   */
-      float optimal_distance_to_high_surface_change; /**< The distance we want keep
-                                                      * between keypoints and areas of
-                                                      * high surface change (this is a
-                                                      * factor for support_size, i.e.,
-                                                      * the distance is
-                                                      *  optimal_distance_to_high_surface_change*support_size)
-                                                      */
+      float
+          min_distance_between_interest_points; /**< Minimum distance between maximas
+                                                 *  (this is a factor for
+                                                 * support_size, i.e. the distance is
+                                                 *  min_distance_between_interest_points*support_size)
+                                                 */
+      float
+          optimal_distance_to_high_surface_change; /**< The distance we want keep
+                                                    * between keypoints and areas of
+                                                    * high surface change (this is a
+                                                    * factor for support_size, i.e.,
+                                                    * the distance is
+                                                    *  optimal_distance_to_high_surface_change*support_size)
+                                                    */
       float min_interest_value;       //!< The minimum value to consider a point as an
                                       //!< interest point
       float min_surface_change_score; //!< The minimum value  of the surface change
@@ -111,20 +113,21 @@ namespace pcl
                                            * compute the interest value of a pixel at a
                                            * certain distance. */
       // TODO:
-      float distance_for_additional_points; /**< All points in this distance to a found
-                                             * maximum, that are above
-                                             * min_interest_value are also added as
-                                             * interest points (this is a factor for
-                                             * support_size, i.e. the distance is
-                                             *  distance_for_additional_points*support_size)
-                                             */
+      float
+          distance_for_additional_points; /**< All points in this distance to a found
+                                           * maximum, that are above
+                                           * min_interest_value are also added as
+                                           * interest points (this is a factor for
+                                           * support_size, i.e. the distance is
+                                           *  distance_for_additional_points*support_size)
+                                           */
       bool add_points_on_straight_edges; /**< If this is set to true, there will also be
                                           * interest points on straight edges, e.g.,
                                           * just indicating an area of high surface
                                           * change */
       bool do_non_maximum_suppression;   /**< If this is set to false there will be much
-                                          * more points   (can be used to spread points over
-                                          * the whole scene   (combined with a low
+                                          * more points   (can be used to spread points
+                                          * over   the whole scene   (combined with a low
                                           * min_interest_value)) */
       bool no_of_polynomial_approximations_per_point; /**< If this is >0, the exact
                                                          position of the interest point

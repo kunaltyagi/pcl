@@ -71,9 +71,11 @@ pcl::GreedyVerification<ModelT, SceneT>::initialize ()
     std::vector<float> nn_distances;
 
     for (size_t i = 0; i < recog_model->cloud_->points.size (); i++) {
-      if (!scene_downsampled_tree_->radiusSearch (
-              recog_model->cloud_->points[i], inliers_threshold_, nn_indices,
-              nn_distances, std::numeric_limits<int>::max ())) {
+      if (!scene_downsampled_tree_->radiusSearch (recog_model->cloud_->points[i],
+                                                  inliers_threshold_,
+                                                  nn_indices,
+                                                  nn_distances,
+                                                  std::numeric_limits<int>::max ())) {
         outliers.push_back (static_cast<int> (i));
       } else {
         for (size_t k = 0; k < nn_distances.size (); k++) {

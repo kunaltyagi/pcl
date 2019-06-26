@@ -44,8 +44,10 @@
 void
 pcl::gpu::extractEuclideanClusters (
     const boost::shared_ptr<pcl::PointCloud<pcl::PointXYZ>> &host_cloud_,
-    const pcl::gpu::Octree::Ptr &tree, float tolerance,
-    std::vector<PointIndices> &clusters, unsigned int min_pts_per_cluster,
+    const pcl::gpu::Octree::Ptr &tree,
+    float tolerance,
+    std::vector<PointIndices> &clusters,
+    unsigned int min_pts_per_cluster,
     unsigned int max_pts_per_cluster)
 {
 
@@ -194,8 +196,12 @@ pcl::gpu::EuclideanClusterExtraction::extract (std::vector<pcl::PointIndices> &c
     }
   */
   // Extract the actual clusters
-  extractEuclideanClusters (host_cloud_, tree_, cluster_tolerance_, clusters,
-                            min_pts_per_cluster_, max_pts_per_cluster_);
+  extractEuclideanClusters (host_cloud_,
+                            tree_,
+                            cluster_tolerance_,
+                            clusters,
+                            min_pts_per_cluster_,
+                            max_pts_per_cluster_);
   std::cout << "INFO: end of extractEuclideanClusters " << std::endl;
   // Sort the clusters based on their size (largest one first)
   // std::sort (clusters.rbegin (), clusters.rend (), comparePointClusters);

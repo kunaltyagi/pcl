@@ -84,8 +84,10 @@ getCuboid (double minX, double maxX, double minY, double maxY, double minZ, doub
 }
 
 void
-getVoxelActors (pcl::PointCloud<pcl::PointXYZ> &voxelCenters, double voxelSideLen,
-                Eigen::Vector3f color, vtkSmartPointer<vtkActorCollection> coll)
+getVoxelActors (pcl::PointCloud<pcl::PointXYZ> &voxelCenters,
+                double voxelSideLen,
+                Eigen::Vector3f color,
+                vtkSmartPointer<vtkActorCollection> coll)
 {
   vtkSmartPointer<vtkAppendPolyData> treeWireframe =
       vtkSmartPointer<vtkAppendPolyData>::New ();
@@ -114,7 +116,8 @@ getVoxelActors (pcl::PointCloud<pcl::PointXYZ> &voxelCenters, double voxelSideLe
 }
 
 void
-displayBoundingBox (Eigen::Vector3f &min_b, Eigen::Vector3f &max_b,
+displayBoundingBox (Eigen::Vector3f &min_b,
+                    Eigen::Vector3f &max_b,
                     vtkSmartPointer<vtkActorCollection> coll)
 {
   vtkSmartPointer<vtkAppendPolyData> treeWireframe =

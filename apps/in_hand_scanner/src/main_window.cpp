@@ -79,22 +79,28 @@ pcl::ihs::MainWindow::MainWindow (QWidget *parent)
 
   connect (ui_->toolButton_1, SIGNAL (clicked ()), ihs_, SLOT (showUnprocessedData ()));
   connect (ui_->toolButton_2, SIGNAL (clicked ()), ihs_, SLOT (showProcessedData ()));
-  connect (ui_->toolButton_3, SIGNAL (clicked ()), ihs_,
-           SLOT (registerContinuously ()));
+  connect (
+      ui_->toolButton_3, SIGNAL (clicked ()), ihs_, SLOT (registerContinuously ()));
   connect (ui_->toolButton_4, SIGNAL (clicked ()), ihs_, SLOT (registerOnce ()));
   connect (ui_->toolButton_5, SIGNAL (clicked ()), ihs_, SLOT (showModel ()));
   connect (ui_->toolButton_6, SIGNAL (clicked ()), ihs_, SLOT (removeUnfitVertices ()));
   connect (ui_->toolButton_0, SIGNAL (clicked ()), ihs_, SLOT (reset ()));
 
   connect (ui_->actionReset_camera, SIGNAL (triggered ()), ihs_, SLOT (resetCamera ()));
-  connect (ui_->actionToggle_coloring, SIGNAL (triggered ()), ihs_,
+  connect (ui_->actionToggle_coloring,
+           SIGNAL (triggered ()),
+           ihs_,
            SLOT (toggleColoring ()));
-  connect (ui_->actionMesh_representation, SIGNAL (triggered ()), ihs_,
+  connect (ui_->actionMesh_representation,
+           SIGNAL (triggered ()),
+           ihs_,
            SLOT (toggleMeshRepresentation ()));
 
   connect (ui_->actionSaveAs, SIGNAL (triggered ()), this, SLOT (saveAs ()));
 
-  connect (ihs_, SIGNAL (runningModeChanged (RunningMode)), this,
+  connect (ihs_,
+           SIGNAL (runningModeChanged (RunningMode)),
+           this,
            SLOT (runningModeChanged (RunningMode)));
 
   // Input data processing
@@ -173,7 +179,9 @@ void
 pcl::ihs::MainWindow::saveAs ()
 {
   QString filename = QFileDialog::getSaveFileName (
-      this, "Save the model mesh.", "",
+      this,
+      "Save the model mesh.",
+      "",
       "Polygon File Format (*.ply);;VTK File Format (*.vtk)");
 
   if (filename.isEmpty ())

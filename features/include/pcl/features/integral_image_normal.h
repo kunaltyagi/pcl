@@ -144,7 +144,9 @@ namespace pcl
      * \param[out] normal the output estimated normal
      */
     void
-    computePointNormal (const int pos_x, const int pos_y, const unsigned point_index,
+    computePointNormal (const int pos_x,
+                        const int pos_y,
+                        const unsigned point_index,
                         PointOutT &normal);
 
     /** \brief Computes the normal at the specified position with mirroring for border
@@ -153,8 +155,10 @@ namespace pcl
      * \param[out] normal the output estimated normal
      */
     void
-    computePointNormalMirror (const int pos_x, const int pos_y,
-                              const unsigned point_index, PointOutT &normal);
+    computePointNormalMirror (const int pos_x,
+                              const int pos_y,
+                              const unsigned point_index,
+                              PointOutT &normal);
 
     /** \brief The depth change threshold for computing object borders
      * \param[in] max_depth_change_factor the depth change threshold for computing
@@ -176,7 +180,8 @@ namespace pcl
       if (normal_smoothing_size <= 0) {
         PCL_ERROR ("[pcl::%s::setNormalSmoothingSize] Invalid normal smoothing size "
                    "given! (%f). Allowed ranges are: 0 < N. Defaulting to %f.\n",
-                   feature_name_.c_str (), normal_smoothing_size,
+                   feature_name_.c_str (),
+                   normal_smoothing_size,
                    normal_smoothing_size_);
         return;
       }
@@ -309,7 +314,8 @@ namespace pcl
      * \param[out] output the resultant normals
      */
     void
-    computeFeatureFull (const float *distance_map, const float &bad_point,
+    computeFeatureFull (const float *distance_map,
+                        const float &bad_point,
                         PointCloudOut &output);
 
     /** \brief Computes the normal for part of the cloud specified by \a indices_
@@ -318,7 +324,8 @@ namespace pcl
      * \param[out] output the resultant normals
      */
     void
-    computeFeaturePart (const float *distance_map, const float &bad_point,
+    computeFeaturePart (const float *distance_map,
+                        const float &bad_point,
                         PointCloudOut &output);
 
     /** \brief Initialize the data structures, based on the normal estimation method
@@ -338,8 +345,13 @@ namespace pcl
      * \ingroup features
      */
     inline void
-    flipNormalTowardsViewpoint (const PointInT &point, float vp_x, float vp_y,
-                                float vp_z, float &nx, float &ny, float &nz)
+    flipNormalTowardsViewpoint (const PointInT &point,
+                                float vp_x,
+                                float vp_y,
+                                float vp_z,
+                                float &nx,
+                                float &ny,
+                                float &nz)
     {
       // See if we need to flip any plane normals
       vp_x -= point.x;

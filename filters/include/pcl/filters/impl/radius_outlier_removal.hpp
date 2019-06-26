@@ -104,7 +104,8 @@ pcl::RadiusOutlierRemoval<PointT>::applyFilterIndices (std::vector<int> &indices
     double nn_dists_max = search_radius_ * search_radius_;
 
     for (std::vector<int>::const_iterator it = indices_->begin ();
-         it != indices_->end (); ++it) {
+         it != indices_->end ();
+         ++it) {
       // Perform the nearest-k search
       int k = searcher_->nearestKSearch (*it, mean_k, nn_indices, nn_dists);
 
@@ -145,7 +146,8 @@ pcl::RadiusOutlierRemoval<PointT>::applyFilterIndices (std::vector<int> &indices
   // NaN or Inf values could exist => use radius search
   else {
     for (std::vector<int>::const_iterator it = indices_->begin ();
-         it != indices_->end (); ++it) {
+         it != indices_->end ();
+         ++it) {
       // Perform the radius search
       // Note: k includes the query point, so is always at least 1
       int k = searcher_->radiusSearch (*it, search_radius_, nn_indices, nn_dists);

@@ -39,7 +39,8 @@
 #include <pcl/apps/modeler/render_window.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-pcl::modeler::DockWidget::DockWidget (const QString &title, QWidget *parent,
+pcl::modeler::DockWidget::DockWidget (const QString &title,
+                                      QWidget *parent,
                                       Qt::WindowFlags flags)
     : QDockWidget (title, parent, flags)
 {

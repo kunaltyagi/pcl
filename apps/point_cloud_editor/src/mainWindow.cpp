@@ -61,7 +61,8 @@ void
 MainWindow::about ()
 {
   QMessageBox::about (
-      this, tr ("Point Cloud Editor"),
+      this,
+      tr ("Point Cloud Editor"),
       tr ("PCL 3D Editor\n\nAuthors: \n  Matthew Hielsberg (hielsber@tamu.edu) and\n"
           "  Yue Li (yli@cse.tamu.edu)\n  Texas A&M University\n\n"
           "This software was written as part of a collaboration with the "
@@ -71,7 +72,8 @@ MainWindow::about ()
 void
 MainWindow::help ()
 {
-  QMessageBox::about (this, tr ("Point Cloud Editor"),
+  QMessageBox::about (this,
+                      tr ("Point Cloud Editor"),
                       tr ("View Mode\n"
                           "  Drag:\t\tRotate about origin\n"
                           "  Alt Drag:\t\tTranslate Z\n"
@@ -162,8 +164,8 @@ MainWindow::createActions ()
   delete_action_ =
       new QAction (QIcon (icon_path + "delete.png"), tr ("Delete"), action_group_);
   delete_action_->setShortcut (tr ("D"));
-  connect (delete_action_, SIGNAL (triggered ()), cloud_editor_widget_,
-           SLOT (remove ()));
+  connect (
+      delete_action_, SIGNAL (triggered ()), cloud_editor_widget_, SLOT (remove ()));
   delete_action_->setCheckable (false);
 
   cut_action_ = new QAction (QIcon (icon_path + "cut.png"), tr ("Cut"), action_group_);
@@ -178,7 +180,9 @@ MainWindow::createActions ()
   paste_action_->setCheckable (false);
 
   toggle_blend_action_ = new QAction (tr ("Outline Points"), this);
-  connect (toggle_blend_action_, SIGNAL (triggered ()), cloud_editor_widget_,
+  connect (toggle_blend_action_,
+           SIGNAL (triggered ()),
+           cloud_editor_widget_,
            SLOT (toggleBlendMode ()));
   toggle_blend_action_->setCheckable (true);
   toggle_blend_action_->setChecked (false);
@@ -196,34 +200,40 @@ MainWindow::createActions ()
   connect (undo_action_, SIGNAL (triggered ()), cloud_editor_widget_, SLOT (undo ()));
   undo_action_->setCheckable (false);
 
-  transform_action_ = new QAction (QIcon (icon_path + "move.png"),
-                                   tr ("Transform Selection"), action_group_);
+  transform_action_ = new QAction (
+      QIcon (icon_path + "move.png"), tr ("Transform Selection"), action_group_);
   transform_action_->setShortcut (tr ("T"));
-  connect (transform_action_, SIGNAL (triggered ()), cloud_editor_widget_,
+  connect (transform_action_,
+           SIGNAL (triggered ()),
+           cloud_editor_widget_,
            SLOT (transform ()));
   transform_action_->setCheckable (true);
 
   denoise_action_ = new QAction (tr ("Denoise"), this);
-  connect (denoise_action_, SIGNAL (triggered ()), cloud_editor_widget_,
-           SLOT (denoise ()));
+  connect (
+      denoise_action_, SIGNAL (triggered ()), cloud_editor_widget_, SLOT (denoise ()));
 
-  select_action_ = new QAction (QIcon (icon_path + "click.png"), tr ("Point Selection"),
-                                action_group_);
+  select_action_ = new QAction (
+      QIcon (icon_path + "click.png"), tr ("Point Selection"), action_group_);
   select_action_->setShortcut (tr ("E"));
-  connect (select_action_, SIGNAL (triggered ()), cloud_editor_widget_,
-           SLOT (select1D ()));
+  connect (
+      select_action_, SIGNAL (triggered ()), cloud_editor_widget_, SLOT (select1D ()));
   select_action_->setCheckable (true);
 
-  invert_select_action_ = new QAction (QIcon (icon_path + "invert.png"),
-                                       tr ("Invert Selection"), action_group_);
-  connect (invert_select_action_, SIGNAL (triggered ()), cloud_editor_widget_,
+  invert_select_action_ = new QAction (
+      QIcon (icon_path + "invert.png"), tr ("Invert Selection"), action_group_);
+  connect (invert_select_action_,
+           SIGNAL (triggered ()),
+           cloud_editor_widget_,
            SLOT (invertSelect ()));
   invert_select_action_->setCheckable (false);
 
-  select_2D_action_ = new QAction (QIcon (icon_path + "select.png"),
-                                   tr ("Rubberband Selection"), action_group_);
+  select_2D_action_ = new QAction (
+      QIcon (icon_path + "select.png"), tr ("Rubberband Selection"), action_group_);
   select_2D_action_->setShortcut (tr ("S"));
-  connect (select_2D_action_, SIGNAL (triggered ()), cloud_editor_widget_,
+  connect (select_2D_action_,
+           SIGNAL (triggered ()),
+           cloud_editor_widget_,
            SLOT (select2D ()));
   select_2D_action_->setCheckable (true);
 
@@ -234,9 +244,11 @@ MainWindow::createActions ()
   //        SLOT(select3D()));
   // select_3D_action_->setCheckable(true);
 
-  show_stat_action_ = new QAction (QIcon (icon_path + "info.png"),
-                                   tr ("Show statistics"), action_group_);
-  connect (show_stat_action_, SIGNAL (triggered ()), cloud_editor_widget_,
+  show_stat_action_ = new QAction (
+      QIcon (icon_path + "info.png"), tr ("Show statistics"), action_group_);
+  connect (show_stat_action_,
+           SIGNAL (triggered ()),
+           cloud_editor_widget_,
            SLOT (showStat ()));
   show_stat_action_->setCheckable (false);
 }
@@ -371,15 +383,19 @@ MainWindow::createSpinBoxes ()
   point_size_spin_box_->setRange (1, 20);
   point_size_spin_box_->setSingleStep (1);
   point_size_spin_box_->setValue (2);
-  connect (point_size_spin_box_, SIGNAL (valueChanged (int)), cloud_editor_widget_,
+  connect (point_size_spin_box_,
+           SIGNAL (valueChanged (int)),
+           cloud_editor_widget_,
            SLOT (setPointSize (int)));
   selected_point_size_spin_box_ = new QSpinBox;
   selected_point_size_spin_box_->setAttribute (Qt::WA_DeleteOnClose);
   selected_point_size_spin_box_->setRange (1, 20);
   selected_point_size_spin_box_->setSingleStep (1);
   selected_point_size_spin_box_->setValue (4);
-  connect (selected_point_size_spin_box_, SIGNAL (valueChanged (int)),
-           cloud_editor_widget_, SLOT (setSelectedPointSize (int)));
+  connect (selected_point_size_spin_box_,
+           SIGNAL (valueChanged (int)),
+           cloud_editor_widget_,
+           SLOT (setSelectedPointSize (int)));
 }
 
 void

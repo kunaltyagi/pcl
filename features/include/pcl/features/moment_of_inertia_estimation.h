@@ -101,7 +101,9 @@ namespace pcl
      * \param[in] nb_cols the number of columns to be considered col_start included
      */
     void
-    setIndices (size_t row_start, size_t col_start, size_t nb_rows,
+    setIndices (size_t row_start,
+                size_t col_start,
+                size_t nb_rows,
                 size_t nb_cols) override;
 
     /** \brief Constructor that sets default values for member variables. */
@@ -174,7 +176,9 @@ namespace pcl
      * \param[out] rotational_matrix this matrix represents the rotation transform
      */
     bool
-    getOBB (PointT &min_point, PointT &max_point, PointT &position,
+    getOBB (PointT &min_point,
+            PointT &max_point,
+            PointT &position,
             Eigen::Matrix3f &rotational_matrix) const;
 
     /** \brief This method gives access to the computed eigen values. It returns true
@@ -193,7 +197,8 @@ namespace pcl
      * vector with the minor eigen value
      */
     bool
-    getEigenVectors (Eigen::Vector3f &major, Eigen::Vector3f &middle,
+    getEigenVectors (Eigen::Vector3f &major,
+                     Eigen::Vector3f &middle,
                      Eigen::Vector3f &minor) const;
 
     /** \brief This method gives access to the computed moments of inertia. It returns
@@ -226,8 +231,10 @@ namespace pcl
      * \param[out] rotated_vector resultant vector
      */
     void
-    rotateVector (const Eigen::Vector3f &vector, const Eigen::Vector3f &axis,
-                  const float angle, Eigen::Vector3f &rotated_vector) const;
+    rotateVector (const Eigen::Vector3f &vector,
+                  const Eigen::Vector3f &axis,
+                  const float angle,
+                  Eigen::Vector3f &rotated_vector) const;
 
     /** \brief This method computes center of mass and axis aligned bounding box. */
     void
@@ -265,9 +272,12 @@ namespace pcl
      */
     void
     computeEigenVectors (const Eigen::Matrix<float, 3, 3> &covariance_matrix,
-                         Eigen::Vector3f &major_axis, Eigen::Vector3f &middle_axis,
-                         Eigen::Vector3f &minor_axis, float &major_value,
-                         float &middle_value, float &minor_value);
+                         Eigen::Vector3f &major_axis,
+                         Eigen::Vector3f &middle_axis,
+                         Eigen::Vector3f &minor_axis,
+                         float &major_value,
+                         float &middle_value,
+                         float &minor_value);
 
     /** \brief This method returns the moment of inertia of a given input_ cloud.
      * Note that when moment of inertia is computed it is multiplied by the point mass.

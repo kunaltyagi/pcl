@@ -110,7 +110,8 @@ namespace pcl
         data.cols = models[0].second.size (); // number of histogram bins
 
         flann::Matrix<float> flann_data (
-            new float[models.size () * models[0].second.size ()], models.size (),
+            new float[models.size () * models[0].second.size ()],
+            models.size (),
             models[0].second.size ());
 
         for (size_t i = 0; i < data.rows; ++i)
@@ -122,8 +123,11 @@ namespace pcl
       }
 
       void
-      nearestKSearch (flann::Index<DistT> *index, const flann_model &model, int k,
-                      flann::Matrix<int> &indices, flann::Matrix<float> &distances);
+      nearestKSearch (flann::Index<DistT> *index,
+                      const flann_model &model,
+                      int k,
+                      flann::Matrix<int> &indices,
+                      flann::Matrix<float> &distances);
 
       int NN_;
       std::vector<std::string> categories_;

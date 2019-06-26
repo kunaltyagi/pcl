@@ -80,13 +80,15 @@ pcl::RandomSample<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
       }
       index += S;
       memcpy (&output.data[i++ * output.point_step],
-              &input_->data[index++ * output.point_step], output.point_step);
+              &input_->data[index++ * output.point_step],
+              output.point_step);
       N--;
     }
 
     index += N * static_cast<unsigned> (unifRand ());
     memcpy (&output.data[i++ * output.point_step],
-            &input_->data[index++ * output.point_step], output.point_step);
+            &input_->data[index++ * output.point_step],
+            output.point_step);
 
     output.width = sample_;
     output.row_step = output.point_step * output.width;

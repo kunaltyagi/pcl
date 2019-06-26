@@ -643,11 +643,14 @@ TEST (TestAddDeleteFace, Manifold2)
 
           Mesh mesh = mesh_tmp;
 
-          mesh.addFace (faces[0][permutations[i][0]], faces[0][permutations[i][1]],
+          mesh.addFace (faces[0][permutations[i][0]],
+                        faces[0][permutations[i][1]],
                         faces[0][permutations[i][2]]);
-          mesh.addFace (faces[1][permutations[j][0]], faces[1][permutations[j][1]],
+          mesh.addFace (faces[1][permutations[j][0]],
+                        faces[1][permutations[j][1]],
                         faces[1][permutations[j][2]]);
-          mesh.addFace (faces[2][permutations[k][0]], faces[2][permutations[k][1]],
+          mesh.addFace (faces[2][permutations[k][0]],
+                        faces[2][permutations[k][1]],
                         faces[2][permutations[k][2]]);
 
           mesh.deleteVertex (VI (l));

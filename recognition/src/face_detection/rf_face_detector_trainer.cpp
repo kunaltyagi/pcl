@@ -27,7 +27,9 @@ pcl::RFFaceDetectorTrainer::trainWithDataProvider ()
 {
 
   face_detection::FeatureHandlerDepthAverage<
-      face_detection::FeatureType, std::vector<face_detection::TrainingExample>, int>
+      face_detection::FeatureType,
+      std::vector<face_detection::TrainingExample>,
+      int>
       fhda;
   fhda.setWSize (w_size_);
   fhda.setMaxPatchSize (max_patch_size_);
@@ -38,14 +40,19 @@ pcl::RFFaceDetectorTrainer::trainWithDataProvider ()
   pcl::TernaryTreeMissingDataBranchEstimator *btt =
       new pcl::TernaryTreeMissingDataBranchEstimator ();
   pcl::face_detection::PoseClassRegressionVarianceStatsEstimator<
-      float, NodeType, std::vector<face_detection::TrainingExample>, int>
+      float,
+      NodeType,
+      std::vector<face_detection::TrainingExample>,
+      int>
       rse (btt);
 
   std::vector<float> thresholds_;
   thresholds_.push_back (0.5f);
 
   pcl::DecisionForestTrainer<face_detection::FeatureType,
-                             std::vector<face_detection::TrainingExample>, float, int,
+                             std::vector<face_detection::TrainingExample>,
+                             float,
+                             int,
                              NodeType>
       dft;
   dft.setMaxTreeDepth (15);
@@ -59,11 +66,17 @@ pcl::RFFaceDetectorTrainer::trainWithDataProvider ()
   dft.setThresholds (thresholds_);
 
   typename face_detection::FaceDetectorDataProvider<
-      face_detection::FeatureType, std::vector<face_detection::TrainingExample>, float,
-      int, NodeType>::Ptr dtdp;
+      face_detection::FeatureType,
+      std::vector<face_detection::TrainingExample>,
+      float,
+      int,
+      NodeType>::Ptr dtdp;
   dtdp.reset (new face_detection::FaceDetectorDataProvider<
-              face_detection::FeatureType, std::vector<face_detection::TrainingExample>,
-              float, int, NodeType>);
+              face_detection::FeatureType,
+              std::vector<face_detection::TrainingExample>,
+              float,
+              int,
+              NodeType>);
   dtdp->setUseNormals (use_normals_);
   dtdp->setWSize (w_size_);
   dtdp->setNumImages (num_images_);
@@ -71,9 +84,12 @@ pcl::RFFaceDetectorTrainer::trainWithDataProvider ()
 
   dtdp->initialize (directory_);
 
-  auto cast_dtdp = boost::dynamic_pointer_cast<pcl::DecisionTreeTrainerDataProvider<
-      face_detection::FeatureType, std::vector<face_detection::TrainingExample>, float,
-      int, NodeType>> (dtdp);
+  auto cast_dtdp = boost::dynamic_pointer_cast<
+      pcl::DecisionTreeTrainerDataProvider<face_detection::FeatureType,
+                                           std::vector<face_detection::TrainingExample>,
+                                           float,
+                                           int,
+                                           NodeType>> (dtdp);
   dft.setDecisionTreeDataProvider (cast_dtdp);
 
   pcl::DecisionForest<NodeType> forest;
@@ -199,7 +215,8 @@ pcl::RFFaceDetectorTrainer::faceVotesClustering ()
         uncertainty.emplace_back (index, uncertainties_[index]);
       }
 
-      std::sort (uncertainty.begin (), uncertainty.end (),
+      std::sort (uncertainty.begin (),
+                 uncertainty.end (),
                  boost::bind (&std::pair<int, float>::second, _1) <
                      boost::bind (&std::pair<int, float>::second, _2));
 
@@ -286,8 +303,8 @@ pcl::RFFaceDetectorTrainer::detectFaces ()
   int element_stride = sizeof (pcl::PointXYZ) / sizeof (float);
   int row_stride = element_stride * cloud->width;
   const float *data = reinterpret_cast<const float *> (&cloud->points[0]);
-  integral_image_depth->setInput (data + 2, cloud->width, cloud->height, element_stride,
-                                  row_stride);
+  integral_image_depth->setInput (
+      data + 2, cloud->width, cloud->height, element_stride, row_stride);
 
   // Compute normals and normal integral images
   pcl::PointCloud<pcl::Normal>::Ptr normals (new pcl::PointCloud<pcl::Normal>);
@@ -312,28 +329,41 @@ pcl::RFFaceDetectorTrainer::detectFaces ()
   if (use_normals_) {
     integral_image_normal_x.reset (new pcl::IntegralImage2D<float, 1> (false));
     const float *data_nx = reinterpret_cast<const float *> (&normals->points[0]);
-    integral_image_normal_x->setInput (data_nx, normals->width, normals->height,
-                                       element_stride_normal, row_stride_normal);
+    integral_image_normal_x->setInput (data_nx,
+                                       normals->width,
+                                       normals->height,
+                                       element_stride_normal,
+                                       row_stride_normal);
 
     integral_image_normal_y.reset (new pcl::IntegralImage2D<float, 1> (false));
     const float *data_ny = reinterpret_cast<const float *> (&normals->points[0]);
-    integral_image_normal_y->setInput (data_ny + 1, normals->width, normals->height,
-                                       element_stride_normal, row_stride_normal);
+    integral_image_normal_y->setInput (data_ny + 1,
+                                       normals->width,
+                                       normals->height,
+                                       element_stride_normal,
+                                       row_stride_normal);
 
     integral_image_normal_z.reset (new pcl::IntegralImage2D<float, 1> (false));
     const float *data_nz = reinterpret_cast<const float *> (&normals->points[0]);
-    integral_image_normal_z->setInput (data_nz + 2, normals->width, normals->height,
-                                       element_stride_normal, row_stride_normal);
+    integral_image_normal_z->setInput (data_nz + 2,
+                                       normals->width,
+                                       normals->height,
+                                       element_stride_normal,
+                                       row_stride_normal);
   }
 
   {
     // instantiate evaluator
     pcl::DecisionForestEvaluator<face_detection::FeatureType,
-                                 std::vector<face_detection::TrainingExample>, float,
-                                 int, NodeType>
+                                 std::vector<face_detection::TrainingExample>,
+                                 float,
+                                 int,
+                                 NodeType>
         dfe;
     face_detection::FeatureHandlerDepthAverage<
-        face_detection::FeatureType, std::vector<face_detection::TrainingExample>, int>
+        face_detection::FeatureType,
+        std::vector<face_detection::TrainingExample>,
+        int>
         fhda;
     fhda.setWSize (w_size_);
     fhda.setNumChannels (1);
@@ -345,7 +375,10 @@ pcl::RFFaceDetectorTrainer::detectFaces ()
     pcl::TernaryTreeMissingDataBranchEstimator *btt =
         new pcl::TernaryTreeMissingDataBranchEstimator ();
     face_detection::PoseClassRegressionVarianceStatsEstimator<
-        float, NodeType, std::vector<face_detection::TrainingExample>, int>
+        float,
+        NodeType,
+        std::vector<face_detection::TrainingExample>,
+        int>
         rse (btt);
 
     std::vector<float> weights;
@@ -519,12 +552,16 @@ pcl::RFFaceDetectorTrainer::detectFaces ()
       pcl::registration::TransformationEstimationPointToPlaneLLS<pcl::PointNormal,
                                                                  pcl::PointNormal>::Ptr
           trans_lls (new pcl::registration::TransformationEstimationPointToPlaneLLS<
-                     pcl::PointNormal, pcl::PointNormal>);
+                     pcl::PointNormal,
+                     pcl::PointNormal>);
 
-      pcl::registration::CorrespondenceEstimationNormalShooting<
-          pcl::PointNormal, pcl::PointNormal, pcl::PointNormal>::Ptr
+      pcl::registration::CorrespondenceEstimationNormalShooting<pcl::PointNormal,
+                                                                pcl::PointNormal,
+                                                                pcl::PointNormal>::Ptr
           cens (new pcl::registration::CorrespondenceEstimationNormalShooting<
-                pcl::PointNormal, pcl::PointNormal, pcl::PointNormal>);
+                pcl::PointNormal,
+                pcl::PointNormal,
+                pcl::PointNormal>);
 
       cens->setInputSource (model_aligned_normals);
       cens->setInputTarget (cloud_voxelized_icp_normals);

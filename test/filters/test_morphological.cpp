@@ -66,8 +66,8 @@ TEST (Morphological, Dilate)
 
   float resolution = 5.0f;
 
-  applyMorphologicalOperator<PointXYZ> (cloud_in.makeShared (), resolution,
-                                        MORPH_DILATE, cloud_out);
+  applyMorphologicalOperator<PointXYZ> (
+      cloud_in.makeShared (), resolution, MORPH_DILATE, cloud_out);
 
   EXPECT_EQ (cloud_out[0].z, 1.0f);
   EXPECT_EQ (cloud_out[1].z, 1.0f);
@@ -93,8 +93,8 @@ TEST (Morphological, Erode)
 
   float resolution = 5.0f;
 
-  applyMorphologicalOperator<PointXYZ> (cloud_in.makeShared (), resolution, MORPH_ERODE,
-                                        cloud_out);
+  applyMorphologicalOperator<PointXYZ> (
+      cloud_in.makeShared (), resolution, MORPH_ERODE, cloud_out);
 
   EXPECT_EQ (cloud_out[0].z, 0.0f);
   EXPECT_EQ (cloud_out[1].z, 0.0f);
@@ -120,8 +120,8 @@ TEST (Morphological, Open)
 
   float resolution = 5.0f;
 
-  applyMorphologicalOperator<PointXYZ> (cloud_in.makeShared (), resolution, MORPH_OPEN,
-                                        cloud_out);
+  applyMorphologicalOperator<PointXYZ> (
+      cloud_in.makeShared (), resolution, MORPH_OPEN, cloud_out);
 
   EXPECT_EQ (cloud_out[0].z, 0.0f);
   EXPECT_EQ (cloud_out[1].z, 0.0f);
@@ -147,8 +147,8 @@ TEST (Morphological, Close)
 
   float resolution = 5.0f;
 
-  applyMorphologicalOperator<PointXYZ> (cloud_in.makeShared (), resolution, MORPH_CLOSE,
-                                        cloud_out);
+  applyMorphologicalOperator<PointXYZ> (
+      cloud_in.makeShared (), resolution, MORPH_CLOSE, cloud_out);
 
   EXPECT_EQ (cloud_out[0].z, 1.0f);
   EXPECT_EQ (cloud_out[1].z, 1.0f);
@@ -174,8 +174,8 @@ TEST (Morphological, Unsupported)
 
   float resolution = 5.0f;
 
-  applyMorphologicalOperator<PointXYZ> (cloud_in.makeShared (), resolution, 99,
-                                        cloud_out);
+  applyMorphologicalOperator<PointXYZ> (
+      cloud_in.makeShared (), resolution, 99, cloud_out);
 
   EXPECT_EQ (cloud_out[0].z, 0.0f);
   EXPECT_EQ (cloud_out[1].z, 1.0f);

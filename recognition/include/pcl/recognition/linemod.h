@@ -156,7 +156,8 @@ namespace pcl
      * \param[in] row_index the row index within the specified energy map.
      */
     inline const unsigned char &
-    operator() (const size_t bin_index, const size_t col_index,
+    operator() (const size_t bin_index,
+                const size_t col_index,
                 const size_t row_index) const
     {
       return (maps_[bin_index][row_index * width_ + col_index]);
@@ -359,7 +360,8 @@ namespace pcl
      */
     int
     createAndAddTemplate (const std::vector<QuantizableModality *> &modalities,
-                          const std::vector<MaskMap *> &masks, const RegionXY &region);
+                          const std::vector<MaskMap *> &masks,
+                          const RegionXY &region);
 
     /** \brief Adds the specified template to the matching queue.
      * \param[in] linemod_template the template to add.
@@ -387,8 +389,10 @@ namespace pcl
     void
     detectTemplatesSemiScaleInvariant (
         const std::vector<QuantizableModality *> &modalities,
-        std::vector<LINEMODDetection> &detections, float min_scale = 0.6944444f,
-        float max_scale = 1.44f, float scale_multiplier = 1.2f) const;
+        std::vector<LINEMODDetection> &detections,
+        float min_scale = 0.6944444f,
+        float max_scale = 1.44f,
+        float scale_multiplier = 1.2f) const;
 
     /** \brief Matches the stored templates to the supplied modality data.
      * \param[in] modalities the modalities that will be used for matching.

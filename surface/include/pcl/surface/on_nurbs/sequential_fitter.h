@@ -75,11 +75,17 @@ namespace pcl
         double stiffnessBoundary;
         double stiffnessInterior;
         int resolution;
-        Parameter (int order = 3, int refinement = 1, int iterationsQuad = 5,
-                   int iterationsBoundary = 5, int iterationsAdjust = 5,
-                   int iterationsInterior = 2, double forceBoundary = 200.0,
-                   double forceBoundaryInside = 400.0, double forceInterior = 1.0,
-                   double stiffnessBoundary = 20.0, double stiffnessInterior = 0.1,
+        Parameter (int order = 3,
+                   int refinement = 1,
+                   int iterationsQuad = 5,
+                   int iterationsBoundary = 5,
+                   int iterationsAdjust = 5,
+                   int iterationsInterior = 2,
+                   double forceBoundary = 200.0,
+                   double forceBoundaryInside = 400.0,
+                   double forceInterior = 1.0,
+                   double stiffnessBoundary = 20.0,
+                   double stiffnessInterior = 0.1,
                    int resolution = 16);
       };
 
@@ -115,8 +121,10 @@ namespace pcl
       project (const Eigen::Vector3d &pt);
 
       bool
-      is_back_facing (const Eigen::Vector3d &v0, const Eigen::Vector3d &v1,
-                      const Eigen::Vector3d &v2, const Eigen::Vector3d &v3);
+      is_back_facing (const Eigen::Vector3d &v0,
+                      const Eigen::Vector3d &v1,
+                      const Eigen::Vector3d &v2,
+                      const Eigen::Vector3d &v3);
 
       public:
       SequentialFitter (Parameter p = Parameter ());
@@ -212,19 +220,24 @@ namespace pcl
        *  \param[in] maxSteps Maximum iteration steps
        *  \param[in] accuracy Accuracy below which the iterations stop */
       static void
-      getClosestPointOnNurbs (ON_NurbsSurface nurbs, const Eigen::Vector3d &pt,
-                              Eigen::Vector2d &params, int maxSteps = 100,
+      getClosestPointOnNurbs (ON_NurbsSurface nurbs,
+                              const Eigen::Vector3d &pt,
+                              Eigen::Vector2d &params,
+                              int maxSteps = 100,
                               double accuracy = 1e-4);
 
       /** \brief Growing algorithm (TODO: under construction) */
       ON_NurbsSurface
-      grow (float max_dist = 1.0f, float max_angle = M_PI_4, unsigned min_length = 0,
+      grow (float max_dist = 1.0f,
+            float max_angle = M_PI_4,
+            unsigned min_length = 0,
             unsigned max_length = 10);
 
       /** \brief Convert point-cloud */
       static unsigned
       PCL2ON (pcl::PointCloud<pcl::PointXYZRGB>::Ptr &pcl_cloud,
-              const std::vector<int> &indices, vector_vec3d &cloud);
+              const std::vector<int> &indices,
+              vector_vec3d &cloud);
 
       public:
       EIGEN_MAKE_ALIGNED_OPERATOR_NEW

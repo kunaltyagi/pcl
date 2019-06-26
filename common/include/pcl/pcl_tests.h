@@ -99,8 +99,12 @@ namespace pcl
 
       template <typename Point1T, typename Point2T>
       ::testing::AssertionResult
-      XYZNear (const char *expr1, const char *expr2, const char *abs_error_expr,
-               const Point1T &p1, const Point2T &p2, double abs_error)
+      XYZNear (const char *expr1,
+               const char *expr2,
+               const char *abs_error_expr,
+               const Point1T &p1,
+               const Point2T &p2,
+               double abs_error)
       {
         const Eigen::Vector3f diff =
             ((p1).getVector3fMap () - (p2).getVector3fMap ()).cwiseAbs ();
@@ -118,7 +122,9 @@ namespace pcl
 
       template <typename Point1T, typename Point2T>
       ::testing::AssertionResult
-      NormalEQ (const char *expr1, const char *expr2, const Point1T &p1,
+      NormalEQ (const char *expr1,
+                const char *expr2,
+                const Point1T &p1,
                 const Point2T &p2)
       {
         if ((p1).getNormalVector3fMap ()
@@ -134,8 +140,12 @@ namespace pcl
 
       template <typename Point1T, typename Point2T>
       ::testing::AssertionResult
-      NormalNear (const char *expr1, const char *expr2, const char *abs_error_expr,
-                  const Point1T &p1, const Point2T &p2, double abs_error)
+      NormalNear (const char *expr1,
+                  const char *expr2,
+                  const char *abs_error_expr,
+                  const Point1T &p1,
+                  const Point2T &p2,
+                  double abs_error)
       {
         const Eigen::Vector3f diff =
             ((p1).getNormalVector3fMap () - (p2).getNormalVector3fMap ()).cwiseAbs ();
@@ -166,7 +176,9 @@ namespace pcl
 
       template <typename Point1T, typename Point2T>
       ::testing::AssertionResult
-      RGBAEQ (const char *expr1, const char *expr2, const Point1T &p1,
+      RGBAEQ (const char *expr1,
+              const char *expr2,
+              const Point1T &p1,
               const Point2T &p2)
       {
         if ((p1).getRGBAVector4i ().cwiseEqual ((p2).getRGBAVector4i ()).all ())
@@ -180,7 +192,9 @@ namespace pcl
 
       template <typename PointCloud1T, typename PointCloud2T>
       ::testing::AssertionResult
-      MetaDataEQ (const char *expr1, const char *expr2, const PointCloud1T &p1,
+      MetaDataEQ (const char *expr1,
+                  const char *expr2,
+                  const PointCloud1T &p1,
                   const PointCloud2T &p2)
       {
         if (!(p1.header == p2.header))
@@ -250,15 +264,15 @@ namespace pcl
 /// and normal_z fields in two points are each within
 /// abs_error.
 #define EXPECT_NORMAL_NEAR(expected, actual, abs_error)                                \
-  EXPECT_PRED_FORMAT3 (::pcl::test::internal::NormalNear, (expected), (actual),        \
-                       abs_error)
+  EXPECT_PRED_FORMAT3 (                                                                \
+      ::pcl::test::internal::NormalNear, (expected), (actual), abs_error)
 
 /// Assert that differences between normal_x, normal_y,
 /// and normal_z fields in two points are each within
 /// abs_error.
 #define ASSERT_NORMAL_NEAR(expected, actual, abs_error)                                \
-  ASSERT_PRED_FORMAT3 (::pcl::test::internal::NormalNear, (expected), (actual),        \
-                       abs_error)
+  ASSERT_PRED_FORMAT3 (                                                                \
+      ::pcl::test::internal::NormalNear, (expected), (actual), abs_error)
 
 /// Expect that each of r, g, and b fields are equal in
 /// two points.

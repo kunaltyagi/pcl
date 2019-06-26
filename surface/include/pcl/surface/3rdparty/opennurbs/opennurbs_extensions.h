@@ -359,16 +359,22 @@ class PCL_EXPORTS ON_CLASS ONX_Model
     ONX_Model::Read
   */
   bool
-  Write (ON_BinaryArchive &archive, int version = 0,
-         const char *sStartSectionComment = NULL, ON_TextLog *error_log = NULL);
-
-  bool
-  Write (const char *filename, int version = 0, const char *sStartSectionComment = NULL,
+  Write (ON_BinaryArchive &archive,
+         int version = 0,
+         const char *sStartSectionComment = NULL,
          ON_TextLog *error_log = NULL);
 
   bool
-  Write (const wchar_t *filename, int version = 0,
-         const char *sStartSectionComment = NULL, ON_TextLog *error_log = NULL);
+  Write (const char *filename,
+         int version = 0,
+         const char *sStartSectionComment = NULL,
+         ON_TextLog *error_log = NULL);
+
+  bool
+  Write (const wchar_t *filename,
+         int version = 0,
+         const char *sStartSectionComment = NULL,
+         ON_TextLog *error_log = NULL);
 
   /*
   Description:
@@ -431,7 +437,9 @@ class PCL_EXPORTS ON_CLASS ONX_Model
     >0      number of problems that were found.
   */
   virtual int
-  Audit (bool bAttemptRepair, int *repair_count, ON_TextLog *text_log,
+  Audit (bool bAttemptRepair,
+         int *repair_count,
+         ON_TextLog *text_log,
          ON_SimpleArray<int> *warnings);
 
   /////////////////////////////////////////////////////////////////////

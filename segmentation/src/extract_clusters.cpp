@@ -46,10 +46,12 @@
 
 // Instantiations of specific point types
 #ifdef PCL_ONLY_CORE_POINT_TYPES
-PCL_INSTANTIATE (EuclideanClusterExtraction, (pcl::PointXYZ) (pcl::PointXYZI) (
-                                                 pcl::PointXYZRGBA) (pcl::PointXYZRGB))
-PCL_INSTANTIATE (extractEuclideanClusters, (pcl::PointXYZ) (pcl::PointXYZI) (
-                                               pcl::PointXYZRGBA) (pcl::PointXYZRGB))
+PCL_INSTANTIATE (
+    EuclideanClusterExtraction,
+    (pcl::PointXYZ) (pcl::PointXYZI) (pcl::PointXYZRGBA) (pcl::PointXYZRGB))
+PCL_INSTANTIATE (
+    extractEuclideanClusters,
+    (pcl::PointXYZ) (pcl::PointXYZI) (pcl::PointXYZRGBA) (pcl::PointXYZRGB))
 PCL_INSTANTIATE (
     extractEuclideanClusters_indices,
     (pcl::PointXYZ) (pcl::PointXYZI) (pcl::PointXYZRGBA) (pcl::PointXYZRGB))

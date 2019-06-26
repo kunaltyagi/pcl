@@ -94,8 +94,11 @@ loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
 }
 
 void
-compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output,
-         double search_radius, bool sqr_gauss_param_set, double sqr_gauss_param,
+compute (const pcl::PCLPointCloud2::ConstPtr &input,
+         pcl::PCLPointCloud2 &output,
+         double search_radius,
+         bool sqr_gauss_param_set,
+         double sqr_gauss_param,
          int polynomial_order)
 {
 
@@ -139,7 +142,9 @@ compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output
 
   PCL_INFO ("Computing smoothed surface and normals with search_radius %f , "
             "sqr_gaussian_param %f, polynomial order %d\n",
-            mls.getSearchRadius (), mls.getSqrGaussParam (), mls.getPolynomialOrder ());
+            mls.getSearchRadius (),
+            mls.getSqrGaussParam (),
+            mls.getPolynomialOrder ());
   TicToc tt;
   tt.tic ();
   mls.process (*xyz_cloud_smoothed);
@@ -161,8 +166,11 @@ saveCloud (const std::string &filename, const pcl::PCLPointCloud2 &output)
   print_highlight ("Saving ");
   print_value ("%s ", filename.c_str ());
 
-  pcl::io::savePCDFile (filename, output, Eigen::Vector4f::Zero (),
-                        Eigen::Quaternionf::Identity (), true);
+  pcl::io::savePCDFile (filename,
+                        output,
+                        Eigen::Vector4f::Zero (),
+                        Eigen::Quaternionf::Identity (),
+                        true);
 
   print_info ("[done, ");
   print_value ("%g", tt.toc ());
@@ -210,7 +218,11 @@ main (int argc, char **argv)
 
   // Do the smoothing
   pcl::PCLPointCloud2 output;
-  compute (cloud, output, search_radius, sqr_gauss_param_set, sqr_gauss_param,
+  compute (cloud,
+           output,
+           search_radius,
+           sqr_gauss_param_set,
+           sqr_gauss_param,
            polynomial_order);
 
   // Save into the second file

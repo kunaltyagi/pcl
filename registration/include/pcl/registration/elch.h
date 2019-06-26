@@ -75,9 +75,11 @@ namespace pcl
       };
 
       /** \brief graph structure to hold the SLAM graph */
-      using LoopGraph =
-          boost::adjacency_list<boost::listS, boost::eigen_vecS, boost::undirectedS,
-                                Vertex, boost::no_property>;
+      using LoopGraph = boost::adjacency_list<boost::listS,
+                                              boost::eigen_vecS,
+                                              boost::undirectedS,
+                                              Vertex,
+                                              boost::no_property>;
 
       using LoopGraphPtr = boost::shared_ptr<LoopGraph>;
 
@@ -211,7 +213,9 @@ namespace pcl
       private:
       /** \brief graph structure for the internal optimization graph */
       using LOAGraph =
-          boost::adjacency_list<boost::listS, boost::vecS, boost::undirectedS,
+          boost::adjacency_list<boost::listS,
+                                boost::vecS,
+                                boost::undirectedS,
                                 boost::no_property,
                                 boost::property<boost::edge_weight_t, double>>;
 

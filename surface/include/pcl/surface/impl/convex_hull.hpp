@@ -63,8 +63,8 @@ pcl::ConvexHull<PointInT>::calculateInputDimension ()
   Eigen::Vector4d xyz_centroid;
   compute3DCentroid (*input_, *indices_, xyz_centroid);
   EIGEN_ALIGN16 Eigen::Matrix3d covariance_matrix = Eigen::Matrix3d::Zero ();
-  computeCovarianceMatrixNormalized (*input_, *indices_, xyz_centroid,
-                                     covariance_matrix);
+  computeCovarianceMatrixNormalized (
+      *input_, *indices_, xyz_centroid, covariance_matrix);
 
   EIGEN_ALIGN16 Eigen::Vector3d eigen_values;
   pcl::eigen33 (covariance_matrix, eigen_values);
@@ -110,8 +110,8 @@ pcl::ConvexHull<PointInT>::performReconstruction2D (
   Eigen::Vector4d normal_calc_centroid;
   Eigen::Matrix3d normal_calc_covariance;
   pcl::compute3DCentroid (normal_calc_cloud, normal_calc_centroid);
-  pcl::computeCovarianceMatrixNormalized (normal_calc_cloud, normal_calc_centroid,
-                                          normal_calc_covariance);
+  pcl::computeCovarianceMatrixNormalized (
+      normal_calc_cloud, normal_calc_centroid, normal_calc_covariance);
 
   // Need to set -1 here. See eigen33 for explanations.
   Eigen::Vector3d::Scalar eigen_value;
@@ -179,8 +179,13 @@ pcl::ConvexHull<PointInT>::performReconstruction2D (
   }
 
   // Compute convex hull
-  int exitcode = qh_new_qhull (dimension, static_cast<int> (indices_->size ()), points,
-                               ismalloc, const_cast<char *> (flags), outfile, errfile);
+  int exitcode = qh_new_qhull (dimension,
+                               static_cast<int> (indices_->size ()),
+                               points,
+                               ismalloc,
+                               const_cast<char *> (flags),
+                               outfile,
+                               errfile);
 #ifdef HAVE_QHULL_2011
   if (compute_area_) {
     qh_prepare_output ();
@@ -191,7 +196,8 @@ pcl::ConvexHull<PointInT>::performReconstruction2D (
   if (exitcode != 0 || qh num_vertices == 0) {
     PCL_ERROR ("[pcl::%s::performReconstrution2D] ERROR: qhull was unable to compute a "
                "convex hull for the given point cloud (%lu)!\n",
-               getClassName ().c_str (), indices_->size ());
+               getClassName ().c_str (),
+               indices_->size ());
 
     hull.points.resize (0);
     hull.width = hull.height = 0;
@@ -221,7 +227,8 @@ pcl::ConvexHull<PointInT>::performReconstruction2D (
               Eigen::aligned_allocator<std::pair<int, Eigen::Vector4f>>>
       idx_points (num_vertices);
   idx_points.resize (hull.points.size ());
-  memset (&idx_points[0], static_cast<int> (hull.points.size ()),
+  memset (&idx_points[0],
+          static_cast<int> (hull.points.size ()),
           sizeof (std::pair<int, Eigen::Vector4f>));
 
   FORALLvertices
@@ -313,8 +320,13 @@ pcl::ConvexHull<PointInT>::performReconstruction3D (
   }
 
   // Compute convex hull
-  int exitcode = qh_new_qhull (dimension, static_cast<int> (indices_->size ()), points,
-                               ismalloc, const_cast<char *> (flags), outfile, errfile);
+  int exitcode = qh_new_qhull (dimension,
+                               static_cast<int> (indices_->size ()),
+                               points,
+                               ismalloc,
+                               const_cast<char *> (flags),
+                               outfile,
+                               errfile);
 #ifdef HAVE_QHULL_2011
   if (compute_area_) {
     qh_prepare_output ();
@@ -325,7 +337,8 @@ pcl::ConvexHull<PointInT>::performReconstruction3D (
   if (exitcode != 0) {
     PCL_ERROR ("[pcl::%s::performReconstrution3D] ERROR: qhull was unable to compute a "
                "convex hull for the given point cloud (%lu)!\n",
-               getClassName ().c_str (), input_->points.size ());
+               getClassName ().c_str (),
+               input_->points.size ());
 
     hull.points.resize (0);
     hull.width = hull.height = 0;
@@ -425,7 +438,8 @@ pcl::ConvexHull<PointInT>::performReconstruction (PointCloud &hull,
   else
     PCL_ERROR ("[pcl::%s::performReconstruction] Error: invalid input dimension "
                "requested: %d\n",
-               getClassName ().c_str (), dimension_);
+               getClassName ().c_str (),
+               dimension_);
 }
 
 //////////////////////////////////////////////////////////////////////////

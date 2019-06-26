@@ -473,8 +473,11 @@ namespace pcl
      * \param[out] output The interpolated point along the edge
      */
     void
-    interpolateEdge (Eigen::Vector3f &p1, Eigen::Vector3f &p2, float val_p1,
-                     float val_p2, Eigen::Vector3f &output);
+    interpolateEdge (Eigen::Vector3f &p1,
+                     Eigen::Vector3f &p2,
+                     float val_p1,
+                     float val_p2,
+                     Eigen::Vector3f &output);
 
     /** \brief Calculate out the corresponding polygons in the leaf node
      * \param leaf_node the leaf node to be checked
@@ -482,7 +485,8 @@ namespace pcl
      * \param cloud point cloud to store the vertices of the polygon
      */
     void
-    createSurface (const std::vector<float> &leaf_node, const Eigen::Vector3i &index_3d,
+    createSurface (const std::vector<float> &leaf_node,
+                   const Eigen::Vector3i &index_3d,
                    pcl::PointCloud<PointNT> &cloud);
 
     /** \brief Get the bounding box for the input data points.

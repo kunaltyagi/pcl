@@ -121,12 +121,25 @@ TEST (PCL, EarClippingCubeTest)
   Vertices vertices;
   vertices.vertices.resize (4);
 
-  const int squares[][4] = {{1, 5, 6, 2}, {2, 6, 7, 3}, {3, 7, 4, 0},
-                            {0, 4, 5, 1}, {4, 7, 6, 5}, {0, 1, 2, 3}};
+  const int squares[][4] = {{1, 5, 6, 2},
+                            {2, 6, 7, 3},
+                            {3, 7, 4, 0},
+                            {0, 4, 5, 1},
+                            {4, 7, 6, 5},
+                            {0, 1, 2, 3}};
 
-  const int truth[][3] = {{2, 1, 5}, {6, 2, 5}, {3, 2, 6}, {7, 3, 6},
-                          {0, 3, 7}, {4, 0, 7}, {1, 0, 4}, {5, 1, 4},
-                          {5, 4, 7}, {6, 5, 7}, {3, 0, 1}, {2, 3, 1}};
+  const int truth[][3] = {{2, 1, 5},
+                          {6, 2, 5},
+                          {3, 2, 6},
+                          {7, 3, 6},
+                          {0, 3, 7},
+                          {4, 0, 7},
+                          {1, 0, 4},
+                          {5, 1, 4},
+                          {5, 4, 7},
+                          {6, 5, 7},
+                          {3, 0, 1},
+                          {2, 3, 1}};
 
   PolygonMesh::Ptr mesh (new PolygonMesh);
   toPCLPointCloud2 (*cloud, mesh->cloud);

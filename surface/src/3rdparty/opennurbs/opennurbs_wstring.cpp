@@ -53,7 +53,9 @@ w2c_size (int w_count, const wchar_t *w)
 }
 
 static int
-w2c (int w_count, const wchar_t *w, int c_count,
+w2c (int w_count,
+     const wchar_t *w,
+     int c_count,
      char *c // array of at least c_count+1 characters
 )
 {
@@ -69,8 +71,15 @@ w2c (int w_count, const wchar_t *w, int c_count,
       unsigned int error_mask = 0xFFFFFFFF;
       ON__UINT32 error_code_point = 0xFFFD;
       const wchar_t *p1 = 0;
-      rc = ON_ConvertWideCharToUTF8 (false, w, w_count, c, c_count, &error_status,
-                                     error_mask, error_code_point, &p1);
+      rc = ON_ConvertWideCharToUTF8 (false,
+                                     w,
+                                     w_count,
+                                     c,
+                                     c_count,
+                                     &error_status,
+                                     error_mask,
+                                     error_code_point,
+                                     &p1);
       if (error_status) {
         ON_ERROR ("Error converting UTF-16 encoded wchar_t string to UTF-8 encoded "
                   "char string.");
@@ -98,7 +107,9 @@ c2w (char c)
 }
 
 static int
-c2w (int c_count, const char *c, int w_count,
+c2w (int c_count,
+     const char *c,
+     int w_count,
      wchar_t *w // array of at least w_count+1 wide characters
 )
 {
@@ -114,8 +125,8 @@ c2w (int c_count, const char *c, int w_count,
       unsigned int error_mask = 0xFFFFFFFF;
       ON__UINT32 error_code_point = 0xFFFD;
       const char *p1 = 0;
-      rc = ON_ConvertUTF8ToWideChar (c, c_count, w, w_count, &error_status, error_mask,
-                                     error_code_point, &p1);
+      rc = ON_ConvertUTF8ToWideChar (
+          c, c_count, w, w_count, &error_status, error_mask, error_code_point, &p1);
       if (rc > 0 && rc <= w_count)
         w[rc] = 0;
       else {
@@ -292,10 +303,11 @@ ON_wString::ReserveArray (size_t array_capacity)
       p1->string_length = size;
     }
   } else if (capacity > p->string_capacity) {
-    p = (ON_wStringHeader *)onrealloc (p, sizeof (ON_wStringHeader) +
-                                              (capacity + 1) * sizeof (*m_s));
+    p = (ON_wStringHeader *)onrealloc (
+        p, sizeof (ON_wStringHeader) + (capacity + 1) * sizeof (*m_s));
     m_s = p->string_array ();
-    memset (&m_s[p->string_capacity], 0,
+    memset (&m_s[p->string_capacity],
+            0,
             (1 + capacity - p->string_capacity) * sizeof (*m_s));
     p->string_capacity = capacity;
   }
@@ -317,8 +329,8 @@ ON_wString::ShrinkArray ()
       m_s[p1->string_length] = 0;
     } else if (p->string_length < p->string_capacity) {
       // onrealloc string
-      p = (ON_wStringHeader *)onrealloc (p, sizeof (ON_wStringHeader) +
-                                                (p->string_length + 1) * sizeof (*m_s));
+      p = (ON_wStringHeader *)onrealloc (
+          p, sizeof (ON_wStringHeader) + (p->string_length + 1) * sizeof (*m_s));
       p->string_capacity = p->string_length;
       m_s = p->string_array ();
       m_s[p->string_length] = 0;
@@ -385,7 +397,9 @@ ON_wString::AppendToArray (int size, const char *s)
   if (size > 0 && s && s[0]) {
     ReserveArray (size + Header ()->string_length);
     Header ()->string_length +=
-        c2w (size, s, Header ()->string_capacity - Header ()->string_length,
+        c2w (size,
+             s,
+             Header ()->string_capacity - Header ()->string_length,
              &m_s[Header ()->string_length]);
     m_s[Header ()->string_length] = 0;
   }
@@ -2000,8 +2014,11 @@ ON_wString::operator>= (const wchar_t *s2) const
 }
 
 void
-ON_String::SplitPath (const char *path, ON_String *drive, ON_String *dir,
-                      ON_String *fname, ON_String *ext)
+ON_String::SplitPath (const char *path,
+                      ON_String *drive,
+                      ON_String *dir,
+                      ON_String *fname,
+                      ON_String *ext)
 {
   const char *dr = 0;
   const char *d = 0;
@@ -2052,8 +2069,11 @@ ON_String::SplitPath (const char *path, ON_String *drive, ON_String *dir,
 }
 
 void
-ON_wString::SplitPath (const char *path, ON_wString *drive, ON_wString *dir,
-                       ON_wString *fname, ON_wString *ext)
+ON_wString::SplitPath (const char *path,
+                       ON_wString *drive,
+                       ON_wString *dir,
+                       ON_wString *fname,
+                       ON_wString *ext)
 {
   const char *dr = 0;
   const char *d = 0;
@@ -2104,8 +2124,11 @@ ON_wString::SplitPath (const char *path, ON_wString *drive, ON_wString *dir,
 }
 
 void
-ON_wString::SplitPath (const wchar_t *path, ON_wString *drive, ON_wString *dir,
-                       ON_wString *fname, ON_wString *ext)
+ON_wString::SplitPath (const wchar_t *path,
+                       ON_wString *drive,
+                       ON_wString *dir,
+                       ON_wString *fname,
+                       ON_wString *ext)
 {
   const wchar_t *dr = 0;
   const wchar_t *d = 0;

@@ -155,7 +155,9 @@ namespace pcl
        * factor multiplied to the radius of the bounding circle. \return B-Spline curve.
        */
       static ON_NurbsCurve
-      initNurbsCurve2D (int order, const vector_vec2d &data, int ncps = 0,
+      initNurbsCurve2D (int order,
+                        const vector_vec2d &data,
+                        int ncps = 0,
                         double radiusF = 1.0);
       //  static ON_NurbsCurve initNurbsCurvePCA(int order, const vector_vec2d &data);
 
@@ -182,14 +184,23 @@ namespace pcl
        * function returns \return closest point on curve in parametric domain.
        */
       static double
-      inverseMapping (const ON_NurbsCurve &nurbs, const Eigen::Vector2d &pt,
-                      const double &hint, double &error, Eigen::Vector2d &p,
-                      Eigen::Vector2d &t, double rScale, int maxSteps = 100,
-                      double accuracy = 1e-6, bool quiet = true);
+      inverseMapping (const ON_NurbsCurve &nurbs,
+                      const Eigen::Vector2d &pt,
+                      const double &hint,
+                      double &error,
+                      Eigen::Vector2d &p,
+                      Eigen::Vector2d &t,
+                      double rScale,
+                      int maxSteps = 100,
+                      double accuracy = 1e-6,
+                      bool quiet = true);
 
       static double
-      inverseMappingO2 (const ON_NurbsCurve &nurbs, const Eigen::Vector2d &pt,
-                        double &error, Eigen::Vector2d &p, Eigen::Vector2d &t);
+      inverseMappingO2 (const ON_NurbsCurve &nurbs,
+                        const Eigen::Vector2d &pt,
+                        double &error,
+                        Eigen::Vector2d &p,
+                        Eigen::Vector2d &t);
 
       /** \brief Given a point pt, the function finds the closest midpoint of the
        * elements of the curve. \param[in] nurbs the B-Spline curve. \param[in] pt the
@@ -200,7 +211,8 @@ namespace pcl
       findClosestElementMidPoint (const ON_NurbsCurve &nurbs,
                                   const Eigen::Vector2d &pt);
       static double
-      findClosestElementMidPoint (const ON_NurbsCurve &nurbs, const Eigen::Vector2d &pt,
+      findClosestElementMidPoint (const ON_NurbsCurve &nurbs,
+                                  const Eigen::Vector2d &pt,
                                   double hint);
 
       /** \brief Enable/Disable debug outputs in console. */
@@ -223,8 +235,10 @@ namespace pcl
       /** \brief Add minimization constraint: point-to-curve distance
        * (point-distance-minimization). */
       virtual void
-      addPointConstraint (const double &param, const Eigen::Vector2d &point,
-                          double weight, unsigned &row);
+      addPointConstraint (const double &param,
+                          const Eigen::Vector2d &point,
+                          double weight,
+                          unsigned &row);
 
       /** \brief Add minimization constraint: smoothness by control point
        * regularisation. */

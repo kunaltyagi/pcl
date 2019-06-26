@@ -81,9 +81,13 @@ pcl::ASCIIReader::~ASCIIReader () {}
 
 //////////////////////////////////////////////////////////////////////////////
 int
-pcl::ASCIIReader::readHeader (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
-                              Eigen::Vector4f &origin, Eigen::Quaternionf &orientation,
-                              int &file_version, int &data_type, unsigned int &data_idx,
+pcl::ASCIIReader::readHeader (const std::string &file_name,
+                              pcl::PCLPointCloud2 &cloud,
+                              Eigen::Vector4f &origin,
+                              Eigen::Quaternionf &orientation,
+                              int &file_version,
+                              int &data_type,
+                              unsigned int &data_idx,
                               const int offset)
 {
   (void)offset; // offset is not used for ascii file implementation
@@ -95,7 +99,8 @@ pcl::ASCIIReader::readHeader (const std::string &file_name, pcl::PCLPointCloud2 
     return (-1);
   }
   if (boost::filesystem::extension (fpath) != extension_) {
-    PCL_ERROR ("[%s] File does not have %s extension. \n", name_.c_str (),
+    PCL_ERROR ("[%s] File does not have %s extension. \n",
+               name_.c_str (),
                extension_.c_str ());
     return -1;
   }
@@ -124,15 +129,24 @@ pcl::ASCIIReader::readHeader (const std::string &file_name, pcl::PCLPointCloud2 
 
 //////////////////////////////////////////////////////////////////////////////
 int
-pcl::ASCIIReader::read (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
-                        Eigen::Vector4f &origin, Eigen::Quaternionf &orientation,
-                        int &file_version, const int offset)
+pcl::ASCIIReader::read (const std::string &file_name,
+                        pcl::PCLPointCloud2 &cloud,
+                        Eigen::Vector4f &origin,
+                        Eigen::Quaternionf &orientation,
+                        int &file_version,
+                        const int offset)
 {
 
   int data_type;
   unsigned int data_idx;
-  if (this->readHeader (file_name, cloud, origin, orientation, file_version, data_type,
-                        data_idx, offset) < 0)
+  if (this->readHeader (file_name,
+                        cloud,
+                        origin,
+                        orientation,
+                        file_version,
+                        data_type,
+                        data_idx,
+                        offset) < 0)
     return (-1);
   cloud.data.resize (cloud.height * cloud.width * cloud.point_step);
 
@@ -148,7 +162,9 @@ pcl::ASCIIReader::read (const std::string &file_name, pcl::PCLPointCloud2 &cloud
       continue; // skip comment lines
 
     std::vector<std::string> tokens;
-    boost::algorithm::split (tokens, line, boost::algorithm::is_any_of (sep_chars_),
+    boost::algorithm::split (tokens,
+                             line,
+                             boost::algorithm::is_any_of (sep_chars_),
                              boost::algorithm::token_compress_on);
 
     if (tokens.size () != fields_.size ())
@@ -184,7 +200,8 @@ pcl::ASCIIReader::setSepChars (const std::string &chars)
 
 //////////////////////////////////////////////////////////////////////////////
 int
-pcl::ASCIIReader::parse (const std::string &token, const pcl::PCLPointField &field,
+pcl::ASCIIReader::parse (const std::string &token,
+                         const pcl::PCLPointField &field,
                          uint8_t *data_target)
 {
   switch (field.datatype) {

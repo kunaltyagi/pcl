@@ -54,7 +54,8 @@ namespace pcl
     class Parameter
     {
       public:
-      Parameter (const std::string &name, const std::string &description,
+      Parameter (const std::string &name,
+                 const std::string &description,
                  const boost::any &value)
           : name_ (name), description_ (description), default_value_ (value),
             current_value_ (value)
@@ -96,7 +97,8 @@ namespace pcl
       setEditorData (QWidget *editor) = 0;
 
       virtual void
-      setModelData (QWidget *editor, QAbstractItemModel *model,
+      setModelData (QWidget *editor,
+                    QAbstractItemModel *model,
                     const QModelIndex &index);
 
       virtual std::pair<QVariant, int>
@@ -115,7 +117,8 @@ namespace pcl
     class BoolParameter : public Parameter
     {
       public:
-      BoolParameter (const std::string &name, const std::string &description,
+      BoolParameter (const std::string &name,
+                     const std::string &description,
                      bool value)
           : Parameter (name, description, value)
       {
@@ -144,8 +147,12 @@ namespace pcl
     class IntParameter : public Parameter
     {
       public:
-      IntParameter (const std::string &name, const std::string &description, int value,
-                    int low, int high, int step = 1)
+      IntParameter (const std::string &name,
+                    const std::string &description,
+                    int value,
+                    int low,
+                    int high,
+                    int step = 1)
           : Parameter (name, description, value), low_ (low), high_ (high), step_ (step)
       {
       }
@@ -196,7 +203,9 @@ namespace pcl
     class EnumParameter : public Parameter
     {
       public:
-      EnumParameter (const std::string &name, const std::string &description, T value,
+      EnumParameter (const std::string &name,
+                     const std::string &description,
+                     T value,
                      const std::map<T, std::string> &candidates)
           : Parameter (name, description, value), candidates_ (candidates)
       {
@@ -227,8 +236,12 @@ namespace pcl
     class DoubleParameter : public Parameter
     {
       public:
-      DoubleParameter (const std::string &name, const std::string &description,
-                       double value, double low, double high, double step = 0.01)
+      DoubleParameter (const std::string &name,
+                       const std::string &description,
+                       double value,
+                       double low,
+                       double high,
+                       double step = 0.01)
           : Parameter (name, description, value), low_ (low), high_ (high), step_ (step)
       {
       }
@@ -278,7 +291,8 @@ namespace pcl
     class ColorParameter : public Parameter
     {
       public:
-      ColorParameter (const std::string &name, const std::string &description,
+      ColorParameter (const std::string &name,
+                      const std::string &description,
                       QColor value)
           : Parameter (name, description, value)
       {

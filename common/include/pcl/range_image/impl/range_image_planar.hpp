@@ -49,10 +49,17 @@ namespace pcl
   template <typename PointCloudType>
   void
   RangeImagePlanar::createFromPointCloudWithFixedSize (
-      const PointCloudType &point_cloud, int di_width, int di_height, float di_center_x,
-      float di_center_y, float di_focal_length_x, float di_focal_length_y,
-      const Eigen::Affine3f &sensor_pose, CoordinateFrame coordinate_frame,
-      float noise_level, float min_range)
+      const PointCloudType &point_cloud,
+      int di_width,
+      int di_height,
+      float di_center_x,
+      float di_center_y,
+      float di_focal_length_x,
+      float di_focal_length_y,
+      const Eigen::Affine3f &sensor_pose,
+      CoordinateFrame coordinate_frame,
+      float noise_level,
+      float min_range)
   {
     // std::cout << "Starting to create range image from "<<point_cloud.points.size
     // ()<<" points.\n";
@@ -88,7 +95,9 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImagePlanar::calculate3DPoint (float image_x, float image_y, float range,
+  RangeImagePlanar::calculate3DPoint (float image_x,
+                                      float image_y,
+                                      float range,
                                       Eigen::Vector3f &point) const
   {
     // cout << __PRETTY_FUNCTION__ << " called.\n";
@@ -104,8 +113,10 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   inline void
-  RangeImagePlanar::getImagePoint (const Eigen::Vector3f &point, float &image_x,
-                                   float &image_y, float &range) const
+  RangeImagePlanar::getImagePoint (const Eigen::Vector3f &point,
+                                   float &image_x,
+                                   float &image_y,
+                                   float &range) const
   {
     Eigen::Vector3f transformedPoint = to_range_image_system_ * point;
     if (transformedPoint[2] <= 0) // Behind the observer?

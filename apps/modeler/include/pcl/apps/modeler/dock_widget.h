@@ -45,7 +45,8 @@ namespace pcl
     class DockWidget : public QDockWidget
     {
       public:
-      explicit DockWidget (const QString &title, QWidget *parent = nullptr,
+      explicit DockWidget (const QString &title,
+                           QWidget *parent = nullptr,
                            Qt::WindowFlags flags = Qt::WindowFlags ());
       explicit DockWidget (QWidget *parent = nullptr,
                            Qt::WindowFlags flags = Qt::WindowFlags ());

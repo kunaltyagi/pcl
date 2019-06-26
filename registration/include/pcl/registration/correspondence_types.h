@@ -53,7 +53,8 @@ namespace pcl
      * determine the standard deviation
      */
     inline void
-    getCorDistMeanStd (const pcl::Correspondences &correspondences, double &mean,
+    getCorDistMeanStd (const pcl::Correspondences &correspondences,
+                       double &mean,
                        double &stddev);
 
     /** \brief extracts the query indices

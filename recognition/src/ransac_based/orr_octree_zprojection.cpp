@@ -89,7 +89,8 @@ pcl::recognition::ORROctreeZProjection::clear ()
 //=========================================================================================================================================
 
 void
-pcl::recognition::ORROctreeZProjection::build (const ORROctree &input, float eps_front,
+pcl::recognition::ORROctreeZProjection::build (const ORROctree &input,
+                                               float eps_front,
                                                float eps_back)
 {
   this->clear ();

@@ -103,8 +103,8 @@ pcl_cuda::MultiRandomSampleConsensus<Storage>::computeModel (int debug_verbosity
     // generate a new batch of hypotheses
     {
       ScopeTime t ("generateModelHypotheses");
-      sac_model_->generateModelHypotheses (h[cur_batch], h_samples[cur_batch],
-                                           iterations_per_batch_);
+      sac_model_->generateModelHypotheses (
+          h[cur_batch], h_samples[cur_batch], iterations_per_batch_);
     }
     host_samples = h_samples[cur_batch];
     host_coeffs = h[cur_batch];
@@ -140,9 +140,12 @@ pcl_cuda::MultiRandomSampleConsensus<Storage>::computeModel (int debug_verbosity
         {
           ScopeTime t ("selectWithinDistance");
           int d_cur_penalty = 0;
-          n_inliers_count = sac_model_->selectWithinDistance (
-              h[cur_batch], i, threshold_, inl_stencil, centroids[cur_iteration],
-              d_cur_penalty);
+          n_inliers_count = sac_model_->selectWithinDistance (h[cur_batch],
+                                                              i,
+                                                              threshold_,
+                                                              inl_stencil,
+                                                              centroids[cur_iteration],
+                                                              d_cur_penalty);
         }
         // store inliers and inlier count
         if (n_inliers_count < min_nr_in_shape) {
@@ -283,7 +286,8 @@ pcl_cuda::MultiRandomSampleConsensus<Storage>::computeModel (int debug_verbosity
                   // std::cerr << "inliers for model " << b*iterations_per_batch_ + j <<
                   // " : " << old_score;
                   n_inliers_count = sac_model_->deleteIndices (
-                      h[b], j,
+                      h[b],
+                      j,
                       hypotheses_inliers_stencils[b * iterations_per_batch_ + j],
                       hypotheses_inliers_stencils[extracted_model]);
                   hypotheses_inlier_count[b * iterations_per_batch_ + j] =

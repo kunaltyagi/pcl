@@ -41,17 +41,19 @@ pcl::cloud_composer::CloudItem::CloudItem (QString name,
                  ItemDataRole::GEOMETRY_HANDLER);
 
   properties_->addCategory ("Core Properties");
-  properties_->addProperty ("Name", QVariant (this->text ()), Qt::NoItemFlags,
-                            "Core Properties");
-  properties_->addProperty ("Height", QVariant (cloud_blob_ptr_->height),
-                            Qt::NoItemFlags, "Core Properties");
-  properties_->addProperty ("Width", QVariant (cloud_blob_ptr_->width), Qt::NoItemFlags,
-                            "Core Properties");
+  properties_->addProperty (
+      "Name", QVariant (this->text ()), Qt::NoItemFlags, "Core Properties");
+  properties_->addProperty (
+      "Height", QVariant (cloud_blob_ptr_->height), Qt::NoItemFlags, "Core Properties");
+  properties_->addProperty (
+      "Width", QVariant (cloud_blob_ptr_->width), Qt::NoItemFlags, "Core Properties");
   properties_->addCategory ("Display Variables");
-  properties_->addProperty ("Point Size", QVariant (1.0),
+  properties_->addProperty ("Point Size",
+                            QVariant (1.0),
                             Qt::ItemIsEditable | Qt::ItemIsEnabled,
                             "Display Variables");
-  properties_->addProperty ("Opacity", QVariant (1.0),
+  properties_->addProperty ("Opacity",
+                            QVariant (1.0),
                             Qt::ItemIsEditable | Qt::ItemIsEnabled,
                             "Display Variables");
 
@@ -82,14 +84,20 @@ void
 pcl::cloud_composer::CloudItem::paintView (
     pcl::visualization::PCLVisualizer::Ptr vis) const
 {
-  vis->addPointCloud (cloud_blob_ptr_, geometry_handler_, color_handler_, origin_,
-                      orientation_, getId ().toStdString ());
+  vis->addPointCloud (cloud_blob_ptr_,
+                      geometry_handler_,
+                      color_handler_,
+                      origin_,
+                      orientation_,
+                      getId ().toStdString ());
   vis->setPointCloudRenderingProperties (
       pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
-      properties_->getProperty ("Point Size").toDouble (), getId ().toStdString ());
+      properties_->getProperty ("Point Size").toDouble (),
+      getId ().toStdString ());
   vis->setPointCloudRenderingProperties (
       pcl::visualization::PCL_VISUALIZER_OPACITY,
-      properties_->getProperty ("Opacity").toDouble (), getId ().toStdString ());
+      properties_->getProperty ("Opacity").toDouble (),
+      getId ().toStdString ());
 }
 
 void
@@ -184,7 +192,8 @@ pcl::cloud_composer::CloudItem::setTemplateCloudFromBlob ()
     }
 
     case (PointTypeFlags::NONE):
-      QMessageBox::warning (nullptr, "Unknown blob type!",
+      QMessageBox::warning (nullptr,
+                            "Unknown blob type!",
                             "Could not find appropriate template type for this cloud "
                             "blob! Only blob functionality enabled!");
     }

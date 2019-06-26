@@ -110,8 +110,10 @@ pcl::ProgressiveMorphologicalFilter<PointT>::extract (std::vector<int> &ground)
 
   // Progressively filter ground returns using morphological open
   for (size_t i = 0; i < window_sizes.size (); ++i) {
-    PCL_DEBUG ("      Iteration %d (height threshold = %f, window size = %f)...", i,
-               height_thresholds[i], window_sizes[i]);
+    PCL_DEBUG ("      Iteration %d (height threshold = %f, window size = %f)...",
+               i,
+               height_thresholds[i],
+               window_sizes[i]);
 
     // Limit filtering to those points currently considered ground returns
     typename pcl::PointCloud<PointT>::Ptr cloud (new pcl::PointCloud<PointT>);
@@ -120,8 +122,8 @@ pcl::ProgressiveMorphologicalFilter<PointT>::extract (std::vector<int> &ground)
     // Create new cloud to hold the filtered results. Apply the morphological
     // opening operation at the current window size.
     typename pcl::PointCloud<PointT>::Ptr cloud_f (new pcl::PointCloud<PointT>);
-    pcl::applyMorphologicalOperator<PointT> (cloud, window_sizes[i], MORPH_OPEN,
-                                             *cloud_f);
+    pcl::applyMorphologicalOperator<PointT> (
+        cloud, window_sizes[i], MORPH_OPEN, *cloud_f);
 
     // Find indices of the points whose difference between the source and
     // filtered point clouds is less than the current height threshold.

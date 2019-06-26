@@ -57,7 +57,8 @@ namespace pcl
    * \author Aitor Aldoma
    * \ingroup features
    */
-  template <typename PointInT, typename PointNT,
+  template <typename PointInT,
+            typename PointNT,
             typename PointOutT = pcl::Histogram<90>>
   class CRHEstimation : public FeatureFromNormals<PointInT, PointNT, PointOutT>
   {

@@ -62,9 +62,10 @@ pcl::cloud_composer::StatisticalOutlierRemovalTool::performAction (
     Eigen::Quaternionf source_orientation =
         input_item->data (ItemDataRole::ORIENTATION).value<Eigen::Quaternionf> ();
     // Put the modified cloud into an item, stick in output
-    CloudItem *cloud_item =
-        new CloudItem (input_item->text () + tr (" sor filtered"), cloud_filtered,
-                       source_origin, source_orientation);
+    CloudItem *cloud_item = new CloudItem (input_item->text () + tr (" sor filtered"),
+                                           cloud_filtered,
+                                           source_origin,
+                                           source_orientation);
 
     output.append (cloud_item);
   } else {
@@ -82,8 +83,8 @@ pcl::cloud_composer::StatisticalOutlierRemovalToolFactory::createToolParameterMo
   PropertiesModel *parameter_model = new PropertiesModel (parent);
 
   parameter_model->addProperty ("Mean K", 50, Qt::ItemIsEditable | Qt::ItemIsEnabled);
-  parameter_model->addProperty ("Std Dev Thresh", 1.0,
-                                Qt::ItemIsEditable | Qt::ItemIsEnabled);
+  parameter_model->addProperty (
+      "Std Dev Thresh", 1.0, Qt::ItemIsEditable | Qt::ItemIsEnabled);
 
   return parameter_model;
 }

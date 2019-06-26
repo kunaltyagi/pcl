@@ -111,7 +111,8 @@ Select2DTool::end (int x, int y, BitMask modifiers, BitMask)
 }
 
 bool
-Select2DTool::isInSelectBox (const Point3D &pt, const GLfloat *project,
+Select2DTool::isInSelectBox (const Point3D &pt,
+                             const GLfloat *project,
                              const GLint *viewport) const
 {
   float w = pt.z * project[11];
@@ -154,7 +155,8 @@ Select2DTool::drawRubberBand (GLint *viewport) const
   // set the line width of the rubberband
   glLineWidth (DEFAULT_TOOL_DISPLAY_SIZE_);
   // set the color of the rubberband
-  glColor3f (DEFAULT_TOOL_DISPLAY_COLOR_RED_, DEFAULT_TOOL_DISPLAY_COLOR_GREEN_,
+  glColor3f (DEFAULT_TOOL_DISPLAY_COLOR_RED_,
+             DEFAULT_TOOL_DISPLAY_COLOR_GREEN_,
              DEFAULT_TOOL_DISPLAY_COLOR_BLUE_);
   glMatrixMode (GL_PROJECTION);
   glPushMatrix ();
@@ -193,7 +195,8 @@ Select2DTool::highlightPoints (GLint *viewport) const
   {
     glEnable (GL_SCISSOR_TEST);
     glScissor (std::min (origin_x_, final_x_),
-               std::min (viewport[3] - final_y_, viewport[3] - origin_y_), width,
+               std::min (viewport[3] - final_y_, viewport[3] - origin_y_),
+               width,
                height);
     cloud_ptr_->drawWithHighlightColor ();
   }

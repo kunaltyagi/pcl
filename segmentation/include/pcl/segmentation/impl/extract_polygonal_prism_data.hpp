@@ -87,8 +87,8 @@ pcl::isPointIn2DPolygon (const PointT &point, const pcl::PointCloud<PointT> &pol
   pcl::PointCloud<PointT> xy_polygon;
   xy_polygon.points.resize (polygon.points.size ());
   for (size_t i = 0; i < polygon.points.size (); ++i) {
-    Eigen::Vector4f pt (polygon.points[i].x, polygon.points[i].y, polygon.points[i].z,
-                        0);
+    Eigen::Vector4f pt (
+        polygon.points[i].x, polygon.points[i].y, polygon.points[i].z, 0);
     xy_polygon.points[i].x = pt[k1];
     xy_polygon.points[i].y = pt[k2];
     xy_polygon.points[i].z = 0;
@@ -155,7 +155,8 @@ pcl::ExtractPolygonalPrismData<PointT>::segment (pcl::PointIndices &output)
 
   if (static_cast<int> (planar_hull_->points.size ()) < min_pts_hull_) {
     PCL_ERROR ("[pcl::%s::segment] Not enough points (%lu) in the hull!\n",
-               getClassName ().c_str (), planar_hull_->points.size ());
+               getClassName ().c_str (),
+               planar_hull_->points.size ());
     output.indices.clear ();
     return;
   }
@@ -212,8 +213,10 @@ pcl::ExtractPolygonalPrismData<PointT>::segment (pcl::PointIndices &output)
   pcl::PointCloud<PointT> polygon;
   polygon.points.resize (planar_hull_->points.size ());
   for (size_t i = 0; i < planar_hull_->points.size (); ++i) {
-    Eigen::Vector4f pt (planar_hull_->points[i].x, planar_hull_->points[i].y,
-                        planar_hull_->points[i].z, 0);
+    Eigen::Vector4f pt (planar_hull_->points[i].x,
+                        planar_hull_->points[i].y,
+                        planar_hull_->points[i].z,
+                        0);
     polygon.points[i].x = pt[k1];
     polygon.points[i].y = pt[k2];
     polygon.points[i].z = 0;
@@ -232,8 +235,10 @@ pcl::ExtractPolygonalPrismData<PointT>::segment (pcl::PointIndices &output)
       continue;
 
     // Check what points are inside the hull
-    Eigen::Vector4f pt (projected_points.points[i].x, projected_points.points[i].y,
-                        projected_points.points[i].z, 0);
+    Eigen::Vector4f pt (projected_points.points[i].x,
+                        projected_points.points[i].y,
+                        projected_points.points[i].z,
+                        0);
     pt_xy.x = pt[k1];
     pt_xy.y = pt[k2];
 

@@ -78,7 +78,8 @@ pcl::HDLGrabber::HDLGrabber (const std::string &correctionsFile,
 
 /////////////////////////////////////////////////////////////////////////////
 pcl::HDLGrabber::HDLGrabber (const boost::asio::ip::address &ipAddress,
-                             const uint16_t port, const std::string &correctionsFile)
+                             const uint16_t port,
+                             const std::string &correctionsFile)
     : last_azimuth_ (65000), current_scan_xyz_ (new pcl::PointCloud<pcl::PointXYZ> ()),
       current_sweep_xyz_ (new pcl::PointCloud<pcl::PointXYZ> ()),
       current_scan_xyzi_ (new pcl::PointCloud<pcl::PointXYZI> ()),
@@ -339,7 +340,9 @@ pcl::HDLGrabber::toPointClouds (HDLDataPacket *dataPacket)
       PointXYZI xyzi;
       PointXYZRGBA xyzrgba;
 
-      computeXYZI (xyzi, firing_data.rotationalPosition, firing_data.laserReturns[j],
+      computeXYZI (xyzi,
+                   firing_data.rotationalPosition,
+                   firing_data.laserReturns[j],
                    laser_corrections_[j + offset]);
 
       xyz.x = xyzrgba.x = xyzi.x;
@@ -371,8 +374,10 @@ pcl::HDLGrabber::toPointClouds (HDLDataPacket *dataPacket)
 
 /////////////////////////////////////////////////////////////////////////////
 void
-pcl::HDLGrabber::computeXYZI (pcl::PointXYZI &point, uint16_t azimuth,
-                              HDLLaserReturn laserReturn, HDLLaserCorrection correction)
+pcl::HDLGrabber::computeXYZI (pcl::PointXYZI &point,
+                              uint16_t azimuth,
+                              HDLLaserReturn laserReturn,
+                              HDLLaserCorrection correction)
 {
   double cos_azimuth, sin_azimuth;
 

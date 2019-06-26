@@ -70,7 +70,8 @@ namespace pcl
     // std::cerr << __PRETTY_FUNCTION__<<" called.\n";
 
     for (size_t scale_space_idx = 1;
-         scale_space_idx < border_extractor_scale_space_.size (); ++scale_space_idx)
+         scale_space_idx < border_extractor_scale_space_.size ();
+         ++scale_space_idx)
       delete border_extractor_scale_space_[scale_space_idx];
     border_extractor_scale_space_.clear ();
     for (size_t scale_space_idx = 1; scale_space_idx < range_image_scale_space_.size ();
@@ -78,7 +79,8 @@ namespace pcl
       delete range_image_scale_space_[scale_space_idx];
     range_image_scale_space_.clear ();
     for (size_t scale_space_idx = 1;
-         scale_space_idx < interest_image_scale_space_.size (); ++scale_space_idx)
+         scale_space_idx < interest_image_scale_space_.size ();
+         ++scale_space_idx)
       delete[] interest_image_scale_space_[scale_space_idx];
     interest_image_scale_space_.clear ();
     is_interest_point_image_.clear ();
@@ -141,8 +143,11 @@ namespace pcl
   namespace
   { // Some helper functions in an anonymous namespace - only available in this file
     inline void
-    nkdGetScores (float distance_factor, float surface_change_score,
-                  float pixelDistance, float optimal_distance, float &negative_score,
+    nkdGetScores (float distance_factor,
+                  float surface_change_score,
+                  float pixelDistance,
+                  float optimal_distance,
+                  float &negative_score,
                   float &positive_score)
     {
       negative_score =
@@ -168,7 +173,8 @@ namespace pcl
     }
 
     inline void
-    propagateInvalidBeams (int new_radius, std::vector<bool> &old_beams,
+    propagateInvalidBeams (int new_radius,
+                           std::vector<bool> &old_beams,
                            std::vector<bool> &new_beams)
     {
       new_beams.clear ();
@@ -367,9 +373,11 @@ namespace pcl
           }
 
           for (int y3 = std::max (0, y2 - 1);
-               y3 <= std::min (y2 + 1, int(range_image.height) - 1); ++y3) {
+               y3 <= std::min (y2 + 1, int(range_image.height) - 1);
+               ++y3) {
             for (int x3 = std::max (0, x2 - 1);
-                 x3 <= std::min (x2 + 1, int(range_image.width) - 1); ++x3) {
+                 x3 <= std::min (x2 + 1, int(range_image.width) - 1);
+                 ++x3) {
               int index3 = y3 * range_image.width + x3;
               if (!was_touched[index3]) {
                 neighbors_to_check.push_back (index3);
@@ -389,9 +397,12 @@ namespace pcl
           float distance = std::sqrt (distance_squared);
           float distance_factor = radius_reciprocal * distance;
           float positive_score, current_negative_score;
-          nkdGetScores (distance_factor, surface_change_score, pixelDistance,
+          nkdGetScores (distance_factor,
+                        surface_change_score,
+                        pixelDistance,
                         parameters_.optimal_distance_to_high_surface_change,
-                        current_negative_score, positive_score);
+                        current_negative_score,
+                        positive_score);
           float angle = nkdGetDirectionAngle (surface_change_direction,
                                               rotation_to_viewer_coordinate_system);
           int histogram_cell =
@@ -415,7 +426,8 @@ namespace pcl
           if (angle_histogram[histogram_cell1] == 0.0f)
             continue;
           for (int histogram_cell2 = histogram_cell1 + 1;
-               histogram_cell2 < angle_histogram_size; ++histogram_cell2) {
+               histogram_cell2 < angle_histogram_size;
+               ++histogram_cell2) {
             if (angle_histogram[histogram_cell2] == 0.0f)
               continue;
             // TODO: lookup table for the following:
@@ -516,10 +528,12 @@ namespace pcl
 
     // double interest_value_calculation_start_time = getTime ();
 #pragma omp parallel for default(shared) num_threads(parameters_.max_no_of_threads)    \
-    schedule(guided, 10)                                                               \
-        firstprivate(was_touched, neighbors_to_check, angle_histogram,                 \
-                     neighbors_within_radius_overhead, angle_elements,                 \
-                     relevant_point_still_valid)
+    schedule(guided, 10) firstprivate(was_touched,                                     \
+                                      neighbors_to_check,                              \
+                                      angle_histogram,                                 \
+                                      neighbors_within_radius_overhead,                \
+                                      angle_elements,                                  \
+                                      relevant_point_still_valid)
     for (int index = 0; index < array_size; ++index) {
       if (interest_image_[index] <= 1.0f)
         continue;
@@ -572,9 +586,11 @@ namespace pcl
         }
 
         for (int y3 = std::max (0, y2 - 1);
-             y3 <= std::min (y2 + 1, int(range_image.height) - 1); ++y3) {
+             y3 <= std::min (y2 + 1, int(range_image.height) - 1);
+             ++y3) {
           for (int x3 = std::max (0, x2 - 1);
-               x3 <= std::min (x2 + 1, int(range_image.width) - 1); ++x3) {
+               x3 <= std::min (x2 + 1, int(range_image.width) - 1);
+               ++x3) {
             int index3 = y3 * range_image.width + x3;
             if (!was_touched[index3]) {
               neighbors_to_check.push_back (index3);
@@ -613,7 +629,8 @@ namespace pcl
         if (angle_histogram[histogram_cell1] == 0.0f)
           continue;
         for (int histogram_cell2 = histogram_cell1 + 1;
-             histogram_cell2 < angle_histogram_size; ++histogram_cell2) {
+             histogram_cell2 < angle_histogram_size;
+             ++histogram_cell2) {
           if (angle_histogram[histogram_cell2] == 0.0f)
             continue;
           // TODO: lookup table for the following:
@@ -658,7 +675,8 @@ namespace pcl
              ++angle_histogram_idx) {
           std::vector<std::pair<int, float>> &relevent_point_indices =
               angle_elements[angle_histogram_idx];
-          std::sort (relevent_point_indices.begin (), relevent_point_indices.end (),
+          std::sort (relevent_point_indices.begin (),
+                     relevent_point_indices.end (),
                      secondPairElementIsGreater);
           relevant_point_still_valid.clear ();
           relevant_point_still_valid.resize (relevent_point_indices.size (), true);
@@ -669,7 +687,8 @@ namespace pcl
             const PointWithRange &relevant_point1 =
                 range_image.getPoint (relevent_point_indices[rpi_idx1].first);
             for (int rpi_idx2 = rpi_idx1 + 1;
-                 rpi_idx2 < int(relevent_point_indices.size ()); ++rpi_idx2) {
+                 rpi_idx2 < int(relevent_point_indices.size ());
+                 ++rpi_idx2) {
               if (!relevant_point_still_valid[rpi_idx2])
                 continue;
               const PointWithRange &relevant_point2 =
@@ -684,7 +703,8 @@ namespace pcl
           }
           int newPointIdx = 0;
           for (int oldPointIdx = 0;
-               oldPointIdx < int(relevant_point_still_valid.size ()); ++oldPointIdx) {
+               oldPointIdx < int(relevant_point_still_valid.size ());
+               ++oldPointIdx) {
             if (relevant_point_still_valid[oldPointIdx])
               relevent_point_indices[newPointIdx++] =
                   relevent_point_indices[oldPointIdx];
@@ -719,9 +739,12 @@ namespace pcl
                   (point3.getVector3fMap () - point2.getVector3fMap ()).norm ();
               float distance_factor = radius_reciprocal * distance;
               float positive_score, current_negative_score;
-              nkdGetScores (distance_factor, surface_change_score, pixelDistance,
+              nkdGetScores (distance_factor,
+                            surface_change_score,
+                            pixelDistance,
                             parameters_.optimal_distance_to_high_surface_change,
-                            current_negative_score, positive_score);
+                            current_negative_score,
+                            positive_score);
               histogram_value = (std::max) (histogram_value, positive_score);
               negative_score = (std::min) (negative_score, current_negative_score);
             }
@@ -732,7 +755,8 @@ namespace pcl
             if (angle_histogram[histogram_cell1] == 0.0f)
               continue;
             for (int histogram_cell2 = histogram_cell1 + 1;
-                 histogram_cell2 < angle_histogram_size; ++histogram_cell2) {
+                 histogram_cell2 < angle_histogram_size;
+                 ++histogram_cell2) {
               if (angle_histogram[histogram_cell2] == 0.0f)
                 continue;
               // TODO: lookup table for the following:
@@ -742,10 +766,10 @@ namespace pcl
               normalized_angle_diff =
                   (normalized_angle_diff <= 1.0f ? normalized_angle_diff
                                                  : 2.0f - normalized_angle_diff);
-              angle_change_value =
-                  std::max (angle_change_value, angle_histogram[histogram_cell1] *
-                                                    angle_histogram[histogram_cell2] *
-                                                    normalized_angle_diff);
+              angle_change_value = std::max (angle_change_value,
+                                             angle_histogram[histogram_cell1] *
+                                                 angle_histogram[histogram_cell2] *
+                                                 normalized_angle_diff);
             }
           }
           angle_change_value = std::sqrt (angle_change_value);
@@ -873,12 +897,12 @@ namespace pcl
                   false; // There is a point in range -> Have to check further distances
 
               float interest_value2 = interest_image_[index2];
-              sample_points.emplace_back (x2 - keypoint_x_int, y2 - keypoint_y_int,
-                                          interest_value2);
+              sample_points.emplace_back (
+                  x2 - keypoint_x_int, y2 - keypoint_y_int, interest_value2);
             }
           }
-          if (!polynomial_calculations.bivariatePolynomialApproximation (sample_points,
-                                                                         2, polynomial))
+          if (!polynomial_calculations.bivariatePolynomialApproximation (
+                  sample_points, 2, polynomial))
             continue;
 
           polynomial.findCriticalPoints (x_values, y_values, types);
@@ -907,7 +931,8 @@ namespace pcl
       }
     }
 
-    std::sort (tmp_interest_points.begin (), tmp_interest_points.end (),
+    std::sort (tmp_interest_points.begin (),
+               tmp_interest_points.end (),
                isBetterInterestPoint);
 
     float min_distance_squared = powf (

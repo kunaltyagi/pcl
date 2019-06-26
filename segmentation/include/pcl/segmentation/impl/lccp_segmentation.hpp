@@ -136,7 +136,8 @@ pcl::LCCPSegmentation<PointT>::computeSegmentAdjacency ()
 
   // For every Supervoxel..
   for (VertexIterator sv_itr = vertex_iterator_range.first;
-       sv_itr != vertex_iterator_range.second; ++sv_itr) // For all supervoxels
+       sv_itr != vertex_iterator_range.second;
+       ++sv_itr) // For all supervoxels
   {
     const uint32_t &sv_label = sv_adjacency_list_[*sv_itr];
     current_segLabel = sv_label_to_seg_label_map_[sv_label];
@@ -145,7 +146,8 @@ pcl::LCCPSegmentation<PointT>::computeSegmentAdjacency ()
     std::pair<AdjacencyIterator, AdjacencyIterator> neighbors =
         boost::adjacent_vertices (*sv_itr, sv_adjacency_list_);
     for (AdjacencyIterator itr_neighbor = neighbors.first;
-         itr_neighbor != neighbors.second; ++itr_neighbor) {
+         itr_neighbor != neighbors.second;
+         ++itr_neighbor) {
       const uint32_t &neigh_label = sv_adjacency_list_[*itr_neighbor];
       neigh_segLabel = sv_label_to_seg_label_map_[neigh_label];
 
@@ -183,7 +185,8 @@ pcl::LCCPSegmentation<PointT>::mergeSmallSegments ()
     // Iterate through all supervoxels, check if they are in a "small" segment -> change
     // label to largest neighborID
     for (VertexIterator sv_itr = vertex_iterator_range.first;
-         sv_itr != vertex_iterator_range.second; ++sv_itr) // For all supervoxels
+         sv_itr != vertex_iterator_range.second;
+         ++sv_itr) // For all supervoxels
     {
       const uint32_t &sv_label = sv_adjacency_list_[*sv_itr];
       current_seg_label = sv_label_to_seg_label_map_[sv_label];
@@ -261,7 +264,8 @@ pcl::LCCPSegmentation<PointT>::prepareSegmentation (
   // Add all supervoxel labels as vertices
   for (typename std::map<uint32_t, typename pcl::Supervoxel<PointT>::Ptr>::iterator
            svlabel_itr = sv_label_to_supervoxel_map_.begin ();
-       svlabel_itr != sv_label_to_supervoxel_map_.end (); ++svlabel_itr) {
+       svlabel_itr != sv_label_to_supervoxel_map_.end ();
+       ++svlabel_itr) {
     const uint32_t &sv_label = svlabel_itr->first;
     VertexID node_id = boost::add_vertex (sv_adjacency_list_);
     sv_adjacency_list_[node_id] = sv_label;
@@ -284,7 +288,8 @@ pcl::LCCPSegmentation<PointT>::prepareSegmentation (
   seg_label_to_sv_list_map_.clear ();
   for (typename std::map<uint32_t, typename pcl::Supervoxel<PointT>::Ptr>::iterator
            svlabel_itr = sv_label_to_supervoxel_map_.begin ();
-       svlabel_itr != sv_label_to_supervoxel_map_.end (); ++svlabel_itr) {
+       svlabel_itr != sv_label_to_supervoxel_map_.end ();
+       ++svlabel_itr) {
     const uint32_t &sv_label = svlabel_itr->first;
     processed_[sv_label] = false;
     sv_label_to_seg_label_map_[sv_label] = 0;
@@ -299,7 +304,8 @@ pcl::LCCPSegmentation<PointT>::doGrouping ()
   seg_label_to_sv_list_map_.clear ();
   for (typename std::map<uint32_t, typename pcl::Supervoxel<PointT>::Ptr>::iterator
            svlabel_itr = sv_label_to_supervoxel_map_.begin ();
-       svlabel_itr != sv_label_to_supervoxel_map_.end (); ++svlabel_itr) {
+       svlabel_itr != sv_label_to_supervoxel_map_.end ();
+       ++svlabel_itr) {
     const uint32_t &sv_label = svlabel_itr->first;
     processed_[sv_label] = false;
     sv_label_to_seg_label_map_[sv_label] = 0;
@@ -316,7 +322,8 @@ pcl::LCCPSegmentation<PointT>::doGrouping ()
   // typedef of size_t..
   unsigned int segment_label = 1; // This starts at 1, because 0 is reserved for errors
   for (VertexIterator sv_itr = vertex_iterator_range.first;
-       sv_itr != vertex_iterator_range.second; ++sv_itr) // For all supervoxels
+       sv_itr != vertex_iterator_range.second;
+       ++sv_itr) // For all supervoxels
   {
     const VertexID sv_vertex_id = *sv_itr;
     const uint32_t &sv_label = sv_adjacency_list_[sv_vertex_id];
@@ -350,7 +357,8 @@ pcl::LCCPSegmentation<PointT>::recursiveSegmentGrowing (
       query_point_id, sv_adjacency_list_); // adjacent vertices to node (*itr) in graph
                                            // sv_adjacency_list_
   for (OutEdgeIterator out_Edge_itr = out_edge_iterator_range.first;
-       out_Edge_itr != out_edge_iterator_range.second; ++out_Edge_itr) {
+       out_Edge_itr != out_edge_iterator_range.second;
+       ++out_Edge_itr) {
     const VertexID neighbor_ID = boost::target (*out_Edge_itr, sv_adjacency_list_);
     const uint32_t &neighbor_label = sv_adjacency_list_[neighbor_ID];
 

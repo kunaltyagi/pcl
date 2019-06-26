@@ -69,9 +69,11 @@ namespace pcl
     using PointCloudOut = pcl::PointCloud<PointOutT>;
     using SearchMethod =
         std::function<int(int, double, std::vector<int> &, std::vector<float> &)>;
-    using SearchMethodSurface =
-        std::function<int(const PointCloudIn &cloud, int index, double,
-                          std::vector<int> &, std::vector<float> &)>;
+    using SearchMethodSurface = std::function<int(const PointCloudIn &cloud,
+                                                  int index,
+                                                  double,
+                                                  std::vector<int> &,
+                                                  std::vector<float> &)>;
 
     public:
     /** \brief Empty constructor. */
@@ -181,7 +183,9 @@ namespace pcl
      * distances from the query point to the k-nearest neighbors
      */
     inline int
-    searchForNeighbors (int index, double parameter, std::vector<int> &indices,
+    searchForNeighbors (int index,
+                        double parameter,
+                        std::vector<int> &indices,
                         std::vector<float> &distances) const
     {
       if (surface_ == input_) // if the two surfaces are the same

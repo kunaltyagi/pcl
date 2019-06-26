@@ -17,7 +17,8 @@ pcl::cloud_composer::CloudViewer::addModel (ProjectModel *new_model)
 {
   CloudView *new_view = new CloudView (new_model);
   connect (new_model->getSelectionModel (),
-           SIGNAL (selectionChanged (QItemSelection, QItemSelection)), new_view,
+           SIGNAL (selectionChanged (QItemSelection, QItemSelection)),
+           new_view,
            SLOT (selectedItemChanged (QItemSelection, QItemSelection)));
   new_model->setCloudView (new_view);
 

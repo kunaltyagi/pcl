@@ -267,7 +267,8 @@ namespace pcl
     double
     computeDerivatives (Eigen::Matrix<double, 6, 1> &score_gradient,
                         Eigen::Matrix<double, 6, 6> &hessian,
-                        PointCloudSource &trans_cloud, Eigen::Matrix<double, 6, 1> &p,
+                        PointCloudSource &trans_cloud,
+                        Eigen::Matrix<double, 6, 1> &p,
                         bool compute_hessian = true);
 
     /** \brief Compute individual point contirbutions to derivatives of probability
@@ -282,8 +283,10 @@ namespace pcl
      */
     double
     updateDerivatives (Eigen::Matrix<double, 6, 1> &score_gradient,
-                       Eigen::Matrix<double, 6, 6> &hessian, Eigen::Vector3d &x_trans,
-                       Eigen::Matrix3d &c_inv, bool compute_hessian = true);
+                       Eigen::Matrix<double, 6, 6> &hessian,
+                       Eigen::Vector3d &x_trans,
+                       Eigen::Matrix3d &c_inv,
+                       bool compute_hessian = true);
 
     /** \brief Precompute anglular components of derivatives.
      * \note Equation 6.19 and 6.21 [Magnusson 2009].
@@ -311,7 +314,8 @@ namespace pcl
      * the current transform vector
      */
     void
-    computeHessian (Eigen::Matrix<double, 6, 6> &hessian, PointCloudSource &trans_cloud,
+    computeHessian (Eigen::Matrix<double, 6, 6> &hessian,
+                    PointCloudSource &trans_cloud,
                     Eigen::Matrix<double, 6, 1> &p);
 
     /** \brief Compute individual point contirbutions to hessian of probability function
@@ -321,7 +325,8 @@ namespace pcl
      * covariance voxel \param[in] c_inv covariance of occupied covariance voxel
      */
     void
-    updateHessian (Eigen::Matrix<double, 6, 6> &hessian, Eigen::Vector3d &x_trans,
+    updateHessian (Eigen::Matrix<double, 6, 6> &hessian,
+                   Eigen::Vector3d &x_trans,
                    Eigen::Matrix3d &c_inv);
 
     /** \brief Compute line search step length and update transform and probability
@@ -346,8 +351,11 @@ namespace pcl
      */
     double
     computeStepLengthMT (const Eigen::Matrix<double, 6, 1> &x,
-                         Eigen::Matrix<double, 6, 1> &step_dir, double step_init,
-                         double step_max, double step_min, double &score,
+                         Eigen::Matrix<double, 6, 1> &step_dir,
+                         double step_init,
+                         double step_max,
+                         double step_min,
+                         double &score,
                          Eigen::Matrix<double, 6, 1> &score_gradient,
                          Eigen::Matrix<double, 6, 6> &hessian,
                          PointCloudSource &trans_cloud);
@@ -376,8 +384,15 @@ namespace pcl
      * \return if interval converges
      */
     bool
-    updateIntervalMT (double &a_l, double &f_l, double &g_l, double &a_u, double &f_u,
-                      double &g_u, double a_t, double f_t, double g_t);
+    updateIntervalMT (double &a_l,
+                      double &f_l,
+                      double &g_l,
+                      double &a_u,
+                      double &f_u,
+                      double &g_u,
+                      double a_t,
+                      double f_t,
+                      double g_t);
 
     /** \brief Select new trial value for More-Thuente method.
      * \note Trial Value Selection [More, Thuente 1994], \f$ \psi(\alpha_k) \f$ is used
@@ -397,8 +412,15 @@ namespace pcl
      * previous trial value, \f$ g_t \f$ in Moore-Thuente (1994) \return new trial value
      */
     double
-    trialValueSelectionMT (double a_l, double f_l, double g_l, double a_u, double f_u,
-                           double g_u, double a_t, double f_t, double g_t);
+    trialValueSelectionMT (double a_l,
+                           double f_l,
+                           double g_l,
+                           double a_u,
+                           double f_u,
+                           double g_u,
+                           double a_t,
+                           double f_t,
+                           double g_t);
 
     /** \brief Auxiliary function used to determine endpoints of More-Thuente interval.
      * \note \f$ \psi(\alpha) \f$ in Equation 1.6 (Moore, Thuente 1994)
@@ -410,8 +432,8 @@ namespace pcl
      * Equation 1.1 [More, Thuente 1994] \return sufficient decrease value
      */
     inline double
-    auxilaryFunction_PsiMT (double a, double f_a, double f_0, double g_0,
-                            double mu = 1.e-4)
+    auxilaryFunction_PsiMT (
+        double a, double f_a, double f_0, double g_0, double mu = 1.e-4)
     {
       return (f_a - f_0 - mu * g_0 * a);
     }

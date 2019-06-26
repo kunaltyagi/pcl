@@ -10,8 +10,8 @@
 
 template <template <class> class Distance, typename PointInT, typename FeatureT>
 void
-pcl::rec_3d_framework::LocalRecognitionPipeline<Distance, PointInT,
-                                                FeatureT>::loadFeaturesAndCreateFLANN ()
+pcl::rec_3d_framework::LocalRecognitionPipeline<Distance, PointInT, FeatureT>::
+    loadFeaturesAndCreateFLANN ()
 {
   boost::shared_ptr<std::vector<ModelT>> models = source_->getModels ();
   std::cout << "Models size:" << models->size () << std::endl;
@@ -73,7 +73,8 @@ pcl::rec_3d_framework::LocalRecognitionPipeline<Distance, PointInT,
           descr_model.keypoint_id = static_cast<int> (dd);
           descr_model.descr.resize (size_feat);
 
-          memcpy (&descr_model.descr[0], &signature->points[dd].histogram[0],
+          memcpy (&descr_model.descr[0],
+                  &signature->points[dd].histogram[0],
                   size_feat * sizeof (float));
 
           flann_models_.push_back (descr_model);
@@ -90,11 +91,12 @@ pcl::rec_3d_framework::LocalRecognitionPipeline<Distance, PointInT,
 
 template <template <class> class Distance, typename PointInT, typename FeatureT>
 void
-pcl::rec_3d_framework::LocalRecognitionPipeline<
-    Distance, PointInT, FeatureT>::nearestKSearch (flann::Index<DistT> *index,
-                                                   const flann_model &model, int k,
-                                                   flann::Matrix<int> &indices,
-                                                   flann::Matrix<float> &distances)
+pcl::rec_3d_framework::LocalRecognitionPipeline<Distance, PointInT, FeatureT>::
+    nearestKSearch (flann::Index<DistT> *index,
+                    const flann_model &model,
+                    int k,
+                    flann::Matrix<int> &indices,
+                    flann::Matrix<float> &distances)
 {
   flann::Matrix<float> p =
       flann::Matrix<float> (new float[model.descr.size ()], 1, model.descr.size ());
@@ -108,8 +110,8 @@ pcl::rec_3d_framework::LocalRecognitionPipeline<
 
 template <template <class> class Distance, typename PointInT, typename FeatureT>
 void
-pcl::rec_3d_framework::LocalRecognitionPipeline<
-    Distance, PointInT, FeatureT>::initialize (bool force_retrain)
+pcl::rec_3d_framework::LocalRecognitionPipeline<Distance, PointInT, FeatureT>::
+    initialize (bool force_retrain)
 {
   boost::shared_ptr<std::vector<ModelT>> models;
 
@@ -144,8 +146,8 @@ pcl::rec_3d_framework::LocalRecognitionPipeline<
             new pcl::PointCloud<FeatureT> ());
         PointInTPtr keypoints_pointcloud;
 
-        bool success = estimator_->estimate (models->at (i).views_->at (v), processed,
-                                             keypoints_pointcloud, signatures);
+        bool success = estimator_->estimate (
+            models->at (i).views_->at (v), processed, keypoints_pointcloud, signatures);
 
         if (success) {
           std::string path = source_->getModelDescriptorDir (
@@ -200,8 +202,8 @@ pcl::rec_3d_framework::LocalRecognitionPipeline<
 
 template <template <class> class Distance, typename PointInT, typename FeatureT>
 void
-pcl::rec_3d_framework::LocalRecognitionPipeline<Distance, PointInT,
-                                                FeatureT>::recognize ()
+pcl::rec_3d_framework::LocalRecognitionPipeline<Distance, PointInT, FeatureT>::
+    recognize ()
 {
 
   models_.reset (new std::vector<ModelT>);
@@ -253,12 +255,14 @@ pcl::rec_3d_framework::LocalRecognitionPipeline<Distance, PointInT,
       // model coordinates
       Eigen::Matrix4f homMatrixPose;
       getPose (flann_models_.at (indices[0][0]).model,
-               flann_models_.at (indices[0][0]).view_id, homMatrixPose);
+               flann_models_.at (indices[0][0]).view_id,
+               homMatrixPose);
 
       typename pcl::PointCloud<PointInT>::Ptr keypoints (
           new pcl::PointCloud<PointInT> ());
       getKeypoints (flann_models_.at (indices[0][0]).model,
-                    flann_models_.at (indices[0][0]).view_id, keypoints);
+                    flann_models_.at (indices[0][0]).view_id,
+                    keypoints);
 
       PointInT view_keypoint =
           keypoints->points[flann_models_.at (indices[0][0]).keypoint_id];
@@ -275,7 +279,8 @@ pcl::rec_3d_framework::LocalRecognitionPipeline<Distance, PointInT,
         oh.correspondences_pointcloud->points.push_back (model_keypoint);
         oh.correspondences_to_inputcloud->push_back (pcl::Correspondence (
             static_cast<int> (oh.correspondences_pointcloud->points.size () - 1),
-            static_cast<int> (idx), distances[0][0]));
+            static_cast<int> (idx),
+            distances[0][0]));
         oh.feature_distances_->push_back (distances[0][0]);
 
       } else {
@@ -354,7 +359,8 @@ pcl::rec_3d_framework::LocalRecognitionPipeline<Distance, PointInT,
         typename pcl::registration::TransformationEstimationSVD<PointInT, PointInT>
             t_est;
         t_est.estimateRigidTransformation (*(*it_map).second.correspondences_pointcloud,
-                                           *keypoints_pointcloud, corresp_clusters[i],
+                                           *keypoints_pointcloud,
+                                           corresp_clusters[i],
                                            best_trans);
 
         models_->push_back ((*it_map).second.model_);
@@ -469,7 +475,9 @@ pcl::rec_3d_framework::LocalRecognitionPipeline<Distance, PointInT, FeatureT>::g
     using mv_pair = std::pair<std::string, int>;
     mv_pair pair_model_view = std::make_pair (model.id_, view_id);
 
-    std::map<mv_pair, Eigen::Matrix4f, std::less<mv_pair>,
+    std::map<mv_pair,
+             Eigen::Matrix4f,
+             std::less<mv_pair>,
              Eigen::aligned_allocator<std::pair<const mv_pair, Eigen::Matrix4f>>>::
         iterator it = poses_cache_.find (pair_model_view);
 
@@ -489,7 +497,8 @@ pcl::rec_3d_framework::LocalRecognitionPipeline<Distance, PointInT, FeatureT>::g
 template <template <class> class Distance, typename PointInT, typename FeatureT>
 void
 pcl::rec_3d_framework::LocalRecognitionPipeline<Distance, PointInT, FeatureT>::
-    getKeypoints (ModelT &model, int view_id,
+    getKeypoints (ModelT &model,
+                  int view_id,
                   typename pcl::PointCloud<PointInT>::Ptr &keypoints_cloud)
 {
 

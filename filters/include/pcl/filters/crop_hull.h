@@ -197,7 +197,8 @@ namespace pcl
      */
     template <unsigned PlaneDim1, unsigned PlaneDim2>
     inline static bool
-    isPointIn2DPolyWithVertIndices (const PointT &point, const Vertices &verts,
+    isPointIn2DPolyWithVertIndices (const PointT &point,
+                                    const Vertices &verts,
                                     const PointCloud &cloud);
 
     /** \brief Does a ray cast from a point intersect with an arbitrary
@@ -210,8 +211,10 @@ namespace pcl
      * \param[in] cloud Cloud from which the vertex indices are drawn.
      */
     inline static bool
-    rayTriangleIntersect (const PointT &point, const Eigen::Vector3f &ray,
-                          const Vertices &verts, const PointCloud &cloud);
+    rayTriangleIntersect (const PointT &point,
+                          const Eigen::Vector3f &ray,
+                          const Vertices &verts,
+                          const PointCloud &cloud);
 
     /** \brief The vertices of the hull used to filter points. */
     std::vector<pcl::Vertices> hull_polygons_;

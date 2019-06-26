@@ -139,8 +139,12 @@ namespace pcl
      * \param[out] nmap_dst destination vertex map
      */
     void
-    tranformMaps (const MapArr &vmap_src, const MapArr &nmap_src, const Mat33 &Rmat,
-                  const float3 &tvec, MapArr &vmap_dst, MapArr &nmap_dst);
+    tranformMaps (const MapArr &vmap_src,
+                  const MapArr &nmap_src,
+                  const Mat33 &Rmat,
+                  const float3 &tvec,
+                  MapArr &vmap_dst,
+                  MapArr &nmap_dst);
 
     /** \brief Performs depth truncation
      * \param[out] depth depth map to truncation
@@ -166,10 +170,16 @@ namespace pcl
      * normals \param[out] coresp
      */
     void
-    findCoresp (const MapArr &vmap_g_curr, const MapArr &nmap_g_curr,
-                const Mat33 &Rprev_inv, const float3 &tprev, const Intr &intr,
-                const MapArr &vmap_g_prev, const MapArr &nmap_g_prev, float distThres,
-                float angleThres, PtrStepSz<short2> coresp);
+    findCoresp (const MapArr &vmap_g_curr,
+                const MapArr &nmap_g_curr,
+                const Mat33 &Rprev_inv,
+                const float3 &tprev,
+                const Intr &intr,
+                const MapArr &vmap_g_prev,
+                const MapArr &nmap_g_prev,
+                float distThres,
+                float angleThres,
+                PtrStepSz<short2> coresp);
 
     /** \brief (now it's extra code) Computation Ax=b for ICP iteration
      * \param[in] v_dst destination vertex map (previous frame cloud)
@@ -182,9 +192,13 @@ namespace pcl
      * \param[out] vectorB_host b
      */
     void
-    estimateTransform (const MapArr &v_dst, const MapArr &n_dst, const MapArr &v_src,
-                       const PtrStepSz<short2> &coresp, DeviceArray2D<float> &gbuf,
-                       DeviceArray<float> &mbuf, float *matrixA_host,
+    estimateTransform (const MapArr &v_dst,
+                       const MapArr &n_dst,
+                       const MapArr &v_src,
+                       const PtrStepSz<short2> &coresp,
+                       DeviceArray2D<float> &gbuf,
+                       DeviceArray<float> &mbuf,
+                       float *matrixA_host,
                        float *vectorB_host);
 
     /** \brief Computation Ax=b for ICP iteration
@@ -204,20 +218,38 @@ namespace pcl
      * vectorB_host b
      */
     void
-    estimateCombined (const Mat33 &Rcurr, const float3 &tcurr, const MapArr &vmap_curr,
-                      const MapArr &nmap_curr, const Mat33 &Rprev_inv,
-                      const float3 &tprev, const Intr &intr, const MapArr &vmap_g_prev,
-                      const MapArr &nmap_g_prev, float distThres, float angleThres,
-                      DeviceArray2D<float> &gbuf, DeviceArray<float> &mbuf,
-                      float *matrixA_host, float *vectorB_host);
+    estimateCombined (const Mat33 &Rcurr,
+                      const float3 &tcurr,
+                      const MapArr &vmap_curr,
+                      const MapArr &nmap_curr,
+                      const Mat33 &Rprev_inv,
+                      const float3 &tprev,
+                      const Intr &intr,
+                      const MapArr &vmap_g_prev,
+                      const MapArr &nmap_g_prev,
+                      float distThres,
+                      float angleThres,
+                      DeviceArray2D<float> &gbuf,
+                      DeviceArray<float> &mbuf,
+                      float *matrixA_host,
+                      float *vectorB_host);
 
     void
-    estimateCombined (const Mat33 &Rcurr, const float3 &tcurr, const MapArr &vmap_curr,
-                      const MapArr &nmap_curr, const Mat33 &Rprev_inv,
-                      const float3 &tprev, const Intr &intr, const MapArr &vmap_g_prev,
-                      const MapArr &nmap_g_prev, float distThres, float angleThres,
-                      DeviceArray2D<double> &gbuf, DeviceArray<double> &mbuf,
-                      double *matrixA_host, double *vectorB_host);
+    estimateCombined (const Mat33 &Rcurr,
+                      const float3 &tcurr,
+                      const MapArr &vmap_curr,
+                      const MapArr &nmap_curr,
+                      const Mat33 &Rprev_inv,
+                      const float3 &tprev,
+                      const Intr &intr,
+                      const MapArr &vmap_g_prev,
+                      const MapArr &nmap_g_prev,
+                      float distThres,
+                      float angleThres,
+                      DeviceArray2D<double> &gbuf,
+                      DeviceArray<double> &mbuf,
+                      double *matrixA_host,
+                      double *vectorB_host);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // TSDF volume functions
@@ -239,9 +271,13 @@ namespace pcl
      * \param[in] volume tsdf volume to be updated
      */
     void
-    integrateTsdfVolume (const PtrStepSz<ushort> &depth_raw, const Intr &intr,
-                         const float3 &volume_size, const Mat33 &Rcurr_inv,
-                         const float3 &tcurr, float tranc_dist, PtrStep<short2> volume);
+    integrateTsdfVolume (const PtrStepSz<ushort> &depth_raw,
+                         const Intr &intr,
+                         const float3 &volume_size,
+                         const Mat33 &Rcurr_inv,
+                         const float3 &tcurr,
+                         float tranc_dist,
+                         PtrStep<short2> volume);
 
     // second version
     /** \brief Function that integrates volume if volume element contains: 2 bytes for
@@ -254,9 +290,13 @@ namespace pcl
      * \param[out] depthRawScaled Buffer for scaled depth along ray
      */
     PCL_EXPORTS void
-    integrateTsdfVolume (const PtrStepSz<ushort> &depth_raw, const Intr &intr,
-                         const float3 &volume_size, const Mat33 &Rcurr_inv,
-                         const float3 &tcurr, float tranc_dist, PtrStep<short2> volume,
+    integrateTsdfVolume (const PtrStepSz<ushort> &depth_raw,
+                         const Intr &intr,
+                         const float3 &volume_size,
+                         const Mat33 &Rcurr_inv,
+                         const float3 &tcurr,
+                         float tranc_dist,
+                         PtrStep<short2> volume,
                          DeviceArray2D<float> &depthRawScaled);
 
     /** \brief Initialzied color volume
@@ -279,10 +319,15 @@ namespace pcl
      * average, one means average with prev value, etc.
      */
     void
-    updateColorVolume (const Intr &intr, float tranc_dist, const Mat33 &R_inv,
-                       const float3 &t, const MapArr &vmap,
-                       const PtrStepSz<uchar3> &colors, const float3 &volume_size,
-                       PtrStep<uchar4> color_volume, int max_weight = 1);
+    updateColorVolume (const Intr &intr,
+                       float tranc_dist,
+                       const Mat33 &R_inv,
+                       const float3 &t,
+                       const MapArr &vmap,
+                       const PtrStepSz<uchar3> &colors,
+                       const float3 &volume_size,
+                       PtrStep<uchar4> color_volume,
+                       int max_weight = 1);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Raycast and view generation
@@ -297,9 +342,14 @@ namespace pcl
      * \param[out] nmap output normals map
      */
     void
-    raycast (const Intr &intr, const Mat33 &Rcurr, const float3 &tcurr,
-             float tranc_dist, const float3 &volume_size, const PtrStep<short2> &volume,
-             MapArr &vmap, MapArr &nmap);
+    raycast (const Intr &intr,
+             const Mat33 &Rcurr,
+             const float3 &tcurr,
+             float tranc_dist,
+             const float3 &volume_size,
+             const PtrStep<short2> &volume,
+             MapArr &vmap,
+             MapArr &nmap);
 
     /** \brief Renders 3D image of the scene
      * \param[in] vmap vertex map
@@ -308,7 +358,9 @@ namespace pcl
      * \param[out] dst buffer where image is generated
      */
     void
-    generateImage (const MapArr &vmap, const MapArr &nmap, const LightSource &light,
+    generateImage (const MapArr &vmap,
+                   const MapArr &nmap,
+                   const LightSource &light,
                    PtrStepSz<uchar3> dst);
 
     /** \brief Renders depth image from give pose
@@ -318,7 +370,9 @@ namespace pcl
      * \param[out] dst buffer where depth is generated
      */
     void
-    generateDepth (const Mat33 &R_inv, const float3 &t, const MapArr &vmap,
+    generateDepth (const Mat33 &R_inv,
+                   const float3 &t,
+                   const MapArr &vmap,
                    DepthMap &dst);
 
     /** \brief Paints 3D view with color map
@@ -327,7 +381,8 @@ namespace pcl
      * \param[in] colors_weight weight for colors
      */
     void
-    paint3DView (const PtrStep<uchar3> &colors, PtrStepSz<uchar3> dst,
+    paint3DView (const PtrStep<uchar3> &colors,
+                 PtrStepSz<uchar3> dst,
                  float colors_weight = 0.5f);
 
     /** \brief Performs resize of vertex map to next pyramid level by averaging each
@@ -352,7 +407,8 @@ namespace pcl
      * \return number of point stored to passed buffer
      */
     PCL_EXPORTS size_t
-    extractCloud (const PtrStep<short2> &volume, const float3 &volume_size,
+    extractCloud (const PtrStep<short2> &volume,
+                  const float3 &volume_size,
                   PtrSz<PointType> output);
 
     /** \brief Performs normals computation for given points using tsdf volume
@@ -364,8 +420,10 @@ namespace pcl
      */
     template <typename NormalType>
     void
-    extractNormals (const PtrStep<short2> &volume, const float3 &volume_size,
-                    const PtrSz<PointType> &input, NormalType *output);
+    extractNormals (const PtrStep<short2> &volume,
+                    const float3 &volume_size,
+                    const PtrSz<PointType> &input,
+                    NormalType *output);
 
     /** \brief Performs colors exctraction from color volume
      * \param[in] color_volume color volume
@@ -374,8 +432,10 @@ namespace pcl
      * \param[out] colors output array with colors.
      */
     void
-    exctractColors (const PtrStep<uchar4> &color_volume, const float3 &volume_size,
-                    const PtrSz<PointType> &points, uchar4 *colors);
+    exctractColors (const PtrStep<uchar4> &color_volume,
+                    const float3 &volume_size,
+                    const PtrSz<PointType> &points,
+                    uchar4 *colors);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Utility
@@ -464,6 +524,7 @@ namespace pcl
     void
     generateTriangles (const PtrStep<short2> &volume,
                        const DeviceArray2D<int> &occupied_voxels,
-                       const float3 &volume_size, DeviceArray<PointType> &output);
+                       const float3 &volume_size,
+                       DeviceArray<PointType> &output);
   } // namespace device
 } // namespace pcl

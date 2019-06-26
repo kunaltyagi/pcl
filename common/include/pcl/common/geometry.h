@@ -81,8 +81,10 @@ namespace pcl
      */
     template <typename PointT, typename NormalT>
     inline void
-    project (const PointT &point, const PointT &plane_origin,
-             const NormalT &plane_normal, PointT &projected)
+    project (const PointT &point,
+             const PointT &plane_origin,
+             const NormalT &plane_normal,
+             PointT &projected)
     {
       Eigen::Vector3f po = point - plane_origin;
       const Eigen::Vector3f normal = plane_normal.getVector3fMapConst ();
@@ -97,8 +99,10 @@ namespace pcl
      * \param[out] projected The returned projected point
      */
     inline void
-    project (const Eigen::Vector3f &point, const Eigen::Vector3f &plane_origin,
-             const Eigen::Vector3f &plane_normal, Eigen::Vector3f &projected)
+    project (const Eigen::Vector3f &point,
+             const Eigen::Vector3f &plane_origin,
+             const Eigen::Vector3f &plane_normal,
+             Eigen::Vector3f &projected)
     {
       Eigen::Vector3f po = point - plane_origin;
       float lambda = plane_normal.dot (po);

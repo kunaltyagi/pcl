@@ -113,10 +113,12 @@ namespace pcl
      * paper.
      */
     inline void
-    setCutting (const uint32_t max_cuts = 20, const uint32_t cutting_min_segments = 0,
+    setCutting (const uint32_t max_cuts = 20,
+                const uint32_t cutting_min_segments = 0,
                 const float cutting_min_score = 0.16,
                 const bool locally_constrained = true,
-                const bool directed_cutting = true, const bool clean_cutting = false)
+                const bool directed_cutting = true,
+                const bool clean_cutting = false)
     {
       max_cuts_ = max_cuts;
       min_segment_size_for_cutting_ = cutting_min_segments;
@@ -204,7 +206,8 @@ namespace pcl
        * the current time, else set to 12345 (default: false)
        */
       WeightedRandomSampleConsensus (const SampleConsensusModelPtr &model,
-                                     double threshold, bool random = false)
+                                     double threshold,
+                                     bool random = false)
           : SampleConsensus<WeightSACPointType> (model, threshold, random)
       {
         initialize ();

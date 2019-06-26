@@ -83,9 +83,11 @@ pcl::PapazovHV<ModelT, SceneT>::initialize ()
     std::vector<float> nn_distances;
 
     for (size_t i = 0; i < recog_model->cloud_->points.size (); i++) {
-      if (!scene_downsampled_tree_->radiusSearch (
-              recog_model->cloud_->points[i], inliers_threshold_, nn_indices,
-              nn_distances, std::numeric_limits<int>::max ())) {
+      if (!scene_downsampled_tree_->radiusSearch (recog_model->cloud_->points[i],
+                                                  inliers_threshold_,
+                                                  nn_indices,
+                                                  nn_distances,
+                                                  std::numeric_limits<int>::max ())) {
         outliers.push_back (static_cast<int> (i));
       } else {
         for (size_t k = 0; k < nn_distances.size (); k++) {
@@ -143,7 +145,8 @@ pcl::PapazovHV<ModelT, SceneT>::nonMaximaSuppresion ()
 
     bool a_better_one = false;
     for (boost::tie (ai, ai_end) = boost::adjacent_vertices (v, conflict_graph_);
-         (ai != ai_end) && !a_better_one; ++ai) {
+         (ai != ai_end) && !a_better_one;
+         ++ai) {
       auto neighbour =
           boost::static_pointer_cast<RecognitionModel> (graph_id_model_map_[int(*ai)]);
       if ((neighbour->explained_.size () >= current->explained_.size ()) &&
@@ -185,7 +188,8 @@ pcl::PapazovHV<ModelT, SceneT>::buildConflictGraph ()
             bool j_found = false;
             bool both_found = false;
             for (size_t kk = 0;
-                 (kk < points_explained_by_rm_[k].size ()) && !both_found; kk++) {
+                 (kk < points_explained_by_rm_[k].size ()) && !both_found;
+                 kk++) {
               if (points_explained_by_rm_[k][kk]->id_ == recognition_models_[i]->id_)
                 i_found = true;
 

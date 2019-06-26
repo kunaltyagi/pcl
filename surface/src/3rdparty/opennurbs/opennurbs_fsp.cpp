@@ -11,7 +11,8 @@ ON_FixedSizePool::SizeofElement () const
 }
 
 bool
-ON_FixedSizePool::Create (size_t sizeof_element, size_t element_count_estimate,
+ON_FixedSizePool::Create (size_t sizeof_element,
+                          size_t element_count_estimate,
                           size_t block_element_capacity)
 {
   if (sizeof_element <= 0) {

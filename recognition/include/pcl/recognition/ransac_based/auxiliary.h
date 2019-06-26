@@ -297,8 +297,8 @@ namespace pcl
       {
         T dot = aux::dot3 (planeNormal, x);
         // Project 'x' on the plane normal
-        T nproj[3] = {-dot * planeNormal[0], -dot * planeNormal[1],
-                      -dot * planeNormal[2]};
+        T nproj[3] = {
+            -dot * planeNormal[0], -dot * planeNormal[1], -dot * planeNormal[2]};
         aux::sum3 (x, nproj, out);
       }
 
@@ -373,7 +373,8 @@ namespace pcl
       /** \brief Compute out = (upper left 3x3 of mat)*p + last column of mat. */
       template <class T>
       void
-      transform (const Eigen::Matrix<T, 4, 4> &mat, const pcl::PointXYZ &p,
+      transform (const Eigen::Matrix<T, 4, 4> &mat,
+                 const pcl::PointXYZ &p,
                  pcl::PointXYZ &out)
       {
         out.x = mat (0, 0) * p.x + mat (0, 1) * p.y + mat (0, 2) * p.z + mat (0, 3);
@@ -401,8 +402,8 @@ namespace pcl
        * a positive test result. The angle has to be in radians. */
       template <typename T>
       bool
-      pointsAreCoplanar (const T p1[3], const T n1[3], const T p2[3], const T n2[3],
-                         T max_angle)
+      pointsAreCoplanar (
+          const T p1[3], const T n1[3], const T p2[3], const T n2[3], T max_angle)
       {
         // Compute the angle between 'n1' and 'n2' and compare it with 'max_angle'
         if (std::acos (aux::clamp (aux::dot3 (n1, n2), -1.0f, 1.0f)) > max_angle)

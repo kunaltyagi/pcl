@@ -266,7 +266,8 @@ TEST (PCL, Octree_Dynamic_Depth_Test)
 
     // iterate over tree
     for (auto it2 = octree.leaf_depth_begin (), it2_end = octree.leaf_depth_end ();
-         it2 != it2_end; ++it2) {
+         it2 != it2_end;
+         ++it2) {
       unsigned int depth = it2.getCurrentOctreeDepth ();
       ASSERT_TRUE ((depth == 1) || (depth == 6));
     }
@@ -297,7 +298,8 @@ TEST (PCL, Octree_Dynamic_Depth_Test)
 
     // iterate over tree
     for (auto it = octree.leaf_depth_begin (), it_end = octree.leaf_depth_end ();
-         it != it_end; ++it) {
+         it != it_end;
+         ++it) {
       OctreeNode *node = it.getCurrentOctreeNode ();
 
       ASSERT_EQ (LEAF_NODE, node->getNodeType ());
@@ -821,7 +823,8 @@ TEST (PCL, Octree_Pointcloud_Iterator_Test)
   unsigned int leafNodeCounter = 0;
 
   for (auto it1 = octreeA.leaf_depth_begin (), it1_end = octreeA.leaf_depth_end ();
-       it1 != it1_end; ++it1) {
+       it1 != it1_end;
+       ++it1) {
     it1.getLeafContainer ().getPointIndices (indexVector);
     leafNodeCounter++;
   }
@@ -979,15 +982,15 @@ TEST (PCL, Octree_Pointcloud_Voxel_Centroid_Test)
   // generate point data for point cloud
   for (size_t i = 0; i < 10; i++) {
     // these three points should always be assigned to the same voxel in the octree
-    cloudIn->points[i * 3 + 0] =
-        PointXYZ (static_cast<float> (i) + 0.2f, static_cast<float> (i) + 0.2f,
-                  static_cast<float> (i) + 0.2f);
-    cloudIn->points[i * 3 + 1] =
-        PointXYZ (static_cast<float> (i) + 0.4f, static_cast<float> (i) + 0.4f,
-                  static_cast<float> (i) + 0.4f);
-    cloudIn->points[i * 3 + 2] =
-        PointXYZ (static_cast<float> (i) + 0.6f, static_cast<float> (i) + 0.6f,
-                  static_cast<float> (i) + 0.6f);
+    cloudIn->points[i * 3 + 0] = PointXYZ (static_cast<float> (i) + 0.2f,
+                                           static_cast<float> (i) + 0.2f,
+                                           static_cast<float> (i) + 0.2f);
+    cloudIn->points[i * 3 + 1] = PointXYZ (static_cast<float> (i) + 0.4f,
+                                           static_cast<float> (i) + 0.4f,
+                                           static_cast<float> (i) + 0.4f);
+    cloudIn->points[i * 3 + 2] = PointXYZ (static_cast<float> (i) + 0.6f,
+                                           static_cast<float> (i) + 0.6f,
+                                           static_cast<float> (i) + 0.6f);
   }
 
   // assign point cloud to octree
@@ -1014,15 +1017,15 @@ TEST (PCL, Octree_Pointcloud_Voxel_Centroid_Test)
   // generate new point data
   for (size_t i = 0; i < 10; i++) {
     // these three points should always be assigned to the same voxel in the octree
-    cloudIn->points[i * 3 + 0] =
-        PointXYZ (static_cast<float> (i) + 0.1f, static_cast<float> (i) + 0.1f,
-                  static_cast<float> (i) + 0.1f);
-    cloudIn->points[i * 3 + 1] =
-        PointXYZ (static_cast<float> (i) + 0.4f, static_cast<float> (i) + 0.4f,
-                  static_cast<float> (i) + 0.4f);
-    cloudIn->points[i * 3 + 2] =
-        PointXYZ (static_cast<float> (i) + 0.7f, static_cast<float> (i) + 0.7f,
-                  static_cast<float> (i) + 0.7f);
+    cloudIn->points[i * 3 + 0] = PointXYZ (static_cast<float> (i) + 0.1f,
+                                           static_cast<float> (i) + 0.1f,
+                                           static_cast<float> (i) + 0.1f);
+    cloudIn->points[i * 3 + 1] = PointXYZ (static_cast<float> (i) + 0.4f,
+                                           static_cast<float> (i) + 0.4f,
+                                           static_cast<float> (i) + 0.4f);
+    cloudIn->points[i * 3 + 2] = PointXYZ (static_cast<float> (i) + 0.7f,
+                                           static_cast<float> (i) + 0.7f,
+                                           static_cast<float> (i) + 0.7f);
   }
 
   // add points from new cloud to octree
@@ -1119,8 +1122,8 @@ TEST (PCL, Octree_Pointcloud_Nearest_K_Neighbour_Search)
                           (cloudIn->points[i].z - searchPoint.z) *
                               (cloudIn->points[i].z - searchPoint.z));
 
-      prioPointQueueEntry pointEntry (cloudIn->points[i], pointDist,
-                                      static_cast<int> (i));
+      prioPointQueueEntry pointEntry (
+          cloudIn->points[i], pointDist, static_cast<int> (i));
 
       pointCandidates.push (pointEntry);
     }
@@ -1145,8 +1148,8 @@ TEST (PCL, Octree_Pointcloud_Nearest_K_Neighbour_Search)
     // octree nearest neighbor search
     octree.deleteTree ();
     octree.addPointsFromInputCloud ();
-    octree.nearestKSearch (searchPoint, static_cast<int> (K), k_indices,
-                           k_sqr_distances);
+    octree.nearestKSearch (
+        searchPoint, static_cast<int> (K), k_indices, k_sqr_distances);
 
     ASSERT_EQ (k_indices_bruteforce.size (), k_indices.size ());
 
@@ -1535,8 +1538,8 @@ TEST (PCL, Octree_Pointcloud_Bounds)
   const double DESIRED_MIN = 0;
 
   OctreePointCloud<PointXYZ> tree (SOME_RESOLUTION);
-  tree.defineBoundingBox (DESIRED_MIN, DESIRED_MIN, DESIRED_MIN, DESIRED_MAX,
-                          DESIRED_MAX, DESIRED_MAX);
+  tree.defineBoundingBox (
+      DESIRED_MIN, DESIRED_MIN, DESIRED_MIN, DESIRED_MAX, DESIRED_MAX, DESIRED_MAX);
 
   double min_x, min_y, min_z, max_x, max_y, max_z;
   tree.getBoundingBox (min_x, min_y, min_z, max_x, max_y, max_z);
@@ -1546,8 +1549,8 @@ TEST (PCL, Octree_Pointcloud_Bounds)
 
   const double LARGE_MIN = 1e7 - 45 * SOME_RESOLUTION;
   const double LARGE_MAX = 1e7 - 5 * SOME_RESOLUTION;
-  tree.defineBoundingBox (LARGE_MIN, LARGE_MIN, LARGE_MIN, LARGE_MAX, LARGE_MAX,
-                          LARGE_MAX);
+  tree.defineBoundingBox (
+      LARGE_MIN, LARGE_MIN, LARGE_MIN, LARGE_MAX, LARGE_MAX, LARGE_MAX);
   tree.getBoundingBox (min_x, min_y, min_z, max_x, max_y, max_z);
   const unsigned int depth = tree.getTreeDepth ();
   tree.defineBoundingBox (min_x, min_y, min_z, max_x, max_y, max_z);

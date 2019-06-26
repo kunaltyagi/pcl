@@ -120,8 +120,8 @@ namespace openni_wrapper
                                                         unsigned output_height) const
       throw ()
   {
-    return (ImageBayerGRBG::resizingSupported (input_width, input_height, output_width,
-                                               output_height));
+    return (ImageBayerGRBG::resizingSupported (
+        input_width, input_height, output_width, output_height));
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

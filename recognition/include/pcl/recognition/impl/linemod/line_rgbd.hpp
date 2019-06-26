@@ -97,8 +97,8 @@ pcl::LineRGBD<PointXYZT, PointRGBT>::loadTemplates (const std::string &file_name
     // Search for extension
     std::string chunk_name (ltm_header.file_name);
 
-    std::transform (chunk_name.begin (), chunk_name.end (), chunk_name.begin (),
-                    ::tolower);
+    std::transform (
+        chunk_name.begin (), chunk_name.end (), chunk_name.begin (), ::tolower);
     std::string::size_type it;
 
     if ((it = chunk_name.find (pcd_ext)) != std::string::npos &&
@@ -227,8 +227,11 @@ pcl::LineRGBD<PointXYZT, PointRGBT>::loadTemplates (const std::string &file_name
 template <typename PointXYZT, typename PointRGBT>
 int
 pcl::LineRGBD<PointXYZT, PointRGBT>::createAndAddTemplate (
-    pcl::PointCloud<pcl::PointXYZRGBA> &cloud, const size_t object_id,
-    const MaskMap &mask_xyz, const MaskMap &mask_rgb, const RegionXY &region)
+    pcl::PointCloud<pcl::PointXYZRGBA> &cloud,
+    const size_t object_id,
+    const MaskMap &mask_xyz,
+    const MaskMap &mask_rgb,
+    const RegionXY &region)
 {
   // add point cloud
   template_point_clouds_.resize (template_point_clouds_.size () + 1);
@@ -320,7 +323,8 @@ template <typename PointXYZT, typename PointRGBT>
 bool
 pcl::LineRGBD<PointXYZT, PointRGBT>::addTemplate (
     const SparseQuantizedMultiModTemplate &sqmmt,
-    pcl::PointCloud<pcl::PointXYZRGBA> &cloud, size_t object_id)
+    pcl::PointCloud<pcl::PointXYZRGBA> &cloud,
+    size_t object_id)
 {
   // add point cloud
   template_point_clouds_.resize (template_point_clouds_.size () + 1);
@@ -504,15 +508,17 @@ template <typename PointXYZT, typename PointRGBT>
 void
 pcl::LineRGBD<PointXYZT, PointRGBT>::detectSemiScaleInvariant (
     std::vector<typename pcl::LineRGBD<PointXYZT, PointRGBT>::Detection> &detections,
-    const float min_scale, const float max_scale, const float scale_multiplier)
+    const float min_scale,
+    const float max_scale,
+    const float scale_multiplier)
 {
   std::vector<pcl::QuantizableModality *> modalities;
   modalities.push_back (&color_gradient_mod_);
   modalities.push_back (&surface_normal_mod_);
 
   std::vector<pcl::LINEMODDetection> linemod_detections;
-  linemod_.detectTemplatesSemiScaleInvariant (modalities, linemod_detections, min_scale,
-                                              max_scale, scale_multiplier);
+  linemod_.detectTemplatesSemiScaleInvariant (
+      modalities, linemod_detections, min_scale, max_scale, scale_multiplier);
 
   detections_.clear ();
   detections_.reserve (linemod_detections.size ());
@@ -825,7 +831,8 @@ pcl::LineRGBD<PointXYZT, PointRGBT>::removeOverlappingDetections ()
   for (size_t detection_index_1 = 0; detection_index_1 < nr_detections;
        ++detection_index_1) {
     for (size_t detection_index_2 = detection_index_1 + 1;
-         detection_index_2 < nr_detections; ++detection_index_2) {
+         detection_index_2 < nr_detections;
+         ++detection_index_2) {
       const float bounding_box_volume =
           detections_[detection_index_1].bounding_box.width *
           detections_[detection_index_1].bounding_box.height *
@@ -862,7 +869,8 @@ pcl::LineRGBD<PointXYZT, PointRGBT>::removeOverlappingDetections ()
       const size_t detection_index_1 = cluster[cluster_index];
 
       for (size_t detection_index_2 = detection_index_1 + 1;
-           detection_index_2 < nr_detections; ++detection_index_2) {
+           detection_index_2 < nr_detections;
+           ++detection_index_2) {
         if (detection_to_cluster_mapping[detection_index_2] != -1)
           continue; // already part of a cluster
 

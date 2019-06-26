@@ -88,7 +88,9 @@ loadCloud (const std::string &filename, PointCloud<PointNormal> &cloud)
 }
 
 void
-compute (const PointCloud<PointNormal>::Ptr &input, pcl::PolygonMesh &output, double mu,
+compute (const PointCloud<PointNormal>::Ptr &input,
+         pcl::PolygonMesh &output,
+         double mu,
          double radius)
 {
   // Estimate

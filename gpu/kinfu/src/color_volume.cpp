@@ -97,8 +97,10 @@ pcl::gpu::ColorVolume::fetchColors (const DeviceArray<PointType> &cloud,
                                     DeviceArray<RGB> &colors) const
 {
   colors.create (cloud.size ());
-  device::exctractColors (color_volume_, device_cast<const float3> (volume_size_),
-                          cloud, (uchar4 *)colors.ptr () /*bgra*/);
+  device::exctractColors (color_volume_,
+                          device_cast<const float3> (volume_size_),
+                          cloud,
+                          (uchar4 *)colors.ptr () /*bgra*/);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

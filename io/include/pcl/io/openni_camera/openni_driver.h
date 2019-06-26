@@ -223,13 +223,16 @@ namespace openni_wrapper
      * @param[out] productId the product id
      */
     static void
-    getDeviceType (const std::string &connection_string, unsigned short &vendorId,
+    getDeviceType (const std::string &connection_string,
+                   unsigned short &vendorId,
                    unsigned short &productId);
 
     protected:
     struct PCL_EXPORTS DeviceContext {
-      DeviceContext (const xn::NodeInfo &device_node, xn::NodeInfo *image_node,
-                     xn::NodeInfo *depth_node, xn::NodeInfo *ir_node);
+      DeviceContext (const xn::NodeInfo &device_node,
+                     xn::NodeInfo *image_node,
+                     xn::NodeInfo *depth_node,
+                     xn::NodeInfo *ir_node);
       DeviceContext (const xn::NodeInfo &device_node);
       DeviceContext (const DeviceContext &);
       xn::NodeInfo device_node;

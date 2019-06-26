@@ -53,7 +53,9 @@
 template <typename PointT, typename LeafContainerT, typename BranchContainerT>
 pcl::octree::OctreePointCloudAdjacency<PointT, LeafContainerT, BranchContainerT>::
     OctreePointCloudAdjacency (const double resolution_arg)
-    : OctreePointCloud<PointT, LeafContainerT, BranchContainerT,
+    : OctreePointCloud<PointT,
+                       LeafContainerT,
+                       BranchContainerT,
                        OctreeBase<LeafContainerT, BranchContainerT>> (resolution_arg)
 {
 }
@@ -61,8 +63,8 @@ pcl::octree::OctreePointCloudAdjacency<PointT, LeafContainerT, BranchContainerT>
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT, typename LeafContainerT, typename BranchContainerT>
 void
-pcl::octree::OctreePointCloudAdjacency<PointT, LeafContainerT,
-                                       BranchContainerT>::addPointsFromInputCloud ()
+pcl::octree::OctreePointCloudAdjacency<PointT, LeafContainerT, BranchContainerT>::
+    addPointsFromInputCloud ()
 {
   // double t1,t2;
   float minX = std::numeric_limits<float>::max (),
@@ -94,8 +96,8 @@ pcl::octree::OctreePointCloudAdjacency<PointT, LeafContainerT,
   }
   this->defineBoundingBox (minX, minY, minZ, maxX, maxY, maxZ);
 
-  OctreePointCloud<PointT, LeafContainerT,
-                   BranchContainerT>::addPointsFromInputCloud ();
+  OctreePointCloud<PointT, LeafContainerT, BranchContainerT>::
+      addPointsFromInputCloud ();
 
   leaf_vector_.reserve (this->getLeafCount ());
   for (auto leaf_itr = this->leaf_depth_begin (); leaf_itr != this->leaf_depth_end ();
@@ -150,8 +152,8 @@ pcl::octree::OctreePointCloudAdjacency<PointT, LeafContainerT, BranchContainerT>
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT, typename LeafContainerT, typename BranchContainerT>
 void
-pcl::octree::OctreePointCloudAdjacency<
-    PointT, LeafContainerT, BranchContainerT>::addPointIdx (const int pointIdx_arg)
+pcl::octree::OctreePointCloudAdjacency<PointT, LeafContainerT, BranchContainerT>::
+    addPointIdx (const int pointIdx_arg)
 {
   OctreeKey key;
 
@@ -234,7 +236,8 @@ pcl::octree::OctreePointCloudAdjacency<PointT, LeafContainerT, BranchContainerT>
   std::map<LeafContainerT *, VoxelID> leaf_vertex_id_map;
   for (typename OctreeAdjacencyT::LeafNodeDepthFirstIterator leaf_itr =
            this->leaf_depth_begin ();
-       leaf_itr != this->leaf_depth_end (); ++leaf_itr) {
+       leaf_itr != this->leaf_depth_end ();
+       ++leaf_itr) {
     OctreeKey leaf_key = leaf_itr.getCurrentOctreeKey ();
     PointT centroid_point;
     this->genLeafNodeCenterFromOctreeKey (leaf_key, centroid_point);
@@ -248,12 +251,14 @@ pcl::octree::OctreePointCloudAdjacency<PointT, LeafContainerT, BranchContainerT>
   // Iterate through and add edges to adjacency graph
   for (typename std::vector<LeafContainerT *>::iterator leaf_itr =
            leaf_vector_.begin ();
-       leaf_itr != leaf_vector_.end (); ++leaf_itr) {
+       leaf_itr != leaf_vector_.end ();
+       ++leaf_itr) {
     VoxelID u = (leaf_vertex_id_map.find (*leaf_itr))->second;
     PointT p_u = voxel_adjacency_graph[u];
     for (auto neighbor_itr = (*leaf_itr)->cbegin (),
               neighbor_end = (*leaf_itr)->cend ();
-         neighbor_itr != neighbor_end; ++neighbor_itr) {
+         neighbor_itr != neighbor_end;
+         ++neighbor_itr) {
       LeafContainerT *neighbor_container = *neighbor_itr;
       EdgeID edge;
       bool edge_added;

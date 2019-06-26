@@ -248,14 +248,18 @@ class BRISKDemo
         for (size_t i = 0; i < keypoints->size (); ++i) {
           int u = int(keypoints->points[i].x);
           int v = int(keypoints->points[i].y);
-          image_viewer_.markPoint (u, v, visualization::red_color,
-                                   visualization::blue_color, 10, getStrBool (!keypts));
+          image_viewer_.markPoint (u,
+                                   v,
+                                   visualization::red_color,
+                                   visualization::blue_color,
+                                   10,
+                                   getStrBool (!keypts));
         }
         keypts = !keypts;
 
         get3DKeypoints (cloud, keypoints, *keypoints3d);
-        visualization::PointCloudColorHandlerCustom<PointT> blue (keypoints3d, 0, 0,
-                                                                  255);
+        visualization::PointCloudColorHandlerCustom<PointT> blue (
+            keypoints3d, 0, 0, 255);
         if (!cloud_viewer_.updatePointCloud (keypoints3d, blue, "keypoints"))
           cloud_viewer_.addPointCloud (keypoints3d, blue, "keypoints");
         cloud_viewer_.setPointCloudRenderingProperties (

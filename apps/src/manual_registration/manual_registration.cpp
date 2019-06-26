@@ -93,15 +93,21 @@ ManualRegistration::ManualRegistration ()
                                           *this);
 
   // Connect all buttons
-  connect (ui_->confirmSrcPointButton, SIGNAL (clicked ()), this,
+  connect (ui_->confirmSrcPointButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (confirmSrcPointPressed ()));
-  connect (ui_->confirmDstPointButton, SIGNAL (clicked ()), this,
+  connect (ui_->confirmDstPointButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (confirmDstPointPressed ()));
   connect (ui_->calculateButton, SIGNAL (clicked ()), this, SLOT (calculatePressed ()));
   connect (ui_->clearButton, SIGNAL (clicked ()), this, SLOT (clearPressed ()));
-  connect (ui_->orthoButton, SIGNAL (stateChanged (int)), this,
-           SLOT (orthoChanged (int)));
-  connect (ui_->applyTransformButton, SIGNAL (clicked ()), this,
+  connect (
+      ui_->orthoButton, SIGNAL (stateChanged (int)), this, SLOT (orthoChanged (int)));
+  connect (ui_->applyTransformButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (applyTransformPressed ()));
   connect (ui_->refineButton, SIGNAL (clicked ()), this, SLOT (refinePressed ()));
   connect (ui_->undoButton, SIGNAL (clicked ()), this, SLOT (undoPressed ()));
@@ -122,8 +128,11 @@ ManualRegistration::SourcePointPickCallback (
 
   // Get the point that was picked
   event.getPoint (src_point_.x, src_point_.y, src_point_.z);
-  PCL_INFO ("Src Window: Clicked point %d with X:%f Y:%f Z:%f\n", idx, src_point_.x,
-            src_point_.y, src_point_.z);
+  PCL_INFO ("Src Window: Clicked point %d with X:%f Y:%f Z:%f\n",
+            idx,
+            src_point_.x,
+            src_point_.y,
+            src_point_.z);
   src_point_selected_ = true;
 }
 
@@ -138,8 +147,11 @@ ManualRegistration::DstPointPickCallback (
 
   // Get the point that was picked
   event.getPoint (dst_point_.x, dst_point_.y, dst_point_.z);
-  PCL_INFO ("Dst Window: Clicked point %d with X:%f Y:%f Z:%f\n", idx, dst_point_.x,
-            dst_point_.y, dst_point_.z);
+  PCL_INFO ("Dst Window: Clicked point %d with X:%f Y:%f Z:%f\n",
+            idx,
+            dst_point_.x,
+            dst_point_.y,
+            dst_point_.z);
   dst_point_selected_ = true;
 }
 

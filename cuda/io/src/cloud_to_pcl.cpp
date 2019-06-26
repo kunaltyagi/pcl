@@ -46,7 +46,8 @@ namespace pcl
 
     //////////////////////////////////////////////////////////////////////////
     void
-    toPCL (const PointCloudAOS<Host> &input, const thrust::host_vector<float4> &normals,
+    toPCL (const PointCloudAOS<Host> &input,
+           const thrust::host_vector<float4> &normals,
            pcl::PointCloud<pcl::PointXYZRGBNormal> &output)
     {
       output.points.resize (input.points.size ());

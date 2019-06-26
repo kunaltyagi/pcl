@@ -129,7 +129,8 @@ namespace pcl
      * 12345 (default: false)
      */
     SampleConsensusModel (const PointCloudConstPtr &cloud,
-                          const std::vector<int> &indices, bool random = false)
+                          const std::vector<int> &indices,
+                          bool random = false)
         : input_ (cloud), indices_ (new std::vector<int> (indices)),
           radius_min_ (-std::numeric_limits<double>::max ()),
           radius_max_ (std::numeric_limits<double>::max ()), samples_radius_ (0.),
@@ -144,7 +145,8 @@ namespace pcl
       if (indices_->size () > input_->points.size ()) {
         PCL_ERROR ("[pcl::SampleConsensusModel] Invalid index vector given with size "
                    "%lu while the input PointCloud has size %lu!\n",
-                   indices_->size (), input_->points.size ());
+                   indices_->size (),
+                   input_->points.size ());
         indices_->clear ();
       }
       shuffled_indices_ = *indices_;
@@ -170,7 +172,8 @@ namespace pcl
       if (indices_->size () < getSampleSize ()) {
         PCL_ERROR ("[pcl::SampleConsensusModel::getSamples] Can not select %lu unique "
                    "points out of %lu!\n",
-                   samples.size (), indices_->size ());
+                   samples.size (),
+                   indices_->size ());
         // one of these will make it stop :)
         samples.clear ();
         iterations = INT_MAX - 1;
@@ -195,7 +198,8 @@ namespace pcl
       }
       PCL_DEBUG ("[pcl::SampleConsensusModel::getSamples] WARNING: Could not select %d "
                  "sample points in %d iterations!\n",
-                 getSampleSize (), max_sample_checks_);
+                 getSampleSize (),
+                 max_sample_checks_);
       samples.clear ();
     }
 
@@ -245,7 +249,8 @@ namespace pcl
      */
     virtual void
     selectWithinDistance (const Eigen::VectorXf &model_coefficients,
-                          const double threshold, std::vector<int> &inliers) = 0;
+                          const double threshold,
+                          std::vector<int> &inliers) = 0;
 
     /** \brief Count all the points which respect the given model
      * coefficients as inliers. Pure virtual.
@@ -462,7 +467,8 @@ namespace pcl
         // - i))]);
         std::swap (shuffled_indices_[i],
                    shuffled_indices_[i + (rnd () % (index_size - i))]);
-      std::copy (shuffled_indices_.begin (), shuffled_indices_.begin () + sample_size,
+      std::copy (shuffled_indices_.begin (),
+                 shuffled_indices_.begin () + sample_size,
                  sample.begin ());
     }
 
@@ -488,8 +494,8 @@ namespace pcl
       // first parameter. This can't be determined efficiently, so we use
       // the point instead of the index.
       // Returned indices are converted automatically.
-      samples_radius_search_->radiusSearch (input_->at (shuffled_indices_[0]),
-                                            samples_radius_, indices, sqr_dists);
+      samples_radius_search_->radiusSearch (
+          input_->at (shuffled_indices_[0]), samples_radius_, indices, sqr_dists);
 
       if (indices.size () < sample_size - 1) {
         // radius search failed, make an invalid model
@@ -502,7 +508,8 @@ namespace pcl
           shuffled_indices_[i] = indices[i - 1];
       }
 
-      std::copy (shuffled_indices_.begin (), shuffled_indices_.begin () + sample_size,
+      std::copy (shuffled_indices_.begin (),
+                 shuffled_indices_.begin () + sample_size,
                  sample.begin ());
     }
 
@@ -520,7 +527,8 @@ namespace pcl
       if (model_coefficients.size () != model_size_) {
         PCL_ERROR ("[pcl::%s::isModelValid] Invalid number of model coefficients given "
                    "(%lu)!\n",
-                   getClassName ().c_str (), model_coefficients.size ());
+                   getClassName ().c_str (),
+                   model_coefficients.size ());
         return (false);
       }
       return (true);

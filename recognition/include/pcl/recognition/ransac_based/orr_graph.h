@@ -124,7 +124,8 @@ namespace pcl
       clear ()
       {
         for (typename std::vector<Node *>::iterator nit = nodes_.begin ();
-             nit != nodes_.end (); ++nit)
+             nit != nodes_.end ();
+             ++nit)
           delete *nit;
 
         nodes_.clear ();
@@ -138,7 +139,8 @@ namespace pcl
           return;
 
         for (typename std::vector<Node *>::iterator nit = nodes_.begin ();
-             nit != nodes_.end (); ++nit)
+             nit != nodes_.end ();
+             ++nit)
           delete *nit;
 
         nodes_.resize (static_cast<size_t> (n));
@@ -156,7 +158,8 @@ namespace pcl
 
         // Set all nodes to undefined
         for (typename std::vector<Node *>::iterator it = nodes_.begin ();
-             it != nodes_.end (); ++it) {
+             it != nodes_.end ();
+             ++it) {
           sorted_nodes[i++] = *it;
           (*it)->state_ = Node::UNDEF;
         }
@@ -166,7 +169,8 @@ namespace pcl
 
         // Now run through the array and start switching nodes on and off
         for (typename std::vector<Node *>::iterator it = sorted_nodes.begin ();
-             it != sorted_nodes.end (); ++it) {
+             it != sorted_nodes.end ();
+             ++it) {
           // Ignore graph nodes which are already OFF
           if ((*it)->state_ == Node::OFF)
             continue;
@@ -176,7 +180,8 @@ namespace pcl
 
           // Set all its neighbors to OFF
           for (typename std::set<Node *>::iterator neigh = (*it)->neighbors_.begin ();
-               neigh != (*it)->neighbors_.end (); ++neigh) {
+               neigh != (*it)->neighbors_.end ();
+               ++neigh) {
             (*neigh)->state_ = Node::OFF;
             off_nodes.push_back (*neigh);
           }

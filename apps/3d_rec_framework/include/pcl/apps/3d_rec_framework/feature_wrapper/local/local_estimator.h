@@ -104,7 +104,8 @@ namespace pcl
 
         for (size_t i = 0; i < keypoints_cloud->points.size (); i++) {
 
-          if (tree->radiusSearch (keypoints_cloud->points[i], radius_,
+          if (tree->radiusSearch (keypoints_cloud->points[i],
+                                  radius_,
                                   (*neighborhood_indices_)[good],
                                   (*neighborhood_dist_)[good])) {
 
@@ -114,8 +115,10 @@ namespace pcl
             EIGEN_ALIGN16 Eigen::Matrix3f eigenVectors;
 
             // compute planarity of the region
-            computeMeanAndCovarianceMatrix (*input, (*neighborhood_indices_)[good],
-                                            covariance_matrix, xyz_centroid);
+            computeMeanAndCovarianceMatrix (*input,
+                                            (*neighborhood_indices_)[good],
+                                            covariance_matrix,
+                                            xyz_centroid);
             pcl::eigen33 (covariance_matrix, eigenVectors, eigenValues);
 
             float eigsum = eigenValues.sum ();
@@ -395,7 +398,8 @@ namespace pcl
       // std::vector< std::vector<float> > neighborhood_dist_;
 
       void
-      computeKeypoints (PointInTPtr &cloud, PointInTPtr &keypoints,
+      computeKeypoints (PointInTPtr &cloud,
+                        PointInTPtr &keypoints,
                         pcl::PointCloud<pcl::Normal>::Ptr &normals)
       {
         keypoints.reset (new pcl::PointCloud<PointInT>);
@@ -428,7 +432,9 @@ namespace pcl
       }
 
       virtual bool
-      estimate (PointInTPtr &in, PointInTPtr &processed, PointInTPtr &keypoints,
+      estimate (PointInTPtr &in,
+                PointInTPtr &processed,
+                PointInTPtr &keypoints,
                 FeatureTPtr &signatures) = 0;
 
       void

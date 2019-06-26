@@ -58,7 +58,9 @@ class ON_CLASS ON_Xform
                                  // arbitrary matrix.  Any missing
                                  // rows/columns are set to identity.
   ON_Xform (const ON_3dPoint &P, // as a frame.
-            const ON_3dVector &X, const ON_3dVector &Y, const ON_3dVector &Z);
+            const ON_3dVector &X,
+            const ON_3dVector &Y,
+            const ON_3dVector &Z);
 
   // use implicit operator=(const ON_3dVector&), operator==
 
@@ -340,7 +342,9 @@ class ON_CLASS ON_Xform
     z_scale_factor - [in] plane.zaxis scale factor
   */
   void
-  Scale (const ON_Plane &plane, double x_scale_factor, double y_scale_factor,
+  Scale (const ON_Plane &plane,
+         double x_scale_factor,
+         double y_scale_factor,
          double z_scale_factor);
 
   /*
@@ -353,7 +357,9 @@ class ON_CLASS ON_Xform
     z1 - [in] plane.zaxis scale factor
   */
   void
-  Shear (const ON_Plane &plane, const ON_3dVector &x1, const ON_3dVector &y1,
+  Shear (const ON_Plane &plane,
+         const ON_3dVector &x1,
+         const ON_3dVector &y1,
          const ON_3dVector &z1);
 
   // Right column is (d.x, d.y,d.z, 1).
@@ -411,7 +417,9 @@ class ON_CLASS ON_Xform
   //   for those frames.  See ON_Xform::ChangeBasis().
   //
   void
-  Rotation (double sin_angle, double cos_angle, ON_3dVector rotation_axis,
+  Rotation (double sin_angle,
+            double cos_angle,
+            ON_3dVector rotation_axis,
             ON_3dPoint rotation_center);
 
   // Parameters:
@@ -419,7 +427,8 @@ class ON_CLASS ON_Xform
   //   rotation_axis - 3d unit axis of rotation
   //   rotation_center - 3d center of rotation
   void
-  Rotation (double angle_radians, ON_3dVector rotation_axis,
+  Rotation (double angle_radians,
+            ON_3dVector rotation_axis,
             ON_3dPoint rotation_center);
 
   /*
@@ -439,8 +448,12 @@ class ON_CLASS ON_Xform
   //   Z1 - final frame Z
   //
   void
-  Rotation (const ON_3dVector &X0, const ON_3dVector &Y0, const ON_3dVector &Z0,
-            const ON_3dVector &X1, const ON_3dVector &Y1, const ON_3dVector &Z1);
+  Rotation (const ON_3dVector &X0,
+            const ON_3dVector &Y0,
+            const ON_3dVector &Z0,
+            const ON_3dVector &X1,
+            const ON_3dVector &Y1,
+            const ON_3dVector &Z1);
 
   // Parameters:
   //   P0 - initial frame center
@@ -452,9 +465,14 @@ class ON_CLASS ON_Xform
   //   Y1 - final frame Y
   //   Z1 - final frame Z
   void
-  Rotation (const ON_3dPoint &P0, const ON_3dVector &X0, const ON_3dVector &Y0,
-            const ON_3dVector &Z0, const ON_3dPoint &P1, const ON_3dVector &X1,
-            const ON_3dVector &Y1, const ON_3dVector &Z1);
+  Rotation (const ON_3dPoint &P0,
+            const ON_3dVector &X0,
+            const ON_3dVector &Y0,
+            const ON_3dVector &Z0,
+            const ON_3dPoint &P1,
+            const ON_3dVector &X1,
+            const ON_3dVector &Y1,
+            const ON_3dVector &Z1);
 
   /*
   Description:
@@ -536,8 +554,12 @@ class ON_CLASS ON_Xform
   //   If Q = a0*X0 + b0*Y0 + c0*Z0 = a1*X1 + b1*Y1 + c1*Z1
   //   then this transform will map the point (a0,b0,c0) to (a1,b1,c1)
   bool
-  ChangeBasis (const ON_3dVector &X0, const ON_3dVector &Y0, const ON_3dVector &Z0,
-               const ON_3dVector &X1, const ON_3dVector &Y1, const ON_3dVector &Z1);
+  ChangeBasis (const ON_3dVector &X0,
+               const ON_3dVector &Y0,
+               const ON_3dVector &Z0,
+               const ON_3dVector &X1,
+               const ON_3dVector &Y1,
+               const ON_3dVector &Z1);
 
   // Parameters:
   //   P0 - initial center
@@ -554,9 +576,14 @@ class ON_CLASS ON_Xform
   //   If Q = P0 + a0*X0 + b0*Y0 + c0*Z0 = P1 + a1*X1 + b1*Y1 + c1*Z1
   //   then this transform will map the point (a0,b0,c0) to (a1,b1,c1)
   bool
-  ChangeBasis (const ON_3dPoint &P0, const ON_3dVector &X0, const ON_3dVector &Y0,
-               const ON_3dVector &Z0, const ON_3dPoint &P1, const ON_3dVector &X1,
-               const ON_3dVector &Y1, const ON_3dVector &Z1);
+  ChangeBasis (const ON_3dPoint &P0,
+               const ON_3dVector &X0,
+               const ON_3dVector &Y0,
+               const ON_3dVector &Z0,
+               const ON_3dPoint &P1,
+               const ON_3dVector &X1,
+               const ON_3dVector &Y1,
+               const ON_3dVector &Z1);
 
   // standard viewing transformations
   void
@@ -572,18 +599,23 @@ class ON_CLASS ON_Xform
                  const ON_3dVector &  // unit CameraZ vector (from screen to camera)
   );
   bool
-  CameraToClip (      // maps viewport frustum to -1 <= x,y,z <= 1 box
-      ON_BOOL32,      // true for perspective, false for orthographic
-      double, double, // left != right (usually left < right )
-      double, double, // bottom != top (usually bottom < top )
-      double, double  // near != far (usually 0 < near < far )
+  CameraToClip ( // maps viewport frustum to -1 <= x,y,z <= 1 box
+      ON_BOOL32, // true for perspective, false for orthographic
+      double,
+      double, // left != right (usually left < right )
+      double,
+      double, // bottom != top (usually bottom < top )
+      double,
+      double // near != far (usually 0 < near < far )
   );
 
   // maps -1 <= x,y,z <= 1 box to viewport frustum
   bool
-  ClipToCamera (int,            // true for perspective, false for orthographic
-                double, double, // left != right (usually left < right )
-                double, double, // bottom != top (usually bottom < top )
+  ClipToCamera (int, // true for perspective, false for orthographic
+                double,
+                double, // left != right (usually left < right )
+                double,
+                double, // bottom != top (usually bottom < top )
                 double,
                 double // near != far an bot are non-zero (usually 0 < near < far )
   );
@@ -963,7 +995,9 @@ class ON_CLASS ON_ClippingRegion
     0.0 <= *t0 <= *t1 <= 1.0.
   */
   bool
-  GetLineClipPlaneParamters (ON_4dPoint P0, ON_4dPoint P1, double *t0,
+  GetLineClipPlaneParamters (ON_4dPoint P0,
+                             ON_4dPoint P1,
+                             double *t0,
                              double *t1) const;
 };
 

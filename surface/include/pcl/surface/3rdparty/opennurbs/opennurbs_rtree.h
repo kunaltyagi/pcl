@@ -550,50 +550,62 @@ class ON_CLASS ON_RTree
     then return true to keep searching and false to terminate the search.
   */
   bool
-  Search (const double a_plane_eqn[4], double a_min, double a_max,
+  Search (const double a_plane_eqn[4],
+          double a_min,
+          double a_max,
           bool ON_MSC_CDECL resultCallback (void *a_context, ON__INT_PTR a_id),
           void *a_context) const;
 
   bool
-  Search (const double a_min[3], const double a_max[3],
+  Search (const double a_min[3],
+          const double a_max[3],
           bool ON_MSC_CDECL resultCallback (void *a_context, ON__INT_PTR a_id),
           void *a_context) const;
 
   bool
-  Search (const double a_min[3], const double a_max[3],
+  Search (const double a_min[3],
+          const double a_max[3],
           ON_RTreeSearchResult &a_result) const;
 
   bool
-  Search (const double a_min[3], const double a_max[3],
+  Search (const double a_min[3],
+          const double a_max[3],
           ON_SimpleArray<ON_RTreeLeaf> &a_result) const;
 
   bool
-  Search (const double a_min[3], const double a_max[3],
+  Search (const double a_min[3],
+          const double a_max[3],
           ON_SimpleArray<void *> &a_result) const;
 
   bool
-  Search (const double a_min[3], const double a_max[3],
+  Search (const double a_min[3],
+          const double a_max[3],
           ON_SimpleArray<int> &a_result) const;
 
   bool
-  Search2d (const double a_min[2], const double a_max[2],
+  Search2d (const double a_min[2],
+            const double a_max[2],
             bool ON_MSC_CDECL resultCallback (void *a_context, ON__INT_PTR a_id),
             void *a_context) const;
 
   bool
-  Search2d (const double a_min[2], const double a_max[2],
+  Search2d (const double a_min[2],
+            const double a_max[2],
             ON_RTreeSearchResult &a_result) const;
 
   bool
-  Search2d (const double a_min[2], const double a_max[2],
+  Search2d (const double a_min[2],
+            const double a_max[2],
             ON_SimpleArray<ON_RTreeLeaf> &a_result) const;
 
   bool
-  Search2d (const double a_min[2], const double a_max[2],
+  Search2d (const double a_min[2],
+            const double a_max[2],
             ON_SimpleArray<void *> &a_result) const;
 
   bool
-  Search2d (const double a_min[2], const double a_max[2],
+  Search2d (const double a_min[2],
+            const double a_max[2],
             ON_SimpleArray<int> &a_result) const;
 
   /*
@@ -611,7 +623,9 @@ class ON_CLASS ON_RTree
     True if entire tree was searched.  It is possible no results were found.
   */
   static bool
-  Search (const ON_RTree &a_rtreeA, const ON_RTree &a_rtreeB, double tolerance,
+  Search (const ON_RTree &a_rtreeA,
+          const ON_RTree &a_rtreeB,
+          double tolerance,
           ON_SimpleArray<ON_2dex> &a_result);
 
   /*
@@ -630,8 +644,11 @@ class ON_CLASS ON_RTree
     True if entire tree was searched.  It is possible no results were found.
   */
   static bool
-  Search (const ON_RTree &a_rtreeA, const ON_RTree &a_rtreeB, double tolerance,
-          void ON_MSC_CDECL resultCallback (void *a_context, ON__INT_PTR a_idA,
+  Search (const ON_RTree &a_rtreeA,
+          const ON_RTree &a_rtreeB,
+          double tolerance,
+          void ON_MSC_CDECL resultCallback (void *a_context,
+                                            ON__INT_PTR a_idA,
                                             ON__INT_PTR a_idB),
           void *a_context);
 
@@ -652,8 +669,11 @@ class ON_CLASS ON_RTree
     True if entire tree was searched.  It is possible no results were found.
   */
   static bool
-  Search (const ON_RTree &a_rtreeA, const ON_RTree &a_rtreeB, double tolerance,
-          bool ON_MSC_CDECL resultCallback (void *a_context, ON__INT_PTR a_idA,
+  Search (const ON_RTree &a_rtreeA,
+          const ON_RTree &a_rtreeB,
+          double tolerance,
+          bool ON_MSC_CDECL resultCallback (void *a_context,
+                                            ON__INT_PTR a_idA,
                                             ON__INT_PTR a_idB),
           void *a_context);
   /*
@@ -702,7 +722,9 @@ class ON_CLASS ON_RTree
   bool
   RemoveRect (ON_RTreeBBox *, ON__INT_PTR, ON_RTreeNode **);
   bool
-  RemoveRectRec (ON_RTreeBBox *, ON__INT_PTR, ON_RTreeNode *,
+  RemoveRectRec (ON_RTreeBBox *,
+                 ON__INT_PTR,
+                 ON_RTreeNode *,
                  struct ON_RTreeListNode **);
   void
   ReInsert (ON_RTreeNode *, struct ON_RTreeListNode **);

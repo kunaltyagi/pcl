@@ -49,7 +49,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::getCorrespondingPointCloud (
-    vtkPolyData *src, const pcl::PointCloud<pcl::PointXYZ> &tgt,
+    vtkPolyData *src,
+    const pcl::PointCloud<pcl::PointXYZ> &tgt,
     std::vector<int> &indices)
 {
   // Iterate through the points and copy the data in a pcl::PointCloud
@@ -86,7 +87,8 @@ pcl::visualization::getCorrespondingPointCloud (
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::visualization::savePointData (vtkPolyData *data, const std::string &out_file,
+pcl::visualization::savePointData (vtkPolyData *data,
+                                   const std::string &out_file,
                                    const boost::shared_ptr<CloudActorMap> &actors)
 {
   // Clean the data (no duplicates!)
@@ -141,8 +143,11 @@ pcl::visualization::savePointData (vtkPolyData *data, const std::string &out_fil
     std::stringstream ss;
     ss << out_file << i++ << ".pcd";
     pcl::console::print_debug ("  Save: %s ... ", ss.str ().c_str ());
-    if (pcl::io::savePCDFile (ss.str (), cloud_out, Eigen::Vector4f::Zero (),
-                              Eigen::Quaternionf::Identity (), true) == -1) {
+    if (pcl::io::savePCDFile (ss.str (),
+                              cloud_out,
+                              Eigen::Vector4f::Zero (),
+                              Eigen::Quaternionf::Identity (),
+                              true) == -1) {
       pcl::console::print_error (stdout, "[failed]\n");
       return (false);
     } else

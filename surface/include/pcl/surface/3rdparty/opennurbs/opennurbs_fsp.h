@@ -50,7 +50,8 @@ class ON_CLASS ON_FixedSizePool
     True if successful and the pool can be used.
   */
   bool
-  Create (size_t sizeof_element, size_t element_count_estimate,
+  Create (size_t sizeof_element,
+          size_t element_count_estimate,
           size_t block_element_capacity);
 
   /*

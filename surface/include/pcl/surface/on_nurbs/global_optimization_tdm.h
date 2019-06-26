@@ -57,17 +57,26 @@ namespace pcl
         double boundary_tangent_weight;
         double closing_tangent_weight;
 
-        ParameterTDM (double intW = 1.0, double intS = 1e-6, double intTW = 0.01,
-                      double bndW = 0.0, double bndS = 1e-6, double bndTW = 0.01,
-                      double cloW = 0.0, double cloSi = 0.0, unsigned cloSa = 0,
-                      double cloTW = 0.0, double comW = 0.0)
+        ParameterTDM (double intW = 1.0,
+                      double intS = 1e-6,
+                      double intTW = 0.01,
+                      double bndW = 0.0,
+                      double bndS = 1e-6,
+                      double bndTW = 0.01,
+                      double cloW = 0.0,
+                      double cloSi = 0.0,
+                      unsigned cloSa = 0,
+                      double cloTW = 0.0,
+                      double comW = 0.0)
             : Parameter (intW, intS, bndW, bndS, cloW, cloSi, cloSa, comW),
               interior_tangent_weight (intTW), boundary_tangent_weight (bndTW),
               closing_tangent_weight (cloTW)
         {
         }
-        ParameterTDM (GlobalOptimization::Parameter params, double intTW = 0.01,
-                      double bndTW = 0.0, double cloTW = 0.0)
+        ParameterTDM (GlobalOptimization::Parameter params,
+                      double intTW = 0.01,
+                      double bndTW = 0.0,
+                      double cloTW = 0.0)
             : Parameter (params), interior_tangent_weight (intTW),
               boundary_tangent_weight (bndTW), closing_tangent_weight (cloTW)
         {
@@ -117,89 +126,125 @@ namespace pcl
       /**\brief Assemble closing-constraint of boundaries using data.boundary for
        * getting closest points and using the tangent-distance (TD) */
       void
-      assembleCommonBoundariesTD (unsigned id1, double wTangent, double weight,
+      assembleCommonBoundariesTD (unsigned id1,
+                                  double wTangent,
+                                  double weight,
                                   unsigned &row);
 
       /** \brief Assemble closing-constraint of boundaries by sampling from nurbs
        * boundary and find closest point on closest nurbs */
       void
-      assembleClosingBoundaries (unsigned id, unsigned samples, double sigma,
-                                 double weight, unsigned &row) override;
+      assembleClosingBoundaries (unsigned id,
+                                 unsigned samples,
+                                 double sigma,
+                                 double weight,
+                                 unsigned &row) override;
 
       /** \brief Assemble closing-constraint of boundaries by sampling from nurbs
        * boundary and find closest point on closest nurbs using the tangent-distance
        * (TD) */
       void
-      assembleClosingBoundariesTD (unsigned id, unsigned samples, double sigma,
-                                   double wTangent, double weight, unsigned &row);
+      assembleClosingBoundariesTD (unsigned id,
+                                   unsigned samples,
+                                   double sigma,
+                                   double wTangent,
+                                   double weight,
+                                   unsigned &row);
 
       /** \brief Assemble point-to-surface constraints for interior points. */
       void
-      assembleInteriorPoints (unsigned id, int ncps, double weight,
+      assembleInteriorPoints (unsigned id,
+                              int ncps,
+                              double weight,
                               unsigned &row) override;
 
       /** \brief Assemble point-to-surface constraints for interior points using the
        * tangent-distance (TD). */
       void
-      assembleInteriorPointsTD (unsigned id, int ncps, double wTangent, double weight,
-                                unsigned &row);
+      assembleInteriorPointsTD (
+          unsigned id, int ncps, double wTangent, double weight, unsigned &row);
 
       /** \brief Assemble point-to-surface constraints for boundary points. */
       void
-      assembleBoundaryPoints (unsigned id, int ncps, double weight,
+      assembleBoundaryPoints (unsigned id,
+                              int ncps,
+                              double weight,
                               unsigned &row) override;
 
       /** \brief Assemble smoothness constraints. */
       void
-      assembleRegularisation (unsigned id, int ncps, double wCageRegInt,
-                              double wCageRegBnd, unsigned &row) override;
+      assembleRegularisation (unsigned id,
+                              int ncps,
+                              double wCageRegInt,
+                              double wCageRegBnd,
+                              unsigned &row) override;
 
       /** \brief Add minimization constraint: two points in parametric domain of two
        * surfaces should lie on each other. */
       void
-      addParamConstraint (const Eigen::Vector2i &id, const Eigen::Vector2d &params1,
-                          const Eigen::Vector2d &params2, double weight,
+      addParamConstraint (const Eigen::Vector2i &id,
+                          const Eigen::Vector2d &params1,
+                          const Eigen::Vector2d &params2,
+                          double weight,
                           unsigned &row) override;
 
       /** \brief Add minimization constraint: two points in parametric domain of two
        * surfaces should lie on each other and using the tangent-distance (TD). */
       virtual void
-      addParamConstraintTD (const Eigen::Vector2i &id, const Eigen::Vector2d &params1,
-                            const Eigen::Vector2d &params2, const Eigen::Vector3d &n,
-                            const Eigen::Vector3d &tu, const Eigen::Vector3d &tv,
-                            double tangent_weight, double weight, unsigned &row);
+      addParamConstraintTD (const Eigen::Vector2i &id,
+                            const Eigen::Vector2d &params1,
+                            const Eigen::Vector2d &params2,
+                            const Eigen::Vector3d &n,
+                            const Eigen::Vector3d &tu,
+                            const Eigen::Vector3d &tv,
+                            double tangent_weight,
+                            double weight,
+                            unsigned &row);
 
       /** \brief Add minimization constraint: point-to-surface distance
        * (point-distance-minimization). */
       void
-      addPointConstraint (unsigned id, int ncps, const Eigen::Vector2d &params,
-                          const Eigen::Vector3d &point, double weight,
+      addPointConstraint (unsigned id,
+                          int ncps,
+                          const Eigen::Vector2d &params,
+                          const Eigen::Vector3d &point,
+                          double weight,
                           unsigned &row) override;
 
       /** \brief Add minimization constraint: point-to-surface distance
        * (tangent-distance-minimization). */
       void
-      addPointConstraintTD (unsigned id, int ncps, const Eigen::Vector2d &params,
-                            const Eigen::Vector3d &p, const Eigen::Vector3d &n,
-                            const Eigen::Vector3d &tu, const Eigen::Vector3d &tv,
-                            double tangent_weight, double weight, unsigned &row);
+      addPointConstraintTD (unsigned id,
+                            int ncps,
+                            const Eigen::Vector2d &params,
+                            const Eigen::Vector3d &p,
+                            const Eigen::Vector3d &n,
+                            const Eigen::Vector3d &tu,
+                            const Eigen::Vector3d &tv,
+                            double tangent_weight,
+                            double weight,
+                            unsigned &row);
 
       /** \brief Add minimization constraint: interior smoothness by control point
        * regularisation. */
       void
-      addCageInteriorRegularisation (unsigned id, int ncps, double weight,
+      addCageInteriorRegularisation (unsigned id,
+                                     int ncps,
+                                     double weight,
                                      unsigned &row) override;
 
       /** \brief Add minimization constraint: boundary smoothness by control point
        * regularisation. */
       void
-      addCageBoundaryRegularisation (unsigned id, int ncps, double weight, int side,
-                                     unsigned &row) override;
+      addCageBoundaryRegularisation (
+          unsigned id, int ncps, double weight, int side, unsigned &row) override;
 
       /** \brief Add minimization constraint: corner smoothness by control point
        * regularisation. */
       void
-      addCageCornerRegularisation (unsigned id, int ncps, double weight,
+      addCageCornerRegularisation (unsigned id,
+                                   int ncps,
+                                   double weight,
                                    unsigned &row) override;
     };
 

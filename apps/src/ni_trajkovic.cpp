@@ -173,14 +173,18 @@ class TrajkovicDemo
           for (const int &index : keypoints_indices_->indices) {
             int u (index % cloud->width);
             int v (index / cloud->width);
-            image_viewer_.markPoint (u, v, visualization::red_color,
-                                     visualization::blue_color, 5, getStrBool (!keypts),
+            image_viewer_.markPoint (u,
+                                     v,
+                                     visualization::red_color,
+                                     visualization::blue_color,
+                                     5,
+                                     getStrBool (!keypts),
                                      0.5);
           }
           keypts = !keypts;
 
-          visualization::PointCloudColorHandlerCustom<KeyPointT> blue (keypoints, 0, 0,
-                                                                       255);
+          visualization::PointCloudColorHandlerCustom<KeyPointT> blue (
+              keypoints, 0, 0, 255);
           if (!cloud_viewer_.updatePointCloud (keypoints, blue, "keypoints"))
             cloud_viewer_.addPointCloud (keypoints, blue, "keypoints");
           cloud_viewer_.setPointCloudRenderingProperties (
@@ -233,7 +237,8 @@ main (int argc, char **argv)
     pcl::console::parse<std::string> (argc, argv, "-device", device_id);
 
   pcl::console::print_info ("Extracting Trajkovic %s keypoints from device %s.\n",
-                            enable_3d ? "3D" : "2D", device_id.c_str ());
+                            enable_3d ? "3D" : "2D",
+                            device_id.c_str ());
 
   OpenNIGrabber grabber (device_id);
 

@@ -157,15 +157,17 @@ FittingCurve::updateCurve (double)
 }
 
 void
-FittingCurve::addPointConstraint (const double &param, const Eigen::Vector3d &point,
-                                  double weight, unsigned &row)
+FittingCurve::addPointConstraint (const double &param,
+                                  const Eigen::Vector3d &point,
+                                  double weight,
+                                  unsigned &row)
 {
   int cp_red = m_nurbs.m_order - 2;
   int ncp = m_nurbs.m_cv_count - 2 * cp_red;
   double *N = new double[m_nurbs.m_order * m_nurbs.m_order];
 
-  int E = ON_NurbsSpanIndex (m_nurbs.m_order, m_nurbs.m_cv_count, m_nurbs.m_knot, param,
-                             0, 0);
+  int E = ON_NurbsSpanIndex (
+      m_nurbs.m_order, m_nurbs.m_cv_count, m_nurbs.m_knot, param, 0, 0);
 
   ON_EvaluateNurbsBasis (m_nurbs.m_order, m_nurbs.m_knot + E, param, N);
 
@@ -238,7 +240,9 @@ FittingCurve::initNurbsCurve2D (int order, const vector_vec2d &data)
 }
 
 ON_NurbsCurve
-FittingCurve::initNurbsCurvePCA (int order, const vector_vec3d &data, int ncps,
+FittingCurve::initNurbsCurvePCA (int order,
+                                 const vector_vec3d &data,
+                                 int ncps,
                                  double rf)
 {
   if (data.empty ())
@@ -313,16 +317,22 @@ FittingCurve::assembleInterior (double wInt, unsigned &row)
   m_data->interior_error.clear ();
   m_data->interior_normals.clear ();
   for (int p = 0; p < nInt; p++) {
-    Eigen::Vector3d pcp (m_data->interior[p](0), m_data->interior[p](1),
-                         m_data->interior[p](2));
+    Eigen::Vector3d pcp (
+        m_data->interior[p](0), m_data->interior[p](1), m_data->interior[p](2));
 
     // inverse mapping
     double param;
     Eigen::Vector3d pt, t;
     double error;
     if (p < int(m_data->interior_param.size ())) {
-      param = inverseMapping (m_nurbs, pcp, m_data->interior_param[p], error, pt, t,
-                              in_max_steps, in_accuracy);
+      param = inverseMapping (m_nurbs,
+                              pcp,
+                              m_data->interior_param[p],
+                              error,
+                              pt,
+                              t,
+                              in_max_steps,
+                              in_accuracy);
       m_data->interior_param[p] = param;
     } else {
       param = findClosestElementMidPoint (m_nurbs, pcp);
@@ -340,9 +350,14 @@ FittingCurve::assembleInterior (double wInt, unsigned &row)
 }
 
 double
-FittingCurve::inverseMapping (const ON_NurbsCurve &nurbs, const Eigen::Vector3d &pt,
-                              const double &hint, double &error, Eigen::Vector3d &p,
-                              Eigen::Vector3d &t, int maxSteps, double accuracy,
+FittingCurve::inverseMapping (const ON_NurbsCurve &nurbs,
+                              const Eigen::Vector3d &pt,
+                              const double &hint,
+                              double &error,
+                              Eigen::Vector3d &p,
+                              Eigen::Vector3d &t,
+                              int maxSteps,
+                              double accuracy,
                               bool quiet)
 {
   // int cp_red = (nurbs.m_order - 2);
@@ -397,9 +412,13 @@ FittingCurve::inverseMapping (const ON_NurbsCurve &nurbs, const Eigen::Vector3d 
   if (!quiet) {
     printf (
         "[FittingCurve::inverseMapping] Warning: Method did not converge (%e %d).\n",
-        accuracy, maxSteps);
+        accuracy,
+        maxSteps);
     printf ("[FittingCurve::inverseMapping] hint: %f current: %f delta: %f error: %f\n",
-            hint, current, delta, error);
+            hint,
+            current,
+            delta,
+            error);
   }
 
   return current;

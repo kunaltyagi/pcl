@@ -116,8 +116,8 @@ ON_LineCurve::GetBBox ( // returns true if successful
     double *boxmax,     // maximum
     ON_BOOL32 bGrowBox) const
 {
-  return ON_GetPointListBoundingBox (m_dim, false, 2, 3, m_line.from, boxmin, boxmax,
-                                     bGrowBox ? true : false);
+  return ON_GetPointListBoundingBox (
+      m_dim, false, 2, 3, m_line.from, boxmin, boxmax, bGrowBox ? true : false);
 }
 
 ON_BOOL32
@@ -429,7 +429,8 @@ ON_LineCurve::SetEndPoint (ON_3dPoint end_point)
 }
 
 int
-ON_LineCurve::GetNurbForm (ON_NurbsCurve &c, double tolerance,
+ON_LineCurve::GetNurbForm (ON_NurbsCurve &c,
+                           double tolerance,
                            const ON_Interval *subdomain) const
 {
   int rc = 0;

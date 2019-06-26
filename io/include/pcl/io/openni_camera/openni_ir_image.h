@@ -59,7 +59,9 @@ namespace openni_wrapper
     inline virtual ~IRImage () throw ();
 
     void
-    fillRaw (unsigned width, unsigned height, unsigned short *ir_buffer,
+    fillRaw (unsigned width,
+             unsigned height,
+             unsigned short *ir_buffer,
              unsigned line_step = 0) const;
 
     inline unsigned

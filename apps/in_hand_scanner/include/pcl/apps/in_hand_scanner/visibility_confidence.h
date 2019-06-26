@@ -73,7 +73,8 @@ namespace pcl
     };
 
     PCL_EXPORTS void
-    addDirection (const Eigen::Vector4f &normal, const Eigen::Vector4f &direction,
+    addDirection (const Eigen::Vector4f &normal,
+                  const Eigen::Vector4f &direction,
                   uint32_t &directions);
 
     PCL_EXPORTS unsigned int

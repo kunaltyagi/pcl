@@ -72,7 +72,8 @@ namespace pcl
    */
   template <typename PointT>
   inline int
-  getFieldIndex (const pcl::PointCloud<PointT> &cloud, const std::string &field_name,
+  getFieldIndex (const pcl::PointCloud<PointT> &cloud,
+                 const std::string &field_name,
                  std::vector<pcl::PCLPointField> &fields);
 
   /** \brief Get the index of a specified field (i.e., dimension/channel)
@@ -267,7 +268,8 @@ namespace pcl
    * Assumes unique indices. \ingroup common
    */
   PCL_EXPORTS void
-  copyPointCloud (const pcl::PCLPointCloud2 &cloud_in, const std::vector<int> &indices,
+  copyPointCloud (const pcl::PCLPointCloud2 &cloud_in,
+                  const std::vector<int> &indices,
                   pcl::PCLPointCloud2 &cloud_out);
 
   /** \brief Extract the indices of a given point cloud as a new point cloud
@@ -306,7 +308,8 @@ namespace pcl
   template <typename PointT>
   void
   copyPointCloud (const pcl::PointCloud<PointT> &cloud_in,
-                  const std::vector<int> &indices, pcl::PointCloud<PointT> &cloud_out);
+                  const std::vector<int> &indices,
+                  pcl::PointCloud<PointT> &cloud_out);
 
   /** \brief Extract the indices of a given point cloud as a new point cloud
    * \param[in] cloud_in the input point cloud dataset
@@ -328,7 +331,8 @@ namespace pcl
    */
   template <typename PointT>
   void
-  copyPointCloud (const pcl::PointCloud<PointT> &cloud_in, const PointIndices &indices,
+  copyPointCloud (const pcl::PointCloud<PointT> &cloud_in,
+                  const PointIndices &indices,
                   pcl::PointCloud<PointT> &cloud_out);
 
   /** \brief Extract the indices of a given point cloud as a new point cloud
@@ -386,7 +390,8 @@ namespace pcl
   template <typename PointInT, typename PointOutT>
   void
   copyPointCloud (const pcl::PointCloud<PointInT> &cloud_in,
-                  const PointIndices &indices, pcl::PointCloud<PointOutT> &cloud_out);
+                  const PointIndices &indices,
+                  pcl::PointCloud<PointOutT> &cloud_out);
 
   /** \brief Extract the indices of a given point cloud as a new point cloud
    * \param[in] cloud_in the input point cloud dataset
@@ -421,8 +426,13 @@ namespace pcl
   template <typename PointT>
   void
   copyPointCloud (const pcl::PointCloud<PointT> &cloud_in,
-                  pcl::PointCloud<PointT> &cloud_out, int top, int bottom, int left,
-                  int right, pcl::InterpolationType border_type, const PointT &value);
+                  pcl::PointCloud<PointT> &cloud_out,
+                  int top,
+                  int bottom,
+                  int left,
+                  int right,
+                  pcl::InterpolationType border_type,
+                  const PointT &value);
 
   /** \brief Concatenate two datasets representing different fields.
    *

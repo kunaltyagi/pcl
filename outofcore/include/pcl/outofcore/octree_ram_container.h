@@ -120,8 +120,10 @@ namespace pcl
        * points from given input rangerange
        */
       void
-      readRangeSubSample (const uint64_t start, const uint64_t count,
-                          const double percent, AlignedPointTVector &v);
+      readRangeSubSample (const uint64_t start,
+                          const uint64_t count,
+                          const double percent,
+                          AlignedPointTVector &v);
 
       /** \brief returns the size of the vector of points stored in this class */
       inline uint64_t

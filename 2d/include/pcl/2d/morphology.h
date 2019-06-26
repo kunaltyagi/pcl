@@ -134,7 +134,8 @@ namespace pcl
      * \param[in] input2
      */
     void
-    unionBinary (pcl::PointCloud<PointT> &output, const pcl::PointCloud<PointT> &input1,
+    unionBinary (pcl::PointCloud<PointT> &output,
+                 const pcl::PointCloud<PointT> &input1,
                  const pcl::PointCloud<PointT> &input2);
 
     /** \brief Set operation \f$ output = input1 \cap input2 \f$
@@ -166,7 +167,8 @@ namespace pcl
      *
      */
     void
-    structuringElementRectangle (pcl::PointCloud<PointT> &kernel, const int height,
+    structuringElementRectangle (pcl::PointCloud<PointT> &kernel,
+                                 const int height,
                                  const int width);
 
     enum MORPHOLOGICAL_OPERATOR_TYPE {

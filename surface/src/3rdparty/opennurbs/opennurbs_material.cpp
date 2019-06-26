@@ -131,10 +131,7 @@ ON_Material::Dump (ON_TextLog &dump) const
 }
 
 ON_UUID
-ON_Material::MaterialPlugInUuid () const
-{
-  return m_plugin_id;
-}
+ON_Material::MaterialPlugInUuid () const { return m_plugin_id; }
 
 void
 ON_Material::SetMaterialPlugInUuid (ON_UUID u)
@@ -387,8 +384,8 @@ ON_Material::Read (ON_BinaryArchive &file)
 
       // The chunk version 2.0 prevents old V3 IO code from attempting
       // to read this material
-      rc = file.BeginRead3dmChunk (TCODE_ANONYMOUS_CHUNK, &major_version,
-                                   &minor_version);
+      rc = file.BeginRead3dmChunk (
+          TCODE_ANONYMOUS_CHUNK, &major_version, &minor_version);
       if (rc) {
         for (;;) {
           if (rc)
@@ -872,13 +869,13 @@ ON_Texture::Compare (const ON_Texture &other) const
     if (rc)
       break;
 
-    rc = CompareTextureDoubles (sizeof (m_blend_A) / sizeof (m_blend_A[0]), m_blend_A,
-                                other.m_blend_A);
+    rc = CompareTextureDoubles (
+        sizeof (m_blend_A) / sizeof (m_blend_A[0]), m_blend_A, other.m_blend_A);
     if (rc)
       break;
 
-    rc = CompareTextureDoubles (sizeof (m_blend_RGB) / sizeof (m_blend_RGB[0]),
-                                m_blend_RGB, other.m_blend_RGB);
+    rc = CompareTextureDoubles (
+        sizeof (m_blend_RGB) / sizeof (m_blend_RGB[0]), m_blend_RGB, other.m_blend_RGB);
     if (rc)
       break;
 
@@ -1259,8 +1256,8 @@ ON_Texture::Read (ON_BinaryArchive &binary_archive)
 
   int major_version = 0;
   int minor_version = 0;
-  bool rc = binary_archive.BeginRead3dmChunk (TCODE_ANONYMOUS_CHUNK, &major_version,
-                                              &minor_version);
+  bool rc = binary_archive.BeginRead3dmChunk (
+      TCODE_ANONYMOUS_CHUNK, &major_version, &minor_version);
   if (rc) {
 
     if (1 != major_version) {
@@ -1399,7 +1396,8 @@ ON_Texture::Default ()
   m_runtime_ptr = 0;
 }
 
-ON_OBJECT_IMPLEMENT (ON_TextureMapping, ON_Object,
+ON_OBJECT_IMPLEMENT (ON_TextureMapping,
+                     ON_Object,
                      "32EC997A-C3BF-4ae5-AB19-FD572B8AD554");
 
 ON_TextureMapping::TYPE
@@ -1864,7 +1862,8 @@ IntersectBoxRayHelper (const ON_3dPoint &rst, const ON_3dVector &n, int dir, dou
 }
 
 int
-ON_TextureMapping::EvaluatePlaneMapping (const ON_3dPoint &P, const ON_3dVector &N,
+ON_TextureMapping::EvaluatePlaneMapping (const ON_3dPoint &P,
+                                         const ON_3dVector &N,
                                          ON_3dPoint *T) const
 {
   // The matrix m_Pxyz transforms the world  coordinate
@@ -1898,7 +1897,8 @@ ON_TextureMapping::EvaluatePlaneMapping (const ON_3dPoint &P, const ON_3dVector 
 }
 
 int
-ON_TextureMapping::EvaluateSphereMapping (const ON_3dPoint &P, const ON_3dVector &N,
+ON_TextureMapping::EvaluateSphereMapping (const ON_3dPoint &P,
+                                          const ON_3dVector &N,
                                           ON_3dPoint *T) const
 {
   // The matrix m_Pxyz transforms the world coordinate
@@ -1916,7 +1916,9 @@ ON_TextureMapping::EvaluateSphereMapping (const ON_3dPoint &P, const ON_3dVector
     int rc = ON_SolveQuadraticEquation (
         (n.x * n.x + n.y * n.y + n.z * n.z),
         2.0 * (rst.x * n.x + rst.y * n.y + rst.z * n.z),
-        (rst.x * rst.x + rst.y * rst.y + rst.z * rst.z) - 1.0, &t0, &t1);
+        (rst.x * rst.x + rst.y * rst.y + rst.z * rst.z) - 1.0,
+        &t0,
+        &t1);
     if (rc >= 0) {
       if (2 != rc && 1 == BestHitHelper (t0, t1)) {
         t0 = t1;
@@ -1958,7 +1960,8 @@ ON_TextureMapping::EvaluateSphereMapping (const ON_3dPoint &P, const ON_3dVector
 }
 
 int
-ON_TextureMapping::EvaluateCylinderMapping (const ON_3dPoint &P, const ON_3dVector &N,
+ON_TextureMapping::EvaluateCylinderMapping (const ON_3dPoint &P,
+                                            const ON_3dVector &N,
                                             ON_3dPoint *T) const
 {
   // The matrix m_Pxyz transforms the world coordinate
@@ -2015,9 +2018,11 @@ ON_TextureMapping::EvaluateCylinderMapping (const ON_3dPoint &P, const ON_3dVect
     }
 
     // shoot ray at the cylinder wall
-    int rc = ON_SolveQuadraticEquation (
-        (n.x * n.x + n.y * n.y), 2.0 * (rst.x * n.x + rst.y * n.y),
-        (rst.x * rst.x + rst.y * rst.y) - 1.0, &t0, &t1);
+    int rc = ON_SolveQuadraticEquation ((n.x * n.x + n.y * n.y),
+                                        2.0 * (rst.x * n.x + rst.y * n.y),
+                                        (rst.x * rst.x + rst.y * rst.y) - 1.0,
+                                        &t0,
+                                        &t1);
     if (rc >= 0) {
       if (2 != rc && 1 == BestHitHelper (t0, t1)) {
         t0 = t1;
@@ -2142,7 +2147,8 @@ ON_TextureMapping::EvaluateCylinderMapping (const ON_3dPoint &P, const ON_3dVect
 }
 
 int
-ON_TextureMapping::EvaluateBoxMapping (const ON_3dPoint &P, const ON_3dVector &N,
+ON_TextureMapping::EvaluateBoxMapping (const ON_3dPoint &P,
+                                       const ON_3dVector &N,
                                        ON_3dPoint *T) const
 {
   // The matrix m_Pxyz transforms the world coordinate
@@ -2277,8 +2283,11 @@ ON_TextureMapping::EvaluateBoxMapping (const ON_3dPoint &P, const ON_3dVector &N
 }
 
 int
-ON_TextureMapping::Evaluate (const ON_3dPoint &P, const ON_3dVector &N, ON_3dPoint *T,
-                             const ON_Xform &P_xform, const ON_Xform &N_xform) const
+ON_TextureMapping::Evaluate (const ON_3dPoint &P,
+                             const ON_3dVector &N,
+                             ON_3dPoint *T,
+                             const ON_Xform &P_xform,
+                             const ON_Xform &N_xform) const
 {
   int rc;
   ON_3dPoint Q = P * P_xform;
@@ -2295,7 +2304,8 @@ ON_TextureMapping::Evaluate (const ON_3dPoint &P, const ON_3dVector &N, ON_3dPoi
 }
 
 int
-ON_TextureMapping::Evaluate (const ON_3dPoint &P, const ON_3dVector &N,
+ON_TextureMapping::Evaluate (const ON_3dPoint &P,
+                             const ON_3dVector &N,
                              ON_3dPoint *T) const
 {
   int rc;
@@ -2478,7 +2488,9 @@ ON_TextureMapping::HasMatchingTextureCoordinates (const ON_MappingTag &tag,
 }
 
 static bool
-GetSPTCHelper (const ON_Mesh &mesh, const ON_TextureMapping &mapping, float *tc,
+GetSPTCHelper (const ON_Mesh &mesh,
+               const ON_TextureMapping &mapping,
+               float *tc,
                int tc_stride)
 {
   const int vcnt = mesh.m_V.Count ();
@@ -2530,8 +2542,8 @@ GetSPTCHelper (const ON_Mesh &mesh, const ON_TextureMapping &mapping, float *tc,
     for (i = 0; i < vcnt; i++) {
       // ALB 2011.01.14
       // Added support for m_uvw in packed textures.  Even though this conceptually
-      // makes very little sense, it's one of the most requested features for the texture
-      // mapping system, so I grudgingly add it.
+      // makes very little sense, it's one of the most requested features for the
+      // texture mapping system, so I grudgingly add it.
       if (bHaveUVWXform) {
         const ON_2dPoint si = mapping.m_uvw * S[i];
         u = si.x;
@@ -2596,7 +2608,8 @@ GetSPTCHelper (const ON_Mesh &mesh, const ON_TextureMapping &mapping, float *tc,
 bool
 ON_TextureMapping::GetTextureCoordinates (const ON_Mesh &mesh,
                                           ON_SimpleArray<ON_3fPoint> &T,
-                                          const ON_Xform *mesh_xform, bool bLazy,
+                                          const ON_Xform *mesh_xform,
+                                          bool bLazy,
                                           ON_SimpleArray<int> *Tside) const
 {
   if (Tside)
@@ -2769,7 +2782,8 @@ ThreeToTwoHelper (const ON_SimpleArray<ON_3fPoint> &T3, ON_SimpleArray<ON_2fPoin
 bool
 ON_TextureMapping::GetTextureCoordinates (const ON_Mesh &mesh,
                                           ON_SimpleArray<ON_2fPoint> &T,
-                                          const ON_Xform *mesh_xform, bool bLazy,
+                                          const ON_Xform *mesh_xform,
+                                          bool bLazy,
                                           ON_SimpleArray<int> *Tside) const
 {
   bool rc = false;
@@ -2879,8 +2893,8 @@ class ON__CChangeTextureCoordinateHelper
   int
   DupVertex (int vi);
   void
-  ChangeTextureCoordinate (int *Fvi, int fvi, float x, float y, float *mesh_T,
-                           int mesh_T_stride);
+  ChangeTextureCoordinate (
+      int *Fvi, int fvi, float x, float y, float *mesh_T, int mesh_T_stride);
 
   int m_tci;
 
@@ -2915,9 +2929,8 @@ class ON__CChangeTextureCoordinateHelper
 };
 
 void
-ON__CChangeTextureCoordinateHelper::ChangeTextureCoordinate (int *Fvi, int fvi, float x,
-                                                             float y, float *mesh_T,
-                                                             int mesh_T_stride)
+ON__CChangeTextureCoordinateHelper::ChangeTextureCoordinate (
+    int *Fvi, int fvi, float x, float y, float *mesh_T, int mesh_T_stride)
 {
   int oldvi = Fvi[fvi];
   float *T = mesh_T + (oldvi * mesh_T_stride);
@@ -3122,7 +3135,9 @@ PoleFix (float t0, float t1)
 }
 
 static int
-IntersectBoxSideRayHelper (int side, const ON_3dPoint &rst, const ON_3dVector &n,
+IntersectBoxSideRayHelper (int side,
+                           const ON_3dPoint &rst,
+                           const ON_3dVector &n,
                            double *s)
 {
   /*
@@ -3196,8 +3211,10 @@ IntersectBoxSideRayHelper (int side, const ON_3dPoint &rst, const ON_3dVector &n
 }
 
 static bool
-EvBoxSideTextureCoordinateHelper2 (int side, const ON_TextureMapping &box_mapping,
-                                   const ON_3dPoint &P, const ON_3dVector &N,
+EvBoxSideTextureCoordinateHelper2 (int side,
+                                   const ON_TextureMapping &box_mapping,
+                                   const ON_3dPoint &P,
+                                   const ON_3dVector &N,
                                    ON_3dPoint *T)
 {
   // side flag
@@ -3290,9 +3307,12 @@ EvBoxSideTextureCoordinateHelper2 (int side, const ON_TextureMapping &box_mappin
 }
 
 static bool
-EvBoxSideTextureCoordinateHelper1 (const ON_Mesh &mesh, const ON_Xform *mesh_xform,
-                                   int vi, int side,
-                                   const ON_TextureMapping &box_mapping, float *Tx,
+EvBoxSideTextureCoordinateHelper1 (const ON_Mesh &mesh,
+                                   const ON_Xform *mesh_xform,
+                                   int vi,
+                                   int side,
+                                   const ON_TextureMapping &box_mapping,
+                                   float *Tx,
                                    float *Ty)
 {
   bool rc = false;
@@ -3389,8 +3409,10 @@ TcDistanceHelper (const ON_2fPoint &tc)
 }
 
 static void
-AdjustSingleBoxTextureCoordinatesHelper (ON_Mesh &mesh, const ON_Xform *mesh_xform,
-                                         float *mesh_T, int mesh_T_stride,
+AdjustSingleBoxTextureCoordinatesHelper (ON_Mesh &mesh,
+                                         const ON_Xform *mesh_xform,
+                                         float *mesh_T,
+                                         int mesh_T_stride,
                                          const int *Tsd,
                                          const ON_TextureMapping &box_mapping)
 {
@@ -3443,8 +3465,8 @@ AdjustSingleBoxTextureCoordinatesHelper (ON_Mesh &mesh, const ON_Xform *mesh_xfo
     for (j = 0; j < fvicnt; j++) {
       if (sd[j] != side) {
         // calculate new tc for this side
-        if (EvBoxSideTextureCoordinateHelper1 (mesh, mesh_xform, Fvi[j], side,
-                                               box_mapping, &tc.x, &tc.y)) {
+        if (EvBoxSideTextureCoordinateHelper1 (
+                mesh, mesh_xform, Fvi[j], side, box_mapping, &tc.x, &tc.y)) {
           if (tc.x != mf.tc[j].x || tc.y != mf.tc[j].y) {
             mf.tc[j] = tc;
             mf.bNewV[j] = true;
@@ -3474,17 +3496,20 @@ AdjustSingleBoxTextureCoordinatesHelper (ON_Mesh &mesh, const ON_Xform *mesh_xfo
     fvicnt = (fvi[2] != fvi[3]) ? 4 : 3;
     for (j = 0; j < fvicnt; j++) {
       if (mf.bNewV[j]) {
-        helper.ChangeTextureCoordinate (fvi, j, mf.tc[j].x, mf.tc[j].y, mesh_T,
-                                        mesh_T_stride);
+        helper.ChangeTextureCoordinate (
+            fvi, j, mf.tc[j].x, mf.tc[j].y, mesh_T, mesh_T_stride);
       }
     }
   }
 }
 
 static void
-AdjustMeshPeriodicTextureCoordinatesHelper (ON_Mesh &mesh, const ON_Xform *mesh_xform,
-                                            float *mesh_T, int mesh_T_stride,
-                                            const int *Tsd, double two_pi_tc,
+AdjustMeshPeriodicTextureCoordinatesHelper (ON_Mesh &mesh,
+                                            const ON_Xform *mesh_xform,
+                                            float *mesh_T,
+                                            int mesh_T_stride,
+                                            const int *Tsd,
+                                            double two_pi_tc,
                                             const ON_TextureMapping &mapping)
 {
   // This helper adjusts texture coordinates on faces that
@@ -3505,8 +3530,8 @@ AdjustMeshPeriodicTextureCoordinatesHelper (ON_Mesh &mesh, const ON_Xform *mesh_
   const bool bBoxCheck = (Tsd && ON_TextureMapping::box_mapping == mapping_type);
 
   if (bBoxCheck && ON_TextureMapping::single == mapping.m_texture_space) {
-    AdjustSingleBoxTextureCoordinatesHelper (mesh, mesh_xform, mesh_T, mesh_T_stride,
-                                             Tsd, mapping);
+    AdjustSingleBoxTextureCoordinatesHelper (
+        mesh, mesh_xform, mesh_T, mesh_T_stride, Tsd, mapping);
     return;
   }
 
@@ -3785,27 +3810,29 @@ AdjustMeshPeriodicTextureCoordinatesHelper (ON_Mesh &mesh, const ON_Xform *mesh_
     int *meshFvi = mesh.m_F[ftc.fi].vi;
 
     if (ftc.bSetT[0]) {
-      helper.ChangeTextureCoordinate (meshFvi, 0, ftc.Tx[0], ON_UNSET_FLOAT, mesh_T,
-                                      mesh_T_stride);
+      helper.ChangeTextureCoordinate (
+          meshFvi, 0, ftc.Tx[0], ON_UNSET_FLOAT, mesh_T, mesh_T_stride);
     }
     if (ftc.bSetT[1]) {
-      helper.ChangeTextureCoordinate (meshFvi, 1, ftc.Tx[1], ON_UNSET_FLOAT, mesh_T,
-                                      mesh_T_stride);
+      helper.ChangeTextureCoordinate (
+          meshFvi, 1, ftc.Tx[1], ON_UNSET_FLOAT, mesh_T, mesh_T_stride);
     }
     if (ftc.bSetT[2]) {
-      helper.ChangeTextureCoordinate (meshFvi, 2, ftc.Tx[2], ON_UNSET_FLOAT, mesh_T,
-                                      mesh_T_stride);
+      helper.ChangeTextureCoordinate (
+          meshFvi, 2, ftc.Tx[2], ON_UNSET_FLOAT, mesh_T, mesh_T_stride);
     }
     if (ftc.bSetT[3]) {
-      helper.ChangeTextureCoordinate (meshFvi, 3, ftc.Tx[3], ON_UNSET_FLOAT, mesh_T,
-                                      mesh_T_stride);
+      helper.ChangeTextureCoordinate (
+          meshFvi, 3, ftc.Tx[3], ON_UNSET_FLOAT, mesh_T, mesh_T_stride);
     }
   }
 }
 
 static bool
-SeamCheckHelper (const ON_TextureMapping &mp, double &two_pi_tc,
-                 ON_SimpleArray<int> &Tside, ON_SimpleArray<int> *&Tsd)
+SeamCheckHelper (const ON_TextureMapping &mp,
+                 double &two_pi_tc,
+                 ON_SimpleArray<int> &Tside,
+                 ON_SimpleArray<int> *&Tsd)
 {
   bool bSeamCheck = false;
   switch (mp.m_type) {
@@ -3850,7 +3877,8 @@ HasSharedVertices (const ON_Mesh &mesh)
 
 const ON_TextureCoordinates *
 ON_Mesh::SetCachedTextureCoordinates (const class ON_TextureMapping &mapping,
-                                      const class ON_Xform *mesh_xform, bool bLazy)
+                                      const class ON_Xform *mesh_xform,
+                                      bool bLazy)
 {
   if (mapping.RequiresVertexNormals () && !HasVertexNormals ())
     ComputeVertexNormals ();
@@ -3902,9 +3930,13 @@ ON_Mesh::SetCachedTextureCoordinates (const class ON_TextureMapping &mapping,
     int mesh_T_stride = sizeof (TC->m_T[0]) / sizeof (mesh_T[0]);
     if (Tsd && Tside.Count () != m_V.Count ())
       Tsd = 0;
-    AdjustMeshPeriodicTextureCoordinatesHelper (*this, mesh_xform, mesh_T,
-                                                mesh_T_stride, Tsd ? Tside.Array () : 0,
-                                                two_pi_tc, mp);
+    AdjustMeshPeriodicTextureCoordinatesHelper (*this,
+                                                mesh_xform,
+                                                mesh_T,
+                                                mesh_T_stride,
+                                                Tsd ? Tside.Array () : 0,
+                                                two_pi_tc,
+                                                mp);
     mesh_T = 0; // when the array is grown, the pointer may become invalid
     if (!mapping.m_uvw.IsIdentity () && !mapping.m_uvw.IsZero ()) {
       // Apply the uvw transformation that is on mapping
@@ -3925,7 +3957,8 @@ ON_Mesh::SetCachedTextureCoordinates (const class ON_TextureMapping &mapping,
 
 bool
 ON_Mesh::SetTextureCoordinates (const class ON_TextureMapping &mapping,
-                                const class ON_Xform *mesh_xform, bool bLazy)
+                                const class ON_Xform *mesh_xform,
+                                bool bLazy)
 {
   if (mapping.RequiresVertexNormals () && !HasVertexNormals ())
     ComputeVertexNormals ();
@@ -3961,9 +3994,13 @@ ON_Mesh::SetTextureCoordinates (const class ON_TextureMapping &mapping,
     int mesh_T_stride = sizeof (m_T[0]) / sizeof (mesh_T[0]);
     if (Tsd && Tside.Count () != m_V.Count ())
       Tsd = 0;
-    AdjustMeshPeriodicTextureCoordinatesHelper (*this, mesh_xform, mesh_T,
-                                                mesh_T_stride, Tsd ? Tside.Array () : 0,
-                                                two_pi_tc, mp);
+    AdjustMeshPeriodicTextureCoordinatesHelper (*this,
+                                                mesh_xform,
+                                                mesh_T,
+                                                mesh_T_stride,
+                                                Tsd ? Tside.Array () : 0,
+                                                two_pi_tc,
+                                                mp);
     mesh_T = 0; // when the array is grown, the pointer may become invalid
     if (!mapping.m_uvw.IsIdentity () && !mapping.m_uvw.IsZero ()) {
       // Apply the uvw transformation that is on mapping
@@ -4290,7 +4327,8 @@ ON_RenderingAttributes::IsValid (ON_TextLog *text_log) const
           if (text_log) {
             text_log->Print ("ON_RenderingAttributes error: m_materials[%d] and "
                              "m_materials[%d] have the same plug-in id.\n",
-                             i, j);
+                             i,
+                             j);
           }
           return false;
         }
@@ -4319,7 +4357,8 @@ ON_ObjectRenderingAttributes::IsValid (ON_TextLog *text_log) const
           if (text_log) {
             text_log->Print ("ON_ObjectRenderingAttributes error: m_mappings[%d] and "
                              "m_mappings[%d] have the same plug-in id.\n",
-                             i, j);
+                             i,
+                             j);
           }
           return false;
         }
@@ -4747,8 +4786,10 @@ ON_TextureMapping::SetSurfaceParameterMapping (void)
 }
 
 bool
-ON_TextureMapping::SetPlaneMapping (const ON_Plane &plane, const ON_Interval &dx,
-                                    const ON_Interval &dy, const ON_Interval &dz)
+ON_TextureMapping::SetPlaneMapping (const ON_Plane &plane,
+                                    const ON_Interval &dx,
+                                    const ON_Interval &dy,
+                                    const ON_Interval &dz)
 {
   Default ();
 
@@ -4872,8 +4913,8 @@ ON_TextureMapping::SetPlaneMapping (const ON_Plane &plane, const ON_Interval &dx
 }
 
 bool
-ON_TextureMapping::SetBoxMapping (const ON_Plane &plane, ON_Interval dx, ON_Interval dy,
-                                  ON_Interval dz, bool bCapped)
+ON_TextureMapping::SetBoxMapping (
+    const ON_Plane &plane, ON_Interval dx, ON_Interval dy, ON_Interval dz, bool bCapped)
 {
   bool rc = SetPlaneMapping (plane, dx, dy, dz);
   if (rc) {
@@ -4925,7 +4966,9 @@ ON_TextureMapping::SetSphereMapping (const ON_Sphere &sphere)
 }
 
 bool
-ON_TextureMapping::GetMappingPlane (ON_Plane &plane, ON_Interval &dx, ON_Interval &dy,
+ON_TextureMapping::GetMappingPlane (ON_Plane &plane,
+                                    ON_Interval &dx,
+                                    ON_Interval &dy,
                                     ON_Interval &dz) const
 {
   ON_Xform xform (m_Pxyz);
@@ -4986,7 +5029,9 @@ ON_TextureMapping::GetMappingPlane (ON_Plane &plane, ON_Interval &dx, ON_Interva
 }
 
 bool
-ON_TextureMapping::GetMappingBox (ON_Plane &plane, ON_Interval &dx, ON_Interval &dy,
+ON_TextureMapping::GetMappingBox (ON_Plane &plane,
+                                  ON_Interval &dx,
+                                  ON_Interval &dy,
                                   ON_Interval &dz) const
 {
   return GetMappingPlane (plane, dx, dy, dz);

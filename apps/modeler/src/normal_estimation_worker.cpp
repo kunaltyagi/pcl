@@ -97,7 +97,10 @@ pcl::modeler::NormalEstimationWorker::setupParameters ()
   search_radius_ = new DoubleParameter (
       "Search Radius",
       "The sphere radius that is to be used for determining the nearest neighbors",
-      radius, 0, x_max_ - x_min_, step);
+      radius,
+      0,
+      x_max_ - x_min_,
+      step);
 
   parameter_dialog_->addParameter (search_radius_);
 

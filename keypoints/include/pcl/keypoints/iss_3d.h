@@ -213,7 +213,8 @@ namespace pcl
      * boundary points is stored
      */
     bool *
-    getBoundaryPoints (PointCloudIn &input, double border_radius,
+    getBoundaryPoints (PointCloudIn &input,
+                       double border_radius,
                        float angle_threshold);
 
     /** \brief Compute the scatter matrix for a point index.

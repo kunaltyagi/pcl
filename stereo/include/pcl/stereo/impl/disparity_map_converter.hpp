@@ -295,7 +295,8 @@ pcl::DisparityMapConverter<PointT>::compute (PointCloud &out_cloud)
 
 template <typename PointT>
 pcl::PointXYZ
-pcl::DisparityMapConverter<PointT>::translateCoordinates (size_t row, size_t column,
+pcl::DisparityMapConverter<PointT>::translateCoordinates (size_t row,
+                                                          size_t column,
                                                           float disparity) const
 {
   // Returning point.

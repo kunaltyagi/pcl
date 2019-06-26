@@ -279,7 +279,9 @@ namespace pcl
      * This method tries to avoid duplicate code.
      */
     virtual void
-    generateStatistics (double &mean, double &variance, double &stddev,
+    generateStatistics (double &mean,
+                        double &variance,
+                        double &stddev,
                         std::vector<float> &distances);
   };
 } // namespace pcl

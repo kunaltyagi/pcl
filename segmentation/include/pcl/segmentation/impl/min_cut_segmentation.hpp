@@ -487,12 +487,14 @@ pcl::MinCutSegmentation<PointT>::recalculateUnaryPotentials ()
   std::pair<EdgeDescriptor, bool> sink_edge;
 
   for (boost::tie (src_edge_iter, src_edge_end) = boost::out_edges (source_, *graph_);
-       src_edge_iter != src_edge_end; src_edge_iter++) {
+       src_edge_iter != src_edge_end;
+       src_edge_iter++) {
     double source_weight = 0.0;
     double sink_weight = 0.0;
     sink_edge.second = false;
     calculateUnaryPotential (static_cast<int> (boost::target (*src_edge_iter, *graph_)),
-                             source_weight, sink_weight);
+                             source_weight,
+                             sink_weight);
     sink_edge =
         boost::lookup_edge (boost::target (*src_edge_iter, *graph_), sink_, *graph_);
     if (!sink_edge.second)
@@ -523,12 +525,14 @@ pcl::MinCutSegmentation<PointT>::recalculateBinaryPotentials ()
   edge_marker.resize (number_of_points + 2, out_edges_marker);
 
   for (boost::tie (vertex_iter, vertex_end) = boost::vertices (*graph_);
-       vertex_iter != vertex_end; vertex_iter++) {
+       vertex_iter != vertex_end;
+       vertex_iter++) {
     VertexDescriptor source_vertex = *vertex_iter;
     if (source_vertex == source_ || source_vertex == sink_)
       continue;
     for (boost::tie (edge_iter, edge_end) = boost::out_edges (source_vertex, *graph_);
-         edge_iter != edge_end; edge_iter++) {
+         edge_iter != edge_end;
+         edge_iter++) {
       // If this is not the edge of the graph, but the reverse fictitious edge that is
       // needed for the algorithm then continue
       EdgeDescriptor reverse_edge = (*reverse_edges_)[*edge_iter];
@@ -573,7 +577,8 @@ pcl::MinCutSegmentation<PointT>::assembleLabels (ResidualCapacityMap &residual_c
 
   OutEdgeIterator edge_iter, edge_end;
   for (boost::tie (edge_iter, edge_end) = boost::out_edges (source_, *graph_);
-       edge_iter != edge_end; edge_iter++) {
+       edge_iter != edge_end;
+       edge_iter++) {
     if (labels[edge_iter->m_target] == 1) {
       if (residual_capacity[*edge_iter] > epsilon_)
         clusters_[1].indices.push_back (static_cast<int> (edge_iter->m_target));

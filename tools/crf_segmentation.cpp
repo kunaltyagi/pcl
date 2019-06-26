@@ -111,8 +111,13 @@ loadCloud (const std::string &filename, CloudLT::Ptr &cloud)
 }
 
 void
-compute (const CloudT::Ptr &cloud, const CloudLT::Ptr &anno, float normal_radius_search,
-         float leaf_x, float leaf_y, float leaf_z, CloudLT::Ptr &out)
+compute (const CloudT::Ptr &cloud,
+         const CloudLT::Ptr &anno,
+         float normal_radius_search,
+         float leaf_x,
+         float leaf_y,
+         float leaf_z,
+         CloudLT::Ptr &out)
 {
   TicToc tt;
   tt.tic ();

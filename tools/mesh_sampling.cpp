@@ -57,8 +57,17 @@ uniform_deviate (int seed)
 }
 
 inline void
-randomPointTriangle (float a1, float a2, float a3, float b1, float b2, float b3,
-                     float c1, float c2, float c3, float r1, float r2,
+randomPointTriangle (float a1,
+                     float a2,
+                     float a3,
+                     float b1,
+                     float b2,
+                     float b3,
+                     float c1,
+                     float c2,
+                     float c3,
+                     float r1,
+                     float r2,
                      Eigen::Vector3f &p)
 {
   float r1sqr = std::sqrt (r1);
@@ -79,9 +88,14 @@ randomPointTriangle (float a1, float a2, float a3, float b1, float b2, float b3,
 }
 
 inline void
-randPSurface (vtkPolyData *polydata, std::vector<double> *cumulativeAreas,
-              double totalArea, Eigen::Vector3f &p, bool calcNormal, Eigen::Vector3f &n,
-              bool calcColor, Eigen::Vector3f &c)
+randPSurface (vtkPolyData *polydata,
+              std::vector<double> *cumulativeAreas,
+              double totalArea,
+              Eigen::Vector3f &p,
+              bool calcNormal,
+              Eigen::Vector3f &n,
+              bool calcColor,
+              Eigen::Vector3f &c)
 {
   float r = static_cast<float> (uniform_deviate (rand ()) * totalArea);
 
@@ -107,8 +121,18 @@ randPSurface (vtkPolyData *polydata, std::vector<double> *cumulativeAreas,
   }
   float r1 = static_cast<float> (uniform_deviate (rand ()));
   float r2 = static_cast<float> (uniform_deviate (rand ()));
-  randomPointTriangle (float(A[0]), float(A[1]), float(A[2]), float(B[0]), float(B[1]),
-                       float(B[2]), float(C[0]), float(C[1]), float(C[2]), r1, r2, p);
+  randomPointTriangle (float(A[0]),
+                       float(A[1]),
+                       float(A[2]),
+                       float(B[0]),
+                       float(B[1]),
+                       float(B[2]),
+                       float(C[0]),
+                       float(C[1]),
+                       float(C[2]),
+                       r1,
+                       r2,
+                       p);
 
   if (calcColor) {
     vtkUnsignedCharArray *const colors =
@@ -119,9 +143,18 @@ randPSurface (vtkPolyData *polydata, std::vector<double> *cumulativeAreas,
       colors->GetTuple (ptIds[1], cB);
       colors->GetTuple (ptIds[2], cC);
 
-      randomPointTriangle (float(cA[0]), float(cA[1]), float(cA[2]), float(cB[0]),
-                           float(cB[1]), float(cB[2]), float(cC[0]), float(cC[1]),
-                           float(cC[2]), r1, r2, c);
+      randomPointTriangle (float(cA[0]),
+                           float(cA[1]),
+                           float(cA[2]),
+                           float(cB[0]),
+                           float(cB[1]),
+                           float(cB[2]),
+                           float(cC[0]),
+                           float(cC[1]),
+                           float(cC[2]),
+                           r1,
+                           r2,
+                           c);
     } else {
       static bool printed_once = false;
       if (!printed_once)
@@ -132,8 +165,10 @@ randPSurface (vtkPolyData *polydata, std::vector<double> *cumulativeAreas,
 }
 
 void
-uniform_sampling (vtkSmartPointer<vtkPolyData> polydata, size_t n_samples,
-                  bool calc_normal, bool calc_color,
+uniform_sampling (vtkSmartPointer<vtkPolyData> polydata,
+                  size_t n_samples,
+                  bool calc_normal,
+                  bool calc_color,
                   pcl::PointCloud<pcl::PointXYZRGBNormal> &cloud_out)
 {
   polydata->BuildCells ();
@@ -159,8 +194,8 @@ uniform_sampling (vtkSmartPointer<vtkPolyData> polydata, size_t n_samples,
     Eigen::Vector3f p;
     Eigen::Vector3f n (0, 0, 0);
     Eigen::Vector3f c (0, 0, 0);
-    randPSurface (polydata, &cumulativeAreas, totalArea, p, calc_normal, n, calc_color,
-                  c);
+    randPSurface (
+        polydata, &cumulativeAreas, totalArea, p, calc_normal, n, calc_color, c);
     cloud_out.points[i].x = p[0];
     cloud_out.points[i].y = p[1];
     cloud_out.points[i].z = p[2];
@@ -283,8 +318,8 @@ main (int argc, char **argv)
     visualization::PCLVisualizer vis3 ("VOXELIZED SAMPLES CLOUD");
     vis3.addPointCloud<pcl::PointXYZRGBNormal> (voxel_cloud);
     if (write_normals)
-      vis3.addPointCloudNormals<pcl::PointXYZRGBNormal> (voxel_cloud, 1, 0.02f,
-                                                         "cloud_normals");
+      vis3.addPointCloudNormals<pcl::PointXYZRGBNormal> (
+          voxel_cloud, 1, 0.02f, "cloud_normals");
     vis3.spin ();
   }
 

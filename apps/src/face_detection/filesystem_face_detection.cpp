@@ -21,7 +21,9 @@ template <class PointInT>
 void
 run (pcl::RFFaceDetectorTrainer &fdrf,
      typename pcl::PointCloud<PointInT>::Ptr &scene_vis,
-     pcl::visualization::PCLVisualizer &vis, bool heat_map, bool show_votes,
+     pcl::visualization::PCLVisualizer &vis,
+     bool heat_map,
+     bool show_votes,
      const std::string &filename)
 {
   pcl::PointCloud<pcl::PointXYZ>::Ptr scene (new pcl::PointCloud<pcl::PointXYZ>);
@@ -52,8 +54,8 @@ run (pcl::RFFaceDetectorTrainer &fdrf,
 
     pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGB>
         handler_keypoints (to_visualize);
-    vis.addPointCloud<pcl::PointXYZRGB> (to_visualize, handler_keypoints,
-                                         "scene_cloud");
+    vis.addPointCloud<pcl::PointXYZRGB> (
+        to_visualize, handler_keypoints, "scene_cloud");
   } else {
     vis.addPointCloud (scene_vis, "scene_cloud");
   }
@@ -88,8 +90,8 @@ run (pcl::RFFaceDetectorTrainer &fdrf,
     pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI>
         handler_votes (votes_cloud, "intensity");
     vis.addPointCloud<pcl::PointXYZI> (votes_cloud, handler_votes, "votes_cloud");
-    vis.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
-                                          14, "votes_cloud");
+    vis.setPointCloudRenderingProperties (
+        pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 14, "votes_cloud");
   }
 
   vis.addCoordinateSystem (0.1, "global");

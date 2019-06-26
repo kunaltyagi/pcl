@@ -21,11 +21,15 @@
 ON_BOOL32
 ON_FindLocalMinimum ( // returns 0 - failed to converge, 1 - success, 2 - failed to
                       // converge to requested tolerances
-    int (*) (void *, double, double *,
-             double *),     // f(void*, double t, double* value, double* derivative );
-    void *,                 // passed as the void* argument to the above function
-    double, double, double, // ax,bx,cx, 3 abcissa  ax<bx<cx or ax>bx>cx, and
-                            // f(bx) < f(ax), and f(bx) < f(cx)
+    int (*) (void *,
+             double,
+             double *,
+             double *), // f(void*, double t, double* value, double* derivative );
+    void *,             // passed as the void* argument to the above function
+    double,
+    double,
+    double,  // ax,bx,cx, 3 abcissa  ax<bx<cx or ax>bx>cx, and
+             // f(bx) < f(ax), and f(bx) < f(cx)
     double,  // tol > 0 (minimum relative step size (use ON_EPSILON when in doubt)
     double,  // zeps > 0 (minimum absolute step size (use 1/2*(desired absolute
              // precision))

@@ -114,7 +114,10 @@ namespace pcl
       static void
       Scale (const Polynomial &p, double w, Polynomial &q);
       static void
-      AddScaled (const Polynomial &p1, double w1, const Polynomial &p2, double w2,
+      AddScaled (const Polynomial &p1,
+                 double w1,
+                 const Polynomial &p2,
+                 double w2,
                  Polynomial &q);
       static void
       AddScaled (const Polynomial &p1, const Polynomial &p2, double w2, Polynomial &q);

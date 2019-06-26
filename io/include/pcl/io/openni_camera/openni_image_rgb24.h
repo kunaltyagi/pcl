@@ -65,22 +65,32 @@ namespace openni_wrapper
     }
 
     void
-    fillRGB (unsigned width, unsigned height, unsigned char *rgb_buffer,
+    fillRGB (unsigned width,
+             unsigned height,
+             unsigned char *rgb_buffer,
              unsigned rgb_line_step = 0) const override;
     void
-    fillGrayscale (unsigned width, unsigned height, unsigned char *gray_buffer,
+    fillGrayscale (unsigned width,
+                   unsigned height,
+                   unsigned char *gray_buffer,
                    unsigned gray_line_step = 0) const override;
     bool
-    isResizingSupported (unsigned input_width, unsigned input_height,
-                         unsigned output_width, unsigned output_height) const override;
+    isResizingSupported (unsigned input_width,
+                         unsigned input_height,
+                         unsigned output_width,
+                         unsigned output_height) const override;
     inline static bool
-    resizingSupported (unsigned input_width, unsigned input_height,
-                       unsigned output_width, unsigned output_height);
+    resizingSupported (unsigned input_width,
+                       unsigned input_height,
+                       unsigned output_width,
+                       unsigned output_height);
   };
 
   bool
-  ImageRGB24::resizingSupported (unsigned input_width, unsigned input_height,
-                                 unsigned output_width, unsigned output_height)
+  ImageRGB24::resizingSupported (unsigned input_width,
+                                 unsigned input_height,
+                                 unsigned output_width,
+                                 unsigned output_height)
   {
     return (output_width <= input_width && output_height <= input_height &&
             input_width % output_width == 0 && input_height % output_height == 0);

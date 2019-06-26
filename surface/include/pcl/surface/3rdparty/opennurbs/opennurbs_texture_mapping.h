@@ -31,9 +31,11 @@ class ON_Line;
 class ON_BrepFace;
 class ON_3dPoint;
 
-typedef int (*TEXMAP_INTERSECT_LINE_SURFACE) (const ON_Line *, const ON_BrepFace *,
+typedef int (*TEXMAP_INTERSECT_LINE_SURFACE) (const ON_Line *,
+                                              const ON_BrepFace *,
                                               ON_SimpleArray<ON_X_EVENT> &);
-typedef bool (*TEXMAP_BREP_FACE_CLOSEST_POINT) (const ON_BrepFace *, const ON_3dPoint *,
+typedef bool (*TEXMAP_BREP_FACE_CLOSEST_POINT) (const ON_BrepFace *,
+                                                const ON_3dPoint *,
                                                 ON_3dPoint &);
 
 class ON_CLASS ON_TextureMapping : public ON_Object
@@ -132,7 +134,9 @@ class ON_CLASS ON_TextureMapping : public ON_Object
     True if input is valid.
   */
   bool
-  SetPlaneMapping (const ON_Plane &plane, const ON_Interval &dx, const ON_Interval &dy,
+  SetPlaneMapping (const ON_Plane &plane,
+                   const ON_Interval &dx,
+                   const ON_Interval &dy,
                    const ON_Interval &dz);
 
   /*
@@ -228,7 +232,10 @@ class ON_CLASS ON_TextureMapping : public ON_Object
             0/6 <=u<= 1/6 <=u<= 2/6 <=u<= 3/6 <=u<= 4/6 <=u<= 5/6 <=u<= 6/6
   */
   bool
-  SetBoxMapping (const ON_Plane &plane, ON_Interval dx, ON_Interval dy, ON_Interval dz,
+  SetBoxMapping (const ON_Plane &plane,
+                 ON_Interval dx,
+                 ON_Interval dy,
+                 ON_Interval dz,
                  bool bIsCapped);
 
   /*
@@ -251,7 +258,9 @@ class ON_CLASS ON_TextureMapping : public ON_Object
       location of the plane will be the same.
   */
   bool
-  GetMappingPlane (ON_Plane &plane, ON_Interval &dx, ON_Interval &dy,
+  GetMappingPlane (ON_Plane &plane,
+                   ON_Interval &dx,
+                   ON_Interval &dy,
                    ON_Interval &dz) const;
 
   /*
@@ -317,7 +326,9 @@ class ON_CLASS ON_TextureMapping : public ON_Object
     location of the box will be the same.
   */
   bool
-  GetMappingBox (ON_Plane &plane, ON_Interval &dx, ON_Interval &dy,
+  GetMappingBox (ON_Plane &plane,
+                 ON_Interval &dx,
+                 ON_Interval &dy,
                  ON_Interval &dz) const;
 
   /*
@@ -405,18 +416,23 @@ class ON_CLASS ON_TextureMapping : public ON_Object
   Evaluate (const ON_3dPoint &P, const ON_3dVector &N, ON_3dPoint *T) const;
 
   virtual int
-  Evaluate (const ON_3dPoint &P, const ON_3dVector &N, ON_3dPoint *T,
-            const ON_Xform &P_xform, const ON_Xform &N_xform) const;
+  Evaluate (const ON_3dPoint &P,
+            const ON_3dVector &N,
+            ON_3dPoint *T,
+            const ON_Xform &P_xform,
+            const ON_Xform &N_xform) const;
 
   int
   EvaluatePlaneMapping (const ON_3dPoint &P, const ON_3dVector &N, ON_3dPoint *T) const;
 
   int
-  EvaluateSphereMapping (const ON_3dPoint &P, const ON_3dVector &N,
+  EvaluateSphereMapping (const ON_3dPoint &P,
+                         const ON_3dVector &N,
                          ON_3dPoint *T) const;
 
   int
-  EvaluateCylinderMapping (const ON_3dPoint &P, const ON_3dVector &N,
+  EvaluateCylinderMapping (const ON_3dPoint &P,
+                           const ON_3dVector &N,
                            ON_3dPoint *T) const;
 
   int
@@ -492,13 +508,17 @@ class ON_CLASS ON_TextureMapping : public ON_Object
     True if successful.
   */
   bool
-  GetTextureCoordinates (const ON_Mesh &mesh, ON_SimpleArray<ON_3fPoint> &T,
-                         const ON_Xform *mesh_xform = 0, bool bLazy = false,
+  GetTextureCoordinates (const ON_Mesh &mesh,
+                         ON_SimpleArray<ON_3fPoint> &T,
+                         const ON_Xform *mesh_xform = 0,
+                         bool bLazy = false,
                          ON_SimpleArray<int> *Tside = 0) const;
 
   bool
-  GetTextureCoordinates (const ON_Mesh &mesh, ON_SimpleArray<ON_2fPoint> &T,
-                         const ON_Xform *mesh_xform = 0, bool bLazy = false,
+  GetTextureCoordinates (const ON_Mesh &mesh,
+                         ON_SimpleArray<ON_2fPoint> &T,
+                         const ON_Xform *mesh_xform = 0,
+                         bool bLazy = false,
                          ON_SimpleArray<int> *Tside = 0) const;
 
   public:

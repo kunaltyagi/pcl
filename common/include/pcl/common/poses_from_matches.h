@@ -101,7 +101,8 @@ namespace pcl
      *  It is assumed, that the correspondences are sorted from good to bad. */
     void
     estimatePosesUsing1Correspondence (
-        const PointCorrespondences6DVector &correspondences, int max_no_of_results,
+        const PointCorrespondences6DVector &correspondences,
+        int max_no_of_results,
         PoseEstimatesVector &pose_estimates) const;
 
     /** Use pairs of 6DOF correspondences to estimate transformations between the
@@ -110,7 +111,8 @@ namespace pcl
     void
     estimatePosesUsing2Correspondences (
         const PointCorrespondences6DVector &correspondences,
-        int max_no_of_tested_combinations, int max_no_of_results,
+        int max_no_of_tested_combinations,
+        int max_no_of_results,
         PoseEstimatesVector &pose_estimates) const;
 
     /** Use triples of 6DOF correspondences to estimate transformations between the
@@ -119,7 +121,8 @@ namespace pcl
     void
     estimatePosesUsing3Correspondences (
         const PointCorrespondences6DVector &correspondences,
-        int max_no_of_tested_combinations, int max_no_of_results,
+        int max_no_of_tested_combinations,
+        int max_no_of_results,
         PoseEstimatesVector &pose_estimates) const;
 
     /// Get a reference to the parameters struct

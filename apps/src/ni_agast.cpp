@@ -99,8 +99,8 @@ class AGASTDemo
     default: {
       timer_.reset ();
       pcl::keypoints::agast::AgastDetector7_12s::Ptr detector (
-          new pcl::keypoints::agast::AgastDetector7_12s (cloud->width, cloud->height,
-                                                         threshold_, bmax_));
+          new pcl::keypoints::agast::AgastDetector7_12s (
+              cloud->width, cloud->height, threshold_, bmax_));
       agast.setAgastDetector (detector);
       agast.compute (*keypoints_);
       PCL_DEBUG ("AGAST 7_12s computation took %f ms.\n", timer_.getTime ());
@@ -109,8 +109,8 @@ class AGASTDemo
     case 2: {
       timer_.reset ();
       pcl::keypoints::agast::AgastDetector5_8::Ptr detector (
-          new pcl::keypoints::agast::AgastDetector5_8 (cloud->width, cloud->height,
-                                                       threshold_, bmax_));
+          new pcl::keypoints::agast::AgastDetector5_8 (
+              cloud->width, cloud->height, threshold_, bmax_));
       agast.setAgastDetector (detector);
       agast.compute (*keypoints_);
       PCL_DEBUG ("AGAST 5_8 computation took %f ms.\n", timer_.getTime ());
@@ -119,8 +119,8 @@ class AGASTDemo
     case 3: {
       timer_.reset ();
       pcl::keypoints::agast::OastDetector9_16::Ptr detector (
-          new pcl::keypoints::agast::OastDetector9_16 (cloud->width, cloud->height,
-                                                       threshold_, bmax_));
+          new pcl::keypoints::agast::OastDetector9_16 (
+              cloud->width, cloud->height, threshold_, bmax_));
       agast.setAgastDetector (detector);
       agast.compute (*keypoints_);
       PCL_DEBUG ("OAST 9_6 computation took %f ms.\n", timer_.getTime ());
@@ -146,12 +146,14 @@ class AGASTDemo
     if (event.getKeySym () == "Up") {
       if (obj->threshold_ <= 0.9) {
         PCL_INFO ("[keyboard_callback] Increase AGAST threshold from %f to %f.\n",
-                  obj->threshold_, obj->threshold_ + 0.01);
+                  obj->threshold_,
+                  obj->threshold_ + 0.01);
         obj->threshold_ += 0.01;
         return;
       }
       PCL_INFO ("[keyboard_callback] Increase AGAST threshold from %f to %f.\n",
-                obj->threshold_, obj->threshold_ + 1);
+                obj->threshold_,
+                obj->threshold_ + 1);
       obj->threshold_ += 1;
       return;
     }
@@ -161,18 +163,21 @@ class AGASTDemo
         return;
       if (obj->threshold_ <= 1) {
         PCL_INFO ("[keyboard_callback] Decrease AGAST threshold from %f to %f.\n",
-                  obj->threshold_, obj->threshold_ - 0.01);
+                  obj->threshold_,
+                  obj->threshold_ - 0.01);
         obj->threshold_ -= 0.01;
         return;
       }
       PCL_INFO ("[keyboard_callback] Decrease AGAST threshold from %f to %f.\n",
-                obj->threshold_, obj->threshold_ - 1);
+                obj->threshold_,
+                obj->threshold_ - 1);
       obj->threshold_ -= 1;
       return;
     }
 
     if (event.getKeySym () == "Right") {
-      PCL_INFO ("[keyboard_callback] Increase AGAST BMAX from %f to %f.\n", obj->bmax_,
+      PCL_INFO ("[keyboard_callback] Increase AGAST BMAX from %f to %f.\n",
+                obj->bmax_,
                 obj->bmax_ + 1);
       obj->bmax_ += 1;
       return;
@@ -181,7 +186,8 @@ class AGASTDemo
     if (event.getKeySym () == "Left") {
       if (obj->bmax_ <= 0)
         return;
-      PCL_INFO ("[keyboard_callback] Decrease AGAST BMAX from %f to %f.\n", obj->bmax_,
+      PCL_INFO ("[keyboard_callback] Decrease AGAST BMAX from %f to %f.\n",
+                obj->bmax_,
                 obj->bmax_ - 1);
       obj->bmax_ -= 1;
       return;
@@ -245,10 +251,10 @@ class AGASTDemo
   void
   run ()
   {
-    cloud_viewer_.registerKeyboardCallback (&AGASTDemo::keyboard_callback, *this,
-                                            static_cast<AGASTDemo *> (this));
-    image_viewer_.registerKeyboardCallback (&AGASTDemo::keyboard_callback, *this,
-                                            static_cast<AGASTDemo *> (this));
+    cloud_viewer_.registerKeyboardCallback (
+        &AGASTDemo::keyboard_callback, *this, static_cast<AGASTDemo *> (this));
+    image_viewer_.registerKeyboardCallback (
+        &AGASTDemo::keyboard_callback, *this, static_cast<AGASTDemo *> (this));
 
     grabber_.start ();
 
@@ -293,15 +299,18 @@ class AGASTDemo
           for (size_t i = 0; i < keypoints->size (); ++i) {
             int u = int(keypoints->points[i].u);
             int v = int(keypoints->points[i].v);
-            image_viewer_.markPoint (u, v, visualization::red_color,
-                                     visualization::blue_color, 10,
+            image_viewer_.markPoint (u,
+                                     v,
+                                     visualization::red_color,
+                                     visualization::blue_color,
+                                     10,
                                      getStrBool (!keypts));
           }
           keypts = !keypts;
 
           get3DKeypoints (cloud, keypoints, *keypoints3d);
-          visualization::PointCloudColorHandlerCustom<PointT> blue (keypoints3d, 0, 0,
-                                                                    255);
+          visualization::PointCloudColorHandlerCustom<PointT> blue (
+              keypoints3d, 0, 0, 255);
           if (!cloud_viewer_.updatePointCloud (keypoints3d, blue, "keypoints"))
             cloud_viewer_.addPointCloud (keypoints3d, blue, "keypoints");
           cloud_viewer_.setPointCloudRenderingProperties (

@@ -154,12 +154,18 @@ namespace pcl
      * item](http://www.ensenso.de/manual/index.html?capture.htm) for more
      * details about the parameters. */
     bool
-    configureCapture (const bool auto_exposure = true, const bool auto_gain = true,
-                      const int bining = 1, const float exposure = 0.32,
-                      const bool front_light = false, const int gain = 1,
-                      const bool gain_boost = false, const bool hardware_gamma = false,
-                      const bool hdr = false, const int pixel_clock = 10,
-                      const bool projector = true, const int target_brightness = 80,
+    configureCapture (const bool auto_exposure = true,
+                      const bool auto_gain = true,
+                      const int bining = 1,
+                      const float exposure = 0.32,
+                      const bool front_light = false,
+                      const int gain = 1,
+                      const bool gain_boost = false,
+                      const bool hardware_gamma = false,
+                      const bool hdr = false,
+                      const int pixel_clock = 10,
+                      const bool projector = true,
+                      const int target_brightness = 80,
                       const std::string trigger_mode = "Software",
                       const bool use_disparity_map_area_of_interest = false) const;
 
@@ -270,7 +276,8 @@ namespace pcl
      * original point cloud! (use @ref clearEEPROMExtrinsicCalibration) Use @ref
      * storeEEPROMExtrinsicCalibration to permanently store this transformation */
     bool
-    setExtrinsicCalibration (const double euler_angle, Eigen::Vector3d &rotation_axis,
+    setExtrinsicCalibration (const double euler_angle,
+                             Eigen::Vector3d &rotation_axis,
                              const Eigen::Vector3d &translation,
                              const std::string target = "Hand");
 
@@ -349,8 +356,13 @@ namespace pcl
      * in the EnsensoSDK documentation
      */
     bool
-    jsonTransformationToEulerAngles (const std::string &json, double &x, double &y,
-                                     double &z, double &w, double &p, double &r) const;
+    jsonTransformationToEulerAngles (const std::string &json,
+                                     double &x,
+                                     double &y,
+                                     double &z,
+                                     double &w,
+                                     double &p,
+                                     double &r) const;
 
     /** @brief Get the angle axis parameters corresponding to a JSON string
      * @param[in] json A string containing the angle axis transformation in JSON format
@@ -363,7 +375,8 @@ namespace pcl
      * in the EnsensoSDK documentation
      */
     bool
-    jsonTransformationToAngleAxis (const std::string json, double &alpha,
+    jsonTransformationToAngleAxis (const std::string json,
+                                   double &alpha,
                                    Eigen::Vector3d &axis,
                                    Eigen::Vector3d &translation) const;
 
@@ -396,8 +409,12 @@ namespace pcl
      * in the EnsensoSDK documentation
      */
     bool
-    eulerAnglesTransformationToJson (const double x, const double y, const double z,
-                                     const double w, const double p, const double r,
+    eulerAnglesTransformationToJson (const double x,
+                                     const double y,
+                                     const double z,
+                                     const double w,
+                                     const double p,
+                                     const double r,
                                      std::string &json,
                                      const bool pretty_format = true) const;
 
@@ -418,9 +435,14 @@ namespace pcl
      * in the EnsensoSDK documentation
      */
     bool
-    angleAxisTransformationToJson (const double x, const double y, const double z,
-                                   const double rx, const double ry, const double rz,
-                                   const double alpha, std::string &json,
+    angleAxisTransformationToJson (const double x,
+                                   const double y,
+                                   const double z,
+                                   const double rx,
+                                   const double ry,
+                                   const double rz,
+                                   const double alpha,
+                                   std::string &json,
                                    const bool pretty_format = true) const;
 
     /** @brief Get the JSON string corresponding to a 4x4 matrix
@@ -433,7 +455,8 @@ namespace pcl
      * page](http://www.ensenso.de/manual/index.html?cmdconverttransformation.htm) in
      * the EnsensoSDK documentation */
     bool
-    matrixTransformationToJson (const Eigen::Affine3d &matrix, std::string &json,
+    matrixTransformationToJson (const Eigen::Affine3d &matrix,
+                                std::string &json,
                                 const bool pretty_format = true) const;
 
     /** @brief Reference to the NxLib tree root
@@ -489,7 +512,8 @@ namespace pcl
      * @param bpe bytes per element
      * @param isFlt is float
      * @return the OpenCV type as a string */
-    std::string static getOpenCVType (const int channels, const int bpe,
+    std::string static getOpenCVType (const int channels,
+                                      const int bpe,
                                       const bool isFlt);
 
     /** @brief Continuously asks for images and or point clouds data from the device and

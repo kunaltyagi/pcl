@@ -87,8 +87,10 @@ namespace pcl
                                   NCVVector<HaarFeature64> &h_haar_features);
 
         NCVStatus
-        ncvHaarGetClassifierSize (const std::string &filename, Ncv32u &numStages,
-                                  Ncv32u &numNodes, Ncv32u &numFeatures);
+        ncvHaarGetClassifierSize (const std::string &filename,
+                                  Ncv32u &numStages,
+                                  Ncv32u &numNodes,
+                                  Ncv32u &numFeatures);
 
         NCVStatus
         NCVprocess (pcl::PointCloud<pcl::RGB> &cloud_in,
@@ -98,9 +100,12 @@ namespace pcl
                     NCVVector<HaarClassifierNode128> &d_haar_nodes,
                     NCVVector<HaarFeature64> &d_haar_features,
                     NCVVector<HaarStage64> &h_haar_stages,
-                    INCVMemAllocator &gpu_allocator, INCVMemAllocator &cpu_allocator,
-                    cudaDeviceProp &device_properties, Ncv32u width = 640,
-                    Ncv32u height = 480, NcvBool bFilterRects = false,
+                    INCVMemAllocator &gpu_allocator,
+                    INCVMemAllocator &cpu_allocator,
+                    cudaDeviceProp &device_properties,
+                    Ncv32u width = 640,
+                    Ncv32u height = 480,
+                    NcvBool bFilterRects = false,
                     NcvBool bLargestFace = true);
 
         int

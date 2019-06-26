@@ -182,7 +182,8 @@ struct static_tree_desc_s {
 #ifdef FASTEST
 #define INSERT_STRING(s, str, match_head)                                              \
   (UPDATE_HASH (s, s->ins_h, s->window[(str) + (MIN_MATCH - 1)]),                      \
-   match_head = s->head[s->ins_h], s->head[s->ins_h] = (Pos) (str))
+   match_head = s->head[s->ins_h],                                                     \
+   s->head[s->ins_h] = (Pos) (str))
 #else
 #define INSERT_STRING(s, str, match_head)                                              \
   (UPDATE_HASH (s, s->ins_h, s->window[(str) + (MIN_MATCH - 1)]),                      \
@@ -204,13 +205,25 @@ int level;
 const char *version;
 int stream_size;
 {
-  return deflateInit2_ (strm, level, Z_DEFLATED, MAX_WBITS, DEF_MEM_LEVEL,
-                        Z_DEFAULT_STRATEGY, version, stream_size);
+  return deflateInit2_ (strm,
+                        level,
+                        Z_DEFLATED,
+                        MAX_WBITS,
+                        DEF_MEM_LEVEL,
+                        Z_DEFAULT_STRATEGY,
+                        version,
+                        stream_size);
   /* To do: ignore strm->next_in if we use it as window */
 }
 
 /* ========================================================================= */
-int ZEXPORT deflateInit2_ (strm, level, method, windowBits, memLevel, strategy, version,
+int ZEXPORT deflateInit2_ (strm,
+                           level,
+                           method,
+                           windowBits,
+                           memLevel,
+                           strategy,
+                           version,
                            stream_size) z_streamp strm;
 int level;
 int method;
@@ -456,8 +469,8 @@ int strategy;
 }
 
 /* ========================================================================= */
-int ZEXPORT deflateTune (strm, good_length, max_lazy, nice_length,
-                         max_chain) z_streamp strm;
+int ZEXPORT
+    deflateTune (strm, good_length, max_lazy, nice_length, max_chain) z_streamp strm;
 int good_length;
 int max_lazy;
 int nice_length;
@@ -589,23 +602,26 @@ int flush;
         put_byte (s, 0);
         put_byte (s, 0);
         put_byte (s, 0);
-        put_byte (s, s->level == 9
-                         ? 2
-                         : (s->strategy >= Z_HUFFMAN_ONLY || s->level < 2 ? 4 : 0));
+        put_byte (s,
+                  s->level == 9
+                      ? 2
+                      : (s->strategy >= Z_HUFFMAN_ONLY || s->level < 2 ? 4 : 0));
         put_byte (s, OS_CODE);
         s->status = BUSY_STATE;
       } else {
-        put_byte (s, (s->gzhead->text ? 1 : 0) + (s->gzhead->hcrc ? 2 : 0) +
-                         (s->gzhead->extra == Z_NULL ? 0 : 4) +
-                         (s->gzhead->name == Z_NULL ? 0 : 8) +
-                         (s->gzhead->comment == Z_NULL ? 0 : 16));
+        put_byte (s,
+                  (s->gzhead->text ? 1 : 0) + (s->gzhead->hcrc ? 2 : 0) +
+                      (s->gzhead->extra == Z_NULL ? 0 : 4) +
+                      (s->gzhead->name == Z_NULL ? 0 : 8) +
+                      (s->gzhead->comment == Z_NULL ? 0 : 16));
         put_byte (s, (Byte) (s->gzhead->time & 0xff));
         put_byte (s, (Byte) ((s->gzhead->time >> 8) & 0xff));
         put_byte (s, (Byte) ((s->gzhead->time >> 16) & 0xff));
         put_byte (s, (Byte) ((s->gzhead->time >> 24) & 0xff));
-        put_byte (s, s->level == 9
-                         ? 2
-                         : (s->strategy >= Z_HUFFMAN_ONLY || s->level < 2 ? 4 : 0));
+        put_byte (s,
+                  s->level == 9
+                      ? 2
+                      : (s->strategy >= Z_HUFFMAN_ONLY || s->level < 2 ? 4 : 0));
         put_byte (s, s->gzhead->os & 0xff);
         if (s->gzhead->extra != 0) {
           put_byte (s, s->gzhead->extra_len & 0xff);
@@ -1347,7 +1363,8 @@ local void fill_window (s) deflate_state *s;
                      (s->block_start >= 0L                                             \
                           ? (charf *)&s->window[(unsigned)s->block_start]              \
                           : (charf *)Z_NULL),                                          \
-                     (ulg) ((int)s->strstart - s->block_start), (eof));                \
+                     (ulg) ((int)s->strstart - s->block_start),                        \
+                     (eof));                                                           \
     s->block_start = s->strstart;                                                      \
     flush_pending (s->strm);                                                           \
     Tracev ((stderr, "[FLUSH]"));                                                      \
@@ -1483,8 +1500,8 @@ int flush;
     if (s->match_length >= MIN_MATCH) {
       check_match (s, s->strstart, s->match_start, s->match_length);
 
-      _tr_tally_dist (s, s->strstart - s->match_start, s->match_length - MIN_MATCH,
-                      bflush);
+      _tr_tally_dist (
+          s, s->strstart - s->match_start, s->match_length - MIN_MATCH, bflush);
 
       s->lookahead -= s->match_length;
 
@@ -1605,8 +1622,8 @@ int flush;
 
       check_match (s, s->strstart - 1, s->prev_match, s->prev_length);
 
-      _tr_tally_dist (s, s->strstart - 1 - s->prev_match, s->prev_length - MIN_MATCH,
-                      bflush);
+      _tr_tally_dist (
+          s, s->strstart - 1 - s->prev_match, s->prev_length - MIN_MATCH, bflush);
 
       /* Insert in hash table all strings up to the end of the match.
        * strstart-1 and strstart are already inserted. If there is not

@@ -56,8 +56,8 @@ namespace pcl
      * \ingroup geometry
      */
     template <class MeshTraitsT>
-    class QuadMesh : public pcl::geometry::MeshBase<QuadMesh<MeshTraitsT>, MeshTraitsT,
-                                                    QuadMeshTag>
+    class QuadMesh : public pcl::geometry::
+                         MeshBase<QuadMesh<MeshTraitsT>, MeshTraitsT, QuadMeshTag>
     {
       public:
       using Base =
@@ -129,8 +129,10 @@ namespace pcl
        * behavior!
        */
       inline FaceIndex
-      addFace (const VertexIndex &idx_v_0, const VertexIndex &idx_v_1,
-               const VertexIndex &idx_v_2, const VertexIndex &idx_v_3,
+      addFace (const VertexIndex &idx_v_0,
+               const VertexIndex &idx_v_1,
+               const VertexIndex &idx_v_2,
+               const VertexIndex &idx_v_3,
                const FaceData &face_data = FaceData (),
                const EdgeData &edge_data = EdgeData (),
                const HalfEdgeData &half_edge_data = HalfEdgeData ())
@@ -146,13 +148,15 @@ namespace pcl
 
       private:
       // NOTE: Can't use the typedef of Base as a friend.
-      friend class pcl::geometry::MeshBase<QuadMesh<MeshTraitsT>, MeshTraitsT,
-                                           pcl::geometry::QuadMeshTag>;
+      friend class pcl::geometry::
+          MeshBase<QuadMesh<MeshTraitsT>, MeshTraitsT, pcl::geometry::QuadMeshTag>;
 
       /** \brief addFace for the quad mesh. */
       inline FaceIndex
-      addFaceImpl (const VertexIndices &vertices, const FaceData &face_data,
-                   const EdgeData &edge_data, const HalfEdgeData &half_edge_data)
+      addFaceImpl (const VertexIndices &vertices,
+                   const FaceData &face_data,
+                   const EdgeData &edge_data,
+                   const HalfEdgeData &half_edge_data)
       {
         if (vertices.size () == 4)
           return (

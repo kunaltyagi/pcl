@@ -93,8 +93,12 @@ getCloudFromFile (boost::filesystem::path pcd_path)
 
 int
 outofcoreProcess (std::vector<boost::filesystem::path> pcd_paths,
-                  boost::filesystem::path root_dir, int depth, double resolution,
-                  int build_octree_with, bool gen_lod, bool overwrite,
+                  boost::filesystem::path root_dir,
+                  int depth,
+                  double resolution,
+                  int build_octree_with,
+                  bool gen_lod,
+                  bool overwrite,
                   bool multiresolution)
 {
   // Bounding box min/max pts
@@ -161,11 +165,11 @@ outofcoreProcess (std::vector<boost::filesystem::path> pcd_paths,
 
   // create the out-of-core data structure (typedef'd above)
   if (build_octree_with == OCTREE_DEPTH) {
-    outofcore_octree = new octree_disk (depth, bounding_box_min, bounding_box_max,
-                                        octree_path_on_disk, "ECEF");
+    outofcore_octree = new octree_disk (
+        depth, bounding_box_min, bounding_box_max, octree_path_on_disk, "ECEF");
   } else {
-    outofcore_octree = new octree_disk (bounding_box_min, bounding_box_max, resolution,
-                                        octree_path_on_disk, "ECEF");
+    outofcore_octree = new octree_disk (
+        bounding_box_min, bounding_box_max, resolution, octree_path_on_disk, "ECEF");
   }
 
   uint64_t total_pts = 0;
@@ -308,6 +312,12 @@ main (int argc, char *argv[])
     root_dir =
         root_dir.parent_path () / (root_dir.stem ().string () + "_tree").c_str ();
 
-  return outofcoreProcess (pcd_paths, root_dir, depth, resolution, build_octree_with,
-                           gen_lod, overwrite, multiresolution);
+  return outofcoreProcess (pcd_paths,
+                           root_dir,
+                           depth,
+                           resolution,
+                           build_octree_with,
+                           gen_lod,
+                           overwrite,
+                           multiresolution);
 }

@@ -353,7 +353,8 @@ namespace pcl
    *  **/
   inline void
   PointCloudDepthAndRGBtoXYZRGBA (const PointCloud<Intensity> &depth,
-                                  const PointCloud<RGB> &image, const float &focal,
+                                  const PointCloud<RGB> &image,
+                                  const float &focal,
                                   PointCloud<PointXYZRGBA> &out)
   {
     float bad_point = std::numeric_limits<float>::quiet_NaN ();

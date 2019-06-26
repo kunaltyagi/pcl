@@ -89,7 +89,8 @@ class SimpleOpenNIViewer
 
   void
   image_callback (const openni_wrapper::Image::Ptr &image,
-                  const openni_wrapper::DepthImage::Ptr &depth_image, float)
+                  const openni_wrapper::DepthImage::Ptr &depth_image,
+                  float)
   {
     FPS_CALC ("image callback");
     std::lock_guard<std::mutex> lock (image_mutex_);
@@ -101,7 +102,8 @@ class SimpleOpenNIViewer
   run ()
   {
     std::function<void(const openni_wrapper::Image::Ptr &,
-                       const openni_wrapper::DepthImage::Ptr &, float)>
+                       const openni_wrapper::DepthImage::Ptr &,
+                       float)>
         image_cb = boost::bind (&SimpleOpenNIViewer::image_callback, this, _1, _2, _3);
     boost::signals2::connection image_connection = grabber_.registerCallback (image_cb);
 
@@ -123,15 +125,15 @@ class SimpleOpenNIViewer
 
         if (image->getEncoding () == openni_wrapper::Image::RGB) {
           data = reinterpret_cast<const void *> (image->getMetaData ().Data ());
-          importer_->SetWholeExtent (0, image->getWidth () - 1, 0,
-                                     image->getHeight () - 1, 0, 0);
+          importer_->SetWholeExtent (
+              0, image->getWidth () - 1, 0, image->getHeight () - 1, 0, 0);
           importer_->SetDataExtentToWholeExtent ();
         } else {
           if (rgb_data_size < image->getWidth () * image->getHeight ()) {
             rgb_data_size = image->getWidth () * image->getHeight ();
             rgb_data = new unsigned char[rgb_data_size * 3];
-            importer_->SetWholeExtent (0, image->getWidth () - 1, 0,
-                                       image->getHeight () - 1, 0, 0);
+            importer_->SetWholeExtent (
+                0, image->getWidth () - 1, 0, image->getHeight () - 1, 0, 0);
             importer_->SetDataExtentToWholeExtent ();
           }
           image->fillRGB (image->getWidth (), image->getHeight (), rgb_data);
@@ -156,8 +158,8 @@ class SimpleOpenNIViewer
         std::stringstream ss;
         ss << "frame_" + time + "_depth.tiff";
 
-        depth_importer_->SetWholeExtent (0, depth_image->getWidth () - 1, 0,
-                                         depth_image->getHeight () - 1, 0, 0);
+        depth_importer_->SetWholeExtent (
+            0, depth_image->getWidth () - 1, 0, depth_image->getHeight () - 1, 0, 0);
         depth_importer_->SetDataExtentToWholeExtent ();
         depth_importer_->SetImportVoidPointer (
             const_cast<void *> (reinterpret_cast<const void *> (
@@ -252,7 +254,8 @@ main (int argc, char **argv)
           modes = grabber.getAvailableImageModes ();
           for (std::vector<std::pair<int, XnMapOutputMode>>::const_iterator it =
                    modes.begin ();
-               it != modes.end (); ++it) {
+               it != modes.end ();
+               ++it) {
             cout << it->first << " = " << it->second.nXRes << " x " << it->second.nYRes
                  << " @ " << it->second.nFPS << endl;
           }

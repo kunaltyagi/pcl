@@ -68,14 +68,21 @@ void
 pcl::modeler::StatisticalOutlierRemovalWorker::setupParameters ()
 {
   mean_k_ = new IntParameter (
-      "Mean K", "The number of nearest neighbors to use for mean distance estimation",
-      8, 1, 1024, 1);
+      "Mean K",
+      "The number of nearest neighbors to use for mean distance estimation",
+      8,
+      1,
+      1024,
+      1);
   stddev_mul_thresh_ = new DoubleParameter (
       "Standard Deviation Multiplier",
       "The distance threshold will be equal to: mean + stddev_mult * stddev. Points "
       "will be classified as inlier or outlier if their average neighbor distance is "
       "below or above this threshold respectively.",
-      1.0, 0.1, 10, 0.1);
+      1.0,
+      0.1,
+      10,
+      0.1);
 
   parameter_dialog_->addParameter (mean_k_);
   parameter_dialog_->addParameter (stddev_mul_thresh_);

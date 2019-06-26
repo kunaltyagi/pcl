@@ -47,8 +47,11 @@
 template <typename PointT>
 void
 pcl::getMinMax3D (const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-                  const std::string &distance_field_name, float min_distance,
-                  float max_distance, Eigen::Vector4f &min_pt, Eigen::Vector4f &max_pt,
+                  const std::string &distance_field_name,
+                  float min_distance,
+                  float max_distance,
+                  Eigen::Vector4f &min_pt,
+                  Eigen::Vector4f &max_pt,
                   bool limit_negative)
 {
   Eigen::Array4f min_p, max_p;
@@ -116,8 +119,11 @@ template <typename PointT>
 void
 pcl::getMinMax3D (const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
                   const std::vector<int> &indices,
-                  const std::string &distance_field_name, float min_distance,
-                  float max_distance, Eigen::Vector4f &min_pt, Eigen::Vector4f &max_pt,
+                  const std::string &distance_field_name,
+                  float min_distance,
+                  float max_distance,
+                  Eigen::Vector4f &min_pt,
+                  Eigen::Vector4f &max_pt,
                   bool limit_negative)
 {
   Eigen::Array4f min_p, max_p;
@@ -219,9 +225,14 @@ pcl::VoxelGrid<PointT>::applyFilter (PointCloud &output)
   Eigen::Vector4f min_p, max_p;
   // Get the minimum and maximum dimensions
   if (!filter_field_name_.empty ()) // If we don't want to process the entire cloud...
-    getMinMax3D<PointT> (
-        input_, *indices_, filter_field_name_, static_cast<float> (filter_limit_min_),
-        static_cast<float> (filter_limit_max_), min_p, max_p, filter_limit_negative_);
+    getMinMax3D<PointT> (input_,
+                         *indices_,
+                         filter_field_name_,
+                         static_cast<float> (filter_limit_min_),
+                         static_cast<float> (filter_limit_max_),
+                         min_p,
+                         max_p,
+                         filter_limit_negative_);
   else
     getMinMax3D<PointT> (*input_, *indices_, min_p, max_p);
 
@@ -265,13 +276,15 @@ pcl::VoxelGrid<PointT>::applyFilter (PointCloud &output)
     int distance_idx = pcl::getFieldIndex (*input_, filter_field_name_, fields);
     if (distance_idx == -1)
       PCL_WARN ("[pcl::%s::applyFilter] Invalid filter field name. Index is %d.\n",
-                getClassName ().c_str (), distance_idx);
+                getClassName ().c_str (),
+                distance_idx);
 
     // First pass: go over all points and insert them into the index_vector vector
     // with calculated idx. Points with the same idx value will contribute to the
     // same point of resulting CloudPoint
     for (std::vector<int>::const_iterator it = indices_->begin ();
-         it != indices_->end (); ++it) {
+         it != indices_->end ();
+         ++it) {
       if (!input_->is_dense)
         // Check if the point is invalid
         if (!std::isfinite (input_->points[*it].x) ||
@@ -317,7 +330,8 @@ pcl::VoxelGrid<PointT>::applyFilter (PointCloud &output)
     // with calculated idx. Points with the same idx value will contribute to the
     // same point of resulting CloudPoint
     for (std::vector<int>::const_iterator it = indices_->begin ();
-         it != indices_->end (); ++it) {
+         it != indices_->end ();
+         ++it) {
       if (!input_->is_dense)
         // Check if the point is invalid
         if (!std::isfinite (input_->points[*it].x) ||
@@ -344,8 +358,8 @@ pcl::VoxelGrid<PointT>::applyFilter (PointCloud &output)
   // Second pass: sort the index_vector vector using value representing target cell as
   // index in effect all points belonging to the same output cell will be next to each
   // other
-  std::sort (index_vector.begin (), index_vector.end (),
-             std::less<cloud_point_index_idx> ());
+  std::sort (
+      index_vector.begin (), index_vector.end (), std::less<cloud_point_index_idx> ());
 
   // Third pass: count output cells
   // we need to skip all the same, adjacent idx values
@@ -386,11 +400,13 @@ pcl::VoxelGrid<PointT>::applyFilter (PointCloud &output)
     } catch (std::bad_alloc &) {
       throw PCLException (
           "VoxelGrid bin size is too low; impossible to allocate memory for layout",
-          "voxel_grid.hpp", "applyFilter");
+          "voxel_grid.hpp",
+          "applyFilter");
     } catch (std::length_error &) {
       throw PCLException (
           "VoxelGrid bin size is too low; impossible to allocate memory for layout",
-          "voxel_grid.hpp", "applyFilter");
+          "voxel_grid.hpp",
+          "applyFilter");
     }
   }
 
@@ -432,8 +448,12 @@ pcl::VoxelGrid<PointT>::applyFilter (PointCloud &output)
 
 #define PCL_INSTANTIATE_VoxelGrid(T) template class PCL_EXPORTS pcl::VoxelGrid<T>;
 #define PCL_INSTANTIATE_getMinMax3D(T)                                                 \
-  template PCL_EXPORTS void pcl::getMinMax3D<T> (                                      \
-      const pcl::PointCloud<T>::ConstPtr &, const std::string &, float, float,         \
-      Eigen::Vector4f &, Eigen::Vector4f &, bool);
+  template PCL_EXPORTS void pcl::getMinMax3D<T> (const pcl::PointCloud<T>::ConstPtr &, \
+                                                 const std::string &,                  \
+                                                 float,                                \
+                                                 float,                                \
+                                                 Eigen::Vector4f &,                    \
+                                                 Eigen::Vector4f &,                    \
+                                                 bool);
 
 #endif // PCL_FILTERS_IMPL_VOXEL_GRID_H_

@@ -66,7 +66,9 @@ namespace pcl
    * \ingroup features
    */
 
-  template <typename PointInT, typename PointNT, typename PointOutT = pcl::SHOT352,
+  template <typename PointInT,
+            typename PointNT,
+            typename PointOutT = pcl::SHOT352,
             typename PointRFT = pcl::ReferenceFrame>
   class SHOTEstimationOMP
       : public SHOTEstimation<PointInT, PointNT, PointOutT, PointRFT>
@@ -152,7 +154,9 @@ namespace pcl
    * \ingroup features
    */
 
-  template <typename PointInT, typename PointNT, typename PointOutT = pcl::SHOT1344,
+  template <typename PointInT,
+            typename PointNT,
+            typename PointOutT = pcl::SHOT1344,
             typename PointRFT = pcl::ReferenceFrame>
   class SHOTColorEstimationOMP
       : public SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT>
@@ -181,17 +185,18 @@ namespace pcl
     using SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT>::radius3_4_;
     using SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT>::radius1_4_;
     using SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT>::radius1_2_;
-    using SHOTColorEstimation<PointInT, PointNT, PointOutT,
-                              PointRFT>::b_describe_shape_;
-    using SHOTColorEstimation<PointInT, PointNT, PointOutT,
-                              PointRFT>::b_describe_color_;
+    using SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT>::
+        b_describe_shape_;
+    using SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT>::
+        b_describe_color_;
     using SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT>::nr_color_bins_;
 
     using PointCloudOut = typename Feature<PointInT, PointOutT>::PointCloudOut;
     using PointCloudIn = typename Feature<PointInT, PointOutT>::PointCloudIn;
 
     /** \brief Empty constructor. */
-    SHOTColorEstimationOMP (bool describe_shape = true, bool describe_color = true,
+    SHOTColorEstimationOMP (bool describe_shape = true,
+                            bool describe_color = true,
                             unsigned int nr_threads = 0)
         : SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT> (describe_shape,
                                                                        describe_color)

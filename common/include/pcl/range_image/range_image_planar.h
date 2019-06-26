@@ -96,8 +96,11 @@ namespace pcl
      * this value). The value is in radians per pixel.
      */
     PCL_EXPORTS void
-    setDisparityImage (const float *disparity_image, int di_width, int di_height,
-                       float focal_length, float base_line,
+    setDisparityImage (const float *disparity_image,
+                       int di_width,
+                       int di_height,
+                       float focal_length,
+                       float base_line,
                        float desired_angular_resolution = -1);
 
     /** Create the image from an existing depth image.
@@ -114,9 +117,14 @@ namespace pcl
      * value is in radians per pixel.
      */
     PCL_EXPORTS void
-    setDepthImage (const float *depth_image, int di_width, int di_height,
-                   float di_center_x, float di_center_y, float di_focal_length_x,
-                   float di_focal_length_y, float desired_angular_resolution = -1);
+    setDepthImage (const float *depth_image,
+                   int di_width,
+                   int di_height,
+                   float di_center_x,
+                   float di_center_y,
+                   float di_focal_length_x,
+                   float di_focal_length_y,
+                   float desired_angular_resolution = -1);
 
     /** Create the image from an existing depth image.
      * \param depth_image the input disparity image data as short values describing
@@ -131,9 +139,14 @@ namespace pcl
      * value). The value is in radians per pixel.
      */
     PCL_EXPORTS void
-    setDepthImage (const unsigned short *depth_image, int di_width, int di_height,
-                   float di_center_x, float di_center_y, float di_focal_length_x,
-                   float di_focal_length_y, float desired_angular_resolution = -1);
+    setDepthImage (const unsigned short *depth_image,
+                   int di_width,
+                   int di_height,
+                   float di_center_x,
+                   float di_center_y,
+                   float di_focal_length_x,
+                   float di_focal_length_y,
+                   float desired_angular_resolution = -1);
 
     /** Create the image from an existing point cloud.
      * \param point_cloud the source point cloud
@@ -150,9 +163,12 @@ namespace pcl
      */
     template <typename PointCloudType>
     void
-    createFromPointCloudWithFixedSize (const PointCloudType &point_cloud, int di_width,
-                                       int di_height, float di_center_x,
-                                       float di_center_y, float di_focal_length_x,
+    createFromPointCloudWithFixedSize (const PointCloudType &point_cloud,
+                                       int di_width,
+                                       int di_height,
+                                       float di_center_x,
+                                       float di_center_y,
+                                       float di_focal_length_x,
                                        float di_focal_length_y,
                                        const Eigen::Affine3f &sensor_pose,
                                        CoordinateFrame coordinate_frame = CAMERA_FRAME,
@@ -173,7 +189,9 @@ namespace pcl
      * in the original)
      */
     inline void
-    calculate3DPoint (float image_x, float image_y, float range,
+    calculate3DPoint (float image_x,
+                      float image_y,
+                      float range,
                       Eigen::Vector3f &point) const override;
 
     /** \brief Calculate the image point and range from the given 3D point
@@ -185,7 +203,9 @@ namespace pcl
      * in the original)
      */
     inline void
-    getImagePoint (const Eigen::Vector3f &point, float &image_x, float &image_y,
+    getImagePoint (const Eigen::Vector3f &point,
+                   float &image_x,
+                   float &image_y,
                    float &range) const override;
 
     /** Get a sub part of the complete image as a new range image.
@@ -200,8 +220,11 @@ namespace pcl
      * image
      */
     PCL_EXPORTS void
-    getSubImage (int sub_image_image_offset_x, int sub_image_image_offset_y,
-                 int sub_image_width, int sub_image_height, int combine_pixels,
+    getSubImage (int sub_image_image_offset_x,
+                 int sub_image_image_offset_y,
+                 int sub_image_width,
+                 int sub_image_height,
+                 int combine_pixels,
                  RangeImage &sub_image) const override;
 
     //! Get a range image with half the resolution

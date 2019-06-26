@@ -49,8 +49,10 @@ namespace pcl
      * Scanning, Antalya, Turkey, 2013. \note Method has since been improved and some
      * variations to the paper exist. \author P.W.Theiler \ingroup registration
      */
-    template <typename PointSource, typename PointTarget,
-              typename NormalT = pcl::Normal, typename Scalar = float>
+    template <typename PointSource,
+              typename PointTarget,
+              typename NormalT = pcl::Normal,
+              typename Scalar = float>
     class KFPCSInitialAlignment
         : public virtual FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>
     {
@@ -140,7 +142,9 @@ namespace pcl
        * \param[out] candidates vector of unique candidates
        */
       void
-      getNBestCandidates (int n, float min_angle3d, float min_translation3d,
+      getNBestCandidates (int n,
+                          float min_angle3d,
+                          float min_translation3d,
                           MatchingCandidates &candidates);
 
       /** \brief Get all unique candidate matches with fitness scores above a threshold
@@ -153,7 +157,9 @@ namespace pcl
        * \param[out] candidates vector of unique candidates
        */
       void
-      getTBestCandidates (float t, float min_angle3d, float min_translation3d,
+      getTBestCandidates (float t,
+                          float min_angle3d,
+                          float min_translation3d,
                           MatchingCandidates &candidates);
 
       protected:
@@ -169,28 +175,28 @@ namespace pcl
       using Registration<PointSource, PointTarget, Scalar>::converged_;
 
       using FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::delta_;
-      using FPCSInitialAlignment<PointSource, PointTarget, NormalT,
-                                 Scalar>::approx_overlap_;
-      using FPCSInitialAlignment<PointSource, PointTarget, NormalT,
-                                 Scalar>::max_pair_diff_;
-      using FPCSInitialAlignment<PointSource, PointTarget, NormalT,
-                                 Scalar>::max_edge_diff_;
-      using FPCSInitialAlignment<PointSource, PointTarget, NormalT,
-                                 Scalar>::coincidation_limit_;
+      using FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
+          approx_overlap_;
+      using FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
+          max_pair_diff_;
+      using FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
+          max_edge_diff_;
+      using FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
+          coincidation_limit_;
       using FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::max_mse_;
-      using FPCSInitialAlignment<PointSource, PointTarget, NormalT,
-                                 Scalar>::max_inlier_dist_sqr_;
+      using FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
+          max_inlier_dist_sqr_;
       using FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::diameter_;
-      using FPCSInitialAlignment<PointSource, PointTarget, NormalT,
-                                 Scalar>::normalize_delta_;
-      using FPCSInitialAlignment<PointSource, PointTarget, NormalT,
-                                 Scalar>::fitness_score_;
-      using FPCSInitialAlignment<PointSource, PointTarget, NormalT,
-                                 Scalar>::score_threshold_;
-      using FPCSInitialAlignment<PointSource, PointTarget, NormalT,
-                                 Scalar>::linkMatchWithBase;
-      using FPCSInitialAlignment<PointSource, PointTarget, NormalT,
-                                 Scalar>::validateMatch;
+      using FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
+          normalize_delta_;
+      using FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
+          fitness_score_;
+      using FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
+          score_threshold_;
+      using FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
+          linkMatchWithBase;
+      using FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
+          validateMatch;
 
       /** \brief Internal computation initialization. */
       bool

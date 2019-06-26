@@ -70,8 +70,8 @@ namespace pcl
      *  See http://en.wikipedia.org/wiki/Quartic_equation#Summary_of_Ferrari.27s_method
      */
     inline void
-    solveQuarticEquation (real a, real b, real c, real d, real e,
-                          std::vector<real> &roots) const;
+    solveQuarticEquation (
+        real a, real b, real c, real d, real e, std::vector<real> &roots) const;
 
     /** Solves an equation of the form ax^3 + bx^2 + cx + d = 0
      *  See http://en.wikipedia.org/wiki/Cubic_equation */
@@ -95,13 +95,15 @@ namespace pcl
     inline BivariatePolynomialT<real> bivariatePolynomialApproximation (
         std::vector<Eigen::Matrix<real, 3, 1>,
                     Eigen::aligned_allocator<Eigen::Matrix<real, 3, 1>>> &samplePoints,
-        unsigned int polynomial_degree, bool &error) const;
+        unsigned int polynomial_degree,
+        bool &error) const;
 
     //! Same as above, using a reference for the return value
     inline bool bivariatePolynomialApproximation (
         std::vector<Eigen::Matrix<real, 3, 1>,
                     Eigen::aligned_allocator<Eigen::Matrix<real, 3, 1>>> &samplePoints,
-        unsigned int polynomial_degree, BivariatePolynomialT<real> &ret) const;
+        unsigned int polynomial_degree,
+        BivariatePolynomialT<real> &ret) const;
 
     //! Set the minimum value under which values are considered zero
     inline void

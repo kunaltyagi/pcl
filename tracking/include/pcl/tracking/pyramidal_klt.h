@@ -79,7 +79,8 @@ namespace pcl
       using TrackerBase::tracker_name_;
 
       /// Constructor
-      PyramidalKLTTracker (int nb_levels = 5, int tracking_window_width = 7,
+      PyramidalKLTTracker (int nb_levels = 5,
+                           int tracking_window_width = 7,
                            int tracking_window_height = 7)
           : ref_ (), nb_levels_ (nb_levels), track_width_ (tracking_window_width),
             track_height_ (tracking_window_height), threads_ (0), initialized_ (false)
@@ -303,7 +304,8 @@ namespace pcl
        * \param[out] output_grad_y downsampled image gradient along Y direction
        */
       void
-      downsample (const FloatImageConstPtr &input, FloatImageConstPtr &output,
+      downsample (const FloatImageConstPtr &input,
+                  FloatImageConstPtr &output,
                   FloatImageConstPtr &output_grad_x,
                   FloatImageConstPtr &output_grad_y) const;
 
@@ -341,15 +343,22 @@ namespace pcl
        * \param[out] covariance covariance matrix coefficients
        */
       virtual void
-      spatialGradient (const FloatImage &img, const FloatImage &grad_x,
-                       const FloatImage &grad_y, const Eigen::Array2i &location,
-                       const Eigen::Array4f &weights, Eigen::ArrayXXf &win,
-                       Eigen::ArrayXXf &grad_x_win, Eigen::ArrayXXf &grad_y_win,
+      spatialGradient (const FloatImage &img,
+                       const FloatImage &grad_x,
+                       const FloatImage &grad_y,
+                       const Eigen::Array2i &location,
+                       const Eigen::Array4f &weights,
+                       Eigen::ArrayXXf &win,
+                       Eigen::ArrayXXf &grad_x_win,
+                       Eigen::ArrayXXf &grad_y_win,
                        Eigen::Array3f &covariance) const;
       void
-      mismatchVector (const Eigen::ArrayXXf &prev, const Eigen::ArrayXXf &prev_grad_x,
-                      const Eigen::ArrayXXf &prev_grad_y, const FloatImage &next,
-                      const Eigen::Array2i &location, const Eigen::Array4f &weights,
+      mismatchVector (const Eigen::ArrayXXf &prev,
+                      const Eigen::ArrayXXf &prev_grad_x,
+                      const Eigen::ArrayXXf &prev_grad_y,
+                      const FloatImage &next,
+                      const Eigen::Array2i &location,
+                      const Eigen::Array4f &weights,
                       Eigen::Array2f &b) const;
 
       /** \brief Compute the pyramidal representation of an image.
@@ -369,7 +378,8 @@ namespace pcl
              const std::vector<FloatImageConstPtr> &current_pyramid,
              const pcl::PointCloud<pcl::PointUV>::ConstPtr &previous_keypoints,
              pcl::PointCloud<pcl::PointUV>::Ptr &current_keypoints,
-             std::vector<int> &status, Eigen::Affine3f &motion) const;
+             std::vector<int> &status,
+             Eigen::Affine3f &motion) const;
 
       void
       computeTracking () override;

@@ -117,7 +117,8 @@ pcl::StatisticalOutlierRemoval<pcl::PCLPointCloud2>::applyFilter (
         continue;
     } else {
       memcpy (&output.data[nr_p * output.point_step],
-              &input_->data[(*indices_)[cp] * output.point_step], output.point_step);
+              &input_->data[(*indices_)[cp] * output.point_step],
+              output.point_step);
       nr_p++;
     }
   }
@@ -218,7 +219,8 @@ pcl::StatisticalOutlierRemoval<pcl::PCLPointCloud2>::generateStatistics (
       distances[cp] = 0;
       PCL_WARN (
           "[pcl::%s::applyFilter] Searching for the closest %d neighbors failed.\n",
-          getClassName ().c_str (), mean_k_);
+          getClassName ().c_str (),
+          mean_k_);
       continue;
     }
 

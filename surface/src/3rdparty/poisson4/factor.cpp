@@ -197,7 +197,12 @@ namespace pcl
     // Solution taken from: http://mathworld.wolfram.com/QuarticEquation.html
     // and http://www.csit.fsu.edu/~burkardt/f_src/subpak/subpak.f90
     int
-    Factor (double a4, double a3, double a2, double a1, double a0, double roots[4][2],
+    Factor (double a4,
+            double a3,
+            double a2,
+            double a1,
+            double a0,
+            double roots[4][2],
             double EPS)
     {
       double R[2], D[2], E[2], R2[2];
@@ -210,8 +215,12 @@ namespace pcl
       a1 /= a4;
       a0 /= a4;
 
-      Factor (1.0, -a2, a3 * a1 - 4.0 * a0, -a3 * a3 * a0 + 4.0 * a2 * a0 - a1 * a1,
-              roots, EPS);
+      Factor (1.0,
+              -a2,
+              a3 * a1 - 4.0 * a0,
+              -a3 * a3 * a0 + 4.0 * a2 * a0 - a1 * a1,
+              roots,
+              EPS);
 
       R2[0] = a3 * a3 / 4.0 - a2 + roots[0][0];
       R2[1] = 0;

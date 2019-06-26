@@ -170,7 +170,8 @@ TEST (PCL, KdTreeFLANN_nearestKSearch)
   float max_dist = 0.0f;
   unsigned int counter = 0;
   for (multimap<float, int>::iterator it = sorted_brute_force_result.begin ();
-       it != sorted_brute_force_result.end () && counter < no_of_neighbors; ++it) {
+       it != sorted_brute_force_result.end () && counter < no_of_neighbors;
+       ++it) {
     max_dist = max (max_dist, it->first);
     ++counter;
   }
@@ -244,8 +245,16 @@ TEST (PCL, KdTreeFLANN_setPointRepresentation)
   for (int i = 0; i < k; ++i) {
     // Compare to ground truth values, computed independently
     static const int gt_indices[10] = {2, 7, 5, 1, 4, 6, 9, 0, 8, 3};
-    static const float gt_distances[10] = {877.8f,  1674.7f, 1802.6f, 1937.5f, 2120.6f,
-                                           2228.8f, 3064.5f, 3199.7f, 3604.2f, 4344.8f};
+    static const float gt_distances[10] = {877.8f,
+                                           1674.7f,
+                                           1802.6f,
+                                           1937.5f,
+                                           2120.6f,
+                                           2228.8f,
+                                           3064.5f,
+                                           3199.7f,
+                                           3604.2f,
+                                           4344.8f};
     EXPECT_EQ (k_indices[i], gt_indices[i]);
     EXPECT_NEAR (k_distances[i], gt_distances[i], 0.1);
   }
@@ -257,8 +266,16 @@ TEST (PCL, KdTreeFLANN_setPointRepresentation)
   for (int i = 0; i < k; ++i) {
     // Compare to ground truth values, computed independently
     static const int gt_indices[10] = {6, 2, 5, 1, 7, 0, 4, 3, 9, 8};
-    static const float gt_distances[10] = {158.6f,  716.5f,  778.6f,  1170.2f, 1177.5f,
-                                           1402.0f, 1924.6f, 2639.1f, 2808.5f, 3370.1f};
+    static const float gt_distances[10] = {158.6f,
+                                           716.5f,
+                                           778.6f,
+                                           1170.2f,
+                                           1177.5f,
+                                           1402.0f,
+                                           1924.6f,
+                                           2639.1f,
+                                           2808.5f,
+                                           3370.1f};
     EXPECT_EQ (k_indices[i], gt_indices[i]);
     EXPECT_NEAR (k_distances[i], gt_distances[i], 0.1);
   }
@@ -272,9 +289,16 @@ TEST (PCL, KdTreeFLANN_setPointRepresentation)
   for (int i = 0; i < k; ++i) {
     // Compare to ground truth values, computed independently
     static const int gt_indices[10] = {2, 9, 4, 7, 1, 5, 8, 0, 3, 6};
-    static const float gt_distances[10] = {3686.9f,  6769.2f,  7177.0f,  8802.3f,
-                                           11071.5f, 11637.3f, 11742.4f, 17769.0f,
-                                           18497.3f, 18942.0f};
+    static const float gt_distances[10] = {3686.9f,
+                                           6769.2f,
+                                           7177.0f,
+                                           8802.3f,
+                                           11071.5f,
+                                           11637.3f,
+                                           11742.4f,
+                                           17769.0f,
+                                           18497.3f,
+                                           18942.0f};
     EXPECT_EQ (k_indices[i], gt_indices[i]);
     EXPECT_NEAR (k_distances[i], gt_distances[i], 0.1);
   }
@@ -331,7 +355,8 @@ main (int argc, char **argv)
   io::loadPCDFile (argv[1], *cloud_in);
 
   std::ifstream xml_file_input_stream (argv[2], std::ifstream::in);
-  read_xml (xml_file_input_stream, xml_property_tree,
+  read_xml (xml_file_input_stream,
+            xml_property_tree,
             boost::property_tree::xml_parser::trim_whitespace);
 
   testing::InitGoogleTest (&argc, argv);

@@ -386,7 +386,9 @@ namespace pcl
      * features. \param[out] features the destination for the extracted features.
      */
     void
-    extractFeatures (const MaskMap &mask, size_t nr_features, size_t modality_index,
+    extractFeatures (const MaskMap &mask,
+                     size_t nr_features,
+                     size_t modality_index,
                      std::vector<QuantizedMultiModFeature> &features) const override;
 
     /** \brief Extracts all possible features from the modality within the specified
@@ -396,7 +398,9 @@ namespace pcl
      * \param[out] features the destination for the extracted features.
      */
     void
-    extractAllFeatures (const MaskMap &mask, size_t nr_features, size_t modality_index,
+    extractAllFeatures (const MaskMap &mask,
+                        size_t nr_features,
+                        size_t modality_index,
                         std::vector<QuantizedMultiModFeature> &features) const override;
 
     /** \brief Provide a pointer to the input dataset (overwrites the
@@ -744,11 +748,14 @@ pcl::SurfaceNormalModality<PointInT>::computeAndQuantizeSurfaceNormals2 ()
 
   const int offsets_i[] = {-l_r, 0, l_r, -l_r, l_r, -l_r, 0, l_r};
   const int offsets_j[] = {-l_r, -l_r, -l_r, 0, 0, l_r, l_r, l_r};
-  const int offsets[] = {
-      offsets_i[0] + offsets_j[0] * l_W, offsets_i[1] + offsets_j[1] * l_W,
-      offsets_i[2] + offsets_j[2] * l_W, offsets_i[3] + offsets_j[3] * l_W,
-      offsets_i[4] + offsets_j[4] * l_W, offsets_i[5] + offsets_j[5] * l_W,
-      offsets_i[6] + offsets_j[6] * l_W, offsets_i[7] + offsets_j[7] * l_W};
+  const int offsets[] = {offsets_i[0] + offsets_j[0] * l_W,
+                         offsets_i[1] + offsets_j[1] * l_W,
+                         offsets_i[2] + offsets_j[2] * l_W,
+                         offsets_i[3] + offsets_j[3] * l_W,
+                         offsets_i[4] + offsets_j[4] * l_W,
+                         offsets_i[5] + offsets_j[5] * l_W,
+                         offsets_i[6] + offsets_j[6] * l_W,
+                         offsets_i[7] + offsets_j[7] * l_W};
 
   // const int l_offsetx = GRANULARITY / 2;
   // const int l_offsety = GRANULARITY / 2;
@@ -779,21 +786,53 @@ pcl::SurfaceNormalModality<PointInT>::computeAndQuantizeSurfaceNormals2 ()
         // double l_A[4]; l_A[0] = l_A[1] = l_A[2] = l_A[3] = 0;
         // double l_b[2]; l_b[0] = l_b[1] = 0;
 
-        accumBilateral (lp_line[offsets[0]] - l_d, offsets_i[0], offsets_j[0], l_A, l_b,
+        accumBilateral (lp_line[offsets[0]] - l_d,
+                        offsets_i[0],
+                        offsets_j[0],
+                        l_A,
+                        l_b,
                         difference_threshold);
-        accumBilateral (lp_line[offsets[1]] - l_d, offsets_i[1], offsets_j[1], l_A, l_b,
+        accumBilateral (lp_line[offsets[1]] - l_d,
+                        offsets_i[1],
+                        offsets_j[1],
+                        l_A,
+                        l_b,
                         difference_threshold);
-        accumBilateral (lp_line[offsets[2]] - l_d, offsets_i[2], offsets_j[2], l_A, l_b,
+        accumBilateral (lp_line[offsets[2]] - l_d,
+                        offsets_i[2],
+                        offsets_j[2],
+                        l_A,
+                        l_b,
                         difference_threshold);
-        accumBilateral (lp_line[offsets[3]] - l_d, offsets_i[3], offsets_j[3], l_A, l_b,
+        accumBilateral (lp_line[offsets[3]] - l_d,
+                        offsets_i[3],
+                        offsets_j[3],
+                        l_A,
+                        l_b,
                         difference_threshold);
-        accumBilateral (lp_line[offsets[4]] - l_d, offsets_i[4], offsets_j[4], l_A, l_b,
+        accumBilateral (lp_line[offsets[4]] - l_d,
+                        offsets_i[4],
+                        offsets_j[4],
+                        l_A,
+                        l_b,
                         difference_threshold);
-        accumBilateral (lp_line[offsets[5]] - l_d, offsets_i[5], offsets_j[5], l_A, l_b,
+        accumBilateral (lp_line[offsets[5]] - l_d,
+                        offsets_i[5],
+                        offsets_j[5],
+                        l_A,
+                        l_b,
                         difference_threshold);
-        accumBilateral (lp_line[offsets[6]] - l_d, offsets_i[6], offsets_j[6], l_A, l_b,
+        accumBilateral (lp_line[offsets[6]] - l_d,
+                        offsets_i[6],
+                        offsets_j[6],
+                        l_A,
+                        l_b,
                         difference_threshold);
-        accumBilateral (lp_line[offsets[7]] - l_d, offsets_i[7], offsets_j[7], l_A, l_b,
+        accumBilateral (lp_line[offsets[7]] - l_d,
+                        offsets_i[7],
+                        offsets_j[7],
+                        l_A,
+                        l_b,
                         difference_threshold);
 
         // for (size_t index = 0; index < 8; ++index)
@@ -942,7 +981,9 @@ pcl::SurfaceNormalModality<PointInT>::computeAndQuantizeSurfaceNormals2 ()
 template <typename PointInT>
 void
 pcl::SurfaceNormalModality<PointInT>::extractFeatures (
-    const MaskMap &mask, const size_t nr_features, const size_t modality_index,
+    const MaskMap &mask,
+    const size_t nr_features,
+    const size_t modality_index,
     std::vector<QuantizedMultiModFeature> &features) const
 {
   const size_t width = mask.getWidth ();
@@ -1053,7 +1094,8 @@ pcl::SurfaceNormalModality<PointInT>::extractFeatures (
   }
 
   for (typename std::list<Candidate>::iterator iter = list1.begin ();
-       iter != list1.end (); ++iter)
+       iter != list1.end ();
+       ++iter)
     iter->distance *= 1.0f / weights[iter->bin_index];
 
   list1.sort ();
@@ -1064,10 +1106,12 @@ pcl::SurfaceNormalModality<PointInT>::extractFeatures (
     while (!feature_selection_finished) {
       const int sqr_distance = distance * distance;
       for (typename std::list<Candidate>::iterator iter1 = list1.begin ();
-           iter1 != list1.end (); ++iter1) {
+           iter1 != list1.end ();
+           ++iter1) {
         bool candidate_accepted = true;
         for (typename std::list<Candidate>::iterator iter2 = list2.begin ();
-             iter2 != list2.end (); ++iter2) {
+             iter2 != list2.end ();
+             ++iter2) {
           const int dx = static_cast<int> (iter1->x) - static_cast<int> (iter2->x);
           const int dy = static_cast<int> (iter1->y) - static_cast<int> (iter2->y);
           const int tmp_distance = dx * dx + dy * dy;
@@ -1081,10 +1125,12 @@ pcl::SurfaceNormalModality<PointInT>::extractFeatures (
         float min_min_sqr_distance = std::numeric_limits<float>::max ();
         float max_min_sqr_distance = 0;
         for (typename std::list<Candidate>::iterator iter2 = list2.begin ();
-             iter2 != list2.end (); ++iter2) {
+             iter2 != list2.end ();
+             ++iter2) {
           float min_sqr_distance = std::numeric_limits<float>::max ();
           for (typename std::list<Candidate>::iterator iter3 = list2.begin ();
-               iter3 != list2.end (); ++iter3) {
+               iter3 != list2.end ();
+               ++iter3) {
             if (iter2 == iter3)
               continue;
 
@@ -1151,7 +1197,8 @@ pcl::SurfaceNormalModality<PointInT>::extractFeatures (
     if (list1.size () <= nr_features) {
       features.reserve (list1.size ());
       for (typename std::list<Candidate>::iterator iter = list1.begin ();
-           iter != list1.end (); ++iter) {
+           iter != list1.end ();
+           ++iter) {
         QuantizedMultiModFeature feature;
 
         feature.x = static_cast<int> (iter->x);
@@ -1171,11 +1218,13 @@ pcl::SurfaceNormalModality<PointInT>::extractFeatures (
     while (list2.size () != nr_features) {
       const int sqr_distance = distance * distance;
       for (typename std::list<Candidate>::iterator iter1 = list1.begin ();
-           iter1 != list1.end (); ++iter1) {
+           iter1 != list1.end ();
+           ++iter1) {
         bool candidate_accepted = true;
 
         for (typename std::list<Candidate>::iterator iter2 = list2.begin ();
-             iter2 != list2.end (); ++iter2) {
+             iter2 != list2.end ();
+             ++iter2) {
           const int dx = static_cast<int> (iter1->x) - static_cast<int> (iter2->x);
           const int dy = static_cast<int> (iter1->y) - static_cast<int> (iter2->y);
           const int tmp_distance = dx * dx + dy * dy;
@@ -1197,7 +1246,8 @@ pcl::SurfaceNormalModality<PointInT>::extractFeatures (
   }
 
   for (typename std::list<Candidate>::iterator iter2 = list2.begin ();
-       iter2 != list2.end (); ++iter2) {
+       iter2 != list2.end ();
+       ++iter2) {
     QuantizedMultiModFeature feature;
 
     feature.x = static_cast<int> (iter2->x);
@@ -1213,7 +1263,9 @@ pcl::SurfaceNormalModality<PointInT>::extractFeatures (
 template <typename PointInT>
 void
 pcl::SurfaceNormalModality<PointInT>::extractAllFeatures (
-    const MaskMap &mask, const size_t, const size_t modality_index,
+    const MaskMap &mask,
+    const size_t,
+    const size_t modality_index,
     std::vector<QuantizedMultiModFeature> &features) const
 {
   const size_t width = mask.getWidth ();
@@ -1324,14 +1376,16 @@ pcl::SurfaceNormalModality<PointInT>::extractAllFeatures (
   }
 
   for (typename std::list<Candidate>::iterator iter = list1.begin ();
-       iter != list1.end (); ++iter)
+       iter != list1.end ();
+       ++iter)
     iter->distance *= 1.0f / weights[iter->bin_index];
 
   list1.sort ();
 
   features.reserve (list1.size ());
   for (typename std::list<Candidate>::iterator iter = list1.begin ();
-       iter != list1.end (); ++iter) {
+       iter != list1.end ();
+       ++iter) {
     QuantizedMultiModFeature feature;
 
     feature.x = static_cast<int> (iter->x);

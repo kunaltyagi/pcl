@@ -79,7 +79,11 @@ class PCL_EXPORTS ON_CLASS ON_NurbsSurface : public ON_Surface
   static ON_NurbsSurface *
   New (const ON_BezierSurface &bezier_surface);
   static ON_NurbsSurface *
-  New (int dimension, ON_BOOL32 bIsRational, int order0, int order1, int cv_count0,
+  New (int dimension,
+       ON_BOOL32 bIsRational,
+       int order0,
+       int order1,
+       int cv_count0,
        int cv_count1);
 
   ON_NurbsSurface ();
@@ -114,7 +118,8 @@ class PCL_EXPORTS ON_CLASS ON_NurbsSurface : public ON_Surface
     true if curves are tne same.
   */
   bool
-  IsDuplicate (const ON_NurbsSurface &other, bool bIgnoreParameterization,
+  IsDuplicate (const ON_NurbsSurface &other,
+               bool bIgnoreParameterization,
                double tolerance = ON_ZERO_TOLERANCE) const;
 
   void
@@ -156,7 +161,8 @@ class PCL_EXPORTS ON_CLASS ON_NurbsSurface : public ON_Surface
     parameterization of curveX, then 2 is returned.
   */
   virtual int
-  CreateRuledSurface (const ON_Curve &curveA, const ON_Curve &curveB,
+  CreateRuledSurface (const ON_Curve &curveA,
+                      const ON_Curve &curveB,
                       const ON_Interval *curveA_domain = NULL,
                       const ON_Interval *curveB_domain = NULL);
 
@@ -185,7 +191,8 @@ class PCL_EXPORTS ON_CLASS ON_NurbsSurface : public ON_Surface
     parameterization of curve, then 2 is returned.
   */
   int
-  CreateConeSurface (ON_3dPoint apex_point, const ON_Curve &curve,
+  CreateConeSurface (ON_3dPoint apex_point,
+                     const ON_Curve &curve,
                      const ON_Interval *curve_domain = NULL);
 
   /*
@@ -298,7 +305,8 @@ class PCL_EXPORTS ON_CLASS ON_NurbsSurface : public ON_Surface
   ON_BOOL32
   SetDomain (
       int dir, // 0 sets first parameter's domain, 1 gets second parameter's domain
-      double t0, double t1);
+      double t0,
+      double t1);
 
   ON_Interval
   Domain (int // 0 gets first parameter's domain, 1 gets second parameter's domain
@@ -429,8 +437,13 @@ class PCL_EXPORTS ON_CLASS ON_NurbsSurface : public ON_Surface
       the ends of their domains.
   */
   bool
-  GetNextDiscontinuity (int dir, ON::continuity c, double t0, double t1, double *t,
-                        int *hint = NULL, int *dtype = NULL,
+  GetNextDiscontinuity (int dir,
+                        ON::continuity c,
+                        double t0,
+                        double t1,
+                        double *t,
+                        int *hint = NULL,
+                        int *dtype = NULL,
                         double cos_angle_tolerance = ON_DEFAULT_ANGLE_TOLERANCE_COSINE,
                         double curvature_tolerance = ON_SQRT_EPSILON) const;
 
@@ -462,7 +475,10 @@ class PCL_EXPORTS ON_CLASS ON_NurbsSurface : public ON_Surface
     Overrides virtual ON_Surface::IsContinuous
   */
   bool
-  IsContinuous (ON::continuity c, double s, double t, int *hint = NULL,
+  IsContinuous (ON::continuity c,
+                double s,
+                double t,
+                int *hint = NULL,
                 double point_tolerance = ON_ZERO_TOLERANCE,
                 double d1_tolerance = ON_ZERO_TOLERANCE,
                 double d2_tolerance = ON_ZERO_TOLERANCE,
@@ -478,19 +494,20 @@ class PCL_EXPORTS ON_CLASS ON_NurbsSurface : public ON_Surface
   Transpose (); // transpose surface parameterization (swap "s" and "t")
 
   ON_BOOL32
-  Evaluate (          // returns false if unable to evaluate
-      double, double, // evaluation parameter
-      int,            // number of derivatives (>=0)
-      int,            // array stride (>=Dimension())
-      double *,       // array of length stride*(ndir+1)*(ndir+2)/2
-      int = 0,        // optional - determines which quadrant to evaluate from
-                      //         0 = default
-                      //         1 from NE quadrant
-                      //         2 from NW quadrant
-                      //         3 from SW quadrant
-                      //         4 from SE quadrant
-      int * = 0       // optional - evaluation hint (int[2]) used to speed
-                      //            repeated evaluations
+  Evaluate ( // returns false if unable to evaluate
+      double,
+      double,   // evaluation parameter
+      int,      // number of derivatives (>=0)
+      int,      // array stride (>=Dimension())
+      double *, // array of length stride*(ndir+1)*(ndir+2)/2
+      int = 0,  // optional - determines which quadrant to evaluate from
+                //         0 = default
+                //         1 from NE quadrant
+                //         2 from NW quadrant
+                //         3 from SW quadrant
+                //         4 from SE quadrant
+      int * = 0 // optional - evaluation hint (int[2]) used to speed
+                //            repeated evaluations
       ) const;
 
   /*
@@ -577,7 +594,9 @@ class PCL_EXPORTS ON_CLASS ON_NurbsSurface : public ON_Surface
 
   */
   ON_BOOL32
-  Split (int dir, double c, ON_Surface *&west_or_south_side,
+  Split (int dir,
+         double c,
+         ON_Surface *&west_or_south_side,
          ON_Surface *&east_or_north_side) const;
 
   /*
@@ -696,33 +715,38 @@ class PCL_EXPORTS ON_CLASS ON_NurbsSurface : public ON_Surface
   CVStyle () const;
 
   double
-  Weight (         // get value of control vertex weight
-      int i, int j // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
+  Weight ( // get value of control vertex weight
+      int i,
+      int j // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
       ) const;
 
   ON_BOOL32
-  SetWeight (       // get value of control vertex weight
-      int i, int j, // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
+  SetWeight ( // get value of control vertex weight
+      int i,
+      int j, // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
       double weight);
 
   ON_BOOL32
-  SetCV (              // set a single control vertex
-      int i, int j,    // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
+  SetCV ( // set a single control vertex
+      int i,
+      int j,           // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
       ON::point_style, // style of input point
       const double *cv // value of control vertex
   );
 
   ON_BOOL32
-  SetCV (                  // set a single control vertex
-      int i, int j,        // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
+  SetCV ( // set a single control vertex
+      int i,
+      int j,               // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
       const ON_3dPoint &cv // value of control vertex
                            // If NURBS is rational, weight
                            // will be set to 1.
   );
 
   ON_BOOL32
-  SetCV (                  // set a single control vertex
-      int i, int j,        // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
+  SetCV ( // set a single control vertex
+      int i,
+      int j,               // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
       const ON_4dPoint &cv // value of control vertex
   );
 
@@ -757,21 +781,24 @@ class PCL_EXPORTS ON_CLASS ON_NurbsSurface : public ON_Surface
   );
 
   ON_BOOL32
-  GetCV (              // get a single control vertex
-      int i, int j,    // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
+  GetCV ( // get a single control vertex
+      int i,
+      int j,           // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
       ON::point_style, // style to use for output point
       double *cv       // array of length >= CVSize()
       ) const;
 
   ON_BOOL32
-  GetCV (            // get a single control vertex
-      int i, int j,  // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
+  GetCV ( // get a single control vertex
+      int i,
+      int j,         // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
       ON_3dPoint &cv // gets euclidean cv when NURBS is rational
       ) const;
 
   ON_BOOL32
-  GetCV (            // get a single control vertex
-      int i, int j,  // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
+  GetCV ( // get a single control vertex
+      int i,
+      int j,         // CV index ( 0 <= i <= CVCount(0), 0 <= j <= CVCount(1)
       ON_4dPoint &cv // gets homogeneous cv
       ) const;
 
@@ -943,7 +970,8 @@ class PCL_EXPORTS ON_CLASS ON_NurbsSurface : public ON_Surface
     false if input is not valid
   */
   ON_BOOL32
-  ConvertSpanToBezier (int span_index0, int span_index1,
+  ConvertSpanToBezier (int span_index0,
+                       int span_index1,
                        ON_BezierSurface &bezier_surface) const;
 
   /////////////////////////////////////////////////////////////////
@@ -1017,14 +1045,29 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCage : public ON_Geometry
   public:
   ON_NurbsCage ();
 
-  ON_NurbsCage (int dim, bool is_rat, int order0, int order1, int order2, int cv_count0,
-                int cv_count1, int cv_count2);
+  ON_NurbsCage (int dim,
+                bool is_rat,
+                int order0,
+                int order1,
+                int order2,
+                int cv_count0,
+                int cv_count1,
+                int cv_count2);
 
-  ON_NurbsCage (const ON_BoundingBox &bbox, int order0, int order1, int order2,
-                int cv_count0, int cv_count1, int cv_count2);
+  ON_NurbsCage (const ON_BoundingBox &bbox,
+                int order0,
+                int order1,
+                int order2,
+                int cv_count0,
+                int cv_count1,
+                int cv_count2);
 
   ON_NurbsCage (const ON_3dPoint *box_corners, // array of 8 3d points
-                int order0, int order1, int order2, int cv_count0, int cv_count1,
+                int order0,
+                int order1,
+                int order2,
+                int cv_count0,
+                int cv_count1,
                 int cv_count2);
 
   ON_NurbsCage (const ON_BezierCage &src);
@@ -1185,7 +1228,8 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCage : public ON_Geometry
     True if a valid tight_bbox is returned.
   */
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   /*
@@ -1230,8 +1274,14 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCage : public ON_Geometry
   IsParallelogram (double tolerance) const;
 
   bool
-  Create (int dim, bool is_rat, int order0, int order1, int order2, int cv_count0,
-          int cv_count1, int cv_count2);
+  Create (int dim,
+          bool is_rat,
+          int order0,
+          int order1,
+          int order2,
+          int cv_count0,
+          int cv_count1,
+          int cv_count2);
 
   /*
   Description:
@@ -1255,8 +1305,13 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCage : public ON_Geometry
 
   */
   bool
-  Create (const ON_BoundingBox &bbox, int order0, int order1, int order2, int cv_count0,
-          int cv_count1, int cv_count2);
+  Create (const ON_BoundingBox &bbox,
+          int order0,
+          int order1,
+          int order2,
+          int cv_count0,
+          int cv_count1,
+          int cv_count2);
 
   /*
   Description:
@@ -1280,8 +1335,13 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCage : public ON_Geometry
 
   */
   bool
-  Create (const ON_3dPoint *box_corners, int order0, int order1, int order2,
-          int cv_count0, int cv_count1, int cv_count2);
+  Create (const ON_3dPoint *box_corners,
+          int order0,
+          int order1,
+          int order2,
+          int cv_count0,
+          int cv_count1,
+          int cv_count2);
 
   void
   Destroy ();
@@ -1389,8 +1449,14 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCage : public ON_Geometry
     ON_NurbsCage::PointAt
   */
   bool
-  Evaluate (double r, double s, double t, int der_count, int v_stride, double *v,
-            int side = 0, int *hint = 0) const;
+  Evaluate (double r,
+            double s,
+            double t,
+            int der_count,
+            int v_stride,
+            double *v,
+            int side = 0,
+            int *hint = 0) const;
 
   /*
   Description:
@@ -1496,15 +1562,22 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCage : public ON_Geometry
 
   double
   Weight ( // get value of control vertex weight
-      int i, int j, int k) const;
+      int i,
+      int j,
+      int k) const;
 
   bool
   SetWeight ( // get value of control vertex weight
-      int i, int j, int k, double w);
+      int i,
+      int j,
+      int k,
+      double w);
 
   bool
   SetCV ( // set a single control vertex
-      int i, int j, int k,
+      int i,
+      int j,
+      int k,
       ON::point_style, // style of input point
       const double *   // value of control vertex
   );
@@ -1525,20 +1598,26 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCage : public ON_Geometry
 
   bool
   GetCV ( // get a single control vertex
-      int i, int j, int k,
+      int i,
+      int j,
+      int k,
       ON::point_style, // style to use for output point
       double *         // array of length >= CVSize()
       ) const;
 
   bool
   GetCV ( // get a single control vertex
-      int i, int j, int k,
+      int i,
+      int j,
+      int k,
       ON_3dPoint & // gets euclidean cv when NURBS is rational
       ) const;
 
   bool
   GetCV ( // get a single control vertex
-      int i, int j, int k,
+      int i,
+      int j,
+      int k,
       ON_4dPoint & // gets homogeneous cv
       ) const;
 
@@ -1687,7 +1766,8 @@ class PCL_EXPORTS ON_CLASS ON_MorphControl : public ON_Geometry
   GetBBox (double *boxmin, double *boxmax, int bGrowBox = false) const;
 
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   void
@@ -1767,23 +1847,27 @@ class PCL_EXPORTS ON_CLASS ON_MorphControl : public ON_Geometry
   AddControlLocalizer (double support_distance, double falloff_distance);
 
   bool
-  AddSphereLocalizer (ON_3dPoint center, double support_distance,
+  AddSphereLocalizer (ON_3dPoint center,
+                      double support_distance,
                       double falloff_distance);
 
   bool
   AddCylinderLocalizer (ON_Line axis, double support_distance, double falloff_distance);
 
   bool
-  AddBoxLocalizer (ON_BoundingBox bbox, double support_distance,
+  AddBoxLocalizer (ON_BoundingBox bbox,
+                   double support_distance,
                    double falloff_distance);
 
   bool
-  AddPlaneLocalizer (const ON_Plane &plane, double support_distance,
+  AddPlaneLocalizer (const ON_Plane &plane,
+                     double support_distance,
                      double falloff_distance);
 
   bool
   AddConvexPolygonLocalizer (const ON_SimpleArray<ON_Plane> &planes,
-                             double support_distance, double falloff_distance);
+                             double support_distance,
+                             double falloff_distance);
 
   /////////////////////////////////////////////////////////
   //
@@ -1851,8 +1935,10 @@ class PCL_EXPORTS ON_CLASS ON_CageMorph : public ON_SpaceMorph
 //   An ON_NurbsSurface representation of the quadrilateral.
 ON_DECL
 ON_NurbsSurface *
-ON_NurbsSurfaceQuadrilateral (const ON_3dPoint &P, const ON_3dPoint &Q,
-                              const ON_3dPoint &R, const ON_3dPoint &S,
+ON_NurbsSurfaceQuadrilateral (const ON_3dPoint &P,
+                              const ON_3dPoint &Q,
+                              const ON_3dPoint &R,
+                              const ON_3dPoint &S,
                               ON_NurbsSurface *nurbs_surface = NULL);
 
 #if defined(ON_DLL_TEMPLATE)

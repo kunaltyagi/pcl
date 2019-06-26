@@ -167,7 +167,8 @@ namespace pcl
       bool
       findTransformation (const MeshConstPtr &mesh_model,
                           const CloudXYZRGBNormalConstPtr &cloud_data,
-                          const Eigen::Matrix4f &T_init, Eigen::Matrix4f &T_final);
+                          const Eigen::Matrix4f &T_init,
+                          Eigen::Matrix4f &T_final);
 
       private:
       using PointNormal = pcl::PointNormal;
@@ -206,7 +207,8 @@ namespace pcl
        */
       bool
       minimizePointPlane (const CloudNormal &cloud_source,
-                          const CloudNormal &cloud_target, Eigen::Matrix4f &T) const;
+                          const CloudNormal &cloud_target,
+                          Eigen::Matrix4f &T) const;
 
       ////////////////////////////////////////////////////////////////////////
       // Members

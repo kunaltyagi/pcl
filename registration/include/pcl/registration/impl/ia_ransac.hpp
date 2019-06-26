@@ -78,14 +78,17 @@ pcl::SampleConsensusInitialAlignment<PointSource, PointTarget, FeatureT>::
 template <typename PointSource, typename PointTarget, typename FeatureT>
 void
 pcl::SampleConsensusInitialAlignment<PointSource, PointTarget, FeatureT>::
-    selectSamples (const PointCloudSource &cloud, int nr_samples,
-                   float min_sample_distance, std::vector<int> &sample_indices)
+    selectSamples (const PointCloudSource &cloud,
+                   int nr_samples,
+                   float min_sample_distance,
+                   std::vector<int> &sample_indices)
 {
   if (nr_samples > static_cast<int> (cloud.points.size ())) {
     PCL_ERROR ("[pcl::%s::selectSamples] ", getClassName ().c_str ());
     PCL_ERROR ("The number of samples (%d) must not be greater than the number of "
                "points (%lu)!\n",
-               nr_samples, cloud.points.size ());
+               nr_samples,
+               cloud.points.size ());
     return;
   }
 
@@ -122,7 +125,8 @@ pcl::SampleConsensusInitialAlignment<PointSource, PointTarget, FeatureT>::
       PCL_WARN ("[pcl::%s::selectSamples] ", getClassName ().c_str ());
       PCL_WARN ("No valid sample found after %d iterations. Relaxing "
                 "min_sample_distance_ to %f\n",
-                iterations_without_a_sample, 0.5 * min_sample_distance);
+                iterations_without_a_sample,
+                0.5 * min_sample_distance);
 
       min_sample_distance_ *= 0.5f;
       min_sample_distance = min_sample_distance_;
@@ -145,8 +149,11 @@ pcl::SampleConsensusInitialAlignment<PointSource, PointTarget, FeatureT>::
   corresponding_indices.resize (sample_indices.size ());
   for (size_t i = 0; i < sample_indices.size (); ++i) {
     // Find the k features nearest to input_features.points[sample_indices[i]]
-    feature_tree_->nearestKSearch (input_features, sample_indices[i],
-                                   k_correspondences_, nn_indices, nn_distances);
+    feature_tree_->nearestKSearch (input_features,
+                                   sample_indices[i],
+                                   k_correspondences_,
+                                   nn_indices,
+                                   nn_distances);
 
     // Select one at random and add it to corresponding_indices
     int random_correspondence = getRandomIndex (k_correspondences_);
@@ -201,7 +208,8 @@ pcl::SampleConsensusInitialAlignment<PointSource, PointTarget, FeatureT>::
     PCL_ERROR ("[pcl::%s::computeTransformation] ", getClassName ().c_str ());
     PCL_ERROR ("The source points and source feature points need to be in a one-to-one "
                "relationship! Current input cloud sizes: %ld vs %ld.\n",
-               input_->size (), input_features_->size ());
+               input_->size (),
+               input_features_->size ());
     return;
   }
 
@@ -209,7 +217,8 @@ pcl::SampleConsensusInitialAlignment<PointSource, PointTarget, FeatureT>::
     PCL_ERROR ("[pcl::%s::computeTransformation] ", getClassName ().c_str ());
     PCL_ERROR ("The target points and target feature points need to be in a one-to-one "
                "relationship! Current input cloud sizes: %ld vs %ld.\n",
-               target_->size (), target_features_->size ());
+               target_->size (),
+               target_features_->size ());
     return;
   }
 

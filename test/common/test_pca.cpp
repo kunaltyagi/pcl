@@ -52,8 +52,8 @@ TEST (PCA, projection)
   for (const auto &point : cloud) {
     pca.project (point, projected);
     pca.reconstruct (projected, reconstructed);
-    EXPECT_NEAR_VECTORS (reconstructed.getVector3fMap (), point.getVector3fMap (),
-                         2.5e-4);
+    EXPECT_NEAR_VECTORS (
+        reconstructed.getVector3fMap (), point.getVector3fMap (), 2.5e-4);
   }
 }
 
@@ -81,8 +81,8 @@ TEST (PCA, cloud_projection)
     pca.reconstruct (cloud_projected, cloud_reconstructed);
     EXPECT_EQ (cloud_reconstructed.size (), cloud_projected.size ());
     for (size_t i = 0; i < cloud.size (); i++)
-      EXPECT_NEAR_VECTORS (cloud[i].getVector3fMap (),
-                           cloud_reconstructed[i].getVector3fMap (), 2.5e-4);
+      EXPECT_NEAR_VECTORS (
+          cloud[i].getVector3fMap (), cloud_reconstructed[i].getVector3fMap (), 2.5e-4);
   } catch (pcl::InitFailedException & /*e*/) {
     std::cerr << "something wrong" << std::endl;
   }

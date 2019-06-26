@@ -59,8 +59,8 @@ main (int argc, char *argv[])
     std::cout << "3dm file does not contain a trimming curve: " << file_3dm
               << std::endl;
 
-    pcl::on_nurbs::Triangulation::convertSurface2PolygonMesh (on_surf, mesh,
-                                                              mesh_resolution);
+    pcl::on_nurbs::Triangulation::convertSurface2PolygonMesh (
+        on_surf, mesh, mesh_resolution);
   } else {
     on_object = on_model.m_object_table[1].m_object;
     if (on_object == nullptr) {

@@ -53,7 +53,9 @@ pcl::GreedyProjectionTriangulation<PointInT>::performReconstruction (
   if (!reconstructPolygons (output.polygons)) {
     PCL_ERROR ("[pcl::%s::performReconstruction] Reconstruction failed. Check "
                "parameters: search radius (%f) or mu (%f) before continuing.\n",
-               getClassName ().c_str (), search_radius_, mu_);
+               getClassName ().c_str (),
+               search_radius_,
+               mu_);
     output.cloud.width = output.cloud.height = 0;
     output.cloud.data.clear ();
     return;
@@ -72,7 +74,9 @@ pcl::GreedyProjectionTriangulation<PointInT>::performReconstruction (
   if (!reconstructPolygons (polygons)) {
     PCL_ERROR ("[pcl::%s::performReconstruction] Reconstruction failed. Check "
                "parameters: search radius (%f) or mu (%f) before continuing.\n",
-               getClassName ().c_str (), search_radius_, mu_);
+               getClassName ().c_str (),
+               search_radius_,
+               mu_);
     return;
   }
 }
@@ -126,7 +130,8 @@ pcl::GreedyProjectionTriangulation<PointInT>::reconstructPolygons (
   if (!input_->is_dense) {
     // Skip invalid points from the indices list
     for (std::vector<int>::const_iterator it = indices_->begin ();
-         it != indices_->end (); ++it)
+         it != indices_->end ();
+         ++it)
       if (!std::isfinite (input_->points[*it].x) ||
           !std::isfinite (input_->points[*it].y) ||
           !std::isfinite (input_->points[*it].z))
@@ -230,13 +235,17 @@ pcl::GreedyProjectionTriangulation<PointInT>::reconstructPolygons (
           bool visibility = true;
           for (int j = 0; j < nr_edge; j++) {
             if (ffn_[nnIdx[doubleEdges[j].index]] != nnIdx[i])
-              visibility = isVisible (uvn_nn[i], uvn_nn[doubleEdges[j].index],
-                                      doubleEdges[j].first, Eigen::Vector2f::Zero ());
+              visibility = isVisible (uvn_nn[i],
+                                      uvn_nn[doubleEdges[j].index],
+                                      doubleEdges[j].first,
+                                      Eigen::Vector2f::Zero ());
             if (!visibility)
               break;
             if (sfn_[nnIdx[doubleEdges[j].index]] != nnIdx[i])
-              visibility = isVisible (uvn_nn[i], uvn_nn[doubleEdges[j].index],
-                                      doubleEdges[j].second, Eigen::Vector2f::Zero ());
+              visibility = isVisible (uvn_nn[i],
+                                      uvn_nn[doubleEdges[j].index],
+                                      doubleEdges[j].second,
+                                      Eigen::Vector2f::Zero ());
             if (!visibility)
               break;
           }
@@ -473,16 +482,19 @@ pcl::GreedyProjectionTriangulation<PointInT>::reconstructPolygons (
             if (doubleEdges[j].index != i) {
               int f = ffn_[nnIdx[doubleEdges[j].index]];
               if ((f != nnIdx[i]) && (f != R_))
-                visibility = isVisible (uvn_nn[i], uvn_nn[doubleEdges[j].index],
-                                        doubleEdges[j].first, Eigen::Vector2f::Zero ());
+                visibility = isVisible (uvn_nn[i],
+                                        uvn_nn[doubleEdges[j].index],
+                                        doubleEdges[j].first,
+                                        Eigen::Vector2f::Zero ());
               if (!visibility)
                 break;
 
               int s = sfn_[nnIdx[doubleEdges[j].index]];
               if ((s != nnIdx[i]) && (s != R_))
-                visibility =
-                    isVisible (uvn_nn[i], uvn_nn[doubleEdges[j].index],
-                               doubleEdges[j].second, Eigen::Vector2f::Zero ());
+                visibility = isVisible (uvn_nn[i],
+                                        uvn_nn[doubleEdges[j].index],
+                                        doubleEdges[j].second,
+                                        Eigen::Vector2f::Zero ());
               if (!visibility)
                 break;
             }
@@ -491,7 +503,8 @@ pcl::GreedyProjectionTriangulation<PointInT>::reconstructPolygons (
         }
 
       // Sorting angles
-      std::sort (angles_.begin (), angles_.end (),
+      std::sort (angles_.begin (),
+                 angles_.end (),
                  GreedyProjectionTriangulation<PointInT>::nnAngleSortAsc);
 
       // Triangulating
@@ -775,7 +788,8 @@ pcl::GreedyProjectionTriangulation<PointInT>::reconstructPolygons (
         Eigen::Vector2f S2;
         std::vector<int> to_erase;
         for (std::vector<int>::iterator it = angleIdx.begin () + 1;
-             it != angleIdx.end () - 1; it++) {
+             it != angleIdx.end () - 1;
+             it++) {
           if (gaps[*(it - 1)])
             angle_so_far = 0;
           else
@@ -834,7 +848,8 @@ pcl::GreedyProjectionTriangulation<PointInT>::reconstructPolygons (
         }
         for (const int &it : to_erase) {
           for (std::vector<int>::iterator iter = angleIdx.begin ();
-               iter != angleIdx.end (); iter++)
+               iter != angleIdx.end ();
+               iter++)
             if (it == *iter) {
               angleIdx.erase (iter);
               break;
@@ -847,7 +862,8 @@ pcl::GreedyProjectionTriangulation<PointInT>::reconstructPolygons (
       changed_2nd_fn_ = false;
       new2boundary_ = NONE;
       for (std::vector<int>::iterator it = angleIdx.begin () + 1;
-           it != angleIdx.end () - 1; it++) {
+           it != angleIdx.end () - 1;
+           it++) {
         current_index_ = angles_[*it].index;
 
         is_current_free_ = false;
@@ -880,9 +896,13 @@ pcl::GreedyProjectionTriangulation<PointInT>::reconstructPolygons (
             addFringePoint (current_index_, R_);
             new2boundary_ = current_index_;
             if (!already_connected_)
-              connectPoint (polygons, angles_[*(it - 1)].index, R_,
-                            angles_[*(it + 1)].index, uvn_nn[angles_[*it].nnIndex],
-                            uvn_nn[angles_[*(it - 1)].nnIndex], uvn_nn_qp_zero);
+              connectPoint (polygons,
+                            angles_[*(it - 1)].index,
+                            R_,
+                            angles_[*(it + 1)].index,
+                            uvn_nn[angles_[*it].nnIndex],
+                            uvn_nn[angles_[*(it - 1)].nnIndex],
+                            uvn_nn_qp_zero);
             else
               already_connected_ = false;
             if (ffn_[R_] == angles_[*(angleIdx.begin ())].index) {
@@ -897,9 +917,12 @@ pcl::GreedyProjectionTriangulation<PointInT>::reconstructPolygons (
           addFringePoint (current_index_, R_);
           new2boundary_ = current_index_;
           if (!already_connected_)
-            connectPoint (polygons, R_, angles_[*(it + 1)].index,
+            connectPoint (polygons,
+                          R_,
+                          angles_[*(it + 1)].index,
                           (it + 2) == angleIdx.end () ? -1 : angles_[*(it + 2)].index,
-                          uvn_nn[angles_[*it].nnIndex], uvn_nn_qp_zero,
+                          uvn_nn[angles_[*it].nnIndex],
+                          uvn_nn_qp_zero,
                           uvn_nn[angles_[*(it + 1)].nnIndex]);
           else
             already_connected_ = false;
@@ -915,7 +938,9 @@ pcl::GreedyProjectionTriangulation<PointInT>::reconstructPolygons (
           addTriangle (current_index_, angles_[*(it - 1)].index, R_, polygons);
           addFringePoint (current_index_, R_);
           if (!already_connected_)
-            connectPoint (polygons, angles_[*(it - 1)].index, angles_[*(it + 1)].index,
+            connectPoint (polygons,
+                          angles_[*(it - 1)].index,
+                          angles_[*(it + 1)].index,
                           (it + 2) == angleIdx.end ()
                               ? -1
                               : gaps[*(it + 1)] ? R_ : angles_[*(it + 2)].index,
@@ -933,7 +958,9 @@ pcl::GreedyProjectionTriangulation<PointInT>::reconstructPolygons (
       }
       if (!gaps[*(angleIdx.end () - 2)]) {
         addTriangle (angles_[*(angleIdx.end () - 2)].index,
-                     angles_[*(angleIdx.end () - 1)].index, R_, polygons);
+                     angles_[*(angleIdx.end () - 1)].index,
+                     R_,
+                     polygons);
         addFringePoint (angles_[*(angleIdx.end () - 2)].index, R_);
         if (R_ == ffn_[angles_[*(angleIdx.end () - 1)].index]) {
           if (angles_[*(angleIdx.end () - 2)].index ==
@@ -990,7 +1017,8 @@ pcl::GreedyProjectionTriangulation<PointInT>::reconstructPolygons (
   std::sort (fringe_queue_.begin (), fringe_queue_.end ());
   fringe_queue_.erase (std::unique (fringe_queue_.begin (), fringe_queue_.end ()),
                        fringe_queue_.end ());
-  PCL_DEBUG ("Number of processed points: %lu / %lu\n", fringe_queue_.size (),
+  PCL_DEBUG ("Number of processed points: %lu / %lu\n",
+             fringe_queue_.size (),
              indices_->size ());
   return (true);
 }
@@ -1024,9 +1052,13 @@ pcl::GreedyProjectionTriangulation<PointInT>::closeTriangle (
 template <typename PointInT>
 void
 pcl::GreedyProjectionTriangulation<PointInT>::connectPoint (
-    std::vector<pcl::Vertices> &polygons, const int prev_index, const int next_index,
-    const int next_next_index, const Eigen::Vector2f &uvn_current,
-    const Eigen::Vector2f &uvn_prev, const Eigen::Vector2f &uvn_next)
+    std::vector<pcl::Vertices> &polygons,
+    const int prev_index,
+    const int next_index,
+    const int next_next_index,
+    const Eigen::Vector2f &uvn_current,
+    const Eigen::Vector2f &uvn_prev,
+    const Eigen::Vector2f &uvn_next)
 {
   if (is_current_free_) {
     ffn_[current_index_] = prev_index;
@@ -1331,8 +1363,8 @@ pcl::GreedyProjectionTriangulation<PointInT>::connectPoint (
               switch (connect2ffn) {
               case 0: // ffn[next]
               {
-                addTriangle (next_index, ffn_[current_index_], ffn_[next_index],
-                             polygons);
+                addTriangle (
+                    next_index, ffn_[current_index_], ffn_[next_index], polygons);
                 neighbor_update = ffn_[next_index];
 
                 /* ffn[next_index] */
@@ -1351,8 +1383,8 @@ pcl::GreedyProjectionTriangulation<PointInT>::connectPoint (
               }
               case 1: // sfn[next]
               {
-                addTriangle (next_index, ffn_[current_index_], sfn_[next_index],
-                             polygons);
+                addTriangle (
+                    next_index, ffn_[current_index_], sfn_[next_index], polygons);
                 neighbor_update = sfn_[next_index];
 
                 /* sfn[next_index] */
@@ -1451,8 +1483,8 @@ pcl::GreedyProjectionTriangulation<PointInT>::connectPoint (
               switch (connect2sfn) {
               case 0: // ffn[next]
               {
-                addTriangle (next_index, sfn_[current_index_], ffn_[next_index],
-                             polygons);
+                addTriangle (
+                    next_index, sfn_[current_index_], ffn_[next_index], polygons);
                 neighbor_update = ffn_[next_index];
 
                 /* ffn[next_index] */
@@ -1471,8 +1503,8 @@ pcl::GreedyProjectionTriangulation<PointInT>::connectPoint (
               }
               case 1: // sfn[next]
               {
-                addTriangle (next_index, sfn_[current_index_], sfn_[next_index],
-                             polygons);
+                addTriangle (
+                    next_index, sfn_[current_index_], sfn_[next_index], polygons);
                 neighbor_update = sfn_[next_index];
 
                 /* sfn[next_index] */

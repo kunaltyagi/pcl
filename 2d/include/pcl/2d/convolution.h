@@ -148,5 +148,6 @@ namespace pcl
 POINT_CLOUD_REGISTER_POINT_STRUCT (
     pcl::PointXYZIEdge,
     (float, x, x) (float, y, y) (float, z, z) (float, magnitude, magnitude) (
-        float, direction, direction) (float, magnitude_x,
-                                      magnitude_x) (float, magnitude_y, magnitude_y))
+        float, direction, direction) (float, magnitude_x, magnitude_x) (float,
+                                                                        magnitude_y,
+                                                                        magnitude_y))

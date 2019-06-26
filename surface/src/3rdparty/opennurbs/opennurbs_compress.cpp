@@ -121,7 +121,8 @@ ON_CompressStream::In (ON__UINT64 size, const void *uncompressed_buffer)
       // submit a portion of uncompressed_buffer to zlib
       ON__UINT64 sz = (size > max_sz) ? max_sz : size;
       m_in_size += sz;
-      m_in_crc = ON_CRC32 (m_in_crc, (size_t)sz,
+      m_in_crc = ON_CRC32 (m_in_crc,
+                           (size_t)sz,
                            uncompressed_buffer); // (size_t) cast is safe because sz <=
                                                  // max_sz = 0x7FFFFFF0
       strm.next_in = (z_Bytef *)uncompressed_buffer;
@@ -159,8 +160,8 @@ ON_CompressStream::In (ON__UINT64 size, const void *uncompressed_buffer)
       ON__UINT64 out_size1 = m_out_size + deflate_output_count;
 
       rc = (0 != m_out_callback_function)
-               ? m_out_callback_function (m_out_callback_context, deflate_output_count,
-                                          out_buffer)
+               ? m_out_callback_function (
+                     m_out_callback_context, deflate_output_count, out_buffer)
                : Out (m_out_callback_context, deflate_output_count, out_buffer);
       if (!rc)
         break;
@@ -238,8 +239,8 @@ ON_CompressStream::End ()
       ON__UINT64 compressed_size1 = m_out_size + ((ON__UINT64)deflate_output_count);
 
       rc = (0 != m_out_callback_function)
-               ? m_out_callback_function (m_out_callback_context, deflate_output_count,
-                                          out_buffer)
+               ? m_out_callback_function (
+                     m_out_callback_context, deflate_output_count, out_buffer)
                : Out (m_out_callback_context, deflate_output_count, out_buffer);
       if (!rc)
         break;
@@ -300,28 +301,16 @@ ON_CompressStream::CallbackContext () const
 }
 
 ON__UINT64
-ON_CompressStream::InSize () const
-{
-  return m_in_size;
-}
+ON_CompressStream::InSize () const { return m_in_size; }
 
 ON__UINT64
-ON_CompressStream::OutSize () const
-{
-  return m_out_size;
-}
+ON_CompressStream::OutSize () const { return m_out_size; }
 
 ON__UINT32
-ON_CompressStream::InCRC () const
-{
-  return m_in_crc;
-}
+ON_CompressStream::InCRC () const { return m_in_crc; }
 
 ON__UINT32
-ON_CompressStream::OutCRC () const
-{
-  return m_out_crc;
-}
+ON_CompressStream::OutCRC () const { return m_out_crc; }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -426,7 +415,8 @@ ON_UncompressStream::In (ON__UINT64 size, const void *compressed_buffer)
       ON__UINT64 sz = (size > max_sz) ? max_sz : size;
       m_in_size += sz;
       m_in_crc = ON_CRC32 (
-          m_in_crc, (size_t)sz,
+          m_in_crc,
+          (size_t)sz,
           compressed_buffer); // (size_t) cast is safe because sz <= max_sz = 0x7FFFFFF0
       strm.next_in = (z_Bytef *)compressed_buffer;
       strm.avail_in = (ON__UINT32)sz;
@@ -463,8 +453,8 @@ ON_UncompressStream::In (ON__UINT64 size, const void *compressed_buffer)
       ON__UINT64 out_size1 = m_out_size + inflate_output_count;
 
       rc = (0 != m_out_callback_function)
-               ? m_out_callback_function (m_out_callback_context, inflate_output_count,
-                                          out_buffer)
+               ? m_out_callback_function (
+                     m_out_callback_context, inflate_output_count, out_buffer)
                : Out (m_out_callback_context, inflate_output_count, out_buffer);
       if (!rc)
         break;
@@ -541,8 +531,8 @@ ON_UncompressStream::End ()
       ON__UINT64 out_size1 = m_out_size + inflate_output_count;
 
       rc = (0 != m_out_callback_function)
-               ? m_out_callback_function (m_out_callback_context, inflate_output_count,
-                                          out_buffer)
+               ? m_out_callback_function (
+                     m_out_callback_context, inflate_output_count, out_buffer)
                : Out (m_out_callback_context, inflate_output_count, out_buffer);
       if (!rc)
         break;
@@ -603,25 +593,13 @@ ON_UncompressStream::CallbackContext () const
 }
 
 ON__UINT64
-ON_UncompressStream::InSize () const
-{
-  return m_in_size;
-}
+ON_UncompressStream::InSize () const { return m_in_size; }
 
 ON__UINT64
-ON_UncompressStream::OutSize () const
-{
-  return m_out_size;
-}
+ON_UncompressStream::OutSize () const { return m_out_size; }
 
 ON__UINT32
-ON_UncompressStream::InCRC () const
-{
-  return m_in_crc;
-}
+ON_UncompressStream::InCRC () const { return m_in_crc; }
 
 ON__UINT32
-ON_UncompressStream::OutCRC () const
-{
-  return m_out_crc;
-}
+ON_UncompressStream::OutCRC () const { return m_out_crc; }

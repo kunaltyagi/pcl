@@ -119,8 +119,8 @@ main (int argc, char **argv)
 
   if (!rgb_path.empty () && !depth_path.empty () &&
       boost::filesystem::exists (rgb_path) && boost::filesystem::exists (depth_path)) {
-    grabber.reset (new pcl::ImageGrabber<pcl::PointXYZRGBA> (depth_path, rgb_path,
-                                                             frames_per_second, false));
+    grabber.reset (new pcl::ImageGrabber<pcl::PointXYZRGBA> (
+        depth_path, rgb_path, frames_per_second, false));
   } else {
     PCL_INFO ("No directory was given with the -<rgb/depth>_dir flag.");
     printHelp (argc, argv);

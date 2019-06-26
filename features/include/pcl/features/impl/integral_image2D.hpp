@@ -55,7 +55,8 @@ pcl::IntegralImage2D<DataType, Dimension>::setSecondOrderComputation (
 template <typename DataType, unsigned Dimension>
 void
 pcl::IntegralImage2D<DataType, Dimension>::setInput (const DataType *data,
-                                                     unsigned width, unsigned height,
+                                                     unsigned width,
+                                                     unsigned height,
                                                      unsigned element_stride,
                                                      unsigned row_stride)
 {
@@ -195,8 +196,10 @@ pcl::IntegralImage2D<DataType, Dimension>::computeIntegralImages (
   memset (count_previous_row, 0, sizeof (unsigned) * (width_ + 1));
 
   if (!compute_second_order_integral_images_) {
-    for (unsigned rowIdx = 0; rowIdx < height_; ++rowIdx, data += row_stride,
-                  previous_row = current_row, current_row += (width_ + 1),
+    for (unsigned rowIdx = 0; rowIdx < height_; ++rowIdx,
+                  data += row_stride,
+                  previous_row = current_row,
+                  current_row += (width_ + 1),
                   count_previous_row = count_current_row,
                   count_current_row += (width_ + 1)) {
       current_row[0].setZero ();
@@ -222,10 +225,13 @@ pcl::IntegralImage2D<DataType, Dimension>::computeIntegralImages (
     memset (so_previous_row, 0, sizeof (SecondOrderType) * (width_ + 1));
 
     SecondOrderType so_element;
-    for (unsigned rowIdx = 0; rowIdx < height_; ++rowIdx, data += row_stride,
-                  previous_row = current_row, current_row += (width_ + 1),
+    for (unsigned rowIdx = 0; rowIdx < height_; ++rowIdx,
+                  data += row_stride,
+                  previous_row = current_row,
+                  current_row += (width_ + 1),
                   count_previous_row = count_current_row,
-                  count_current_row += (width_ + 1), so_previous_row = so_current_row,
+                  count_current_row += (width_ + 1),
+                  so_previous_row = so_current_row,
                   so_current_row += (width_ + 1)) {
       current_row[0].setZero ();
       so_current_row[0].setZero ();
@@ -259,8 +265,10 @@ pcl::IntegralImage2D<DataType, Dimension>::computeIntegralImages (
 
 template <typename DataType>
 void
-pcl::IntegralImage2D<DataType, 1>::setInput (const DataType *data, unsigned width,
-                                             unsigned height, unsigned element_stride,
+pcl::IntegralImage2D<DataType, 1>::setInput (const DataType *data,
+                                             unsigned width,
+                                             unsigned height,
+                                             unsigned element_stride,
                                              unsigned row_stride)
 {
   if ((width + 1) * (height + 1) > first_order_integral_image_.size ()) {
@@ -277,7 +285,8 @@ pcl::IntegralImage2D<DataType, 1>::setInput (const DataType *data, unsigned widt
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename DataType>
 typename pcl::IntegralImage2D<DataType, 1>::ElementType
-pcl::IntegralImage2D<DataType, 1>::getFirstOrderSum (unsigned start_x, unsigned start_y,
+pcl::IntegralImage2D<DataType, 1>::getFirstOrderSum (unsigned start_x,
+                                                     unsigned start_y,
                                                      unsigned width,
                                                      unsigned height) const
 {
@@ -296,7 +305,8 @@ pcl::IntegralImage2D<DataType, 1>::getFirstOrderSum (unsigned start_x, unsigned 
 template <typename DataType>
 typename pcl::IntegralImage2D<DataType, 1>::SecondOrderType
 pcl::IntegralImage2D<DataType, 1>::getSecondOrderSum (unsigned start_x,
-                                                      unsigned start_y, unsigned width,
+                                                      unsigned start_y,
+                                                      unsigned width,
                                                       unsigned height) const
 {
   const unsigned upper_left_idx = start_y * (width_ + 1) + start_x;
@@ -333,7 +343,8 @@ pcl::IntegralImage2D<DataType, 1>::getFiniteElementsCount (unsigned start_x,
 template <typename DataType>
 typename pcl::IntegralImage2D<DataType, 1>::ElementType
 pcl::IntegralImage2D<DataType, 1>::getFirstOrderSumSE (unsigned start_x,
-                                                       unsigned start_y, unsigned end_x,
+                                                       unsigned start_y,
+                                                       unsigned end_x,
                                                        unsigned end_y) const
 {
   const unsigned upper_left_idx = start_y * (width_ + 1) + start_x;
@@ -401,8 +412,10 @@ pcl::IntegralImage2D<DataType, 1>::computeIntegralImages (const DataType *data,
   memset (count_previous_row, 0, sizeof (unsigned) * (width_ + 1));
 
   if (!compute_second_order_integral_images_) {
-    for (unsigned rowIdx = 0; rowIdx < height_; ++rowIdx, data += row_stride,
-                  previous_row = current_row, current_row += (width_ + 1),
+    for (unsigned rowIdx = 0; rowIdx < height_; ++rowIdx,
+                  data += row_stride,
+                  previous_row = current_row,
+                  current_row += (width_ + 1),
                   count_previous_row = count_current_row,
                   count_current_row += (width_ + 1)) {
       current_row[0] = 0.0;
@@ -425,10 +438,13 @@ pcl::IntegralImage2D<DataType, 1>::computeIntegralImages (const DataType *data,
     SecondOrderType *so_current_row = so_previous_row + (width_ + 1);
     memset (so_previous_row, 0, sizeof (SecondOrderType) * (width_ + 1));
 
-    for (unsigned rowIdx = 0; rowIdx < height_; ++rowIdx, data += row_stride,
-                  previous_row = current_row, current_row += (width_ + 1),
+    for (unsigned rowIdx = 0; rowIdx < height_; ++rowIdx,
+                  data += row_stride,
+                  previous_row = current_row,
+                  current_row += (width_ + 1),
                   count_previous_row = count_current_row,
-                  count_current_row += (width_ + 1), so_previous_row = so_current_row,
+                  count_current_row += (width_ + 1),
+                  so_previous_row = so_current_row,
                   so_current_row += (width_ + 1)) {
       current_row[0] = 0.0;
       so_current_row[0] = 0.0;

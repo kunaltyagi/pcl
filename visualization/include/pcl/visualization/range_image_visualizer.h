@@ -62,8 +62,10 @@ namespace pcl
       /** Get a widget visualizing the given range image.
        *  You are responsible for deleting it after usage! */
       static RangeImageVisualizer *
-      getRangeImageWidget (const pcl::RangeImage &range_image, float min_value,
-                           float max_value, bool grayscale,
+      getRangeImageWidget (const pcl::RangeImage &range_image,
+                           float min_value,
+                           float max_value,
+                           bool grayscale,
                            const std::string &name = "Range image");
 
       /** Visualize the given range image and the detected borders in it.
@@ -71,7 +73,9 @@ namespace pcl
        * marked bright blue. */
       void
       visualizeBorders (
-          const pcl::RangeImage &range_image, float min_value, float max_value,
+          const pcl::RangeImage &range_image,
+          float min_value,
+          float max_value,
           bool grayscale,
           const pcl::PointCloud<pcl::BorderDescription> &border_descriptions);
 
@@ -79,7 +83,9 @@ namespace pcl
        * after usage! */
       static RangeImageVisualizer *
       getRangeImageBordersWidget (
-          const pcl::RangeImage &range_image, float min_value, float max_value,
+          const pcl::RangeImage &range_image,
+          float min_value,
+          float max_value,
           bool grayscale,
           const pcl::PointCloud<pcl::BorderDescription> &border_descriptions,
           const std::string &name = "Range image with borders");
@@ -88,14 +94,16 @@ namespace pcl
        *  -PI and PI will return the same color
        *  You are responsible for deleting it after usage! */
       static RangeImageVisualizer *
-      getAnglesWidget (const pcl::RangeImage &range_image, float *angles_image,
+      getAnglesWidget (const pcl::RangeImage &range_image,
+                       float *angles_image,
                        const std::string &name);
 
       /** Get a widget visualizing the given angle image (assuming values in (-PI/2,
        * PI/2]). -PI/2 and PI/2 will return the same color You are responsible for
        * deleting it after usage! */
       static RangeImageVisualizer *
-      getHalfAnglesWidget (const pcl::RangeImage &range_image, float *angles_image,
+      getHalfAnglesWidget (const pcl::RangeImage &range_image,
+                           float *angles_image,
                            const std::string &name);
 
       /** Get a widget visualizing the interest values and extracted interest points.
@@ -103,8 +111,10 @@ namespace pcl
        *  You are responsible for deleting it after usage! */
       static RangeImageVisualizer *
       getInterestPointsWidget (
-          const pcl::RangeImage &range_image, const float *interest_image,
-          float min_value, float max_value,
+          const pcl::RangeImage &range_image,
+          const float *interest_image,
+          float min_value,
+          float max_value,
           const pcl::PointCloud<pcl::InterestPoint> &interest_points,
           const std::string &name);
 

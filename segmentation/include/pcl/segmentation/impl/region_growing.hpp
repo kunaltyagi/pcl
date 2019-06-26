@@ -289,7 +289,8 @@ pcl::RegionGrowing<PointT, NormalT>::extract (std::vector<pcl::PointIndices> &cl
   clusters.resize (clusters_.size ());
   std::vector<pcl::PointIndices>::iterator cluster_iter_input = clusters.begin ();
   for (std::vector<pcl::PointIndices>::const_iterator cluster_iter = clusters_.begin ();
-       cluster_iter != clusters_.end (); cluster_iter++) {
+       cluster_iter != clusters_.end ();
+       cluster_iter++) {
     if ((static_cast<int> (cluster_iter->indices.size ()) >= min_pts_per_cluster_) &&
         (static_cast<int> (cluster_iter->indices.size ()) <= max_pts_per_cluster_)) {
       *cluster_iter_input = *cluster_iter;
@@ -478,8 +479,10 @@ pcl::RegionGrowing<PointT, NormalT>::growRegion (int initial_seed, int segment_n
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT, typename NormalT>
 bool
-pcl::RegionGrowing<PointT, NormalT>::validatePoint (int initial_seed, int point,
-                                                    int nghbr, bool &is_a_seed) const
+pcl::RegionGrowing<PointT, NormalT>::validatePoint (int initial_seed,
+                                                    int point,
+                                                    int nghbr,
+                                                    bool &is_a_seed) const
 {
   is_a_seed = true;
 
@@ -612,7 +615,8 @@ pcl::RegionGrowing<PointT, NormalT>::getSegmentFromPoint (int index,
           segment_was_found = true;
           cluster.indices.clear ();
           cluster.indices.reserve (i_segment->indices.size ());
-          std::copy (i_segment->indices.begin (), i_segment->indices.end (),
+          std::copy (i_segment->indices.begin (),
+                     i_segment->indices.end (),
                      std::back_inserter (cluster.indices));
           break;
         }
@@ -662,7 +666,8 @@ pcl::RegionGrowing<PointT, NormalT>::getColoredCloud ()
     for (auto i_segment = clusters_.cbegin (); i_segment != clusters_.cend ();
          i_segment++) {
       for (auto i_point = i_segment->indices.cbegin ();
-           i_point != i_segment->indices.cend (); i_point++) {
+           i_point != i_segment->indices.cend ();
+           i_point++) {
         int index;
         index = *i_point;
         colored_cloud->points[index].r = colors[3 * next_color];
@@ -713,7 +718,8 @@ pcl::RegionGrowing<PointT, NormalT>::getColoredCloudRGBA ()
     for (auto i_segment = clusters_.cbegin (); i_segment != clusters_.cend ();
          i_segment++) {
       for (auto i_point = i_segment->indices.cbegin ();
-           i_point != i_segment->indices.cend (); i_point++) {
+           i_point != i_segment->indices.cend ();
+           i_point++) {
         int index = *i_point;
         colored_cloud->points[index].r = colors[3 * next_color];
         colored_cloud->points[index].g = colors[3 * next_color + 1];

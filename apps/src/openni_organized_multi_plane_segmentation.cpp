@@ -67,8 +67,8 @@ class OpenNIOrganizedMultiPlaneSegmentation
     pcl::visualization::PCLVisualizer::Ptr viewer (
         new pcl::visualization::PCLVisualizer ("Viewer"));
     viewer->setBackgroundColor (0, 0, 0);
-    pcl::visualization::PointCloudColorHandlerCustom<PointT> single_color (cloud, 0,
-                                                                           255, 0);
+    pcl::visualization::PointCloudColorHandlerCustom<PointT> single_color (
+        cloud, 0, 255, 0);
     viewer->addPointCloud<PointT> (cloud, single_color, "cloud");
     viewer->setPointCloudRenderingProperties (
         pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "cloud");

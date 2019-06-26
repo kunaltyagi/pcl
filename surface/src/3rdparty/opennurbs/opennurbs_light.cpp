@@ -356,11 +356,16 @@ ON_Light::GetBBox ( // returns true if successful
   }
 
   if (rc && points.Count () > 0) {
-    rc =
-        ON_GetPointListBoundingBox (3, 0, points.Count (), 3, (double *)points.Array (),
-                                    boxmin, boxmax, bGrowBox ? true : false)
-            ? true
-            : false;
+    rc = ON_GetPointListBoundingBox (3,
+                                     0,
+                                     points.Count (),
+                                     3,
+                                     (double *)points.Array (),
+                                     boxmin,
+                                     boxmax,
+                                     bGrowBox ? true : false)
+             ? true
+             : false;
   }
 
   return rc;
@@ -403,10 +408,7 @@ ON_Light::Enable (ON_BOOL32 b)
 }
 
 ON_BOOL32
-ON_Light::IsEnabled () const
-{
-  return m_bOn;
-}
+ON_Light::IsEnabled () const { return m_bOn; }
 
 ON::light_style
 ON_Light::Style () const
@@ -832,7 +834,8 @@ ON_Light::CoordinateSystem () const // determined by style
 }
 
 ON_BOOL32
-ON_Light::GetLightXform (const ON_Viewport &vp, ON::coordinate_system dest_cs,
+ON_Light::GetLightXform (const ON_Viewport &vp,
+                         ON::coordinate_system dest_cs,
                          ON_Xform &xform) const
 {
   ON::coordinate_system src_cs = CoordinateSystem ();

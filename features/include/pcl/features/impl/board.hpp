@@ -85,7 +85,8 @@ pcl::BOARDLocalReferenceFrameEstimation<PointInT, PointNT, PointOutT>::
 template <typename PointInT, typename PointNT, typename PointOutT>
 float
 pcl::BOARDLocalReferenceFrameEstimation<PointInT, PointNT, PointOutT>::
-    getAngleBetweenUnitVectors (Eigen::Vector3f const &v1, Eigen::Vector3f const &v2,
+    getAngleBetweenUnitVectors (Eigen::Vector3f const &v1,
+                                Eigen::Vector3f const &v2,
                                 Eigen::Vector3f const &axis)
 {
   Eigen::Vector3f angle_orientation;
@@ -141,7 +142,8 @@ pcl::BOARDLocalReferenceFrameEstimation<PointInT, PointNT, PointOutT>::
 template <typename PointInT, typename PointNT, typename PointOutT>
 void
 pcl::BOARDLocalReferenceFrameEstimation<PointInT, PointNT, PointOutT>::planeFitting (
-    Eigen::Matrix<float, Eigen::Dynamic, 3> const &points, Eigen::Vector3f &center,
+    Eigen::Matrix<float, Eigen::Dynamic, 3> const &points,
+    Eigen::Vector3f &center,
     Eigen::Vector3f &norm)
 {
   // -----------------------------------------------------
@@ -249,8 +251,8 @@ pcl::BOARDLocalReferenceFrameEstimation<PointInT, PointNT, PointOutT>::computePo
 
   // extract support points for Rx radius
   if (tangent_radius_ != 0.0f && search_parameter_ != tangent_radius_) {
-    n_neighbours = this->searchForNeighbors (index, tangent_radius_, neighbours_indices,
-                                             neighbours_distances);
+    n_neighbours = this->searchForNeighbors (
+        index, tangent_radius_, neighbours_indices, neighbours_distances);
   }
 
   // find point with the "most different" normal (with respect to fittedNormal)
@@ -306,7 +308,8 @@ pcl::BOARDLocalReferenceFrameEstimation<PointInT, PointNT, PointOutT>::computePo
     if (find_holes_) {
       // find angle with respect to random axis previously calculated
       Eigen::Vector3f indicating_normal_vect;
-      directedOrthogonalAxis (fitted_normal, input_->at (index).getVector3fMap (),
+      directedOrthogonalAxis (fitted_normal,
+                              input_->at (index).getVector3fMap (),
                               surface_->at (curr_neigh_idx).getVector3fMap (),
                               indicating_normal_vect);
       float angle =
@@ -356,8 +359,10 @@ pcl::BOARDLocalReferenceFrameEstimation<PointInT, PointNT, PointOutT>::computePo
     }
     // find orthogonal axis directed to minNormalIndex point projection on plane with
     // fittedNormal as axis
-    directedOrthogonalAxis (fitted_normal, input_->at (index).getVector3fMap (),
-                            surface_->at (min_normal_index).getVector3fMap (), x_axis);
+    directedOrthogonalAxis (fitted_normal,
+                            input_->at (index).getVector3fMap (),
+                            surface_->at (min_normal_index).getVector3fMap (),
+                            x_axis);
     y_axis = fitted_normal.cross (x_axis);
 
     lrf.row (0).matrix () = x_axis;
@@ -370,8 +375,10 @@ pcl::BOARDLocalReferenceFrameEstimation<PointInT, PointNT, PointOutT>::computePo
   if (!find_holes_) {
     if (best_point_found_on_margins) {
       // if most inclined normal is on support margin
-      directedOrthogonalAxis (fitted_normal, input_->at (index).getVector3fMap (),
-                              best_margin_point, x_axis);
+      directedOrthogonalAxis (fitted_normal,
+                              input_->at (index).getVector3fMap (),
+                              best_margin_point,
+                              x_axis);
       y_axis = fitted_normal.cross (x_axis);
 
       lrf.row (0).matrix () = x_axis;
@@ -387,8 +394,10 @@ pcl::BOARDLocalReferenceFrameEstimation<PointInT, PointNT, PointOutT>::computePo
       return (std::numeric_limits<float>::max ());
     }
 
-    directedOrthogonalAxis (fitted_normal, input_->at (index).getVector3fMap (),
-                            surface_->at (min_normal_index).getVector3fMap (), x_axis);
+    directedOrthogonalAxis (fitted_normal,
+                            input_->at (index).getVector3fMap (),
+                            surface_->at (min_normal_index).getVector3fMap (),
+                            x_axis);
     y_axis = fitted_normal.cross (x_axis);
 
     lrf.row (0).matrix () = x_axis;
@@ -410,8 +419,10 @@ pcl::BOARDLocalReferenceFrameEstimation<PointInT, PointNT, PointOutT>::computePo
   if (!is_hole_present) {
     if (best_point_found_on_margins) {
       // if most inclined normal is on support margin
-      directedOrthogonalAxis (fitted_normal, input_->at (index).getVector3fMap (),
-                              best_margin_point, x_axis);
+      directedOrthogonalAxis (fitted_normal,
+                              input_->at (index).getVector3fMap (),
+                              best_margin_point,
+                              x_axis);
       y_axis = fitted_normal.cross (x_axis);
 
       lrf.row (0).matrix () = x_axis;
@@ -429,8 +440,10 @@ pcl::BOARDLocalReferenceFrameEstimation<PointInT, PointNT, PointOutT>::computePo
 
     // find orthogonal axis directed to minNormalIndex point projection on plane with
     // fittedNormal as axis
-    directedOrthogonalAxis (fitted_normal, input_->at (index).getVector3fMap (),
-                            surface_->at (min_normal_index).getVector3fMap (), x_axis);
+    directedOrthogonalAxis (fitted_normal,
+                            input_->at (index).getVector3fMap (),
+                            surface_->at (min_normal_index).getVector3fMap (),
+                            x_axis);
     y_axis = fitted_normal.cross (x_axis);
 
     lrf.row (0).matrix () = x_axis;
@@ -546,8 +559,10 @@ pcl::BOARDLocalReferenceFrameEstimation<PointInT, PointNT, PointOutT>::computePo
   } else {
     if (best_point_found_on_margins) {
       // if most inclined normal is on support margin
-      directedOrthogonalAxis (fitted_normal, input_->at (index).getVector3fMap (),
-                              best_margin_point, x_axis);
+      directedOrthogonalAxis (fitted_normal,
+                              input_->at (index).getVector3fMap (),
+                              best_margin_point,
+                              x_axis);
     } else {
       // Check if we are not in a degenerate case (all the neighboring normals are NaNs)
       if (min_normal_index == -1) {
@@ -557,7 +572,8 @@ pcl::BOARDLocalReferenceFrameEstimation<PointInT, PointNT, PointOutT>::computePo
 
       // find orthogonal axis directed to minNormalIndex point projection on plane with
       // fittedNormal as axis
-      directedOrthogonalAxis (fitted_normal, input_->at (index).getVector3fMap (),
+      directedOrthogonalAxis (fitted_normal,
+                              input_->at (index).getVector3fMap (),
                               surface_->at (min_normal_index).getVector3fMap (),
                               x_axis);
     }

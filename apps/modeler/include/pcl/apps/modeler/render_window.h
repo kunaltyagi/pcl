@@ -51,7 +51,8 @@ namespace pcl
     class RenderWindow : public QVTKWidget
     {
       public:
-      RenderWindow (RenderWindowItem *render_window_item, QWidget *parent = nullptr,
+      RenderWindow (RenderWindowItem *render_window_item,
+                    QWidget *parent = nullptr,
                     Qt::WindowFlags flags = nullptr);
       ~RenderWindow ();
 

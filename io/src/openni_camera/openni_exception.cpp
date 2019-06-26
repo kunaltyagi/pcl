@@ -44,7 +44,8 @@ namespace openni_wrapper
 {
 
   OpenNIException::OpenNIException (const std::string &function_name,
-                                    const std::string &file_name, unsigned line_number,
+                                    const std::string &file_name,
+                                    unsigned line_number,
                                     const std::string &message) throw ()
       : function_name_ (function_name), file_name_ (file_name),
         line_number_ (line_number), message_ (message)

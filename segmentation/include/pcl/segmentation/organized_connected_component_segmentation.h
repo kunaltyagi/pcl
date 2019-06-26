@@ -120,7 +120,8 @@ namespace pcl
      * the label corresponding to start_idx
      */
     static void
-    findLabeledRegionBoundary (int start_idx, PointCloudLPtr labels,
+    findLabeledRegionBoundary (int start_idx,
+                               PointCloudLPtr labels,
                                pcl::PointIndices &boundary_indices);
 
     protected:

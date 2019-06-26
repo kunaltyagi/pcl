@@ -137,8 +137,11 @@ namespace pcl
       integral (void) const;
 
       void
-      getSolutions (double c, std::vector<double> &roots, double EPS,
-                    double min = -DBL_MAX, double max = DBL_MAX) const;
+      getSolutions (double c,
+                    std::vector<double> &roots,
+                    double EPS,
+                    double min = -DBL_MAX,
+                    double max = DBL_MAX) const;
 
       void
       printnl (void) const;

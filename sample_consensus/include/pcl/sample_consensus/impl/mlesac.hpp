@@ -66,8 +66,8 @@ pcl::MaximumLikelihoodSampleConsensus<PointT>::computeModel (int debug_verbosity
   std::vector<double> distances;
 
   // Compute sigma - remember to set threshold_ correctly !
-  sigma_ = computeMedianAbsoluteDeviation (sac_model_->getInputCloud (),
-                                           sac_model_->getIndices (), threshold_);
+  sigma_ = computeMedianAbsoluteDeviation (
+      sac_model_->getInputCloud (), sac_model_->getIndices (), threshold_);
   if (debug_verbosity_level > 1)
     PCL_DEBUG ("[pcl::MaximumLikelihoodSampleConsensus::computeModel] Estimated sigma "
                "value: %f.\n",
@@ -169,7 +169,9 @@ pcl::MaximumLikelihoodSampleConsensus<PointT>::computeModel (int debug_verbosity
     if (debug_verbosity_level > 1)
       PCL_DEBUG ("[pcl::MaximumLikelihoodSampleConsensus::computeModel] Trial %d out "
                  "of %d. Best penalty is %f.\n",
-                 iterations_, static_cast<int> (ceil (k)), d_best_penalty);
+                 iterations_,
+                 static_cast<int> (ceil (k)),
+                 d_best_penalty);
     if (iterations_ > max_iterations_) {
       if (debug_verbosity_level > 0)
         PCL_DEBUG ("[pcl::MaximumLikelihoodSampleConsensus::computeModel] MLESAC "
@@ -192,7 +194,8 @@ pcl::MaximumLikelihoodSampleConsensus<PointT>::computeModel (int debug_verbosity
   if (distances.size () != indices.size ()) {
     PCL_ERROR ("[pcl::MaximumLikelihoodSampleConsensus::computeModel] Estimated "
                "distances (%lu) differs than the normal of indices (%lu).\n",
-               distances.size (), indices.size ());
+               distances.size (),
+               indices.size ());
     return (false);
   }
 
@@ -209,7 +212,8 @@ pcl::MaximumLikelihoodSampleConsensus<PointT>::computeModel (int debug_verbosity
   if (debug_verbosity_level > 0)
     PCL_DEBUG ("[pcl::MaximumLikelihoodSampleConsensus::computeModel] Model: %lu size, "
                "%d inliers.\n",
-               model_.size (), n_inliers_count);
+               model_.size (),
+               n_inliers_count);
 
   return (true);
 }
@@ -218,7 +222,8 @@ pcl::MaximumLikelihoodSampleConsensus<PointT>::computeModel (int debug_verbosity
 template <typename PointT>
 double
 pcl::MaximumLikelihoodSampleConsensus<PointT>::computeMedianAbsoluteDeviation (
-    const PointCloudConstPtr &cloud, const boost::shared_ptr<std::vector<int>> &indices,
+    const PointCloudConstPtr &cloud,
+    const boost::shared_ptr<std::vector<int>> &indices,
     double sigma) const
 {
   std::vector<double> distances (indices->size ());
@@ -250,8 +255,10 @@ pcl::MaximumLikelihoodSampleConsensus<PointT>::computeMedianAbsoluteDeviation (
 template <typename PointT>
 void
 pcl::MaximumLikelihoodSampleConsensus<PointT>::getMinMax (
-    const PointCloudConstPtr &cloud, const boost::shared_ptr<std::vector<int>> &indices,
-    Eigen::Vector4f &min_p, Eigen::Vector4f &max_p) const
+    const PointCloudConstPtr &cloud,
+    const boost::shared_ptr<std::vector<int>> &indices,
+    Eigen::Vector4f &min_p,
+    Eigen::Vector4f &max_p) const
 {
   min_p.setConstant (FLT_MAX);
   max_p.setConstant (-FLT_MAX);
@@ -278,7 +285,8 @@ pcl::MaximumLikelihoodSampleConsensus<PointT>::getMinMax (
 template <typename PointT>
 void
 pcl::MaximumLikelihoodSampleConsensus<PointT>::computeMedian (
-    const PointCloudConstPtr &cloud, const boost::shared_ptr<std::vector<int>> &indices,
+    const PointCloudConstPtr &cloud,
+    const boost::shared_ptr<std::vector<int>> &indices,
     Eigen::Vector4f &median) const
 {
   // Copy the values to vectors for faster sorting

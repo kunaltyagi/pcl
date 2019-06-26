@@ -30,8 +30,14 @@ namespace pcl
       }
 
       void
-      setParameters (int width, int height, float fx, float fy, float cx, float cy,
-                     float z_near, float z_far);
+      setParameters (int width,
+                     int height,
+                     float fx,
+                     float fy,
+                     float cx,
+                     float cy,
+                     float z_near,
+                     float z_far);
 
       Eigen::Matrix4f
       getProjectionMatrix ()

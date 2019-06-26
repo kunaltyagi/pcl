@@ -72,8 +72,12 @@ struct HaarFeature64 {
 #define HaarFeature64_CreateCheck_MaxRectField 0xFF
 
   __host__ NCVStatus
-  setRect (Ncv32u rectX, Ncv32u rectY, Ncv32u rectWidth, Ncv32u rectHeight,
-           Ncv32u /*clsWidth*/, Ncv32u /*clsHeight*/)
+  setRect (Ncv32u rectX,
+           Ncv32u rectY,
+           Ncv32u rectWidth,
+           Ncv32u rectHeight,
+           Ncv32u /*clsWidth*/,
+           Ncv32u /*clsHeight*/)
   {
     ncvAssertReturn (rectWidth <= HaarFeature64_CreateCheck_MaxRectField &&
                          rectHeight <= HaarFeature64_CreateCheck_MaxRectField,
@@ -122,7 +126,10 @@ struct HaarFeatureDescriptor32 {
 
   public:
   __host__ NCVStatus
-  create (NcvBool bTilted, NcvBool bLeftLeaf, NcvBool bRightLeaf, Ncv32u numFeatures,
+  create (NcvBool bTilted,
+          NcvBool bLeftLeaf,
+          NcvBool bRightLeaf,
+          Ncv32u numFeatures,
           Ncv32u offsetFeatures)
   {
     if (numFeatures > HaarFeatureDescriptor32_CreateCheck_MaxNumFeatures) {
@@ -365,45 +372,63 @@ enum {
 };
 
 NCV_EXPORTS NCVStatus
-ncvDetectObjectsMultiScale_device (
-    NCVMatrix<Ncv8u> &d_srcImg, NcvSize32u srcRoi, NCVVector<NcvRect32u> &d_dstRects,
-    Ncv32u &dstNumRects,
+ncvDetectObjectsMultiScale_device (NCVMatrix<Ncv8u> &d_srcImg,
+                                   NcvSize32u srcRoi,
+                                   NCVVector<NcvRect32u> &d_dstRects,
+                                   Ncv32u &dstNumRects,
 
-    HaarClassifierCascadeDescriptor &haar, NCVVector<HaarStage64> &h_HaarStages,
-    NCVVector<HaarStage64> &d_HaarStages, NCVVector<HaarClassifierNode128> &d_HaarNodes,
-    NCVVector<HaarFeature64> &d_HaarFeatures,
+                                   HaarClassifierCascadeDescriptor &haar,
+                                   NCVVector<HaarStage64> &h_HaarStages,
+                                   NCVVector<HaarStage64> &d_HaarStages,
+                                   NCVVector<HaarClassifierNode128> &d_HaarNodes,
+                                   NCVVector<HaarFeature64> &d_HaarFeatures,
 
-    NcvSize32u minObjSize,
-    Ncv32u minNeighbors, // default 4
-    Ncv32f scaleStep,    // default 1.2f
-    Ncv32u pixelStep,    // default 1
-    Ncv32u flags,        // default NCVPipeObjDet_Default
+                                   NcvSize32u minObjSize,
+                                   Ncv32u minNeighbors, // default 4
+                                   Ncv32f scaleStep,    // default 1.2f
+                                   Ncv32u pixelStep,    // default 1
+                                   Ncv32u flags,        // default NCVPipeObjDet_Default
 
-    INCVMemAllocator &gpuAllocator, INCVMemAllocator &cpuAllocator,
-    cudaDeviceProp &devProp, cudaStream_t cuStream);
+                                   INCVMemAllocator &gpuAllocator,
+                                   INCVMemAllocator &cpuAllocator,
+                                   cudaDeviceProp &devProp,
+                                   cudaStream_t cuStream);
 
 #define OBJDET_MASK_ELEMENT_INVALID_32U 0xFFFFFFFF
 #define HAAR_STDDEV_BORDER 1
 
 NCV_EXPORTS NCVStatus
-ncvApplyHaarClassifierCascade_device (
-    NCVMatrix<Ncv32u> &d_integralImage, NCVMatrix<Ncv32f> &d_weights,
-    NCVMatrixAlloc<Ncv32u> &d_pixelMask, Ncv32u &numDetections,
-    HaarClassifierCascadeDescriptor &haar, NCVVector<HaarStage64> &h_HaarStages,
-    NCVVector<HaarStage64> &d_HaarStages, NCVVector<HaarClassifierNode128> &d_HaarNodes,
-    NCVVector<HaarFeature64> &d_HaarFeatures, NcvBool bMaskElements,
-    NcvSize32u anchorsRoi, Ncv32u pixelStep, Ncv32f scaleArea,
-    INCVMemAllocator &gpuAllocator, INCVMemAllocator &cpuAllocator,
-    cudaDeviceProp &devProp, cudaStream_t cuStream);
+ncvApplyHaarClassifierCascade_device (NCVMatrix<Ncv32u> &d_integralImage,
+                                      NCVMatrix<Ncv32f> &d_weights,
+                                      NCVMatrixAlloc<Ncv32u> &d_pixelMask,
+                                      Ncv32u &numDetections,
+                                      HaarClassifierCascadeDescriptor &haar,
+                                      NCVVector<HaarStage64> &h_HaarStages,
+                                      NCVVector<HaarStage64> &d_HaarStages,
+                                      NCVVector<HaarClassifierNode128> &d_HaarNodes,
+                                      NCVVector<HaarFeature64> &d_HaarFeatures,
+                                      NcvBool bMaskElements,
+                                      NcvSize32u anchorsRoi,
+                                      Ncv32u pixelStep,
+                                      Ncv32f scaleArea,
+                                      INCVMemAllocator &gpuAllocator,
+                                      INCVMemAllocator &cpuAllocator,
+                                      cudaDeviceProp &devProp,
+                                      cudaStream_t cuStream);
 
 NCV_EXPORTS NCVStatus
-ncvApplyHaarClassifierCascade_host (
-    NCVMatrix<Ncv32u> &h_integralImage, NCVMatrix<Ncv32f> &h_weights,
-    NCVMatrixAlloc<Ncv32u> &h_pixelMask, Ncv32u &numDetections,
-    HaarClassifierCascadeDescriptor &haar, NCVVector<HaarStage64> &h_HaarStages,
-    NCVVector<HaarClassifierNode128> &h_HaarNodes,
-    NCVVector<HaarFeature64> &h_HaarFeatures, NcvBool bMaskElements,
-    NcvSize32u anchorsRoi, Ncv32u pixelStep, Ncv32f scaleArea);
+ncvApplyHaarClassifierCascade_host (NCVMatrix<Ncv32u> &h_integralImage,
+                                    NCVMatrix<Ncv32f> &h_weights,
+                                    NCVMatrixAlloc<Ncv32u> &h_pixelMask,
+                                    Ncv32u &numDetections,
+                                    HaarClassifierCascadeDescriptor &haar,
+                                    NCVVector<HaarStage64> &h_HaarStages,
+                                    NCVVector<HaarClassifierNode128> &h_HaarNodes,
+                                    NCVVector<HaarFeature64> &h_HaarFeatures,
+                                    NcvBool bMaskElements,
+                                    NcvSize32u anchorsRoi,
+                                    Ncv32u pixelStep,
+                                    Ncv32f scaleArea);
 
 #define RECT_SIMILARITY_PROPORTION 0.2f
 
@@ -411,20 +436,28 @@ NCV_EXPORTS NCVStatus
 ncvGrowDetectionsVector_device (NCVVector<Ncv32u> &pixelMask,
                                 Ncv32u numPixelMaskDetections,
                                 NCVVector<NcvRect32u> &hypotheses,
-                                Ncv32u &totalDetections, Ncv32u totalMaxDetections,
-                                Ncv32u rectWidth, Ncv32u rectHeight, Ncv32f curScale,
+                                Ncv32u &totalDetections,
+                                Ncv32u totalMaxDetections,
+                                Ncv32u rectWidth,
+                                Ncv32u rectHeight,
+                                Ncv32f curScale,
                                 cudaStream_t cuStream);
 
 NCV_EXPORTS NCVStatus
 ncvGrowDetectionsVector_host (NCVVector<Ncv32u> &pixelMask,
                               Ncv32u numPixelMaskDetections,
                               NCVVector<NcvRect32u> &hypotheses,
-                              Ncv32u &totalDetections, Ncv32u totalMaxDetections,
-                              Ncv32u rectWidth, Ncv32u rectHeight, Ncv32f curScale);
+                              Ncv32u &totalDetections,
+                              Ncv32u totalMaxDetections,
+                              Ncv32u rectWidth,
+                              Ncv32u rectHeight,
+                              Ncv32f curScale);
 
 NCV_EXPORTS NCVStatus
-ncvHaarGetClassifierSize (const std::string &filename, Ncv32u &numStages,
-                          Ncv32u &numNodes, Ncv32u &numFeatures);
+ncvHaarGetClassifierSize (const std::string &filename,
+                          Ncv32u &numStages,
+                          Ncv32u &numNodes,
+                          Ncv32u &numFeatures);
 
 NCV_EXPORTS NCVStatus
 ncvHaarLoadFromFile_host (const std::string &filename,

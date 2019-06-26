@@ -82,9 +82,10 @@ pcl::cloud_composer::MergeSelection::performAction (ConstItemList input_data,
                                  .value<Eigen::Quaternionf> ();
         pose_found = true;
       }
-      CloudItem *new_cloud_item =
-          new CloudItem (input_cloud_item->text (), original_minus_indices,
-                         source_origin, source_orientation);
+      CloudItem *new_cloud_item = new CloudItem (input_cloud_item->text (),
+                                                 original_minus_indices,
+                                                 source_origin,
+                                                 source_orientation);
       output.append (new_cloud_item);
       pcl::PCLPointCloud2::Ptr temp_cloud = boost::make_shared<pcl::PCLPointCloud2> ();
       concatenatePointCloud (*merged_cloud, *selected_points, *temp_cloud);
@@ -104,8 +105,8 @@ pcl::cloud_composer::MergeSelection::performAction (ConstItemList input_data,
     merged_cloud = temp_cloud;
   }
 
-  CloudItem *cloud_item = new CloudItem ("Cloud from Selection", merged_cloud,
-                                         source_origin, source_orientation);
+  CloudItem *cloud_item = new CloudItem (
+      "Cloud from Selection", merged_cloud, source_origin, source_orientation);
 
   output.append (cloud_item);
 

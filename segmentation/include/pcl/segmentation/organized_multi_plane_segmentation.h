@@ -274,7 +274,8 @@ namespace pcl
         std::vector<PlanarRegion<PointT>,
                     Eigen::aligned_allocator<PlanarRegion<PointT>>> &regions,
         std::vector<ModelCoefficients> &model_coefficients,
-        std::vector<PointIndices> &inlier_indices, PointCloudLPtr &labels,
+        std::vector<PointIndices> &inlier_indices,
+        PointCloudLPtr &labels,
         std::vector<pcl::PointIndices> &label_indices,
         std::vector<pcl::PointIndices> &boundary_indices);
 
@@ -294,7 +295,8 @@ namespace pcl
                 &centroids,
             std::vector<Eigen::Matrix3f, Eigen::aligned_allocator<Eigen::Matrix3f>>
                 &covariances,
-            PointCloudLPtr &labels, std::vector<pcl::PointIndices> &label_indices);
+            PointCloudLPtr &labels,
+            std::vector<pcl::PointIndices> &label_indices);
 
     protected:
     /** \brief A pointer to the input normals */

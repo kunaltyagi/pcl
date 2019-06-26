@@ -165,7 +165,8 @@ pcl::UnaryClassifier<PointT>::findClusters (typename pcl::PointCloud<PointT>::Pt
 template <typename PointT>
 void
 pcl::UnaryClassifier<PointT>::getCloudWithLabel (
-    typename pcl::PointCloud<PointT>::Ptr in, pcl::PointCloud<pcl::PointXYZ>::Ptr out,
+    typename pcl::PointCloud<PointT>::Ptr in,
+    pcl::PointCloud<pcl::PointXYZ>::Ptr out,
     int label_num)
 {
   // find the 'label' field index
@@ -202,7 +203,8 @@ template <typename PointT>
 void
 pcl::UnaryClassifier<PointT>::computeFPFH (
     pcl::PointCloud<pcl::PointXYZ>::Ptr in,
-    pcl::PointCloud<pcl::FPFHSignature33>::Ptr out, float normal_radius_search,
+    pcl::PointCloud<pcl::FPFHSignature33>::Ptr out,
+    float normal_radius_search,
     float fpfh_radius_search)
 {
   pcl::PointCloud<pcl::Normal>::Ptr normals (new pcl::PointCloud<pcl::Normal> ());
@@ -233,7 +235,8 @@ template <typename PointT>
 void
 pcl::UnaryClassifier<PointT>::kmeansClustering (
     pcl::PointCloud<pcl::FPFHSignature33>::Ptr in,
-    pcl::PointCloud<pcl::FPFHSignature33>::Ptr out, int k)
+    pcl::PointCloud<pcl::FPFHSignature33>::Ptr out,
+    int k)
 {
   pcl::Kmeans kmeans (static_cast<int> (in->points.size ()), 33);
   kmeans.setClusterSize (k);
@@ -271,7 +274,8 @@ template <typename PointT>
 void
 pcl::UnaryClassifier<PointT>::queryFeatureDistances (
     std::vector<pcl::PointCloud<pcl::FPFHSignature33>::Ptr> &trained_features,
-    pcl::PointCloud<pcl::FPFHSignature33>::Ptr query_features, std::vector<int> &indi,
+    pcl::PointCloud<pcl::FPFHSignature33>::Ptr query_features,
+    std::vector<int> &indi,
     std::vector<float> &dist)
 {
   // estimate the total number of row's needed
@@ -308,7 +312,8 @@ pcl::UnaryClassifier<PointT>::queryFeatureDistances (
   for (size_t i = 0; i < query_features->points.size (); i++) {
     // Query point
     flann::Matrix<float> p = flann::Matrix<float> (new float[n_col], 1, n_col);
-    memcpy (&p.ptr ()[0], query_features->points[i].histogram,
+    memcpy (&p.ptr ()[0],
+            query_features->points[i].histogram,
             p.cols * p.rows * sizeof (float));
 
     flann::Matrix<int> indices (new int[k], 1, k);
@@ -420,8 +425,8 @@ pcl::UnaryClassifier<PointT>::segment (pcl::PointCloud<pcl::PointXYZRGBL>::Ptr &
     // compute FPFH feature histograms for all point of the input point cloud
     pcl::PointCloud<pcl::FPFHSignature33>::Ptr input_cloud_features (
         new pcl::PointCloud<pcl::FPFHSignature33>);
-    computeFPFH (tmp_cloud, input_cloud_features, normal_radius_search_,
-                 fpfh_radius_search_);
+    computeFPFH (
+        tmp_cloud, input_cloud_features, normal_radius_search_, fpfh_radius_search_);
 
     // query the distances from the input data features to all trained features
     std::vector<int> indices;

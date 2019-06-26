@@ -415,8 +415,10 @@ pcl::console::initVerbosityLevel ()
   char *pcl_verbosity_level = getenv ("PCL_VERBOSITY_LEVEL");
   if (pcl_verbosity_level) {
     std::string s_pcl_verbosity_level (pcl_verbosity_level);
-    std::transform (s_pcl_verbosity_level.begin (), s_pcl_verbosity_level.end (),
-                    s_pcl_verbosity_level.begin (), toupper);
+    std::transform (s_pcl_verbosity_level.begin (),
+                    s_pcl_verbosity_level.end (),
+                    s_pcl_verbosity_level.begin (),
+                    toupper);
 
     if (s_pcl_verbosity_level.find ("ALWAYS") != std::string::npos)
       s_VerbosityLevel = L_ALWAYS;
@@ -441,8 +443,10 @@ pcl::console::initVerbosityLevel ()
 
 ////////////////////////////////////////////////////////////////////////////////
 void
-pcl::console::print (pcl::console::VERBOSITY_LEVEL level, FILE *stream,
-                     const char *format, ...)
+pcl::console::print (pcl::console::VERBOSITY_LEVEL level,
+                     FILE *stream,
+                     const char *format,
+                     ...)
 {
   if (!isVerbosityLevelEnabled (level))
     return;

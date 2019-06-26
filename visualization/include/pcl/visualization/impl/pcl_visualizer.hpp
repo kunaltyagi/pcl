@@ -75,7 +75,8 @@
 template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::addPointCloud (
-    const typename pcl::PointCloud<PointT>::ConstPtr &cloud, const std::string &id,
+    const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
+    const std::string &id,
     int viewport)
 {
   // Convert the PointCloud to VTK PolyData
@@ -88,7 +89,8 @@ template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::addPointCloud (
     const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-    const PointCloudGeometryHandler<PointT> &geometry_handler, const std::string &id,
+    const PointCloudGeometryHandler<PointT> &geometry_handler,
+    const std::string &id,
     int viewport)
 {
   if (contains (id)) {
@@ -100,13 +102,20 @@ pcl::visualization::PCLVisualizer::addPointCloud (
 
   if (pcl::traits::has_color<PointT> ()) {
     PointCloudColorHandlerRGBField<PointT> color_handler_rgb_field (cloud);
-    return (fromHandlersToScreen (geometry_handler, color_handler_rgb_field, id,
-                                  viewport, cloud->sensor_origin_,
+    return (fromHandlersToScreen (geometry_handler,
+                                  color_handler_rgb_field,
+                                  id,
+                                  viewport,
+                                  cloud->sensor_origin_,
                                   cloud->sensor_orientation_));
   }
   PointCloudColorHandlerCustom<PointT> color_handler (cloud, 255, 255, 255);
-  return (fromHandlersToScreen (geometry_handler, color_handler, id, viewport,
-                                cloud->sensor_origin_, cloud->sensor_orientation_));
+  return (fromHandlersToScreen (geometry_handler,
+                                color_handler,
+                                id,
+                                viewport,
+                                cloud->sensor_origin_,
+                                cloud->sensor_orientation_));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,7 +123,8 @@ template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::addPointCloud (
     const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-    const GeometryHandlerConstPtr &geometry_handler, const std::string &id,
+    const GeometryHandlerConstPtr &geometry_handler,
+    const std::string &id,
     int viewport)
 {
   if (contains (id)) {
@@ -127,8 +137,12 @@ pcl::visualization::PCLVisualizer::addPointCloud (
 
   // PointCloudColorHandlerRandom<PointT> color_handler (cloud);
   PointCloudColorHandlerCustom<PointT> color_handler (cloud, 255, 255, 255);
-  return (fromHandlersToScreen (geometry_handler, color_handler, id, viewport,
-                                cloud->sensor_origin_, cloud->sensor_orientation_));
+  return (fromHandlersToScreen (geometry_handler,
+                                color_handler,
+                                id,
+                                viewport,
+                                cloud->sensor_origin_,
+                                cloud->sensor_orientation_));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,7 +150,8 @@ template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::addPointCloud (
     const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-    const PointCloudColorHandler<PointT> &color_handler, const std::string &id,
+    const PointCloudColorHandler<PointT> &color_handler,
+    const std::string &id,
     int viewport)
 {
   if (contains (id)) {
@@ -152,8 +167,12 @@ pcl::visualization::PCLVisualizer::addPointCloud (
   }
   // Convert the PointCloud to VTK PolyData
   PointCloudGeometryHandlerXYZ<PointT> geometry_handler (cloud);
-  return (fromHandlersToScreen (geometry_handler, color_handler, id, viewport,
-                                cloud->sensor_origin_, cloud->sensor_orientation_));
+  return (fromHandlersToScreen (geometry_handler,
+                                color_handler,
+                                id,
+                                viewport,
+                                cloud->sensor_origin_,
+                                cloud->sensor_orientation_));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,7 +180,9 @@ template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::addPointCloud (
     const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-    const ColorHandlerConstPtr &color_handler, const std::string &id, int viewport)
+    const ColorHandlerConstPtr &color_handler,
+    const std::string &id,
+    int viewport)
 {
   // Check to see if this entry already exists (has it been already added to the
   // visualizer?)
@@ -174,8 +195,12 @@ pcl::visualization::PCLVisualizer::addPointCloud (
   }
 
   PointCloudGeometryHandlerXYZ<PointT> geometry_handler (cloud);
-  return (fromHandlersToScreen (geometry_handler, color_handler, id, viewport,
-                                cloud->sensor_origin_, cloud->sensor_orientation_));
+  return (fromHandlersToScreen (geometry_handler,
+                                color_handler,
+                                id,
+                                viewport,
+                                cloud->sensor_origin_,
+                                cloud->sensor_orientation_));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,7 +209,9 @@ bool
 pcl::visualization::PCLVisualizer::addPointCloud (
     const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
     const GeometryHandlerConstPtr &geometry_handler,
-    const ColorHandlerConstPtr &color_handler, const std::string &id, int viewport)
+    const ColorHandlerConstPtr &color_handler,
+    const std::string &id,
+    int viewport)
 {
   // Check to see if this entry already exists (has it been already added to the
   // visualizer?)
@@ -196,8 +223,12 @@ pcl::visualization::PCLVisualizer::addPointCloud (
     am_it->second.color_handlers.push_back (color_handler);
     return (true);
   }
-  return (fromHandlersToScreen (geometry_handler, color_handler, id, viewport,
-                                cloud->sensor_origin_, cloud->sensor_orientation_));
+  return (fromHandlersToScreen (geometry_handler,
+                                color_handler,
+                                id,
+                                viewport,
+                                cloud->sensor_origin_,
+                                cloud->sensor_orientation_));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,7 +237,8 @@ bool
 pcl::visualization::PCLVisualizer::addPointCloud (
     const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
     const PointCloudColorHandler<PointT> &color_handler,
-    const PointCloudGeometryHandler<PointT> &geometry_handler, const std::string &id,
+    const PointCloudGeometryHandler<PointT> &geometry_handler,
+    const std::string &id,
     int viewport)
 {
   if (contains (id)) {
@@ -220,8 +252,12 @@ pcl::visualization::PCLVisualizer::addPointCloud (
     // style_->setCloudActorMap (boost::make_shared<CloudActorMap> (cloud_actor_map_));
     return (false);
   }
-  return (fromHandlersToScreen (geometry_handler, color_handler, id, viewport,
-                                cloud->sensor_origin_, cloud->sensor_orientation_));
+  return (fromHandlersToScreen (geometry_handler,
+                                color_handler,
+                                id,
+                                viewport,
+                                cloud->sensor_origin_,
+                                cloud->sensor_orientation_));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,7 +265,8 @@ template <typename PointT>
 void
 pcl::visualization::PCLVisualizer::convertPointCloudToVTKPolyData (
     const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-    vtkSmartPointer<vtkPolyData> &polydata, vtkSmartPointer<vtkIdTypeArray> &initcells)
+    vtkSmartPointer<vtkPolyData> &polydata,
+    vtkSmartPointer<vtkIdTypeArray> &initcells)
 {
   vtkSmartPointer<vtkCellArray> vertices;
   if (!polydata) {
@@ -288,7 +325,8 @@ template <typename PointT>
 void
 pcl::visualization::PCLVisualizer::convertPointCloudToVTKPolyData (
     const pcl::visualization::PointCloudGeometryHandler<PointT> &geometry_handler,
-    vtkSmartPointer<vtkPolyData> &polydata, vtkSmartPointer<vtkIdTypeArray> &initcells)
+    vtkSmartPointer<vtkPolyData> &polydata,
+    vtkSmartPointer<vtkIdTypeArray> &initcells)
 {
   vtkSmartPointer<vtkCellArray> vertices;
   if (!polydata) {
@@ -319,8 +357,12 @@ pcl::visualization::PCLVisualizer::convertPointCloudToVTKPolyData (
 template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::addPolygon (
-    const typename pcl::PointCloud<PointT>::ConstPtr &cloud, double r, double g,
-    double b, const std::string &id, int viewport)
+    const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
+    double r,
+    double g,
+    double b,
+    const std::string &id,
+    int viewport)
 {
   vtkSmartPointer<vtkDataSet> data = createPolygon<PointT> (cloud);
   if (!data)
@@ -376,8 +418,12 @@ pcl::visualization::PCLVisualizer::addPolygon (
 template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::addPolygon (
-    const pcl::PlanarPolygon<PointT> &polygon, double r, double g, double b,
-    const std::string &id, int viewport)
+    const pcl::PlanarPolygon<PointT> &polygon,
+    double r,
+    double g,
+    double b,
+    const std::string &id,
+    int viewport)
 {
   vtkSmartPointer<vtkDataSet> data = createPolygon<PointT> (polygon);
   if (!data)
@@ -434,7 +480,8 @@ pcl::visualization::PCLVisualizer::addPolygon (
 template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::addPolygon (
-    const typename pcl::PointCloud<PointT>::ConstPtr &cloud, const std::string &id,
+    const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
+    const std::string &id,
     int viewport)
 {
   return (!addPolygon<PointT> (cloud, 0.5, 0.5, 0.5, id, viewport));
@@ -443,8 +490,12 @@ pcl::visualization::PCLVisualizer::addPolygon (
 ////////////////////////////////////////////////////////////////////////////////////////////
 template <typename P1, typename P2>
 bool
-pcl::visualization::PCLVisualizer::addLine (const P1 &pt1, const P2 &pt2, double r,
-                                            double g, double b, const std::string &id,
+pcl::visualization::PCLVisualizer::addLine (const P1 &pt1,
+                                            const P2 &pt2,
+                                            double r,
+                                            double g,
+                                            double b,
+                                            const std::string &id,
                                             int viewport)
 {
   if (contains (id)) {
@@ -473,8 +524,12 @@ pcl::visualization::PCLVisualizer::addLine (const P1 &pt1, const P2 &pt2, double
 ////////////////////////////////////////////////////////////////////////////////////////////
 template <typename P1, typename P2>
 bool
-pcl::visualization::PCLVisualizer::addArrow (const P1 &pt1, const P2 &pt2, double r,
-                                             double g, double b, const std::string &id,
+pcl::visualization::PCLVisualizer::addArrow (const P1 &pt1,
+                                             const P2 &pt2,
+                                             double r,
+                                             double g,
+                                             double b,
+                                             const std::string &id,
                                              int viewport)
 {
   if (contains (id)) {
@@ -504,9 +559,14 @@ pcl::visualization::PCLVisualizer::addArrow (const P1 &pt1, const P2 &pt2, doubl
 ////////////////////////////////////////////////////////////////////////////////////////////
 template <typename P1, typename P2>
 bool
-pcl::visualization::PCLVisualizer::addArrow (const P1 &pt1, const P2 &pt2, double r,
-                                             double g, double b, bool display_length,
-                                             const std::string &id, int viewport)
+pcl::visualization::PCLVisualizer::addArrow (const P1 &pt1,
+                                             const P2 &pt2,
+                                             double r,
+                                             double g,
+                                             double b,
+                                             bool display_length,
+                                             const std::string &id,
+                                             int viewport)
 {
   if (contains (id)) {
     PCL_WARN ("[addArrow] The id <%s> already exists! Please choose a different id and "
@@ -538,11 +598,16 @@ pcl::visualization::PCLVisualizer::addArrow (const P1 &pt1, const P2 &pt2, doubl
 ////////////////////////////////////////////////////////////////////////////////////////////
 template <typename P1, typename P2>
 bool
-pcl::visualization::PCLVisualizer::addArrow (const P1 &pt1, const P2 &pt2,
-                                             double r_line, double g_line,
-                                             double b_line, double r_text,
-                                             double g_text, double b_text,
-                                             const std::string &id, int viewport)
+pcl::visualization::PCLVisualizer::addArrow (const P1 &pt1,
+                                             const P2 &pt2,
+                                             double r_line,
+                                             double g_line,
+                                             double b_line,
+                                             double r_text,
+                                             double g_text,
+                                             double b_text,
+                                             const std::string &id,
+                                             int viewport)
 {
   if (contains (id)) {
     PCL_WARN ("[addArrow] The id <%s> already exists! Please choose a different id and "
@@ -573,8 +638,10 @@ pcl::visualization::PCLVisualizer::addArrow (const P1 &pt1, const P2 &pt2,
 ////////////////////////////////////////////////////////////////////////////////////////////
 template <typename P1, typename P2>
 bool
-pcl::visualization::PCLVisualizer::addLine (const P1 &pt1, const P2 &pt2,
-                                            const std::string &id, int viewport)
+pcl::visualization::PCLVisualizer::addLine (const P1 &pt1,
+                                            const P2 &pt2,
+                                            const std::string &id,
+                                            int viewport)
 {
   return (!addLine (pt1, pt2, 0.5, 0.5, 0.5, id, viewport));
 }
@@ -582,9 +649,13 @@ pcl::visualization::PCLVisualizer::addLine (const P1 &pt1, const P2 &pt2,
 ////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 bool
-pcl::visualization::PCLVisualizer::addSphere (const PointT &center, double radius,
-                                              double r, double g, double b,
-                                              const std::string &id, int viewport)
+pcl::visualization::PCLVisualizer::addSphere (const PointT &center,
+                                              double radius,
+                                              double r,
+                                              double g,
+                                              double b,
+                                              const std::string &id,
+                                              int viewport)
 {
   if (contains (id)) {
     PCL_WARN ("[addSphere] The id <%s> already exists! Please choose a different id "
@@ -629,8 +700,10 @@ pcl::visualization::PCLVisualizer::addSphere (const PointT &center, double radiu
 ////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 bool
-pcl::visualization::PCLVisualizer::addSphere (const PointT &center, double radius,
-                                              const std::string &id, int viewport)
+pcl::visualization::PCLVisualizer::addSphere (const PointT &center,
+                                              double radius,
+                                              const std::string &id,
+                                              int viewport)
 {
   return (addSphere (center, radius, 0.5, 0.5, 0.5, id, viewport));
 }
@@ -638,8 +711,11 @@ pcl::visualization::PCLVisualizer::addSphere (const PointT &center, double radiu
 ////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 bool
-pcl::visualization::PCLVisualizer::updateSphere (const PointT &center, double radius,
-                                                 double r, double g, double b,
+pcl::visualization::PCLVisualizer::updateSphere (const PointT &center,
+                                                 double radius,
+                                                 double r,
+                                                 double g,
+                                                 double b,
                                                  const std::string &id)
 {
   if (!contains (id)) {
@@ -670,9 +746,13 @@ pcl::visualization::PCLVisualizer::updateSphere (const PointT &center, double ra
 template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::addText3D (const std::string &text,
-                                              const PointT &position, double textScale,
-                                              double r, double g, double b,
-                                              const std::string &id, int viewport)
+                                              const PointT &position,
+                                              double textScale,
+                                              double r,
+                                              double g,
+                                              double b,
+                                              const std::string &id,
+                                              int viewport)
 {
   std::string tid;
   if (id.empty ())
@@ -685,7 +765,8 @@ pcl::visualization::PCLVisualizer::addText3D (const std::string &text,
 
   // If there is no custom viewport and the viewport number is not 0, exit
   if (rens_->GetNumberOfItems () <= viewport) {
-    PCL_ERROR ("[addText3D] The viewport [%d] doesn't exist (id <%s>)! ", viewport,
+    PCL_ERROR ("[addText3D] The viewport [%d] doesn't exist (id <%s>)! ",
+               viewport,
                tid.c_str ());
     return false;
   }
@@ -697,7 +778,8 @@ pcl::visualization::PCLVisualizer::addText3D (const std::string &text,
     if (contains (uid)) {
       PCL_ERROR ("[addText3D] The id <%s> already exists in viewport [%d]! "
                  "Please choose a different id and retry.\n",
-                 tid.c_str (), i);
+                 tid.c_str (),
+                 i);
       return false;
     }
 
@@ -747,9 +829,13 @@ template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::addText3D (const std::string &text,
                                               const PointT &position,
-                                              double orientation[3], double textScale,
-                                              double r, double g, double b,
-                                              const std::string &id, int viewport)
+                                              double orientation[3],
+                                              double textScale,
+                                              double r,
+                                              double g,
+                                              double b,
+                                              const std::string &id,
+                                              int viewport)
 {
   std::string tid;
   if (id.empty ())
@@ -762,7 +848,8 @@ pcl::visualization::PCLVisualizer::addText3D (const std::string &text,
 
   // If there is no custom viewport and the viewport number is not 0, exit
   if (rens_->GetNumberOfItems () <= viewport) {
-    PCL_ERROR ("[addText3D] The viewport [%d] doesn't exist (id <%s>)! ", viewport,
+    PCL_ERROR ("[addText3D] The viewport [%d] doesn't exist (id <%s>)! ",
+               viewport,
                tid.c_str ());
     return false;
   }
@@ -774,7 +861,8 @@ pcl::visualization::PCLVisualizer::addText3D (const std::string &text,
     if (contains (uid)) {
       PCL_ERROR ("[addText3D] The id <%s> already exists in viewport [%d]! "
                  "Please choose a different id and retry.\n",
-                 tid.c_str (), i);
+                 tid.c_str (),
+                 i);
       return false;
     }
 
@@ -817,11 +905,14 @@ pcl::visualization::PCLVisualizer::addText3D (const std::string &text,
 template <typename PointNT>
 bool
 pcl::visualization::PCLVisualizer::addPointCloudNormals (
-    const typename pcl::PointCloud<PointNT>::ConstPtr &cloud, int level, float scale,
-    const std::string &id, int viewport)
+    const typename pcl::PointCloud<PointNT>::ConstPtr &cloud,
+    int level,
+    float scale,
+    const std::string &id,
+    int viewport)
 {
-  return (addPointCloudNormals<PointNT, PointNT> (cloud, cloud, level, scale, id,
-                                                  viewport));
+  return (addPointCloudNormals<PointNT, PointNT> (
+      cloud, cloud, level, scale, id, viewport));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -829,8 +920,11 @@ template <typename PointT, typename PointNT>
 bool
 pcl::visualization::PCLVisualizer::addPointCloudNormals (
     const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-    const typename pcl::PointCloud<PointNT>::ConstPtr &normals, int level, float scale,
-    const std::string &id, int viewport)
+    const typename pcl::PointCloud<PointNT>::ConstPtr &normals,
+    int level,
+    float scale,
+    const std::string &id,
+    int viewport)
 {
   if (normals->points.size () != cloud->points.size ()) {
     PCL_ERROR ("[addPointCloudNormals] The number of points differs from the number of "
@@ -929,8 +1023,8 @@ pcl::visualization::PCLVisualizer::addPointCloudNormals (
 
   // Use cloud view point info
   vtkSmartPointer<vtkMatrix4x4> transformation = vtkSmartPointer<vtkMatrix4x4>::New ();
-  convertToVtkMatrix (cloud->sensor_origin_, cloud->sensor_orientation_,
-                      transformation);
+  convertToVtkMatrix (
+      cloud->sensor_origin_, cloud->sensor_orientation_, transformation);
   actor->SetUserMatrix (transformation);
 
   // Add it to all renderers
@@ -946,11 +1040,14 @@ template <typename PointNT>
 bool
 pcl::visualization::PCLVisualizer::addPointCloudPrincipalCurvatures (
     const typename pcl::PointCloud<PointNT>::ConstPtr &cloud,
-    const pcl::PointCloud<pcl::PrincipalCurvatures>::ConstPtr &pcs, int level,
-    float scale, const std::string &id, int viewport)
+    const pcl::PointCloud<pcl::PrincipalCurvatures>::ConstPtr &pcs,
+    int level,
+    float scale,
+    const std::string &id,
+    int viewport)
 {
-  return (addPointCloudPrincipalCurvatures<PointNT, PointNT> (cloud, cloud, pcs, level,
-                                                              scale, id, viewport));
+  return (addPointCloudPrincipalCurvatures<PointNT, PointNT> (
+      cloud, cloud, pcs, level, scale, id, viewport));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -959,8 +1056,11 @@ bool
 pcl::visualization::PCLVisualizer::addPointCloudPrincipalCurvatures (
     const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
     const typename pcl::PointCloud<PointNT>::ConstPtr &normals,
-    const pcl::PointCloud<pcl::PrincipalCurvatures>::ConstPtr &pcs, int level,
-    float scale, const std::string &id, int viewport)
+    const pcl::PointCloud<pcl::PrincipalCurvatures>::ConstPtr &pcs,
+    int level,
+    float scale,
+    const std::string &id,
+    int viewport)
 {
   if (pcs->points.size () != cloud->points.size () ||
       normals->points.size () != cloud->points.size ()) {
@@ -1019,7 +1119,8 @@ pcl::visualization::PCLVisualizer::addPointCloudPrincipalCurvatures (
     Eigen::Vector3f pc (pcs->points[i].principal_curvature[0],
                         pcs->points[i].principal_curvature[1],
                         pcs->points[i].principal_curvature[2]);
-    Eigen::Vector3f normal (normals->points[i].normal[0], normals->points[i].normal[1],
+    Eigen::Vector3f normal (normals->points[i].normal[0],
+                            normals->points[i].normal[1],
                             normals->points[i].normal[2]);
     Eigen::Vector3f pc_c = pc.cross (normal);
 
@@ -1066,8 +1167,11 @@ template <typename PointT, typename GradientT>
 bool
 pcl::visualization::PCLVisualizer::addPointCloudIntensityGradients (
     const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-    const typename pcl::PointCloud<GradientT>::ConstPtr &gradients, int level,
-    double scale, const std::string &id, int viewport)
+    const typename pcl::PointCloud<GradientT>::ConstPtr &gradients,
+    int level,
+    double scale,
+    const std::string &id,
+    int viewport)
 {
   if (gradients->points.size () != cloud->points.size ()) {
     PCL_ERROR ("[addPointCloudGradients] The number of points differs from the number "
@@ -1109,8 +1213,8 @@ pcl::visualization::PCLVisualizer::addPointCloudIntensityGradients (
     lines->InsertCellPoint (2 * j + 1);
   }
 
-  data->SetArray (&pts[0], 2 * nr_gradients * 3, 0,
-                  vtkFloatArray::VTK_DATA_ARRAY_DELETE);
+  data->SetArray (
+      &pts[0], 2 * nr_gradients * 3, 0, vtkFloatArray::VTK_DATA_ARRAY_DELETE);
   points->SetData (data);
 
   vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New ();
@@ -1140,7 +1244,9 @@ bool
 pcl::visualization::PCLVisualizer::addCorrespondences (
     const typename pcl::PointCloud<PointT>::ConstPtr &source_points,
     const typename pcl::PointCloud<PointT>::ConstPtr &target_points,
-    const std::vector<int> &correspondences, const std::string &id, int viewport)
+    const std::vector<int> &correspondences,
+    const std::string &id,
+    int viewport)
 {
   pcl::Correspondences corrs;
   corrs.resize (correspondences.size ());
@@ -1162,8 +1268,11 @@ bool
 pcl::visualization::PCLVisualizer::addCorrespondences (
     const typename pcl::PointCloud<PointT>::ConstPtr &source_points,
     const typename pcl::PointCloud<PointT>::ConstPtr &target_points,
-    const pcl::Correspondences &correspondences, int nth, const std::string &id,
-    int viewport, bool overwrite)
+    const pcl::Correspondences &correspondences,
+    int nth,
+    const std::string &id,
+    int viewport,
+    bool overwrite)
 {
   if (correspondences.empty ()) {
     PCL_DEBUG ("[addCorrespondences] An empty set of correspondences given! Nothing to "
@@ -1293,11 +1402,13 @@ bool
 pcl::visualization::PCLVisualizer::updateCorrespondences (
     const typename pcl::PointCloud<PointT>::ConstPtr &source_points,
     const typename pcl::PointCloud<PointT>::ConstPtr &target_points,
-    const pcl::Correspondences &correspondences, int nth, const std::string &id,
+    const pcl::Correspondences &correspondences,
+    int nth,
+    const std::string &id,
     int viewport)
 {
-  return (addCorrespondences<PointT> (source_points, target_points, correspondences,
-                                      nth, id, viewport, true));
+  return (addCorrespondences<PointT> (
+      source_points, target_points, correspondences, nth, id, viewport, true));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -1305,21 +1416,25 @@ template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::fromHandlersToScreen (
     const PointCloudGeometryHandler<PointT> &geometry_handler,
-    const PointCloudColorHandler<PointT> &color_handler, const std::string &id,
-    int viewport, const Eigen::Vector4f &sensor_origin,
+    const PointCloudColorHandler<PointT> &color_handler,
+    const std::string &id,
+    int viewport,
+    const Eigen::Vector4f &sensor_origin,
     const Eigen::Quaternion<float> &sensor_orientation)
 {
   if (!geometry_handler.isCapable ()) {
     PCL_WARN ("[fromHandlersToScreen] PointCloud <%s> requested with an invalid "
               "geometry handler (%s)!\n",
-              id.c_str (), geometry_handler.getName ().c_str ());
+              id.c_str (),
+              geometry_handler.getName ().c_str ());
     return (false);
   }
 
   if (!color_handler.isCapable ()) {
     PCL_WARN ("[fromHandlersToScreen] PointCloud <%s> requested with an invalid color "
               "handler (%s)!\n",
-              id.c_str (), color_handler.getName ().c_str ());
+              id.c_str (),
+              color_handler.getName ().c_str ());
     return (false);
   }
 
@@ -1367,21 +1482,25 @@ template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::fromHandlersToScreen (
     const PointCloudGeometryHandler<PointT> &geometry_handler,
-    const ColorHandlerConstPtr &color_handler, const std::string &id, int viewport,
+    const ColorHandlerConstPtr &color_handler,
+    const std::string &id,
+    int viewport,
     const Eigen::Vector4f &sensor_origin,
     const Eigen::Quaternion<float> &sensor_orientation)
 {
   if (!geometry_handler.isCapable ()) {
     PCL_WARN ("[fromHandlersToScreen] PointCloud <%s> requested with an invalid "
               "geometry handler (%s)!\n",
-              id.c_str (), geometry_handler.getName ().c_str ());
+              id.c_str (),
+              geometry_handler.getName ().c_str ());
     return (false);
   }
 
   if (!color_handler->isCapable ()) {
     PCL_WARN ("[fromHandlersToScreen] PointCloud <%s> requested with an invalid color "
               "handler (%s)!\n",
-              id.c_str (), color_handler->getName ().c_str ());
+              id.c_str (),
+              color_handler->getName ().c_str ());
     return (false);
   }
 
@@ -1430,21 +1549,25 @@ template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::fromHandlersToScreen (
     const GeometryHandlerConstPtr &geometry_handler,
-    const PointCloudColorHandler<PointT> &color_handler, const std::string &id,
-    int viewport, const Eigen::Vector4f &sensor_origin,
+    const PointCloudColorHandler<PointT> &color_handler,
+    const std::string &id,
+    int viewport,
+    const Eigen::Vector4f &sensor_origin,
     const Eigen::Quaternion<float> &sensor_orientation)
 {
   if (!geometry_handler->isCapable ()) {
     PCL_WARN ("[fromHandlersToScreen] PointCloud <%s> requested with an invalid "
               "geometry handler (%s)!\n",
-              id.c_str (), geometry_handler->getName ().c_str ());
+              id.c_str (),
+              geometry_handler->getName ().c_str ());
     return (false);
   }
 
   if (!color_handler.isCapable ()) {
     PCL_WARN ("[fromHandlersToScreen] PointCloud <%s> requested with an invalid color "
               "handler (%s)!\n",
-              id.c_str (), color_handler.getName ().c_str ());
+              id.c_str (),
+              color_handler.getName ().c_str ());
     return (false);
   }
 
@@ -1529,7 +1652,8 @@ template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::updatePointCloud (
     const typename pcl::PointCloud<PointT>::ConstPtr &,
-    const PointCloudGeometryHandler<PointT> &geometry_handler, const std::string &id)
+    const PointCloudGeometryHandler<PointT> &geometry_handler,
+    const std::string &id)
 {
   // Check to see if this ID entry already exists (has it been already added to the
   // visualizer?)
@@ -1568,7 +1692,8 @@ template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::updatePointCloud (
     const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-    const PointCloudColorHandler<PointT> &color_handler, const std::string &id)
+    const PointCloudColorHandler<PointT> &color_handler,
+    const std::string &id)
 {
   // Check to see if this ID entry already exists (has it been already added to the
   // visualizer?)
@@ -1645,7 +1770,9 @@ template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::addPolygonMesh (
     const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-    const std::vector<pcl::Vertices> &vertices, const std::string &id, int viewport)
+    const std::vector<pcl::Vertices> &vertices,
+    const std::string &id,
+    int viewport)
 {
   if (vertices.empty () || cloud->points.empty ())
     return (false);
@@ -1791,8 +1918,8 @@ pcl::visualization::PCLVisualizer::addPolygonMesh (
 
   // Save the viewpoint transformation matrix to the global actor map
   vtkSmartPointer<vtkMatrix4x4> transformation = vtkSmartPointer<vtkMatrix4x4>::New ();
-  convertToVtkMatrix (cloud->sensor_origin_, cloud->sensor_orientation_,
-                      transformation);
+  convertToVtkMatrix (
+      cloud->sensor_origin_, cloud->sensor_orientation_, transformation);
   (*cloud_actor_map_)[id].viewpoint_transformation_ = transformation;
 
   return (true);
@@ -1803,7 +1930,8 @@ template <typename PointT>
 bool
 pcl::visualization::PCLVisualizer::updatePolygonMesh (
     const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-    const std::vector<pcl::Vertices> &verts, const std::string &id)
+    const std::vector<pcl::Vertices> &verts,
+    const std::string &id)
 {
   if (verts.empty ()) {
     pcl::console::print_error ("[addPolygonMesh] No vertices given!\n");

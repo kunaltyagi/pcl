@@ -128,10 +128,13 @@ namespace pcl
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
       };
 
-      using SLAMGraph =
-          boost::adjacency_list<boost::eigen_vecS, boost::eigen_vecS,
-                                boost::bidirectionalS, VertexProperties, EdgeProperties,
-                                boost::no_property, boost::eigen_listS>;
+      using SLAMGraph = boost::adjacency_list<boost::eigen_vecS,
+                                              boost::eigen_vecS,
+                                              boost::bidirectionalS,
+                                              VertexProperties,
+                                              EdgeProperties,
+                                              boost::no_property,
+                                              boost::eigen_listS>;
       using SLAMGraphPtr = boost::shared_ptr<SLAMGraph>;
       using Vertex = typename SLAMGraph::vertex_descriptor;
       using Edge = typename SLAMGraph::edge_descriptor;
@@ -282,7 +285,8 @@ namespace pcl
        * set of correspondences for that edge.
        */
       void
-      setCorrespondences (const Vertex &source_vertex, const Vertex &target_vertex,
+      setCorrespondences (const Vertex &source_vertex,
+                          const Vertex &target_vertex,
                           const pcl::CorrespondencesPtr &corrs);
 
       /** \brief Return a set of correspondences from one of the SLAM graph's edges.

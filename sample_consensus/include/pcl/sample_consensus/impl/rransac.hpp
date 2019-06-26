@@ -91,10 +91,10 @@ pcl::RandomizedRandomSampleConsensus<PointT>::computeModel (int debug_verbosity_
 
     // RRANSAC addon: verify a random fraction of the data
     // Get X random samples which satisfy the model criterion
-    this->getRandomSamples (sac_model_->getIndices (), fraction_nr_points,
-                            indices_subset);
-    if (!sac_model_->doSamplesVerifyModel (indices_subset, model_coefficients,
-                                           threshold_)) {
+    this->getRandomSamples (
+        sac_model_->getIndices (), fraction_nr_points, indices_subset);
+    if (!sac_model_->doSamplesVerifyModel (
+            indices_subset, model_coefficients, threshold_)) {
       // Unfortunately we cannot "continue" after the first iteration, because k might
       // not be set, while iterations gets incremented
       if (k > 1.0) {
@@ -130,7 +130,9 @@ pcl::RandomizedRandomSampleConsensus<PointT>::computeModel (int debug_verbosity_
     if (debug_verbosity_level > 1)
       PCL_DEBUG ("[pcl::RandomizedRandomSampleConsensus::computeModel] Trial %d out of "
                  "%d: %d inliers (best is: %d so far).\n",
-                 iterations_, static_cast<int> (ceil (k)), n_inliers_count,
+                 iterations_,
+                 static_cast<int> (ceil (k)),
+                 n_inliers_count,
                  n_best_inliers_count);
     if (iterations_ > max_iterations_) {
       if (debug_verbosity_level > 0)
@@ -143,7 +145,8 @@ pcl::RandomizedRandomSampleConsensus<PointT>::computeModel (int debug_verbosity_
   if (debug_verbosity_level > 0)
     PCL_DEBUG ("[pcl::RandomizedRandomSampleConsensus::computeModel] Model: %lu size, "
                "%d inliers.\n",
-               model_.size (), n_best_inliers_count);
+               model_.size (),
+               n_best_inliers_count);
 
   if (model_.empty ()) {
     inliers_.clear ();

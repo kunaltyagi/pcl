@@ -82,7 +82,8 @@ main (int, char **argv)
 
   // iterate over the octree, depth first
   OutofcoreDepthFirstIterator<
-      pcl::PointXYZ, pcl::outofcore::OutofcoreOctreeDiskContainer<pcl::PointXYZ>>
+      pcl::PointXYZ,
+      pcl::outofcore::OutofcoreOctreeDiskContainer<pcl::PointXYZ>>
       it (*octree);
   OctreeDisk::Iterator myit (*octree);
 

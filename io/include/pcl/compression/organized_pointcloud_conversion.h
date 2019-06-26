@@ -91,8 +91,11 @@ namespace pcl
        * \ingroup io
        */
       static void
-      convert (const pcl::PointCloud<PointT> &cloud_arg, float focalLength_arg,
-               float disparityShift_arg, float disparityScale_arg, bool,
+      convert (const pcl::PointCloud<PointT> &cloud_arg,
+               float focalLength_arg,
+               float disparityShift_arg,
+               float disparityScale_arg,
+               bool,
                typename std::vector<uint16_t> &disparityData_arg,
                typename std::vector<uint8_t> &)
       {
@@ -132,9 +135,14 @@ namespace pcl
        */
       static void
       convert (typename std::vector<uint16_t> &disparityData_arg,
-               typename std::vector<uint8_t> &, bool, size_t width_arg,
-               size_t height_arg, float focalLength_arg, float disparityShift_arg,
-               float disparityScale_arg, pcl::PointCloud<PointT> &cloud_arg)
+               typename std::vector<uint8_t> &,
+               bool,
+               size_t width_arg,
+               size_t height_arg,
+               float focalLength_arg,
+               float disparityShift_arg,
+               float disparityScale_arg,
+               pcl::PointCloud<PointT> &cloud_arg)
       {
         size_t cloud_size = width_arg * height_arg;
 
@@ -193,8 +201,11 @@ namespace pcl
        */
       static void
       convert (typename std::vector<float> &depthData_arg,
-               typename std::vector<uint8_t> &, bool, size_t width_arg,
-               size_t height_arg, float focalLength_arg,
+               typename std::vector<uint8_t> &,
+               bool,
+               size_t width_arg,
+               size_t height_arg,
+               float focalLength_arg,
                pcl::PointCloud<PointT> &cloud_arg)
       {
         size_t cloud_size = width_arg * height_arg;
@@ -259,8 +270,11 @@ namespace pcl
        * \ingroup io
        */
       static void
-      convert (const pcl::PointCloud<PointT> &cloud_arg, float focalLength_arg,
-               float disparityShift_arg, float disparityScale_arg, bool convertToMono,
+      convert (const pcl::PointCloud<PointT> &cloud_arg,
+               float focalLength_arg,
+               float disparityShift_arg,
+               float disparityScale_arg,
+               bool convertToMono,
                typename std::vector<uint16_t> &disparityData_arg,
                typename std::vector<uint8_t> &rgbData_arg)
       {
@@ -333,9 +347,13 @@ namespace pcl
        */
       static void
       convert (typename std::vector<uint16_t> &disparityData_arg,
-               typename std::vector<uint8_t> &rgbData_arg, bool monoImage_arg,
-               size_t width_arg, size_t height_arg, float focalLength_arg,
-               float disparityShift_arg, float disparityScale_arg,
+               typename std::vector<uint8_t> &rgbData_arg,
+               bool monoImage_arg,
+               size_t width_arg,
+               size_t height_arg,
+               float focalLength_arg,
+               float disparityShift_arg,
+               float disparityScale_arg,
                pcl::PointCloud<PointT> &cloud_arg)
       {
         size_t cloud_size = width_arg * height_arg;
@@ -426,8 +444,11 @@ namespace pcl
        */
       static void
       convert (typename std::vector<float> &depthData_arg,
-               typename std::vector<uint8_t> &rgbData_arg, bool monoImage_arg,
-               size_t width_arg, size_t height_arg, float focalLength_arg,
+               typename std::vector<uint8_t> &rgbData_arg,
+               bool monoImage_arg,
+               size_t width_arg,
+               size_t height_arg,
+               float focalLength_arg,
                pcl::PointCloud<PointT> &cloud_arg)
       {
         size_t cloud_size = width_arg * height_arg;

@@ -54,7 +54,8 @@ class ON_CLASS ON_Plane
         that is used to determine the yaxis direction.
         y_dir does not have to be perpendicular to x_dir.
   */
-  ON_Plane (const ON_3dPoint &origin, const ON_3dVector &x_dir,
+  ON_Plane (const ON_3dPoint &origin,
+            const ON_3dVector &x_dir,
             const ON_3dVector &y_dir);
 
   /*
@@ -68,7 +69,8 @@ class ON_CLASS ON_Plane
         not colinear with the first two points.
         yaxis*(y_point-origin) will be > 0.
   */
-  ON_Plane (const ON_3dPoint &origin, const ON_3dPoint &x_point,
+  ON_Plane (const ON_3dPoint &origin,
+            const ON_3dPoint &x_point,
             const ON_3dPoint &y_point);
 
   /*
@@ -118,7 +120,8 @@ class ON_CLASS ON_Plane
     true if valid plane is created.
   */
   bool
-  CreateFromFrame (const ON_3dPoint &origin, const ON_3dVector &x_dir,
+  CreateFromFrame (const ON_3dPoint &origin,
+                   const ON_3dVector &x_dir,
                    const ON_3dVector &y_dir);
 
   /*
@@ -135,7 +138,8 @@ class ON_CLASS ON_Plane
     true if valid plane is created.
   */
   bool
-  CreateFromPoints (const ON_3dPoint &origin, const ON_3dPoint &point_on_x,
+  CreateFromPoints (const ON_3dPoint &origin,
+                    const ON_3dPoint &point_on_x,
                     const ON_3dPoint &point_on);
 
   /*
@@ -369,7 +373,9 @@ class ON_CLASS ON_Plane
     true if successful
   */
   bool
-  Rotate (double sin_angle, double cos_angle, const ON_3dVector &axis,
+  Rotate (double sin_angle,
+          double cos_angle,
+          const ON_3dVector &axis,
           const ON_3dPoint &center);
 
   /*

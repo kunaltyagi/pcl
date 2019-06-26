@@ -48,13 +48,22 @@
 template <typename PointInT, typename PointNT, typename PointOutT>
 bool
 pcl::FPFHEstimation<PointInT, PointNT, PointOutT>::computePairFeatures (
-    const pcl::PointCloud<PointInT> &cloud, const pcl::PointCloud<PointNT> &normals,
-    int p_idx, int q_idx, float &f1, float &f2, float &f3, float &f4)
+    const pcl::PointCloud<PointInT> &cloud,
+    const pcl::PointCloud<PointNT> &normals,
+    int p_idx,
+    int q_idx,
+    float &f1,
+    float &f2,
+    float &f3,
+    float &f4)
 {
   pcl::computePairFeatures (cloud.points[p_idx].getVector4fMap (),
                             normals.points[p_idx].getNormalVector4fMap (),
                             cloud.points[q_idx].getVector4fMap (),
-                            normals.points[q_idx].getNormalVector4fMap (), f1, f2, f3,
+                            normals.points[q_idx].getNormalVector4fMap (),
+                            f1,
+                            f2,
+                            f3,
                             f4);
   return (true);
 }
@@ -63,9 +72,14 @@ pcl::FPFHEstimation<PointInT, PointNT, PointOutT>::computePairFeatures (
 template <typename PointInT, typename PointNT, typename PointOutT>
 void
 pcl::FPFHEstimation<PointInT, PointNT, PointOutT>::computePointSPFHSignature (
-    const pcl::PointCloud<PointInT> &cloud, const pcl::PointCloud<PointNT> &normals,
-    int p_idx, int row, const std::vector<int> &indices, Eigen::MatrixXf &hist_f1,
-    Eigen::MatrixXf &hist_f2, Eigen::MatrixXf &hist_f3)
+    const pcl::PointCloud<PointInT> &cloud,
+    const pcl::PointCloud<PointNT> &normals,
+    int p_idx,
+    int row,
+    const std::vector<int> &indices,
+    Eigen::MatrixXf &hist_f1,
+    Eigen::MatrixXf &hist_f2,
+    Eigen::MatrixXf &hist_f3)
 {
   Eigen::Vector4f pfh_tuple;
   // Get the number of bins from the histograms size
@@ -83,8 +97,14 @@ pcl::FPFHEstimation<PointInT, PointNT, PointOutT>::computePointSPFHSignature (
       continue;
 
     // Compute the pair P to NNi
-    if (!computePairFeatures (cloud, normals, p_idx, index, pfh_tuple[0], pfh_tuple[1],
-                              pfh_tuple[2], pfh_tuple[3]))
+    if (!computePairFeatures (cloud,
+                              normals,
+                              p_idx,
+                              index,
+                              pfh_tuple[0],
+                              pfh_tuple[1],
+                              pfh_tuple[2],
+                              pfh_tuple[3]))
       continue;
 
     // Normalize the f1, f2, f3 features and push them in the histogram
@@ -116,9 +136,12 @@ pcl::FPFHEstimation<PointInT, PointNT, PointOutT>::computePointSPFHSignature (
 template <typename PointInT, typename PointNT, typename PointOutT>
 void
 pcl::FPFHEstimation<PointInT, PointNT, PointOutT>::weightPointSPFHSignature (
-    const Eigen::MatrixXf &hist_f1, const Eigen::MatrixXf &hist_f2,
-    const Eigen::MatrixXf &hist_f3, const std::vector<int> &indices,
-    const std::vector<float> &dists, Eigen::VectorXf &fpfh_histogram)
+    const Eigen::MatrixXf &hist_f1,
+    const Eigen::MatrixXf &hist_f2,
+    const Eigen::MatrixXf &hist_f3,
+    const std::vector<int> &indices,
+    const std::vector<float> &dists,
+    Eigen::VectorXf &fpfh_histogram)
 {
   assert (indices.size () == dists.size ());
   double sum_f1 = 0.0, sum_f2 = 0.0, sum_f3 = 0.0;
@@ -182,8 +205,10 @@ pcl::FPFHEstimation<PointInT, PointNT, PointOutT>::weightPointSPFHSignature (
 template <typename PointInT, typename PointNT, typename PointOutT>
 void
 pcl::FPFHEstimation<PointInT, PointNT, PointOutT>::computeSPFHSignatures (
-    std::vector<int> &spfh_hist_lookup, Eigen::MatrixXf &hist_f1,
-    Eigen::MatrixXf &hist_f2, Eigen::MatrixXf &hist_f3)
+    std::vector<int> &spfh_hist_lookup,
+    Eigen::MatrixXf &hist_f1,
+    Eigen::MatrixXf &hist_f2,
+    Eigen::MatrixXf &hist_f3)
 {
   // Allocate enough space to hold the NN search results
   // \note This resize is irrelevant for a radiusSearch ().
@@ -226,13 +251,13 @@ pcl::FPFHEstimation<PointInT, PointNT, PointOutT>::computeSPFHSignatures (
     ++spfh_indices_itr;
 
     // Find the neighborhood around p_idx
-    if (this->searchForNeighbors (*surface_, p_idx, search_parameter_, nn_indices,
-                                  nn_dists) == 0)
+    if (this->searchForNeighbors (
+            *surface_, p_idx, search_parameter_, nn_indices, nn_dists) == 0)
       continue;
 
     // Estimate the SPFH signature around p_idx
-    computePointSPFHSignature (*surface_, *normals_, p_idx, i, nn_indices, hist_f1,
-                               hist_f2, hist_f3);
+    computePointSPFHSignature (
+        *surface_, *normals_, p_idx, i, nn_indices, hist_f1, hist_f2, hist_f3);
 
     // Populate a lookup table for converting a point index to its corresponding row in
     // the spfh_hist_* matrices
@@ -260,8 +285,8 @@ pcl::FPFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (
   if (input_->is_dense) {
     // Iterate over the entire index vector
     for (size_t idx = 0; idx < indices_->size (); ++idx) {
-      if (this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                    nn_dists) == 0) {
+      if (this->searchForNeighbors (
+              (*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0) {
         for (Eigen::Index d = 0; d < fpfh_histogram_.size (); ++d)
           output.points[idx].histogram[d] = std::numeric_limits<float>::quiet_NaN ();
 
@@ -276,8 +301,8 @@ pcl::FPFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (
 
       // Compute the FPFH signature (i.e. compute a weighted combination of local SPFH
       // signatures) ...
-      weightPointSPFHSignature (hist_f1_, hist_f2_, hist_f3_, nn_indices, nn_dists,
-                                fpfh_histogram_);
+      weightPointSPFHSignature (
+          hist_f1_, hist_f2_, hist_f3_, nn_indices, nn_dists, fpfh_histogram_);
 
       // ...and copy it into the output cloud
       for (Eigen::Index d = 0; d < fpfh_histogram_.size (); ++d)
@@ -287,8 +312,8 @@ pcl::FPFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (
     // Iterate over the entire index vector
     for (size_t idx = 0; idx < indices_->size (); ++idx) {
       if (!isFinite ((*input_)[(*indices_)[idx]]) ||
-          this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                    nn_dists) == 0) {
+          this->searchForNeighbors (
+              (*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0) {
         for (Eigen::Index d = 0; d < fpfh_histogram_.size (); ++d)
           output.points[idx].histogram[d] = std::numeric_limits<float>::quiet_NaN ();
 
@@ -303,8 +328,8 @@ pcl::FPFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (
 
       // Compute the FPFH signature (i.e. compute a weighted combination of local SPFH
       // signatures) ...
-      weightPointSPFHSignature (hist_f1_, hist_f2_, hist_f3_, nn_indices, nn_dists,
-                                fpfh_histogram_);
+      weightPointSPFHSignature (
+          hist_f1_, hist_f2_, hist_f3_, nn_indices, nn_dists, fpfh_histogram_);
 
       // ...and copy it into the output cloud
       for (Eigen::Index d = 0; d < fpfh_histogram_.size (); ++d)

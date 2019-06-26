@@ -45,8 +45,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 void
-pcl::ApproximateVoxelGrid<PointT>::flush (PointCloud &output, size_t op, he *hhe,
-                                          int rgba_index, int centroid_size)
+pcl::ApproximateVoxelGrid<PointT>::flush (
+    PointCloud &output, size_t op, he *hhe, int rgba_index, int centroid_size)
 {
   hhe->centroid /= static_cast<float> (hhe->count);
   pcl::for_each_type<FieldList> (
@@ -58,7 +58,8 @@ pcl::ApproximateVoxelGrid<PointT>::flush (PointCloud &output, size_t op, he *hhe
           b = hhe->centroid[centroid_size - 1];
     int rgb = (static_cast<int> (r)) << 16 | (static_cast<int> (g)) << 8 |
               (static_cast<int> (b));
-    memcpy (reinterpret_cast<char *> (&output.points[op]) + rgba_index, &rgb,
+    memcpy (reinterpret_cast<char *> (&output.points[op]) + rgba_index,
+            &rgb,
             sizeof (float));
   }
 }
@@ -113,7 +114,8 @@ pcl::ApproximateVoxelGrid<PointT>::applyFilter (PointCloud &output)
     if (rgba_index >= 0) {
       // fill r/g/b data
       pcl::RGB rgb;
-      memcpy (&rgb, (reinterpret_cast<const char *> (&input_->points[cp])) + rgba_index,
+      memcpy (&rgb,
+              (reinterpret_cast<const char *> (&input_->points[cp])) + rgba_index,
               sizeof (RGB));
       scratch[centroid_size - 3] = rgb.r;
       scratch[centroid_size - 2] = rgb.g;

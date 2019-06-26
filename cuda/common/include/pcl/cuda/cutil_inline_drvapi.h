@@ -31,7 +31,9 @@ __cuSafeCallNoSync (CUresult err, const char *file, const int line)
   if (CUDA_SUCCESS != err) {
     fprintf (stderr,
              "cuSafeCallNoSync() Driver API error = %04d from file <%s>, line %i.\n",
-             err, file, line);
+             err,
+             file,
+             line);
     exit (-1);
   }
 }
@@ -46,8 +48,11 @@ __cuCtxSync (const char *file, const int line)
 {
   CUresult err = cuCtxSynchronize ();
   if (CUDA_SUCCESS != err) {
-    fprintf (stderr, "cuCtxSynchronize() API error = %04d in file <%s>, line %i.\n",
-             err, file, line);
+    fprintf (stderr,
+             "cuCtxSynchronize() API error = %04d in file <%s>, line %i.\n",
+             err,
+             file,
+             line);
     exit (-1);
   }
 }
@@ -67,8 +72,8 @@ _ConvertSMVer2CoresDrvApi (int major, int minor)
     int Cores;
   };
 
-  sSMtoCores nGpuArchCoresPerSM[] = {{0x10, 8},  {0x11, 8},  {0x12, 8}, {0x13, 8},
-                                     {0x20, 32}, {0x21, 48}, {-1, -1}};
+  sSMtoCores nGpuArchCoresPerSM[] = {
+      {0x10, 8}, {0x11, 8}, {0x12, 8}, {0x13, 8}, {0x20, 32}, {0x21, 48}, {-1, -1}};
 
   int index = 0;
   while (nGpuArchCoresPerSM[index].SM != -1) {
@@ -109,9 +114,10 @@ cutilDrvGetMaxGflopsDeviceId ()
   // Find the best CUDA capable GPU device
   current_device = 0;
   while (current_device < device_count) {
-    cutilDrvSafeCallNoSync (cuDeviceGetAttribute (
-        &multiProcessorCount, CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT,
-        current_device));
+    cutilDrvSafeCallNoSync (
+        cuDeviceGetAttribute (&multiProcessorCount,
+                              CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT,
+                              current_device));
     cutilDrvSafeCallNoSync (cuDeviceGetAttribute (
         &clockRate, CU_DEVICE_ATTRIBUTE_CLOCK_RATE, current_device));
     cutilDrvSafeCallNoSync (cuDeviceGetAttribute (
@@ -179,9 +185,10 @@ cutilDrvGetMaxGflopsGraphicsDeviceId ()
   // Find the best CUDA capable GPU device
   current_device = 0;
   while (current_device < device_count) {
-    cutilDrvSafeCallNoSync (cuDeviceGetAttribute (
-        &multiProcessorCount, CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT,
-        current_device));
+    cutilDrvSafeCallNoSync (
+        cuDeviceGetAttribute (&multiProcessorCount,
+                              CU_DEVICE_ATTRIBUTE_MULTIPROCESSOR_COUNT,
+                              current_device));
     cutilDrvSafeCallNoSync (cuDeviceGetAttribute (
         &clockRate, CU_DEVICE_ATTRIBUTE_CLOCK_RATE, current_device));
     cutilDrvSafeCallNoSync (cuDeviceGetAttribute (
@@ -230,7 +237,9 @@ __cuCheckMsg (const char *msg, const char *file, const int line)
     fprintf (stderr,
              "cutilDrvCheckMsg -> cuCtxSynchronize API error = %04d in file <%s>, line "
              "%i.\n",
-             err, file, line);
+             err,
+             file,
+             line);
     exit (-1);
   }
 }
@@ -260,8 +269,8 @@ cutilDeviceInitDrv (int ARGC, char **ARGV)
   if (dev > deviceCount - 1) {
     fprintf (stderr, "\n");
     fprintf (stderr, ">> %d CUDA capable GPU device(s) detected. <<\n", deviceCount);
-    fprintf (stderr, ">> cutilDeviceInit (-device=%d) is not a valid GPU device. <<\n",
-             dev);
+    fprintf (
+        stderr, ">> cutilDeviceInit (-device=%d) is not a valid GPU device. <<\n", dev);
     fprintf (stderr, "\n");
     return -dev;
   }
@@ -308,19 +317,20 @@ cutilChooseCudaDeviceDrv (int argc, char **argv, int *p_devID)
 #endif
 
     //! Check for CUDA context lost
-    inline void cutilDrvCudaCheckCtxLost (const char *errorMessage, const char *file,
+    inline void cutilDrvCudaCheckCtxLost (const char *errorMessage,
+                                          const char *file,
                                           const int line)
 {
   CUresult err = cuCtxSynchronize ();
   if (CUDA_ERROR_INVALID_CONTEXT != err) {
-    fprintf (stderr, "Cuda error: %s in file '%s' in line %i\n", errorMessage, file,
-             line);
+    fprintf (
+        stderr, "Cuda error: %s in file '%s' in line %i\n", errorMessage, file, line);
     exit (-1);
   }
   err = cuCtxSynchronize ();
   if (CUDA_SUCCESS != err) {
-    fprintf (stderr, "Cuda error: %s in file '%s' in line %i\n", errorMessage, file,
-             line);
+    fprintf (
+        stderr, "Cuda error: %s in file '%s' in line %i\n", errorMessage, file, line);
     exit (-1);
   }
 }
@@ -364,8 +374,8 @@ __cutilDrvQAFinish (int argc, char **argv, bool bStatus)
 
 // General check for CUDA GPU SM Capabilities for a specific device #
 inline bool
-cutilDrvCudaDevCapabilities (int major_version, int minor_version, int deviceNum,
-                             int argc, char **argv)
+cutilDrvCudaDevCapabilities (
+    int major_version, int minor_version, int deviceNum, int argc, char **argv)
 {
   int major, minor, dev;
   char device_name[256];
@@ -382,12 +392,16 @@ cutilDrvCudaDevCapabilities (int major_version, int minor_version, int deviceNum
   cutilDrvSafeCallNoSync (cuDeviceGetName (device_name, 256, dev));
 
   if ((major > major_version) || (major == major_version && minor >= minor_version)) {
-    printf ("> Device %d: < %s >, Compute SM %d.%d detected\n", dev, device_name, major,
+    printf ("> Device %d: < %s >, Compute SM %d.%d detected\n",
+            dev,
+            device_name,
+            major,
             minor);
     return true;
   } else {
     printf ("There is no device supporting CUDA compute capability %d.%d.\n",
-            major_version, minor_version);
+            major_version,
+            minor_version);
     __cutilDrvQAFinish (argc, argv, true);
     return false;
   }

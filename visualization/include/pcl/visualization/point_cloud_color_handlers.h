@@ -229,7 +229,9 @@ namespace pcl
       }
 
       /** \brief Constructor. */
-      PointCloudColorHandlerCustom (const PointCloudConstPtr &cloud, double r, double g,
+      PointCloudColorHandlerCustom (const PointCloudConstPtr &cloud,
+                                    double r,
+                                    double g,
                                     double b)
           : PointCloudColorHandler<PointT> (cloud), r_ (r), g_ (g), b_ (b)
       {
@@ -748,7 +750,9 @@ namespace pcl
 
       public:
       /** \brief Constructor. */
-      PointCloudColorHandlerCustom (const PointCloudConstPtr &cloud, double r, double g,
+      PointCloudColorHandlerCustom (const PointCloudConstPtr &cloud,
+                                    double r,
+                                    double g,
                                     double b)
           : PointCloudColorHandler<pcl::PCLPointCloud2> (cloud), r_ (r), g_ (g), b_ (b)
       {

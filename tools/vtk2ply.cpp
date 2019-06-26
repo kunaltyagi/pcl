@@ -80,7 +80,8 @@ main (int argc, char **argv)
   reader->SetFileName (argv[vtk_file_indices[0]]);
   reader->Update ();
   polydata = reader->GetOutput ();
-  print_info ("Loaded %s with %lu points/vertices.\n", argv[vtk_file_indices[0]],
+  print_info ("Loaded %s with %lu points/vertices.\n",
+              argv[vtk_file_indices[0]],
               polydata->GetNumberOfPoints ());
 
   // Convert to PLY and save

@@ -73,8 +73,8 @@ pcl::VLPGrabber::initializeLaserMapping ()
 void
 pcl::VLPGrabber::loadVLP16Corrections ()
 {
-  double vlp16_vertical_corrections[] = {-15, 1, -13, 3,  -11, 5,  -9, 7,
-                                         -7,  9, -5,  11, -3,  13, -1, 15};
+  double vlp16_vertical_corrections[] = {
+      -15, 1, -13, 3, -11, 5, -9, 7, -7, 9, -5, 11, -3, 13, -1, 15};
   for (uint8_t i = 0; i < VLP_MAX_NUM_LASERS; i++) {
     HDLGrabber::laser_corrections_[i].azimuthCorrection = 0.0;
     HDLGrabber::laser_corrections_[i].distanceCorrection = 0.0;
@@ -165,7 +165,9 @@ pcl::VLPGrabber::toPointClouds (HDLDataPacket *dataPacket)
       PointXYZI dual_xyzi;
       PointXYZRGBA dual_xyzrgba;
 
-      HDLGrabber::computeXYZI (xyzi, current_azimuth, firing_data.laserReturns[j],
+      HDLGrabber::computeXYZI (xyzi,
+                               current_azimuth,
+                               firing_data.laserReturns[j],
                                laser_corrections_[j % VLP_MAX_NUM_LASERS]);
 
       xyz.x = xyzrgba.x = xyzi.x;
@@ -175,7 +177,8 @@ pcl::VLPGrabber::toPointClouds (HDLDataPacket *dataPacket)
       xyzrgba.rgba = laser_rgb_mapping_[j % VLP_MAX_NUM_LASERS].rgba;
 
       if (dataPacket->mode == VLP_DUAL_MODE) {
-        HDLGrabber::computeXYZI (dual_xyzi, current_azimuth,
+        HDLGrabber::computeXYZI (dual_xyzi,
+                                 current_azimuth,
                                  dataPacket->firingData[i + 1].laserReturns[j],
                                  laser_corrections_[j % VLP_MAX_NUM_LASERS]);
 

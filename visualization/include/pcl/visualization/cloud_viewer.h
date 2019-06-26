@@ -168,7 +168,8 @@ namespace pcl
       inline boost::signals2::connection
       registerKeyboardCallback (
           void (T::*callback) (const pcl::visualization::KeyboardEvent &, void *),
-          T &instance, void *cookie = nullptr)
+          T &instance,
+          void *cookie = nullptr)
       {
         return (registerKeyboardCallback (
             [=, &instance](const pcl::visualization::KeyboardEvent &e) {
@@ -202,7 +203,8 @@ namespace pcl
       inline boost::signals2::connection
       registerMouseCallback (
           void (T::*callback) (const pcl::visualization::MouseEvent &, void *),
-          T &instance, void *cookie = nullptr)
+          T &instance,
+          void *cookie = nullptr)
       {
         return (registerMouseCallback (
             [=, &instance](const pcl::visualization::MouseEvent &e) {
@@ -238,7 +240,8 @@ namespace pcl
       inline boost::signals2::connection
       registerPointPickingCallback (
           void (T::*callback) (const pcl::visualization::PointPickingEvent &, void *),
-          T &instance, void *cookie = nullptr)
+          T &instance,
+          void *cookie = nullptr)
       {
         return (registerPointPickingCallback (
             [=, &instance](const pcl::visualization::PointPickingEvent &e) {

@@ -61,7 +61,8 @@ namespace pcl
    * \author Radu B. Rusu, Stefan Holzer
    * \ingroup features
    */
-  template <typename PointInT, typename PointOutT = pcl::BRISKSignature512,
+  template <typename PointInT,
+            typename PointOutT = pcl::BRISKSignature512,
             typename KeypointT = pcl::PointWithScale,
             typename IntensityT = pcl::common::IntensityFieldAccessor<PointInT>>
   class BRISK2DEstimation // : public Feature<PointT, KeyPointT>
@@ -144,22 +145,32 @@ namespace pcl
      * size descriptor which the user needs to accommodate in a new point type.
      */
     void
-    generateKernel (std::vector<float> &radius_list, std::vector<int> &number_list,
-                    float d_max = 5.85f, float d_min = 8.2f,
+    generateKernel (std::vector<float> &radius_list,
+                    std::vector<int> &number_list,
+                    float d_max = 5.85f,
+                    float d_min = 8.2f,
                     std::vector<int> index_change = std::vector<int> ());
 
     /** \brief Compute the smoothed intensity for a given x/y position in the image. */
     inline int
-    smoothedIntensity (const std::vector<unsigned char> &image, int image_width,
-                       int image_height, const std::vector<int> &integral_image,
-                       const float key_x, const float key_y, const unsigned int scale,
-                       const unsigned int rot, const unsigned int point) const;
+    smoothedIntensity (const std::vector<unsigned char> &image,
+                       int image_width,
+                       int image_height,
+                       const std::vector<int> &integral_image,
+                       const float key_x,
+                       const float key_y,
+                       const unsigned int scale,
+                       const unsigned int rot,
+                       const unsigned int point) const;
 
     private:
     /** \brief ROI predicate comparator. */
     bool
-    RoiPredicate (const float min_x, const float min_y, const float max_x,
-                  const float max_y, const KeypointT &key_pt);
+    RoiPredicate (const float min_x,
+                  const float min_y,
+                  const float max_x,
+                  const float max_y,
+                  const KeypointT &key_pt);
 
     /** \brief Specifies whether rotation invariance is enabled. */
     bool rotation_invariance_enabled_;

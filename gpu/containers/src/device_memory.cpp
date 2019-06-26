@@ -291,8 +291,10 @@ pcl::gpu::DeviceMemory2D::DeviceMemory2D (int rows_arg, int colsBytes_arg)
   create (rows_arg, colsBytes_arg);
 }
 
-pcl::gpu::DeviceMemory2D::DeviceMemory2D (int rows_arg, int colsBytes_arg,
-                                          void *data_arg, size_t step_arg)
+pcl::gpu::DeviceMemory2D::DeviceMemory2D (int rows_arg,
+                                          int colsBytes_arg,
+                                          void *data_arg,
+                                          size_t step_arg)
     : data_ (data_arg), step_ (step_arg), colsBytes_ (colsBytes_arg), rows_ (rows_arg),
       refcount_ (nullptr)
 {
@@ -371,27 +373,44 @@ pcl::gpu::DeviceMemory2D::copyTo (DeviceMemory2D &other) const
     other.release ();
   else {
     other.create (rows_, colsBytes_);
-    cudaSafeCall (cudaMemcpy2D (other.data_, other.step_, data_, step_, colsBytes_,
-                                rows_, cudaMemcpyDeviceToDevice));
+    cudaSafeCall (cudaMemcpy2D (other.data_,
+                                other.step_,
+                                data_,
+                                step_,
+                                colsBytes_,
+                                rows_,
+                                cudaMemcpyDeviceToDevice));
     cudaSafeCall (cudaDeviceSynchronize ());
   }
 }
 
 void
-pcl::gpu::DeviceMemory2D::upload (const void *host_ptr_arg, size_t host_step_arg,
-                                  int rows_arg, int colsBytes_arg)
+pcl::gpu::DeviceMemory2D::upload (const void *host_ptr_arg,
+                                  size_t host_step_arg,
+                                  int rows_arg,
+                                  int colsBytes_arg)
 {
   create (rows_arg, colsBytes_arg);
-  cudaSafeCall (cudaMemcpy2D (data_, step_, host_ptr_arg, host_step_arg, colsBytes_,
-                              rows_, cudaMemcpyHostToDevice));
+  cudaSafeCall (cudaMemcpy2D (data_,
+                              step_,
+                              host_ptr_arg,
+                              host_step_arg,
+                              colsBytes_,
+                              rows_,
+                              cudaMemcpyHostToDevice));
   cudaSafeCall (cudaDeviceSynchronize ());
 }
 
 void
 pcl::gpu::DeviceMemory2D::download (void *host_ptr_arg, size_t host_step_arg) const
 {
-  cudaSafeCall (cudaMemcpy2D (host_ptr_arg, host_step_arg, data_, step_, colsBytes_,
-                              rows_, cudaMemcpyDeviceToHost));
+  cudaSafeCall (cudaMemcpy2D (host_ptr_arg,
+                              host_step_arg,
+                              data_,
+                              step_,
+                              colsBytes_,
+                              rows_,
+                              cudaMemcpyDeviceToHost));
   cudaSafeCall (cudaDeviceSynchronize ());
 }
 

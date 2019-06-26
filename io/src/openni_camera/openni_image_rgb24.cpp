@@ -13,13 +13,18 @@ namespace openni_wrapper
   ImageRGB24::~ImageRGB24 () throw () {}
 
   void
-  ImageRGB24::fillGrayscale (unsigned width, unsigned height,
-                             unsigned char *gray_buffer, unsigned gray_line_step) const
+  ImageRGB24::fillGrayscale (unsigned width,
+                             unsigned height,
+                             unsigned char *gray_buffer,
+                             unsigned gray_line_step) const
   {
     if (width > image_md_->XRes () || height > image_md_->YRes ())
       THROW_OPENNI_EXCEPTION (
           "Up-sampling not supported. Request was %d x %d -> %d x %d.",
-          image_md_->XRes (), image_md_->YRes (), width, height);
+          image_md_->XRes (),
+          image_md_->YRes (),
+          width,
+          height);
 
     if (image_md_->XRes () % width == 0 && image_md_->YRes () % height == 0) {
       unsigned src_step = image_md_->XRes () / width;
@@ -47,18 +52,26 @@ namespace openni_wrapper
     } else {
       THROW_OPENNI_EXCEPTION ("Down-sampling only possible for integer scale. Request "
                               "was %d x %d -> %d x %d.",
-                              image_md_->XRes (), image_md_->YRes (), width, height);
+                              image_md_->XRes (),
+                              image_md_->YRes (),
+                              width,
+                              height);
     }
   }
 
   void
-  ImageRGB24::fillRGB (unsigned width, unsigned height, unsigned char *rgb_buffer,
+  ImageRGB24::fillRGB (unsigned width,
+                       unsigned height,
+                       unsigned char *rgb_buffer,
                        unsigned rgb_line_step) const
   {
     if (width > image_md_->XRes () || height > image_md_->YRes ())
       THROW_OPENNI_EXCEPTION (
           "Up-sampling not supported. Request was %d x %d -> %d x %d.",
-          image_md_->XRes (), image_md_->YRes (), width, height);
+          image_md_->XRes (),
+          image_md_->YRes (),
+          width,
+          height);
 
     if (width == image_md_->XRes () && height == image_md_->YRes ()) {
       unsigned line_size = width * 3;
@@ -104,16 +117,21 @@ namespace openni_wrapper
     } else {
       THROW_OPENNI_EXCEPTION ("Down-sampling only possible for integer scale. Request "
                               "was %d x %d -> %d x %d.",
-                              image_md_->XRes (), image_md_->YRes (), width, height);
+                              image_md_->XRes (),
+                              image_md_->YRes (),
+                              width,
+                              height);
     }
   }
 
   bool
-  ImageRGB24::isResizingSupported (unsigned input_width, unsigned input_height,
-                                   unsigned output_width, unsigned output_height) const
+  ImageRGB24::isResizingSupported (unsigned input_width,
+                                   unsigned input_height,
+                                   unsigned output_width,
+                                   unsigned output_height) const
   {
-    return ImageRGB24::resizingSupported (input_width, input_height, output_width,
-                                          output_height);
+    return ImageRGB24::resizingSupported (
+        input_width, input_height, output_width, output_height);
   }
 } // namespace openni_wrapper
 

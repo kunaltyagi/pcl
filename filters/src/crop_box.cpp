@@ -61,8 +61,8 @@ pcl::CropBox<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
   Eigen::Affine3f inverse_transform = Eigen::Affine3f::Identity ();
 
   if (rotation_ != Eigen::Vector3f::Zero ()) {
-    pcl::getTransformation (0, 0, 0, rotation_ (0), rotation_ (1), rotation_ (2),
-                            transform);
+    pcl::getTransformation (
+        0, 0, 0, rotation_ (0), rotation_ (1), rotation_ (2), transform);
     inverse_transform = transform.inverse ();
   }
 
@@ -105,7 +105,8 @@ pcl::CropBox<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
          local_pt.z () > max_pt_[2])) {
       if (negative_) {
         memcpy (&output.data[indices_count++ * output.point_step],
-                &input_->data[index * output.point_step], output.point_step);
+                &input_->data[index * output.point_step],
+                output.point_step);
       } else if (extract_removed_indices_) {
         (*removed_indices_)[removed_indices_count++] = static_cast<int> (index);
       }
@@ -116,7 +117,8 @@ pcl::CropBox<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
         (*removed_indices_)[removed_indices_count++] = static_cast<int> (index);
       } else if (!negative_) {
         memcpy (&output.data[indices_count++ * output.point_step],
-                &input_->data[index * output.point_step], output.point_step);
+                &input_->data[index * output.point_step],
+                output.point_step);
       }
     }
   }
@@ -141,8 +143,8 @@ pcl::CropBox<pcl::PCLPointCloud2>::applyFilter (std::vector<int> &indices)
   Eigen::Affine3f inverse_transform = Eigen::Affine3f::Identity ();
 
   if (rotation_ != Eigen::Vector3f::Zero ()) {
-    pcl::getTransformation (0, 0, 0, rotation_ (0), rotation_ (1), rotation_ (2),
-                            transform);
+    pcl::getTransformation (
+        0, 0, 0, rotation_ (0), rotation_ (1), rotation_ (2), transform);
     inverse_transform = transform.inverse ();
   }
 

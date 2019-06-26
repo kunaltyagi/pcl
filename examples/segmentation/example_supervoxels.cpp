@@ -353,8 +353,8 @@ main (int argc, char **argv)
   }
 
   std::cout << "Constructing Boost Graph Library Adjacency List...\n";
-  using VoxelAdjacencyList = boost::adjacency_list<boost::setS, boost::setS,
-                                                   boost::undirectedS, uint32_t, float>;
+  using VoxelAdjacencyList = boost::
+      adjacency_list<boost::setS, boost::setS, boost::undirectedS, uint32_t, float>;
   VoxelAdjacencyList supervoxel_adjacency_list;
   super.getSupervoxelAdjacencyList (supervoxel_adjacency_list);
 
@@ -400,7 +400,9 @@ main (int argc, char **argv)
       if (refined_sv_normal_shown != show_refined || !sv_added) {
         viewer->removePointCloud ("supervoxel_normals");
         viewer->addPointCloudNormals<PointNormal> (
-            (show_refined) ? refined_sv_normal_cloud : sv_normal_cloud, 1, 0.05f,
+            (show_refined) ? refined_sv_normal_cloud : sv_normal_cloud,
+            1,
+            0.05f,
             "supervoxel_normals");
         sv_added = true;
       }
@@ -420,8 +422,10 @@ main (int argc, char **argv)
         if (refined_normal_shown != show_refined || !normals_added) {
           viewer->removePointCloud (ss.str ());
           viewer->addPointCloudNormals<PointT, Normal> ((sv_itr->second)->voxels_,
-                                                        (sv_itr->second)->normals_, 10,
-                                                        0.02f, ss.str ());
+                                                        (sv_itr->second)->normals_,
+                                                        10,
+                                                        0.02f,
+                                                        ss.str ());
           //  std::cout << (sv_itr->second)->normals_->points[0]<<"\n";
         }
       }
@@ -481,8 +485,8 @@ main (int argc, char **argv)
       printText (viewer);
     } else {
       removeText (viewer);
-      if (!viewer->updateText ("Press h to show help", 5, 10, 12, 1.0, 1.0, 1.0,
-                               "help_text"))
+      if (!viewer->updateText (
+              "Press h to show help", 5, 10, 12, 1.0, 1.0, 1.0, "help_text"))
         viewer->addText ("Press h to show help", 5, 10, 12, 1.0, 1.0, 1.0, "help_text");
     }
 
@@ -526,9 +530,15 @@ printText (pcl::visualization::PCLVisualizer::Ptr viewer)
   std::string on_str = "on";
   std::string off_str = "off";
   if (!viewer->updateText ("Press (1-n) to show different elements (h) to disable this",
-                           5, 72, 12, 1.0, 1.0, 1.0, "hud_text"))
-    viewer->addText ("Press 1-n to show different elements", 5, 72, 12, 1.0, 1.0, 1.0,
-                     "hud_text");
+                           5,
+                           72,
+                           12,
+                           1.0,
+                           1.0,
+                           1.0,
+                           "hud_text"))
+    viewer->addText (
+        "Press 1-n to show different elements", 5, 72, 12, 1.0, 1.0, 1.0, "hud_text");
 
   std::string temp =
       "(1) Voxels currently " + ((show_voxel_centroids) ? on_str : off_str);

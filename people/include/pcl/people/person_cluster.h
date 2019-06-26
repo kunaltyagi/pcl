@@ -140,9 +140,12 @@ namespace pcl
       using PointCloudConstPtr = boost::shared_ptr<const PointCloud>;
 
       /** \brief Constructor. */
-      PersonCluster (const PointCloudPtr &input_cloud, const pcl::PointIndices &indices,
-                     const Eigen::VectorXf &ground_coeffs, float sqrt_ground_coeffs,
-                     bool head_centroid, bool vertical = false);
+      PersonCluster (const PointCloudPtr &input_cloud,
+                     const pcl::PointIndices &indices,
+                     const Eigen::VectorXf &ground_coeffs,
+                     float sqrt_ground_coeffs,
+                     bool head_centroid,
+                     bool vertical = false);
 
       /** \brief Destructor. */
       virtual ~PersonCluster ();
@@ -309,17 +312,20 @@ namespace pcl
       /**
        * \brief For sorting purpose: sort by distance.
        */
-      friend bool operator<<> (const PersonCluster<PointT> &c1,
-                               const PersonCluster<PointT> &c2);
+      friend bool
+      operator<<> (const PersonCluster<PointT> &c1, const PersonCluster<PointT> &c2);
 
       protected:
       /**
        * \brief PersonCluster initialization.
        */
       void
-      init (const PointCloudPtr &input_cloud, const pcl::PointIndices &indices,
-            const Eigen::VectorXf &ground_coeffs, float sqrt_ground_coeffs,
-            bool head_centroid, bool vertical);
+      init (const PointCloudPtr &input_cloud,
+            const pcl::PointIndices &indices,
+            const Eigen::VectorXf &ground_coeffs,
+            float sqrt_ground_coeffs,
+            bool head_centroid,
+            bool vertical);
     };
   } /* namespace people */
 } /* namespace pcl */

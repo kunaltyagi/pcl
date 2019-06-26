@@ -185,7 +185,8 @@ class ON_CLASS ON_Polyline : public ON_3dPointArray
   // Returns:
   //   true if successful.
   bool
-  ClosestPointTo (const ON_3dPoint &test_point, double *t,
+  ClosestPointTo (const ON_3dPoint &test_point,
+                  double *t,
                   int segment_index0, // index of segment where search begins
                   int segment_index1  // index + 1 of segment where search stops
                   ) const;

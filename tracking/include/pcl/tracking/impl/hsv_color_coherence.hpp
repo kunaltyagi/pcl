@@ -143,9 +143,17 @@ namespace pcl
       target_rgb.int_value = target.rgba;
 
       float source_h, source_s, source_v, target_h, target_s, target_v;
-      RGB2HSV (source_rgb.Red, source_rgb.Blue, source_rgb.Green, source_h, source_s,
+      RGB2HSV (source_rgb.Red,
+               source_rgb.Blue,
+               source_rgb.Green,
+               source_h,
+               source_s,
                source_v);
-      RGB2HSV (target_rgb.Red, target_rgb.Blue, target_rgb.Green, target_h, target_s,
+      RGB2HSV (target_rgb.Red,
+               target_rgb.Blue,
+               target_rgb.Green,
+               target_h,
+               target_s,
                target_v);
       // hue value is in 0 ~ 2pi, but circulated.
       const float _h_diff = fabsf (source_h - target_h);

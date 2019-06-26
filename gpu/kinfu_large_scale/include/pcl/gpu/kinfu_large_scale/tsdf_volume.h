@@ -191,7 +191,9 @@ namespace pcl
         size_t
         fetchSliceAsCloud (DeviceArray<PointType> &cloud_buffer_xyz,
                            DeviceArray<float> &cloud_buffer_intensity,
-                           const tsdf_buffer *buffer, int shiftX, int shiftY,
+                           const tsdf_buffer *buffer,
+                           int shiftX,
+                           int shiftY,
                            int shiftZ) const;
 
         /** \brief Computes normals as gradient of tsdf for given points
@@ -258,7 +260,8 @@ namespace pcl
           if (volume_host_->size () != this->size ())
             pcl::console::print_warn ("[TSDFVolume::setHeader] Header volume size (%d) "
                                       "doesn't fit underlying data size (%d)",
-                                      volume_host_->size (), size ());
+                                      volume_host_->size (),
+                                      size ());
         }
 
         /** \brief Returns overall number of voxels in grid stored on host */

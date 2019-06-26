@@ -128,8 +128,8 @@ TEST (PCL, Octree_Pointcloud_Nearest_K_Neighbour_Search)
                           (cloudIn->points[i].z - searchPoint.z) *
                               (cloudIn->points[i].z - searchPoint.z));
 
-      prioPointQueueEntry pointEntry (cloudIn->points[i], pointDist,
-                                      static_cast<int> (i));
+      prioPointQueueEntry pointEntry (
+          cloudIn->points[i], pointDist, static_cast<int> (i));
 
       pointCandidates.push (pointEntry);
     }
@@ -152,8 +152,8 @@ TEST (PCL, Octree_Pointcloud_Nearest_K_Neighbour_Search)
     }
     // octree nearest neighbor search
     octree->setInputCloud (cloudIn);
-    octree->nearestKSearch (searchPoint, static_cast<int> (K), k_indices,
-                            k_sqr_distances);
+    octree->nearestKSearch (
+        searchPoint, static_cast<int> (K), k_indices, k_sqr_distances);
 
     ASSERT_EQ (k_indices.size (), k_indices_bruteforce.size ());
 

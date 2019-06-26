@@ -57,7 +57,8 @@ namespace pcl
 
     CloudIterator (PointCloud<PointT> &cloud, const PointIndices &indices);
 
-    CloudIterator (PointCloud<PointT> &cloud, const Correspondences &corrs,
+    CloudIterator (PointCloud<PointT> &cloud,
+                   const Correspondences &corrs,
                    bool source);
 
     ~CloudIterator ();
@@ -143,7 +144,8 @@ namespace pcl
 
     ConstCloudIterator (const PointCloud<PointT> &cloud, const PointIndices &indices);
 
-    ConstCloudIterator (const PointCloud<PointT> &cloud, const Correspondences &corrs,
+    ConstCloudIterator (const PointCloud<PointT> &cloud,
+                        const Correspondences &corrs,
                         bool source);
 
     ~ConstCloudIterator ();

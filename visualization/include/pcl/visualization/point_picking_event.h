@@ -95,8 +95,14 @@ namespace pcl
       {
       }
 
-      PointPickingEvent (int idx1, int idx2, float x1, float y1, float z1, float x2,
-                         float y2, float z2)
+      PointPickingEvent (int idx1,
+                         int idx2,
+                         float x1,
+                         float y1,
+                         float z1,
+                         float x2,
+                         float y2,
+                         float z2)
           : idx_ (idx1), idx2_ (idx2), x_ (x1), y_ (y1), z_ (z1), x2_ (x2), y2_ (y2),
             z2_ (z2)
       {

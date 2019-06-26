@@ -286,8 +286,8 @@ pcl::gpu::TsdfVolume::fetchNormals (const DeviceArray<PointType> &cloud,
 {
   normals.create (cloud.size ());
   const float3 device_volume_size = device_cast<const float3> (size_);
-  device::extractNormals (volume_, device_volume_size, cloud,
-                          (device::PointType *)normals.ptr ());
+  device::extractNormals (
+      volume_, device_volume_size, cloud, (device::PointType *)normals.ptr ());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -298,8 +298,8 @@ pcl::gpu::TsdfVolume::fetchNormals (const DeviceArray<PointType> &cloud,
 {
   normals.create (cloud.size ());
   const float3 device_volume_size = device_cast<const float3> (size_);
-  device::extractNormals (volume_, device_volume_size, cloud,
-                          (device::float8 *)normals.ptr ());
+  device::extractNormals (
+      volume_, device_volume_size, cloud, (device::float8 *)normals.ptr ());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

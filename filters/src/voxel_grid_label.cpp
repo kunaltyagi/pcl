@@ -61,9 +61,13 @@ pcl::VoxelGridLabel::applyFilter (PointCloud &output)
   Eigen::Vector4f min_p, max_p;
   // Get the minimum and maximum dimensions
   if (!filter_field_name_.empty ()) // If we don't want to process the entire cloud...
-    getMinMax3D<pcl::PointXYZRGBL> (
-        input_, filter_field_name_, static_cast<float> (filter_limit_min_),
-        static_cast<float> (filter_limit_max_), min_p, max_p, filter_limit_negative_);
+    getMinMax3D<pcl::PointXYZRGBL> (input_,
+                                    filter_field_name_,
+                                    static_cast<float> (filter_limit_min_),
+                                    static_cast<float> (filter_limit_max_),
+                                    min_p,
+                                    max_p,
+                                    filter_limit_negative_);
   else
     getMinMax3D<pcl::PointXYZRGBL> (*input_, min_p, max_p);
 
@@ -125,7 +129,8 @@ pcl::VoxelGridLabel::applyFilter (PointCloud &output)
     int distance_idx = pcl::getFieldIndex (*input_, filter_field_name_, fields);
     if (distance_idx == -1)
       PCL_WARN ("[pcl::%s::applyFilter] Invalid filter field name. Index is %d.\n",
-                getClassName ().c_str (), distance_idx);
+                getClassName ().c_str (),
+                distance_idx);
 
     // First pass: go over all points and insert them into the index_vector vector
     // with calculated idx. Points with the same idx value will contribute to the
@@ -198,8 +203,8 @@ pcl::VoxelGridLabel::applyFilter (PointCloud &output)
   // Second pass: sort the index_vector vector using value representing target cell as
   // index in effect all points belonging to the same output cell will be next to each
   // other
-  std::sort (index_vector.begin (), index_vector.end (),
-             std::less<cloud_point_index_idx> ());
+  std::sort (
+      index_vector.begin (), index_vector.end (), std::less<cloud_point_index_idx> ());
 
   // Third pass: count output cells
   // we need to skip all the same, adjacenent idx values
@@ -231,11 +236,13 @@ pcl::VoxelGridLabel::applyFilter (PointCloud &output)
     } catch (std::bad_alloc &) {
       throw PCLException (
           "VoxelGrid bin size is too low; impossible to allocate memory for layout",
-          "voxel_grid.hpp", "applyFilter");
+          "voxel_grid.hpp",
+          "applyFilter");
     } catch (std::length_error &) {
       throw PCLException (
           "VoxelGrid bin size is too low; impossible to allocate memory for layout",
-          "voxel_grid.hpp", "applyFilter");
+          "voxel_grid.hpp",
+          "applyFilter");
     }
   }
 
@@ -331,7 +338,8 @@ pcl::VoxelGridLabel::applyFilter (PointCloud &output)
               b = centroid[centroid_size - 1];
         int rgb = (static_cast<int> (r) << 16) | (static_cast<int> (g) << 8) |
                   static_cast<int> (b);
-        memcpy (reinterpret_cast<char *> (&output.points[index]) + rgba_index, &rgb,
+        memcpy (reinterpret_cast<char *> (&output.points[index]) + rgba_index,
+                &rgb,
                 sizeof (float));
       }
 

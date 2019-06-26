@@ -95,7 +95,9 @@ main (int argc, char **argv)
     std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f>> transforms;
 
     // Get world as a vector of cubes
-    wm.getWorldAsCubes (pcl::device::kinfuLS::VOLUME_X, clouds, transforms,
+    wm.getWorldAsCubes (pcl::device::kinfuLS::VOLUME_X,
+                        clouds,
+                        transforms,
                         0.025); // 2.5% overlapp (12 cells with a 512-wide cube)
 
     // Creating the standalone marching cubes instance
@@ -106,8 +108,10 @@ main (int argc, char **argv)
     PCL_WARN ("Processing world with volume size set to %.2f meters\n", volume_size);
 
     pcl::gpu::kinfuLS::StandaloneMarchingCubes<pcl::PointXYZI> m_cubes (
-        pcl::device::kinfuLS::VOLUME_X, pcl::device::kinfuLS::VOLUME_Y,
-        pcl::device::kinfuLS::VOLUME_Z, volume_size);
+        pcl::device::kinfuLS::VOLUME_X,
+        pcl::device::kinfuLS::VOLUME_Y,
+        pcl::device::kinfuLS::VOLUME_Z,
+        volume_size);
 
     //~ //Creating the output
     //~ boost::shared_ptr<pcl::PolygonMesh> mesh_ptr_;

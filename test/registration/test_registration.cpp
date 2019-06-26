@@ -200,12 +200,12 @@ sampleRandomTransform (Eigen::Affine3f &trans, float max_angle, float max_trans)
 {
   srand (0);
   // Sample random transform
-  Eigen::Vector3f axis ((float)rand () / RAND_MAX, (float)rand () / RAND_MAX,
-                        (float)rand () / RAND_MAX);
+  Eigen::Vector3f axis (
+      (float)rand () / RAND_MAX, (float)rand () / RAND_MAX, (float)rand () / RAND_MAX);
   axis.normalize ();
   float angle = (float)rand () / RAND_MAX * max_angle;
-  Eigen::Vector3f translation ((float)rand () / RAND_MAX, (float)rand () / RAND_MAX,
-                               (float)rand () / RAND_MAX);
+  Eigen::Vector3f translation (
+      (float)rand () / RAND_MAX, (float)rand () / RAND_MAX, (float)rand () / RAND_MAX);
   translation *= max_trans;
   Eigen::Affine3f rotation (Eigen::AngleAxis<float> (angle, axis));
   trans = Eigen::Translation3f (translation) * rotation;
@@ -242,8 +242,8 @@ TEST (PCL, IterativeClosestPointWithRejectors)
     PointCloud<PointXYZ>::Ptr source_trans (new PointCloud<PointXYZ>);
     PointCloud<PointXYZ>::Ptr target_trans (new PointCloud<PointXYZ>);
 
-    pcl::transformPointCloud (*source, *source_trans,
-                              delta_transform.inverse () * net_transform);
+    pcl::transformPointCloud (
+        *source, *source_trans, delta_transform.inverse () * net_transform);
     pcl::transformPointCloud (*source, *target_trans, net_transform);
 
     reg.setInputSource (source_trans);
@@ -299,8 +299,8 @@ TEST (PCL, JointIterativeClosestPoint)
       // And apply it to the source and target
       PointCloud<PointXYZ>::Ptr source_trans (new PointCloud<PointXYZ>);
       PointCloud<PointXYZ>::Ptr target_trans (new PointCloud<PointXYZ>);
-      pcl::transformPointCloud (*source, *source_trans,
-                                delta_transform.inverse () * net_transform);
+      pcl::transformPointCloud (
+          *source, *source_trans, delta_transform.inverse () * net_transform);
       pcl::transformPointCloud (*source, *target_trans, net_transform);
       // Add these to the joint solver
       reg.addInputSource (source_trans);
@@ -533,7 +533,8 @@ TEST (PCL, GeneralizedIterativeClosestPoint)
   transform.translation () = Eigen::Vector3f (0.1, 0.2, 0.3);
   PointCloud<PointT>::Ptr transformed_tgt (new PointCloud<PointT>);
   pcl::transformPointCloud (
-      *tgt, *transformed_tgt,
+      *tgt,
+      *transformed_tgt,
       transform.matrix ()); // transformed_tgt is now a copy of tgt with a
                             // transformation matrix applied
 

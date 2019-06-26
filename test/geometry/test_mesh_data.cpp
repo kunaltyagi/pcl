@@ -72,7 +72,9 @@ using FaceIndices = std::vector<FaceIndex>;
 /** \brief Check if the size of the mesh elements is correct. */
 template <class MeshT>
 void
-checkSizeElements (const MeshT &mesh, const size_t n_v, const size_t n_e,
+checkSizeElements (const MeshT &mesh,
+                   const size_t n_v,
+                   const size_t n_e,
                    const size_t n_f)
 {
   ASSERT_EQ (n_v, mesh.sizeVertices ());
@@ -85,7 +87,10 @@ checkSizeElements (const MeshT &mesh, const size_t n_v, const size_t n_e,
 /** \brief Check if the size of the mesh data is correct. */
 template <class MeshT>
 void
-checkSizeData (const MeshT &mesh, const size_t n_v, const size_t n_he, const size_t n_e,
+checkSizeData (const MeshT &mesh,
+               const size_t n_v,
+               const size_t n_he,
+               const size_t n_e,
                const size_t n_f)
 {
   ASSERT_EQ (n_v, mesh.getVertexDataCloud ().size ());

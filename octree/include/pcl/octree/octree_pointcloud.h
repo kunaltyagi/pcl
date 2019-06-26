@@ -63,7 +63,8 @@ namespace pcl
      * implementation () \ingroup octree \author Julius Kammerl (julius@kammerl.de)
      */
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <typename PointT, typename LeafContainerT = OctreeContainerPointIndices,
+    template <typename PointT,
+              typename LeafContainerT = OctreeContainerPointIndices,
               typename BranchContainerT = OctreeContainerEmpty,
               typename OctreeT = OctreeBase<LeafContainerT, BranchContainerT>>
 
@@ -93,7 +94,9 @@ namespace pcl
       using PointCloudConstPtr = boost::shared_ptr<const PointCloud>;
 
       // public typedefs for single/double buffering
-      using SingleBuffer = OctreePointCloud<PointT, LeafContainerT, BranchContainerT,
+      using SingleBuffer = OctreePointCloud<PointT,
+                                            LeafContainerT,
+                                            BranchContainerT,
                                             OctreeBase<LeafContainerT>>;
       // using DoubleBuffer = OctreePointCloud<PointT, LeafContainerT, BranchContainerT,
       // Octree2BufBase<LeafContainerT> >;
@@ -216,7 +219,8 @@ namespace pcl
        * the dataset (given by \a setInputCloud)
        */
       void
-      addPointToCloud (const PointT &point_arg, PointCloudPtr cloud_arg,
+      addPointToCloud (const PointT &point_arg,
+                       PointCloudPtr cloud_arg,
                        IndicesPtr indices_arg);
 
       /** \brief Check if voxel at given point exist.
@@ -245,7 +249,8 @@ namespace pcl
        * \return "true" if voxel exist; "false" otherwise
        */
       bool
-      isVoxelOccupiedAtPoint (const double point_x_arg, const double point_y_arg,
+      isVoxelOccupiedAtPoint (const double point_x_arg,
+                              const double point_y_arg,
                               const double point_z_arg) const;
 
       /** \brief Check if voxel at given point from input cloud exist.
@@ -309,9 +314,12 @@ namespace pcl
        * \param[in] max_z_arg Z coordinate of upper bounding box corner
        */
       void
-      defineBoundingBox (const double min_x_arg, const double min_y_arg,
-                         const double min_z_arg, const double max_x_arg,
-                         const double max_y_arg, const double max_z_arg);
+      defineBoundingBox (const double min_x_arg,
+                         const double min_y_arg,
+                         const double min_z_arg,
+                         const double max_x_arg,
+                         const double max_y_arg,
+                         const double max_z_arg);
 
       /** \brief Define bounding box for octree
        * \note Lower bounding box point is set to (0, 0, 0)
@@ -321,7 +329,8 @@ namespace pcl
        * \param[in] max_z_arg Z coordinate of upper bounding box corner
        */
       void
-      defineBoundingBox (const double max_x_arg, const double max_y_arg,
+      defineBoundingBox (const double max_x_arg,
+                         const double max_y_arg,
                          const double max_z_arg);
 
       /** \brief Define bounding box cube for octree
@@ -342,8 +351,12 @@ namespace pcl
        * \param[in] max_z_arg Z coordinate of upper bounding box corner
        */
       void
-      getBoundingBox (double &min_x_arg, double &min_y_arg, double &min_z_arg,
-                      double &max_x_arg, double &max_y_arg, double &max_z_arg) const;
+      getBoundingBox (double &min_x_arg,
+                      double &min_y_arg,
+                      double &min_z_arg,
+                      double &max_x_arg,
+                      double &max_y_arg,
+                      double &max_z_arg) const;
 
       /** \brief Calculates the squared diameter of a voxel at given tree depth
        * \param[in] tree_depth_arg depth/level in octree
@@ -384,10 +397,12 @@ namespace pcl
        */
       inline void
       getVoxelBounds (const OctreeIteratorBase<OctreeT> &iterator,
-                      Eigen::Vector3f &min_pt, Eigen::Vector3f &max_pt) const
+                      Eigen::Vector3f &min_pt,
+                      Eigen::Vector3f &max_pt) const
       {
         this->genVoxelBoundsFromOctreeKey (iterator.getCurrentOctreeKey (),
-                                           iterator.getCurrentOctreeDepth (), min_pt,
+                                           iterator.getCurrentOctreeDepth (),
+                                           min_pt,
                                            max_pt);
       }
 
@@ -420,8 +435,10 @@ namespace pcl
        * \param[in] depth_mask of leaf node to be expanded
        */
       void
-      expandLeafNode (LeafNode *leaf_node, BranchNode *parent_branch,
-                      unsigned char child_idx, unsigned int depth_mask);
+      expandLeafNode (LeafNode *leaf_node,
+                      BranchNode *parent_branch,
+                      unsigned char child_idx,
+                      unsigned int depth_mask);
 
       /** \brief Get point at index from input pointcloud dataset
        * \param[in] index_arg index representing the point in the dataset given by \a
@@ -486,8 +503,10 @@ namespace pcl
        * \param[out] key_arg write octree key to this reference
        */
       void
-      genOctreeKeyforPoint (const double point_x_arg, const double point_y_arg,
-                            const double point_z_arg, OctreeKey &key_arg) const;
+      genOctreeKeyforPoint (const double point_x_arg,
+                            const double point_y_arg,
+                            const double point_z_arg,
+                            OctreeKey &key_arg) const;
 
       /** \brief Virtual method for generating octree key for a given point index.
        * \note This method enables to assign indices to leaf nodes during octree
@@ -523,7 +542,8 @@ namespace pcl
        */
       void
       genVoxelBoundsFromOctreeKey (const OctreeKey &key_arg,
-                                   unsigned int tree_depth_arg, Eigen::Vector3f &min_pt,
+                                   unsigned int tree_depth_arg,
+                                   Eigen::Vector3f &min_pt,
                                    Eigen::Vector3f &max_pt) const;
 
       /** \brief Recursively search the tree for all leaf nodes and return a vector of
@@ -534,7 +554,8 @@ namespace pcl
        */
       int
       getOccupiedVoxelCentersRecursive (
-          const BranchNode *node_arg, const OctreeKey &key_arg,
+          const BranchNode *node_arg,
+          const OctreeKey &key_arg,
           AlignedPointTVector &voxel_center_list_arg) const;
 
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

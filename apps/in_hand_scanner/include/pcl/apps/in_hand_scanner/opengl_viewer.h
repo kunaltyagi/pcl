@@ -70,7 +70,8 @@ namespace pcl
         {
           public:
           Triangle () : first (0), second (0), third (0) {}
-          Triangle (const unsigned int first, const unsigned int second,
+          Triangle (const unsigned int first,
+                    const unsigned int second,
                     const unsigned int third)
               : first (first), second (second), third (third)
           {
@@ -143,8 +144,12 @@ namespace pcl
         {
         }
 
-        BoxCoefficients (const float x_min, const float x_max, const float y_min,
-                         const float y_max, const float z_min, const float z_max,
+        BoxCoefficients (const float x_min,
+                         const float x_max,
+                         const float y_min,
+                         const float y_max,
+                         const float z_min,
+                         const float z_max,
                          const Eigen::Isometry3d &T)
             : x_min (x_min), x_max (x_max), y_min (y_min), y_max (y_max), z_min (z_min),
               z_max (z_max), transformation (T)
@@ -178,7 +183,8 @@ namespace pcl
        * visualization. Therefore this method takes some time.
        */
       bool
-      addMesh (const MeshConstPtr &mesh, const std::string &id,
+      addMesh (const MeshConstPtr &mesh,
+               const std::string &id,
                const Eigen::Isometry3d &T = Eigen::Isometry3d::Identity ());
 
       /** \brief Convert an organized cloud to a mesh and draw it.
@@ -189,7 +195,8 @@ namespace pcl
        * success. \note This method takes some time for the conversion).
        */
       bool
-      addMesh (const CloudXYZRGBNormalConstPtr &cloud, const std::string &id,
+      addMesh (const CloudXYZRGBNormalConstPtr &cloud,
+               const std::string &id,
                const Eigen::Isometry3d &T = Eigen::Isometry3d::Identity ());
 
       /** \brief Remove the mesh with the given id.

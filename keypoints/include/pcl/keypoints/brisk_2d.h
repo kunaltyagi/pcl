@@ -67,7 +67,8 @@ namespace pcl
    * \author Radu B. Rusu, Stefan Holzer
    * \ingroup keypoints
    */
-  template <typename PointInT, typename PointOutT = pcl::PointWithScale,
+  template <typename PointInT,
+            typename PointOutT = pcl::PointWithScale,
             typename IntensityT = pcl::common::IntensityFieldAccessor<PointInT>>
   class BriskKeypoint2D : public Keypoint<PointInT, PointOutT>
   {
@@ -152,7 +153,9 @@ namespace pcl
 
     /////////////////////////////////////////////////////////////////////////
     inline void
-    bilinearInterpolation (const PointCloudInConstPtr &cloud, float x, float y,
+    bilinearInterpolation (const PointCloudInConstPtr &cloud,
+                           float x,
+                           float y,
                            PointOutT &pt)
     {
       int u = int(x);
@@ -254,8 +257,11 @@ namespace pcl
          * \param[in] scale scale
          * \param[in] offset offset
          */
-        Layer (const std::vector<unsigned char> &img, int width, int height,
-               float scale = 1.0f, float offset = 0.0f);
+        Layer (const std::vector<unsigned char> &img,
+               int width,
+               int height,
+               float scale = 1.0f,
+               float offset = 0.0f);
 
         /** \brief Copy constructor for deriving a layer.
          * \param[in] layer layer to derive from
@@ -306,8 +312,12 @@ namespace pcl
          * \param[in] scale the scale
          */
         uint8_t
-        getValue (const std::vector<unsigned char> &mat, int width, int height,
-                  float xf, float yf, float scale);
+        getValue (const std::vector<unsigned char> &mat,
+                  int width,
+                  int height,
+                  float xf,
+                  float yf,
+                  float scale);
 
         /** \brief Get the image used. */
         const std::vector<unsigned char> &
@@ -354,14 +364,20 @@ namespace pcl
         private:
         // half sampling
         inline void
-        halfsample (const std::vector<unsigned char> &srcimg, int srcwidth,
-                    int srcheight, std::vector<unsigned char> &dstimg, int dstwidth,
+        halfsample (const std::vector<unsigned char> &srcimg,
+                    int srcwidth,
+                    int srcheight,
+                    std::vector<unsigned char> &dstimg,
+                    int dstwidth,
                     int dstheight);
 
         // two third sampling
         inline void
-        twothirdsample (const std::vector<unsigned char> &srcimg, int srcwidth,
-                        int srcheight, std::vector<unsigned char> &dstimg, int dstwidth,
+        twothirdsample (const std::vector<unsigned char> &srcimg,
+                        int srcwidth,
+                        int srcheight,
+                        std::vector<unsigned char> &dstimg,
+                        int dstwidth,
                         int dstheight);
 
         /** the image */
@@ -397,7 +413,8 @@ namespace pcl
          * \param[in] height the image height
          */
         void
-        constructPyramid (const std::vector<unsigned char> &image, int width,
+        constructPyramid (const std::vector<unsigned char> &image,
+                          int width,
                           int height);
 
         /** \brief Get the keypoints for the associated image and threshold.
@@ -429,14 +446,27 @@ namespace pcl
 
         /** 2D maximum refinement */
         inline float
-        subpixel2D (const int s_0_0, const int s_0_1, const int s_0_2, const int s_1_0,
-                    const int s_1_1, const int s_1_2, const int s_2_0, const int s_2_1,
-                    const int s_2_2, float &delta_x, float &delta_y);
+        subpixel2D (const int s_0_0,
+                    const int s_0_1,
+                    const int s_0_2,
+                    const int s_1_0,
+                    const int s_1_1,
+                    const int s_1_2,
+                    const int s_2_0,
+                    const int s_2_1,
+                    const int s_2_2,
+                    float &delta_x,
+                    float &delta_y);
 
         /** 3D maximum refinement centered around (x_layer,y_layer) */
         inline float
-        refine3D (const uint8_t layer, const int x_layer, const int y_layer, float &x,
-                  float &y, float &scale, bool &ismax);
+        refine3D (const uint8_t layer,
+                  const int x_layer,
+                  const int y_layer,
+                  float &x,
+                  float &y,
+                  float &scale,
+                  bool &ismax);
 
         /** interpolated score access with recalculation when needed */
         inline int
@@ -447,12 +477,22 @@ namespace pcl
 
         /** return the maximum of score patches above or below */
         inline float
-        getScoreMaxAbove (const uint8_t layer, const int x_layer, const int y_layer,
-                          const int threshold, bool &ismax, float &dx, float &dy);
+        getScoreMaxAbove (const uint8_t layer,
+                          const int x_layer,
+                          const int y_layer,
+                          const int threshold,
+                          bool &ismax,
+                          float &dx,
+                          float &dy);
 
         inline float
-        getScoreMaxBelow (const uint8_t layer, const int x_layer, const int y_layer,
-                          const int threshold, bool &ismax, float &dx, float &dy);
+        getScoreMaxBelow (const uint8_t layer,
+                          const int x_layer,
+                          const int y_layer,
+                          const int threshold,
+                          bool &ismax,
+                          float &dx,
+                          float &dy);
 
         // the image pyramids
         uint8_t layers_;

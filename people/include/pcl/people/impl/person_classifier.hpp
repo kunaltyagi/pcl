@@ -100,7 +100,8 @@ pcl::people::PersonClassifier<PointT>::loadSVMFromFile (std::string svm_filename
 
 template <typename PointT>
 void
-pcl::people::PersonClassifier<PointT>::setSVM (int window_height, int window_width,
+pcl::people::PersonClassifier<PointT>::setSVM (int window_height,
+                                               int window_width,
                                                std::vector<float> SVM_weights,
                                                float SVM_offset)
 {
@@ -112,7 +113,8 @@ pcl::people::PersonClassifier<PointT>::setSVM (int window_height, int window_wid
 
 template <typename PointT>
 void
-pcl::people::PersonClassifier<PointT>::getSVM (int &window_height, int &window_width,
+pcl::people::PersonClassifier<PointT>::getSVM (int &window_height,
+                                               int &window_width,
                                                std::vector<float> &SVM_weights,
                                                float &SVM_offset)
 {
@@ -125,7 +127,8 @@ pcl::people::PersonClassifier<PointT>::getSVM (int &window_height, int &window_w
 template <typename PointT>
 void
 pcl::people::PersonClassifier<PointT>::resize (PointCloudPtr &input_image,
-                                               PointCloudPtr &output_image, int width,
+                                               PointCloudPtr &output_image,
+                                               int width,
                                                int height)
 {
   PointT new_point;
@@ -190,7 +193,9 @@ template <typename PointT>
 void
 pcl::people::PersonClassifier<PointT>::copyMakeBorder (PointCloudPtr &input_image,
                                                        PointCloudPtr &output_image,
-                                                       int xmin, int ymin, int width,
+                                                       int xmin,
+                                                       int ymin,
+                                                       int width,
                                                        int height)
 {
   PointT black_point;
@@ -221,8 +226,10 @@ pcl::people::PersonClassifier<PointT>::copyMakeBorder (PointCloudPtr &input_imag
 
 template <typename PointT>
 double
-pcl::people::PersonClassifier<PointT>::evaluate (float height_person, float xc,
-                                                 float yc, PointCloudPtr &image)
+pcl::people::PersonClassifier<PointT>::evaluate (float height_person,
+                                                 float xc,
+                                                 float yc,
+                                                 PointCloudPtr &image)
 {
   if (SVM_weights_.empty ()) {
     PCL_ERROR ("[pcl::people::PersonClassifier::evaluate] SVM has not been set!\n");

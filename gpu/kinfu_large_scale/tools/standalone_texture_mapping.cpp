@@ -52,7 +52,8 @@ using namespace pcl;
 
 /** \brief Save a textureMesh object to obj file */
 int
-saveOBJFile (const std::string &file_name, const pcl::TextureMesh &tex_mesh,
+saveOBJFile (const std::string &file_name,
+             const pcl::TextureMesh &tex_mesh,
              unsigned precision)
 {
   if (tex_mesh.cloud.data.empty ()) {
@@ -174,8 +175,8 @@ saveOBJFile (const std::string &file_name, const pcl::TextureMesh &tex_mesh,
     if (tex_mesh.tex_coordinates.empty ())
       continue;
 
-    PCL_INFO ("%d vertex textures in submesh %d\n", tex_mesh.tex_coordinates[m].size (),
-              m);
+    PCL_INFO (
+        "%d vertex textures in submesh %d\n", tex_mesh.tex_coordinates[m].size (), m);
     fs << "# " << tex_mesh.tex_coordinates[m].size () << " vertex textures in submesh "
        << m << std::endl;
     for (const auto &coordinate : tex_mesh.tex_coordinates[m]) {
@@ -459,7 +460,8 @@ main (int argc, char **argv)
   }
   mesh.tex_polygons.push_back (polygon_1);
   PCL_INFO ("\tInput mesh contains %d faces and %d vertices\n",
-            mesh.tex_polygons[0].size (), cloud->points.size ());
+            mesh.tex_polygons[0].size (),
+            cloud->points.size ());
   PCL_INFO ("...Done.\n");
 
   // Load textures and cameras poses and intrinsics
@@ -469,7 +471,8 @@ main (int argc, char **argv)
   const boost::filesystem::path base_dir (".");
   std::string extension (".txt");
   for (boost::filesystem::directory_iterator it (base_dir);
-       it != boost::filesystem::directory_iterator (); ++it) {
+       it != boost::filesystem::directory_iterator ();
+       ++it) {
     if (boost::filesystem::is_regular_file (it->status ()) &&
         boost::filesystem::extension (it->path ()) == extension) {
       pcl::TextureMapping<pcl::PointXYZ>::Camera cam;
@@ -525,8 +528,10 @@ main (int argc, char **argv)
 
   PCL_INFO ("Sorting faces by cameras done.\n");
   for (size_t i = 0; i <= my_cams.size (); ++i) {
-    PCL_INFO ("\tSub mesh %d contains %d faces and %d UV coordinates.\n", i,
-              mesh.tex_polygons[i].size (), mesh.tex_coordinates[i].size ());
+    PCL_INFO ("\tSub mesh %d contains %d faces and %d UV coordinates.\n",
+              i,
+              mesh.tex_polygons[i].size (),
+              mesh.tex_coordinates[i].size ());
   }
 
   // compute normals for the mesh

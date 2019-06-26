@@ -57,13 +57,20 @@ namespace pcl
       protected:
       /** \brief Create indices for triangulation. */
       static void
-      createIndices (std::vector<pcl::Vertices> &vertices, unsigned vidx, unsigned segX,
+      createIndices (std::vector<pcl::Vertices> &vertices,
+                     unsigned vidx,
+                     unsigned segX,
                      unsigned segY);
 
       /** \brief Create vertices (cloud) for triangulation. */
       static void
-      createVertices (pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud, float x0, float y0,
-                      float z0, float width, float height, unsigned segX,
+      createVertices (pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
+                      float x0,
+                      float y0,
+                      float z0,
+                      float width,
+                      float height,
+                      unsigned segX,
                       unsigned segY);
 
       public:
@@ -86,7 +93,8 @@ namespace pcl
        * resolution (number of vertices along each of the two dimensions of the surface.
        */
       static void
-      convertSurface2PolygonMesh (const ON_NurbsSurface &nurbs, PolygonMesh &mesh,
+      convertSurface2PolygonMesh (const ON_NurbsSurface &nurbs,
+                                  PolygonMesh &mesh,
                                   unsigned resolution);
 
       /** \brief Converts an openNURBS NurbsSurface to a pcl::PolygonMesh by sampling
@@ -97,12 +105,15 @@ namespace pcl
        * two dimensions of the surface. */
       static void
       convertTrimmedSurface2PolygonMesh (const ON_NurbsSurface &nurbs,
-                                         const ON_NurbsCurve &curve, PolygonMesh &mesh,
+                                         const ON_NurbsCurve &curve,
+                                         PolygonMesh &mesh,
                                          unsigned resolution);
       static void
       convertTrimmedSurface2PolygonMesh (const ON_NurbsSurface &nurbs,
-                                         const ON_NurbsCurve &curve, PolygonMesh &mesh,
-                                         unsigned resolution, vector_vec3d &start,
+                                         const ON_NurbsCurve &curve,
+                                         PolygonMesh &mesh,
+                                         unsigned resolution,
+                                         vector_vec3d &start,
                                          vector_vec3d &end);
 
       /** \brief Converts an openNURBS NurbsSurface to a point-cloud (vertices) and an
@@ -135,7 +146,8 @@ namespace pcl
        * cloud The actual vertices (point-cloud). \param[in] resolution number of
        * sampling points within one NurbsCurve element. */
       static void
-      convertCurve2PointCloud (const ON_NurbsCurve &curve, const ON_NurbsSurface &surf,
+      convertCurve2PointCloud (const ON_NurbsCurve &curve,
+                               const ON_NurbsSurface &surf,
                                pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,
                                unsigned resolution);
     };

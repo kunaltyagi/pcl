@@ -66,7 +66,8 @@ pcl::PolynomialCalculationsT<real>::Parameters::setZeroValue (real new_zero_valu
 
 template <typename real>
 inline void
-pcl::PolynomialCalculationsT<real>::solveLinearEquation (real a, real b,
+pcl::PolynomialCalculationsT<real>::solveLinearEquation (real a,
+                                                         real b,
                                                          std::vector<real> &roots) const
 {
   // cout << "Trying to solve "<<a<<"x + "<<b<<" = 0\n";
@@ -151,8 +152,8 @@ pcl::PolynomialCalculationsT<real>::solveQuadraticEquation (
 
 template <typename real>
 inline void
-pcl::PolynomialCalculationsT<real>::solveCubicEquation (real a, real b, real c, real d,
-                                                        std::vector<real> &roots) const
+pcl::PolynomialCalculationsT<real>::solveCubicEquation (
+    real a, real b, real c, real d, std::vector<real> &roots) const
 {
   // cout << "Trying to solve "<<a<<"x^3 + "<<b<<"x^2 + "<<c<<"x + "<<d<<" = 0\n";
 
@@ -371,7 +372,8 @@ inline pcl::BivariatePolynomialT<real>
     pcl::PolynomialCalculationsT<real>::bivariatePolynomialApproximation (
         std::vector<Eigen::Matrix<real, 3, 1>,
                     Eigen::aligned_allocator<Eigen::Matrix<real, 3, 1>>> &samplePoints,
-        unsigned int polynomial_degree, bool &error) const
+        unsigned int polynomial_degree,
+        bool &error) const
 {
   pcl::BivariatePolynomialT<real> ret;
   error = bivariatePolynomialApproximation (samplePoints, polynomial_degree, ret);
@@ -384,7 +386,8 @@ template <typename real>
 inline bool pcl::PolynomialCalculationsT<real>::bivariatePolynomialApproximation (
     std::vector<Eigen::Matrix<real, 3, 1>,
                 Eigen::aligned_allocator<Eigen::Matrix<real, 3, 1>>> &samplePoints,
-    unsigned int polynomial_degree, pcl::BivariatePolynomialT<real> &ret) const
+    unsigned int polynomial_degree,
+    pcl::BivariatePolynomialT<real> &ret) const
 {
   // MEASURE_FUNCTION_TIME;
   unsigned int parameters_size =
@@ -425,7 +428,8 @@ inline bool pcl::PolynomialCalculationsT<real>::bivariatePolynomialApproximation
            Eigen::Matrix<real, 3, 1>,
            Eigen::aligned_allocator<Eigen::Matrix<real, 3, 1>>>::const_iterator it =
            samplePoints.begin ();
-       it != samplePoints.end (); ++it) {
+       it != samplePoints.end ();
+       ++it) {
     currentX = (*it)[0];
     currentY = (*it)[1];
     currentZ = (*it)[2];

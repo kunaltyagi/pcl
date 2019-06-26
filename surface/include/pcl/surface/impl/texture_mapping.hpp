@@ -223,11 +223,14 @@ pcl::TextureMapping<PointInT>::mapTexture2MeshUV (pcl::TextureMesh &tex_mesh)
   float x_, y_, z_;
 
   for (int i = 0; i < nr_points; ++i) {
-    memcpy (&x_, &tex_mesh.cloud.data[i * point_size + tex_mesh.cloud.fields[0].offset],
+    memcpy (&x_,
+            &tex_mesh.cloud.data[i * point_size + tex_mesh.cloud.fields[0].offset],
             sizeof (float));
-    memcpy (&y_, &tex_mesh.cloud.data[i * point_size + tex_mesh.cloud.fields[1].offset],
+    memcpy (&y_,
+            &tex_mesh.cloud.data[i * point_size + tex_mesh.cloud.fields[1].offset],
             sizeof (float));
-    memcpy (&z_, &tex_mesh.cloud.data[i * point_size + tex_mesh.cloud.fields[2].offset],
+    memcpy (&z_,
+            &tex_mesh.cloud.data[i * point_size + tex_mesh.cloud.fields[2].offset],
             sizeof (float));
     // x
     if (x_ <= x_lowest)
@@ -313,12 +316,14 @@ pcl::TextureMapping<PointInT>::mapMultipleTexturesToMeshUV (
   if (tex_mesh.tex_polygons.size () != cams.size () + 1) {
     PCL_ERROR ("The mesh should be divided into nbCamera+1 sub-meshes.\n");
     PCL_ERROR ("You provided %d cameras and a mesh containing %d sub-meshes.\n",
-               cams.size (), tex_mesh.tex_polygons.size ());
+               cams.size (),
+               tex_mesh.tex_polygons.size ());
     return;
   }
 
   PCL_INFO ("You provided %d  cameras and a mesh containing %d sub-meshes.\n",
-            cams.size (), tex_mesh.tex_polygons.size ());
+            cams.size (),
+            tex_mesh.tex_polygons.size ());
 
   typename pcl::PointCloud<PointInT>::Ptr originalCloud (new pcl::PointCloud<PointInT>);
   typename pcl::PointCloud<PointInT>::Ptr camera_transformed_cloud (
@@ -339,8 +344,8 @@ pcl::TextureMapping<PointInT>::mapMultipleTexturesToMeshUV (
     Eigen::Affine3f cam_trans = current_cam.pose;
 
     // transform cloud into current camera frame
-    pcl::transformPointCloud (*originalCloud, *camera_transformed_cloud,
-                              cam_trans.inverse ());
+    pcl::transformPointCloud (
+        *originalCloud, *camera_transformed_cloud, cam_trans.inverse ());
 
     // vector of texture coordinates for each face
     std::vector<Eigen::Vector2f, Eigen::aligned_allocator<Eigen::Vector2f>>
@@ -563,8 +568,10 @@ pcl::TextureMapping<PointInT>::removeOccludedPoints (const pcl::TextureMesh &tex
 template <typename PointInT>
 int
 pcl::TextureMapping<PointInT>::sortFacesByCamera (
-    pcl::TextureMesh &tex_mesh, pcl::TextureMesh &sorted_mesh,
-    const pcl::texture_mapping::CameraVector &cameras, const double octree_voxel_size,
+    pcl::TextureMesh &tex_mesh,
+    pcl::TextureMesh &sorted_mesh,
+    const pcl::texture_mapping::CameraVector &cameras,
+    const double octree_voxel_size,
     PointCloud &visible_pts)
 {
   if (tex_mesh.tex_polygons.size () != 1) {
@@ -598,13 +605,13 @@ pcl::TextureMapping<PointInT>::sortFacesByCamera (
     Eigen::Affine3f cam_trans = camera.pose;
 
     // transform original cloud in camera coordinates
-    pcl::transformPointCloud (*original_cloud, *transformed_cloud,
-                              cam_trans.inverse ());
+    pcl::transformPointCloud (
+        *original_cloud, *transformed_cloud, cam_trans.inverse ());
 
     // find occlusions on transformed cloud
     std::vector<int> visible, occluded;
-    removeOccludedPoints (transformed_cloud, filtered_cloud, octree_voxel_size, visible,
-                          occluded);
+    removeOccludedPoints (
+        transformed_cloud, filtered_cloud, octree_voxel_size, visible, occluded);
     visible_pts = *filtered_cloud;
 
     // find visible faces => add them to polygon N for camera N
@@ -623,7 +630,8 @@ pcl::TextureMapping<PointInT>::sortFacesByCamera (
            ++current_pt_indice) {
         // TODO this is far too long! Better create an helper function that raycasts
         // here.
-        it = find (occluded.begin (), occluded.end (),
+        it = find (occluded.begin (),
+                   occluded.end (),
                    tex_mesh.tex_polygons[0][faces].vertices[current_pt_indice]);
 
         if (it == occluded.end ()) {
@@ -664,8 +672,10 @@ template <typename PointInT>
 void
 pcl::TextureMapping<PointInT>::showOcclusions (
     const PointCloudPtr &input_cloud,
-    pcl::PointCloud<pcl::PointXYZI>::Ptr &colored_cloud, const double octree_voxel_size,
-    const bool show_nb_occlusions, const int max_occlusions)
+    pcl::PointCloud<pcl::PointXYZI>::Ptr &colored_cloud,
+    const double octree_voxel_size,
+    const bool show_nb_occlusions,
+    const int max_occlusions)
 {
   // variable used to filter occluded points by depth
   double maxDeltaZ = octree_voxel_size * 2.0;
@@ -739,15 +749,18 @@ pcl::TextureMapping<PointInT>::showOcclusions (
 template <typename PointInT>
 void
 pcl::TextureMapping<PointInT>::showOcclusions (
-    pcl::TextureMesh &tex_mesh, pcl::PointCloud<pcl::PointXYZI>::Ptr &colored_cloud,
-    double octree_voxel_size, bool show_nb_occlusions, int max_occlusions)
+    pcl::TextureMesh &tex_mesh,
+    pcl::PointCloud<pcl::PointXYZI>::Ptr &colored_cloud,
+    double octree_voxel_size,
+    bool show_nb_occlusions,
+    int max_occlusions)
 {
   // load points into a PCL format
   typename pcl::PointCloud<PointInT>::Ptr cloud (new pcl::PointCloud<PointInT>);
   pcl::fromPCLPointCloud2 (tex_mesh.cloud, *cloud);
 
-  showOcclusions (cloud, colored_cloud, octree_voxel_size, show_nb_occlusions,
-                  max_occlusions);
+  showOcclusions (
+      cloud, colored_cloud, octree_voxel_size, show_nb_occlusions, max_occlusions);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -773,8 +786,8 @@ pcl::TextureMapping<PointInT>::textureMeshwithMultipleCameras (
     // transform mesh into camera's frame
     typename pcl::PointCloud<PointInT>::Ptr camera_cloud (
         new pcl::PointCloud<PointInT>);
-    pcl::transformPointCloud (*mesh_cloud, *camera_cloud,
-                              cameras[current_cam].pose.inverse ());
+    pcl::transformPointCloud (
+        *mesh_cloud, *camera_cloud, cameras[current_cam].pose.inverse ());
 
     // CREATE UV MAP FOR CURRENT FACES
     pcl::PointCloud<pcl::PointXY>::Ptr projections (new pcl::PointCloud<pcl::PointXY>);
@@ -808,7 +821,9 @@ pcl::TextureMapping<PointInT>::textureMeshwithMultipleCameras (
                   ->points[mesh.tex_polygons[current_cam][idx_face].vertices[1]],
               camera_cloud
                   ->points[mesh.tex_polygons[current_cam][idx_face].vertices[2]],
-              uv_coord1, uv_coord2, uv_coord3)) {
+              uv_coord1,
+              uv_coord2,
+              uv_coord3)) {
         // face is in the camera's FOV
 
         // add UV coordinates
@@ -886,7 +901,9 @@ pcl::TextureMapping<PointInT>::textureMeshwithMultipleCameras (
                       ->points[mesh.tex_polygons[idx_pcam][idx_face].vertices[1]],
                   camera_cloud
                       ->points[mesh.tex_polygons[idx_pcam][idx_face].vertices[2]],
-                  uv_coord1, uv_coord2, uv_coord3)) {
+                  uv_coord1,
+                  uv_coord2,
+                  uv_coord3)) {
             // face is in the camera's FOV
             // get its circumsribed circle
             double radius;
@@ -894,13 +911,16 @@ pcl::TextureMapping<PointInT>::textureMeshwithMultipleCameras (
             // getTriangleCircumcenterAndSize (uv_coord1, uv_coord2, uv_coord3, center,
             // radius);
             getTriangleCircumcscribedCircleCentroid (
-                uv_coord1, uv_coord2, uv_coord3, center,
+                uv_coord1,
+                uv_coord2,
+                uv_coord3,
+                center,
                 radius); // this function yields faster results than
                          // getTriangleCircumcenterAndSize
 
             // get points inside circ.circle
-            if (kdtree.radiusSearch (center, radius, idxNeighbors,
-                                     neighborsSquaredDistance) > 0) {
+            if (kdtree.radiusSearch (
+                    center, radius, idxNeighbors, neighborsSquaredDistance) > 0) {
               // for each neighbor
               for (const int &idxNeighbor : idxNeighbors) {
                 if (std::max (
@@ -919,7 +939,9 @@ pcl::TextureMapping<PointInT>::textureMeshwithMultipleCameras (
                         .z) {
                   // neighbor is farther than all the face's points. Check if it falls
                   // into the triangle
-                  if (checkPointInsideTriangle (uv_coord1, uv_coord2, uv_coord3,
+                  if (checkPointInsideTriangle (uv_coord1,
+                                                uv_coord2,
+                                                uv_coord3,
                                                 projections->points[idxNeighbor])) {
                     // current neighbor is inside triangle and is closer => the
                     // corresponding face
@@ -1021,8 +1043,11 @@ pcl::TextureMapping<PointInT>::textureMeshwithMultipleCameras (
 template <typename PointInT>
 inline void
 pcl::TextureMapping<PointInT>::getTriangleCircumcenterAndSize (
-    const pcl::PointXY &p1, const pcl::PointXY &p2, const pcl::PointXY &p3,
-    pcl::PointXY &circomcenter, double &radius)
+    const pcl::PointXY &p1,
+    const pcl::PointXY &p2,
+    const pcl::PointXY &p3,
+    pcl::PointXY &circomcenter,
+    double &radius)
 {
   // we simplify the problem by translating the triangle's origin to its first point
   pcl::PointXY ptB, ptC;
@@ -1062,8 +1087,11 @@ pcl::TextureMapping<PointInT>::getTriangleCircumcenterAndSize (
 template <typename PointInT>
 inline void
 pcl::TextureMapping<PointInT>::getTriangleCircumcscribedCircleCentroid (
-    const pcl::PointXY &p1, const pcl::PointXY &p2, const pcl::PointXY &p3,
-    pcl::PointXY &circumcenter, double &radius)
+    const pcl::PointXY &p1,
+    const pcl::PointXY &p2,
+    const pcl::PointXY &p3,
+    pcl::PointXY &circumcenter,
+    double &radius)
 {
   // compute centroid's coordinates (translate back to original coordinates)
   circumcenter.x = static_cast<float> (p1.x + p2.x + p3.x) / 3;
@@ -1165,8 +1193,10 @@ pcl::TextureMapping<PointInT>::checkPointInsideTriangle (const pcl::PointXY &p1,
 template <typename PointInT>
 inline bool
 pcl::TextureMapping<PointInT>::isFaceProjected (const Camera &camera,
-                                                const PointInT &p1, const PointInT &p2,
-                                                const PointInT &p3, pcl::PointXY &proj1,
+                                                const PointInT &p1,
+                                                const PointInT &p2,
+                                                const PointInT &p3,
+                                                pcl::PointXY &proj1,
                                                 pcl::PointXY &proj2,
                                                 pcl::PointXY &proj3)
 {

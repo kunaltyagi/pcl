@@ -183,8 +183,8 @@ print_number (cJSON *item)
 }
 
 /* Parse the input text into an unescaped cstring, and populate item. */
-static const unsigned char firstByteMark[7] = {0x00, 0x00, 0xC0, 0xE0,
-                                               0xF0, 0xF8, 0xFC};
+static const unsigned char firstByteMark[7] = {
+    0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC};
 static const char *
 parse_string (cJSON *item, const char *str)
 {

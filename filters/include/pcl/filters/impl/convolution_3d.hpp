@@ -105,7 +105,8 @@ operator() (const std::vector<int> &indices, const std::vector<float> &distances
   std::vector<float>::const_iterator dist_it = distances.begin ();
 
   for (std::vector<int>::const_iterator idx_it = indices.begin ();
-       idx_it != indices.end (); ++idx_it, ++dist_it) {
+       idx_it != indices.end ();
+       ++idx_it, ++dist_it) {
     if (*dist_it <= threshold_ && isFinite ((*input_)[*idx_it])) {
       float weight = expf (-0.5f * (*dist_it) / sigma_sqr_);
       result += weight * (*input_)[*idx_it];
@@ -133,7 +134,8 @@ operator() (const std::vector<int> &indices, const std::vector<float> &distances
   std::vector<float>::const_iterator dist_it = distances.begin ();
 
   for (std::vector<int>::const_iterator idx_it = indices.begin ();
-       idx_it != indices.end (); ++idx_it, ++dist_it) {
+       idx_it != indices.end ();
+       ++idx_it, ++dist_it) {
     if (*dist_it <= threshold_ && isFinite ((*input_)[*idx_it])) {
       float weight = expf (-0.5f * (*dist_it) / sigma_sqr_);
       result.x += weight * (*input_)[*idx_it].x;

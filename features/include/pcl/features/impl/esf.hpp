@@ -310,9 +310,15 @@ pcl::ESFEstimation<PointInT, PointOutT>::computeESF (PointCloudIn &pc,
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointInT, typename PointOutT>
 int
-pcl::ESFEstimation<PointInT, PointOutT>::lci (const int x1, const int y1, const int z1,
-                                              const int x2, const int y2, const int z2,
-                                              float &ratio, int &incnt, int &pointcount)
+pcl::ESFEstimation<PointInT, PointOutT>::lci (const int x1,
+                                              const int y1,
+                                              const int z1,
+                                              const int x2,
+                                              const int y2,
+                                              const int z2,
+                                              float &ratio,
+                                              int &incnt,
+                                              int &pointcount)
 {
   int voxelcount = 0;
   int voxel_in = 0;

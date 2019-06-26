@@ -177,7 +177,10 @@ int
 ON_ArePointsOnLine ( // returns 0=no, 1 = yes, 2 = pointset is (to tolerance) a single
                      // point on the line
     int dim,         // 2 or 3
-    int is_rat, int count, int stride, const double *point,
+    int is_rat,
+    int count,
+    int stride,
+    const double *point,
     const ON_BoundingBox
         &bbox, // if needed, use ON_GetBoundingBox(dim,is_rat,count,stride,point)
     const ON_Line &line, // line to test

@@ -53,7 +53,8 @@ namespace pcl
   {
     // convert point cloud with color and normals
     PCL_EXPORTS void
-    toPCL (const PointCloudAOS<Host> &input, const thrust::host_vector<float4> &normals,
+    toPCL (const PointCloudAOS<Host> &input,
+           const thrust::host_vector<float4> &normals,
            pcl::PointCloud<pcl::PointXYZRGBNormal> &output);
     PCL_EXPORTS void
     toPCL (const PointCloudAOS<Device> &input,

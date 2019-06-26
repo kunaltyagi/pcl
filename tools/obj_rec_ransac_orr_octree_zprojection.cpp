@@ -85,7 +85,11 @@ show_octree_zproj (ORROctreeZProjection *zproj, PCLVisualizer &viz);
 void
 node_to_cube (const ORROctree::Node *node, vtkAppendPolyData *additive_octree);
 void
-rectangle_to_vtk (float x1, float x2, float y1, float y2, float z,
+rectangle_to_vtk (float x1,
+                  float x2,
+                  float y1,
+                  float y2,
+                  float z,
                   vtkAppendPolyData *additive_rectangle);
 
 //#define _SHOW_POINTS_
@@ -94,10 +98,11 @@ int
 main (int argc, char **argv)
 {
   if (argc != 3) {
-    fprintf (stderr, "\nERROR: Syntax is ./pcl_obj_rec_ransac_orr_octree_zprojection "
-                     "<vtk file> <leaf_size>\n"
-                     "EXAMPLE: ./pcl_obj_rec_ransac_orr_octree_zprojection "
-                     "../../test/tum_table_scene.vtk 6\n\n");
+    fprintf (stderr,
+             "\nERROR: Syntax is ./pcl_obj_rec_ransac_orr_octree_zprojection "
+             "<vtk file> <leaf_size>\n"
+             "EXAMPLE: ./pcl_obj_rec_ransac_orr_octree_zprojection "
+             "../../test/tum_table_scene.vtk 6\n\n");
     return -1;
   }
 
@@ -146,12 +151,12 @@ run (const char *file_name, float voxel_size)
   viz.addPointCloud (points_out, "cloud out");
 
   // Change the appearance
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
-                                        2, "cloud in");
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
-                                        5, "cloud out");
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 1.0,
-                                        0.0, 0.0, "cloud out");
+  viz.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud in");
+  viz.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "cloud out");
+  viz.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 0.0, 0.0, "cloud out");
 #endif
 
   // Enter the main loop
@@ -302,7 +307,11 @@ node_to_cube (const ORROctree::Node *node, vtkAppendPolyData *additive_octree)
 //===============================================================================================================================
 
 void
-rectangle_to_vtk (float x1, float x2, float y1, float y2, float z,
+rectangle_to_vtk (float x1,
+                  float x2,
+                  float y1,
+                  float y2,
+                  float z,
                   vtkAppendPolyData *additive_rectangle)
 {
   // Define the cube representing the leaf

@@ -42,8 +42,10 @@
 
 template <typename PointT>
 void
-pcl::common::expandColumns (const PointCloud<PointT> &input, PointCloud<PointT> &output,
-                            const PointT &val, const size_t &amount)
+pcl::common::expandColumns (const PointCloud<PointT> &input,
+                            PointCloud<PointT> &output,
+                            const PointT &val,
+                            const size_t &amount)
 {
   if (amount <= 0)
     PCL_THROW_EXCEPTION (InitFailedException,
@@ -74,8 +76,10 @@ pcl::common::expandColumns (const PointCloud<PointT> &input, PointCloud<PointT> 
 
 template <typename PointT>
 void
-pcl::common::expandRows (const PointCloud<PointT> &input, PointCloud<PointT> &output,
-                         const PointT &val, const size_t &amount)
+pcl::common::expandRows (const PointCloud<PointT> &input,
+                         PointCloud<PointT> &output,
+                         const PointT &val,
+                         const size_t &amount)
 {
   if (amount <= 0)
     PCL_THROW_EXCEPTION (InitFailedException,
@@ -97,7 +101,8 @@ pcl::common::expandRows (const PointCloud<PointT> &input, PointCloud<PointT> &ou
 template <typename PointT>
 void
 pcl::common::duplicateColumns (const PointCloud<PointT> &input,
-                               PointCloud<PointT> &output, const size_t &amount)
+                               PointCloud<PointT> &output,
+                               const size_t &amount)
 {
   if (amount <= 0)
     PCL_THROW_EXCEPTION (InitFailedException,
@@ -129,7 +134,8 @@ pcl::common::duplicateColumns (const PointCloud<PointT> &input,
 
 template <typename PointT>
 void
-pcl::common::duplicateRows (const PointCloud<PointT> &input, PointCloud<PointT> &output,
+pcl::common::duplicateRows (const PointCloud<PointT> &input,
+                            PointCloud<PointT> &output,
                             const size_t &amount)
 {
   if (amount <= 0 || amount > (input.height / 2))
@@ -154,7 +160,8 @@ pcl::common::duplicateRows (const PointCloud<PointT> &input, PointCloud<PointT> 
 
 template <typename PointT>
 void
-pcl::common::mirrorColumns (const PointCloud<PointT> &input, PointCloud<PointT> &output,
+pcl::common::mirrorColumns (const PointCloud<PointT> &input,
+                            PointCloud<PointT> &output,
                             const size_t &amount)
 {
   if (amount <= 0)
@@ -186,7 +193,8 @@ pcl::common::mirrorColumns (const PointCloud<PointT> &input, PointCloud<PointT> 
 
 template <typename PointT>
 void
-pcl::common::mirrorRows (const PointCloud<PointT> &input, PointCloud<PointT> &output,
+pcl::common::mirrorRows (const PointCloud<PointT> &input,
+                         PointCloud<PointT> &output,
                          const size_t &amount)
 {
   if (amount <= 0 || amount > (input.height / 2))
@@ -217,7 +225,8 @@ pcl::common::mirrorRows (const PointCloud<PointT> &input, PointCloud<PointT> &ou
 
 template <typename PointT>
 void
-pcl::common::deleteRows (const PointCloud<PointT> &input, PointCloud<PointT> &output,
+pcl::common::deleteRows (const PointCloud<PointT> &input,
+                         PointCloud<PointT> &output,
                          const size_t &amount)
 {
   if (amount <= 0 || amount > (input.height / 2))
@@ -235,7 +244,8 @@ pcl::common::deleteRows (const PointCloud<PointT> &input, PointCloud<PointT> &ou
 
 template <typename PointT>
 void
-pcl::common::deleteCols (const PointCloud<PointT> &input, PointCloud<PointT> &output,
+pcl::common::deleteCols (const PointCloud<PointT> &input,
+                         PointCloud<PointT> &output,
                          const size_t &amount)
 {
   if (amount <= 0 || amount > (input.width / 2))

@@ -216,7 +216,9 @@ class OpenNIGrabFrame
   }
 
   void
-  setOptions (const std::string &filename, const std::string &pcd_format, bool paused,
+  setOptions (const std::string &filename,
+              const std::string &pcd_format,
+              bool paused,
               bool visualizer)
   {
     boost::filesystem::path path (filename);

@@ -153,7 +153,8 @@ ON_Cylinder::ClosestPointTo (ON_3dPoint point) const
 
 // rotate plane about its origin
 bool
-ON_Cylinder::Rotate (double sin_angle, double cos_angle,
+ON_Cylinder::Rotate (double sin_angle,
+                     double cos_angle,
                      const ON_3dVector &axis // axis of rotation
 )
 {

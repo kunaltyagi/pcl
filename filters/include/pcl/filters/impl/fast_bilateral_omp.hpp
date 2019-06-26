@@ -163,7 +163,8 @@ pcl::FastBilateralFilterOMP<PointT>::applyFilter (PointCloud &output)
 #pragma omp parallel for num_threads(threads_)
 #endif
       for (long int i = 0;
-           i < static_cast<long int> ((small_width - 2) * (small_height - 2)); ++i) {
+           i < static_cast<long int> ((small_width - 2) * (small_height - 2));
+           ++i) {
         size_t x = static_cast<size_t> (i % (small_width - 2) + 1);
         size_t y = static_cast<size_t> (i / (small_width - 2) + 1);
         const long int off = offset[dim];
@@ -183,7 +184,8 @@ pcl::FastBilateralFilterOMP<PointT>::applyFilter (PointCloud &output)
     for (std::vector<Eigen::Vector2f,
                      Eigen::aligned_allocator<Eigen::Vector2f>>::iterator d =
              data.begin ();
-         d != data.end (); ++d)
+         d != data.end ();
+         ++d)
       *d /= ((*d)[0] != 0) ? (*d)[1] : 1;
 
 #ifdef _OPENMP
@@ -193,9 +195,10 @@ pcl::FastBilateralFilterOMP<PointT>::applyFilter (PointCloud &output)
       size_t x = static_cast<size_t> (i % input_->width);
       size_t y = static_cast<size_t> (i / input_->width);
       const float z = output (x, y).z - base_min;
-      const Eigen::Vector2f D = data.trilinear_interpolation (
-          static_cast<float> (x) / sigma_s_ + padding_xy,
-          static_cast<float> (y) / sigma_s_ + padding_xy, z / sigma_r_ + padding_z);
+      const Eigen::Vector2f D =
+          data.trilinear_interpolation (static_cast<float> (x) / sigma_s_ + padding_xy,
+                                        static_cast<float> (y) / sigma_s_ + padding_xy,
+                                        z / sigma_r_ + padding_z);
       output (x, y).z = D[0];
     }
   } else {
@@ -206,9 +209,10 @@ pcl::FastBilateralFilterOMP<PointT>::applyFilter (PointCloud &output)
       size_t x = static_cast<size_t> (i % input_->width);
       size_t y = static_cast<size_t> (i / input_->width);
       const float z = output (x, y).z - base_min;
-      const Eigen::Vector2f D = data.trilinear_interpolation (
-          static_cast<float> (x) / sigma_s_ + padding_xy,
-          static_cast<float> (y) / sigma_s_ + padding_xy, z / sigma_r_ + padding_z);
+      const Eigen::Vector2f D =
+          data.trilinear_interpolation (static_cast<float> (x) / sigma_s_ + padding_xy,
+                                        static_cast<float> (y) / sigma_s_ + padding_xy,
+                                        z / sigma_r_ + padding_z);
       output (x, y).z = D[0] / D[1];
     }
   }

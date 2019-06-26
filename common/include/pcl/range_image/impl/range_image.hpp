@@ -93,15 +93,25 @@ namespace pcl
   template <typename PointCloudType>
   void
   RangeImage::createFromPointCloud (const PointCloudType &point_cloud,
-                                    float angular_resolution, float max_angle_width,
+                                    float angular_resolution,
+                                    float max_angle_width,
                                     float max_angle_height,
                                     const Eigen::Affine3f &sensor_pose,
                                     RangeImage::CoordinateFrame coordinate_frame,
-                                    float noise_level, float min_range, int border_size)
+                                    float noise_level,
+                                    float min_range,
+                                    int border_size)
   {
-    createFromPointCloud (point_cloud, angular_resolution, angular_resolution,
-                          max_angle_width, max_angle_height, sensor_pose,
-                          coordinate_frame, noise_level, min_range, border_size);
+    createFromPointCloud (point_cloud,
+                          angular_resolution,
+                          angular_resolution,
+                          max_angle_width,
+                          max_angle_height,
+                          sensor_pose,
+                          coordinate_frame,
+                          noise_level,
+                          min_range,
+                          border_size);
   }
 
   /////////////////////////////////////////////////////////////////////////
@@ -109,11 +119,14 @@ namespace pcl
   void
   RangeImage::createFromPointCloud (const PointCloudType &point_cloud,
                                     float angular_resolution_x,
-                                    float angular_resolution_y, float max_angle_width,
+                                    float angular_resolution_y,
+                                    float max_angle_width,
                                     float max_angle_height,
                                     const Eigen::Affine3f &sensor_pose,
                                     RangeImage::CoordinateFrame coordinate_frame,
-                                    float noise_level, float min_range, int border_size)
+                                    float noise_level,
+                                    float min_range,
+                                    int border_size)
   {
     setAngularResolution (angular_resolution_x, angular_resolution_y);
 
@@ -153,25 +166,41 @@ namespace pcl
   template <typename PointCloudType>
   void
   RangeImage::createFromPointCloudWithKnownSize (
-      const PointCloudType &point_cloud, float angular_resolution,
-      const Eigen::Vector3f &point_cloud_center, float point_cloud_radius,
-      const Eigen::Affine3f &sensor_pose, RangeImage::CoordinateFrame coordinate_frame,
-      float noise_level, float min_range, int border_size)
+      const PointCloudType &point_cloud,
+      float angular_resolution,
+      const Eigen::Vector3f &point_cloud_center,
+      float point_cloud_radius,
+      const Eigen::Affine3f &sensor_pose,
+      RangeImage::CoordinateFrame coordinate_frame,
+      float noise_level,
+      float min_range,
+      int border_size)
   {
-    createFromPointCloudWithKnownSize (
-        point_cloud, angular_resolution, angular_resolution, point_cloud_center,
-        point_cloud_radius, sensor_pose, coordinate_frame, noise_level, min_range,
-        border_size);
+    createFromPointCloudWithKnownSize (point_cloud,
+                                       angular_resolution,
+                                       angular_resolution,
+                                       point_cloud_center,
+                                       point_cloud_radius,
+                                       sensor_pose,
+                                       coordinate_frame,
+                                       noise_level,
+                                       min_range,
+                                       border_size);
   }
 
   /////////////////////////////////////////////////////////////////////////
   template <typename PointCloudType>
   void
   RangeImage::createFromPointCloudWithKnownSize (
-      const PointCloudType &point_cloud, float angular_resolution_x,
-      float angular_resolution_y, const Eigen::Vector3f &point_cloud_center,
-      float point_cloud_radius, const Eigen::Affine3f &sensor_pose,
-      RangeImage::CoordinateFrame coordinate_frame, float noise_level, float min_range,
+      const PointCloudType &point_cloud,
+      float angular_resolution_x,
+      float angular_resolution_y,
+      const Eigen::Vector3f &point_cloud_center,
+      float point_cloud_radius,
+      const Eigen::Affine3f &sensor_pose,
+      RangeImage::CoordinateFrame coordinate_frame,
+      float noise_level,
+      float min_range,
       int border_size)
   {
     // MEASURE_FUNCTION_TIME;
@@ -183,9 +212,16 @@ namespace pcl
     // normal way
     if ((point_cloud_center - sensor_pose.translation ()).norm () <=
         point_cloud_radius) {
-      createFromPointCloud (point_cloud, angular_resolution_x, angular_resolution_y,
-                            pcl::deg2rad (360.0f), pcl::deg2rad (180.0f), sensor_pose,
-                            coordinate_frame, noise_level, min_range, border_size);
+      createFromPointCloud (point_cloud,
+                            angular_resolution_x,
+                            angular_resolution_y,
+                            pcl::deg2rad (360.0f),
+                            pcl::deg2rad (180.0f),
+                            sensor_pose,
+                            coordinate_frame,
+                            noise_level,
+                            min_range,
+                            border_size);
       return;
     }
 
@@ -226,38 +262,65 @@ namespace pcl
   template <typename PointCloudTypeWithViewpoints>
   void
   RangeImage::createFromPointCloudWithViewpoints (
-      const PointCloudTypeWithViewpoints &point_cloud, float angular_resolution,
-      float max_angle_width, float max_angle_height,
-      RangeImage::CoordinateFrame coordinate_frame, float noise_level, float min_range,
+      const PointCloudTypeWithViewpoints &point_cloud,
+      float angular_resolution,
+      float max_angle_width,
+      float max_angle_height,
+      RangeImage::CoordinateFrame coordinate_frame,
+      float noise_level,
+      float min_range,
       int border_size)
   {
-    createFromPointCloudWithViewpoints (
-        point_cloud, angular_resolution, angular_resolution, max_angle_width,
-        max_angle_height, coordinate_frame, noise_level, min_range, border_size);
+    createFromPointCloudWithViewpoints (point_cloud,
+                                        angular_resolution,
+                                        angular_resolution,
+                                        max_angle_width,
+                                        max_angle_height,
+                                        coordinate_frame,
+                                        noise_level,
+                                        min_range,
+                                        border_size);
   }
 
   /////////////////////////////////////////////////////////////////////////
   template <typename PointCloudTypeWithViewpoints>
   void
   RangeImage::createFromPointCloudWithViewpoints (
-      const PointCloudTypeWithViewpoints &point_cloud, float angular_resolution_x,
-      float angular_resolution_y, float max_angle_width, float max_angle_height,
-      RangeImage::CoordinateFrame coordinate_frame, float noise_level, float min_range,
+      const PointCloudTypeWithViewpoints &point_cloud,
+      float angular_resolution_x,
+      float angular_resolution_y,
+      float max_angle_width,
+      float max_angle_height,
+      RangeImage::CoordinateFrame coordinate_frame,
+      float noise_level,
+      float min_range,
       int border_size)
   {
     Eigen::Vector3f average_viewpoint = getAverageViewPoint (point_cloud);
     Eigen::Affine3f sensor_pose =
         static_cast<Eigen::Affine3f> (Eigen::Translation3f (average_viewpoint));
-    createFromPointCloud (point_cloud, angular_resolution_x, angular_resolution_y,
-                          max_angle_width, max_angle_height, sensor_pose,
-                          coordinate_frame, noise_level, min_range, border_size);
+    createFromPointCloud (point_cloud,
+                          angular_resolution_x,
+                          angular_resolution_y,
+                          max_angle_width,
+                          max_angle_height,
+                          sensor_pose,
+                          coordinate_frame,
+                          noise_level,
+                          min_range,
+                          border_size);
   }
 
   /////////////////////////////////////////////////////////////////////////
   template <typename PointCloudType>
   void
-  RangeImage::doZBuffer (const PointCloudType &point_cloud, float noise_level,
-                         float min_range, int &top, int &right, int &bottom, int &left)
+  RangeImage::doZBuffer (const PointCloudType &point_cloud,
+                         float noise_level,
+                         float min_range,
+                         int &top,
+                         int &right,
+                         int &bottom,
+                         int &left)
   {
     using PointType2 = typename PointCloudType::PointType;
     const typename pcl::PointCloud<PointType2>::VectorType &points2 =
@@ -276,7 +339,8 @@ namespace pcl
     int x, y;
     for (typename pcl::PointCloud<PointType2>::VectorType::const_iterator it =
              points2.begin ();
-         it != points2.end (); ++it) {
+         it != points2.end ();
+         ++it) {
       if (!isFinite (*it)) // Check for NAN etc
         continue;
       Vector3fMapConst current_point = it->getVector3fMap ();
@@ -366,8 +430,8 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::getImagePoint (float x, float y, float z, float &image_x, float &image_y,
-                             float &range) const
+  RangeImage::getImagePoint (
+      float x, float y, float z, float &image_x, float &image_y, float &range) const
   {
     Eigen::Vector3f point (x, y, z);
     getImagePoint (point, image_x, image_y, range);
@@ -375,8 +439,8 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::getImagePoint (float x, float y, float z, float &image_x,
-                             float &image_y) const
+  RangeImage::getImagePoint (
+      float x, float y, float z, float &image_x, float &image_y) const
   {
     float range;
     getImagePoint (x, y, z, image_x, image_y, range);
@@ -384,8 +448,8 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::getImagePoint (float x, float y, float z, int &image_x,
-                             int &image_y) const
+  RangeImage::getImagePoint (
+      float x, float y, float z, int &image_x, int &image_y) const
   {
     float image_x_float, image_y_float;
     getImagePoint (x, y, z, image_x_float, image_y_float);
@@ -394,8 +458,10 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::getImagePoint (const Eigen::Vector3f &point, float &image_x,
-                             float &image_y, float &range) const
+  RangeImage::getImagePoint (const Eigen::Vector3f &point,
+                             float &image_x,
+                             float &image_y,
+                             float &range) const
   {
     Eigen::Vector3f transformedPoint = to_range_image_system_ * point;
     range = transformedPoint.norm ();
@@ -410,7 +476,9 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::getImagePoint (const Eigen::Vector3f &point, int &image_x, int &image_y,
+  RangeImage::getImagePoint (const Eigen::Vector3f &point,
+                             int &image_x,
+                             int &image_y,
                              float &range) const
   {
     float image_x_float, image_y_float;
@@ -420,7 +488,8 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::getImagePoint (const Eigen::Vector3f &point, float &image_x,
+  RangeImage::getImagePoint (const Eigen::Vector3f &point,
+                             float &image_x,
                              float &image_y) const
   {
     float range;
@@ -429,7 +498,8 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::getImagePoint (const Eigen::Vector3f &point, int &image_x,
+  RangeImage::getImagePoint (const Eigen::Vector3f &point,
+                             int &image_x,
                              int &image_y) const
   {
     float image_x_float, image_y_float;
@@ -473,7 +543,9 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::getImagePointFromAngles (float angle_x, float angle_y, float &image_x,
+  RangeImage::getImagePointFromAngles (float angle_x,
+                                       float angle_y,
+                                       float &image_x,
                                        float &image_y) const
   {
     image_x = (angle_x * cosLookUp (angle_y) + static_cast<float> (M_PI)) *
@@ -617,7 +689,9 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::calculate3DPoint (float image_x, float image_y, float range,
+  RangeImage::calculate3DPoint (float image_x,
+                                float image_y,
+                                float range,
                                 Eigen::Vector3f &point) const
   {
     float angle_x, angle_y;
@@ -625,14 +699,16 @@ namespace pcl
     getAnglesFromImagePoint (image_x, image_y, angle_x, angle_y);
 
     float cosY = cosf (angle_y);
-    point = Eigen::Vector3f (range * sinf (angle_x) * cosY, range * sinf (angle_y),
+    point = Eigen::Vector3f (range * sinf (angle_x) * cosY,
+                             range * sinf (angle_y),
                              range * cosf (angle_x) * cosY);
     point = to_world_system_ * point;
   }
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::calculate3DPoint (float image_x, float image_y,
+  RangeImage::calculate3DPoint (float image_x,
+                                float image_y,
                                 Eigen::Vector3f &point) const
   {
     const PointWithRange &point_in_image = getPoint (image_x, image_y);
@@ -641,7 +717,9 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::calculate3DPoint (float image_x, float image_y, float range,
+  RangeImage::calculate3DPoint (float image_x,
+                                float image_y,
+                                float range,
                                 PointWithRange &point) const
   {
     point.range = range;
@@ -654,7 +732,8 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::calculate3DPoint (float image_x, float image_y,
+  RangeImage::calculate3DPoint (float image_x,
+                                float image_y,
                                 PointWithRange &point) const
   {
     const PointWithRange &point_in_image = getPoint (image_x, image_y);
@@ -663,7 +742,9 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::getAnglesFromImagePoint (float image_x, float image_y, float &angle_x,
+  RangeImage::getAnglesFromImagePoint (float image_x,
+                                       float image_y,
+                                       float &angle_x,
                                        float &angle_y) const
   {
     angle_y = (image_y + static_cast<float> (image_offset_y_)) * angular_resolution_y_ -
@@ -744,14 +825,14 @@ namespace pcl
   const Eigen::Vector3f
   RangeImage::getSensorPos () const
   {
-    return Eigen::Vector3f (to_world_system_ (0, 3), to_world_system_ (1, 3),
-                            to_world_system_ (2, 3));
+    return Eigen::Vector3f (
+        to_world_system_ (0, 3), to_world_system_ (1, 3), to_world_system_ (2, 3));
   }
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::getSurfaceAngleChange (int x, int y, int radius, float &angle_change_x,
-                                     float &angle_change_y) const
+  RangeImage::getSurfaceAngleChange (
+      int x, int y, int radius, float &angle_change_x, float &angle_change_y) const
   {
     angle_change_x = angle_change_y = -std::numeric_limits<float>::infinity ();
     if (!isValid (x, y))
@@ -859,7 +940,8 @@ namespace pcl
   /////////////////////////////////////////////////////////////////////////
   float
   RangeImage::getMaxAngleSize (const Eigen::Affine3f &viewer_pose,
-                               const Eigen::Vector3f &center, float radius)
+                               const Eigen::Vector3f &center,
+                               float radius)
   {
     return 2.0f * asinf (radius / (viewer_pose.translation () - center).norm ());
   }
@@ -873,8 +955,12 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImage::get1dPointAverage (int x, int y, int delta_x, int delta_y,
-                                 int no_of_points, PointWithRange &average_point) const
+  RangeImage::get1dPointAverage (int x,
+                                 int y,
+                                 int delta_x,
+                                 int delta_y,
+                                 int no_of_points,
+                                 PointWithRange &average_point) const
   {
     // std::cout << __PRETTY_FUNCTION__<<" called.\n";
     // MEASURE_FUNCTION_TIME;
@@ -928,8 +1014,8 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   float
-  RangeImage::getAverageEuclideanDistance (int x, int y, int offset_x, int offset_y,
-                                           int max_steps) const
+  RangeImage::getAverageEuclideanDistance (
+      int x, int y, int offset_x, int offset_y, int max_steps) const
   {
     float average_pixel_distance = 0.0f;
     float weight = 0.0f;
@@ -965,8 +1051,8 @@ namespace pcl
     int no_of_nearest_neighbors =
         static_cast<int> (pow (static_cast<double> ((radius + 1.0)), 2.0));
     Eigen::Vector3f normal;
-    if (!getNormalForClosestNeighbors (x, y, radius, point, no_of_nearest_neighbors,
-                                       normal, 1))
+    if (!getNormalForClosestNeighbors (
+            x, y, radius, point, no_of_nearest_neighbors, normal, 1))
       return -std::numeric_limits<float>::infinity ();
     return deg2rad (90.0f) -
            acosf (
@@ -975,8 +1061,8 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   bool
-  RangeImage::getNormal (int x, int y, int radius, Eigen::Vector3f &normal,
-                         int step_size) const
+  RangeImage::getNormal (
+      int x, int y, int radius, Eigen::Vector3f &normal, int step_size) const
   {
     VectorAverage3f vector_average;
     for (int y2 = y - radius; y2 <= y + radius; y2 += step_size) {
@@ -1012,29 +1098,41 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   bool
-  RangeImage::getNormalForClosestNeighbors (int x, int y, int radius,
+  RangeImage::getNormalForClosestNeighbors (int x,
+                                            int y,
+                                            int radius,
                                             const PointWithRange &point,
                                             int no_of_nearest_neighbors,
                                             Eigen::Vector3f &normal,
                                             int step_size) const
   {
-    return getNormalForClosestNeighbors (
-        x, y, radius, Eigen::Vector3f (point.x, point.y, point.z),
-        no_of_nearest_neighbors, normal, nullptr, step_size);
+    return getNormalForClosestNeighbors (x,
+                                         y,
+                                         radius,
+                                         Eigen::Vector3f (point.x, point.y, point.z),
+                                         no_of_nearest_neighbors,
+                                         normal,
+                                         nullptr,
+                                         step_size);
   }
 
   /////////////////////////////////////////////////////////////////////////
   bool
-  RangeImage::getNormalForClosestNeighbors (int x, int y, Eigen::Vector3f &normal,
+  RangeImage::getNormalForClosestNeighbors (int x,
+                                            int y,
+                                            Eigen::Vector3f &normal,
                                             int radius) const
   {
     if (!isValid (x, y))
       return false;
     int no_of_nearest_neighbors =
         static_cast<int> (pow (static_cast<double> (radius + 1.0), 2.0));
-    return getNormalForClosestNeighbors (x, y, radius,
+    return getNormalForClosestNeighbors (x,
+                                         y,
+                                         radius,
                                          getPoint (x, y).getVector3fMap (),
-                                         no_of_nearest_neighbors, normal);
+                                         no_of_nearest_neighbors,
+                                         normal);
   }
 
   namespace
@@ -1052,11 +1150,15 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   bool
-  RangeImage::getSurfaceInformation (int x, int y, int radius,
+  RangeImage::getSurfaceInformation (int x,
+                                     int y,
+                                     int radius,
                                      const Eigen::Vector3f &point,
-                                     int no_of_closest_neighbors, int step_size,
+                                     int no_of_closest_neighbors,
+                                     int step_size,
                                      float &max_closest_neighbor_distance_squared,
-                                     Eigen::Vector3f &normal, Eigen::Vector3f &mean,
+                                     Eigen::Vector3f &normal,
+                                     Eigen::Vector3f &mean,
                                      Eigen::Vector3f &eigen_values,
                                      Eigen::Vector3f *normal_all_neighbors,
                                      Eigen::Vector3f *mean_all_neighbors,
@@ -1140,8 +1242,10 @@ namespace pcl
          ++neighbor_idx2)
       vector_average.add (ordered_neighbors[neighbor_idx2].neighbor->getVector3fMap ());
 
-    vector_average.doPCA (*eigen_values_all_neighbors, *normal_all_neighbors,
-                          eigen_vector2, eigen_vector3);
+    vector_average.doPCA (*eigen_values_all_neighbors,
+                          *normal_all_neighbors,
+                          eigen_vector2,
+                          eigen_vector3);
     // std::cout << PVARN (vector_average.getNoOfSamples ())<<".\n";
     if (normal_all_neighbors->dot (viewing_direction) < 0.0f)
       *normal_all_neighbors *= -1.0f;
@@ -1155,8 +1259,8 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   float
-  RangeImage::getSquaredDistanceOfNthNeighbor (int x, int y, int radius, int n,
-                                               int step_size) const
+  RangeImage::getSquaredDistanceOfNthNeighbor (
+      int x, int y, int radius, int n, int step_size) const
   {
     const PointWithRange &point = getPoint (x, y);
     if (!std::isfinite (point.range))
@@ -1185,7 +1289,9 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   bool
-  RangeImage::getNormalForClosestNeighbors (int x, int y, int radius,
+  RangeImage::getNormalForClosestNeighbors (int x,
+                                            int y,
+                                            int radius,
                                             const Eigen::Vector3f &point,
                                             int no_of_nearest_neighbors,
                                             Eigen::Vector3f &normal,
@@ -1194,9 +1300,16 @@ namespace pcl
   {
     Eigen::Vector3f mean, eigen_values;
     float used_squared_max_distance;
-    bool ret =
-        getSurfaceInformation (x, y, radius, point, no_of_nearest_neighbors, step_size,
-                               used_squared_max_distance, normal, mean, eigen_values);
+    bool ret = getSurfaceInformation (x,
+                                      y,
+                                      radius,
+                                      point,
+                                      no_of_nearest_neighbors,
+                                      step_size,
+                                      used_squared_max_distance,
+                                      normal,
+                                      mean,
+                                      eigen_values);
 
     if (ret) {
       if (point_on_plane != nullptr)
@@ -1253,7 +1366,8 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   bool
-  RangeImage::getViewingDirection (int x, int y,
+  RangeImage::getViewingDirection (int x,
+                                   int y,
                                    Eigen::Vector3f &viewing_direction) const
   {
     if (!isValid (x, y))
@@ -1297,8 +1411,8 @@ namespace pcl
                                                   Eigen::Affine3f &transformation) const
   {
     Eigen::Vector3f viewing_direction = (point - getSensorPos ()).normalized ();
-    getTransformationFromTwoUnitVectors (Eigen::Vector3f (0.0f, -1.0f, 0.0f),
-                                         viewing_direction, transformation);
+    getTransformationFromTwoUnitVectors (
+        Eigen::Vector3f (0.0f, -1.0f, 0.0f), viewing_direction, transformation);
   }
 
   /////////////////////////////////////////////////////////////////////////
@@ -1346,7 +1460,8 @@ namespace pcl
   {
     float x_real, y_real, range_of_current_point;
     for (typename PointCloudType::const_iterator it = far_ranges.points.begin ();
-         it != far_ranges.points.end (); ++it) {
+         it != far_ranges.points.end ();
+         ++it) {
       // if (!isFinite (*it))  // Check for NAN etc
       // continue;
       Vector3fMapConst current_point = it->getVector3fMap ();

@@ -55,8 +55,8 @@ pcl::SHOTLocalReferenceFrameEstimation<PointInT, PointOutT>::getLocalRF (
   std::vector<int> n_indices;
   std::vector<float> n_sqr_distances;
 
-  this->searchForNeighbors (current_point_idx, search_parameter_, n_indices,
-                            n_sqr_distances);
+  this->searchForNeighbors (
+      current_point_idx, search_parameter_, n_indices, n_sqr_distances);
 
   Eigen::Matrix<double, Eigen::Dynamic, 4> vij (n_indices.size (), 4);
 

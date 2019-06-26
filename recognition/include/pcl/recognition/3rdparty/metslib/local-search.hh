@@ -63,8 +63,10 @@ namespace mets
     ///
     /// @param short_circuit Wether the search should stop on
     /// the first improving move or not.
-    local_search (evaluable_solution &starting_point, solution_recorder &recorder,
-                  move_manager_type &moveman, gol_type epsilon = 1e-7,
+    local_search (evaluable_solution &starting_point,
+                  solution_recorder &recorder,
+                  move_manager_type &moveman,
+                  gol_type epsilon = 1e-7,
                   bool short_circuit = false);
 
     /// purposely not implemented (see Effective C++)
@@ -94,7 +96,8 @@ template <typename move_manager_t>
 mets::local_search<move_manager_t>::local_search (evaluable_solution &working,
                                                   solution_recorder &recorder,
                                                   move_manager_t &moveman,
-                                                  gol_type epsilon, bool short_circuit)
+                                                  gol_type epsilon,
+                                                  bool short_circuit)
     : abstract_search<move_manager_t> (working, recorder, moveman),
       short_circuit_m (short_circuit), epsilon_m (epsilon)
 {
@@ -119,7 +122,8 @@ mets::local_search<move_manager_t>::search () throw (no_moves_error)
     base_t::moves_m.refresh (base_t::working_solution_m);
     best_movit = base_t::moves_m.end ();
     for (typename move_manager_t::iterator movit = base_t::moves_m.begin ();
-         movit != base_t::moves_m.end (); ++movit) {
+         movit != base_t::moves_m.end ();
+         ++movit) {
       // evaluate the cost after the move
       gol_type cost = (*movit)->evaluate (base_t::working_solution_m);
       if (cost < best_cost - epsilon_m) {

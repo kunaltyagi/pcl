@@ -326,8 +326,8 @@ ON_Ellipse::ClosestPointTo (const ON_3dPoint &point, double *t) const
             }
           }
 
-          rc = ON_FindLocalMinimum (distSqToEllipse, p, t0, et, t1, ON_EPSILON,
-                                    ON_SQRT_EPSILON, 100, &et);
+          rc = ON_FindLocalMinimum (
+              distSqToEllipse, p, t0, et, t1, ON_EPSILON, ON_SQRT_EPSILON, 100, &et);
           rc = (rc > 0) ? true : false;
           if (rc)
             *t = (et >= 2.0 * ON_PI) ? 0.0 : et;
@@ -392,7 +392,9 @@ ON_Ellipse::Rotate (double angle, const ON_3dVector &axis)
 }
 
 ON_BOOL32
-ON_Ellipse::Rotate (double sin_angle, double cos_angle, const ON_3dVector &axis,
+ON_Ellipse::Rotate (double sin_angle,
+                    double cos_angle,
+                    const ON_3dVector &axis,
                     const ON_3dPoint &point)
 {
   return plane.Rotate (sin_angle, cos_angle, axis, point);
@@ -405,10 +407,7 @@ ON_Ellipse::Rotate (double angle, const ON_3dVector &axis, const ON_3dPoint &poi
 }
 
 ON_BOOL32
-ON_Ellipse::Translate (const ON_3dVector &delta)
-{
-  return plane.Translate (delta);
-}
+ON_Ellipse::Translate (const ON_3dVector &delta) { return plane.Translate (delta); }
 
 ON_BOOL32
 ON_Ellipse::GetNurbForm (ON_NurbsCurve &nurbscurve) const

@@ -107,7 +107,11 @@ class ON_CLASS ON_BoundingBox
   // arguments If bGrowBox is true, the existing box is expanded, otherwise it is only
   // set to the current point list
   bool
-  Set (int dim, int is_rat, int count, int stride, const double *point_array,
+  Set (int dim,
+       int is_rat,
+       int count,
+       int stride,
+       const double *point_array,
        int bGrowBox = false);
 
   bool
@@ -431,7 +435,8 @@ class ON_CLASS ON_BoundingBox
   */
   bool
   Intersection ( // this = intersection of two args
-      const ON_BoundingBox &bbox_A, const ON_BoundingBox &bbox_B);
+      const ON_BoundingBox &bbox_A,
+      const ON_BoundingBox &bbox_B);
 
   bool
   Intersection (       // Returns true when intersect is non-empty.
@@ -470,7 +475,8 @@ class ON_CLASS ON_BoundingBox
 
   bool
   Union ( // this = union of two args
-      const ON_BoundingBox &, const ON_BoundingBox &);
+      const ON_BoundingBox &,
+      const ON_BoundingBox &);
 
   /*
   Description:
@@ -526,19 +532,32 @@ Returns:
 */
 ON_DECL
 bool
-ON_GetPointListBoundingBox (int dim, int is_rat, int count, int stride,
-                            const double *point_list, ON_BoundingBox &bbox,
-                            int bGrowBox = false, const ON_Xform *xform = 0);
+ON_GetPointListBoundingBox (int dim,
+                            int is_rat,
+                            int count,
+                            int stride,
+                            const double *point_list,
+                            ON_BoundingBox &bbox,
+                            int bGrowBox = false,
+                            const ON_Xform *xform = 0);
 
 ON_DECL
 bool
-ON_GetPointListBoundingBox (int dim, int is_rat, int count, int stride,
-                            const float *point_list, ON_BoundingBox &bbox,
-                            int bGrowBox = false, const ON_Xform *xform = 0);
+ON_GetPointListBoundingBox (int dim,
+                            int is_rat,
+                            int count,
+                            int stride,
+                            const float *point_list,
+                            ON_BoundingBox &bbox,
+                            int bGrowBox = false,
+                            const ON_Xform *xform = 0);
 
 ON_DECL
 bool
-ON_GetPointListBoundingBox (int dim, int is_rat, int count, int stride,
+ON_GetPointListBoundingBox (int dim,
+                            int is_rat,
+                            int count,
+                            int stride,
                             const double *point_list,
                             double *boxmin, // min[dim]
                             double *boxmax, // max[dim]
@@ -546,12 +565,15 @@ ON_GetPointListBoundingBox (int dim, int is_rat, int count, int stride,
 
 ON_DECL
 ON_BoundingBox
-ON_PointListBoundingBox (int dim, int is_rat, int count, int stride,
-                         const double *point_list);
+ON_PointListBoundingBox (
+    int dim, int is_rat, int count, int stride, const double *point_list);
 
 ON_DECL
 bool
-ON_GetPointListBoundingBox (int dim, int is_rat, int count, int stride,
+ON_GetPointListBoundingBox (int dim,
+                            int is_rat,
+                            int count,
+                            int stride,
                             const float *point_list,
                             float *boxmin, // min[dim]
                             float *boxmax, // max[dim]
@@ -560,12 +582,20 @@ ON_GetPointListBoundingBox (int dim, int is_rat, int count, int stride,
 ON_DECL
 ON_BoundingBox
 ON_PointListBoundingBox ( // low level workhorse function
-    int dim, int is_rat, int count, int stride, const float *point_list);
+    int dim,
+    int is_rat,
+    int count,
+    int stride,
+    const float *point_list);
 
 ON_DECL
 bool
-ON_GetPointGridBoundingBox (int dim, int is_rat, int point_count0, int point_count1,
-                            int point_stride0, int point_stride1,
+ON_GetPointGridBoundingBox (int dim,
+                            int is_rat,
+                            int point_count0,
+                            int point_count1,
+                            int point_stride0,
+                            int point_stride1,
                             const double *point_grid,
                             double *boxmin, // min[dim]
                             double *boxmax, // max[dim]
@@ -573,8 +603,12 @@ ON_GetPointGridBoundingBox (int dim, int is_rat, int point_count0, int point_cou
 
 ON_DECL
 ON_BoundingBox
-ON_PointGridBoundingBox (int dim, int is_rat, int point_count0, int point_count1,
-                         int point_stride0, int point_stride1,
+ON_PointGridBoundingBox (int dim,
+                         int is_rat,
+                         int point_count0,
+                         int point_count1,
+                         int point_stride0,
+                         int point_stride1,
                          const double *point_grid);
 
 ON_DECL
@@ -615,6 +649,7 @@ ON_BeyondSinglePrecision (const ON_BoundingBox &bbox, ON_Xform *xform);
 ON_DECL
 bool
 ON_WorldBBoxIsInTightBBox (const ON_BoundingBox &tight_bbox,
-                           const ON_BoundingBox &world_bbox, const ON_Xform *xform);
+                           const ON_BoundingBox &world_bbox,
+                           const ON_Xform *xform);
 
 #endif

@@ -175,7 +175,8 @@ namespace pcl
        */
       virtual void
       setLODPoints (const boost::uint64_t &lod_index_arg,
-                    const boost::uint64_t &num_points_arg, const bool increment = true);
+                    const boost::uint64_t &num_points_arg,
+                    const bool increment = true);
 
       /** \brief Set information about the coordinate system */
       virtual void

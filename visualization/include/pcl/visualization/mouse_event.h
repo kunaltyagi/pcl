@@ -75,8 +75,13 @@ namespace pcl
        * that time where event got fired \param[in] selection_mode whether we are in
        * selection mode
        */
-      inline MouseEvent (const Type &type, const MouseButton &button, unsigned int x,
-                         unsigned int y, bool alt, bool ctrl, bool shift,
+      inline MouseEvent (const Type &type,
+                         const MouseButton &button,
+                         unsigned int x,
+                         unsigned int y,
+                         bool alt,
+                         bool ctrl,
+                         bool shift,
                          bool selection_mode = false);
 
       /**
@@ -137,8 +142,13 @@ namespace pcl
       bool selection_mode_;
     };
 
-    MouseEvent::MouseEvent (const Type &type, const MouseButton &button, unsigned x,
-                            unsigned y, bool alt, bool ctrl, bool shift,
+    MouseEvent::MouseEvent (const Type &type,
+                            const MouseButton &button,
+                            unsigned x,
+                            unsigned y,
+                            bool alt,
+                            bool ctrl,
+                            bool shift,
                             bool selection_mode)
         : type_ (type), button_ (button), pointer_x_ (x), pointer_y_ (y),
           key_state_ (0), selection_mode_ (selection_mode)

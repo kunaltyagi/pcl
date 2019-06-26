@@ -56,10 +56,10 @@ main (int argc, char **argv)
 
   PointCloud<PointXYZ>::Ptr cloud_a_subsampled, cloud_b_subsampled;
   PointCloud<Normal>::Ptr cloud_a_subsampled_normals, cloud_b_subsampled_normals;
-  subsampleAndCalculateNormals (cloud_a, cloud_a_subsampled,
-                                cloud_a_subsampled_normals);
-  subsampleAndCalculateNormals (cloud_b, cloud_b_subsampled,
-                                cloud_b_subsampled_normals);
+  subsampleAndCalculateNormals (
+      cloud_a, cloud_a_subsampled, cloud_a_subsampled_normals);
+  subsampleAndCalculateNormals (
+      cloud_b, cloud_b_subsampled, cloud_b_subsampled_normals);
 
   PCL_INFO ("Finished subsampling the clouds ...\n");
 
@@ -68,9 +68,11 @@ main (int argc, char **argv)
   PointCloud<PointNormal>::Ptr cloud_subsampled_with_normals_a (
       new PointCloud<PointNormal> ()),
       cloud_subsampled_with_normals_b (new PointCloud<PointNormal> ());
-  concatenateFields (*cloud_a_subsampled, *cloud_a_subsampled_normals,
+  concatenateFields (*cloud_a_subsampled,
+                     *cloud_a_subsampled_normals,
                      *cloud_subsampled_with_normals_a);
-  concatenateFields (*cloud_b_subsampled, *cloud_b_subsampled_normals,
+  concatenateFields (*cloud_b_subsampled,
+                     *cloud_b_subsampled_normals,
                      *cloud_subsampled_with_normals_b);
 
   PPFEstimation<PointNormal, PointNormal, PPFSignature> ppf_estimator;
@@ -81,7 +83,8 @@ main (int argc, char **argv)
   ppf_estimator.setInputNormals (cloud_subsampled_with_normals_b);
   ppf_estimator.compute (*ppf_signature_b);
 
-  PCL_INFO ("Feature cloud sizes: %u , %u\n", ppf_signature_a->points.size (),
+  PCL_INFO ("Feature cloud sizes: %u , %u\n",
+            ppf_signature_a->points.size (),
             ppf_signature_b->points.size ());
 
   PCL_INFO ("Finished calculating the features ...\n");
@@ -111,8 +114,8 @@ main (int argc, char **argv)
 
   float value = PyramidFeatureHistogram<PPFSignature>::comparePyramidFeatureHistograms (
       pyramid_a, pyramid_b);
-  PCL_INFO ("Surface comparison value between %s and %s is: %f\n", argv[1], argv[2],
-            value);
+  PCL_INFO (
+      "Surface comparison value between %s and %s is: %f\n", argv[1], argv[2], value);
 
   return 0;
 }

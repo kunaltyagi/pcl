@@ -271,8 +271,8 @@ namespace pcl
           if (normals_set_ && requires_normals_) {
             pcl::PointCloud<pcl::Normal>::Ptr filtered_normals (
                 new pcl::PointCloud<pcl::Normal> ());
-            pcl::copyPointCloud (*complete_normal_models_[i], indices,
-                                 *filtered_normals);
+            pcl::copyPointCloud (
+                *complete_normal_models_[i], indices, *filtered_normals);
             visible_normal_models_.push_back (filtered_normals);
           }
 

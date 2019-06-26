@@ -112,12 +112,12 @@ class MultiRansac
 
       // viz.addPointCloudNormals<pcl::PointXYZRGBNormal> (normal_cloud, 139, 0.1,
       // "normalcloud");
-      viz.addPointCloud<pcl::PointXYZRGBNormal> (normal_cloud, Color_handler,
-                                                 std::string ("cloud"), 0);
+      viz.addPointCloud<pcl::PointXYZRGBNormal> (
+          normal_cloud, Color_handler, std::string ("cloud"), 0);
       viz.setPointCloudRenderingProperties (
           pcl::visualization::PCL_VISUALIZER_LINE_WIDTH, linesize, cloud_name);
-      viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_OPACITY,
-                                            opacity, cloud_name);
+      viz.setPointCloudRenderingProperties (
+          pcl::visualization::PCL_VISUALIZER_OPACITY, opacity, cloud_name);
       viz.setPointCloudRenderingProperties (
           pcl::visualization::PCL_VISUALIZER_POINT_SIZE, psize, cloud_name);
       new_cloud = false;
@@ -153,8 +153,14 @@ class MultiRansac
 
       // Compute the PointCloud on the device
       // d2c.compute<Storage> (depth_image, image, constant, data, true, 2);
-      d2c.compute<Storage> (depth_image, image, constant, data, true, 2,
-                            smoothing_nr_iterations, smoothing_filter_size);
+      d2c.compute<Storage> (depth_image,
+                            image,
+                            constant,
+                            data,
+                            true,
+                            2,
+                            smoothing_nr_iterations,
+                            smoothing_filter_size);
 
       // Compute normals
       boost::shared_ptr<typename Storage<float4>::type> normals;
@@ -194,7 +200,8 @@ class MultiRansac
             typename Storage<int>::type region_mask;
             markInliers<Storage> (data, region_mask, planes);
             thrust::host_vector<int> regions_host;
-            std::copy (regions_host.begin (), regions_host.end (),
+            std::copy (regions_host.begin (),
+                       regions_host.end (),
                        std::ostream_iterator<int> (std::cerr, " "));
             {
               ScopeTimeCPU t ("retrieving inliers");
@@ -230,10 +237,10 @@ class MultiRansac
           }
 
           cv::namedWindow ("Parameters", CV_WINDOW_NORMAL);
-          cvCreateTrackbar ("iterations", "Parameters", &smoothing_nr_iterations, 50,
-                            NULL);
-          cvCreateTrackbar ("filter_size", "Parameters", &smoothing_filter_size, 10,
-                            NULL);
+          cvCreateTrackbar (
+              "iterations", "Parameters", &smoothing_nr_iterations, 50, NULL);
+          cvCreateTrackbar (
+              "filter_size", "Parameters", &smoothing_filter_size, 10, NULL);
           cvCreateTrackbar ("enable_coloring", "Parameters", &enable_coloring, 1, NULL);
           cvCreateTrackbar ("threshold", "Parameters", &threshold_x100, 100, NULL);
           cv::waitKey (2);
@@ -267,14 +274,16 @@ class MultiRansac
       std::cerr << "[RANSAC] Using GPU..." << std::endl;
       std::function<void(
           const boost::shared_ptr<openni_wrapper::Image> &image,
-          const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image, float)>
+          const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image,
+          float)>
           f = boost::bind (&MultiRansac::cloud_cb<Device>, this, _1, _2, _3);
       c = interface->registerCallback (f);
     } else {
       std::cerr << "[RANSAC] Using CPU..." << std::endl;
       std::function<void(
           const boost::shared_ptr<openni_wrapper::Image> &image,
-          const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image, float)>
+          const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image,
+          float)>
           f = boost::bind (&MultiRansac::cloud_cb<Host>, this, _1, _2, _3);
       c = interface->registerCallback (f);
     }

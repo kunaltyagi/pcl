@@ -150,7 +150,8 @@ ON_Box::ClosestPointTo (ON_3dPoint point) const
 
 // rotate box about its center
 bool
-ON_Box::Rotate (double sin_angle, double cos_angle,
+ON_Box::Rotate (double sin_angle,
+                double cos_angle,
                 const ON_3dVector &axis // axis of rotation
 )
 {
@@ -167,7 +168,8 @@ ON_Box::Rotate (double angle,           // angle in radians
 
 // rotate box about a point and axis
 bool
-ON_Box::Rotate (double sin_angle, double cos_angle,
+ON_Box::Rotate (double sin_angle,
+                double cos_angle,
                 const ON_3dVector &axis, // axis of rotation
                 const ON_3dPoint &point  // center of rotation
 )

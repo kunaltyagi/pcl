@@ -163,7 +163,8 @@ namespace pcl
    */
   template <typename PointT>
   void
-  fromPCLPointCloud2 (const pcl::PCLPointCloud2 &msg, pcl::PointCloud<PointT> &cloud,
+  fromPCLPointCloud2 (const pcl::PCLPointCloud2 &msg,
+                      pcl::PointCloud<PointT> &cloud,
                       const MsgFieldMap &field_map)
   {
     // Copy info fields
@@ -202,7 +203,8 @@ namespace pcl
           const uint8_t *msg_data = row_data + col * msg.point_step;
           BOOST_FOREACH (const detail::FieldMapping &mapping, field_map) {
             memcpy (cloud_data + mapping.struct_offset,
-                    msg_data + mapping.serialized_offset, mapping.size);
+                    msg_data + mapping.serialized_offset,
+                    mapping.size);
           }
           cloud_data += sizeof (PointT);
         }

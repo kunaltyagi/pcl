@@ -87,8 +87,10 @@ class OpenNISmoothing
   using CloudPtr = typename Cloud::Ptr;
   using CloudConstPtr = typename Cloud::ConstPtr;
 
-  OpenNISmoothing (double search_radius, bool sqr_gauss_param_set,
-                   double sqr_gauss_param, int polynomial_order,
+  OpenNISmoothing (double search_radius,
+                   bool sqr_gauss_param_set,
+                   double sqr_gauss_param,
+                   int polynomial_order,
                    const std::string &device_id = "")
       : viewer ("PCL OpenNI MLS Smoothing"), device_id_ (device_id)
   {
@@ -235,12 +237,12 @@ main (int argc, char **argv)
 
   pcl::OpenNIGrabber grabber (arg);
   if (grabber.providesCallback<pcl::OpenNIGrabber::sig_cb_openni_point_cloud_rgba> ()) {
-    OpenNISmoothing<pcl::PointXYZRGBA> v (search_radius, sqr_gauss_param_set,
-                                          sqr_gauss_param, polynomial_order, arg);
+    OpenNISmoothing<pcl::PointXYZRGBA> v (
+        search_radius, sqr_gauss_param_set, sqr_gauss_param, polynomial_order, arg);
     v.run ();
   } else {
-    OpenNISmoothing<pcl::PointXYZ> v (search_radius, sqr_gauss_param_set,
-                                      sqr_gauss_param, polynomial_order, arg);
+    OpenNISmoothing<pcl::PointXYZ> v (
+        search_radius, sqr_gauss_param_set, sqr_gauss_param, polynomial_order, arg);
     v.run ();
   }
 

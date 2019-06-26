@@ -87,25 +87,25 @@ TEST (PCL, IntegralImage1D)
           // window_height << " :: " << integral_image1.getFirstOrderSum (xIdx, yIdx,
           // window_width, window_height) * 2 << endl;
           EXPECT_EQ (window_height * window_width * (window_width + 2 * xIdx - 1),
-                     integral_image1.getFirstOrderSum (xIdx, yIdx, window_width,
-                                                       window_height) *
+                     integral_image1.getFirstOrderSum (
+                         xIdx, yIdx, window_width, window_height) *
                          2);
           EXPECT_EQ (window_height * window_width * (window_width + 2 * xIdx - 1),
-                     integral_image2.getFirstOrderSum (xIdx, yIdx, window_width,
-                                                       window_height) *
+                     integral_image2.getFirstOrderSum (
+                         xIdx, yIdx, window_width, window_height) *
                          2);
           EXPECT_EQ (window_height * window_width,
-                     integral_image1.getFiniteElementsCount (xIdx, yIdx, window_width,
-                                                             window_height));
+                     integral_image1.getFiniteElementsCount (
+                         xIdx, yIdx, window_width, window_height));
           EXPECT_EQ (window_height * window_width,
-                     integral_image2.getFiniteElementsCount (xIdx, yIdx, window_width,
-                                                             window_height));
+                     integral_image2.getFiniteElementsCount (
+                         xIdx, yIdx, window_width, window_height));
 
           int w = window_width + xIdx - 1;
           long result = w * (w + 1) * (2 * w + 1) - xIdx * (xIdx - 1) * (2 * xIdx - 1);
           EXPECT_EQ (window_height * result,
-                     integral_image1.getSecondOrderSum (xIdx, yIdx, window_width,
-                                                        window_height) *
+                     integral_image1.getSecondOrderSum (
+                         xIdx, yIdx, window_width, window_height) *
                          6);
         }
       }
@@ -132,25 +132,25 @@ TEST (PCL, IntegralImage1D)
       for (unsigned yIdx = 0; yIdx < height - window_height; ++yIdx) {
         for (unsigned xIdx = 0; xIdx < width - window_width; ++xIdx) {
           EXPECT_EQ (window_height * window_width * (window_width + 2 * xIdx - 1),
-                     integral_image1.getFirstOrderSum (xIdx, yIdx, window_width,
-                                                       window_height) *
+                     integral_image1.getFirstOrderSum (
+                         xIdx, yIdx, window_width, window_height) *
                          2);
           EXPECT_EQ (window_height * window_width * (window_width + 2 * xIdx - 1),
-                     integral_image2.getFirstOrderSum (xIdx, yIdx, window_width,
-                                                       window_height) *
+                     integral_image2.getFirstOrderSum (
+                         xIdx, yIdx, window_width, window_height) *
                          2);
           EXPECT_EQ (window_height * window_width,
-                     integral_image1.getFiniteElementsCount (xIdx, yIdx, window_width,
-                                                             window_height));
+                     integral_image1.getFiniteElementsCount (
+                         xIdx, yIdx, window_width, window_height));
           EXPECT_EQ (window_height * window_width,
-                     integral_image2.getFiniteElementsCount (xIdx, yIdx, window_width,
-                                                             window_height));
+                     integral_image2.getFiniteElementsCount (
+                         xIdx, yIdx, window_width, window_height));
 
           int w = window_width + xIdx - 1;
           long result = w * (w + 1) * (2 * w + 1) - xIdx * (xIdx - 1) * (2 * xIdx - 1);
           EXPECT_EQ (window_height * result,
-                     integral_image1.getSecondOrderSum (xIdx, yIdx, window_width,
-                                                        window_height) *
+                     integral_image1.getSecondOrderSum (
+                         xIdx, yIdx, window_width, window_height) *
                          6);
         }
       }
@@ -178,21 +178,21 @@ TEST (PCL, IntegralImage1D)
       for (unsigned yIdx = 0; yIdx < height - window_height; ++yIdx) {
         for (unsigned xIdx = 0; xIdx < width - window_width; ++xIdx) {
           EXPECT_EQ (window_width * window_height,
-                     integral_image1.getFirstOrderSum (xIdx, yIdx, window_width,
-                                                       window_height));
+                     integral_image1.getFirstOrderSum (
+                         xIdx, yIdx, window_width, window_height));
           EXPECT_EQ (window_width * window_height,
-                     integral_image2.getFirstOrderSum (xIdx, yIdx, window_width,
-                                                       window_height));
+                     integral_image2.getFirstOrderSum (
+                         xIdx, yIdx, window_width, window_height));
           EXPECT_EQ (window_width * window_height,
-                     integral_image1.getFiniteElementsCount (xIdx, yIdx, window_width,
-                                                             window_height));
+                     integral_image1.getFiniteElementsCount (
+                         xIdx, yIdx, window_width, window_height));
           EXPECT_EQ (window_width * window_height,
-                     integral_image2.getFiniteElementsCount (xIdx, yIdx, window_width,
-                                                             window_height));
+                     integral_image2.getFiniteElementsCount (
+                         xIdx, yIdx, window_width, window_height));
 
           EXPECT_EQ (window_width * window_height,
-                     integral_image1.getSecondOrderSum (xIdx, yIdx, window_width,
-                                                        window_height));
+                     integral_image1.getSecondOrderSum (
+                         xIdx, yIdx, window_width, window_height));
         }
       }
     }
@@ -207,21 +207,21 @@ TEST (PCL, IntegralImage1D)
       for (unsigned yIdx = 0; yIdx < height - window_height; ++yIdx) {
         for (unsigned xIdx = 0; xIdx < width - window_width; ++xIdx) {
           EXPECT_EQ (window_width * window_height * 2,
-                     integral_image1.getFirstOrderSum (xIdx, yIdx, window_width,
-                                                       window_height));
+                     integral_image1.getFirstOrderSum (
+                         xIdx, yIdx, window_width, window_height));
           EXPECT_EQ (window_width * window_height * 2,
-                     integral_image2.getFirstOrderSum (xIdx, yIdx, window_width,
-                                                       window_height));
+                     integral_image2.getFirstOrderSum (
+                         xIdx, yIdx, window_width, window_height));
           EXPECT_EQ (window_width * window_height,
-                     integral_image1.getFiniteElementsCount (xIdx, yIdx, window_width,
-                                                             window_height));
+                     integral_image1.getFiniteElementsCount (
+                         xIdx, yIdx, window_width, window_height));
           EXPECT_EQ (window_width * window_height,
-                     integral_image2.getFiniteElementsCount (xIdx, yIdx, window_width,
-                                                             window_height));
+                     integral_image2.getFiniteElementsCount (
+                         xIdx, yIdx, window_width, window_height));
 
           EXPECT_EQ (window_width * window_height * 4,
-                     integral_image1.getSecondOrderSum (xIdx, yIdx, window_width,
-                                                        window_height));
+                     integral_image1.getSecondOrderSum (
+                         xIdx, yIdx, window_width, window_height));
         }
       }
     }
@@ -237,25 +237,25 @@ TEST (PCL, IntegralImage1D)
       for (unsigned yIdx = 0; yIdx < height - window_height; ++yIdx) {
         for (unsigned xIdx = 0; xIdx < width - window_width; ++xIdx) {
           EXPECT_EQ (window_height * window_width * (window_width + 2 * xIdx - 1),
-                     integral_image1.getFirstOrderSum (xIdx, yIdx, window_width,
-                                                       window_height) *
+                     integral_image1.getFirstOrderSum (
+                         xIdx, yIdx, window_width, window_height) *
                          2);
           EXPECT_EQ (window_height * window_width * (window_width + 2 * xIdx - 1),
-                     integral_image2.getFirstOrderSum (xIdx, yIdx, window_width,
-                                                       window_height) *
+                     integral_image2.getFirstOrderSum (
+                         xIdx, yIdx, window_width, window_height) *
                          2);
           EXPECT_EQ (window_width * window_height,
-                     integral_image1.getFiniteElementsCount (xIdx, yIdx, window_width,
-                                                             window_height));
+                     integral_image1.getFiniteElementsCount (
+                         xIdx, yIdx, window_width, window_height));
           EXPECT_EQ (window_width * window_height,
-                     integral_image2.getFiniteElementsCount (xIdx, yIdx, window_width,
-                                                             window_height));
+                     integral_image2.getFiniteElementsCount (
+                         xIdx, yIdx, window_width, window_height));
 
           int w = window_width + xIdx - 1;
           long result = w * (w + 1) * (2 * w + 1) - xIdx * (xIdx - 1) * (2 * xIdx - 1);
           EXPECT_EQ (window_height * result,
-                     integral_image1.getSecondOrderSum (xIdx, yIdx, window_width,
-                                                        window_height) *
+                     integral_image1.getSecondOrderSum (
+                         xIdx, yIdx, window_width, window_height) *
                          6);
         }
       }
@@ -297,16 +297,21 @@ TEST (PCL, IntegralImage1D)
         for (unsigned xIdx = 0; xIdx < width - window_width; ++xIdx) {
           int count = window_height * ((window_width - (xIdx & 1) + 1) >> 1);
 
-          EXPECT_EQ (count * 3, integral_image1.getFirstOrderSum (
-                                    xIdx, yIdx, window_width, window_height));
-          EXPECT_EQ (count * 3, integral_image2.getFirstOrderSum (
-                                    xIdx, yIdx, window_width, window_height));
-          EXPECT_EQ (count, integral_image1.getFiniteElementsCount (
-                                xIdx, yIdx, window_width, window_height));
-          EXPECT_EQ (count, integral_image2.getFiniteElementsCount (
-                                xIdx, yIdx, window_width, window_height));
-          EXPECT_EQ (count * 9, integral_image1.getSecondOrderSum (
-                                    xIdx, yIdx, window_width, window_height));
+          EXPECT_EQ (count * 3,
+                     integral_image1.getFirstOrderSum (
+                         xIdx, yIdx, window_width, window_height));
+          EXPECT_EQ (count * 3,
+                     integral_image2.getFirstOrderSum (
+                         xIdx, yIdx, window_width, window_height));
+          EXPECT_EQ (count,
+                     integral_image1.getFiniteElementsCount (
+                         xIdx, yIdx, window_width, window_height));
+          EXPECT_EQ (count,
+                     integral_image2.getFiniteElementsCount (
+                         xIdx, yIdx, window_width, window_height));
+          EXPECT_EQ (count * 9,
+                     integral_image1.getSecondOrderSum (
+                         xIdx, yIdx, window_width, window_height));
         }
       }
     }
@@ -342,8 +347,8 @@ TEST (PCL, IntegralImage3D)
       for (unsigned yIdx = 0; yIdx < height - window_height; ++yIdx) {
         for (unsigned xIdx = 0; xIdx < width - window_width; ++xIdx) {
           IntegralImage2D<float, 3>::ElementType sum =
-              integral_image3.getFirstOrderSum (xIdx, yIdx, window_width,
-                                                window_height);
+              integral_image3.getFirstOrderSum (
+                  xIdx, yIdx, window_width, window_height);
 
           EXPECT_EQ (window_height * window_width * (window_width + 2 * xIdx - 1),
                      sum[0] * 2);
@@ -354,8 +359,8 @@ TEST (PCL, IntegralImage3D)
                      sum[2] * 2);
 
           IntegralImage2D<float, 3>::SecondOrderType sumSqr =
-              integral_image3.getSecondOrderSum (xIdx, yIdx, window_width,
-                                                 window_height);
+              integral_image3.getSecondOrderSum (
+                  xIdx, yIdx, window_width, window_height);
 
           IntegralImage2D<float, 3>::SecondOrderType ground_truth;
           ground_truth.setZero ();

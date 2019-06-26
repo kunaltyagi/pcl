@@ -16,7 +16,8 @@
 
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-ON_OBJECT_IMPLEMENT (ON_DetailView, ON_Geometry,
+ON_OBJECT_IMPLEMENT (ON_DetailView,
+                     ON_Geometry,
                      "C8C66EFA-B3CB-4e00-9440-2AD66203379E");
 
 ON_DetailView::ON_DetailView () { m_page_per_model_ratio = 0.0; }
@@ -173,7 +174,8 @@ ON_DetailView::GetBBox (double *boxmin, double *boxmax, int bGrowBox) const
 }
 
 bool
-ON_DetailView::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_DetailView::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                    int bGrowBox,
                                     const ON_Xform *xform) const
 {
   return m_boundary.GetTightBoundingBox (tight_bbox, bGrowBox, xform);

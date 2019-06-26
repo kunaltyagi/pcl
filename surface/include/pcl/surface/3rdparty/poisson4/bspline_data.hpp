@@ -136,7 +136,8 @@ namespace pcl
 
     template <int Degree, class Real>
     void
-    BSplineData<Degree, Real>::set (int maxDepth, bool useDotRatios,
+    BSplineData<Degree, Real>::set (int maxDepth,
+                                    bool useDotRatios,
                                     bool reflectBoundary)
     {
       this->useDotRatios = useDotRatios;
@@ -239,7 +240,8 @@ namespace pcl
       for (int d1 = 0; d1 <= depth; d1++)
         for (int off1 = 0; off1 < (1 << d1); off1++) {
           int ii = BinaryNode<Real>::CenterIndex (d1, off1);
-          BSplineElements<Degree> b1 (1 << d1, off1,
+          BSplineElements<Degree> b1 (1 << d1,
+                                      off1,
                                       reflectBoundary ? BSplineElements<Degree>::NEUMANN
                                                       : BSplineElements<Degree>::NONE);
           BSplineElements<Degree - 1> db1;
@@ -266,7 +268,8 @@ namespace pcl
               if (d1 == d2 && off2 < off1)
                 continue;
               int jj = BinaryNode<Real>::CenterIndex (d2, off2);
-              BSplineElements<Degree> b2 (1 << d2, off2,
+              BSplineElements<Degree> b2 (1 << d2,
+                                          off2,
                                           reflectBoundary
                                               ? BSplineElements<Degree>::NEUMANN
                                               : BSplineElements<Degree>::NONE);
@@ -361,7 +364,9 @@ namespace pcl
     }
     template <int Degree, class Real>
     void
-    BSplineData<Degree, Real>::setSampleSpan (int idx, int &start, int &end,
+    BSplineData<Degree, Real>::setSampleSpan (int idx,
+                                              int &start,
+                                              int &end,
                                               double smooth) const
     {
       int d, off, res;
@@ -414,7 +419,8 @@ namespace pcl
     }
     template <int Degree, class Real>
     void
-    BSplineData<Degree, Real>::setValueTables (int flags, double valueSmooth,
+    BSplineData<Degree, Real>::setValueTables (int flags,
+                                               double valueSmooth,
                                                double normalSmooth)
     {
       clearValueTables ();

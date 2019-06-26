@@ -83,7 +83,8 @@ namespace pcl
      * \return the intensity average at a given point index
      */
     double
-    computePointWeight (const int pid, const std::vector<int> &indices,
+    computePointWeight (const int pid,
+                        const std::vector<int> &indices,
                         const std::vector<float> &distances);
 
     /** \brief Set the half size of the Gaussian bilateral filter window.

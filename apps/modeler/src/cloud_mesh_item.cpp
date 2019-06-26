@@ -238,8 +238,12 @@ pcl::modeler::CloudMeshItem::prepareProperties (ParameterDialog *parameter_dialo
 void
 pcl::modeler::CloudMeshItem::setProperties ()
 {
-  cloud_mesh_->transform (*translation_x_, *translation_y_, *translation_z_,
-                          *rotation_x_, *rotation_y_, *rotation_z_);
+  cloud_mesh_->transform (*translation_x_,
+                          *translation_y_,
+                          *translation_z_,
+                          *rotation_x_,
+                          *rotation_y_,
+                          *rotation_z_);
 
   updateChannels ();
 }

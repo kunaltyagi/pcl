@@ -108,7 +108,8 @@ namespace pcl
     }
     template <class Real>
     void
-    EdgeCollapse (const Real &edgeRatio, std::vector<TriangleIndex> &triangles,
+    EdgeCollapse (const Real &edgeRatio,
+                  std::vector<TriangleIndex> &triangles,
                   std::vector<Point3D<Real>> &positions,
                   std::vector<Point3D<Real>> *normals)
     {
@@ -222,7 +223,8 @@ namespace pcl
     }
     template <class Real>
     void
-    TriangleCollapse (const Real &edgeRatio, std::vector<TriangleIndex> &triangles,
+    TriangleCollapse (const Real &edgeRatio,
+                      std::vector<TriangleIndex> &triangles,
                       std::vector<Point3D<Real>> &positions,
                       std::vector<Point3D<Real>> *normals)
     {

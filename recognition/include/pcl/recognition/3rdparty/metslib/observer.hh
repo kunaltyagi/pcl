@@ -171,7 +171,8 @@ namespace mets
   {
     // upcast the object to the real observer_subject type
     observed_subject *real_subject = static_cast<observed_subject *> (this);
-    std::for_each (observers_m.begin (), observers_m.end (),
+    std::for_each (observers_m.begin (),
+                   observers_m.end (),
                    update_observer<observed_subject> (real_subject));
   }
 

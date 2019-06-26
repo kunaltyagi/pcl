@@ -129,7 +129,8 @@ namespace pcl
       using sig_cb_openni_depth_image = void(const boost::shared_ptr<DepthImage> &);
       using sig_cb_openni_ir_image = void(const boost::shared_ptr<IRImage> &);
       using sig_cb_openni_image_depth_image =
-          void(const boost::shared_ptr<Image> &, const boost::shared_ptr<DepthImage> &,
+          void(const boost::shared_ptr<Image> &,
+               const boost::shared_ptr<DepthImage> &,
                float);
       using sig_cb_openni_ir_depth_image = void(const boost::shared_ptr<IRImage> &,
                                                 const boost::shared_ptr<DepthImage> &,
@@ -204,9 +205,10 @@ namespace pcl
                               const double rgb_principal_point_x,
                               const double rgb_principal_point_y)
       {
-        rgb_parameters_ =
-            CameraParameters (rgb_focal_length_x, rgb_focal_length_y,
-                              rgb_principal_point_x, rgb_principal_point_y);
+        rgb_parameters_ = CameraParameters (rgb_focal_length_x,
+                                            rgb_focal_length_y,
+                                            rgb_principal_point_x,
+                                            rgb_principal_point_y);
       }
 
       /** \brief Get the RGB camera parameters (fx, fy, cx, cy)
@@ -216,7 +218,8 @@ namespace pcl
        * \param[out] rgb_principal_point_y the RGB principal point (cy)
        */
       inline void
-      getRGBCameraIntrinsics (double &rgb_focal_length_x, double &rgb_focal_length_y,
+      getRGBCameraIntrinsics (double &rgb_focal_length_x,
+                              double &rgb_focal_length_y,
                               double &rgb_principal_point_x,
                               double &rgb_principal_point_y) const
       {
@@ -279,9 +282,10 @@ namespace pcl
                                 const double depth_principal_point_x,
                                 const double depth_principal_point_y)
       {
-        depth_parameters_ =
-            CameraParameters (depth_focal_length_x, depth_focal_length_y,
-                              depth_principal_point_x, depth_principal_point_y);
+        depth_parameters_ = CameraParameters (depth_focal_length_x,
+                                              depth_focal_length_y,
+                                              depth_principal_point_x,
+                                              depth_principal_point_y);
       }
 
       /** \brief Get the Depth camera parameters (fx, fy, cx, cy)
@@ -343,7 +347,8 @@ namespace pcl
       protected:
       /** \brief Sets up an OpenNI device. */
       void
-      setupDevice (const std::string &device_id, const Mode &depth_mode,
+      setupDevice (const std::string &device_id,
+                   const Mode &depth_mode,
                    const Mode &image_mode);
 
       /** \brief Update mode maps. */

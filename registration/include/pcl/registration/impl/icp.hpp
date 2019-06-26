@@ -238,14 +238,22 @@ pcl::IterativeClosestPoint<PointSource, PointTarget, Scalar>::computeTransformat
   PCL_DEBUG ("Transformation "
              "is:\n\t%5f\t%5f\t%5f\t%5f\n\t%5f\t%5f\t%5f\t%5f\n\t%5f\t%5f\t%5f\t%"
              "5f\n\t%5f\t%5f\t%5f\t%5f\n",
-             final_transformation_ (0, 0), final_transformation_ (0, 1),
-             final_transformation_ (0, 2), final_transformation_ (0, 3),
-             final_transformation_ (1, 0), final_transformation_ (1, 1),
-             final_transformation_ (1, 2), final_transformation_ (1, 3),
-             final_transformation_ (2, 0), final_transformation_ (2, 1),
-             final_transformation_ (2, 2), final_transformation_ (2, 3),
-             final_transformation_ (3, 0), final_transformation_ (3, 1),
-             final_transformation_ (3, 2), final_transformation_ (3, 3));
+             final_transformation_ (0, 0),
+             final_transformation_ (0, 1),
+             final_transformation_ (0, 2),
+             final_transformation_ (0, 3),
+             final_transformation_ (1, 0),
+             final_transformation_ (1, 1),
+             final_transformation_ (1, 2),
+             final_transformation_ (1, 3),
+             final_transformation_ (2, 0),
+             final_transformation_ (2, 1),
+             final_transformation_ (2, 2),
+             final_transformation_ (2, 3),
+             final_transformation_ (3, 0),
+             final_transformation_ (3, 1),
+             final_transformation_ (3, 2),
+             final_transformation_ (3, 3));
 
   // Copy all the values
   output = *input_;
@@ -255,8 +263,8 @@ pcl::IterativeClosestPoint<PointSource, PointTarget, Scalar>::computeTransformat
 
 template <typename PointSource, typename PointTarget, typename Scalar>
 void
-pcl::IterativeClosestPoint<PointSource, PointTarget,
-                           Scalar>::determineRequiredBlobData ()
+pcl::IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+    determineRequiredBlobData ()
 {
   need_source_blob_ = false;
   need_target_blob_ = false;
@@ -284,12 +292,14 @@ pcl::IterativeClosestPoint<PointSource, PointTarget,
     if (rej->requiresSourceNormals () && !source_has_normals_) {
       PCL_WARN ("[pcl::%s::determineRequiredBlobData] Rejector %s expects source "
                 "normals, but we can't provide them.\n",
-                getClassName ().c_str (), rej->getClassName ().c_str ());
+                getClassName ().c_str (),
+                rej->getClassName ().c_str ());
     }
     if (rej->requiresTargetNormals () && !target_has_normals_) {
       PCL_WARN ("[pcl::%s::determineRequiredBlobData] Rejector %s expects target "
                 "normals, but we can't provide them.\n",
-                getClassName ().c_str (), rej->getClassName ().c_str ());
+                getClassName ().c_str (),
+                rej->getClassName ().c_str ());
     }
   }
 }
@@ -297,10 +307,10 @@ pcl::IterativeClosestPoint<PointSource, PointTarget,
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename Scalar>
 void
-pcl::IterativeClosestPointWithNormals<
-    PointSource, PointTarget, Scalar>::transformCloud (const PointCloudSource &input,
-                                                       PointCloudSource &output,
-                                                       const Matrix4 &transform)
+pcl::IterativeClosestPointWithNormals<PointSource, PointTarget, Scalar>::
+    transformCloud (const PointCloudSource &input,
+                    PointCloudSource &output,
+                    const Matrix4 &transform)
 {
   pcl::transformPointCloudWithNormals (input, output, transform);
 }

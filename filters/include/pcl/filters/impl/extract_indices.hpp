@@ -145,8 +145,10 @@ pcl::ExtractIndices<PointT>::applyFilterIndices (std::vector<int> &indices)
 
       // Store the difference in removed_indices
       removed_indices_->clear ();
-      set_difference (full_indices.begin (), full_indices.end (),
-                      sorted_input_indices.begin (), sorted_input_indices.end (),
+      set_difference (full_indices.begin (),
+                      full_indices.end (),
+                      sorted_input_indices.begin (),
+                      sorted_input_indices.end (),
                       inserter (*removed_indices_, removed_indices_->begin ()));
     }
   } else // Inverted functionality
@@ -163,8 +165,10 @@ pcl::ExtractIndices<PointT>::applyFilterIndices (std::vector<int> &indices)
 
     // Store the difference in indices
     indices.clear ();
-    set_difference (full_indices.begin (), full_indices.end (),
-                    sorted_input_indices.begin (), sorted_input_indices.end (),
+    set_difference (full_indices.begin (),
+                    full_indices.end (),
+                    sorted_input_indices.begin (),
+                    sorted_input_indices.end (),
                     inserter (indices, indices.begin ()));
 
     if (extract_removed_indices_)

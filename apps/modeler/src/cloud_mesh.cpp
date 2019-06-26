@@ -220,8 +220,8 @@ pcl::modeler::CloudMesh::updateVtkPolygons ()
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::CloudMesh::transform (double tx, double ty, double tz, double rx,
-                                    double ry, double rz)
+pcl::modeler::CloudMesh::transform (
+    double tx, double ty, double tz, double rx, double ry, double rz)
 {
   Eigen::Vector4f centroid;
   pcl::compute3DCentroid (*cloud_, centroid);
@@ -235,8 +235,8 @@ pcl::modeler::CloudMesh::transform (double tx, double ty, double tz, double rx,
   Eigen::Affine3f affine_transform = pcl::getTransformation (
       float(tx), float(ty), float(tz), float(rx), float(ry), float(rz));
   CloudMesh::PointCloud transform_cloud = mean_cloud;
-  pcl::transformPointCloudWithNormals (mean_cloud, transform_cloud,
-                                       affine_transform.matrix ());
+  pcl::transformPointCloudWithNormals (
+      mean_cloud, transform_cloud, affine_transform.matrix ());
 
   centroid = -centroid;
   pcl::demeanPointCloud (transform_cloud, centroid, *cloud_);

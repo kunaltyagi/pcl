@@ -590,8 +590,8 @@ namespace pcl
       } else {
         if (cloud_with_color_)
           // encode average color of all points within voxel
-          color_coder_.encodeAverageOfPoints (leafIdx, point_color_offset_,
-                                              this->input_);
+          color_coder_.encodeAverageOfPoints (
+              leafIdx, point_color_offset_, this->input_);
       }
     }
 
@@ -627,8 +627,8 @@ namespace pcl
             static_cast<double> (key_arg.z) * this->resolution_ + this->min_z_;
 
         // decode differentially encoded points
-        point_coder_.decodePoints (output_, lowerVoxelCorner, cloudSize,
-                                   cloudSize + pointCount);
+        point_coder_.decodePoints (
+            output_, lowerVoxelCorner, cloudSize, cloudSize + pointCount);
       } else {
         // calculate center of lower voxel corner
         newPoint.x = static_cast<float> (
@@ -645,12 +645,16 @@ namespace pcl
       if (cloud_with_color_) {
         if (data_with_color_)
           // decode color information
-          color_coder_.decodePoints (output_, output_->points.size () - pointCount,
-                                     output_->points.size (), point_color_offset_);
+          color_coder_.decodePoints (output_,
+                                     output_->points.size () - pointCount,
+                                     output_->points.size (),
+                                     point_color_offset_);
         else
           // set default color information
-          color_coder_.setDefaultColor (output_, output_->points.size () - pointCount,
-                                        output_->points.size (), point_color_offset_);
+          color_coder_.setDefaultColor (output_,
+                                        output_->points.size () - pointCount,
+                                        output_->points.size (),
+                                        point_color_offset_);
       }
     }
   } // namespace io

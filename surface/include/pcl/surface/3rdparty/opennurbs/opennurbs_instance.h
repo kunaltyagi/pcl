@@ -175,7 +175,8 @@ class ON_CLASS ON_InstanceDefinition : public ON_Geometry
     See the IDEF_UPDATE_TYPE comments for more details.
   */
   void
-  SetSourceArchive (const wchar_t *source_archive, ON_CheckSum checksum,
+  SetSourceArchive (const wchar_t *source_archive,
+                    ON_CheckSum checksum,
                     IDEF_UPDATE_TYPE update_type);
 
   /*

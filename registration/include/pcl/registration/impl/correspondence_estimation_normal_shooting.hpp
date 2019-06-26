@@ -45,8 +45,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename NormalT, typename Scalar>
 bool
-pcl::registration::CorrespondenceEstimationNormalShooting<
-    PointSource, PointTarget, NormalT, Scalar>::initCompute ()
+pcl::registration::CorrespondenceEstimationNormalShooting<PointSource,
+                                                          PointTarget,
+                                                          NormalT,
+                                                          Scalar>::initCompute ()
 {
   if (!source_normals_) {
     PCL_WARN ("[pcl::registration::%s::initCompute] Datasets containing normals for "
@@ -62,10 +64,10 @@ pcl::registration::CorrespondenceEstimationNormalShooting<
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename NormalT, typename Scalar>
 void
-pcl::registration::CorrespondenceEstimationNormalShooting<
-    PointSource, PointTarget, NormalT,
-    Scalar>::determineCorrespondences (pcl::Correspondences &correspondences,
-                                       double max_distance)
+pcl::registration::
+    CorrespondenceEstimationNormalShooting<PointSource, PointTarget, NormalT, Scalar>::
+        determineCorrespondences (pcl::Correspondences &correspondences,
+                                  double max_distance)
 {
   if (!initCompute ())
     return;
@@ -88,7 +90,8 @@ pcl::registration::CorrespondenceEstimationNormalShooting<
     PointTarget pt;
     // Iterate over the input set of source indices
     for (std::vector<int>::const_iterator idx_i = indices_->begin ();
-         idx_i != indices_->end (); ++idx_i) {
+         idx_i != indices_->end ();
+         ++idx_i) {
       tree_->nearestKSearch (input_->points[*idx_i], k_, nn_indices, nn_dists);
 
       // Among the K nearest neighbours find the one with minimum perpendicular distance
@@ -128,7 +131,8 @@ pcl::registration::CorrespondenceEstimationNormalShooting<
 
     // Iterate over the input set of source indices
     for (std::vector<int>::const_iterator idx_i = indices_->begin ();
-         idx_i != indices_->end (); ++idx_i) {
+         idx_i != indices_->end ();
+         ++idx_i) {
       tree_->nearestKSearch (input_->points[*idx_i], k_, nn_indices, nn_dists);
 
       // Among the K nearest neighbours find the one with minimum perpendicular distance
@@ -176,10 +180,10 @@ pcl::registration::CorrespondenceEstimationNormalShooting<
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename NormalT, typename Scalar>
 void
-pcl::registration::CorrespondenceEstimationNormalShooting<
-    PointSource, PointTarget, NormalT,
-    Scalar>::determineReciprocalCorrespondences (pcl::Correspondences &correspondences,
-                                                 double max_distance)
+pcl::registration::
+    CorrespondenceEstimationNormalShooting<PointSource, PointTarget, NormalT, Scalar>::
+        determineReciprocalCorrespondences (pcl::Correspondences &correspondences,
+                                            double max_distance)
 {
   if (!initCompute ())
     return;
@@ -210,7 +214,8 @@ pcl::registration::CorrespondenceEstimationNormalShooting<
     PointTarget pt;
     // Iterate over the input set of source indices
     for (std::vector<int>::const_iterator idx_i = indices_->begin ();
-         idx_i != indices_->end (); ++idx_i) {
+         idx_i != indices_->end ();
+         ++idx_i) {
       tree_->nearestKSearch (input_->points[*idx_i], k_, nn_indices, nn_dists);
 
       // Among the K nearest neighbours find the one with minimum perpendicular distance
@@ -242,8 +247,8 @@ pcl::registration::CorrespondenceEstimationNormalShooting<
 
       // Check if the correspondence is reciprocal
       target_idx = nn_indices[min_index];
-      tree_reciprocal_->nearestKSearch (target_->points[target_idx], 1,
-                                        index_reciprocal, distance_reciprocal);
+      tree_reciprocal_->nearestKSearch (
+          target_->points[target_idx], 1, index_reciprocal, distance_reciprocal);
 
       if (*idx_i != index_reciprocal[0])
         continue;
@@ -259,7 +264,8 @@ pcl::registration::CorrespondenceEstimationNormalShooting<
 
     // Iterate over the input set of source indices
     for (std::vector<int>::const_iterator idx_i = indices_->begin ();
-         idx_i != indices_->end (); ++idx_i) {
+         idx_i != indices_->end ();
+         ++idx_i) {
       tree_->nearestKSearch (input_->points[*idx_i], k_, nn_indices, nn_dists);
 
       // Among the K nearest neighbours find the one with minimum perpendicular distance
@@ -296,8 +302,8 @@ pcl::registration::CorrespondenceEstimationNormalShooting<
 
       // Check if the correspondence is reciprocal
       target_idx = nn_indices[min_index];
-      tree_reciprocal_->nearestKSearch (target_->points[target_idx], 1,
-                                        index_reciprocal, distance_reciprocal);
+      tree_reciprocal_->nearestKSearch (
+          target_->points[target_idx], 1, index_reciprocal, distance_reciprocal);
 
       if (*idx_i != index_reciprocal[0])
         continue;

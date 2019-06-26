@@ -13,8 +13,8 @@ pcl::cloud_composer::FPFHItem::FPFHItem (
   pcl::PointCloud<pcl::FPFHSignature33>::ConstPtr fpfh_const = fpfh_ptr;
   this->setData (QVariant::fromValue (fpfh_const), ItemDataRole::CLOUD_TEMPLATED);
   properties_->addCategory ("Core Properties");
-  properties_->addProperty ("Radius", QVariant (radius_), Qt::ItemIsEnabled,
-                            "Core Properties");
+  properties_->addProperty (
+      "Radius", QVariant (radius_), Qt::ItemIsEnabled, "Core Properties");
 }
 
 pcl::cloud_composer::FPFHItem *
@@ -45,7 +45,8 @@ pcl::cloud_composer::FPFHItem::getInspectorTabs ()
   }
 
   // Plot the histogram
-  plot_->addFeatureHistogram (*fpfh_ptr_, fpfh_ptr_->width,
+  plot_->addFeatureHistogram (*fpfh_ptr_,
+                              fpfh_ptr_->width,
                               data (ItemDataRole::ITEM_ID).toString ().toStdString ());
   // Set the render window of the QVTK widget, update
   plot_->setViewInteractor (

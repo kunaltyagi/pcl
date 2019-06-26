@@ -16,7 +16,8 @@
 
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-ON_VIRTUAL_OBJECT_IMPLEMENT (ON_UserData, ON_Object,
+ON_VIRTUAL_OBJECT_IMPLEMENT (ON_UserData,
+                             ON_Object,
                              "850324A7-050E-11d4-BFFA-0010830122F0");
 
 ON_UserData::ON_UserData ()
@@ -204,12 +205,10 @@ ON_UserData::IsUnknownUserData () const
 }
 
 ON_BOOL32
-ON_UserData::GetDescription (ON_wString &description)
-{
-  return true;
-}
+ON_UserData::GetDescription (ON_wString &description) { return true; }
 
-ON_OBJECT_IMPLEMENT (ON_UnknownUserData, ON_UserData,
+ON_OBJECT_IMPLEMENT (ON_UnknownUserData,
+                     ON_UserData,
                      "850324A8-050E-11d4-BFFA-0010830122F0");
 
 ON_UnknownUserData::ON_UnknownUserData ()
@@ -536,10 +535,7 @@ ON_UserDataHolder::MoveUserDataTo (const ON_Object &source_object, bool bAppend)
 }
 
 ON_BOOL32
-ON_UserDataHolder::IsValid (ON_TextLog *text_log) const
-{
-  return true;
-}
+ON_UserDataHolder::IsValid (ON_TextLog *text_log) const { return true; }
 
 /////////////////////////////////////////////////////////////////
 //
@@ -622,7 +618,8 @@ ON_UserString::Dump (ON_TextLog &text_log) const
   text_log.Print ("Value: %ls\n", ws);
 }
 
-ON_OBJECT_IMPLEMENT (ON_UserStringList, ON_UserData,
+ON_OBJECT_IMPLEMENT (ON_UserStringList,
+                     ON_UserData,
                      "CE28DE29-F4C5-4faa-A50A-C3A6849B6329");
 
 ON_UserStringList::ON_UserStringList ()
@@ -644,10 +641,7 @@ ON_UserStringList::GetDescription (ON_wString &description)
 }
 
 ON_BOOL32
-ON_UserStringList::Archive () const
-{
-  return true;
-}
+ON_UserStringList::Archive () const { return true; }
 
 unsigned int
 ON_UserStringList::SizeOf () const
@@ -1065,7 +1059,8 @@ ON_Object::GetUserStringKeys (ON_ClassArray<ON_wString> &user_string_keys) const
   return user_string_keys.Count () - count0;
 }
 
-ON_OBJECT_IMPLEMENT (ON_DocumentUserStringList, ON_Object,
+ON_OBJECT_IMPLEMENT (ON_DocumentUserStringList,
+                     ON_Object,
                      "06F3218E-F5EC-4f6c-B74C-14583F0ED7BC");
 
 ON_DocumentUserStringList::ON_DocumentUserStringList () {}
@@ -1073,10 +1068,7 @@ ON_DocumentUserStringList::ON_DocumentUserStringList () {}
 ON_DocumentUserStringList::~ON_DocumentUserStringList () {}
 
 ON_BOOL32
-ON_DocumentUserStringList::IsValid (ON_TextLog *text_log) const
-{
-  return true;
-}
+ON_DocumentUserStringList::IsValid (ON_TextLog *text_log) const { return true; }
 
 void
 ON_DocumentUserStringList::Dump (ON_TextLog &) const
@@ -1138,8 +1130,8 @@ ON_DocumentUserStringList::Read (ON_BinaryArchive &binary_archive)
     // any new information that is added at a later date.
     int major_version = 0;
     int minor_version = 0;
-    rc = binary_archive.BeginRead3dmChunk (TCODE_ANONYMOUS_CHUNK, &major_version,
-                                           &minor_version);
+    rc = binary_archive.BeginRead3dmChunk (
+        TCODE_ANONYMOUS_CHUNK, &major_version, &minor_version);
     if (!rc)
       return false;
     for (;;) {

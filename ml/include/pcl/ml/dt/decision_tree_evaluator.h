@@ -49,7 +49,10 @@ namespace pcl
 {
 
   /** \brief Utility class for evaluating a decision tree. */
-  template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+  template <class FeatureType,
+            class DataSet,
+            class LabelType,
+            class ExampleIndex,
             class NodeType>
   class DecisionTreeEvaluator
   {
@@ -73,7 +76,8 @@ namespace pcl
               pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> &feature_handler,
               pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex>
                   &stats_estimator,
-              DataSet &data_set, std::vector<ExampleIndex> &examples,
+              DataSet &data_set,
+              std::vector<ExampleIndex> &examples,
               std::vector<LabelType> &label_data);
 
     /** \brief Evaluates the specified examples using the supplied tree and adds the
@@ -90,7 +94,8 @@ namespace pcl
         pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> &feature_handler,
         pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex>
             &stats_estimator,
-        DataSet &data_set, std::vector<ExampleIndex> &examples,
+        DataSet &data_set,
+        std::vector<ExampleIndex> &examples,
         std::vector<LabelType> &label_data);
 
     /** \brief Evaluates the specified examples using the supplied tree.
@@ -106,7 +111,9 @@ namespace pcl
               pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> &feature_handler,
               pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex>
                   &stats_estimator,
-              DataSet &data_set, ExampleIndex example, NodeType &leave);
+              DataSet &data_set,
+              ExampleIndex example,
+              NodeType &leave);
 
     /** \brief Evaluates the specified examples using the supplied tree.
      * \param[in] tree The decision tree.
@@ -121,7 +128,8 @@ namespace pcl
               pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> &feature_handler,
               pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex>
                   &stats_estimator,
-              DataSet &data_set, std::vector<ExampleIndex> &examples,
+              DataSet &data_set,
+              std::vector<ExampleIndex> &examples,
               std::vector<NodeType *> &nodes);
   };
 

@@ -115,7 +115,8 @@ pcl::visualization::ImageViewer::ImageViewer (const std::string &window_title)
   resetStoppedFlag ();
 
   PCL_DEBUG ("[pcl::visualization::ImageViewer] VTK version found: %d.%d\n",
-             VTK_MAJOR_VERSION, VTK_MINOR_VERSION);
+             VTK_MAJOR_VERSION,
+             VTK_MINOR_VERSION);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +128,8 @@ pcl::visualization::ImageViewer::~ImageViewer ()
 //////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::ImageViewer::addRGBImage (const unsigned char *rgb_data,
-                                              unsigned width, unsigned height,
+                                              unsigned width,
+                                              unsigned height,
                                               const std::string &layer_id,
                                               double opacity)
 {
@@ -161,7 +163,8 @@ pcl::visualization::ImageViewer::addRGBImage (const unsigned char *rgb_data,
 //////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::ImageViewer::showRGBImage (const unsigned char *rgb_data,
-                                               unsigned width, unsigned height,
+                                               unsigned width,
+                                               unsigned height,
                                                const std::string &layer_id,
                                                double opacity)
 {
@@ -172,7 +175,8 @@ pcl::visualization::ImageViewer::showRGBImage (const unsigned char *rgb_data,
 //////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::ImageViewer::addMonoImage (const unsigned char *rgb_data,
-                                               unsigned width, unsigned height,
+                                               unsigned width,
+                                               unsigned height,
                                                const std::string &layer_id,
                                                double opacity)
 {
@@ -207,7 +211,8 @@ pcl::visualization::ImageViewer::addMonoImage (const unsigned char *rgb_data,
 //////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::ImageViewer::showMonoImage (const unsigned char *rgb_data,
-                                                unsigned width, unsigned height,
+                                                unsigned width,
+                                                unsigned height,
                                                 const std::string &layer_id,
                                                 double opacity)
 {
@@ -218,7 +223,8 @@ pcl::visualization::ImageViewer::showMonoImage (const unsigned char *rgb_data,
 //////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::ImageViewer::addMonoImage (
-    const pcl::PointCloud<pcl::Intensity> &cloud, const std::string &layer_id,
+    const pcl::PointCloud<pcl::Intensity> &cloud,
+    const std::string &layer_id,
     double opacity)
 {
   if (data_size_ < cloud.width * cloud.height) {
@@ -234,7 +240,8 @@ pcl::visualization::ImageViewer::addMonoImage (
 //////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::ImageViewer::showMonoImage (
-    const pcl::PointCloud<pcl::Intensity> &cloud, const std::string &layer_id,
+    const pcl::PointCloud<pcl::Intensity> &cloud,
+    const std::string &layer_id,
     double opacity)
 {
   addMonoImage (cloud, layer_id, opacity);
@@ -244,7 +251,8 @@ pcl::visualization::ImageViewer::showMonoImage (
 //////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::ImageViewer::addMonoImage (
-    const pcl::PointCloud<pcl::Intensity8u> &cloud, const std::string &layer_id,
+    const pcl::PointCloud<pcl::Intensity8u> &cloud,
+    const std::string &layer_id,
     double opacity)
 {
   if (data_size_ < cloud.width * cloud.height) {
@@ -260,7 +268,8 @@ pcl::visualization::ImageViewer::addMonoImage (
 //////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::ImageViewer::showMonoImage (
-    const pcl::PointCloud<pcl::Intensity8u> &cloud, const std::string &layer_id,
+    const pcl::PointCloud<pcl::Intensity8u> &cloud,
+    const std::string &layer_id,
     double opacity)
 {
   addMonoImage (cloud, layer_id, opacity);
@@ -269,9 +278,14 @@ pcl::visualization::ImageViewer::showMonoImage (
 
 //////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::ImageViewer::addFloatImage (
-    const float *float_image, unsigned int width, unsigned int height, float min_value,
-    float max_value, bool grayscale, const std::string &layer_id, double opacity)
+pcl::visualization::ImageViewer::addFloatImage (const float *float_image,
+                                                unsigned int width,
+                                                unsigned int height,
+                                                float min_value,
+                                                float max_value,
+                                                bool grayscale,
+                                                const std::string &layer_id,
+                                                double opacity)
 {
   unsigned char *rgb_image = FloatImageUtils::getVisualImage (
       float_image, width, height, min_value, max_value, grayscale);
@@ -281,19 +295,25 @@ pcl::visualization::ImageViewer::addFloatImage (
 
 //////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::ImageViewer::showFloatImage (
-    const float *float_image, unsigned int width, unsigned int height, float min_value,
-    float max_value, bool grayscale, const std::string &layer_id, double opacity)
+pcl::visualization::ImageViewer::showFloatImage (const float *float_image,
+                                                 unsigned int width,
+                                                 unsigned int height,
+                                                 float min_value,
+                                                 float max_value,
+                                                 bool grayscale,
+                                                 const std::string &layer_id,
+                                                 double opacity)
 {
-  addFloatImage (float_image, width, height, min_value, max_value, grayscale, layer_id,
-                 opacity);
+  addFloatImage (
+      float_image, width, height, min_value, max_value, grayscale, layer_id, opacity);
   render ();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::ImageViewer::addAngleImage (const float *angle_image,
-                                                unsigned int width, unsigned int height,
+                                                unsigned int width,
+                                                unsigned int height,
                                                 const std::string &layer_id,
                                                 double opacity)
 {
@@ -343,10 +363,14 @@ pcl::visualization::ImageViewer::showHalfAngleImage (const float *angle_image,
 
 //////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::ImageViewer::addShortImage (
-    const unsigned short *short_image, unsigned int width, unsigned int height,
-    unsigned short min_value, unsigned short max_value, bool grayscale,
-    const std::string &layer_id, double opacity)
+pcl::visualization::ImageViewer::addShortImage (const unsigned short *short_image,
+                                                unsigned int width,
+                                                unsigned int height,
+                                                unsigned short min_value,
+                                                unsigned short max_value,
+                                                bool grayscale,
+                                                const std::string &layer_id,
+                                                double opacity)
 {
   unsigned char *rgb_image = FloatImageUtils::getVisualImage (
       short_image, width, height, min_value, max_value, grayscale);
@@ -356,13 +380,17 @@ pcl::visualization::ImageViewer::addShortImage (
 
 //////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::ImageViewer::showShortImage (
-    const unsigned short *short_image, unsigned int width, unsigned int height,
-    unsigned short min_value, unsigned short max_value, bool grayscale,
-    const std::string &layer_id, double opacity)
+pcl::visualization::ImageViewer::showShortImage (const unsigned short *short_image,
+                                                 unsigned int width,
+                                                 unsigned int height,
+                                                 unsigned short min_value,
+                                                 unsigned short max_value,
+                                                 bool grayscale,
+                                                 const std::string &layer_id,
+                                                 double opacity)
 {
-  addShortImage (short_image, width, height, min_value, max_value, grayscale, layer_id,
-                 opacity);
+  addShortImage (
+      short_image, width, height, min_value, max_value, grayscale, layer_id, opacity);
   render ();
 }
 
@@ -389,11 +417,12 @@ pcl::visualization::ImageViewer::spinOnce (int time, bool force_redraw)
   if (time <= 0)
     time = 1;
 
-  DO_EVERY (1.0 / interactor_->GetDesiredUpdateRate (),
-            exit_main_loop_timer_callback_->right_timer_id =
-                interactor_->CreateRepeatingTimer (time);
-            interactor_->Start (); interactor_->DestroyTimer (
-                exit_main_loop_timer_callback_->right_timer_id););
+  DO_EVERY (
+      1.0 / interactor_->GetDesiredUpdateRate (),
+      exit_main_loop_timer_callback_->right_timer_id =
+          interactor_->CreateRepeatingTimer (time);
+      interactor_->Start ();
+      interactor_->DestroyTimer (exit_main_loop_timer_callback_->right_timer_id););
   for (auto &i : image_data_)
     delete[] i;
   image_data_.clear ();
@@ -449,8 +478,12 @@ pcl::visualization::ImageViewer::emitMouseEvent (unsigned long event_id)
   // interactor_->GetMousePosition (&x, &y);
   int x = this->interactor_->GetEventPosition ()[0];
   int y = this->interactor_->GetEventPosition ()[1];
-  MouseEvent event (MouseEvent::MouseMove, MouseEvent::NoButton, x, y,
-                    interactor_->GetAltKey (), interactor_->GetControlKey (),
+  MouseEvent event (MouseEvent::MouseMove,
+                    MouseEvent::NoButton,
+                    x,
+                    y,
+                    interactor_->GetAltKey (),
+                    interactor_->GetControlKey (),
                     interactor_->GetShiftKey ());
   bool repeat = false;
   switch (event_id) {
@@ -524,16 +557,20 @@ void
 pcl::visualization::ImageViewer::emitKeyboardEvent (unsigned long event_id)
 {
   KeyboardEvent event (bool(event_id == vtkCommand::KeyPressEvent),
-                       interactor_->GetKeySym (), interactor_->GetKeyCode (),
-                       interactor_->GetAltKey (), interactor_->GetControlKey (),
+                       interactor_->GetKeySym (),
+                       interactor_->GetKeyCode (),
+                       interactor_->GetAltKey (),
+                       interactor_->GetControlKey (),
                        interactor_->GetShiftKey ());
   keyboard_signal_ (event);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::ImageViewer::MouseCallback (vtkObject *, unsigned long eid,
-                                                void *clientdata, void *)
+pcl::visualization::ImageViewer::MouseCallback (vtkObject *,
+                                                unsigned long eid,
+                                                void *clientdata,
+                                                void *)
 {
   ImageViewer *window = reinterpret_cast<ImageViewer *> (clientdata);
   window->emitMouseEvent (eid);
@@ -541,8 +578,10 @@ pcl::visualization::ImageViewer::MouseCallback (vtkObject *, unsigned long eid,
 
 //////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::ImageViewer::KeyboardCallback (vtkObject *, unsigned long eid,
-                                                   void *clientdata, void *)
+pcl::visualization::ImageViewer::KeyboardCallback (vtkObject *,
+                                                   unsigned long eid,
+                                                   void *clientdata,
+                                                   void *)
 {
   ImageViewer *window = reinterpret_cast<ImageViewer *> (clientdata);
   window->emitKeyboardEvent (eid);
@@ -550,8 +589,8 @@ pcl::visualization::ImageViewer::KeyboardCallback (vtkObject *, unsigned long ei
 
 //////////////////////////////////////////////////////////////////////////////////////////
 pcl::visualization::ImageViewer::LayerMap::iterator
-pcl::visualization::ImageViewer::createLayer (const std::string &layer_id, int width,
-                                              int height, double opacity, bool fill_box)
+pcl::visualization::ImageViewer::createLayer (
+    const std::string &layer_id, int width, int height, double opacity, bool fill_box)
 {
   Layer l;
   l.layer_name = layer_id;
@@ -576,8 +615,10 @@ pcl::visualization::ImageViewer::createLayer (const std::string &layer_id, int w
 
 //////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::visualization::ImageViewer::addLayer (const std::string &layer_id, int width,
-                                           int height, double opacity)
+pcl::visualization::ImageViewer::addLayer (const std::string &layer_id,
+                                           int width,
+                                           int height,
+                                           double opacity)
 {
   // Check to see if this ID entry already exists (has it been already added to the
   // visualizer?)
@@ -615,9 +656,14 @@ pcl::visualization::ImageViewer::removeLayer (const std::string &layer_id)
 
 //////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::visualization::ImageViewer::addCircle (unsigned int x, unsigned int y,
-                                            double radius, double r, double g, double b,
-                                            const std::string &layer_id, double opacity)
+pcl::visualization::ImageViewer::addCircle (unsigned int x,
+                                            unsigned int y,
+                                            double radius,
+                                            double r,
+                                            double g,
+                                            double b,
+                                            const std::string &layer_id,
+                                            double opacity)
 {
   // Check to see if this ID entry already exists (has it been already added to the
   // visualizer?)
@@ -637,8 +683,8 @@ pcl::visualization::ImageViewer::addCircle (unsigned int x, unsigned int y,
                      static_cast<unsigned char> (255.0 * g),
                      static_cast<unsigned char> (255.0 * b));
   circle->setOpacity (opacity);
-  circle->set (static_cast<float> (x), static_cast<float> (y),
-               static_cast<float> (radius));
+  circle->set (
+      static_cast<float> (x), static_cast<float> (y), static_cast<float> (radius));
   am_it->actor->GetScene ()->AddItem (circle);
 
   return (true);
@@ -646,8 +692,10 @@ pcl::visualization::ImageViewer::addCircle (unsigned int x, unsigned int y,
 
 //////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::visualization::ImageViewer::addCircle (unsigned int x, unsigned int y,
-                                            double radius, const std::string &layer_id,
+pcl::visualization::ImageViewer::addCircle (unsigned int x,
+                                            unsigned int y,
+                                            double radius,
+                                            const std::string &layer_id,
                                             double opacity)
 {
   return (addCircle (x, y, radius, 0.0, 1.0, 0.0, layer_id, opacity));
@@ -655,9 +703,15 @@ pcl::visualization::ImageViewer::addCircle (unsigned int x, unsigned int y,
 
 //////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::visualization::ImageViewer::addFilledRectangle (
-    unsigned int x_min, unsigned int x_max, unsigned int y_min, unsigned int y_max,
-    double r, double g, double b, const std::string &layer_id, double opacity)
+pcl::visualization::ImageViewer::addFilledRectangle (unsigned int x_min,
+                                                     unsigned int x_max,
+                                                     unsigned int y_min,
+                                                     unsigned int y_max,
+                                                     double r,
+                                                     double g,
+                                                     double b,
+                                                     const std::string &layer_id,
+                                                     double opacity)
 {
   // Check to see if this ID entry already exists (has it been already added to the
   // visualizer?)
@@ -677,8 +731,10 @@ pcl::visualization::ImageViewer::addFilledRectangle (
                    static_cast<unsigned char> (255.0 * g),
                    static_cast<unsigned char> (255.0 * b));
   rect->setOpacity (opacity);
-  rect->set (static_cast<float> (x_min), static_cast<float> (y_min),
-             static_cast<float> (x_max - x_min), static_cast<float> (y_max - y_min));
+  rect->set (static_cast<float> (x_min),
+             static_cast<float> (y_min),
+             static_cast<float> (x_max - x_min),
+             static_cast<float> (y_max - y_min));
   am_it->actor->GetScene ()->AddItem (rect);
 
   return (true);
@@ -686,19 +742,26 @@ pcl::visualization::ImageViewer::addFilledRectangle (
 
 //////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::visualization::ImageViewer::addFilledRectangle (
-    unsigned int x_min, unsigned int x_max, unsigned int y_min, unsigned int y_max,
-    const std::string &layer_id, double opacity)
+pcl::visualization::ImageViewer::addFilledRectangle (unsigned int x_min,
+                                                     unsigned int x_max,
+                                                     unsigned int y_min,
+                                                     unsigned int y_max,
+                                                     const std::string &layer_id,
+                                                     double opacity)
 {
-  return (addFilledRectangle (x_min, x_max, y_min, y_max, 0.0, 1.0, 0.0, layer_id,
-                              opacity));
+  return (addFilledRectangle (
+      x_min, x_max, y_min, y_max, 0.0, 1.0, 0.0, layer_id, opacity));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::visualization::ImageViewer::addRectangle (unsigned int x_min, unsigned int x_max,
-                                               unsigned int y_min, unsigned int y_max,
-                                               double r, double g, double b,
+pcl::visualization::ImageViewer::addRectangle (unsigned int x_min,
+                                               unsigned int x_max,
+                                               unsigned int y_min,
+                                               unsigned int y_max,
+                                               double r,
+                                               double g,
+                                               double b,
                                                const std::string &layer_id,
                                                double opacity)
 {
@@ -720,8 +783,10 @@ pcl::visualization::ImageViewer::addRectangle (unsigned int x_min, unsigned int 
                    static_cast<unsigned char> (255.0 * g),
                    static_cast<unsigned char> (255.0 * b));
   rect->setOpacity (opacity);
-  rect->set (static_cast<float> (x_min), static_cast<float> (y_min),
-             static_cast<float> (x_max), static_cast<float> (y_max));
+  rect->set (static_cast<float> (x_min),
+             static_cast<float> (y_min),
+             static_cast<float> (x_max),
+             static_cast<float> (y_max));
   am_it->actor->GetScene ()->AddItem (rect);
 
   return (true);
@@ -729,8 +794,10 @@ pcl::visualization::ImageViewer::addRectangle (unsigned int x_min, unsigned int 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::visualization::ImageViewer::addRectangle (unsigned int x_min, unsigned int x_max,
-                                               unsigned int y_min, unsigned int y_max,
+pcl::visualization::ImageViewer::addRectangle (unsigned int x_min,
+                                               unsigned int x_max,
+                                               unsigned int y_min,
+                                               unsigned int y_max,
                                                const std::string &layer_id,
                                                double opacity)
 {
@@ -740,8 +807,10 @@ pcl::visualization::ImageViewer::addRectangle (unsigned int x_min, unsigned int 
 //////////////////////////////////////////////////////////////////////////////////////////
 bool
 pcl::visualization::ImageViewer::addRectangle (const pcl::PointXY &min_pt,
-                                               const pcl::PointXY &max_pt, double r,
-                                               double g, double b,
+                                               const pcl::PointXY &max_pt,
+                                               double r,
+                                               double g,
+                                               double b,
                                                const std::string &layer_id,
                                                double opacity)
 {
@@ -781,10 +850,15 @@ pcl::visualization::ImageViewer::addRectangle (const pcl::PointXY &min_pt,
 
 //////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::visualization::ImageViewer::addLine (unsigned int x_min, unsigned int y_min,
-                                          unsigned int x_max, unsigned int y_max,
-                                          double r, double g, double b,
-                                          const std::string &layer_id, double opacity)
+pcl::visualization::ImageViewer::addLine (unsigned int x_min,
+                                          unsigned int y_min,
+                                          unsigned int x_max,
+                                          unsigned int y_max,
+                                          double r,
+                                          double g,
+                                          double b,
+                                          const std::string &layer_id,
+                                          double opacity)
 {
   // Check to see if this ID entry already exists (has it been already added to the
   // visualizer?)
@@ -804,8 +878,10 @@ pcl::visualization::ImageViewer::addLine (unsigned int x_min, unsigned int y_min
                    static_cast<unsigned char> (255.0 * g),
                    static_cast<unsigned char> (255.0 * b));
   line->setOpacity (opacity);
-  line->set (static_cast<float> (x_min), static_cast<float> (y_min),
-             static_cast<float> (x_max), static_cast<float> (y_max));
+  line->set (static_cast<float> (x_min),
+             static_cast<float> (y_min),
+             static_cast<float> (x_max),
+             static_cast<float> (y_max));
   am_it->actor->GetScene ()->AddItem (line);
 
   return (true);
@@ -813,19 +889,26 @@ pcl::visualization::ImageViewer::addLine (unsigned int x_min, unsigned int y_min
 
 //////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::visualization::ImageViewer::addLine (unsigned int x_min, unsigned int y_min,
-                                          unsigned int x_max, unsigned int y_max,
-                                          const std::string &layer_id, double opacity)
+pcl::visualization::ImageViewer::addLine (unsigned int x_min,
+                                          unsigned int y_min,
+                                          unsigned int x_max,
+                                          unsigned int y_max,
+                                          const std::string &layer_id,
+                                          double opacity)
 {
   return (addLine (x_min, y_min, x_max, y_max, 0.0, 1.0, 0.0, layer_id, opacity));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::visualization::ImageViewer::addText (unsigned int x, unsigned int y,
-                                          const std::string &text_string, double r,
-                                          double g, double b,
-                                          const std::string &layer_id, double opacity)
+pcl::visualization::ImageViewer::addText (unsigned int x,
+                                          unsigned int y,
+                                          const std::string &text_string,
+                                          double r,
+                                          double g,
+                                          double b,
+                                          const std::string &layer_id,
+                                          double opacity)
 {
   // Check to see if this ID entry already exists (has it been already added to the
   // visualizer?)
@@ -853,18 +936,24 @@ pcl::visualization::ImageViewer::addText (unsigned int x, unsigned int y,
 
 //////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::visualization::ImageViewer::addText (unsigned int x, unsigned int y,
+pcl::visualization::ImageViewer::addText (unsigned int x,
+                                          unsigned int y,
                                           const std::string &text,
-                                          const std::string &layer_id, double opacity)
+                                          const std::string &layer_id,
+                                          double opacity)
 {
   return (addText (x, y, text, 0.0, 1.0, 0.0, layer_id, opacity));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::ImageViewer::markPoint (size_t u, size_t v, Vector3ub fg_color,
-                                            Vector3ub bg_color, double radius,
-                                            const std::string &layer_id, double opacity)
+pcl::visualization::ImageViewer::markPoint (size_t u,
+                                            size_t v,
+                                            Vector3ub fg_color,
+                                            Vector3ub bg_color,
+                                            double radius,
+                                            const std::string &layer_id,
+                                            double opacity)
 {
   // Check to see if this ID entry already exists (has it been already added to the
   // visualizer?)
@@ -889,8 +978,8 @@ pcl::visualization::ImageViewer::markPoint (size_t u, size_t v, Vector3ub fg_col
   disk->setOpacity (opacity);
 
   point->set (static_cast<float> (u), static_cast<float> (v));
-  disk->set (static_cast<float> (u), static_cast<float> (v),
-             static_cast<float> (radius));
+  disk->set (
+      static_cast<float> (u), static_cast<float> (v), static_cast<float> (radius));
 
   am_it->actor->GetScene ()->AddItem (disk);
   am_it->actor->GetScene ()->AddItem (point);
@@ -899,8 +988,10 @@ pcl::visualization::ImageViewer::markPoint (size_t u, size_t v, Vector3ub fg_col
 //////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::ImageViewer::markPoints (const std::vector<int> &uv,
-                                             Vector3ub fg_color, Vector3ub bg_color,
-                                             double size, const std::string &layer_id,
+                                             Vector3ub fg_color,
+                                             Vector3ub bg_color,
+                                             double size,
+                                             const std::string &layer_id,
                                              double opacity)
 {
   if (uv.empty ())
@@ -915,8 +1006,10 @@ pcl::visualization::ImageViewer::markPoints (const std::vector<int> &uv,
 //////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::ImageViewer::markPoints (const std::vector<float> &uv,
-                                             Vector3ub fg_color, Vector3ub bg_color,
-                                             double size, const std::string &layer_id,
+                                             Vector3ub fg_color,
+                                             Vector3ub bg_color,
+                                             double size,
+                                             const std::string &layer_id,
                                              double opacity)
 {
   if (uv.empty ())

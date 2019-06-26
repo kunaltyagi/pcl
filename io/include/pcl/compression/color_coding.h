@@ -201,7 +201,8 @@ namespace pcl
        * */
       void
       encodePoints (const typename std::vector<int> &indexVector_arg,
-                    unsigned char rgba_offset_arg, PointCloudConstPtr inputCloud_arg)
+                    unsigned char rgba_offset_arg,
+                    PointCloudConstPtr inputCloud_arg)
       {
         unsigned int avgRed;
         unsigned int avgGreen;
@@ -282,8 +283,10 @@ namespace pcl
        * color information \param rgba_offset_arg offset to color information
        */
       void
-      decodePoints (PointCloudPtr outputCloud_arg, std::size_t beginIdx_arg,
-                    std::size_t endIdx_arg, unsigned char rgba_offset_arg)
+      decodePoints (PointCloudPtr outputCloud_arg,
+                    std::size_t beginIdx_arg,
+                    std::size_t endIdx_arg,
+                    unsigned char rgba_offset_arg)
       {
         assert (beginIdx_arg <= endIdx_arg);
 
@@ -340,8 +343,10 @@ namespace pcl
        * color information \param rgba_offset_arg offset to color information
        * */
       void
-      setDefaultColor (PointCloudPtr outputCloud_arg, std::size_t beginIdx_arg,
-                       std::size_t endIdx_arg, unsigned char rgba_offset_arg)
+      setDefaultColor (PointCloudPtr outputCloud_arg,
+                       std::size_t beginIdx_arg,
+                       std::size_t endIdx_arg,
+                       unsigned char rgba_offset_arg)
       {
         assert (beginIdx_arg <= endIdx_arg);
 

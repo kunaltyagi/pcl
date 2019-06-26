@@ -69,9 +69,10 @@ TEST (PointOperators, PointXYZRGBtoIntensity)
   // EXPECT_EQ (p2, static_cast<float> (299*p0.r + 587*p0.g + 114*p0.b)/1000.0f +
   // static_cast<float> (299*p1.r + 587*p1.g + 114*p1.b)/1000.0f);
   p2 = 0.1f * convert (p1);
-  EXPECT_NEAR (
-      p2, 0.1 * static_cast<float> (299 * p1.r + 587 * p1.g + 114 * p1.b) / 1000.0f,
-      1e-4);
+  EXPECT_NEAR (p2,
+               0.1 * static_cast<float> (299 * p1.r + 587 * p1.g + 114 * p1.b) /
+                   1000.0f,
+               1e-4);
 }
 
 TEST (PointOperators, PointXYZRGBtoPointXYZI)
@@ -101,9 +102,10 @@ TEST (PointOperators, PointXYZRGBtoPointXYZI)
   // EXPECT_EQ (p2.intensity, static_cast<float> (299*p0.r + 587*p0.g +
   // 114*p0.b)/1000.0f + static_cast<float> (299*p1.r + 587*p1.g + 114*p1.b)/1000.0f);
   intensity.set (p2, rgb_intensity (p1) * 0.1f);
-  EXPECT_NEAR (
-      p2.intensity,
-      static_cast<float> (299 * p1.r + 587 * p1.g + 114 * p1.b) / 1000.0f * 0.1, 1e-4);
+  EXPECT_NEAR (p2.intensity,
+               static_cast<float> (299 * p1.r + 587 * p1.g + 114 * p1.b) / 1000.0f *
+                   0.1,
+               1e-4);
 }
 
 int

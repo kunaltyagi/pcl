@@ -52,7 +52,8 @@ namespace pcl
   template <typename PointT>
   inline float
   getMeanPointDensity (const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-                       float max_dist, int nr_threads = 1);
+                       float max_dist,
+                       int nr_threads = 1);
 
   /** \brief Compute the mean point density of a given point cloud.
    * \param[in] cloud pointer to the input point cloud
@@ -64,7 +65,8 @@ namespace pcl
   template <typename PointT>
   inline float
   getMeanPointDensity (const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-                       const std::vector<int> &indices, float max_dist,
+                       const std::vector<int> &indices,
+                       float max_dist,
                        int nr_threads = 1);
 
   namespace registration
@@ -74,8 +76,10 @@ namespace pcl
      * Dror Aiger, Niloy Mitra, Daniel Cohen-Or. ACM Transactions on Graphics, vol.
      * 27(3), 2008 \author P.W.Theiler \ingroup registration
      */
-    template <typename PointSource, typename PointTarget,
-              typename NormalT = pcl::Normal, typename Scalar = float>
+    template <typename PointSource,
+              typename PointTarget,
+              typename NormalT = pcl::Normal,
+              typename Scalar = float>
     class FPCSInitialAlignment : public Registration<PointSource, PointTarget, Scalar>
     {
       public:

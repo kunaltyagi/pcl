@@ -16,7 +16,8 @@
 
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-ON_VIRTUAL_OBJECT_IMPLEMENT (ON_Geometry, ON_Object,
+ON_VIRTUAL_OBJECT_IMPLEMENT (ON_Geometry,
+                             ON_Object,
                              "4ED7D4DA-E947-11d3-BFE5-0010830122F0");
 
 ON_Geometry::ON_Geometry () {}
@@ -43,14 +44,17 @@ ON_Geometry::BoundingBox () const
 
 ON_BOOL32
 ON_Geometry::GetBoundingBox ( // returns true if successful
-    ON_BoundingBox &bbox, ON_BOOL32 bGrowBox) const
+    ON_BoundingBox &bbox,
+    ON_BOOL32 bGrowBox) const
 {
   return GetBoundingBox (bbox.m_min, bbox.m_max, bGrowBox);
 }
 
 ON_BOOL32
 ON_Geometry::GetBoundingBox ( // returns true if successful
-    ON_3dPoint &boxmin, ON_3dPoint &boxmax, ON_BOOL32 bGrowBox) const
+    ON_3dPoint &boxmin,
+    ON_3dPoint &boxmax,
+    ON_BOOL32 bGrowBox) const
 {
   ON_Workspace ws;
   const int dim = Dimension ();
@@ -98,7 +102,8 @@ ON_Geometry::GetBoundingBox ( // returns true if successful
 }
 
 bool
-ON_Geometry::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_Geometry::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                  int bGrowBox,
                                   const ON_Xform *xform) const
 {
   //	This implementation should be overridden by classes devived

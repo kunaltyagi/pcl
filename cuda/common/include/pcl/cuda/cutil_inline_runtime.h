@@ -87,8 +87,8 @@ _ConvertSMVer2Cores (int major, int minor)
     int Cores;
   };
 
-  sSMtoCores nGpuArchCoresPerSM[] = {{0x10, 8},  {0x11, 8},  {0x12, 8}, {0x13, 8},
-                                     {0x20, 32}, {0x21, 48}, {-1, -1}};
+  sSMtoCores nGpuArchCoresPerSM[] = {
+      {0x10, 8}, {0x11, 8}, {0x12, 8}, {0x13, 8}, {0x20, 32}, {0x21, 48}, {-1, -1}};
 
   int index = 0;
   while (nGpuArchCoresPerSM[index].SM != -1) {
@@ -257,8 +257,11 @@ inline void
 __cudaSafeCallNoSync (cudaError err, const char *file, const int line)
 {
   if (cudaSuccess != err) {
-    FPRINTF ((stderr, "%s(%i) : cudaSafeCallNoSync() Runtime API error : %s.\n", file,
-              line, cudaGetErrorString (err)));
+    FPRINTF ((stderr,
+              "%s(%i) : cudaSafeCallNoSync() Runtime API error : %s.\n",
+              file,
+              line,
+              cudaGetErrorString (err)));
     exit (-1);
   }
 }
@@ -267,7 +270,10 @@ inline void
 __cudaSafeCall (cudaError err, const char *file, const int line)
 {
   if (cudaSuccess != err) {
-    FPRINTF ((stderr, "%s(%i) : cudaSafeCall() Runtime API error : %s.\n", file, line,
+    FPRINTF ((stderr,
+              "%s(%i) : cudaSafeCall() Runtime API error : %s.\n",
+              file,
+              line,
               cudaGetErrorString (err)));
     exit (-1);
   }
@@ -278,8 +284,11 @@ __cudaSafeThreadSync (const char *file, const int line)
 {
   cudaError err = cutilDeviceSynchronize ();
   if (cudaSuccess != err) {
-    FPRINTF ((stderr, "%s(%i) : cudaDeviceSynchronize() Runtime API error : %s.\n",
-              file, line, cudaGetErrorString (err)));
+    FPRINTF ((stderr,
+              "%s(%i) : cudaDeviceSynchronize() Runtime API error : %s.\n",
+              file,
+              line,
+              cudaGetErrorString (err)));
     exit (-1);
   }
 }
@@ -307,8 +316,12 @@ __cutilGetLastError (const char *errorMessage, const char *file, const int line)
 {
   cudaError_t err = cudaGetLastError ();
   if (cudaSuccess != err) {
-    FPRINTF ((stderr, "%s(%i) : cutilCheckMsg() CUTIL CUDA error : %s : %s.\n", file,
-              line, errorMessage, cudaGetErrorString (err)));
+    FPRINTF ((stderr,
+              "%s(%i) : cutilCheckMsg() CUTIL CUDA error : %s : %s.\n",
+              file,
+              line,
+              errorMessage,
+              cudaGetErrorString (err)));
     exit (-1);
   }
 }
@@ -318,15 +331,23 @@ __cutilGetLastErrorAndSync (const char *errorMessage, const char *file, const in
 {
   cudaError_t err = cudaGetLastError ();
   if (cudaSuccess != err) {
-    FPRINTF ((stderr, "%s(%i) : cutilCheckMsg() CUTIL CUDA error : %s : %s.\n", file,
-              line, errorMessage, cudaGetErrorString (err)));
+    FPRINTF ((stderr,
+              "%s(%i) : cutilCheckMsg() CUTIL CUDA error : %s : %s.\n",
+              file,
+              line,
+              errorMessage,
+              cudaGetErrorString (err)));
     exit (-1);
   }
 
   err = cutilDeviceSynchronize ();
   if (cudaSuccess != err) {
-    FPRINTF ((stderr, "%s(%i) : cutilCheckMsg cudaDeviceSynchronize error: %s : %s.\n",
-              file, line, errorMessage, cudaGetErrorString (err)));
+    FPRINTF ((stderr,
+              "%s(%i) : cutilCheckMsg cudaDeviceSynchronize error: %s : %s.\n",
+              file,
+              line,
+              errorMessage,
+              cudaGetErrorString (err)));
     exit (-1);
   }
 }
@@ -366,8 +387,8 @@ cutilDeviceInit (int ARGC, char **ARGV)
   if (dev > deviceCount - 1) {
     fprintf (stderr, "\n");
     fprintf (stderr, ">> %d CUDA capable GPU device(s) detected. <<\n", deviceCount);
-    fprintf (stderr, ">> cutilDeviceInit (-device=%d) is not a valid GPU device. <<\n",
-             dev);
+    fprintf (
+        stderr, ">> cutilDeviceInit (-device=%d) is not a valid GPU device. <<\n", dev);
     fprintf (stderr, "\n");
     return -dev;
   }
@@ -414,13 +435,21 @@ cutilCudaCheckCtxLost (const char *errorMessage, const char *file, const int lin
 {
   cudaError_t err = cudaGetLastError ();
   if (cudaSuccess != err) {
-    FPRINTF ((stderr, "%s(%i) : CUDA error: %s : %s.\n", file, line, errorMessage,
+    FPRINTF ((stderr,
+              "%s(%i) : CUDA error: %s : %s.\n",
+              file,
+              line,
+              errorMessage,
               cudaGetErrorString (err)));
     exit (-1);
   }
   err = cutilDeviceSynchronize ();
   if (cudaSuccess != err) {
-    FPRINTF ((stderr, "%s(%i) : CUDA error: %s : %s.\n", file, line, errorMessage,
+    FPRINTF ((stderr,
+              "%s(%i) : CUDA error: %s : %s.\n",
+              file,
+              line,
+              errorMessage,
               cudaGetErrorString (err)));
     exit (-1);
   }
@@ -481,12 +510,16 @@ cutilCudaCapabilities (int major_version, int minor_version, int argc, char **ar
 
   if ((deviceProp.major > major_version) ||
       (deviceProp.major == major_version && deviceProp.minor >= minor_version)) {
-    printf ("> Device %d: <%16s >, Compute SM %d.%d detected\n", dev, deviceProp.name,
-            deviceProp.major, deviceProp.minor);
+    printf ("> Device %d: <%16s >, Compute SM %d.%d detected\n",
+            dev,
+            deviceProp.name,
+            deviceProp.major,
+            deviceProp.minor);
     return true;
   } else {
     printf ("There is no device supporting CUDA compute capability %d.%d.\n",
-            major_version, minor_version);
+            major_version,
+            minor_version);
     __cutilQAFinish (argc, argv, true);
     return false;
   }

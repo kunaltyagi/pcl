@@ -45,7 +45,7 @@ namespace pcl
           unexplained_in_neighborhood_weights; // weights for the points not being
                                                // explained in the neighborhood of a
                                                // hypothesis
-      std::vector<int> outlier_indices_; // outlier indices of this model
+      std::vector<int> outlier_indices_;       // outlier indices of this model
       std::vector<int> complete_cloud_occupancy_indices_;
       typename pcl::PointCloud<ModelT>::Ptr cloud_;
       typename pcl::PointCloud<ModelT>::Ptr complete_cloud_;
@@ -225,8 +225,9 @@ namespace pcl
                                            // are explained by the recognition models
     std::vector<float>
         unexplained_by_RM_neighboorhods; // represents the points of scene_cloud_ that
-                                         // are not explained by the active hypotheses in
-                                         // the neighboorhod of the recognition models
+                                         // are not explained by the active hypotheses
+                                         // in the neighboorhod of the recognition
+                                         // models
     std::vector<RecognitionModelPtr> recognition_models_;
     std::vector<size_t> indices_;
 
@@ -314,7 +315,8 @@ namespace pcl
                              std::vector<float> &unexplained_distances,
                              std::vector<float> &unexplained_by_RM,
                              std::vector<int> &explained,
-                             std::vector<int> &explained_by_RM, float val)
+                             std::vector<int> &explained_by_RM,
+                             float val)
     {
       {
 
@@ -367,7 +369,8 @@ namespace pcl
     }
 
     void
-    updateExplainedVector (std::vector<int> &vec, std::vector<float> &vec_float,
+    updateExplainedVector (std::vector<int> &vec,
+                           std::vector<float> &vec_float,
                            std::vector<int> &explained_,
                            std::vector<float> &explained_by_RM_distance_weighted,
                            float sign)
@@ -403,15 +406,16 @@ namespace pcl
     }
 
     void
-    updateCMDuplicity (std::vector<int> &vec, std::vector<int> &occupancy_vec,
+    updateCMDuplicity (std::vector<int> &vec,
+                       std::vector<int> &occupancy_vec,
                        float sign)
     {
       int add_to_duplicity_ = 0;
       for (const int &i : vec) {
         bool prev_dup = occupancy_vec[i] > 1;
         occupancy_vec[i] += static_cast<int> (sign);
-        if ((occupancy_vec[i] > 1) && prev_dup) { // its still a duplicate, we are
-                                                  // adding
+        if ((occupancy_vec[i] > 1) && prev_dup) {       // its still a duplicate, we are
+                                                        // adding
           add_to_duplicity_ += static_cast<int> (sign); // so, just add or remove one
         } else if ((occupancy_vec[i] == 1) &&
                    prev_dup) { // if was duplicate before, now its not, remove 2, we are

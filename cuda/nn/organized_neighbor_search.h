@@ -102,9 +102,12 @@ namespace pcl
      * value \return number of neighbors found in radius
      */
     int
-    radiusSearch (const PointCloudConstPtr &cloud_arg, int index_arg, double radius_arg,
+    radiusSearch (const PointCloudConstPtr &cloud_arg,
+                  int index_arg,
+                  double radius_arg,
                   std::vector<int> &k_indices_arg,
-                  std::vector<float> &k_sqr_distances_arg, int max_nn_arg = INT_MAX);
+                  std::vector<float> &k_sqr_distances_arg,
+                  int max_nn_arg = INT_MAX);
 
     /** \brief Search for all neighbors of query point that are within a given radius.
      * \param index_arg index representing the query point in the dataset given by \a
@@ -116,7 +119,8 @@ namespace pcl
      * neighbors to this value \return number of neighbors found in radius
      */
     int
-    radiusSearch (int index_arg, const double radius_arg,
+    radiusSearch (int index_arg,
+                  const double radius_arg,
                   std::vector<int> &k_indices_arg,
                   std::vector<float> &k_sqr_distances_arg,
                   int max_nn_arg = INT_MAX) const;
@@ -130,7 +134,8 @@ namespace pcl
      * value \return number of neighbors found in radius
      */
     int
-    radiusSearch (const PointT &p_q_arg, const double radius_arg,
+    radiusSearch (const PointT &p_q_arg,
+                  const double radius_arg,
                   std::vector<int> &k_indices_arg,
                   std::vector<float> &k_sqr_distances_arg,
                   int max_nn_arg = INT_MAX) const;
@@ -145,7 +150,9 @@ namespace pcl
      * number of neighbors found
      */
     int
-    nearestKSearch (const PointCloudConstPtr &cloud_arg, int index_arg, int k_arg,
+    nearestKSearch (const PointCloudConstPtr &cloud_arg,
+                    int index_arg,
+                    int k_arg,
                     std::vector<int> &k_indices_arg,
                     std::vector<float> &k_sqr_distances_arg);
 
@@ -159,7 +166,9 @@ namespace pcl
      * neighbors found
      */
     int
-    nearestKSearch (int index_arg, int k_arg, std::vector<int> &k_indices_arg,
+    nearestKSearch (int index_arg,
+                    int k_arg,
+                    std::vector<int> &k_indices_arg,
                     std::vector<float> &k_sqr_distances_arg);
 
     /** \brief Search for k-nearest neighbors at given query point.
@@ -172,7 +181,9 @@ namespace pcl
      * @return number of neighbors found
      */
     int
-    nearestKSearch (const PointT &p_q_arg, int k_arg, std::vector<int> &k_indices_arg,
+    nearestKSearch (const PointT &p_q_arg,
+                    int k_arg,
+                    std::vector<int> &k_indices_arg,
                     std::vector<float> &k_sqr_distances_arg);
 
     /** \brief Get the maximum allowed distance between the query point and its nearest
@@ -289,8 +300,11 @@ namespace pcl
     }
 
     void
-    getProjectedRadiusSearchBox (const PointT &point_arg, double squared_radius_arg,
-                                 int &minX_arg, int &minY_arg, int &maxX_arg,
+    getProjectedRadiusSearchBox (const PointT &point_arg,
+                                 double squared_radius_arg,
+                                 int &minX_arg,
+                                 int &minY_arg,
+                                 int &maxX_arg,
                                  int &maxY_arg) const;
 
     /** \brief Estimate focal length parameter that was used during point cloud

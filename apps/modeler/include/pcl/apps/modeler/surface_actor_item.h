@@ -57,7 +57,8 @@ namespace pcl
       using ColorHandlerPtr = ColorHandler::Ptr;
       using ColorHandlerConstPtr = ColorHandler::ConstPtr;
 
-      SurfaceActorItem (QTreeWidgetItem *parent, const CloudMesh::Ptr &cloud_mesh,
+      SurfaceActorItem (QTreeWidgetItem *parent,
+                        const CloudMesh::Ptr &cloud_mesh,
                         const vtkSmartPointer<vtkRenderWindow> &render_window);
       ~SurfaceActorItem ();
 

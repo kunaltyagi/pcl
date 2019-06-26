@@ -16,7 +16,8 @@
 
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-ON_VIRTUAL_OBJECT_IMPLEMENT (ON_Curve, ON_Geometry,
+ON_VIRTUAL_OBJECT_IMPLEMENT (ON_Curve,
+                             ON_Geometry,
                              "4ED7D4D7-E947-11d3-BFE5-0010830122F0");
 
 ON_Curve::ON_Curve () : ON_Geometry () {}
@@ -92,7 +93,8 @@ ON_Curve::DestroyCurveTree ()
 }
 
 bool
-ON_Curve::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_Curve::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                               int bGrowBox,
                                const ON_Xform *xform) const
 {
   if (bGrowBox && !tight_bbox.IsValid ()) {
@@ -286,8 +288,12 @@ ON_Curve::IsEllipse (const ON_Plane *plane, ON_Ellipse *ellipse, double toleranc
 }
 
 bool
-ON_Curve::IsArcAt (double t, const ON_Plane *plane, ON_Arc *arc, double tolerance,
-                   double *t0, double *t1) const
+ON_Curve::IsArcAt (double t,
+                   const ON_Plane *plane,
+                   ON_Arc *arc,
+                   double tolerance,
+                   double *t0,
+                   double *t1) const
 {
   double k, k0, k1;
   int hint;
@@ -543,8 +549,13 @@ ON_Curve::IsPeriodic () const
 }
 
 bool
-ON_Curve::GetNextDiscontinuity (ON::continuity c, double t0, double t1, double *t,
-                                int *hint, int *dtype, double cos_angle_tolerance,
+ON_Curve::GetNextDiscontinuity (ON::continuity c,
+                                double t0,
+                                double t1,
+                                double *t,
+                                int *hint,
+                                int *dtype,
+                                double cos_angle_tolerance,
                                 double curvature_tolerance) const
 {
   // this function must be overridden by curve objects that
@@ -638,8 +649,8 @@ ON_Curve::GetNextDiscontinuity (ON::continuity c, double t0, double t1, double *
                   // NOTE:
                   //  This test must exactly match the one
                   //  used in ON_NurbsCurve::GetNextDiscontinuity()
-                  if (!ON_IsG2CurvatureContinuous (Ka, Kb, cos_angle_tolerance,
-                                                   curvature_tolerance)) {
+                  if (!ON_IsG2CurvatureContinuous (
+                          Ka, Kb, cos_angle_tolerance, curvature_tolerance)) {
                     if (dtype)
                       *dtype = 2;
                     *t = t1;
@@ -665,7 +676,8 @@ ON_Curve::GetNextDiscontinuity (ON::continuity c, double t0, double t1, double *
 
 bool
 ON_Curve::IsContinuous (
-    ON::continuity desired_continuity, double t,
+    ON::continuity desired_continuity,
+    double t,
     int *hint,                  // default = NULL,
     double point_tolerance,     // default=ON_ZERO_TOLERANCE
     double d1_tolerance,        // default==ON_ZERO_TOLERANCE
@@ -799,12 +811,12 @@ ON_Curve::IsContinuous (
       return false; // tangent discontinuity
 
     if (desired_continuity == ON::Gsmooth_continuous) {
-      if (!ON_IsGsmoothCurvatureContinuous (Km, Kp, cos_angle_tolerance,
-                                            curvature_tolerance))
+      if (!ON_IsGsmoothCurvatureContinuous (
+              Km, Kp, cos_angle_tolerance, curvature_tolerance))
         return false;
     } else {
-      if (!ON_IsG2CurvatureContinuous (Km, Kp, cos_angle_tolerance,
-                                       curvature_tolerance))
+      if (!ON_IsG2CurvatureContinuous (
+              Km, Kp, cos_angle_tolerance, curvature_tolerance))
         return false;
     }
     break;
@@ -843,16 +855,10 @@ ON_Curve::PointAtEnd () const
 }
 
 ON_BOOL32
-ON_Curve::SetStartPoint (ON_3dPoint start_point)
-{
-  return false;
-}
+ON_Curve::SetStartPoint (ON_3dPoint start_point) { return false; }
 
 ON_BOOL32
-ON_Curve::SetEndPoint (ON_3dPoint end_point)
-{
-  return false;
-}
+ON_Curve::SetEndPoint (ON_3dPoint end_point) { return false; }
 
 ON_3dVector
 ON_Curve::DerivativeAt (double t) const
@@ -882,8 +888,8 @@ ON_Curve::CurvatureAt (double t) const
 }
 
 ON_BOOL32
-ON_Curve::EvTangent (double t, ON_3dPoint &point, ON_3dVector &tangent, int side,
-                     int *hint) const
+ON_Curve::EvTangent (
+    double t, ON_3dPoint &point, ON_3dVector &tangent, int side, int *hint) const
 {
   ON_3dVector D1, D2; //, K;
   tangent.Zero ();
@@ -950,8 +956,12 @@ ON_Curve::EvTangent (double t, ON_3dPoint &point, ON_3dVector &tangent, int side
 }
 
 ON_BOOL32
-ON_Curve::EvCurvature (double t, ON_3dPoint &point, ON_3dVector &tangent,
-                       ON_3dVector &kappa, int side, int *hint) const
+ON_Curve::EvCurvature (double t,
+                       ON_3dPoint &point,
+                       ON_3dVector &tangent,
+                       ON_3dVector &kappa,
+                       int side,
+                       int *hint) const
 {
   ON_3dVector d1, d2;
   int rc = Ev2Der (t, point, d1, d2, side, hint);
@@ -1144,7 +1154,8 @@ ON_Curve::EvaluatePoint (const class ON_ObjRef &objref, ON_3dPoint &P) const
 ON_BOOL32
 ON_Curve::Ev1Der ( // returns false if unable to evaluate
     double t,      // evaluation parameter
-    ON_3dPoint &point, ON_3dVector &derivative,
+    ON_3dPoint &point,
+    ON_3dVector &derivative,
     int side, // optional - determines which side to evaluate from
               //      <= 0 to evaluate from below,
               //      >  0 to evaluate from above
@@ -1187,7 +1198,9 @@ ON_Curve::Ev1Der ( // returns false if unable to evaluate
 ON_BOOL32
 ON_Curve::Ev2Der ( // returns false if unable to evaluate
     double t,      // evaluation parameter
-    ON_3dPoint &point, ON_3dVector &firstDervative, ON_3dVector &secondDervative,
+    ON_3dPoint &point,
+    ON_3dVector &firstDervative,
+    ON_3dVector &secondDervative,
     int side, // optional - determines which side to evaluate from
               //      <= 0 to evaluate from below,
               //      >  0 to evaluate from above
@@ -1277,12 +1290,12 @@ Returns:
   True if ends of curves are matched to requested gap_tolerance.
 */
 bool
-ON_MatchCurveEnds (ON_Curve *curve0, int end0, ON_Curve *curve1, int end1,
-                   double gap_tolerance = 0.0);
+ON_MatchCurveEnds (
+    ON_Curve *curve0, int end0, ON_Curve *curve1, int end1, double gap_tolerance = 0.0);
 
 bool
-ON_MatchCurveEnds (ON_Curve *curve0, int end0, ON_Curve *curve1, int end1,
-                   double gap_tolerance)
+ON_MatchCurveEnds (
+    ON_Curve *curve0, int end0, ON_Curve *curve1, int end1, double gap_tolerance)
 {
   ON_BOOL32 rc = false;
   if (0 != curve0 && 0 != curve1 && end0 >= 0 && end0 <= 1 && end1 >= 0 && end1 <= 1) {
@@ -1663,7 +1676,8 @@ ON_Curve::FirstSpanIsLinear (double min_length, double tolerance) const
 }
 
 bool
-ON_Curve::FirstSpanIsLinear (double min_length, double tolerance,
+ON_Curve::FirstSpanIsLinear (double min_length,
+                             double tolerance,
                              ON_Line *span_line) const
 {
   const ON_NurbsCurve *nurbs_curve = ON_NurbsCurve::Cast (this);
@@ -1720,13 +1734,16 @@ ON_Curve::LastSpanIsLinear (double min_length, double tolerance) const
 }
 
 bool
-ON_Curve::LastSpanIsLinear (double min_length, double tolerance,
+ON_Curve::LastSpanIsLinear (double min_length,
+                            double tolerance,
                             ON_Line *span_line) const
 {
   const ON_NurbsCurve *nurbs_curve = ON_NurbsCurve::Cast (this);
   if (0 != nurbs_curve) {
     return nurbs_curve->SpanIsLinear (nurbs_curve->m_cv_count - nurbs_curve->m_order,
-                                      min_length, tolerance, span_line);
+                                      min_length,
+                                      tolerance,
+                                      span_line);
   }
 
   const ON_PolylineCurve *polyline_curve = ON_PolylineCurve::Cast (this);
@@ -1777,7 +1794,9 @@ ON_NurbsCurve::SpanIsLinear (int span_index, double min_length, double tolerance
 }
 
 bool
-ON_NurbsCurve::SpanIsLinear (int span_index, double min_length, double tolerance,
+ON_NurbsCurve::SpanIsLinear (int span_index,
+                             double min_length,
+                             double tolerance,
                              ON_Line *span_line) const
 {
   if (m_dim < 2 || m_dim > 3)
@@ -1933,7 +1952,8 @@ ON_Curve::Split (
 
 // virtual
 int
-ON_Curve::GetNurbForm (ON_NurbsCurve &nurbs_curve, double tolerance,
+ON_Curve::GetNurbForm (ON_NurbsCurve &nurbs_curve,
+                       double tolerance,
                        const ON_Interval *subdomain) const
 {
   return 0;
@@ -1947,7 +1967,8 @@ ON_Curve::HasNurbForm () const
 }
 
 ON_NurbsCurve *
-ON_Curve::NurbsCurve (ON_NurbsCurve *pNurbsCurve, double tolerance,
+ON_Curve::NurbsCurve (ON_NurbsCurve *pNurbsCurve,
+                      double tolerance,
                       const ON_Interval *subdomain) const
 {
   ON_NurbsCurve *nurbs_curve = pNurbsCurve;
@@ -2183,7 +2204,8 @@ ON_Curve::IsClosable (double tolerance,
 
 int
 ON_JoinCurves (const ON_SimpleArray<const ON_Curve *> &InCurves,
-               ON_SimpleArray<ON_Curve *> &OutCurves, double join_tol,
+               ON_SimpleArray<ON_Curve *> &OutCurves,
+               double join_tol,
                bool bPreserveDirection, // = false
                ON_SimpleArray<int> *key //=0
 )
@@ -2554,8 +2576,11 @@ ON_JoinCurves (const ON_SimpleArray<const ON_Curve *> &InCurves,
 // returns true if t is sufficiently close to m_t[index]
 // -1 <= index <= m_t.Count()
 bool
-ON_Curve::ParameterSearch (double t, int &index, bool bEnableSnap,
-                           const ON_SimpleArray<double> &m_t, double RelTol) const
+ON_Curve::ParameterSearch (double t,
+                           int &index,
+                           bool bEnableSnap,
+                           const ON_SimpleArray<double> &m_t,
+                           double RelTol) const
 {
 
   // 24 October 2003 Dale Lear - added comments and fixed bugs when t < m_t[0]
@@ -2698,7 +2723,9 @@ ON_SortLines (const ON_SimpleArray<ON_Line> &line_list, int *index, bool *bRever
 }
 
 bool
-ON_SortCurves (int curve_count, const ON_Curve *const *curve_list, int *index,
+ON_SortCurves (int curve_count,
+               const ON_Curve *const *curve_list,
+               int *index,
                bool *bReverse)
 {
   int i;
@@ -2758,19 +2785,7 @@ ON_SortCurves (int curve_count, const ON_Curve *const *curve_list, int *index,
 
 bool
 ON_SortCurves (const ON_SimpleArray<const ON_Curve *> &curves,
-               ON_SimpleArray<int> &index, ON_SimpleArray<bool> &bReverse)
-{
-  const int curve_count = curves.Count ();
-  index.Reserve (curve_count);
-  index.SetCount (curve_count);
-  bReverse.Reserve (curve_count);
-  bReverse.SetCount (curve_count);
-  return ON_SortCurves (curve_count, curves.Array (), index.Array (),
-                        bReverse.Array ());
-}
-
-bool
-ON_SortCurves (const ON_SimpleArray<ON_Curve *> &curves, ON_SimpleArray<int> &index,
+               ON_SimpleArray<int> &index,
                ON_SimpleArray<bool> &bReverse)
 {
   const int curve_count = curves.Count ();
@@ -2778,6 +2793,20 @@ ON_SortCurves (const ON_SimpleArray<ON_Curve *> &curves, ON_SimpleArray<int> &in
   index.SetCount (curve_count);
   bReverse.Reserve (curve_count);
   bReverse.SetCount (curve_count);
-  return ON_SortCurves (curve_count, curves.Array (), index.Array (),
-                        bReverse.Array ());
+  return ON_SortCurves (
+      curve_count, curves.Array (), index.Array (), bReverse.Array ());
+}
+
+bool
+ON_SortCurves (const ON_SimpleArray<ON_Curve *> &curves,
+               ON_SimpleArray<int> &index,
+               ON_SimpleArray<bool> &bReverse)
+{
+  const int curve_count = curves.Count ();
+  index.Reserve (curve_count);
+  index.SetCount (curve_count);
+  bReverse.Reserve (curve_count);
+  bReverse.SetCount (curve_count);
+  return ON_SortCurves (
+      curve_count, curves.Array (), index.Array (), bReverse.Array ());
 }

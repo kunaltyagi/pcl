@@ -318,8 +318,8 @@ LCCPSegmentation Parameters: \n\
   pcl::LCCPSegmentation<PointT> lccp;
   lccp.setConcavityToleranceThreshold (concavity_tolerance_threshold);
   lccp.setSanityCheck (use_sanity_criterion);
-  lccp.setSmoothnessCheck (true, voxel_resolution, seed_resolution,
-                           smoothness_threshold);
+  lccp.setSmoothnessCheck (
+      true, voxel_resolution, seed_resolution, smoothness_threshold);
   lccp.setKFactor (k_factor);
   lccp.setInputSupervoxels (supervoxel_clusters, supervoxel_adjacency);
   lccp.setMinSegmentSize (min_segment_size);
@@ -343,18 +343,20 @@ LCCPSegmentation Parameters: \n\
                     "the lccp segmentation output.\n");
         pcl::PCLPointCloud2 output_label_cloud2, output_concat_cloud2;
         pcl::toPCLPointCloud2 (*lccp_labeled_cloud, output_label_cloud2);
-        pcl::concatenateFields (input_pointcloud2, output_label_cloud2,
-                                output_concat_cloud2);
-        pcl::io::savePCDFile (outputname + "_out.pcd", output_concat_cloud2,
-                              Eigen::Vector4f::Zero (), Eigen::Quaternionf::Identity (),
+        pcl::concatenateFields (
+            input_pointcloud2, output_label_cloud2, output_concat_cloud2);
+        pcl::io::savePCDFile (outputname + "_out.pcd",
+                              output_concat_cloud2,
+                              Eigen::Vector4f::Zero (),
+                              Eigen::Quaternionf::Identity (),
                               save_binary_pcd);
       } else
-        pcl::io::savePCDFile (outputname + "_out.pcd", *lccp_labeled_cloud,
-                              save_binary_pcd);
+        pcl::io::savePCDFile (
+            outputname + "_out.pcd", *lccp_labeled_cloud, save_binary_pcd);
 
       if (sv_output_specified) {
-        pcl::io::savePCDFile (outputname + "_svcloud.pcd", *sv_centroid_normal_cloud,
-                              save_binary_pcd);
+        pcl::io::savePCDFile (
+            outputname + "_svcloud.pcd", *sv_centroid_normal_cloud, save_binary_pcd);
       }
     }
   } else {
@@ -400,13 +402,15 @@ LCCPSegmentation Parameters: \n\
     // Create a polydata to store everything in
     vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New ();
     for (VertexIterator itr = vertex_iterator_range.first;
-         itr != vertex_iterator_range.second; ++itr) {
+         itr != vertex_iterator_range.second;
+         ++itr) {
       const uint32_t sv_label = sv_adjacency_list[*itr];
       std::pair<AdjacencyIterator, AdjacencyIterator> neighbors =
           boost::adjacent_vertices (*itr, sv_adjacency_list);
 
       for (AdjacencyIterator itr_neighbor = neighbors.first;
-           itr_neighbor != neighbors.second; ++itr_neighbor) {
+           itr_neighbor != neighbors.second;
+           ++itr_neighbor) {
         EdgeID connecting_edge =
             boost::edge (*itr, *itr_neighbor, sv_adjacency_list)
                 .first; // Get the edge connecting these supervoxels
@@ -471,8 +475,8 @@ LCCPSegmentation Parameters: \n\
       if (normals_changed) {
         viewer->removePointCloud ("normals");
         if (show_normals) {
-          viewer->addPointCloudNormals<pcl::PointNormal> (sv_centroid_normal_cloud, 1,
-                                                          normals_scale, "normals");
+          viewer->addPointCloudNormals<pcl::PointNormal> (
+              sv_centroid_normal_cloud, 1, normals_scale, "normals");
           normals_changed = false;
         }
       }
@@ -489,10 +493,10 @@ LCCPSegmentation Parameters: \n\
         printText (viewer);
       } else {
         removeText (viewer);
-        if (!viewer->updateText ("Press d to show help", 5, 10, 12, 1.0, 1.0, 1.0,
-                                 "help_text"))
-          viewer->addText ("Press d to show help", 5, 10, 12, 1.0, 1.0, 1.0,
-                           "help_text");
+        if (!viewer->updateText (
+                "Press d to show help", 5, 10, 12, 1.0, 1.0, 1.0, "help_text"))
+          viewer->addText (
+              "Press d to show help", 5, 10, 12, 1.0, 1.0, 1.0, "help_text");
       }
 
       std::this_thread::sleep_for (100ms);
@@ -511,10 +515,16 @@ printText (pcl::visualization::PCLVisualizer::Ptr viewer_arg)
   std::string on_str = "ON";
   std::string off_str = "OFF";
   if (!viewer_arg->updateText (
-          "Press (1-n) to show different elements (d) to disable this", 5, 72, 12, 1.0,
-          1.0, 1.0, "hud_text"))
-    viewer_arg->addText ("Press (1-n) to show different elements", 5, 72, 12, 1.0, 1.0,
-                         1.0, "hud_text");
+          "Press (1-n) to show different elements (d) to disable this",
+          5,
+          72,
+          12,
+          1.0,
+          1.0,
+          1.0,
+          "hud_text"))
+    viewer_arg->addText (
+        "Press (1-n) to show different elements", 5, 72, 12, 1.0, 1.0, 1.0, "hud_text");
 
   std::string temp =
       "(1) Supervoxel Normals, currently " + ((show_normals) ? on_str : off_str);

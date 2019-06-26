@@ -240,8 +240,8 @@ pcl::apps::RenderViewsTesselatedSphere::generateViews ()
 
     // translate model so we can place camera at (0,0,0)
     vtkSmartPointer<vtkTransform> translation = vtkSmartPointer<vtkTransform>::New ();
-    translation->Translate (first_cam_pos[0] * -1, first_cam_pos[1] * -1,
-                            first_cam_pos[2] * -1);
+    translation->Translate (
+        first_cam_pos[0] * -1, first_cam_pos[1] * -1, first_cam_pos[2] * -1);
     vtkSmartPointer<vtkTransformFilter> translation_filter =
         vtkSmartPointer<vtkTransformFilter>::New ();
     translation_filter->SetTransform (translation);
@@ -249,8 +249,8 @@ pcl::apps::RenderViewsTesselatedSphere::generateViews ()
 
     // modify camera
     cam_tmp->SetPosition (0, 0, 0);
-    cam_tmp->SetFocalPoint (first_cam_pos[0] * -1, first_cam_pos[1] * -1,
-                            first_cam_pos[2] * -1);
+    cam_tmp->SetFocalPoint (
+        first_cam_pos[0] * -1, first_cam_pos[1] * -1, first_cam_pos[2] * -1);
     cam_tmp->Modified ();
 
     // notice transformations for final pose

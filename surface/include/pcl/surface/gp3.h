@@ -61,7 +61,8 @@ namespace pcl
    * \ingroup surface
    */
   inline bool
-  isVisible (const Eigen::Vector2f &X, const Eigen::Vector2f &S1,
+  isVisible (const Eigen::Vector2f &X,
+             const Eigen::Vector2f &S1,
              const Eigen::Vector2f &S2,
              const Eigen::Vector2f &R = Eigen::Vector2f::Zero ())
   {
@@ -486,9 +487,12 @@ namespace pcl
      * of the next point
      */
     void
-    connectPoint (std::vector<pcl::Vertices> &polygons, const int prev_index,
-                  const int next_index, const int next_next_index,
-                  const Eigen::Vector2f &uvn_current, const Eigen::Vector2f &uvn_prev,
+    connectPoint (std::vector<pcl::Vertices> &polygons,
+                  const int prev_index,
+                  const int next_index,
+                  const int next_next_index,
+                  const Eigen::Vector2f &uvn_current,
+                  const Eigen::Vector2f &uvn_prev,
                   const Eigen::Vector2f &uvn_next);
 
     /** \brief Whenever a query point is part of a boundary loop containing 3 points,

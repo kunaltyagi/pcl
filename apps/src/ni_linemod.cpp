@@ -209,9 +209,11 @@ class NILinemod
    * the boundary of the plane \param[out] object the segmented resultant object
    */
   void
-  segmentObject (int picked_idx, const CloudConstPtr &cloud,
+  segmentObject (int picked_idx,
+                 const CloudConstPtr &cloud,
                  const PointIndices::Ptr &plane_indices,
-                 const PointIndices::Ptr &plane_boundary_indices, Cloud &object)
+                 const PointIndices::Ptr &plane_boundary_indices,
+                 Cloud &object)
   {
     CloudPtr plane_hull (new Cloud);
 
@@ -231,8 +233,10 @@ class NILinemod
     }
     std::vector<int> indices_subset = plane_indices->indices;
     std::sort (indices_subset.begin (), indices_subset.end ());
-    set_difference (indices_fullset_.begin (), indices_fullset_.end (),
-                    indices_subset.begin (), indices_subset.end (),
+    set_difference (indices_fullset_.begin (),
+                    indices_fullset_.end (),
+                    indices_subset.begin (),
+                    indices_subset.end (),
                     inserter (everything_but_the_plane->indices,
                               everything_but_the_plane->indices.begin ()));
 
@@ -290,8 +294,11 @@ class NILinemod
 
   /////////////////////////////////////////////////////////////////////////
   void
-  segment (const PointT &picked_point, int picked_idx, PlanarRegion<PointT> &region,
-           PointIndices &, CloudPtr &object)
+  segment (const PointT &picked_point,
+           int picked_idx,
+           PlanarRegion<PointT> &region,
+           PointIndices &,
+           CloudPtr &object)
   {
     // First frame is segmented using an organized multi plane segmentation approach
     // from points and their normals
@@ -318,11 +325,16 @@ class NILinemod
     PointCloud<Label>::Ptr labels (new PointCloud<Label>);
     vector<PointIndices> label_indices;
     vector<PointIndices> boundary_indices;
-    mps_.segmentAndRefine (regions, model_coefficients, inlier_indices, labels,
-                           label_indices, boundary_indices);
+    mps_.segmentAndRefine (regions,
+                           model_coefficients,
+                           inlier_indices,
+                           labels,
+                           label_indices,
+                           boundary_indices);
     PCL_DEBUG ("Number of planar regions detected: %lu for a cloud of %lu points and "
                "%lu normals.\n",
-               regions.size (), search_.getInputCloud ()->points.size (),
+               regions.size (),
+               search_.getInputCloud ()->points.size (),
                normal_cloud->points.size ());
 
     double max_dist = numeric_limits<double>::max ();
@@ -348,8 +360,11 @@ class NILinemod
     // Segment the object of interest
     if (plane_boundary_indices && !plane_boundary_indices->indices.empty ()) {
       object.reset (new Cloud);
-      segmentObject (picked_idx, search_.getInputCloud (), plane_indices_,
-                     plane_boundary_indices, *object);
+      segmentObject (picked_idx,
+                     search_.getInputCloud (),
+                     plane_indices_,
+                     plane_boundary_indices,
+                     *object);
 
       // Save to disk
       // pcl::io::saveTARPointCloud ("output.ltm", *object, "object.pcd");
@@ -403,10 +418,10 @@ class NILinemod
 
     // Add some marker to the image
     image_viewer_.addCircle (u, v, 5, 1.0, 0.0, 0.0, "circles", 1.0);
-    image_viewer_.addFilledRectangle (u - 5, u + 5, v - 5, v + 5, 0.0, 1.0, 0.0,
-                                      "boxes", 0.5);
-    image_viewer_.markPoint (u, v, visualization::red_color, visualization::blue_color,
-                             10);
+    image_viewer_.addFilledRectangle (
+        u - 5, u + 5, v - 5, v + 5, 0.0, 1.0, 0.0, "boxes", 0.5);
+    image_viewer_.markPoint (
+        u, v, visualization::red_color, visualization::blue_color, 10);
 
     // Segment the region that we're interested in, by employing a two step process:
     //  * first, segment all the planes in the scene, and find the one closest to our
@@ -433,14 +448,20 @@ class NILinemod
       PlanarRegion<PointT> refined_region;
       pcl::approximatePolygon (region, refined_region, 0.01, false, true);
       PCL_INFO ("Planar region: %lu points initial, %lu points after refinement.\n",
-                region.getContour ().size (), refined_region.getContour ().size ());
+                region.getContour ().size (),
+                refined_region.getContour ().size ());
       cloud_viewer_.addPolygon (refined_region, 0.0, 0.0, 1.0, "refined_region");
       cloud_viewer_.setShapeRenderingProperties (
           visualization::PCL_VISUALIZER_LINE_WIDTH, 10, "refined_region");
 
       // Draw in image space
-      image_viewer_.addPlanarPolygon (search_.getInputCloud (), refined_region, 0.0,
-                                      0.0, 1.0, "refined_region", 1.0);
+      image_viewer_.addPlanarPolygon (search_.getInputCloud (),
+                                      refined_region,
+                                      0.0,
+                                      0.0,
+                                      1.0,
+                                      "refined_region",
+                                      1.0);
     }
 
     // If no object could be determined, exit
@@ -463,8 +484,16 @@ class NILinemod
       stringstream ss;
       ss << "cube_" << idx;
       // Visualize the bounding box in 3D...
-      cloud_viewer_.addCube (min_pt.x, max_pt.x, min_pt.y, max_pt.y, min_pt.z, max_pt.z,
-                             0.0, 1.0, 0.0, ss.str ());
+      cloud_viewer_.addCube (min_pt.x,
+                             max_pt.x,
+                             min_pt.y,
+                             max_pt.y,
+                             min_pt.z,
+                             max_pt.z,
+                             0.0,
+                             1.0,
+                             0.0,
+                             ss.str ());
       cloud_viewer_.setShapeRenderingProperties (
           visualization::PCL_VISUALIZER_LINE_WIDTH, 10, ss.str ());
 

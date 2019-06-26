@@ -88,7 +88,10 @@ loadCloud (const std::string &filename, Cloud::Ptr cloud)
 }
 
 void
-compute (const Cloud::Ptr &input, Cloud::Ptr &output, float radius, bool inside,
+compute (const Cloud::Ptr &input,
+         Cloud::Ptr &output,
+         float radius,
+         bool inside,
          bool keep_organized)
 {
   // Estimate
@@ -99,9 +102,11 @@ compute (const Cloud::Ptr &input, Cloud::Ptr &output, float radius, bool inside,
 
   pcl::ConditionOr<PointType>::Ptr cond (new pcl::ConditionOr<PointType> ());
   cond->addComparison (pcl::TfQuadraticXYZComparison<PointType>::ConstPtr (
-      new pcl::TfQuadraticXYZComparison<PointType> (
-          inside ? pcl::ComparisonOps::LT : pcl::ComparisonOps::GT,
-          Eigen::Matrix3f::Identity (), Eigen::Vector3f::Zero (), -radius * radius)));
+      new pcl::TfQuadraticXYZComparison<PointType> (inside ? pcl::ComparisonOps::LT
+                                                           : pcl::ComparisonOps::GT,
+                                                    Eigen::Matrix3f::Identity (),
+                                                    Eigen::Vector3f::Zero (),
+                                                    -radius * radius)));
 
   pcl::ConditionalRemoval<PointType> condrem;
   condrem.setCondition (cond);
@@ -135,8 +140,11 @@ saveCloud (const std::string &filename, const Cloud::Ptr &output)
 }
 
 int
-batchProcess (const std::vector<std::string> &pcd_files, std::string &output_dir,
-              float radius, bool inside, bool keep_organized)
+batchProcess (const std::vector<std::string> &pcd_files,
+              std::string &output_dir,
+              float radius,
+              bool inside,
+              bool keep_organized)
 {
   std::vector<std::string> st;
   for (const auto &pcd_file : pcd_files) {

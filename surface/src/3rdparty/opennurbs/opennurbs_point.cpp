@@ -276,7 +276,8 @@ ON_Interval::Intersection ( // this = this intersect arg
 // empty set interval or disjoint intervals is the empty set interval.
 bool
 ON_Interval::Intersection ( // this = intersection of two args
-    const ON_Interval &ain, const ON_Interval &bin)
+    const ON_Interval &ain,
+    const ON_Interval &bin)
 {
   bool rc = false;
   if (ain.IsEmptySet () && bin.IsEmptySet ())
@@ -401,7 +402,8 @@ ON_Interval::Union (double t)
 // Union() returns true if the union is not empty.
 bool
 ON_Interval::Union ( // this = union of two args
-    const ON_Interval &ain, const ON_Interval &bin)
+    const ON_Interval &ain,
+    const ON_Interval &bin)
 {
   bool rc = false;
   if (bin.IsEmptySet ()) {
@@ -435,8 +437,12 @@ ON_3dVector::Decompose ( // Computes a, b, c such that this vector = a*X + b*Y +
                          // If X,Y,Z is known to be an orthonormal frame,
                          // then a = V*X, b = V*Y, c = V*Z will compute
                          // the same result more quickly.
-    const ON_3dVector &X, const ON_3dVector &Y, const ON_3dVector &Z, double *a,
-    double *b, double *c) const
+    const ON_3dVector &X,
+    const ON_3dVector &Y,
+    const ON_3dVector &Z,
+    double *a,
+    double *b,
+    double *c) const
 {
   int rank;
   double pivot_ratio = 0.0;
@@ -450,8 +456,8 @@ ON_3dVector::Decompose ( // Computes a, b, c such that this vector = a*X + b*Y +
   row2[0] = row0[2];
   row2[1] = row1[2];
   row2[2] = Z * Z;
-  rank = ON_Solve3x3 (row0, row1, row2, (*this) * X, (*this) * Y, (*this) * Z, a, b, c,
-                      &pivot_ratio);
+  rank = ON_Solve3x3 (
+      row0, row1, row2, (*this) * X, (*this) * Y, (*this) * Z, a, b, c, &pivot_ratio);
   return (rank == 3) ? true : false;
 }
 
@@ -576,7 +582,8 @@ ON_3dVector::PerpendicularTo (const ON_3dVector &v)
 }
 
 bool
-ON_3dVector::PerpendicularTo (const ON_3dPoint &P0, const ON_3dPoint &P1,
+ON_3dVector::PerpendicularTo (const ON_3dPoint &P0,
+                              const ON_3dPoint &P1,
                               const ON_3dPoint &P2)
 {
   // Find a the unit normal to a triangle defined by 3 points
@@ -854,7 +861,10 @@ ON_2fVector::Decompose ( // Computes a, b such that this vector = a*X + b*Y
                          // If X,Y is known to be an orthonormal frame,
                          // then a = V*X, b = V*Y will compute
                          // the same result more quickly.
-    const ON_2fVector &X, const ON_2fVector &Y, double *a, double *b) const
+    const ON_2fVector &X,
+    const ON_2fVector &Y,
+    double *a,
+    double *b) const
 {
   ON_2dVector V (*this);
   return V.Decompose (ON_2dVector (X), ON_2dVector (Y), a, b);
@@ -866,13 +876,16 @@ ON_2dVector::Decompose ( // Computes a, b such that this vector = a*X + b*Y
                          // If X,Y is known to be an orthonormal frame,
                          // then a = V*X, b = V*Y will compute
                          // the same result more quickly.
-    const ON_2dVector &X, const ON_2dVector &Y, double *a, double *b) const
+    const ON_2dVector &X,
+    const ON_2dVector &Y,
+    double *a,
+    double *b) const
 {
   int rank;
   double pivot_ratio = 0.0;
   double XoY = X * Y;
-  rank = ON_Solve2x2 (X * X, XoY, Y * Y, XoY, (*this) * X, (*this) * Y, a, b,
-                      &pivot_ratio);
+  rank = ON_Solve2x2 (
+      X * X, XoY, Y * Y, XoY, (*this) * X, (*this) * Y, a, b, &pivot_ratio);
   return (rank == 2) ? true : false;
 }
 
@@ -1301,8 +1314,8 @@ const ON_2dPoint ON_2dPoint::Origin (0.0, 0.0);
 const ON_2dPoint ON_2dPoint::UnsetPoint (ON_UNSET_VALUE, ON_UNSET_VALUE);
 
 const ON_3dPoint ON_3dPoint::Origin (0.0, 0.0, 0.0);
-const ON_3dPoint ON_3dPoint::UnsetPoint (ON_UNSET_VALUE, ON_UNSET_VALUE,
-                                         ON_UNSET_VALUE);
+const ON_3dPoint
+    ON_3dPoint::UnsetPoint (ON_UNSET_VALUE, ON_UNSET_VALUE, ON_UNSET_VALUE);
 
 const ON_2dVector ON_2dVector::ZeroVector (0.0, 0.0);
 const ON_2dVector ON_2dVector::XAxis (1.0, 0.0);
@@ -1313,8 +1326,8 @@ const ON_3dVector ON_3dVector::ZeroVector (0.0, 0.0, 0.0);
 const ON_3dVector ON_3dVector::XAxis (1.0, 0.0, 0.0);
 const ON_3dVector ON_3dVector::YAxis (0.0, 1.0, 0.0);
 const ON_3dVector ON_3dVector::ZAxis (0.0, 0.0, 1.0);
-const ON_3dVector ON_3dVector::UnsetVector (ON_UNSET_VALUE, ON_UNSET_VALUE,
-                                            ON_UNSET_VALUE);
+const ON_3dVector
+    ON_3dVector::UnsetVector (ON_UNSET_VALUE, ON_UNSET_VALUE, ON_UNSET_VALUE);
 
 const ON_2fPoint ON_2fPoint::Origin (0.0f, 0.0f);
 const ON_3fPoint ON_3fPoint::Origin (0.0f, 0.0f, 0.0f);
@@ -3930,15 +3943,15 @@ ON_DotProduct (const ON_3fVector &a, const ON_3fVector &b)
 ON_3fVector
 ON_CrossProduct (const ON_3fVector &a, const ON_3fVector &b)
 {
-  return ON_3fVector (a.y * b.z - b.y * a.z, a.z * b.x - b.z * a.x,
-                      a.x * b.y - b.x * a.y);
+  return ON_3fVector (
+      a.y * b.z - b.y * a.z, a.z * b.x - b.z * a.x, a.x * b.y - b.x * a.y);
 }
 
 ON_3fVector
 ON_CrossProduct (const float *a, const float *b)
 {
-  return ON_3fVector (a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0],
-                      a[0] * b[1] - b[0] * a[1]);
+  return ON_3fVector (
+      a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0], a[0] * b[1] - b[0] * a[1]);
 }
 
 float
@@ -6819,15 +6832,15 @@ ON_DotProduct (const ON_3dVector &a, const ON_3dVector &b)
 ON_3dVector
 ON_CrossProduct (const ON_3dVector &a, const ON_3dVector &b)
 {
-  return ON_3dVector (a.y * b.z - b.y * a.z, a.z * b.x - b.z * a.x,
-                      a.x * b.y - b.x * a.y);
+  return ON_3dVector (
+      a.y * b.z - b.y * a.z, a.z * b.x - b.z * a.x, a.x * b.y - b.x * a.y);
 }
 
 ON_3dVector
 ON_CrossProduct (const double *a, const double *b)
 {
-  return ON_3dVector (a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0],
-                      a[0] * b[1] - b[0] * a[1]);
+  return ON_3dVector (
+      a[1] * b[2] - b[1] * a[2], a[2] * b[0] - b[2] * a[0], a[0] * b[1] - b[0] * a[1]);
 }
 
 double
@@ -7125,7 +7138,9 @@ ON_PlaneEquation::ValueAt (double xx, double yy, double zz) const
 }
 
 double *
-ON_PlaneEquation::ValueAt (int Pcount, const ON_3fPoint *P, double *value,
+ON_PlaneEquation::ValueAt (int Pcount,
+                           const ON_3fPoint *P,
+                           double *value,
                            double value_range[2]) const
 {
   if (Pcount <= 0 || 0 == P)
@@ -7164,7 +7179,9 @@ ON_PlaneEquation::ValueAt (int Pcount, const ON_3fPoint *P, double *value,
 }
 
 double *
-ON_PlaneEquation::ValueAt (int Pcount, const ON_3dPoint *P, double *value,
+ON_PlaneEquation::ValueAt (int Pcount,
+                           const ON_3dPoint *P,
+                           double *value,
                            double value_range[2]) const
 {
   if (Pcount <= 0 || 0 == P)
@@ -7247,8 +7264,10 @@ ON_PlaneEquation::MaximumValueAt (const ON_BoundingBox &bbox) const
 }
 
 double
-ON_PlaneEquation::MaximumAbsoluteValueAt (bool bRational, int point_count,
-                                          int point_stride, const double *points,
+ON_PlaneEquation::MaximumAbsoluteValueAt (bool bRational,
+                                          int point_count,
+                                          int point_stride,
+                                          const double *points,
                                           double stop_value) const
 {
   double value, max_value, w;
@@ -7319,8 +7338,11 @@ ON_PlaneEquation::MaximumAbsoluteValueAt (bool bRational, int point_count,
 }
 
 double
-ON_PlaneEquation::MaximumValueAt (bool bRational, int point_count, int point_stride,
-                                  const double *points, double stop_value) const
+ON_PlaneEquation::MaximumValueAt (bool bRational,
+                                  int point_count,
+                                  int point_stride,
+                                  const double *points,
+                                  double stop_value) const
 {
   double value, max_value, w;
 
@@ -7386,8 +7408,11 @@ ON_PlaneEquation::MaximumValueAt (bool bRational, int point_count, int point_str
 }
 
 double
-ON_PlaneEquation::MinimumValueAt (bool bRational, int point_count, int point_stride,
-                                  const double *points, double stop_value) const
+ON_PlaneEquation::MinimumValueAt (bool bRational,
+                                  int point_count,
+                                  int point_stride,
+                                  const double *points,
+                                  double stop_value) const
 {
   double value, min_value, w;
 
@@ -7453,9 +7478,13 @@ ON_PlaneEquation::MinimumValueAt (bool bRational, int point_count, int point_str
 }
 
 bool
-ON_PlaneEquation::IsNearerThan (const ON_BezierCurve &bezcrv, double s0, double s1,
-                                int sample_count, double endpoint_tolerance,
-                                double interior_tolerance, double *smin,
+ON_PlaneEquation::IsNearerThan (const ON_BezierCurve &bezcrv,
+                                double s0,
+                                double s1,
+                                int sample_count,
+                                double endpoint_tolerance,
+                                double interior_tolerance,
+                                double *smin,
                                 double *smax) const
 {
   int i, n;
@@ -7676,8 +7705,13 @@ ON_BoundingBox::Dump (ON_TextLog &text_log) const
   if (!IsValid ()) {
     text_log.Print ("not valid ");
   }
-  text_log.Print ("%.17g to %.17g, %.17g to %.17g, %.17g to %.17g\n", m_min.x, m_max.x,
-                  m_min.y, m_max.y, m_min.z, m_max.z);
+  text_log.Print ("%.17g to %.17g, %.17g to %.17g, %.17g to %.17g\n",
+                  m_min.x,
+                  m_max.x,
+                  m_min.y,
+                  m_max.y,
+                  m_min.z,
+                  m_max.z);
 }
 
 bool
@@ -7785,8 +7819,11 @@ ON_IsDegenrateConicHelper (double A, double B, double C, double D, double E)
 }
 
 bool
-ON_GetConicEquationThrough6Points (int stride, const double *points2d, double conic[6],
-                                   double *max_pivot, double *min_pivot,
+ON_GetConicEquationThrough6Points (int stride,
+                                   const double *points2d,
+                                   double conic[6],
+                                   double *max_pivot,
+                                   double *min_pivot,
                                    double *zero_pivot)
 {
   // Sets conic[] to the coefficents = (A,B,C,D,E,F),
@@ -8239,9 +8276,12 @@ ON_GetConicEquationThrough6Points (int stride, const double *points2d, double co
 }
 
 bool
-ON_IsConicEquationAnEllipse (const double conic[6], ON_2dPoint &center,
-                             ON_2dVector &major_axis, ON_2dVector &minor_axis,
-                             double *major_radius, double *minor_radius)
+ON_IsConicEquationAnEllipse (const double conic[6],
+                             ON_2dPoint &center,
+                             ON_2dVector &major_axis,
+                             ON_2dVector &minor_axis,
+                             double *major_radius,
+                             double *minor_radius)
 {
   double A, C, D, E, F, x0, y0;
   double X[2], Y[2], P[2];
@@ -8337,8 +8377,8 @@ ON_IsConicEquationAnEllipse (const double conic[6], ON_2dPoint &center,
 }
 
 bool
-ON_GetEllipseConicEquation (double a, double b, double x0, double y0, double alpha,
-                            double conic[6])
+ON_GetEllipseConicEquation (
+    double a, double b, double x0, double y0, double alpha, double conic[6])
 {
   if (0 == conic)
     return false;

@@ -114,7 +114,8 @@ namespace pcl
      * \param[in] channel The channel index.
      */
     inline const DATA_TYPE &
-    operator() (const size_t col_index, const size_t row_index,
+    operator() (const size_t col_index,
+                const size_t row_index,
                 const size_t channel) const
     {
       return data_[NUM_OF_CHANNELS * (row_index * width_ + col_index) + channel];
@@ -199,7 +200,9 @@ namespace pcl
      * \param[in] channel The channel index.
      */
     inline DATA_TYPE &
-    operator() (const size_t data_set_id, const size_t col, const size_t row,
+    operator() (const size_t data_set_id,
+                const size_t col,
+                const size_t row,
                 const size_t channel)
     {
       return (*data_set_[data_set_id]) (col, row, channel);
@@ -211,7 +214,9 @@ namespace pcl
      * \param[in] channel The channel index.
      */
     inline const DATA_TYPE &
-    operator() (const size_t data_set_id, const size_t col, const size_t row,
+    operator() (const size_t data_set_id,
+                const size_t col,
+                const size_t row,
                 const size_t channel) const
     {
       return (*data_set_[data_set_id]) (col, row, channel);

@@ -161,14 +161,18 @@ ON_BezierCage::ON_BezierCage (int dim, bool is_rat, int order0, int order1, int 
   Create (dim, is_rat, order0, order1, order2);
 }
 
-ON_BezierCage::ON_BezierCage (const ON_BoundingBox &bbox, int order0, int order1,
+ON_BezierCage::ON_BezierCage (const ON_BoundingBox &bbox,
+                              int order0,
+                              int order1,
                               int order2)
     : m_dim (0), m_is_rat (0), m_cv_capacity (0), m_cv (0)
 {
   Create (bbox, order0, order1, order2);
 }
 
-ON_BezierCage::ON_BezierCage (const ON_3dPoint *box_corners, int order0, int order1,
+ON_BezierCage::ON_BezierCage (const ON_3dPoint *box_corners,
+                              int order0,
+                              int order1,
                               int order2)
     : m_dim (0), m_is_rat (0), m_cv_capacity (0), m_cv (0)
 {
@@ -193,8 +197,8 @@ ON_BezierCage &
 ON_BezierCage::operator= (const ON_BezierCage &src)
 {
   if (this != &src) {
-    if (Create (src.m_dim, src.m_is_rat, src.m_order[0], src.m_order[1],
-                src.m_order[2])) {
+    if (Create (
+            src.m_dim, src.m_is_rat, src.m_order[0], src.m_order[1], src.m_order[2])) {
       const int sizeof_cv = src.CVSize () * sizeof (m_cv[0]);
       int i, j, k;
       for (i = 0; i < m_order[0]; i++)
@@ -261,7 +265,11 @@ ON_BezierCage::Dump (ON_TextLog &dump) const
 {
   dump.Print ("ON_BezierCage dim = %d is_rat = %d\n"
               "        order = (%d, %d, %d) \n",
-              m_dim, m_is_rat, m_order[0], m_order[1], m_order[2]);
+              m_dim,
+              m_is_rat,
+              m_order[0],
+              m_order[1],
+              m_order[2]);
   dump.Print ("Control Points  %d %s points\n"
               "  index               value\n",
               m_order[0] * m_order[1] * m_order[2],
@@ -278,8 +286,8 @@ ON_BezierCage::Dump (ON_TextLog &dump) const
           dump.Print ("\n");
         sPreamble[0] = 0;
         sprintf (sPreamble, "  CV[%2d][%2d]", i, j);
-        dump.PrintPointList (m_dim, m_is_rat, m_order[2], m_cv_stride[2], CV (i, j, 0),
-                             sPreamble);
+        dump.PrintPointList (
+            m_dim, m_is_rat, m_order[2], m_cv_stride[2], CV (i, j, 0), sPreamble);
       }
       if (i < m_order[0] - 1)
         dump.Print ("\n");
@@ -342,7 +350,9 @@ ON_BezierCage::Create (int dim, bool is_rat, int order0, int order1, int order2)
 }
 
 bool
-ON_BezierCage::Create (const ON_3dPoint *box_corners, int order0, int order1,
+ON_BezierCage::Create (const ON_3dPoint *box_corners,
+                       int order0,
+                       int order1,
                        int order2)
 {
   int i, j, k;
@@ -433,8 +443,14 @@ ON_BezierCage::GetBBox ( // returns true if successful
   bool rc = (m_order[0] > 0 && m_order[1] > 0 && m_order[2] > 0) ? true : false;
   for (i = 0; rc && i < m_order[0]; i++)
     for (j = 0; rc && j < m_order[1]; j++) {
-      rc = ON_GetPointListBoundingBox (m_dim, m_is_rat, m_order[2], m_cv_stride[2],
-                                       CV (i, j, 0), boxmin, boxmax, bGrowBox);
+      rc = ON_GetPointListBoundingBox (m_dim,
+                                       m_is_rat,
+                                       m_order[2],
+                                       m_cv_stride[2],
+                                       CV (i, j, 0),
+                                       boxmin,
+                                       boxmax,
+                                       bGrowBox);
       bGrowBox = true;
     }
   return rc;
@@ -455,8 +471,8 @@ ON_BezierCage::Transform (const ON_Xform &xform)
 
     for (i = 0; rc && i < m_order[0]; i++) {
       for (j = 0; rc && j < m_order[1]; j++) {
-        rc = ON_TransformPointList (m_dim, m_is_rat, m_order[2], m_cv_stride[2],
-                                    CV (i, j, 0), xform);
+        rc = ON_TransformPointList (
+            m_dim, m_is_rat, m_order[2], m_cv_stride[2], CV (i, j, 0), xform);
       }
     }
   }
@@ -509,11 +525,13 @@ ON_BezierCage::Domain (
 }
 
 bool
-ON_BezierCage::Evaluate (         // returns false if unable to evaluate
-    double r, double s, double t, // evaluation parameter
-    int der_count,                // number of derivatives (>=0)
-    int v_stride,                 // array stride (>=Dimension())
-    double *v                     // array of length stride*(ndir+1)*(ndir+2)/2
+ON_BezierCage::Evaluate ( // returns false if unable to evaluate
+    double r,
+    double s,
+    double t,      // evaluation parameter
+    int der_count, // number of derivatives (>=0)
+    int v_stride,  // array stride (>=Dimension())
+    double *v      // array of length stride*(ndir+1)*(ndir+2)/2
     ) const
 {
   const int cvdim = m_is_rat ? (m_dim + 1) : m_dim;
@@ -1108,8 +1126,13 @@ ON_BezierCageMorph::ON_BezierCageMorph () : m_bValid (0) {}
 ON_BezierCageMorph::~ON_BezierCageMorph () {}
 
 bool
-ON_BezierCageMorph::Create (ON_3dPoint P0, ON_3dPoint P1, ON_3dPoint P2, ON_3dPoint P3,
-                            int point_countX, int point_countY, int point_countZ)
+ON_BezierCageMorph::Create (ON_3dPoint P0,
+                            ON_3dPoint P1,
+                            ON_3dPoint P2,
+                            ON_3dPoint P3,
+                            int point_countX,
+                            int point_countY,
+                            int point_countZ)
 {
   if (point_countX < 2 || point_countY < 2 || point_countZ < 2 || !P0.IsValid () ||
       !P1.IsValid () || !P2.IsValid () || !P3.IsValid ()) {

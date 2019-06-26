@@ -433,7 +433,8 @@ pcl::ihs::OpenGLViewer::~OpenGLViewer () { this->stopTimer (); }
 ////////////////////////////////////////////////////////////////////////////////
 
 bool
-pcl::ihs::OpenGLViewer::addMesh (const MeshConstPtr &mesh, const std::string &id,
+pcl::ihs::OpenGLViewer::addMesh (const MeshConstPtr &mesh,
+                                 const std::string &id,
                                  const Eigen::Isometry3d &T)
 {
   if (!mesh) {
@@ -456,7 +457,8 @@ pcl::ihs::OpenGLViewer::addMesh (const MeshConstPtr &mesh, const std::string &id
 
 bool
 pcl::ihs::OpenGLViewer::addMesh (const CloudXYZRGBNormalConstPtr &cloud,
-                                 const std::string &id, const Eigen::Isometry3d &T)
+                                 const std::string &id,
+                                 const Eigen::Isometry3d &T)
 {
   if (!cloud) {
     std::cerr << "ERROR in opengl_viewer.cpp: Input cloud is not valid.\n";
@@ -800,29 +802,31 @@ pcl::ihs::OpenGLViewer::paintEvent (QPaintEvent * /*event*/)
   glLoadIdentity ();
 
   // light 0 (directional)
-  glLightfv (GL_LIGHT0, GL_AMBIENT,
-             Eigen::Vector4f (0.1f, 0.1f, 0.1f, 1.0f).eval ().data ());
-  glLightfv (GL_LIGHT0, GL_DIFFUSE,
-             Eigen::Vector4f (0.6f, 0.6f, 0.6f, 1.0f).eval ().data ());
-  glLightfv (GL_LIGHT0, GL_SPECULAR,
-             Eigen::Vector4f (0.2f, 0.2f, 0.2f, 1.0f).eval ().data ());
-  glLightfv (GL_LIGHT0, GL_POSITION,
+  glLightfv (
+      GL_LIGHT0, GL_AMBIENT, Eigen::Vector4f (0.1f, 0.1f, 0.1f, 1.0f).eval ().data ());
+  glLightfv (
+      GL_LIGHT0, GL_DIFFUSE, Eigen::Vector4f (0.6f, 0.6f, 0.6f, 1.0f).eval ().data ());
+  glLightfv (
+      GL_LIGHT0, GL_SPECULAR, Eigen::Vector4f (0.2f, 0.2f, 0.2f, 1.0f).eval ().data ());
+  glLightfv (GL_LIGHT0,
+             GL_POSITION,
              Eigen::Vector4f (0.3f, 0.5f, 0.8f, 0.0f).normalized ().eval ().data ());
 
   // light 1 (directional)
-  glLightfv (GL_LIGHT1, GL_AMBIENT,
-             Eigen::Vector4f (0.0f, 0.0f, 0.0f, 1.0f).eval ().data ());
-  glLightfv (GL_LIGHT1, GL_DIFFUSE,
-             Eigen::Vector4f (0.3f, 0.3f, 0.3f, 1.0f).eval ().data ());
-  glLightfv (GL_LIGHT1, GL_SPECULAR,
-             Eigen::Vector4f (0.1f, 0.1f, 0.1f, 1.0f).eval ().data ());
-  glLightfv (GL_LIGHT1, GL_POSITION,
+  glLightfv (
+      GL_LIGHT1, GL_AMBIENT, Eigen::Vector4f (0.0f, 0.0f, 0.0f, 1.0f).eval ().data ());
+  glLightfv (
+      GL_LIGHT1, GL_DIFFUSE, Eigen::Vector4f (0.3f, 0.3f, 0.3f, 1.0f).eval ().data ());
+  glLightfv (
+      GL_LIGHT1, GL_SPECULAR, Eigen::Vector4f (0.1f, 0.1f, 0.1f, 1.0f).eval ().data ());
+  glLightfv (GL_LIGHT1,
+             GL_POSITION,
              Eigen::Vector4f (-0.3f, 0.5f, 0.8f, 0.0f).normalized ().eval ().data ());
 
   // Material
   glColorMaterial (GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-  glMaterialfv (GL_FRONT, GL_SPECULAR,
-                Eigen::Vector4f (0.1f, 0.1f, 0.1f, 1.0f).eval ().data ());
+  glMaterialfv (
+      GL_FRONT, GL_SPECULAR, Eigen::Vector4f (0.1f, 0.1f, 0.1f, 1.0f).eval ().data ());
   glMaterialf (GL_FRONT, GL_SHININESS, 25.f);
 
   glEnable (GL_DEPTH_TEST);
@@ -856,8 +860,15 @@ pcl::ihs::OpenGLViewer::paintEvent (QPaintEvent * /*event*/)
   const Eigen::Vector3d up = (R_cam * -ey).normalized ();
 
   glMatrixMode (GL_MODELVIEW);
-  gluLookAt (eye.x (), eye.y (), eye.z (), center.x (), center.y (), center.z (),
-             up.x (), up.y (), up.z ());
+  gluLookAt (eye.x (),
+             eye.y (),
+             eye.z (),
+             center.x (),
+             center.y (),
+             center.z (),
+             up.x (),
+             up.y (),
+             up.z ());
 
   // Draw everything
   this->drawMeshes ();
@@ -932,7 +943,8 @@ pcl::ihs::OpenGLViewer::drawMeshes ()
   }
 
   for (FaceVertexMeshMap::const_iterator it = drawn_meshes_.begin ();
-       it != drawn_meshes_.end (); ++it) {
+       it != drawn_meshes_.end ();
+       ++it) {
     if (it->second && !it->second->vertices.empty ()) {
       const FaceVertexMesh &mesh = *it->second;
 
@@ -976,7 +988,9 @@ pcl::ihs::OpenGLViewer::drawMeshes ()
         }
         case MR_EDGES:
         case MR_FACES: {
-          glDrawElements (GL_TRIANGLES, 3 * mesh.triangles.size (), GL_UNSIGNED_INT,
+          glDrawElements (GL_TRIANGLES,
+                          3 * mesh.triangles.size (),
+                          GL_UNSIGNED_INT,
                           &mesh.triangles[0]);
           break;
         }
@@ -1080,11 +1094,15 @@ pcl::ihs::OpenGLViewer::setupViewport (const int w, const int h)
   const float h_scaled = w / aspect_ratio;
 
   if (w < w_scaled) {
-    glViewport (0, static_cast<GLint> ((h - h_scaled) / 2.f), w,
+    glViewport (0,
+                static_cast<GLint> ((h - h_scaled) / 2.f),
+                w,
                 static_cast<GLsizei> (h_scaled));
   } else {
-    glViewport (static_cast<GLint> ((w - w_scaled) / 2.f), 0,
-                static_cast<GLsizei> (w_scaled), h);
+    glViewport (static_cast<GLint> ((w - w_scaled) / 2.f),
+                0,
+                static_cast<GLsizei> (w_scaled),
+                h);
   }
 }
 

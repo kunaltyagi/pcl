@@ -137,7 +137,8 @@ namespace pcl
      * function that needs to hold for clustering
      */
     inline void
-    setConditionFunction (bool (*condition_function) (const PointT &, const PointT &,
+    setConditionFunction (bool (*condition_function) (const PointT &,
+                                                      const PointT &,
                                                       float))
     {
       condition_function_ = condition_function;

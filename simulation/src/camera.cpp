@@ -31,8 +31,14 @@ pcl::simulation::Camera::updatePose ()
 }
 
 void
-pcl::simulation::Camera::setParameters (int width, int height, float fx, float fy,
-                                        float cx, float cy, float z_near, float z_far)
+pcl::simulation::Camera::setParameters (int width,
+                                        int height,
+                                        float fx,
+                                        float fy,
+                                        float cx,
+                                        float cy,
+                                        float z_near,
+                                        float z_far)
 {
   width_ = width;
   height_ = height;
@@ -52,6 +58,12 @@ pcl::simulation::Camera::setParameters (int width, int height, float fx, float f
 void
 pcl::simulation::Camera::initializeCameraParameters ()
 {
-  setParameters (640, 480, 576.09757860f, 576.09757860f, 321.06398107f, 242.97676897f,
-                 0.7f, 20.0f);
+  setParameters (640,
+                 480,
+                 576.09757860f,
+                 576.09757860f,
+                 321.06398107f,
+                 242.97676897f,
+                 0.7f,
+                 20.0f);
 }

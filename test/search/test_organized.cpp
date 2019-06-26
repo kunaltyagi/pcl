@@ -126,8 +126,8 @@ TEST (PCL, Organized_Neighbor_Pointcloud_Nearest_K_Neighbour_Search)
 
     // organized nearest neighbor search
     organizedNeighborSearch.setInputCloud (cloudIn);
-    organizedNeighborSearch.nearestKSearch (searchPoint, int(K), k_indices,
-                                            k_sqr_distances);
+    organizedNeighborSearch.nearestKSearch (
+        searchPoint, int(K), k_indices, k_sqr_distances);
 
     k_indices_bruteforce.clear ();
     k_sqr_distances_bruteforce.clear ();
@@ -247,8 +247,8 @@ TEST (PCL, Organized_Neighbor_Pointcloud_Neighbours_Within_Radius_Search)
 
     // execute organized search
     organizedNeighborSearch.setInputCloud (cloudIn);
-    organizedNeighborSearch.radiusSearch (searchPoint, searchRadius, cloudNWRSearch,
-                                          cloudNWRRadius);
+    organizedNeighborSearch.radiusSearch (
+        searchPoint, searchRadius, cloudNWRSearch, cloudNWRRadius);
 
     // check if result from organized radius search can be also found in bruteforce
     // search
@@ -291,8 +291,8 @@ TEST (PCL, Organized_Neighbor_Pointcloud_Neighbours_Within_Radius_Search)
     ASSERT_EQ (cloudNWRRadius.size (), cloudSearchBruteforce.size ());
 
     // check if result limitation works
-    organizedNeighborSearch.radiusSearch (searchPoint, searchRadius, cloudNWRSearch,
-                                          cloudNWRRadius, 5);
+    organizedNeighborSearch.radiusSearch (
+        searchPoint, searchRadius, cloudNWRSearch, cloudNWRRadius, 5);
 
     ASSERT_EQ (cloudNWRRadius.size () <= 5, true);
   }

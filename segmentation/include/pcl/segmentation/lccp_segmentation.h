@@ -86,9 +86,11 @@ namespace pcl
     public:
     // Adjacency list with nodes holding labels (uint32_t) and edges holding
     // EdgeProperties.
-    using SupervoxelAdjacencyList =
-        boost::adjacency_list<boost::setS, boost::setS, boost::undirectedS, uint32_t,
-                              EdgeProperties>;
+    using SupervoxelAdjacencyList = boost::adjacency_list<boost::setS,
+                                                          boost::setS,
+                                                          boost::undirectedS,
+                                                          uint32_t,
+                                                          EdgeProperties>;
     using VertexIterator =
         typename boost::graph_traits<SupervoxelAdjacencyList>::vertex_iterator;
     using AdjacencyIterator =
@@ -237,8 +239,10 @@ namespace pcl
      * Threshold (/fudging factor) for smoothness constraint according to the above
      * formula. */
     inline void
-    setSmoothnessCheck (bool use_smoothness_check_arg, float voxel_res_arg,
-                        float seed_res_arg, float smoothness_threshold_arg = 0.1)
+    setSmoothnessCheck (bool use_smoothness_check_arg,
+                        float voxel_res_arg,
+                        float seed_res_arg,
+                        float smoothness_threshold_arg = 0.1)
     {
       use_smoothness_check_ = use_smoothness_check_arg;
       voxel_resolution_ = voxel_res_arg;
@@ -325,7 +329,8 @@ namespace pcl
      * connected to the edge that should be checked \param[out] normal_angle The angle
      * between source and target \return True if connection is convex */
     bool
-    connIsConvex (const uint32_t source_label_arg, const uint32_t target_label_arg,
+    connIsConvex (const uint32_t source_label_arg,
+                  const uint32_t target_label_arg,
                   float &normal_angle);
 
     ///  *** Parameters *** ///

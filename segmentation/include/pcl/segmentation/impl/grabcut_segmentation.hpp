@@ -139,15 +139,18 @@ pcl::GrabCut<PointT>::initCompute ()
 
 template <typename PointT>
 void
-pcl::GrabCut<PointT>::addEdge (vertex_descriptor v1, vertex_descriptor v2,
-                               float capacity, float rev_capacity)
+pcl::GrabCut<PointT>::addEdge (vertex_descriptor v1,
+                               vertex_descriptor v2,
+                               float capacity,
+                               float rev_capacity)
 {
   graph_.addEdge (v1, v2, capacity, rev_capacity);
 }
 
 template <typename PointT>
 void
-pcl::GrabCut<PointT>::setTerminalWeights (vertex_descriptor v, float source_capacity,
+pcl::GrabCut<PointT>::setTerminalWeights (vertex_descriptor v,
+                                          float source_capacity,
                                           float sink_capacity)
 {
   graph_.addSourceEdge (v, source_capacity);
@@ -163,8 +166,8 @@ pcl::GrabCut<PointT>::setBackgroundPointsIndices (const PointIndicesConstPtr &in
     return;
 
   std::fill (trimap_.begin (), trimap_.end (), TrimapBackground);
-  std::fill (hard_segmentation_.begin (), hard_segmentation_.end (),
-             SegmentationBackground);
+  std::fill (
+      hard_segmentation_.begin (), hard_segmentation_.end (), SegmentationBackground);
   for (const int &index : indices->indices) {
     trimap_[index] = TrimapUnknown;
     hard_segmentation_[index] = SegmentationForeground;
@@ -181,7 +184,11 @@ void
 pcl::GrabCut<PointT>::fitGMMs ()
 {
   // Step 3: Build GMMs using Orchard-Bouman clustering algorithm
-  buildGMMs (*image_, *indices_, hard_segmentation_, GMM_component_, background_GMM_,
+  buildGMMs (*image_,
+             *indices_,
+             hard_segmentation_,
+             GMM_component_,
+             background_GMM_,
              foreground_GMM_);
 
   // Initialize the graph for graphcut (do this here so that the T-Link debugging image
@@ -194,7 +201,11 @@ int
 pcl::GrabCut<PointT>::refineOnce ()
 {
   // Steps 4 and 5: Learn new GMMs from current segmentation
-  learnGMMs (*image_, *indices_, hard_segmentation_, GMM_component_, background_GMM_,
+  learnGMMs (*image_,
+             *indices_,
+             hard_segmentation_,
+             GMM_component_,
+             background_GMM_,
              foreground_GMM_);
 
   // Step 6: Run GraphCut and update segmentation
@@ -317,9 +328,12 @@ pcl::GrabCut<PointT>::initGraph ()
       int point_index = (*indices_)[i_point];
       std::vector<float>::const_iterator weights_it = n_link.weights.begin ();
       for (auto indices_it = n_link.indices.cbegin ();
-           indices_it != n_link.indices.cend (); ++indices_it, ++weights_it) {
+           indices_it != n_link.indices.cend ();
+           ++indices_it, ++weights_it) {
         if ((*indices_it != point_index) && (*indices_it > -1)) {
-          addEdge (graph_nodes_[i_point], graph_nodes_[*indices_it], *weights_it,
+          addEdge (graph_nodes_[i_point],
+                   graph_nodes_[*indices_it],
+                   *weights_it,
                    *weights_it);
         }
       }
@@ -404,7 +418,8 @@ pcl::GrabCut<PointT>::computeBetaNonOrganized ()
         links.nb_links = found - 1;
         links.weights.reserve (links.nb_links);
         for (std::vector<int>::const_iterator nn_it = links.indices.begin ();
-             nn_it != links.indices.end (); ++nn_it) {
+             nn_it != links.indices.end ();
+             ++nn_it) {
           if (*nn_it != point_index) {
             float color_distance = squaredEuclideanDistance (
                 image_->points[point_index], image_->points[*nn_it]);

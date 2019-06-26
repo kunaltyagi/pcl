@@ -66,7 +66,8 @@ namespace pcl
      * \param[out] node The destination node for the statistics.
      */
     virtual void
-    computeAndSetNodeStats (DataSet &data_set, std::vector<ExampleIndex> &examples,
+    computeAndSetNodeStats (DataSet &data_set,
+                            std::vector<ExampleIndex> &examples,
                             std::vector<LabelDataType> &label_data,
                             NodeType &node) const = 0;
 
@@ -85,7 +86,8 @@ namespace pcl
      * information gain.
      */
     virtual float
-    computeInformationGain (DataSet &data_set, std::vector<ExampleIndex> &examples,
+    computeInformationGain (DataSet &data_set,
+                            std::vector<ExampleIndex> &examples,
                             std::vector<LabelDataType> &label_data,
                             std::vector<float> &results,
                             std::vector<unsigned char> &flags,
@@ -100,7 +102,8 @@ namespace pcl
      */
     virtual void
     computeBranchIndices (std::vector<float> &results,
-                          std::vector<unsigned char> &flags, const float threshold,
+                          std::vector<unsigned char> &flags,
+                          const float threshold,
                           std::vector<unsigned char> &branch_indices) const = 0;
 
     /** \brief Computes the branch indices obtained by the specified threshold on the
@@ -110,8 +113,10 @@ namespace pcl
      * index. \param[out] branch_index The destination for the computed branch index.
      */
     virtual void
-    computeBranchIndex (const float result, const unsigned char flag,
-                        const float threshold, unsigned char &branch_index) const = 0;
+    computeBranchIndex (const float result,
+                        const unsigned char flag,
+                        const float threshold,
+                        unsigned char &branch_index) const = 0;
 
     /** \brief Generates code for computing the branch indices for the specified node
      * and writes it to the specified stream. \param[in] node The node for which the

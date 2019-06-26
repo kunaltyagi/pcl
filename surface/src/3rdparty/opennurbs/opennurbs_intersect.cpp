@@ -17,8 +17,12 @@
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
 bool
-ON_IntersectLineLine (const ON_Line &lineA, const ON_Line &lineB, double *a, double *b,
-                      double tolerance, bool bIntersectSegments)
+ON_IntersectLineLine (const ON_Line &lineA,
+                      const ON_Line &lineB,
+                      double *a,
+                      double *b,
+                      double tolerance,
+                      bool bIntersectSegments)
 {
   bool rc = ON_Intersect (lineA, lineB, a, b) ? true : false;
   if (rc) {
@@ -40,7 +44,9 @@ ON_IntersectLineLine (const ON_Line &lineA, const ON_Line &lineB, double *a, dou
 }
 
 bool
-ON_Intersect (const ON_BoundingBox &bbox, const ON_Line &line, double tol,
+ON_Intersect (const ON_BoundingBox &bbox,
+              const ON_Line &line,
+              double tol,
               ON_Interval *line_parameters)
 {
   double a, b, d, mn, mx, s0, s1, t0, t1;
@@ -212,7 +218,9 @@ ON_Intersect (const ON_BoundingBox &bbox, const ON_Line &line, double tol,
 }
 
 bool
-ON_Intersect (const ON_Line &lineA, const ON_Line &lineB, double *lineA_parameter,
+ON_Intersect (const ON_Line &lineA,
+              const ON_Line &lineB,
+              double *lineA_parameter,
               double *lineB_parameter)
 {
   // If you are looking at this code because you don't like an
@@ -353,10 +361,16 @@ bool
 ON_Intersect (const ON_Plane &R, const ON_Plane &S, const ON_Plane &T, ON_3dPoint &P)
 {
   double pr = 0.0;
-  const int rank =
-      ON_Solve3x3 (&R.plane_equation.x, &S.plane_equation.x, &T.plane_equation.x,
-                   -R.plane_equation.d, -S.plane_equation.d, -T.plane_equation.d, &P.x,
-                   &P.y, &P.z, &pr);
+  const int rank = ON_Solve3x3 (&R.plane_equation.x,
+                                &S.plane_equation.x,
+                                &T.plane_equation.x,
+                                -R.plane_equation.d,
+                                -S.plane_equation.d,
+                                -T.plane_equation.d,
+                                &P.x,
+                                &P.y,
+                                &P.z,
+                                &pr);
   return (rank == 3) ? true : false;
 }
 
@@ -431,7 +445,9 @@ ON_Intersect ( // returns 0 = no intersections,
                // If 1 is returned, first point is obtained by evaluating
                // the line and the second point is obtained by evaluating
                // the sphere.
-    const ON_Line &line, const ON_Sphere &sphere, ON_3dPoint &A,
+    const ON_Line &line,
+    const ON_Sphere &sphere,
+    ON_3dPoint &A,
     ON_3dPoint &B // intersection point(s) returned here
 )
 {
@@ -467,7 +483,11 @@ ON_Intersect ( // returns 0 = no intersections,
 
 static int
 Intersect2dLineCircle (ON_2dPoint line_from, // 2d line from point
-                       ON_2dPoint line_to, double r, double tol, double *t0, double *t1)
+                       ON_2dPoint line_to,
+                       double r,
+                       double tol,
+                       double *t0,
+                       double *t1)
 {
   // returns 0 = line is degenerate
   // 1 = one intersection returned,
@@ -577,7 +597,8 @@ ON_Intersect ( // returns 0 = no intersections,
     const ON_Cylinder &cylinder, // if cylinder.height[0]==cylinder.height[1],
                                  // then infinite cyl is used.  Otherwise
                                  // finite cyl is used.
-    ON_3dPoint &A, ON_3dPoint &B // intersection point(s) returned here
+    ON_3dPoint &A,
+    ON_3dPoint &B // intersection point(s) returned here
 )
 {
   ON_BOOL32 bFiniteCyl = true;
@@ -686,8 +707,12 @@ ON_Intersect ( // returns 0 = no intersections,
 }
 
 int
-ON_Intersect (const ON_Line &line, const ON_Circle &circle, double *line_t0,
-              ON_3dPoint &circle_point0, double *line_t1, ON_3dPoint &circle_point1)
+ON_Intersect (const ON_Line &line,
+              const ON_Circle &circle,
+              double *line_t0,
+              ON_3dPoint &circle_point0,
+              double *line_t1,
+              ON_3dPoint &circle_point1)
 {
   // transform to coordinate system where equation of circle
   // is x^2 + y^2 = R^2 and solve for line parameter(s).
@@ -749,7 +774,9 @@ ON_Intersect (const ON_Line &line, const ON_Circle &circle, double *line_t0,
 }
 
 int
-ON_Intersect (const ON_Plane &plane, const ON_Circle &circle, ON_3dPoint &point0,
+ON_Intersect (const ON_Plane &plane,
+              const ON_Circle &circle,
+              ON_3dPoint &point0,
               ON_3dPoint &point1)
 {
   int rval = -1;
@@ -769,7 +796,9 @@ ON_Intersect (const ON_Plane &plane, const ON_Circle &circle, ON_3dPoint &point0
 }
 
 int
-ON_Intersect (const ON_Plane &plane, const ON_Arc &arc, ON_3dPoint &point0,
+ON_Intersect (const ON_Plane &plane,
+              const ON_Arc &arc,
+              ON_3dPoint &point0,
               ON_3dPoint &point1)
 {
   int rval = -1;
@@ -789,8 +818,12 @@ ON_Intersect (const ON_Plane &plane, const ON_Arc &arc, ON_3dPoint &point0,
 }
 
 int
-ON_Intersect (const ON_Line &line, const ON_Arc &arc, double *line_t0,
-              ON_3dPoint &arc_point0, double *line_t1, ON_3dPoint &arc_point1)
+ON_Intersect (const ON_Line &line,
+              const ON_Arc &arc,
+              double *line_t0,
+              ON_3dPoint &arc_point0,
+              double *line_t1,
+              ON_3dPoint &arc_point1)
 {
   ON_Circle c = arc;
   ON_3dPoint p[2];

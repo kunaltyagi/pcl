@@ -56,8 +56,10 @@ namespace pcl
    * \ingroup common
    */
   PCL_EXPORTS void
-  lineToLineSegment (const Eigen::VectorXf &line_a, const Eigen::VectorXf &line_b,
-                     Eigen::Vector4f &pt1_seg, Eigen::Vector4f &pt2_seg);
+  lineToLineSegment (const Eigen::VectorXf &line_a,
+                     const Eigen::VectorXf &line_b,
+                     Eigen::Vector4f &pt1_seg,
+                     Eigen::Vector4f &pt2_seg);
 
   /** \brief Get the square distance from a point to a line (represented by a point and
    * a direction) \param pt a point \param line_pt a point on the line (make sure that
@@ -97,7 +99,8 @@ namespace pcl
    * segment) \return the length of segment length \ingroup common
    */
   template <typename PointT>
-  double inline getMaxSegment (const pcl::PointCloud<PointT> &cloud, PointT &pmin,
+  double inline getMaxSegment (const pcl::PointCloud<PointT> &cloud,
+                               PointT &pmin,
                                PointT &pmax)
   {
     double max_dist = std::numeric_limits<double>::min ();
@@ -136,7 +139,8 @@ namespace pcl
    */
   template <typename PointT>
   double inline getMaxSegment (const pcl::PointCloud<PointT> &cloud,
-                               const std::vector<int> &indices, PointT &pmin,
+                               const std::vector<int> &indices,
+                               PointT &pmin,
                                PointT &pmax)
   {
     double max_dist = std::numeric_limits<double>::min ();

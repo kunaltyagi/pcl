@@ -267,8 +267,10 @@ pcl::RobotEyeGrabber::asyncSocketReceive ()
 {
   // expecting at most max_length bytes (UDP packet).
   socket_->async_receive_from (
-      boost::asio::buffer (receive_buffer_, MAX_LENGTH), sender_endpoint_,
-      boost::bind (&RobotEyeGrabber::socketCallback, this,
+      boost::asio::buffer (receive_buffer_, MAX_LENGTH),
+      sender_endpoint_,
+      boost::bind (&RobotEyeGrabber::socketCallback,
+                   this,
                    boost::asio::placeholders::error,
                    boost::asio::placeholders::bytes_transferred));
 }

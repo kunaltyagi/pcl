@@ -151,8 +151,8 @@ RELATED FUNCTIONS:
 }
 
 void
-ON_EvaluatedeCasteljau (int dim, int order, int side, int cv_stride, double *cv,
-                        double t)
+ON_EvaluatedeCasteljau (
+    int dim, int order, int side, int cv_stride, double *cv, double t)
 /*****************************************************************************
 Evaluate a Bezier using the de Casteljau algorithm
 
@@ -322,8 +322,8 @@ RELATED FUNCTIONS:
 }
 
 bool
-ON_IncreaseBezierDegree (int dim, ON_BOOL32 is_rat, int order, int cv_stride,
-                         double *cv)
+ON_IncreaseBezierDegree (
+    int dim, ON_BOOL32 is_rat, int order, int cv_stride, double *cv)
 /*****************************************************************************
 Increase the degree of a Bezier
 
@@ -447,16 +447,17 @@ ON_RemoveBezierSingAt1 (int dim, int order, int cv_stride, double *cv)
 }
 
 bool
-ON_EvaluateBezier (int dim,              // dimension
-                   ON_BOOL32 is_rat,     // true if NURBS is rational
-                   int order,            // order
-                   int cv_stride,        // cv_stride >= (is_rat)?dim+1:dim
-                   const double *cv,     // cv[order*cv_stride] array
-                   double t0, double t1, // domain
-                   int der_count,        // number of derivatives to compute
-                   double t,             // evaluation parameter
-                   int v_stride,         // v_stride (>=dimension)
-                   double *v             // v[(der_count+1)*v_stride] array
+ON_EvaluateBezier (int dim,          // dimension
+                   ON_BOOL32 is_rat, // true if NURBS is rational
+                   int order,        // order
+                   int cv_stride,    // cv_stride >= (is_rat)?dim+1:dim
+                   const double *cv, // cv[order*cv_stride] array
+                   double t0,
+                   double t1,     // domain
+                   int der_count, // number of derivatives to compute
+                   double t,      // evaluation parameter
+                   int v_stride,  // v_stride (>=dimension)
+                   double *v      // v[(der_count+1)*v_stride] array
 )
 /*****************************************************************************
 Evaluate a Bezier
@@ -803,7 +804,9 @@ ON_EvaluateNurbsBasis (int order, const double *knot, double t, double *N)
 }
 
 bool
-ON_EvaluateNurbsBasisDerivatives (int order, const double *knot, int der_count,
+ON_EvaluateNurbsBasisDerivatives (int order,
+                                  const double *knot,
+                                  int der_count,
                                   double *N)
 {
   /* INPUT:
@@ -1021,8 +1024,8 @@ ON_EvaluateNurbsRationalSpan (int dim,            // dimension
 
   hv = (double *)alloca ((der_count + 1) * hv_stride * sizeof (*hv));
 
-  rc = ON_EvaluateNurbsNonRationalSpan (dim + 1, order, knot, cv_stride, cv, der_count,
-                                        t, hv_stride, hv);
+  rc = ON_EvaluateNurbsNonRationalSpan (
+      dim + 1, order, knot, cv_stride, cv, der_count, t, hv_stride, hv);
   if (rc) {
     rc = ON_EvaluateQuotientRule (dim, der_count, hv_stride, hv);
   }
@@ -1053,24 +1056,41 @@ ON_EvaluateNurbsSpan (int dim,            // dimension
   bool rc = false;
   if (knot[0] == knot[order - 2] && knot[order - 1] == knot[2 * order - 3]) {
     // Bezier span - use faster Bezier evaluator
-    rc = ON_EvaluateBezier (dim, is_rat, order, cv_stride, cv, knot[order - 2],
-                            knot[order - 1], der_count, t, v_stride, v);
+    rc = ON_EvaluateBezier (dim,
+                            is_rat,
+                            order,
+                            cv_stride,
+                            cv,
+                            knot[order - 2],
+                            knot[order - 1],
+                            der_count,
+                            t,
+                            v_stride,
+                            v);
   } else {
     // generic NURBS span evaluation
-    rc = (is_rat) ? ON_EvaluateNurbsRationalSpan (dim, order, knot, cv_stride, cv,
-                                                  der_count, t, v_stride, v)
-                  : ON_EvaluateNurbsNonRationalSpan (dim, order, knot, cv_stride, cv,
-                                                     der_count, t, v_stride, v);
+    rc = (is_rat) ? ON_EvaluateNurbsRationalSpan (
+                        dim, order, knot, cv_stride, cv, der_count, t, v_stride, v)
+                  : ON_EvaluateNurbsNonRationalSpan (
+                        dim, order, knot, cv_stride, cv, der_count, t, v_stride, v);
   }
   return rc;
 }
 
 bool
-ON_EvaluateNurbsSurfaceSpan (int dim, ON_BOOL32 is_rat, int order0, int order1,
-                             const double *knot0, const double *knot1, int cv_stride0,
+ON_EvaluateNurbsSurfaceSpan (int dim,
+                             ON_BOOL32 is_rat,
+                             int order0,
+                             int order1,
+                             const double *knot0,
+                             const double *knot1,
+                             int cv_stride0,
                              int cv_stride1,
                              const double *cv0, // cv at "lower left" of bispan
-                             int der_count, double t0, double t1, int v_stride,
+                             int der_count,
+                             double t0,
+                             double t1,
+                             int v_stride,
                              double *v // returns values
 )
 {
@@ -1234,8 +1254,14 @@ ON_EvaluateNurbsSurfaceSpan (int dim, ON_BOOL32 is_rat, int order0, int order1,
 }
 
 bool
-ON_EvaluateNurbsDeBoor (int cv_dim, int order, int cv_stride, double *cv,
-                        const double *knots, int side, double mult_k, double t)
+ON_EvaluateNurbsDeBoor (int cv_dim,
+                        int order,
+                        int cv_stride,
+                        double *cv,
+                        const double *knots,
+                        int side,
+                        double mult_k,
+                        double t)
 /*
  * Evaluate a B-spline span using the de Boor algorithm
  *
@@ -1521,7 +1547,9 @@ ON_EvaluateNurbsDeBoor (int cv_dim, int order, int cv_stride, double *cv,
 }
 
 bool
-ON_EvaluateNurbsBlossom (int cvdim, int order, int cv_stride,
+ON_EvaluateNurbsBlossom (int cvdim,
+                         int order,
+                         int cv_stride,
                          const double *CV,   // size cv_stride*order
                          const double *knot, // nondecreasing, size 2*(order-1)
                          // knot[order-2] != knot[order-1]
@@ -1581,8 +1609,13 @@ ON_EvaluateNurbsBlossom (int cvdim, int order, int cv_stride,
 }
 
 void
-ON_ConvertNurbSpanToBezier (int cvdim, int order, int cvstride, double *cv,
-                            const double *knot, double t0, double t1)
+ON_ConvertNurbSpanToBezier (int cvdim,
+                            int order,
+                            int cvstride,
+                            double *cv,
+                            const double *knot,
+                            double t0,
+                            double t1)
 /*
  * Convert a Nurb span to a Bezier
  *

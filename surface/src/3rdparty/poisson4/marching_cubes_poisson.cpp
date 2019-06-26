@@ -470,7 +470,8 @@ namespace pcl
       return (idx == 5) || (idx == 10);
     }
     int
-    MarchingSquares::AddEdges (const double v[Square::CORNERS], double iso,
+    MarchingSquares::AddEdges (const double v[Square::CORNERS],
+                               double iso,
                                Edge *isoEdges)
     {
       int idx, nEdges = 0;
@@ -502,7 +503,8 @@ namespace pcl
     }
 
     int
-    MarchingSquares::AddEdgeIndices (const double v[Square::CORNERS], double iso,
+    MarchingSquares::AddEdgeIndices (const double v[Square::CORNERS],
+                                     double iso,
                                      int *isoIndices)
     {
       int idx, nEdges = 0;
@@ -874,7 +876,8 @@ namespace pcl
       return idx;
     }
     int
-    MarchingCubes::GetFaceIndex (const double values[Cube::CORNERS], double iso,
+    MarchingCubes::GetFaceIndex (const double values[Cube::CORNERS],
+                                 double iso,
                                  int faceIndex)
     {
       int i, j, x, y, z, idx = 0;
@@ -928,14 +931,16 @@ namespace pcl
       return idx;
     }
     int
-    MarchingCubes::IsAmbiguous (const double v[Cube::CORNERS], double isoValue,
+    MarchingCubes::IsAmbiguous (const double v[Cube::CORNERS],
+                                double isoValue,
                                 int faceIndex)
     {
       int idx = GetFaceIndex (v, isoValue, faceIndex);
       return (idx == 5) || (idx == 10);
     }
     int
-    MarchingCubes::HasRoots (const double v[Cube::CORNERS], double isoValue,
+    MarchingCubes::HasRoots (const double v[Cube::CORNERS],
+                             double isoValue,
                              int faceIndex)
     {
       int idx = GetFaceIndex (v, isoValue, faceIndex);
@@ -961,7 +966,8 @@ namespace pcl
       }
     }
     int
-    MarchingCubes::AddTriangles (const double v[Cube::CORNERS], double iso,
+    MarchingCubes::AddTriangles (const double v[Cube::CORNERS],
+                                 double iso,
                                  Triangle *isoTriangles)
     {
       int idx, ntriang = 0;
@@ -994,7 +1000,8 @@ namespace pcl
     }
 
     int
-    MarchingCubes::AddTriangleIndices (const double v[Cube::CORNERS], double iso,
+    MarchingCubes::AddTriangleIndices (const double v[Cube::CORNERS],
+                                       double iso,
                                        int *isoIndices)
     {
       int idx, ntriang = 0;
@@ -1069,7 +1076,8 @@ namespace pcl
       return idx;
     }
     int
-    MarchingCubes::GetFaceIndex (const float values[Cube::CORNERS], float iso,
+    MarchingCubes::GetFaceIndex (const float values[Cube::CORNERS],
+                                 float iso,
                                  int faceIndex)
     {
       int i, j, x, y, z, idx = 0;
@@ -1182,7 +1190,8 @@ namespace pcl
       return idx;
     }
     int
-    MarchingCubes::IsAmbiguous (const float v[Cube::CORNERS], float isoValue,
+    MarchingCubes::IsAmbiguous (const float v[Cube::CORNERS],
+                                float isoValue,
                                 int faceIndex)
     {
       int idx = GetFaceIndex (v, isoValue, faceIndex);
@@ -1205,7 +1214,8 @@ namespace pcl
       }
     }
     int
-    MarchingCubes::HasRoots (const float v[Cube::CORNERS], float isoValue,
+    MarchingCubes::HasRoots (const float v[Cube::CORNERS],
+                             float isoValue,
                              int faceIndex)
     {
       int idx = GetFaceIndex (v, isoValue, faceIndex);
@@ -1232,7 +1242,8 @@ namespace pcl
       }
     }
     int
-    MarchingCubes::AddTriangles (const float v[Cube::CORNERS], float iso,
+    MarchingCubes::AddTriangles (const float v[Cube::CORNERS],
+                                 float iso,
                                  Triangle *isoTriangles)
     {
       int idx, ntriang = 0;
@@ -1264,7 +1275,8 @@ namespace pcl
     }
 
     int
-    MarchingCubes::AddTriangleIndices (const float v[Cube::CORNERS], float iso,
+    MarchingCubes::AddTriangleIndices (const float v[Cube::CORNERS],
+                                       float iso,
                                        int *isoIndices)
     {
       int idx, ntriang = 0;

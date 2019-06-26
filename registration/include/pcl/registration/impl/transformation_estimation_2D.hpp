@@ -49,7 +49,8 @@ pcl::registration::TransformationEstimation2D<PointSource, PointTarget, Scalar>:
   if (cloud_tgt.points.size () != nr_points) {
     PCL_ERROR ("[pcl::TransformationEstimation2D::estimateRigidTransformation] Number "
                "or points in source (%lu) differs than target (%lu)!\n",
-               nr_points, cloud_tgt.points.size ());
+               nr_points,
+               cloud_tgt.points.size ());
     return;
   }
 
@@ -70,7 +71,8 @@ pcl::registration::TransformationEstimation2D<PointSource, PointTarget, Scalar>:
   if (indices_src.size () != cloud_tgt.points.size ()) {
     PCL_ERROR ("[pcl::Transformation2D::estimateRigidTransformation] Number or points "
                "in source (%lu) differs than target (%lu)!\n",
-               indices_src.size (), cloud_tgt.points.size ());
+               indices_src.size (),
+               cloud_tgt.points.size ());
     return;
   }
 
@@ -92,7 +94,8 @@ pcl::registration::TransformationEstimation2D<PointSource, PointTarget, Scalar>:
   if (indices_src.size () != indices_tgt.size ()) {
     PCL_ERROR ("[pcl::TransformationEstimation2D::estimateRigidTransformation] Number "
                "or points in source (%lu) differs than target (%lu)!\n",
-               indices_src.size (), indices_tgt.size ());
+               indices_src.size (),
+               indices_tgt.size ());
     return;
   }
 
@@ -142,8 +145,11 @@ pcl::registration::TransformationEstimation2D<PointSource, PointTarget, Scalar>:
   demeanPointCloud (source_it, centroid_src, cloud_src_demean);
   demeanPointCloud (target_it, centroid_tgt, cloud_tgt_demean);
 
-  getTransformationFromCorrelation (cloud_src_demean, centroid_src, cloud_tgt_demean,
-                                    centroid_tgt, transformation_matrix);
+  getTransformationFromCorrelation (cloud_src_demean,
+                                    centroid_src,
+                                    cloud_tgt_demean,
+                                    centroid_tgt,
+                                    transformation_matrix);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////

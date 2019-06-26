@@ -262,7 +262,8 @@ Cloud::draw (bool disable_highlight) const
           glDrawArrays (GL_POINTS, 0, cloud_.size ());
         } else {
           // draw the unselected points
-          glDrawElements (GL_POINTS, cloud_.size () - selection_ptr->size (),
+          glDrawElements (GL_POINTS,
+                          cloud_.size () - selection_ptr->size (),
                           GL_UNSIGNED_INT,
                           (&(partitioned_indices_[selection_ptr->size () - 1])) + 1);
 
@@ -283,7 +284,9 @@ Cloud::draw (bool disable_highlight) const
           glBlendFunc (GL_SRC_ALPHA, GL_ZERO);
 
           // draw the selected points
-          glDrawElements (GL_POINTS, selection_ptr->size (), GL_UNSIGNED_INT,
+          glDrawElements (GL_POINTS,
+                          selection_ptr->size (),
+                          GL_UNSIGNED_INT,
                           &(partitioned_indices_[0]));
         }
       }
@@ -452,15 +455,15 @@ Cloud::enableTexture () const
 {
   if (!use_color_ramp_)
     return;
-  float ranges[3] = {max_xyz_[0] - min_xyz_[0], max_xyz_[1] - min_xyz_[1],
-                     max_xyz_[2] - min_xyz_[2]};
+  float ranges[3] = {
+      max_xyz_[0] - min_xyz_[0], max_xyz_[1] - min_xyz_[1], max_xyz_[2] - min_xyz_[2]};
   float transvals[3] = {-min_xyz_[0], -min_xyz_[1], -min_xyz_[2]};
   float range = ranges[color_ramp_axis_];
   float transval = transvals[color_ramp_axis_];
   glEnable (GL_TEXTURE_1D);
   glEnableClientState (GL_TEXTURE_COORD_ARRAY);
-  glTexCoordPointer (1, GL_FLOAT, sizeof (Point3D),
-                     &(cloud_.points[0].data[color_ramp_axis_]));
+  glTexCoordPointer (
+      1, GL_FLOAT, sizeof (Point3D), &(cloud_.points[0].data[color_ramp_axis_]));
   glMatrixMode (GL_TEXTURE);
   glPushMatrix ();
   glLoadIdentity ();

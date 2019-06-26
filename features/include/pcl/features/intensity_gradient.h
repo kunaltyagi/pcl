@@ -53,7 +53,9 @@ namespace pcl
    * \author Michael Dixon
    * \ingroup features
    */
-  template <typename PointInT, typename PointNT, typename PointOutT,
+  template <typename PointInT,
+            typename PointNT,
+            typename PointOutT,
             typename IntensitySelectorT = pcl::common::IntensityFieldAccessor<PointInT>>
   class IntensityGradientEstimation
       : public FeatureFromNormals<PointInT, PointNT, PointOutT>
@@ -61,8 +63,11 @@ namespace pcl
     public:
     using Ptr = boost::shared_ptr<
         IntensityGradientEstimation<PointInT, PointNT, PointOutT, IntensitySelectorT>>;
-    using ConstPtr = boost::shared_ptr<const IntensityGradientEstimation<
-        PointInT, PointNT, PointOutT, IntensitySelectorT>>;
+    using ConstPtr =
+        boost::shared_ptr<const IntensityGradientEstimation<PointInT,
+                                                            PointNT,
+                                                            PointOutT,
+                                                            IntensitySelectorT>>;
     using Feature<PointInT, PointOutT>::feature_name_;
     using Feature<PointInT, PointOutT>::getClassName;
     using Feature<PointInT, PointOutT>::indices_;
@@ -109,7 +114,8 @@ namespace pcl
     void
     computePointIntensityGradient (const pcl::PointCloud<PointInT> &cloud,
                                    const std::vector<int> &indices,
-                                   const Eigen::Vector3f &point, float mean_intensity,
+                                   const Eigen::Vector3f &point,
+                                   float mean_intensity,
                                    const Eigen::Vector3f &normal,
                                    Eigen::Vector3f &gradient);
 

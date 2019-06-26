@@ -45,8 +45,14 @@ namespace pcl
   namespace device
   {
     __device__ __host__ __forceinline__ bool
-    computePairFeatures (const float3 &p1, const float3 &n1, const float3 &p2,
-                         const float3 &n2, float &f1, float &f2, float &f3, float &f4)
+    computePairFeatures (const float3 &p1,
+                         const float3 &n1,
+                         const float3 &p2,
+                         const float3 &n2,
+                         float &f1,
+                         float &f2,
+                         float &f3,
+                         float &f4)
     {
       f1 = f2 = f3 = f4 = 0.0f;
 
@@ -91,10 +97,19 @@ namespace pcl
     }
 
     __device__ __host__ __forceinline__ bool
-    computeRGBPairFeatures (const float3 &p1, const float3 &n1, const int &colors1,
-                            const float3 &p2, const float3 &n2, const int &colors2,
-                            float &f1, float &f2, float &f3, float &f4, float &f5,
-                            float &f6, float &f7)
+    computeRGBPairFeatures (const float3 &p1,
+                            const float3 &n1,
+                            const int &colors1,
+                            const float3 &p2,
+                            const float3 &n2,
+                            const int &colors2,
+                            float &f1,
+                            float &f2,
+                            float &f3,
+                            float &f4,
+                            float &f5,
+                            float &f6,
+                            float &f7)
     {
       float3 dp2p1 = p2 - p1;
       f4 = norm (dp2p1);
@@ -148,8 +163,8 @@ namespace pcl
     }
 
     __device__ __host__ __forceinline__ void
-    computeRGBPairFeatures_RGBOnly (const int &colors1, const int &colors2, float &f5,
-                                    float &f6, float &f7)
+    computeRGBPairFeatures_RGBOnly (
+        const int &colors1, const int &colors2, float &f5, float &f6, float &f7)
     {
       f5 = ((float)((colors1)&0xFF)) / ((colors2)&0xFF);
       f6 = ((float)((colors1 >> 8) & 0xFF)) / ((colors2 >> 8) & 0xFF);
@@ -165,8 +180,14 @@ namespace pcl
     }
 
     __device__ __host__ __forceinline__ bool
-    computePPFPairFeature (const float3 &p1, const float3 &n1, const float3 &p2,
-                           const float3 &n2, float &f1, float &f2, float &f3, float &f4)
+    computePPFPairFeature (const float3 &p1,
+                           const float3 &n1,
+                           const float3 &p2,
+                           const float3 &n2,
+                           float &f1,
+                           float &f2,
+                           float &f3,
+                           float &f4)
     {
       float3 delta = p2 - p1;
 
@@ -185,7 +206,8 @@ namespace pcl
 
     __device__ __host__ __forceinline__ void
     computeAlfaM (const float3 &model_reference_point,
-                  const float3 &model_reference_normal, const float3 &model_point,
+                  const float3 &model_reference_normal,
+                  const float3 &model_point,
                   float &alpha_m)
     {
       float acos_value = acos (model_reference_normal.x);

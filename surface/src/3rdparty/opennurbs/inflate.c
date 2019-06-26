@@ -97,8 +97,8 @@ local int updatewindow OF ((z_streamp strm, unsigned out));
 #ifdef BUILDFIXED
 void makefixed OF ((void));
 #endif
-local unsigned syncsearch OF ((unsigned FAR *have, unsigned char FAR *buf,
-                               unsigned len));
+local unsigned
+    syncsearch OF ((unsigned FAR *have, unsigned char FAR *buf, unsigned len));
 
 int ZEXPORT inflateReset (strm) z_streamp strm;
 {
@@ -293,7 +293,9 @@ makefixed ()
   for (;;) {
     if ((low % 7) == 0)
       printf ("\n        ");
-    printf ("{%u,%u,%d}", state.lencode[low].op, state.lencode[low].bits,
+    printf ("{%u,%u,%d}",
+            state.lencode[low].op,
+            state.lencode[low].bits,
             state.lencode[low].val);
     if (++low == size)
       break;
@@ -306,7 +308,9 @@ makefixed ()
   for (;;) {
     if ((low % 6) == 0)
       printf ("\n        ");
-    printf ("{%u,%u,%d}", state.distcode[low].op, state.distcode[low].bits,
+    printf ("{%u,%u,%d}",
+            state.distcode[low].op,
+            state.distcode[low].bits,
             state.distcode[low].val);
     if (++low == size)
       break;
@@ -698,7 +702,8 @@ int flush;
         if (copy) {
           if (state->head != Z_NULL && state->head->extra != Z_NULL) {
             len = state->head->extra_len - state->length;
-            zmemcpy (state->head->extra + len, next,
+            zmemcpy (state->head->extra + len,
+                     next,
                      len + copy > state->head->extra_max ? state->head->extra_max - len
                                                          : copy);
           }
@@ -804,12 +809,14 @@ int flush;
         break;
       case 1: /* fixed block */
         fixedtables (state);
-        Tracev ((stderr, "inflate:     fixed codes block%s\n",
+        Tracev ((stderr,
+                 "inflate:     fixed codes block%s\n",
                  state->last ? " (last)" : ""));
         state->mode = LEN; /* decode codes */
         break;
       case 2: /* dynamic block */
-        Tracev ((stderr, "inflate:     dynamic codes block%s\n",
+        Tracev ((stderr,
+                 "inflate:     dynamic codes block%s\n",
                  state->last ? " (last)" : ""));
         state->mode = TABLE;
         break;
@@ -880,8 +887,8 @@ int flush;
       state->next = state->codes;
       state->lencode = (code const FAR *)(state->next);
       state->lenbits = 7;
-      ret = inflate_table (CODES, state->lens, 19, &(state->next), &(state->lenbits),
-                           state->work);
+      ret = inflate_table (
+          CODES, state->lens, 19, &(state->next), &(state->lenbits), state->work);
       if (ret) {
         strm->msg = (char *)"invalid code lengths set";
         state->mode = BAD;
@@ -945,8 +952,12 @@ int flush;
       state->next = state->codes;
       state->lencode = (code const FAR *)(state->next);
       state->lenbits = 9;
-      ret = inflate_table (LENS, state->lens, state->nlen, &(state->next),
-                           &(state->lenbits), state->work);
+      ret = inflate_table (LENS,
+                           state->lens,
+                           state->nlen,
+                           &(state->next),
+                           &(state->lenbits),
+                           state->work);
       if (ret) {
         strm->msg = (char *)"invalid literal/lengths set";
         state->mode = BAD;
@@ -954,8 +965,12 @@ int flush;
       }
       state->distcode = (code const FAR *)(state->next);
       state->distbits = 6;
-      ret = inflate_table (DISTS, state->lens + state->nlen, state->ndist,
-                           &(state->next), &(state->distbits), state->work);
+      ret = inflate_table (DISTS,
+                           state->lens + state->nlen,
+                           state->ndist,
+                           &(state->next),
+                           &(state->distbits),
+                           state->work);
       if (ret) {
         strm->msg = (char *)"invalid distances set";
         state->mode = BAD;
@@ -1362,8 +1377,8 @@ z_streamp source;
     return Z_MEM_ERROR;
   window = Z_NULL;
   if (state->window != Z_NULL) {
-    window = (unsigned char FAR *)ZALLOC (source, 1U << state->wbits,
-                                          sizeof (unsigned char));
+    window = (unsigned char FAR *)ZALLOC (
+        source, 1U << state->wbits, sizeof (unsigned char));
     if (window == Z_NULL) {
       ZFREE (source, copy);
       return Z_MEM_ERROR;

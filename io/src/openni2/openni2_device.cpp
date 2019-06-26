@@ -616,12 +616,14 @@ pcl::io::openni2::OpenNI2Device::findCompatibleDepthMode (
 bool
 pcl::io::openni2::OpenNI2Device::findCompatibleVideoMode (
     const std::vector<OpenNI2VideoMode> supportedModes,
-    const OpenNI2VideoMode &requested_mode, OpenNI2VideoMode &actual_mode) const
+    const OpenNI2VideoMode &requested_mode,
+    OpenNI2VideoMode &actual_mode) const
 {
   bool found = false;
   for (const auto &supportedMode : supportedModes) {
     if (supportedMode.frame_rate_ == requested_mode.frame_rate_ &&
-        resizingSupported (supportedMode.x_resolution_, supportedMode.y_resolution_,
+        resizingSupported (supportedMode.x_resolution_,
+                           supportedMode.y_resolution_,
                            requested_mode.x_resolution_,
                            requested_mode.y_resolution_)) {
       if (found) { // check whether the new mode is better -> smaller than the current

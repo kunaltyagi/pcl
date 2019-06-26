@@ -146,7 +146,8 @@ namespace pcl
       if (volume_->size () != this->size ())
         pcl::console::print_warn ("[TSDFVolume::setHeader] Header volume size (%d) "
                                   "doesn't fit underlying data size (%d)",
-                                  volume_->size (), size ());
+                                  volume_->size (),
+                                  size ());
     };
 
     /** \brief Resizes the internal storage and updates the header accordingly */
@@ -168,8 +169,8 @@ namespace pcl
     {
       resize (
           Eigen::Vector3i (DEFAULT_GRID_RES_X, DEFAULT_GRID_RES_Y, DEFAULT_GRID_RES_Z),
-          Eigen::Vector3f (DEFAULT_VOLUME_SIZE_X, DEFAULT_VOLUME_SIZE_Y,
-                           DEFAULT_VOLUME_SIZE_Z));
+          Eigen::Vector3f (
+              DEFAULT_VOLUME_SIZE_X, DEFAULT_VOLUME_SIZE_Y, DEFAULT_VOLUME_SIZE_Z));
     };
 
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -276,18 +277,22 @@ namespace pcl
      * (in mm) */
     template <typename PointT>
     void
-    getVoxelCoordAndOffset (const PointT &point, Eigen::Vector3i &voxel_coord,
+    getVoxelCoordAndOffset (const PointT &point,
+                            Eigen::Vector3i &voxel_coord,
                             Eigen::Vector3f &offset) const;
 
     /** extracts voxels in neighborhood of given voxel */
     bool
-    extractNeighborhood (const Eigen::Vector3i &voxel_coord, int neighborhood_size,
+    extractNeighborhood (const Eigen::Vector3i &voxel_coord,
+                         int neighborhood_size,
                          VoxelTVec &neighborhood) const;
 
     /** adds voxel values in local neighborhood */
     bool
-    addNeighborhood (const Eigen::Vector3i &voxel_coord, int neighborhood_size,
-                     const VoxelTVec &neighborhood, WeightT voxel_weight);
+    addNeighborhood (const Eigen::Vector3i &voxel_coord,
+                     int neighborhood_size,
+                     const VoxelTVec &neighborhood,
+                     WeightT voxel_weight);
 
     /** averages voxel values by the weight value */
     void
@@ -307,7 +312,8 @@ namespace pcl
     getLinearVoxelIndinces (
         const Eigen::Matrix<int, 3, Eigen::Dynamic> &indices_matrix) const
     {
-      return (Eigen::RowVector3i (1, header_.resolution[0],
+      return (Eigen::RowVector3i (1,
+                                  header_.resolution[0],
                                   header_.resolution[0] * header_.resolution[1]) *
               indices_matrix)
           .transpose ();

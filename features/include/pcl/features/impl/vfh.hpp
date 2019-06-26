@@ -92,8 +92,10 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::compute (PointCloudOut &output
 template <typename PointInT, typename PointNT, typename PointOutT>
 void
 pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computePointSPFHSignature (
-    const Eigen::Vector4f &centroid_p, const Eigen::Vector4f &centroid_n,
-    const pcl::PointCloud<PointInT> &cloud, const pcl::PointCloud<PointNT> &normals,
+    const Eigen::Vector4f &centroid_p,
+    const Eigen::Vector4f &centroid_n,
+    const pcl::PointCloud<PointInT> &cloud,
+    const pcl::PointCloud<PointNT> &normals,
     const std::vector<int> &indices)
 {
   Eigen::Vector4f pfh_tuple;
@@ -138,10 +140,14 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computePointSPFHSignature (
   // Iterate over all the points in the neighborhood
   for (const int &index : indices) {
     // Compute the pair P to NNi
-    if (!computePairFeatures (centroid_p, centroid_n,
+    if (!computePairFeatures (centroid_p,
+                              centroid_n,
                               cloud.points[index].getVector4fMap (),
                               normals.points[index].getNormalVector4fMap (),
-                              pfh_tuple[0], pfh_tuple[1], pfh_tuple[2], pfh_tuple[3]))
+                              pfh_tuple[0],
+                              pfh_tuple[1],
+                              pfh_tuple[2],
+                              pfh_tuple[3]))
       continue;
 
     // Normalize the f1, f2, f3, f4 features and push them in the histogram
@@ -228,8 +234,8 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
   d_vp_p.normalize ();
 
   // Estimate the SPFH at nn_indices[0] using the entire cloud
-  computePointSPFHSignature (xyz_centroid, normal_centroid, *surface_, *normals_,
-                             *indices_);
+  computePointSPFHSignature (
+      xyz_centroid, normal_centroid, *surface_, *normals_, *indices_);
 
   // We only output _1_ signature
   output.points.resize (1);
@@ -265,7 +271,8 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
   for (size_t i = 0; i < indices_->size (); ++i) {
     Eigen::Vector4f normal (normals_->points[(*indices_)[i]].normal[0],
                             normals_->points[(*indices_)[i]].normal[1],
-                            normals_->points[(*indices_)[i]].normal[2], 0);
+                            normals_->points[(*indices_)[i]].normal[2],
+                            0);
     // Normalize
     double alpha = (normal.dot (d_vp_p) + 1.0) * 0.5;
     int fi = static_cast<int> (floor (alpha * static_cast<double> (hist_vp_.size ())));

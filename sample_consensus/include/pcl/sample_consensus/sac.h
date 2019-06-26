@@ -88,7 +88,8 @@ namespace pcl
      * \param[in] random if true set the random seed to the current time, else set to
      * 12345 (default: false)
      */
-    SampleConsensus (const SampleConsensusModelPtr &model, double threshold,
+    SampleConsensus (const SampleConsensusModelPtr &model,
+                     double threshold,
                      bool random = false)
         : sac_model_ (model), probability_ (0.99), iterations_ (0),
           threshold_ (threshold), max_iterations_ (1000),
@@ -201,16 +202,18 @@ namespace pcl
       Eigen::VectorXf new_model_coefficients = model_coefficients_;
       do {
         // Optimize the model coefficients
-        sac_model_->optimizeModelCoefficients (prev_inliers, new_model_coefficients,
-                                               new_model_coefficients);
+        sac_model_->optimizeModelCoefficients (
+            prev_inliers, new_model_coefficients, new_model_coefficients);
         inliers_sizes.push_back (prev_inliers.size ());
 
         // Select the new inliers based on the optimized coefficients and new threshold
-        sac_model_->selectWithinDistance (new_model_coefficients, error_threshold,
-                                          new_inliers);
+        sac_model_->selectWithinDistance (
+            new_model_coefficients, error_threshold, new_inliers);
         PCL_DEBUG ("[pcl::SampleConsensus::refineModel] Number of inliers found "
                    "(before/after): %lu/%lu, with an error threshold of %g.\n",
-                   prev_inliers.size (), new_inliers.size (), error_threshold);
+                   prev_inliers.size (),
+                   new_inliers.size (),
+                   error_threshold);
 
         if (new_inliers.empty ()) {
           refine_iterations++;
@@ -227,7 +230,9 @@ namespace pcl
 
         PCL_DEBUG ("[pcl::SampleConsensus::refineModel] New estimated error threshold: "
                    "%g on iteration %d out of %d.\n",
-                   error_threshold, refine_iterations, max_iterations);
+                   error_threshold,
+                   refine_iterations,
+                   max_iterations);
         inlier_changed = false;
         std::swap (prev_inliers, new_inliers);
         // If the number of inliers changed, then we are still optimizing
@@ -285,7 +290,8 @@ namespace pcl
      */
     inline void
     getRandomSamples (const boost::shared_ptr<std::vector<int>> &indices,
-                      size_t nr_samples, std::set<int> &indices_subset)
+                      size_t nr_samples,
+                      std::set<int> &indices_subset)
     {
       indices_subset.clear ();
       while (indices_subset.size () < nr_samples)

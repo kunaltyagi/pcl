@@ -107,7 +107,8 @@ namespace pcl
       }
 
       void
-      estimate (PointInTPtr &in, PointInTPtr &out,
+      estimate (PointInTPtr &in,
+                PointInTPtr &out,
                 pcl::PointCloud<pcl::Normal>::Ptr &normals)
       {
         if (compute_mesh_resolution_) {

@@ -67,9 +67,14 @@ namespace pcl
 
         double common_weight;
 
-        Parameter (double intW = 1.0, double intS = 1e-6, double bndW = 0.0,
-                   double bndS = 1e-6, double cloW = 0.0, double cloSig = 0.0,
-                   unsigned cloSam = 0, double comW = 0.0)
+        Parameter (double intW = 1.0,
+                   double intS = 1e-6,
+                   double bndW = 0.0,
+                   double bndS = 1e-6,
+                   double cloW = 0.0,
+                   double cloSig = 0.0,
+                   unsigned cloSam = 0,
+                   double comW = 0.0)
             : interior_weight (intW), interior_smoothness (intS),
               boundary_weight (bndW), boundary_smoothness (bndS), closing_weight (cloW),
               closing_sigma (cloSig), closing_samples (cloSam), common_weight (comW)
@@ -142,8 +147,8 @@ namespace pcl
       /** \brief Assemble closing-constraint of boundaries by sampling from nurbs
        * boundary and find closest point on closest nurbs */
       virtual void
-      assembleClosingBoundaries (unsigned id, unsigned samples, double sigma,
-                                 double weight, unsigned &row);
+      assembleClosingBoundaries (
+          unsigned id, unsigned samples, double sigma, double weight, unsigned &row);
 
       /** \brief Assemble point-to-surface constraints for interior points. */
       virtual void
@@ -155,32 +160,41 @@ namespace pcl
 
       /** \brief Assemble smoothness constraints. */
       virtual void
-      assembleRegularisation (unsigned id, int ncps, double wCageRegInt,
-                              double wCageRegBnd, unsigned &row);
+      assembleRegularisation (
+          unsigned id, int ncps, double wCageRegInt, double wCageRegBnd, unsigned &row);
 
       /** \brief Add minimization constraint: two points in parametric domain of two
        * surfaces should lie on each other. */
       virtual void
-      addParamConstraint (const Eigen::Vector2i &id, const Eigen::Vector2d &params1,
-                          const Eigen::Vector2d &params2, double weight, unsigned &row);
+      addParamConstraint (const Eigen::Vector2i &id,
+                          const Eigen::Vector2d &params1,
+                          const Eigen::Vector2d &params2,
+                          double weight,
+                          unsigned &row);
 
       /** \brief Add minimization constraint: point-to-surface distance
        * (point-distance-minimization). */
       virtual void
-      addPointConstraint (unsigned id, int ncps, const Eigen::Vector2d &params,
-                          const Eigen::Vector3d &point, double weight, unsigned &row);
+      addPointConstraint (unsigned id,
+                          int ncps,
+                          const Eigen::Vector2d &params,
+                          const Eigen::Vector3d &point,
+                          double weight,
+                          unsigned &row);
 
       /** \brief Add minimization constraint: interior smoothness by control point
        * regularisation. */
       virtual void
-      addCageInteriorRegularisation (unsigned id, int ncps, double weight,
+      addCageInteriorRegularisation (unsigned id,
+                                     int ncps,
+                                     double weight,
                                      unsigned &row);
 
       /** \brief Add minimization constraint: boundary smoothness by control point
        * regularisation. */
       virtual void
-      addCageBoundaryRegularisation (unsigned id, int ncps, double weight, int side,
-                                     unsigned &row);
+      addCageBoundaryRegularisation (
+          unsigned id, int ncps, double weight, int side, unsigned &row);
 
       /** \brief Add minimization constraint: corner smoothness by control point
        * regularisation. */

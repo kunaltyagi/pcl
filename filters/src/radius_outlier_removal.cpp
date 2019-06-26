@@ -101,7 +101,8 @@ pcl::RadiusOutlierRemoval<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &out
     }
 
     memcpy (&output.data[nr_p * output.point_step],
-            &input_->data[(*indices_)[cp] * output.point_step], output.point_step);
+            &input_->data[(*indices_)[cp] * output.point_step],
+            output.point_step);
     nr_p++;
   }
 

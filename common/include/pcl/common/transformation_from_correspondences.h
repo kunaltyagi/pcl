@@ -82,7 +82,8 @@ namespace pcl
 
     /** Add a new sample */
     inline void
-    add (const Eigen::Vector3f &point, const Eigen::Vector3f &corresponding_point,
+    add (const Eigen::Vector3f &point,
+         const Eigen::Vector3f &corresponding_point,
          float weight = 1.0);
 
     /** Calculate the transformation that will best transform the points into their

@@ -392,11 +392,15 @@ CPCSegmentation Parameters: \n\
   pcl::CPCSegmentation<PointT> cpc;
   cpc.setConcavityToleranceThreshold (concavity_tolerance_threshold);
   cpc.setSanityCheck (use_sanity_criterion);
-  cpc.setCutting (max_cuts, cutting_min_segments, min_cut_score, use_local_constrain,
-                  use_directed_cutting, use_clean_cutting);
+  cpc.setCutting (max_cuts,
+                  cutting_min_segments,
+                  min_cut_score,
+                  use_local_constrain,
+                  use_directed_cutting,
+                  use_clean_cutting);
   cpc.setRANSACIterations (ransac_iterations);
-  cpc.setSmoothnessCheck (true, voxel_resolution, seed_resolution,
-                          smoothness_threshold);
+  cpc.setSmoothnessCheck (
+      true, voxel_resolution, seed_resolution, smoothness_threshold);
   cpc.setKFactor (k_factor);
   cpc.setInputSupervoxels (supervoxel_clusters, supervoxel_adjacency);
   cpc.setMinSegmentSize (min_segment_size);
@@ -420,18 +424,20 @@ CPCSegmentation Parameters: \n\
                     "the cpc segmentation output.\n");
         pcl::PCLPointCloud2 output_label_cloud2, output_concat_cloud2;
         pcl::toPCLPointCloud2 (*cpc_labeled_cloud, output_label_cloud2);
-        pcl::concatenateFields (input_pointcloud2, output_label_cloud2,
-                                output_concat_cloud2);
-        pcl::io::savePCDFile (outputname + "_out.pcd", output_concat_cloud2,
-                              Eigen::Vector4f::Zero (), Eigen::Quaternionf::Identity (),
+        pcl::concatenateFields (
+            input_pointcloud2, output_label_cloud2, output_concat_cloud2);
+        pcl::io::savePCDFile (outputname + "_out.pcd",
+                              output_concat_cloud2,
+                              Eigen::Vector4f::Zero (),
+                              Eigen::Quaternionf::Identity (),
                               save_binary_pcd);
       } else
-        pcl::io::savePCDFile (outputname + "_out.pcd", *cpc_labeled_cloud,
-                              save_binary_pcd);
+        pcl::io::savePCDFile (
+            outputname + "_out.pcd", *cpc_labeled_cloud, save_binary_pcd);
 
       if (sv_output_specified) {
-        pcl::io::savePCDFile (outputname + "_svcloud.pcd", *sv_centroid_normal_cloud,
-                              save_binary_pcd);
+        pcl::io::savePCDFile (
+            outputname + "_svcloud.pcd", *sv_centroid_normal_cloud, save_binary_pcd);
       }
     }
   } else {
@@ -477,13 +483,15 @@ CPCSegmentation Parameters: \n\
     // Create a polydata to store everything in
     vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New ();
     for (VertexIterator itr = vertex_iterator_range.first;
-         itr != vertex_iterator_range.second; ++itr) {
+         itr != vertex_iterator_range.second;
+         ++itr) {
       const uint32_t sv_label = sv_adjacency_list[*itr];
       std::pair<AdjacencyIterator, AdjacencyIterator> neighbors =
           boost::adjacent_vertices (*itr, sv_adjacency_list);
 
       for (AdjacencyIterator itr_neighbor = neighbors.first;
-           itr_neighbor != neighbors.second; ++itr_neighbor) {
+           itr_neighbor != neighbors.second;
+           ++itr_neighbor) {
         EdgeID connecting_edge =
             boost::edge (*itr, *itr_neighbor, sv_adjacency_list)
                 .first; // Get the edge connecting these supervoxels
@@ -562,8 +570,8 @@ CPCSegmentation Parameters: \n\
       }
       if (show_normals) {
         if (!viewer->contains ("normals"))
-          viewer->addPointCloudNormals<pcl::PointNormal> (sv_centroid_normal_cloud, 1,
-                                                          normals_scale, "normals");
+          viewer->addPointCloudNormals<pcl::PointNormal> (
+              sv_centroid_normal_cloud, 1, normals_scale, "normals");
       } else
         viewer->removePointCloud ("normals");
       /// Show Adjacency
@@ -575,7 +583,8 @@ CPCSegmentation Parameters: \n\
         if (!viewer->contains ("adjacency_graph")) {
           viewer->addModelFromPolyData (polyData, "adjacency_graph", 0);
           viewer->setShapeRenderingProperties (
-              pcl::visualization::PCL_VISUALIZER_LINE_WIDTH, line_width,
+              pcl::visualization::PCL_VISUALIZER_LINE_WIDTH,
+              line_width,
               "adjacency_graph");
         }
       } else {
@@ -587,10 +596,22 @@ CPCSegmentation Parameters: \n\
         printText (viewer);
       } else {
         removeText (viewer);
-        if (!viewer->updateText ("Press d to show help", 5, 10, 12, textcolor,
-                                 textcolor, textcolor, "help_text"))
-          viewer->addText ("Press d to show help", 5, 10, 12, textcolor, textcolor,
-                           textcolor, "help_text");
+        if (!viewer->updateText ("Press d to show help",
+                                 5,
+                                 10,
+                                 12,
+                                 textcolor,
+                                 textcolor,
+                                 textcolor,
+                                 "help_text"))
+          viewer->addText ("Press d to show help",
+                           5,
+                           10,
+                           12,
+                           textcolor,
+                           textcolor,
+                           textcolor,
+                           "help_text");
       }
 
       std::this_thread::sleep_for (100ms);
@@ -610,54 +631,66 @@ printText (pcl::visualization::PCLVisualizer::Ptr viewer_arg)
   std::string off_str = "OFF";
   int top = 100;
   if (!viewer_arg->updateText (
-          "Press (1-n) to show different elements (d) to disable this", 5, top, 12,
-          textcolor, textcolor, textcolor, "hud_text"))
-    viewer_arg->addText ("Press (1-n) to show different elements", 5, top, 12,
-                         textcolor, textcolor, textcolor, "hud_text");
+          "Press (1-n) to show different elements (d) to disable this",
+          5,
+          top,
+          12,
+          textcolor,
+          textcolor,
+          textcolor,
+          "hud_text"))
+    viewer_arg->addText ("Press (1-n) to show different elements",
+                         5,
+                         top,
+                         12,
+                         textcolor,
+                         textcolor,
+                         textcolor,
+                         "hud_text");
 
   top -= 12;
   std::string temp =
       "(1) Supervoxel Normals, currently " + ((show_normals) ? on_str : off_str);
-  if (!viewer_arg->updateText (temp, 5, top, 10, textcolor, textcolor, textcolor,
-                               "normals_text"))
-    viewer_arg->addText (temp, 5, top, 10, textcolor, textcolor, textcolor,
-                         "normals_text");
+  if (!viewer_arg->updateText (
+          temp, 5, top, 10, textcolor, textcolor, textcolor, "normals_text"))
+    viewer_arg->addText (
+        temp, 5, top, 10, textcolor, textcolor, textcolor, "normals_text");
 
   top -= 24;
   temp = "(2) Adjacency Graph, currently " + ((show_adjacency) ? on_str : off_str) +
          "\n      White: convex; Red: concave, Green: cut";
-  if (!viewer_arg->updateText (temp, 5, top, 10, textcolor, textcolor, textcolor,
-                               "graph_text"))
-    viewer_arg->addText (temp, 5, top, 10, textcolor, textcolor, textcolor,
-                         "graph_text");
+  if (!viewer_arg->updateText (
+          temp, 5, top, 10, textcolor, textcolor, textcolor, "graph_text"))
+    viewer_arg->addText (
+        temp, 5, top, 10, textcolor, textcolor, textcolor, "graph_text");
 
   top -= 12;
   temp = "(3) Press to show SEGMENTATION";
-  if (!viewer_arg->updateText (temp, 5, top, 10, textcolor, textcolor, textcolor,
-                               "seg_text"))
+  if (!viewer_arg->updateText (
+          temp, 5, top, 10, textcolor, textcolor, textcolor, "seg_text"))
     viewer_arg->addText (temp, 5, top, 10, textcolor, textcolor, textcolor, "seg_text");
 
   top -= 12;
   temp = "(4) Press to show SUPERVOXELS";
-  if (!viewer_arg->updateText (temp, 5, top, 10, textcolor, textcolor, textcolor,
-                               "supervoxel_text"))
-    viewer_arg->addText (temp, 5, top, 10, textcolor, textcolor, textcolor,
-                         "supervoxel_text");
+  if (!viewer_arg->updateText (
+          temp, 5, top, 10, textcolor, textcolor, textcolor, "supervoxel_text"))
+    viewer_arg->addText (
+        temp, 5, top, 10, textcolor, textcolor, textcolor, "supervoxel_text");
 
   top -= 12;
   temp = "(5/6) Press to increase/decrease normals scale, currently " +
          boost::str (boost::format ("%.3f") % normals_scale);
-  if (!viewer_arg->updateText (temp, 5, top, 10, textcolor, textcolor, textcolor,
-                               "normals_scale_text"))
-    viewer_arg->addText (temp, 5, top, 10, textcolor, textcolor, textcolor,
-                         "normals_scale_text");
+  if (!viewer_arg->updateText (
+          temp, 5, top, 10, textcolor, textcolor, textcolor, "normals_scale_text"))
+    viewer_arg->addText (
+        temp, 5, top, 10, textcolor, textcolor, textcolor, "normals_scale_text");
   top -= 12;
   temp = "(7/8) Press to increase/decrease line width, currently " +
          boost::str (boost::format ("%.3f") % line_width);
-  if (!viewer_arg->updateText (temp, 5, top, 10, textcolor, textcolor, textcolor,
-                               "line_width_text"))
-    viewer_arg->addText (temp, 5, top, 10, textcolor, textcolor, textcolor,
-                         "line_width_text");
+  if (!viewer_arg->updateText (
+          temp, 5, top, 10, textcolor, textcolor, textcolor, "line_width_text"))
+    viewer_arg->addText (
+        temp, 5, top, 10, textcolor, textcolor, textcolor, "line_width_text");
 }
 
 void

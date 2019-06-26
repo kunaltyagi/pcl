@@ -147,7 +147,9 @@ namespace pcl
     }
     template <class NodeData, class Real>
     inline void
-    OctNode<NodeData, Real>::Index (int depth, const int offset[3], short &d,
+    OctNode<NodeData, Real>::Index (int depth,
+                                    const int offset[3],
+                                    short &d,
                                     short off[3])
     {
       d = short(depth);
@@ -173,7 +175,8 @@ namespace pcl
     }
     template <class NodeData, class Real>
     inline void
-    OctNode<NodeData, Real>::DepthAndOffset (const long long &index, int &depth,
+    OctNode<NodeData, Real>::DepthAndOffset (const long long &index,
+                                             int &depth,
                                              int offset[3])
     {
       depth = int(index & DepthMask);
@@ -215,7 +218,8 @@ namespace pcl
     template <class NodeData, class Real>
     inline void
     OctNode<NodeData, Real>::CenterAndWidth (const long long &index,
-                                             Point3D<Real> &center, Real &width)
+                                             Point3D<Real> &center,
+                                             Real &width)
     {
       int depth, offset[3];
       depth = index & DepthMask;
@@ -421,8 +425,8 @@ namespace pcl
       Real width;
       centerAndWidth (center, width);
       for (int dim = 0; dim < DIMENSION; dim++) {
-        printf ("%[%f,%f]", center.coords[dim] - width / 2,
-                center.coords[dim] + width / 2);
+        printf (
+            "%[%f,%f]", center.coords[dim] - width / 2, center.coords[dim] + width / 2);
         if (dim < DIMENSION - 1) {
           printf ("x");
         } else
@@ -441,7 +445,8 @@ namespace pcl
     template <class NodeData, class Real>
     template <class NodeAdjacencyFunction>
     void
-    OctNode<NodeData, Real>::processNodeNodes (OctNode *node, NodeAdjacencyFunction *F,
+    OctNode<NodeData, Real>::processNodeNodes (OctNode *node,
+                                               NodeAdjacencyFunction *F,
                                                int processCurrent)
     {
       if (processCurrent) {
@@ -454,8 +459,10 @@ namespace pcl
     template <class NodeData, class Real>
     template <class NodeAdjacencyFunction>
     void
-    OctNode<NodeData, Real>::processNodeFaces (OctNode *node, NodeAdjacencyFunction *F,
-                                               int fIndex, int processCurrent)
+    OctNode<NodeData, Real>::processNodeFaces (OctNode *node,
+                                               NodeAdjacencyFunction *F,
+                                               int fIndex,
+                                               int processCurrent)
     {
       if (processCurrent) {
         F->Function (this, node);
@@ -469,8 +476,10 @@ namespace pcl
     template <class NodeData, class Real>
     template <class NodeAdjacencyFunction>
     void
-    OctNode<NodeData, Real>::processNodeEdges (OctNode *node, NodeAdjacencyFunction *F,
-                                               int eIndex, int processCurrent)
+    OctNode<NodeData, Real>::processNodeEdges (OctNode *node,
+                                               NodeAdjacencyFunction *F,
+                                               int eIndex,
+                                               int processCurrent)
     {
       if (processCurrent) {
         F->Function (this, node);
@@ -485,7 +494,8 @@ namespace pcl
     template <class NodeAdjacencyFunction>
     void
     OctNode<NodeData, Real>::processNodeCorners (OctNode *node,
-                                                 NodeAdjacencyFunction *F, int cIndex,
+                                                 NodeAdjacencyFunction *F,
+                                                 int cIndex,
                                                  int processCurrent)
     {
       if (processCurrent) {
@@ -540,7 +550,8 @@ namespace pcl
     template <class NodeAdjacencyFunction>
     void
     OctNode<NodeData, Real>::__processNodeEdges (OctNode *node,
-                                                 NodeAdjacencyFunction *F, int cIndex1,
+                                                 NodeAdjacencyFunction *F,
+                                                 int cIndex1,
                                                  int cIndex2)
     {
       F->Function (&children[cIndex1], node);
@@ -556,35 +567,40 @@ namespace pcl
     template <class NodeAdjacencyFunction>
     void
     OctNode<NodeData, Real>::__processNodeFaces (OctNode *node,
-                                                 NodeAdjacencyFunction *F, int cIndex1,
-                                                 int cIndex2, int cIndex3, int cIndex4)
+                                                 NodeAdjacencyFunction *F,
+                                                 int cIndex1,
+                                                 int cIndex2,
+                                                 int cIndex3,
+                                                 int cIndex4)
     {
       F->Function (&children[cIndex1], node);
       F->Function (&children[cIndex2], node);
       F->Function (&children[cIndex3], node);
       F->Function (&children[cIndex4], node);
       if (children[cIndex1].children) {
-        children[cIndex1].__processNodeFaces (node, F, cIndex1, cIndex2, cIndex3,
-                                              cIndex4);
+        children[cIndex1].__processNodeFaces (
+            node, F, cIndex1, cIndex2, cIndex3, cIndex4);
       }
       if (children[cIndex2].children) {
-        children[cIndex2].__processNodeFaces (node, F, cIndex1, cIndex2, cIndex3,
-                                              cIndex4);
+        children[cIndex2].__processNodeFaces (
+            node, F, cIndex1, cIndex2, cIndex3, cIndex4);
       }
       if (children[cIndex3].children) {
-        children[cIndex3].__processNodeFaces (node, F, cIndex1, cIndex2, cIndex3,
-                                              cIndex4);
+        children[cIndex3].__processNodeFaces (
+            node, F, cIndex1, cIndex2, cIndex3, cIndex4);
       }
       if (children[cIndex4].children) {
-        children[cIndex4].__processNodeFaces (node, F, cIndex1, cIndex2, cIndex3,
-                                              cIndex4);
+        children[cIndex4].__processNodeFaces (
+            node, F, cIndex1, cIndex2, cIndex3, cIndex4);
       }
     }
     template <class NodeData, class Real>
     template <class NodeAdjacencyFunction>
     void
-    OctNode<NodeData, Real>::ProcessNodeAdjacentNodes (int maxDepth, OctNode *node1,
-                                                       int width1, OctNode *node2,
+    OctNode<NodeData, Real>::ProcessNodeAdjacentNodes (int maxDepth,
+                                                       OctNode *node1,
+                                                       int width1,
+                                                       OctNode *node2,
                                                        int width2,
                                                        NodeAdjacencyFunction *F,
                                                        int processCurrent)
@@ -595,17 +611,30 @@ namespace pcl
       w1 = node1->width (maxDepth + 1);
       w2 = node2->width (maxDepth + 1);
 
-      ProcessNodeAdjacentNodes (c1[0] - c2[0], c1[1] - c2[1], c1[2] - c2[2], node1,
-                                (width1 * w1) >> 1, node2, (width2 * w2) >> 1, w2, F,
+      ProcessNodeAdjacentNodes (c1[0] - c2[0],
+                                c1[1] - c2[1],
+                                c1[2] - c2[2],
+                                node1,
+                                (width1 * w1) >> 1,
+                                node2,
+                                (width2 * w2) >> 1,
+                                w2,
+                                F,
                                 processCurrent);
     }
     template <class NodeData, class Real>
     template <class NodeAdjacencyFunction>
     void
-    OctNode<NodeData, Real>::ProcessNodeAdjacentNodes (
-        int dx, int dy, int dz, OctNode<NodeData, Real> *node1, int radius1,
-        OctNode<NodeData, Real> *node2, int radius2, int width2,
-        NodeAdjacencyFunction *F, int processCurrent)
+    OctNode<NodeData, Real>::ProcessNodeAdjacentNodes (int dx,
+                                                       int dy,
+                                                       int dz,
+                                                       OctNode<NodeData, Real> *node1,
+                                                       int radius1,
+                                                       OctNode<NodeData, Real> *node2,
+                                                       int radius2,
+                                                       int width2,
+                                                       NodeAdjacencyFunction *F,
+                                                       int processCurrent)
     {
       if (!Overlap (dx, dy, dz, radius1 + radius2)) {
         return;
@@ -616,15 +645,20 @@ namespace pcl
       if (!node2->children) {
         return;
       }
-      __ProcessNodeAdjacentNodes (-dx, -dy, -dz, node1, radius1, node2, radius2,
-                                  width2 / 2, F);
+      __ProcessNodeAdjacentNodes (
+          -dx, -dy, -dz, node1, radius1, node2, radius2, width2 / 2, F);
     }
     template <class NodeData, class Real>
     template <class TerminatingNodeAdjacencyFunction>
     void
     OctNode<NodeData, Real>::ProcessTerminatingNodeAdjacentNodes (
-        int maxDepth, OctNode *node1, int width1, OctNode *node2, int width2,
-        TerminatingNodeAdjacencyFunction *F, int processCurrent)
+        int maxDepth,
+        OctNode *node1,
+        int width1,
+        OctNode *node2,
+        int width2,
+        TerminatingNodeAdjacencyFunction *F,
+        int processCurrent)
     {
       int c1[3], c2[3], w1, w2;
       node1->centerIndex (maxDepth + 1, c1);
@@ -632,17 +666,31 @@ namespace pcl
       w1 = node1->width (maxDepth + 1);
       w2 = node2->width (maxDepth + 1);
 
-      ProcessTerminatingNodeAdjacentNodes (c1[0] - c2[0], c1[1] - c2[1], c1[2] - c2[2],
-                                           node1, (width1 * w1) >> 1, node2,
-                                           (width2 * w2) >> 1, w2, F, processCurrent);
+      ProcessTerminatingNodeAdjacentNodes (c1[0] - c2[0],
+                                           c1[1] - c2[1],
+                                           c1[2] - c2[2],
+                                           node1,
+                                           (width1 * w1) >> 1,
+                                           node2,
+                                           (width2 * w2) >> 1,
+                                           w2,
+                                           F,
+                                           processCurrent);
     }
     template <class NodeData, class Real>
     template <class TerminatingNodeAdjacencyFunction>
     void
     OctNode<NodeData, Real>::ProcessTerminatingNodeAdjacentNodes (
-        int dx, int dy, int dz, OctNode<NodeData, Real> *node1, int radius1,
-        OctNode<NodeData, Real> *node2, int radius2, int width2,
-        TerminatingNodeAdjacencyFunction *F, int processCurrent)
+        int dx,
+        int dy,
+        int dz,
+        OctNode<NodeData, Real> *node1,
+        int radius1,
+        OctNode<NodeData, Real> *node2,
+        int radius2,
+        int width2,
+        TerminatingNodeAdjacencyFunction *F,
+        int processCurrent)
     {
       if (!Overlap (dx, dy, dz, radius1 + radius2)) {
         return;
@@ -653,29 +701,40 @@ namespace pcl
       if (!node2->children) {
         return;
       }
-      __ProcessTerminatingNodeAdjacentNodes (-dx, -dy, -dz, node1, radius1, node2,
-                                             radius2, width2 / 2, F);
+      __ProcessTerminatingNodeAdjacentNodes (
+          -dx, -dy, -dz, node1, radius1, node2, radius2, width2 / 2, F);
     }
     template <class NodeData, class Real>
     template <class PointAdjacencyFunction>
     void
-    OctNode<NodeData, Real>::ProcessPointAdjacentNodes (int maxDepth, const int c1[3],
-                                                        OctNode *node2, int width2,
+    OctNode<NodeData, Real>::ProcessPointAdjacentNodes (int maxDepth,
+                                                        const int c1[3],
+                                                        OctNode *node2,
+                                                        int width2,
                                                         PointAdjacencyFunction *F,
                                                         int processCurrent)
     {
       int c2[3], w2;
       node2->centerIndex (maxDepth + 1, c2);
       w2 = node2->width (maxDepth + 1);
-      ProcessPointAdjacentNodes (c1[0] - c2[0], c1[1] - c2[1], c1[2] - c2[2], node2,
-                                 (width2 * w2) >> 1, w2, F, processCurrent);
+      ProcessPointAdjacentNodes (c1[0] - c2[0],
+                                 c1[1] - c2[1],
+                                 c1[2] - c2[2],
+                                 node2,
+                                 (width2 * w2) >> 1,
+                                 w2,
+                                 F,
+                                 processCurrent);
     }
     template <class NodeData, class Real>
     template <class PointAdjacencyFunction>
     void
-    OctNode<NodeData, Real>::ProcessPointAdjacentNodes (int dx, int dy, int dz,
+    OctNode<NodeData, Real>::ProcessPointAdjacentNodes (int dx,
+                                                        int dy,
+                                                        int dz,
                                                         OctNode<NodeData, Real> *node2,
-                                                        int radius2, int width2,
+                                                        int radius2,
+                                                        int width2,
                                                         PointAdjacencyFunction *F,
                                                         int processCurrent)
     {
@@ -691,8 +750,13 @@ namespace pcl
     template <class NodeAdjacencyFunction>
     void
     OctNode<NodeData, Real>::ProcessFixedDepthNodeAdjacentNodes (
-        int maxDepth, OctNode<NodeData, Real> *node1, int width1,
-        OctNode<NodeData, Real> *node2, int width2, int depth, NodeAdjacencyFunction *F,
+        int maxDepth,
+        OctNode<NodeData, Real> *node1,
+        int width1,
+        OctNode<NodeData, Real> *node2,
+        int width2,
+        int depth,
+        NodeAdjacencyFunction *F,
         int processCurrent)
     {
       int c1[3], c2[3], w1, w2;
@@ -701,17 +765,33 @@ namespace pcl
       w1 = node1->width (maxDepth + 1);
       w2 = node2->width (maxDepth + 1);
 
-      ProcessFixedDepthNodeAdjacentNodes (
-          c1[0] - c2[0], c1[1] - c2[1], c1[2] - c2[2], node1, (width1 * w1) >> 1, node2,
-          (width2 * w2) >> 1, w2, depth, F, processCurrent);
+      ProcessFixedDepthNodeAdjacentNodes (c1[0] - c2[0],
+                                          c1[1] - c2[1],
+                                          c1[2] - c2[2],
+                                          node1,
+                                          (width1 * w1) >> 1,
+                                          node2,
+                                          (width2 * w2) >> 1,
+                                          w2,
+                                          depth,
+                                          F,
+                                          processCurrent);
     }
     template <class NodeData, class Real>
     template <class NodeAdjacencyFunction>
     void
     OctNode<NodeData, Real>::ProcessFixedDepthNodeAdjacentNodes (
-        int dx, int dy, int dz, OctNode<NodeData, Real> *node1, int radius1,
-        OctNode<NodeData, Real> *node2, int radius2, int width2, int depth,
-        NodeAdjacencyFunction *F, int processCurrent)
+        int dx,
+        int dy,
+        int dz,
+        OctNode<NodeData, Real> *node1,
+        int radius1,
+        OctNode<NodeData, Real> *node2,
+        int radius2,
+        int width2,
+        int depth,
+        NodeAdjacencyFunction *F,
+        int processCurrent)
     {
       int d = node2->depth ();
       if (d > depth) {
@@ -728,16 +808,21 @@ namespace pcl
         if (!node2->children) {
           return;
         }
-        __ProcessFixedDepthNodeAdjacentNodes (-dx, -dy, -dz, node1, radius1, node2,
-                                              radius2, width2 / 2, depth - 1, F);
+        __ProcessFixedDepthNodeAdjacentNodes (
+            -dx, -dy, -dz, node1, radius1, node2, radius2, width2 / 2, depth - 1, F);
       }
     }
     template <class NodeData, class Real>
     template <class NodeAdjacencyFunction>
     void
     OctNode<NodeData, Real>::ProcessMaxDepthNodeAdjacentNodes (
-        int maxDepth, OctNode<NodeData, Real> *node1, int width1,
-        OctNode<NodeData, Real> *node2, int width2, int depth, NodeAdjacencyFunction *F,
+        int maxDepth,
+        OctNode<NodeData, Real> *node1,
+        int width1,
+        OctNode<NodeData, Real> *node2,
+        int width2,
+        int depth,
+        NodeAdjacencyFunction *F,
         int processCurrent)
     {
       int c1[3], c2[3], w1, w2;
@@ -745,17 +830,33 @@ namespace pcl
       node2->centerIndex (maxDepth + 1, c2);
       w1 = node1->width (maxDepth + 1);
       w2 = node2->width (maxDepth + 1);
-      ProcessMaxDepthNodeAdjacentNodes (
-          c1[0] - c2[0], c1[1] - c2[1], c1[2] - c2[2], node1, (width1 * w1) >> 1, node2,
-          (width2 * w2) >> 1, w2, depth, F, processCurrent);
+      ProcessMaxDepthNodeAdjacentNodes (c1[0] - c2[0],
+                                        c1[1] - c2[1],
+                                        c1[2] - c2[2],
+                                        node1,
+                                        (width1 * w1) >> 1,
+                                        node2,
+                                        (width2 * w2) >> 1,
+                                        w2,
+                                        depth,
+                                        F,
+                                        processCurrent);
     }
     template <class NodeData, class Real>
     template <class NodeAdjacencyFunction>
     void
     OctNode<NodeData, Real>::ProcessMaxDepthNodeAdjacentNodes (
-        int dx, int dy, int dz, OctNode<NodeData, Real> *node1, int radius1,
-        OctNode<NodeData, Real> *node2, int radius2, int width2, int depth,
-        NodeAdjacencyFunction *F, int processCurrent)
+        int dx,
+        int dy,
+        int dz,
+        OctNode<NodeData, Real> *node1,
+        int radius1,
+        OctNode<NodeData, Real> *node2,
+        int radius2,
+        int width2,
+        int depth,
+        NodeAdjacencyFunction *F,
+        int processCurrent)
     {
       int d = node2->depth ();
       if (d > depth) {
@@ -768,16 +869,20 @@ namespace pcl
         F->Function (node2, node1);
       }
       if (d < depth && node2->children) {
-        __ProcessMaxDepthNodeAdjacentNodes (-dx, -dy, -dz, node1, radius1, node2,
-                                            radius2, width2 >> 1, depth - 1, F);
+        __ProcessMaxDepthNodeAdjacentNodes (
+            -dx, -dy, -dz, node1, radius1, node2, radius2, width2 >> 1, depth - 1, F);
       }
     }
     template <class NodeData, class Real>
     template <class NodeAdjacencyFunction>
     void
-    OctNode<NodeData, Real>::__ProcessNodeAdjacentNodes (int dx, int dy, int dz,
-                                                         OctNode *node1, int radius1,
-                                                         OctNode *node2, int radius2,
+    OctNode<NodeData, Real>::__ProcessNodeAdjacentNodes (int dx,
+                                                         int dy,
+                                                         int dz,
+                                                         OctNode *node1,
+                                                         int radius1,
+                                                         OctNode *node2,
+                                                         int radius2,
                                                          int cWidth2,
                                                          NodeAdjacencyFunction *F)
     {
@@ -794,57 +899,57 @@ namespace pcl
         if (o & 1) {
           F->Function (&node2->children[0], node1);
           if (node2->children[0].children) {
-            __ProcessNodeAdjacentNodes (dx1, dy1, dz1, node1, radius1,
-                                        &node2->children[0], radius, cWidth, F);
+            __ProcessNodeAdjacentNodes (
+                dx1, dy1, dz1, node1, radius1, &node2->children[0], radius, cWidth, F);
           }
         }
         if (o & 2) {
           F->Function (&node2->children[1], node1);
           if (node2->children[1].children) {
-            __ProcessNodeAdjacentNodes (dx2, dy1, dz1, node1, radius1,
-                                        &node2->children[1], radius, cWidth, F);
+            __ProcessNodeAdjacentNodes (
+                dx2, dy1, dz1, node1, radius1, &node2->children[1], radius, cWidth, F);
           }
         }
         if (o & 4) {
           F->Function (&node2->children[2], node1);
           if (node2->children[2].children) {
-            __ProcessNodeAdjacentNodes (dx1, dy2, dz1, node1, radius1,
-                                        &node2->children[2], radius, cWidth, F);
+            __ProcessNodeAdjacentNodes (
+                dx1, dy2, dz1, node1, radius1, &node2->children[2], radius, cWidth, F);
           }
         }
         if (o & 8) {
           F->Function (&node2->children[3], node1);
           if (node2->children[3].children) {
-            __ProcessNodeAdjacentNodes (dx2, dy2, dz1, node1, radius1,
-                                        &node2->children[3], radius, cWidth, F);
+            __ProcessNodeAdjacentNodes (
+                dx2, dy2, dz1, node1, radius1, &node2->children[3], radius, cWidth, F);
           }
         }
         if (o & 16) {
           F->Function (&node2->children[4], node1);
           if (node2->children[4].children) {
-            __ProcessNodeAdjacentNodes (dx1, dy1, dz2, node1, radius1,
-                                        &node2->children[4], radius, cWidth, F);
+            __ProcessNodeAdjacentNodes (
+                dx1, dy1, dz2, node1, radius1, &node2->children[4], radius, cWidth, F);
           }
         }
         if (o & 32) {
           F->Function (&node2->children[5], node1);
           if (node2->children[5].children) {
-            __ProcessNodeAdjacentNodes (dx2, dy1, dz2, node1, radius1,
-                                        &node2->children[5], radius, cWidth, F);
+            __ProcessNodeAdjacentNodes (
+                dx2, dy1, dz2, node1, radius1, &node2->children[5], radius, cWidth, F);
           }
         }
         if (o & 64) {
           F->Function (&node2->children[6], node1);
           if (node2->children[6].children) {
-            __ProcessNodeAdjacentNodes (dx1, dy2, dz2, node1, radius1,
-                                        &node2->children[6], radius, cWidth, F);
+            __ProcessNodeAdjacentNodes (
+                dx1, dy2, dz2, node1, radius1, &node2->children[6], radius, cWidth, F);
           }
         }
         if (o & 128) {
           F->Function (&node2->children[7], node1);
           if (node2->children[7].children) {
-            __ProcessNodeAdjacentNodes (dx2, dy2, dz2, node1, radius1,
-                                        &node2->children[7], radius, cWidth, F);
+            __ProcessNodeAdjacentNodes (
+                dx2, dy2, dz2, node1, radius1, &node2->children[7], radius, cWidth, F);
           }
         }
       }
@@ -853,8 +958,15 @@ namespace pcl
     template <class TerminatingNodeAdjacencyFunction>
     void
     OctNode<NodeData, Real>::__ProcessTerminatingNodeAdjacentNodes (
-        int dx, int dy, int dz, OctNode *node1, int radius1, OctNode *node2,
-        int radius2, int cWidth2, TerminatingNodeAdjacencyFunction *F)
+        int dx,
+        int dy,
+        int dz,
+        OctNode *node1,
+        int radius1,
+        OctNode *node2,
+        int radius2,
+        int cWidth2,
+        TerminatingNodeAdjacencyFunction *F)
     {
       int cWidth = cWidth2 >> 1;
       int radius = radius2 >> 1;
@@ -919,8 +1031,11 @@ namespace pcl
     template <class NodeData, class Real>
     template <class PointAdjacencyFunction>
     void
-    OctNode<NodeData, Real>::__ProcessPointAdjacentNodes (int dx, int dy, int dz,
-                                                          OctNode *node2, int radius2,
+    OctNode<NodeData, Real>::__ProcessPointAdjacentNodes (int dx,
+                                                          int dy,
+                                                          int dz,
+                                                          OctNode *node2,
+                                                          int radius2,
                                                           int cWidth2,
                                                           PointAdjacencyFunction *F)
     {
@@ -937,57 +1052,57 @@ namespace pcl
         if (o & 1) {
           F->Function (&node2->children[0]);
           if (node2->children[0].children) {
-            __ProcessPointAdjacentNodes (dx1, dy1, dz1, &node2->children[0], radius,
-                                         cWidth, F);
+            __ProcessPointAdjacentNodes (
+                dx1, dy1, dz1, &node2->children[0], radius, cWidth, F);
           }
         }
         if (o & 2) {
           F->Function (&node2->children[1]);
           if (node2->children[1].children) {
-            __ProcessPointAdjacentNodes (dx2, dy1, dz1, &node2->children[1], radius,
-                                         cWidth, F);
+            __ProcessPointAdjacentNodes (
+                dx2, dy1, dz1, &node2->children[1], radius, cWidth, F);
           }
         }
         if (o & 4) {
           F->Function (&node2->children[2]);
           if (node2->children[2].children) {
-            __ProcessPointAdjacentNodes (dx1, dy2, dz1, &node2->children[2], radius,
-                                         cWidth, F);
+            __ProcessPointAdjacentNodes (
+                dx1, dy2, dz1, &node2->children[2], radius, cWidth, F);
           }
         }
         if (o & 8) {
           F->Function (&node2->children[3]);
           if (node2->children[3].children) {
-            __ProcessPointAdjacentNodes (dx2, dy2, dz1, &node2->children[3], radius,
-                                         cWidth, F);
+            __ProcessPointAdjacentNodes (
+                dx2, dy2, dz1, &node2->children[3], radius, cWidth, F);
           }
         }
         if (o & 16) {
           F->Function (&node2->children[4]);
           if (node2->children[4].children) {
-            __ProcessPointAdjacentNodes (dx1, dy1, dz2, &node2->children[4], radius,
-                                         cWidth, F);
+            __ProcessPointAdjacentNodes (
+                dx1, dy1, dz2, &node2->children[4], radius, cWidth, F);
           }
         }
         if (o & 32) {
           F->Function (&node2->children[5]);
           if (node2->children[5].children) {
-            __ProcessPointAdjacentNodes (dx2, dy1, dz2, &node2->children[5], radius,
-                                         cWidth, F);
+            __ProcessPointAdjacentNodes (
+                dx2, dy1, dz2, &node2->children[5], radius, cWidth, F);
           }
         }
         if (o & 64) {
           F->Function (&node2->children[6]);
           if (node2->children[6].children) {
-            __ProcessPointAdjacentNodes (dx1, dy2, dz2, &node2->children[6], radius,
-                                         cWidth, F);
+            __ProcessPointAdjacentNodes (
+                dx1, dy2, dz2, &node2->children[6], radius, cWidth, F);
           }
         }
         if (o & 128) {
           F->Function (&node2->children[7]);
           if (node2->children[7].children) {
-            __ProcessPointAdjacentNodes (dx2, dy2, dz2, &node2->children[7], radius,
-                                         cWidth, F);
+            __ProcessPointAdjacentNodes (
+                dx2, dy2, dz2, &node2->children[7], radius, cWidth, F);
           }
         }
       }
@@ -996,8 +1111,16 @@ namespace pcl
     template <class NodeAdjacencyFunction>
     void
     OctNode<NodeData, Real>::__ProcessFixedDepthNodeAdjacentNodes (
-        int dx, int dy, int dz, OctNode *node1, int radius1, OctNode *node2,
-        int radius2, int cWidth2, int depth, NodeAdjacencyFunction *F)
+        int dx,
+        int dy,
+        int dz,
+        OctNode *node1,
+        int radius1,
+        OctNode *node2,
+        int radius2,
+        int cWidth2,
+        int depth,
+        NodeAdjacencyFunction *F)
     {
       int cWidth = cWidth2 >> 1;
       int radius = radius2 >> 1;
@@ -1037,58 +1160,114 @@ namespace pcl
         } else {
           if (o & 1) {
             if (node2->children[0].children) {
-              __ProcessFixedDepthNodeAdjacentNodes (dx1, dy1, dz1, node1, radius1,
-                                                    &node2->children[0], radius, cWidth,
-                                                    depth, F);
+              __ProcessFixedDepthNodeAdjacentNodes (dx1,
+                                                    dy1,
+                                                    dz1,
+                                                    node1,
+                                                    radius1,
+                                                    &node2->children[0],
+                                                    radius,
+                                                    cWidth,
+                                                    depth,
+                                                    F);
             }
           }
           if (o & 2) {
             if (node2->children[1].children) {
-              __ProcessFixedDepthNodeAdjacentNodes (dx2, dy1, dz1, node1, radius1,
-                                                    &node2->children[1], radius, cWidth,
-                                                    depth, F);
+              __ProcessFixedDepthNodeAdjacentNodes (dx2,
+                                                    dy1,
+                                                    dz1,
+                                                    node1,
+                                                    radius1,
+                                                    &node2->children[1],
+                                                    radius,
+                                                    cWidth,
+                                                    depth,
+                                                    F);
             }
           }
           if (o & 4) {
             if (node2->children[2].children) {
-              __ProcessFixedDepthNodeAdjacentNodes (dx1, dy2, dz1, node1, radius1,
-                                                    &node2->children[2], radius, cWidth,
-                                                    depth, F);
+              __ProcessFixedDepthNodeAdjacentNodes (dx1,
+                                                    dy2,
+                                                    dz1,
+                                                    node1,
+                                                    radius1,
+                                                    &node2->children[2],
+                                                    radius,
+                                                    cWidth,
+                                                    depth,
+                                                    F);
             }
           }
           if (o & 8) {
             if (node2->children[3].children) {
-              __ProcessFixedDepthNodeAdjacentNodes (dx2, dy2, dz1, node1, radius1,
-                                                    &node2->children[3], radius, cWidth,
-                                                    depth, F);
+              __ProcessFixedDepthNodeAdjacentNodes (dx2,
+                                                    dy2,
+                                                    dz1,
+                                                    node1,
+                                                    radius1,
+                                                    &node2->children[3],
+                                                    radius,
+                                                    cWidth,
+                                                    depth,
+                                                    F);
             }
           }
           if (o & 16) {
             if (node2->children[4].children) {
-              __ProcessFixedDepthNodeAdjacentNodes (dx1, dy1, dz2, node1, radius1,
-                                                    &node2->children[4], radius, cWidth,
-                                                    depth, F);
+              __ProcessFixedDepthNodeAdjacentNodes (dx1,
+                                                    dy1,
+                                                    dz2,
+                                                    node1,
+                                                    radius1,
+                                                    &node2->children[4],
+                                                    radius,
+                                                    cWidth,
+                                                    depth,
+                                                    F);
             }
           }
           if (o & 32) {
             if (node2->children[5].children) {
-              __ProcessFixedDepthNodeAdjacentNodes (dx2, dy1, dz2, node1, radius1,
-                                                    &node2->children[5], radius, cWidth,
-                                                    depth, F);
+              __ProcessFixedDepthNodeAdjacentNodes (dx2,
+                                                    dy1,
+                                                    dz2,
+                                                    node1,
+                                                    radius1,
+                                                    &node2->children[5],
+                                                    radius,
+                                                    cWidth,
+                                                    depth,
+                                                    F);
             }
           }
           if (o & 64) {
             if (node2->children[6].children) {
-              __ProcessFixedDepthNodeAdjacentNodes (dx1, dy2, dz2, node1, radius1,
-                                                    &node2->children[6], radius, cWidth,
-                                                    depth, F);
+              __ProcessFixedDepthNodeAdjacentNodes (dx1,
+                                                    dy2,
+                                                    dz2,
+                                                    node1,
+                                                    radius1,
+                                                    &node2->children[6],
+                                                    radius,
+                                                    cWidth,
+                                                    depth,
+                                                    F);
             }
           }
           if (o & 128) {
             if (node2->children[7].children) {
-              __ProcessFixedDepthNodeAdjacentNodes (dx2, dy2, dz2, node1, radius1,
-                                                    &node2->children[7], radius, cWidth,
-                                                    depth, F);
+              __ProcessFixedDepthNodeAdjacentNodes (dx2,
+                                                    dy2,
+                                                    dz2,
+                                                    node1,
+                                                    radius1,
+                                                    &node2->children[7],
+                                                    radius,
+                                                    cWidth,
+                                                    depth,
+                                                    F);
             }
           }
         }
@@ -1098,8 +1277,16 @@ namespace pcl
     template <class NodeAdjacencyFunction>
     void
     OctNode<NodeData, Real>::__ProcessMaxDepthNodeAdjacentNodes (
-        int dx, int dy, int dz, OctNode *node1, int radius1, OctNode *node2,
-        int radius2, int cWidth2, int depth, NodeAdjacencyFunction *F)
+        int dx,
+        int dy,
+        int dz,
+        OctNode *node1,
+        int radius1,
+        OctNode *node2,
+        int radius2,
+        int cWidth2,
+        int depth,
+        NodeAdjacencyFunction *F)
     {
       int cWidth = cWidth2 >> 1;
       int radius = radius2 >> 1;
@@ -1140,58 +1327,114 @@ namespace pcl
         if (node2->depth () < depth) {
           if (o & 1) {
             if (node2->children[0].children) {
-              __ProcessMaxDepthNodeAdjacentNodes (dx1, dy1, dz1, node1, radius1,
-                                                  &node2->children[0], radius, cWidth,
-                                                  depth, F);
+              __ProcessMaxDepthNodeAdjacentNodes (dx1,
+                                                  dy1,
+                                                  dz1,
+                                                  node1,
+                                                  radius1,
+                                                  &node2->children[0],
+                                                  radius,
+                                                  cWidth,
+                                                  depth,
+                                                  F);
             }
           }
           if (o & 2) {
             if (node2->children[1].children) {
-              __ProcessMaxDepthNodeAdjacentNodes (dx2, dy1, dz1, node1, radius1,
-                                                  &node2->children[1], radius, cWidth,
-                                                  depth, F);
+              __ProcessMaxDepthNodeAdjacentNodes (dx2,
+                                                  dy1,
+                                                  dz1,
+                                                  node1,
+                                                  radius1,
+                                                  &node2->children[1],
+                                                  radius,
+                                                  cWidth,
+                                                  depth,
+                                                  F);
             }
           }
           if (o & 4) {
             if (node2->children[2].children) {
-              __ProcessMaxDepthNodeAdjacentNodes (dx1, dy2, dz1, node1, radius1,
-                                                  &node2->children[2], radius, cWidth,
-                                                  depth, F);
+              __ProcessMaxDepthNodeAdjacentNodes (dx1,
+                                                  dy2,
+                                                  dz1,
+                                                  node1,
+                                                  radius1,
+                                                  &node2->children[2],
+                                                  radius,
+                                                  cWidth,
+                                                  depth,
+                                                  F);
             }
           }
           if (o & 8) {
             if (node2->children[3].children) {
-              __ProcessMaxDepthNodeAdjacentNodes (dx2, dy2, dz1, node1, radius1,
-                                                  &node2->children[3], radius, cWidth,
-                                                  depth, F);
+              __ProcessMaxDepthNodeAdjacentNodes (dx2,
+                                                  dy2,
+                                                  dz1,
+                                                  node1,
+                                                  radius1,
+                                                  &node2->children[3],
+                                                  radius,
+                                                  cWidth,
+                                                  depth,
+                                                  F);
             }
           }
           if (o & 16) {
             if (node2->children[4].children) {
-              __ProcessMaxDepthNodeAdjacentNodes (dx1, dy1, dz2, node1, radius1,
-                                                  &node2->children[4], radius, cWidth,
-                                                  depth, F);
+              __ProcessMaxDepthNodeAdjacentNodes (dx1,
+                                                  dy1,
+                                                  dz2,
+                                                  node1,
+                                                  radius1,
+                                                  &node2->children[4],
+                                                  radius,
+                                                  cWidth,
+                                                  depth,
+                                                  F);
             }
           }
           if (o & 32) {
             if (node2->children[5].children) {
-              __ProcessMaxDepthNodeAdjacentNodes (dx2, dy1, dz2, node1, radius1,
-                                                  &node2->children[5], radius, cWidth,
-                                                  depth, F);
+              __ProcessMaxDepthNodeAdjacentNodes (dx2,
+                                                  dy1,
+                                                  dz2,
+                                                  node1,
+                                                  radius1,
+                                                  &node2->children[5],
+                                                  radius,
+                                                  cWidth,
+                                                  depth,
+                                                  F);
             }
           }
           if (o & 64) {
             if (node2->children[6].children) {
-              __ProcessMaxDepthNodeAdjacentNodes (dx1, dy2, dz2, node1, radius1,
-                                                  &node2->children[6], radius, cWidth,
-                                                  depth, F);
+              __ProcessMaxDepthNodeAdjacentNodes (dx1,
+                                                  dy2,
+                                                  dz2,
+                                                  node1,
+                                                  radius1,
+                                                  &node2->children[6],
+                                                  radius,
+                                                  cWidth,
+                                                  depth,
+                                                  F);
             }
           }
           if (o & 128) {
             if (node2->children[7].children) {
-              __ProcessMaxDepthNodeAdjacentNodes (dx2, dy2, dz2, node1, radius1,
-                                                  &node2->children[7], radius, cWidth,
-                                                  depth, F);
+              __ProcessMaxDepthNodeAdjacentNodes (dx2,
+                                                  dy2,
+                                                  dz2,
+                                                  node1,
+                                                  radius1,
+                                                  &node2->children[7],
+                                                  radius,
+                                                  cWidth,
+                                                  depth,
+                                                  F);
             }
           }
         }
@@ -1475,8 +1718,10 @@ namespace pcl
     }
     template <class NodeData, class Real>
     inline int
-    OctNode<NodeData, Real>::Overlap2 (const int &depth1, const int offSet1[DIMENSION],
-                                       const Real &multiplier1, const int &depth2,
+    OctNode<NodeData, Real>::Overlap2 (const int &depth1,
+                                       const int offSet1[DIMENSION],
+                                       const Real &multiplier1,
+                                       const int &depth2,
                                        const int offSet2[DIMENSION],
                                        const Real &multiplier2)
     {
@@ -1606,7 +1851,8 @@ namespace pcl
     }
     template <class NodeData, class Real>
     const OctNode<NodeData, Real> *
-    OctNode<NodeData, Real>::__edgeNeighbor (int o, const int i[2],
+    OctNode<NodeData, Real>::__edgeNeighbor (int o,
+                                             const int i[2],
                                              const int idx[2]) const
     {
       if (!parent) {
@@ -1650,7 +1896,9 @@ namespace pcl
     }
     template <class NodeData, class Real>
     OctNode<NodeData, Real> *
-    OctNode<NodeData, Real>::__edgeNeighbor (int o, const int i[2], const int idx[2],
+    OctNode<NodeData, Real>::__edgeNeighbor (int o,
+                                             const int i[2],
+                                             const int idx[2],
                                              int forceChildren)
     {
       if (!parent) {
@@ -1903,7 +2151,8 @@ namespace pcl
     template <class NodeData, class Real>
     typename OctNode<NodeData, Real>::Neighbors3 &
     OctNode<NodeData, Real>::NeighborKey3::setNeighbors (OctNode<NodeData, Real> *root,
-                                                         Point3D<Real> p, int d)
+                                                         Point3D<Real> p,
+                                                         int d)
     {
       if (!neighbors[d].neighbors[1][1][1] ||
           !neighbors[d].neighbors[1][1][1]->isInside (p)) {
@@ -2000,7 +2249,8 @@ namespace pcl
     template <class NodeData, class Real>
     typename OctNode<NodeData, Real>::Neighbors3 &
     OctNode<NodeData, Real>::NeighborKey3::getNeighbors (OctNode<NodeData, Real> *root,
-                                                         Point3D<Real> p, int d)
+                                                         Point3D<Real> p,
+                                                         int d)
     {
       if (!neighbors[d].neighbors[1][1][1] ||
           !neighbors[d].neighbors[1][1][1]->isInside (p)) {
@@ -2909,9 +3159,8 @@ namespace pcl
     }
     template <class NodeData, class Real>
     typename OctNode<NodeData, Real>::Neighbors5 &
-    OctNode<NodeData, Real>::NeighborKey5::setNeighbors (OctNode *node, int xStart,
-                                                         int xEnd, int yStart, int yEnd,
-                                                         int zStart, int zEnd)
+    OctNode<NodeData, Real>::NeighborKey5::setNeighbors (
+        OctNode *node, int xStart, int xEnd, int yStart, int yEnd, int zStart, int zEnd)
     {
       int d = node->depth ();
       if (node != neighbors[d].neighbors[2][2][2]) {

@@ -232,9 +232,11 @@ namespace pcl
         if (cardinality_ ==
             2) // Special case: when two points are considered, we only have one edge
         {
-          return (thresholdEdgeLength (
-              corr[idx[0]].index_query, corr[idx[1]].index_query,
-              corr[idx[0]].index_match, corr[idx[1]].index_match, cardinality_));
+          return (thresholdEdgeLength (corr[idx[0]].index_query,
+                                       corr[idx[1]].index_query,
+                                       corr[idx[0]].index_match,
+                                       corr[idx[1]].index_match,
+                                       cardinality_));
         } else { // Otherwise check all edges
           for (int i = 0; i < cardinality_; ++i)
             if (!thresholdEdgeLength (corr[idx[i]].index_query,
@@ -335,8 +337,11 @@ namespace pcl
        * \return true if edge length ratio is larger than or equal to threshold
        */
       inline bool
-      thresholdEdgeLength (int index_query_1, int index_query_2, int index_match_1,
-                           int index_match_2, float simsq)
+      thresholdEdgeLength (int index_query_1,
+                           int index_query_2,
+                           int index_match_1,
+                           int index_match_2,
+                           float simsq)
       {
         // Distance between source points
         const float dist_src =
@@ -358,7 +363,9 @@ namespace pcl
        * bins number of bins in output \return linear histogram
        */
       std::vector<int>
-      computeHistogram (const std::vector<float> &data, float lower, float upper,
+      computeHistogram (const std::vector<float> &data,
+                        float lower,
+                        float upper,
                         int bins);
 
       /** \brief Find the optimal value for binary histogram thresholding using Otsu's

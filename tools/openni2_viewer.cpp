@@ -226,9 +226,15 @@ class OpenNI2Viewer
         if (!cloud_viewer_->updatePointCloud (cloud, "OpenNICloud")) {
           cloud_viewer_->addPointCloud (cloud, "OpenNICloud");
           cloud_viewer_->resetCameraViewpoint ("OpenNICloud");
-          cloud_viewer_->setCameraPosition (0, 0, 0,   // Position
-                                            0, 0, 1,   // Viewpoint
-                                            0, -1, 0); // Up
+          cloud_viewer_->setCameraPosition (0,
+                                            0,
+                                            0, // Position
+                                            0,
+                                            0,
+                                            1, // Viewpoint
+                                            0,
+                                            -1,
+                                            0); // Up
         }
       }
 
@@ -247,10 +253,11 @@ class OpenNI2Viewer
 
         if (image->getEncoding () == pcl::io::openni2::Image::RGB)
           image_viewer_->addRGBImage ((const unsigned char *)image->getData (),
-                                      image->getWidth (), image->getHeight ());
-        else
-          image_viewer_->addRGBImage (rgb_data_, image->getWidth (),
+                                      image->getWidth (),
                                       image->getHeight ());
+        else
+          image_viewer_->addRGBImage (
+              rgb_data_, image->getWidth (), image->getHeight ());
         image_viewer_->spinOnce ();
       }
     }
@@ -306,7 +313,8 @@ main (int argc, char **argv)
             pcl::io::openni2::OpenNI2DeviceManager::getInstance ();
         if (deviceManager->getNumOfConnectedDevices () > 0) {
           for (size_t deviceIdx = 0;
-               deviceIdx < deviceManager->getNumOfConnectedDevices (); ++deviceIdx) {
+               deviceIdx < deviceManager->getNumOfConnectedDevices ();
+               ++deviceIdx) {
             boost::shared_ptr<pcl::io::openni2::OpenNI2Device> device =
                 deviceManager->getDeviceByIndex (deviceIdx);
             cout << "Device " << device->getStringID () << "connected." << endl;

@@ -205,10 +205,7 @@ ON_PolyCurve::SwapCoordinates (int i, int j)
 }
 
 ON_BOOL32
-ON_PolyCurve::IsValid (ON_TextLog *text_log) const
-{
-  return IsValid (false, text_log);
-}
+ON_PolyCurve::IsValid (ON_TextLog *text_log) const { return IsValid (false, text_log); }
 
 bool
 ON_PolyCurve::IsValid (bool bAllowGaps, ON_TextLog *text_log) const
@@ -227,7 +224,8 @@ ON_PolyCurve::IsValid (bool bAllowGaps, ON_TextLog *text_log) const
     if (text_log)
       text_log->Print ("Polycurve segment count = %d and m_t.Count()=%d (should be "
                        "segment count+1)\n",
-                       count, m_t.Count ());
+                       count,
+                       m_t.Count ());
     return ON_IsNotValid ();
   }
 
@@ -250,22 +248,26 @@ ON_PolyCurve::IsValid (bool bAllowGaps, ON_TextLog *text_log) const
     if (seg_dim != dim) {
       if (text_log)
         text_log->Print ("Polycurve segment[%d]->Dimension()=%d (should be %d).\n",
-                         segment_index, seg_dim, dim);
+                         segment_index,
+                         seg_dim,
+                         dim);
       return ON_IsNotValid (); // all segments must have same dimension
     }
 
     if (m_t[segment_index] >= m_t[segment_index + 1]) {
       if (text_log)
         text_log->Print ("Polycurve m_t[%d]=%g and m_t[%d]=%g (should be increasing)\n",
-                         segment_index, m_t[segment_index], segment_index + 1,
+                         segment_index,
+                         m_t[segment_index],
+                         segment_index + 1,
                          m_t[segment_index + 1]);
       return ON_IsNotValid (); // segment domain must be non-empty
     }
 
     if (count > 1 && !bAllowGaps && m_segment[segment_index]->IsClosed ()) {
       if (text_log)
-        text_log->Print ("Polycurve segment[%d] is closed (%d segments).\n",
-                         segment_index, count);
+        text_log->Print (
+            "Polycurve segment[%d] is closed (%d segments).\n", segment_index, count);
       return ON_IsNotValid (); // closed segments not permitted in multi segment curve
     }
   }
@@ -280,7 +282,9 @@ ON_PolyCurve::IsValid (bool bAllowGaps, ON_TextLog *text_log) const
       if (text_log)
         text_log->Print (
             "Polycurve end of segment[%d] != start of segment[%d] (distance=%g)\n",
-            gap_index - 1, gap_index, d);
+            gap_index - 1,
+            gap_index,
+            d);
       return ON_IsNotValid (); // not contiguous
     }
   }
@@ -628,7 +632,8 @@ ON_PolyCurve::ChangeClosedCurveSeam (double t)
 
           // take care when moving new_c pointers to m_segment
           // so that we don't delete any curves.
-          memset (m_segment.Array (), 0,
+          memset (m_segment.Array (),
+                  0,
                   m_segment.Capacity () * sizeof (*m_segment.Array ()));
           m_segment.SetCount (0);
           m_segment.Append (new_c.Count (), new_c.Array ());
@@ -951,7 +956,9 @@ GetLineIsoCoordinates (const ON_Line &line, const ON_3dPoint P, ON_3dPoint &C)
 }
 
 static void
-LineLineTieBreaker (const ON_Line &line0, const ON_Line &line1, ON_3dPoint &Q0,
+LineLineTieBreaker (const ON_Line &line0,
+                    const ON_Line &line1,
+                    ON_3dPoint &Q0,
                     ON_3dPoint &Q1)
 {
   double line0_length = line0.Length ();
@@ -1078,12 +1085,14 @@ ON_PolyCurve::CloseGap (int gap_index, int ends_to_modify)
     ON_Line line0, line1;
     double min_line_length = 0.0;
     double is_linear_tolerance = 0.0;
-    bool bLine0 = (0 == arc0) ? c0->LastSpanIsLinear (min_line_length,
-                                                      is_linear_tolerance, &line0)
-                              : false;
-    bool bLine1 = (0 == arc0) ? c1->FirstSpanIsLinear (min_line_length,
-                                                       is_linear_tolerance, &line1)
-                              : false;
+    bool bLine0 =
+        (0 == arc0)
+            ? c0->LastSpanIsLinear (min_line_length, is_linear_tolerance, &line0)
+            : false;
+    bool bLine1 =
+        (0 == arc0)
+            ? c1->FirstSpanIsLinear (min_line_length, is_linear_tolerance, &line1)
+            : false;
     if (bLine0 && bLine1)
       LineLineTieBreaker (line0, line1, Q0, Q1);
     else if (bLine0)
@@ -1223,8 +1232,13 @@ ON_PolyCurve::IsPeriodic () const
 }
 
 bool
-ON_PolyCurve::GetNextDiscontinuity (ON::continuity c, double t0, double t1, double *t,
-                                    int *hint, int *dtype, double cos_angle_tolerance,
+ON_PolyCurve::GetNextDiscontinuity (ON::continuity c,
+                                    double t0,
+                                    double t1,
+                                    double *t,
+                                    int *hint,
+                                    int *dtype,
+                                    double cos_angle_tolerance,
                                     double curvature_tolerance) const
 {
   ON_3dPoint Pm, Pp;
@@ -1304,8 +1318,8 @@ ON_PolyCurve::GetNextDiscontinuity (ON::continuity c, double t0, double t1, doub
         s0 = cdom.ParameterAt (sdom.NormalizedParameterAt (t0));
         s1 = cdom.ParameterAt (sdom.NormalizedParameterAt (t1));
       }
-      rc = crv->GetNextDiscontinuity (c, s0, s1, &s, &curve_hint, dtype,
-                                      cos_angle_tolerance, curvature_tolerance);
+      rc = crv->GetNextDiscontinuity (
+          c, s0, s1, &s, &curve_hint, dtype, cos_angle_tolerance, curvature_tolerance);
       if (rc) {
         double kink_t;
         if (sdom == cdom) {
@@ -1341,8 +1355,14 @@ ON_PolyCurve::GetNextDiscontinuity (ON::continuity c, double t0, double t1, doub
               else
                 s1 = s1 - s_tol;
             }
-            rc = crv->GetNextDiscontinuity (c, s0, s1, &s, &curve_hint, dtype,
-                                            cos_angle_tolerance, curvature_tolerance);
+            rc = crv->GetNextDiscontinuity (c,
+                                            s0,
+                                            s1,
+                                            &s,
+                                            &curve_hint,
+                                            dtype,
+                                            cos_angle_tolerance,
+                                            curvature_tolerance);
             if (rc) {
               kink_t = sdom.ParameterAt (cdom.NormalizedParameterAt (s));
               if (kink_t <= tmin || kink_t >= tmax)
@@ -1425,7 +1445,10 @@ ON_PolyCurve::GetNextDiscontinuity (ON::continuity c, double t0, double t1, doub
       case ON::G2_continuous:
       case ON::Gsmooth_continuous:
         crv->Ev2Der (crv0_t, Pm, D1m, D2m, crv0_side); // point on this curve
-        crv1->Ev2Der (crv1_t, Pp, D1p, D2p,
+        crv1->Ev2Der (crv1_t,
+                      Pp,
+                      D1p,
+                      D2p,
                       -crv0_side); // corresponding point on next curve
         if (c == ON::C2_continuous) {
           if (!(D1m - D1p).IsTiny (D1m.MaximumCoordinate () * ON_SQRT_EPSILON)) {
@@ -1447,10 +1470,10 @@ ON_PolyCurve::GetNextDiscontinuity (ON::continuity c, double t0, double t1, doub
           } else {
             bool bIsCurvatureContinuous =
                 (ON::Gsmooth_continuous == c)
-                    ? ON_IsGsmoothCurvatureContinuous (Km, Kp, cos_angle_tolerance,
-                                                       curvature_tolerance)
-                    : ON_IsG2CurvatureContinuous (Km, Kp, cos_angle_tolerance,
-                                                  curvature_tolerance);
+                    ? ON_IsGsmoothCurvatureContinuous (
+                          Km, Kp, cos_angle_tolerance, curvature_tolerance)
+                    : ON_IsG2CurvatureContinuous (
+                          Km, Kp, cos_angle_tolerance, curvature_tolerance);
             if (!bIsCurvatureContinuous) {
               // NOTE:
               //   The test to enter this scope must exactly match
@@ -1501,8 +1524,8 @@ ON_PolyCurve::GetNextDiscontinuity (ON::continuity c, double t0, double t1, doub
     if (!rc && input_c != c) {
       // 20 March 2003 Dale Lear
       //   See if we need to do a locus check at an end
-      rc = ON_Curve::GetNextDiscontinuity (input_c, t0, t1, t, NULL, dtype,
-                                           cos_angle_tolerance, curvature_tolerance);
+      rc = ON_Curve::GetNextDiscontinuity (
+          input_c, t0, t1, t, NULL, dtype, cos_angle_tolerance, curvature_tolerance);
     }
   }
   return rc;
@@ -1510,7 +1533,8 @@ ON_PolyCurve::GetNextDiscontinuity (ON::continuity c, double t0, double t1, doub
 
 bool
 ON_PolyCurve::IsContinuous (
-    ON::continuity desired_continuity, double t,
+    ON::continuity desired_continuity,
+    double t,
     int *hint,                  // default = NULL,
     double point_tolerance,     // default=ON_ZERO_TOLERANCE
     double d1_tolerance,        // default==ON_ZERO_TOLERANCE
@@ -1525,8 +1549,13 @@ ON_PolyCurve::IsContinuous (
     if (t <= m_t[0] || t >= m_t[count]) {
       // 20 March 2003 Dale Lear
       //     Consistently handles locus case and out of domain case.
-      rc = ON_Curve::IsContinuous (desired_continuity, t, hint, point_tolerance,
-                                   d1_tolerance, d2_tolerance, cos_angle_tolerance,
+      rc = ON_Curve::IsContinuous (desired_continuity,
+                                   t,
+                                   hint,
+                                   point_tolerance,
+                                   d1_tolerance,
+                                   d2_tolerance,
+                                   cos_angle_tolerance,
                                    curvature_tolerance);
       return rc;
     }
@@ -1578,9 +1607,14 @@ ON_PolyCurve::IsContinuous (
         sdom.Set (m_t[segment_index], m_t[segment_index + 1]);
         if (sdom != cdom)
           t = cdom.ParameterAt (sdom.NormalizedParameterAt (t));
-        rc = segment_curve->IsContinuous (desired_continuity, t, &curve_hint,
-                                          point_tolerance, d1_tolerance, d2_tolerance,
-                                          cos_angle_tolerance, curvature_tolerance);
+        rc = segment_curve->IsContinuous (desired_continuity,
+                                          t,
+                                          &curve_hint,
+                                          point_tolerance,
+                                          d1_tolerance,
+                                          d2_tolerance,
+                                          cos_angle_tolerance,
+                                          curvature_tolerance);
         if (hint)
           *hint = (segment_index | (curve_hint << 14));
       }
@@ -1591,8 +1625,13 @@ ON_PolyCurve::IsContinuous (
         rc = true; // t and end of domain
       else {
         // evaluate ends of segments
-        rc = ON_Curve::IsContinuous (desired_continuity, t, hint, point_tolerance,
-                                     d1_tolerance, d2_tolerance, cos_angle_tolerance,
+        rc = ON_Curve::IsContinuous (desired_continuity,
+                                     t,
+                                     hint,
+                                     point_tolerance,
+                                     d1_tolerance,
+                                     d2_tolerance,
+                                     cos_angle_tolerance,
                                      curvature_tolerance);
         if (0 != rc && ON::Gsmooth_continuous == desired_continuity &&
             segment_index >= 0 && segment_index < count) {
@@ -1639,8 +1678,10 @@ ON_PolyCurve::Reverse ()
 }
 
 bool
-ON_TuneupEvaluationParameter (int side, double s0, double s1, // segment domain
-                              double *s                       // segment parameter
+ON_TuneupEvaluationParameter (int side,
+                              double s0,
+                              double s1, // segment domain
+                              double *s  // segment parameter
 )
 {
   double t = *s;
@@ -1702,8 +1743,8 @@ ON_PolyCurve::Evaluate ( // returns false if unable to evaluate
       //   to indicate that if t is numerically closed to an end paramter, then
       //   it should be tuned up to be at the end paramter.
       double a = t;
-      if (ON_TuneupEvaluationParameter (side, m_t[segment_index],
-                                        m_t[segment_index + 1], &a)) {
+      if (ON_TuneupEvaluationParameter (
+              side, m_t[segment_index], m_t[segment_index + 1], &a)) {
         // recalculate segment index
         t = a;
         segment_index = ON_NurbsSpanIndex (2, count + 1, m_t, t, side, segment_index);
@@ -1901,10 +1942,7 @@ ON_PolyCurve::AppendAndMatch (ON_Curve *c)
 }
 
 ON_BOOL32
-ON_PolyCurve::Remove ()
-{
-  return Remove (Count () - 1);
-}
+ON_PolyCurve::Remove () { return Remove (Count () - 1); }
 
 ON_BOOL32
 ON_PolyCurve::Remove (int segment_index)
@@ -2008,7 +2046,8 @@ ON_PolyCurve::SetEndPoint (ON_3dPoint end_point)
 
 int
 ON_PolyCurve::GetNurbForm (
-    ON_NurbsCurve &nurb, double tol,
+    ON_NurbsCurve &nurb,
+    double tol,
     const ON_Interval *subdomain // OPTIONAL subdomain of ON::ProxyCurve::Domain()
     ) const
 {
@@ -2100,7 +2139,8 @@ ON_PolyCurve::SegmentIndex (double curve_t) const
 }
 
 int
-ON_PolyCurve::SegmentIndex (ON_Interval sub_domain, int *segment_index0,
+ON_PolyCurve::SegmentIndex (ON_Interval sub_domain,
+                            int *segment_index0,
                             int *segment_index1) const
 {
   const int segment_count = m_segment.Count ();
@@ -2725,7 +2765,9 @@ ON_PolyCurve::Split (double split_parameter,
 // Flatten a poly curve reparameterized over pdom.
 // Harvests all the segments recursively and places them in the arrays
 static void
-Flatten (ON_PolyCurve *poly, ON_Interval pdom, ON_SimpleArray<double> &new_t,
+Flatten (ON_PolyCurve *poly,
+         ON_Interval pdom,
+         ON_SimpleArray<double> &new_t,
          ON_SimpleArray<ON_Curve *> &new_seg)
 {
   int n = poly->Count ();

@@ -70,31 +70,41 @@ namespace pcl
       void
       download (const DeviceArray<T> &arr)
       {
-        cudaSafeCall (cudaMemcpyAsync (ptr_, arr.ptr (), arr.sizeBytes (),
-                                       cudaMemcpyDeviceToHost, stream_));
+        cudaSafeCall (cudaMemcpyAsync (
+            ptr_, arr.ptr (), arr.sizeBytes (), cudaMemcpyDeviceToHost, stream_));
       }
 
       void
       download (const DeviceArray2D<T> &arr)
       {
-        cudaSafeCall (cudaMemcpy2DAsync (ptr_, arr.cols (), arr.ptr (), arr.step (),
-                                         arr.colsBytes (), arr.rows (),
-                                         cudaMemcpyDeviceToHost, stream_));
+        cudaSafeCall (cudaMemcpy2DAsync (ptr_,
+                                         arr.cols (),
+                                         arr.ptr (),
+                                         arr.step (),
+                                         arr.colsBytes (),
+                                         arr.rows (),
+                                         cudaMemcpyDeviceToHost,
+                                         stream_));
       }
 
       void
       upload (const DeviceArray<T> &arr) const
       {
-        cudaSafeCall (cudaMemcpyAsync (arr.ptr (), ptr_, arr.size (),
-                                       cudaMemcpyHostToDevice, stream_));
+        cudaSafeCall (cudaMemcpyAsync (
+            arr.ptr (), ptr_, arr.size (), cudaMemcpyHostToDevice, stream_));
       }
 
       void
       upload (const DeviceArray2D<T> &arr) const
       {
-        cudaSafeCall (cudaMemcpy2DAsync (arr.ptr (), arr.step (), ptr_, arr.cols (),
-                                         arr.colsBytes (), arr.rows (),
-                                         cudaMemcpyHostToDevice, stream_));
+        cudaSafeCall (cudaMemcpy2DAsync (arr.ptr (),
+                                         arr.step (),
+                                         ptr_,
+                                         arr.cols (),
+                                         arr.colsBytes (),
+                                         arr.rows (),
+                                         cudaMemcpyHostToDevice,
+                                         stream_));
       }
 
       void

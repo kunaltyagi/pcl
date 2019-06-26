@@ -52,7 +52,9 @@ namespace pcl
   namespace gpu
   {
     static inline void
-    ___cudaSafeCall (cudaError_t err, const char *file, const int line,
+    ___cudaSafeCall (cudaError_t err,
+                     const char *file,
+                     const int line,
                      const char *func = "")
     {
       if (cudaSuccess != err)

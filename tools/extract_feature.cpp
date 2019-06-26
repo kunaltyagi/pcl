@@ -106,11 +106,15 @@ loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
   return (true);
 }
 
-template <typename FeatureAlgorithm, typename PointIn, typename NormalT,
+template <typename FeatureAlgorithm,
+          typename PointIn,
+          typename NormalT,
           typename PointOut>
 void
 computeFeatureViaNormals (const pcl::PCLPointCloud2::ConstPtr &input,
-                          pcl::PCLPointCloud2 &output, int argc, char **argv,
+                          pcl::PCLPointCloud2 &output,
+                          int argc,
+                          char **argv,
                           bool set_search_flag = true)
 {
   int n_k = default_n_k;
@@ -219,16 +223,20 @@ main (int argc, char **argv)
   // Perform the feature estimation
   pcl::PCLPointCloud2 output;
   if (feature_name == "PFHEstimation")
-    computeFeatureViaNormals<PFHEstimation<PointXYZ, Normal, PFHSignature125>, PointXYZ,
-                             Normal, PFHSignature125> (cloud, output, argc, argv);
+    computeFeatureViaNormals<PFHEstimation<PointXYZ, Normal, PFHSignature125>,
+                             PointXYZ,
+                             Normal,
+                             PFHSignature125> (cloud, output, argc, argv);
   else if (feature_name == "FPFHEstimation")
     computeFeatureViaNormals<FPFHEstimation<PointXYZ, Normal, FPFHSignature33>,
-                             PointXYZ, Normal, FPFHSignature33> (cloud, output, argc,
-                                                                 argv);
+                             PointXYZ,
+                             Normal,
+                             FPFHSignature33> (cloud, output, argc, argv);
   else if (feature_name == "VFHEstimation")
-    computeFeatureViaNormals<VFHEstimation<PointXYZ, Normal, VFHSignature308>, PointXYZ,
-                             Normal, VFHSignature308> (cloud, output, argc, argv,
-                                                       false);
+    computeFeatureViaNormals<VFHEstimation<PointXYZ, Normal, VFHSignature308>,
+                             PointXYZ,
+                             Normal,
+                             VFHSignature308> (cloud, output, argc, argv, false);
   else {
     print_error (
         "Valid feature names are PFHEstimation, FPFHEstimation, VFHEstimation.\n");

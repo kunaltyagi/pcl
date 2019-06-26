@@ -155,14 +155,22 @@ namespace pcl
        * resultant model inliers \param inliers_stencil
        */
       int
-      selectWithinDistance (const Coefficients &model_coefficients, float threshold,
-                            IndicesPtr &inliers, IndicesPtr &inliers_stencil);
+      selectWithinDistance (const Coefficients &model_coefficients,
+                            float threshold,
+                            IndicesPtr &inliers,
+                            IndicesPtr &inliers_stencil);
       int
-      selectWithinDistance (const Hypotheses &h, int idx, float threshold,
-                            IndicesPtr &inliers, IndicesPtr &inliers_stencil);
+      selectWithinDistance (const Hypotheses &h,
+                            int idx,
+                            float threshold,
+                            IndicesPtr &inliers,
+                            IndicesPtr &inliers_stencil);
       int
-      selectWithinDistance (Hypotheses &h, int idx, float threshold,
-                            IndicesPtr &inliers_stencil, float3 &centroid);
+      selectWithinDistance (Hypotheses &h,
+                            int idx,
+                            float threshold,
+                            IndicesPtr &inliers_stencil,
+                            float3 &centroid);
 
       int
       countWithinDistance (const Coefficients &model_coefficients, float threshold);
@@ -244,8 +252,10 @@ namespace pcl
       int nr_indices;
       float bad_value;
 
-      CreatePlaneHypothesis (const PointXYZRGB *_input, const int *_indices,
-                             int _nr_indices, float bad)
+      CreatePlaneHypothesis (const PointXYZRGB *_input,
+                             const int *_indices,
+                             int _nr_indices,
+                             float bad)
           : input (_input), indices (_indices), nr_indices (_nr_indices),
             bad_value (bad)
       {

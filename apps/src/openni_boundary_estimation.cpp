@@ -148,8 +148,8 @@ class OpenNIIntegralImageNormalEstimation
       ColorHandlerConstPtr color_handler (
           new pcl::visualization::PointCloudColorHandlerGenericField<
               pcl::PCLPointCloud2> (cloud2, "boundary_point"));
-      viz.addPointCloud<pcl::PointXYZRGBNormal> (temp_cloud, color_handler,
-                                                 "normalcloud");
+      viz.addPointCloud<pcl::PointXYZRGBNormal> (
+          temp_cloud, color_handler, "normalcloud");
       viz.resetCameraViewpoint ("normalcloud");
       new_cloud_ = false;
     }

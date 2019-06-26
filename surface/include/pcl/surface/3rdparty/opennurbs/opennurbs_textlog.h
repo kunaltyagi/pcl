@@ -192,10 +192,12 @@ class PCL_EXPORTS ON_CLASS ON_TextLog
   );
 
   void
-  PrintPointGrid (int,                // dim
-                  ON_BOOL32,          // true for rational points
-                  int, int,           // point_count0, point_count1
-                  int, int,           // point_stride0, point_stride1
+  PrintPointGrid (int,       // dim
+                  ON_BOOL32, // true for rational points
+                  int,
+                  int, // point_count0, point_count1
+                  int,
+                  int,                // point_stride0, point_stride1
                   const double *,     // point[] array
                   const char * = NULL // optional preabmle
   );

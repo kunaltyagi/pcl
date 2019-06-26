@@ -53,7 +53,8 @@ pcl::registration::TransformationEstimationDQ<PointSource, PointTarget, Scalar>:
   if (cloud_tgt.points.size () != nr_points) {
     PCL_ERROR ("[pcl::TransformationEstimationDQ::estimateRigidTransformation] Number "
                "or points in source (%lu) differs than target (%lu)!\n",
-               nr_points, cloud_tgt.points.size ());
+               nr_points,
+               cloud_tgt.points.size ());
     return;
   }
 
@@ -74,7 +75,8 @@ pcl::registration::TransformationEstimationDQ<PointSource, PointTarget, Scalar>:
   if (indices_src.size () != cloud_tgt.points.size ()) {
     PCL_ERROR ("[pcl::TransformationDQ::estimateRigidTransformation] Number or points "
                "in source (%lu) differs than target (%lu)!\n",
-               indices_src.size (), cloud_tgt.points.size ());
+               indices_src.size (),
+               cloud_tgt.points.size ());
     return;
   }
 
@@ -96,7 +98,8 @@ pcl::registration::TransformationEstimationDQ<PointSource, PointTarget, Scalar>:
   if (indices_src.size () != indices_tgt.size ()) {
     PCL_ERROR ("[pcl::TransformationEstimationDQ::estimateRigidTransformation] Number "
                "or points in source (%lu) differs than target (%lu)!\n",
-               indices_src.size (), indices_tgt.size ());
+               indices_src.size (),
+               indices_tgt.size ());
     return;
   }
 

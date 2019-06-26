@@ -56,8 +56,10 @@ namespace openni_wrapper
     friend class OpenNIDriver;
 
     public:
-    DevicePrimesense (xn::Context &context, const xn::NodeInfo &device_node,
-                      const xn::NodeInfo &image_node, const xn::NodeInfo &depth_node,
+    DevicePrimesense (xn::Context &context,
+                      const xn::NodeInfo &device_node,
+                      const xn::NodeInfo &image_node,
+                      const xn::NodeInfo &depth_node,
                       const xn::NodeInfo &ir_node);
     ~DevicePrimesense () throw ();
     // virtual void setImageOutputMode (const XnMapOutputMode& output_mode);
@@ -69,9 +71,10 @@ namespace openni_wrapper
     void
     enumAvailableModes () throw ();
     bool
-    isImageResizeSupported (unsigned input_width, unsigned input_height,
-                            unsigned output_width, unsigned output_height) const
-        throw () override;
+    isImageResizeSupported (unsigned input_width,
+                            unsigned input_height,
+                            unsigned output_width,
+                            unsigned output_height) const throw () override;
 
     void
     startImageStream () override;

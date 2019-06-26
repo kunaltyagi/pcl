@@ -24,10 +24,13 @@ Returns:
 */
 ON_DECL
 bool
-ON_GetEndCapTransformation (ON_3dPoint P, ON_3dVector T, ON_3dVector U,
+ON_GetEndCapTransformation (ON_3dPoint P,
+                            ON_3dVector T,
+                            ON_3dVector U,
                             const ON_3dVector *Normal,
                             ON_Xform &xform, // = rot3d*scale2d
-                            ON_Xform *scale2d, ON_Xform *rot2d);
+                            ON_Xform *scale2d,
+                            ON_Xform *rot2d);
 
 class ON_CLASS ON_Extrusion : public ON_Surface
 {
@@ -69,7 +72,8 @@ class ON_CLASS ON_Extrusion : public ON_Surface
   ON_BOOL32
   GetBBox (double *boxmin, double *boxmax, int bGrowBox = false) const;
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
   ON_BOOL32
   Transform (const ON_Xform &xform);
@@ -172,7 +176,10 @@ class ON_CLASS ON_Extrusion : public ON_Surface
   ON_BOOL32
   GetSpanVector (int dir, double *span_vector) const;
   ON_BOOL32
-  GetSpanVectorIndex (int dir, double t, int side, int *span_vector_index,
+  GetSpanVectorIndex (int dir,
+                      double t,
+                      int side,
+                      int *span_vector_index,
                       ON_Interval *span_interval) const;
   int
   Degree (int dir) const;
@@ -187,12 +194,20 @@ class ON_CLASS ON_Extrusion : public ON_Surface
   ON_BOOL32
   IsPeriodic (int) const;
   bool
-  GetNextDiscontinuity (int dir, ON::continuity c, double t0, double t1, double *t,
-                        int *hint = NULL, int *dtype = NULL,
+  GetNextDiscontinuity (int dir,
+                        ON::continuity c,
+                        double t0,
+                        double t1,
+                        double *t,
+                        int *hint = NULL,
+                        int *dtype = NULL,
                         double cos_angle_tolerance = ON_DEFAULT_ANGLE_TOLERANCE_COSINE,
                         double curvature_tolerance = ON_SQRT_EPSILON) const;
   bool
-  IsContinuous (ON::continuity c, double s, double t, int *hint = NULL,
+  IsContinuous (ON::continuity c,
+                double s,
+                double t,
+                int *hint = NULL,
                 double point_tolerance = ON_ZERO_TOLERANCE,
                 double d1_tolerance = ON_ZERO_TOLERANCE,
                 double d2_tolerance = ON_ZERO_TOLERANCE,
@@ -205,8 +220,13 @@ class ON_CLASS ON_Extrusion : public ON_Surface
   ON_BOOL32
   Transpose ();
   ON_BOOL32
-  Evaluate (double u, double v, int num_der, int array_stride, double *der_array,
-            int quadrant = 0, int *hint = 0) const;
+  Evaluate (double u,
+            double v,
+            int num_der,
+            int array_stride,
+            double *der_array,
+            int quadrant = 0,
+            int *hint = 0) const;
   ON_Curve *
   IsoCurve (int dir, double c) const;
 
@@ -215,17 +235,23 @@ class ON_CLASS ON_Extrusion : public ON_Surface
   bool
   Extend (int dir, const ON_Interval &domain);
   ON_BOOL32
-  Split (int dir, double c, ON_Surface *&west_or_south_side,
+  Split (int dir,
+         double c,
+         ON_Surface *&west_or_south_side,
          ON_Surface *&east_or_north_side) const;
 
   bool
-  GetClosestPoint (const ON_3dPoint &P, double *s, double *t,
-                   double maximum_distance = 0.0, const ON_Interval *sdomain = 0,
+  GetClosestPoint (const ON_3dPoint &P,
+                   double *s,
+                   double *t,
+                   double maximum_distance = 0.0,
+                   const ON_Interval *sdomain = 0,
                    const ON_Interval *tdomain = 0) const;
 
   ON_BOOL32
   GetLocalClosestPoint (const ON_3dPoint &, // test_point
-                        double, double,     // seed_parameters
+                        double,
+                        double, // seed_parameters
                         double *,
                         double *, // parameters of local closest point returned here
                         const ON_Interval * = NULL, // first parameter sub_domain
@@ -243,11 +269,15 @@ class ON_CLASS ON_Extrusion : public ON_Surface
   int
   HasNurbForm () const;
   bool
-  GetSurfaceParameterFromNurbFormParameter (double nurbs_s, double nurbs_t,
-                                            double *surface_s, double *surface_t) const;
+  GetSurfaceParameterFromNurbFormParameter (double nurbs_s,
+                                            double nurbs_t,
+                                            double *surface_s,
+                                            double *surface_t) const;
   bool
-  GetNurbFormParameterFromSurfaceParameter (double surface_s, double surface_t,
-                                            double *nurbs_s, double *nurbs_t) const;
+  GetNurbFormParameterFromSurfaceParameter (double surface_s,
+                                            double surface_t,
+                                            double *nurbs_s,
+                                            double *nurbs_t) const;
 
   ////////////////////////////////////////////////////////////
   //
@@ -799,7 +829,9 @@ class ON_CLASS ON_Extrusion : public ON_Surface
           }
   */
   static ON_Extrusion *
-  Cylinder (const ON_Cylinder &cylinder, bool bCapBottom, bool bCapTop,
+  Cylinder (const ON_Cylinder &cylinder,
+            bool bCapBottom,
+            bool bCapTop,
             ON_Extrusion *extrusion = 0);
 
   /*
@@ -843,7 +875,10 @@ class ON_CLASS ON_Extrusion : public ON_Surface
           }
   */
   static ON_Extrusion *
-  Pipe (const ON_Cylinder &cylinder, double other_radius, bool bCapBottom, bool bCapTop,
+  Pipe (const ON_Cylinder &cylinder,
+        double other_radius,
+        bool bCapBottom,
+        bool bCapTop,
         ON_Extrusion *extrusion = 0);
 
   /*
@@ -875,8 +910,11 @@ class ON_CLASS ON_Extrusion : public ON_Surface
     object is not null.
   */
   static ON_Extrusion *
-  CreateFrom3dCurve (const ON_Curve &curve, const ON_Plane *plane, double height,
-                     bool bCap, ON_Extrusion *extrusion = 0);
+  CreateFrom3dCurve (const ON_Curve &curve,
+                     const ON_Plane *plane,
+                     double height,
+                     bool bCap,
+                     ON_Extrusion *extrusion = 0);
 };
 
 #endif

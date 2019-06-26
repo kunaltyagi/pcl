@@ -87,7 +87,8 @@ namespace pcl
       std::vector<int> indices_;
 
       bool use_cache_;
-      std::map<std::pair<std::string, int>, Eigen::Matrix4f,
+      std::map<std::pair<std::string, int>,
+               Eigen::Matrix4f,
                std::less<std::pair<std::string, int>>,
                Eigen::aligned_allocator<
                    std::pair<const std::pair<std::string, int>, Eigen::Matrix4f>>>
@@ -122,7 +123,8 @@ namespace pcl
         data.cols = models[0].descr.size (); // number of histogram bins
 
         flann::Matrix<float> flann_data (
-            new float[models.size () * models[0].descr.size ()], models.size (),
+            new float[models.size () * models[0].descr.size ()],
+            models.size (),
             models[0].descr.size ());
 
         for (size_t i = 0; i < data.rows; ++i)
@@ -134,8 +136,11 @@ namespace pcl
       }
 
       void
-      nearestKSearch (flann::Index<DistT> *index, const flann_model &model, int k,
-                      flann::Matrix<int> &indices, flann::Matrix<float> &distances);
+      nearestKSearch (flann::Index<DistT> *index,
+                      const flann_model &model,
+                      int k,
+                      flann::Matrix<int> &indices,
+                      flann::Matrix<float> &distances);
 
       class ObjectHypothesis
       {
@@ -153,11 +158,13 @@ namespace pcl
       getPose (ModelT &model, int view_id, Eigen::Matrix4f &pose_matrix);
 
       void
-      getKeypoints (ModelT &model, int view_id,
+      getKeypoints (ModelT &model,
+                    int view_id,
                     typename pcl::PointCloud<PointInT>::Ptr &keypoints_cloud);
 
       void
-      drawCorrespondences (PointInTPtr &cloud, ObjectHypothesis &oh,
+      drawCorrespondences (PointInTPtr &cloud,
+                           ObjectHypothesis &oh,
                            PointInTPtr &keypoints_pointcloud,
                            pcl::Correspondences &correspondences)
       {
@@ -172,8 +179,8 @@ namespace pcl
 
         pcl::visualization::PointCloudColorHandlerCustom<PointInT>
             random_handler_sampled (cloud_sampled, 0, 0, 255);
-        vis_corresp_.addPointCloud<PointInT> (cloud_sampled, random_handler_sampled,
-                                              "sampled");
+        vis_corresp_.addPointCloud<PointInT> (
+            cloud_sampled, random_handler_sampled, "sampled");
 
         for (size_t kk = 0; kk < correspondences.size (); kk++) {
           pcl::PointXYZ p;
@@ -188,8 +195,8 @@ namespace pcl
           std::stringstream line_name;
           line_name << "line_" << kk;
 
-          vis_corresp_.addLine<pcl::PointXYZ, pcl::PointXYZ> (p_scene, p,
-                                                              line_name.str ());
+          vis_corresp_.addLine<pcl::PointXYZ, pcl::PointXYZ> (
+              p_scene, p, line_name.str ());
         }
 
         vis_corresp_.spin ();
@@ -211,7 +218,8 @@ namespace pcl
       }
 
       void
-      setISPK (typename pcl::PointCloud<FeatureT>::Ptr &signatures, PointInTPtr &p,
+      setISPK (typename pcl::PointCloud<FeatureT>::Ptr &signatures,
+               PointInTPtr &p,
                PointInTPtr &keypoints)
       {
         keypoints_input_ = keypoints;

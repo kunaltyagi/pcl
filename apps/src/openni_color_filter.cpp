@@ -67,8 +67,11 @@ class OpenNIPassthrough
   using CloudPtr = typename Cloud::Ptr;
   using CloudConstPtr = typename Cloud::ConstPtr;
 
-  OpenNIPassthrough (pcl::OpenNIGrabber &grabber, unsigned char red,
-                     unsigned char green, unsigned char blue, unsigned char radius)
+  OpenNIPassthrough (pcl::OpenNIGrabber &grabber,
+                     unsigned char red,
+                     unsigned char green,
+                     unsigned char blue,
+                     unsigned char radius)
       : viewer ("PCL OpenNI ColorFilter Viewer"), grabber_ (grabber)
   {
     std::function<void(const CloudConstPtr &)> f =
@@ -88,8 +91,11 @@ class OpenNIPassthrough
   }
 
   void
-  fillLookup (std::vector<bool> &lookup, unsigned char red, unsigned char green,
-              unsigned char blue, unsigned radius)
+  fillLookup (std::vector<bool> &lookup,
+              unsigned char red,
+              unsigned char green,
+              unsigned char blue,
+              unsigned radius)
   {
     unsigned radius_sqr = radius * radius;
     pcl::RGB color;

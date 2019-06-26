@@ -139,7 +139,8 @@ FittingCurve2dPDM::assemble (const Parameter &parameter)
   if (row < nrows) {
     m_solver.resize (row);
     if (!m_quiet)
-      printf ("[FittingCurve2dPDM::assemble] Warning: rows do not match: %d %d\n", row,
+      printf ("[FittingCurve2dPDM::assemble] Warning: rows do not match: %d %d\n",
+              row,
               nrows);
   }
 }
@@ -307,15 +308,16 @@ FittingCurve2dPDM::removeCPsOnLine (const ON_NurbsCurve &nurbs, double min_curve
 
 void
 FittingCurve2dPDM::addPointConstraint (const double &param,
-                                       const Eigen::Vector2d &point, double weight,
+                                       const Eigen::Vector2d &point,
+                                       double weight,
                                        unsigned &row)
 {
   int cp_red = m_nurbs.m_order - 2;
   int ncp = m_nurbs.m_cv_count - 2 * cp_red;
   double *N = new double[m_nurbs.m_order * m_nurbs.m_order];
 
-  int E = ON_NurbsSpanIndex (m_nurbs.m_order, m_nurbs.m_cv_count, m_nurbs.m_knot, param,
-                             0, 0);
+  int E = ON_NurbsSpanIndex (
+      m_nurbs.m_order, m_nurbs.m_cv_count, m_nurbs.m_knot, param, 0, 0);
 
   ON_EvaluateNurbsBasis (m_nurbs.m_order, m_nurbs.m_knot + E, param, N);
 
@@ -387,7 +389,9 @@ FittingCurve2dPDM::initCPsNurbsCurve2D (int order, const vector_vec2d &cps)
 }
 
 ON_NurbsCurve
-FittingCurve2dPDM::initNurbsCurve2D (int order, const vector_vec2d &data, int ncps,
+FittingCurve2dPDM::initNurbsCurve2D (int order,
+                                     const vector_vec2d &data,
+                                     int ncps,
                                      double radiusF)
 {
   if (data.empty ())
@@ -521,13 +525,29 @@ FittingCurve2dPDM::assembleInterior (double wInt, double rScale, unsigned &row)
     double error;
     if (p < int(m_data->interior_param.size ())) {
       param = findClosestElementMidPoint (m_nurbs, pcp, m_data->interior_param[p]);
-      param = inverseMapping (m_nurbs, pcp, param, error, pt, t, rScale, in_max_steps,
-                              in_accuracy, m_quiet);
+      param = inverseMapping (m_nurbs,
+                              pcp,
+                              param,
+                              error,
+                              pt,
+                              t,
+                              rScale,
+                              in_max_steps,
+                              in_accuracy,
+                              m_quiet);
       m_data->interior_param[p] = param;
     } else {
       param = findClosestElementMidPoint (m_nurbs, pcp);
-      param = inverseMapping (m_nurbs, pcp, param, error, pt, t, rScale, in_max_steps,
-                              in_accuracy, m_quiet);
+      param = inverseMapping (m_nurbs,
+                              pcp,
+                              param,
+                              error,
+                              pt,
+                              t,
+                              rScale,
+                              in_max_steps,
+                              in_accuracy,
+                              m_quiet);
       m_data->interior_param.push_back (param);
     }
 
@@ -545,10 +565,15 @@ FittingCurve2dPDM::assembleInterior (double wInt, double rScale, unsigned &row)
 
 double
 FittingCurve2dPDM::inverseMapping (const ON_NurbsCurve &nurbs,
-                                   const Eigen::Vector2d &pt, const double &hint,
-                                   double &error, Eigen::Vector2d &p,
-                                   Eigen::Vector2d &t, double rScale, int maxSteps,
-                                   double accuracy, bool quiet)
+                                   const Eigen::Vector2d &pt,
+                                   const double &hint,
+                                   double &error,
+                                   Eigen::Vector2d &p,
+                                   Eigen::Vector2d &t,
+                                   double rScale,
+                                   int maxSteps,
+                                   double accuracy,
+                                   bool quiet)
 {
   if (nurbs.Order () == 2)
     return inverseMappingO2 (nurbs, pt, error, p, t);
@@ -609,10 +634,14 @@ FittingCurve2dPDM::inverseMapping (const ON_NurbsCurve &nurbs,
   if (!quiet) {
     printf ("[FittingCurve2dPDM::inverseMapping] Warning: Method did not converge (%e "
             "%d).\n",
-            accuracy, maxSteps);
+            accuracy,
+            maxSteps);
     printf ("[FittingCurve2dPDM::inverseMapping] hint: %f current: %f delta: %f error: "
             "%f\n",
-            hint, current, delta, error);
+            hint,
+            current,
+            delta,
+            error);
   }
 
   return current;
@@ -620,8 +649,10 @@ FittingCurve2dPDM::inverseMapping (const ON_NurbsCurve &nurbs,
 
 double
 FittingCurve2dPDM::inverseMappingO2 (const ON_NurbsCurve &nurbs,
-                                     const Eigen::Vector2d &pt, double &error,
-                                     Eigen::Vector2d &p, Eigen::Vector2d &t)
+                                     const Eigen::Vector2d &pt,
+                                     double &error,
+                                     Eigen::Vector2d &p,
+                                     Eigen::Vector2d &t)
 {
   if (nurbs.Order () != 2)
     printf ("[FittingCurve2dPDM::inverseMappingO2] Error, order not 2 (polynomial "
@@ -765,7 +796,8 @@ FittingCurve2dPDM::inverseMappingO2 (const ON_NurbsCurve &nurbs,
 
 double
 FittingCurve2dPDM::findClosestElementMidPoint (const ON_NurbsCurve &nurbs,
-                                               const Eigen::Vector2d &pt, double hint)
+                                               const Eigen::Vector2d &pt,
+                                               double hint)
 {
   // evaluate hint
   double param = hint;

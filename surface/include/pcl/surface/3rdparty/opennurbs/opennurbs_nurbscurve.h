@@ -87,7 +87,8 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCurve : public ON_Curve
     true if curves are tne same.
   */
   bool
-  IsDuplicate (const ON_NurbsCurve &other, bool bIgnoreParameterization,
+  IsDuplicate (const ON_NurbsCurve &other,
+               bool bIgnoreParameterization,
                double tolerance = ON_ZERO_TOLERANCE) const;
 
   // Description:
@@ -117,8 +118,11 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCurve : public ON_Curve
   // Returns:
   //   true if successful
   bool
-  CreateClampedUniformNurbs (int dimension, int order, int point_count,
-                             const ON_3dPoint *point, double knot_delta = 1.0);
+  CreateClampedUniformNurbs (int dimension,
+                             int order,
+                             int point_count,
+                             const ON_3dPoint *point,
+                             double knot_delta = 1.0);
 
   // Description:
   //   Create a periodic uniform NURBS curve from a list
@@ -132,8 +136,11 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCurve : public ON_Curve
   // Returns:
   //   true if successful
   bool
-  CreatePeriodicUniformNurbs (int dimension, int order, int point_count,
-                              const ON_3dPoint *point, double knot_delta = 1.0);
+  CreatePeriodicUniformNurbs (int dimension,
+                              int order,
+                              int point_count,
+                              const ON_3dPoint *point,
+                              double knot_delta = 1.0);
 
   // Description:
   //   Deallocate knot and cv memory.  Zeros all fields.
@@ -221,7 +228,9 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCurve : public ON_Curve
   //   true if object has bounding box and calculation was successful
   ON_BOOL32
   GetBBox ( // returns true if successful
-      double *boxmin, double *boxmax, int bGrowBox = false) const;
+      double *boxmin,
+      double *boxmax,
+      int bGrowBox = false) const;
 
   // Description:
   //   virtual ON_Geometry::Transform override.
@@ -325,7 +334,9 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCurve : public ON_Curve
   //   virtual ON_Curve::GetParameterTolerance override.
   ON_BOOL32
   GetParameterTolerance ( // returns tminus < tplus: parameters tminus <= s <= tplus
-      double t, double *tminus, double *tplus) const;
+      double t,
+      double *tminus,
+      double *tplus) const;
 
   // Description:
   //   virtual ON_Curve::IsLinear override.
@@ -355,7 +366,8 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCurve : public ON_Curve
   // Description:
   //   virtual ON_Curve::IsArc override.
   ON_BOOL32
-  IsArc (const ON_Plane *plane = NULL, ON_Arc *arc = NULL,
+  IsArc (const ON_Plane *plane = NULL,
+         ON_Arc *arc = NULL,
          double tolerance = ON_ZERO_TOLERANCE) const;
 
   // Description:
@@ -424,8 +436,12 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCurve : public ON_Curve
     Overrides ON_Curve::GetNextDiscontinuity.
   */
   bool
-  GetNextDiscontinuity (ON::continuity c, double t0, double t1, double *t,
-                        int *hint = NULL, int *dtype = NULL,
+  GetNextDiscontinuity (ON::continuity c,
+                        double t0,
+                        double t1,
+                        double *t,
+                        int *hint = NULL,
+                        int *dtype = NULL,
                         double cos_angle_tolerance = ON_DEFAULT_ANGLE_TOLERANCE_COSINE,
                         double curvature_tolerance = ON_SQRT_EPSILON) const;
 
@@ -463,7 +479,9 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCurve : public ON_Curve
     Overrides ON_Curve::IsContinuous.
   */
   bool
-  IsContinuous (ON::continuity c, double t, int *hint = NULL,
+  IsContinuous (ON::continuity c,
+                double t,
+                int *hint = NULL,
                 double point_tolerance = ON_ZERO_TOLERANCE,
                 double d1_tolerance = ON_ZERO_TOLERANCE,
                 double d2_tolerance = ON_ZERO_TOLERANCE,
@@ -557,7 +575,9 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCurve : public ON_Curve
   SpanIsLinear (int span_index, double min_length, double tolerance) const;
 
   bool
-  SpanIsLinear (int span_index, double min_length, double tolerance,
+  SpanIsLinear (int span_index,
+                double min_length,
+                double tolerance,
                 ON_Line *line) const;
 
   /*
@@ -630,7 +650,8 @@ class PCL_EXPORTS ON_CLASS ON_NurbsCurve : public ON_Curve
                 //            curve's parameterization and the NURBS
                 //            parameterization may not match to the
                 //            desired accuracy.
-      ON_NurbsCurve &nurbsform, double tolerance = 0.0,
+      ON_NurbsCurve &nurbsform,
+      double tolerance = 0.0,
       const ON_Interval *subdomain = NULL // OPTIONAL subdomain of curve
       ) const;
 

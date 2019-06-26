@@ -100,12 +100,17 @@ namespace pcl
 
       /** Set desired depth and color resolution, the rest is "don't
        * care". */
-      Mode (unsigned int depth_width, unsigned int depth_height,
-            unsigned int color_width, unsigned int color_height);
+      Mode (unsigned int depth_width,
+            unsigned int depth_height,
+            unsigned int color_width,
+            unsigned int color_height);
 
       /** Set desired framerate, depth and color resolution. */
-      Mode (unsigned int fps, unsigned int depth_width, unsigned int depth_height,
-            unsigned int color_width, unsigned int color_height);
+      Mode (unsigned int fps,
+            unsigned int depth_width,
+            unsigned int depth_height,
+            unsigned int color_width,
+            unsigned int color_height);
 
       bool
       operator== (const pcl::RealSenseGrabber::Mode &m) const;
@@ -135,7 +140,8 @@ namespace pcl
      * \param[in] strict if set to \c true, an exception will be thrown if
      * device does not support exactly the mode requested. Otherwise the
      * closest available mode is selected. */
-    RealSenseGrabber (const std::string &device_id = "", const Mode &mode = Mode (),
+    RealSenseGrabber (const std::string &device_id = "",
+                      const Mode &mode = Mode (),
                       bool strict = false);
 
     virtual ~RealSenseGrabber () throw ();

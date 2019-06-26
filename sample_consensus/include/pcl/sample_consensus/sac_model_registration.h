@@ -172,7 +172,8 @@ namespace pcl
      */
     void
     selectWithinDistance (const Eigen::VectorXf &model_coefficients,
-                          const double threshold, std::vector<int> &inliers) override;
+                          const double threshold,
+                          std::vector<int> &inliers) override;
 
     /** \brief Count all the points which respect the given model coefficients as
      * inliers.
@@ -196,11 +197,14 @@ namespace pcl
                                Eigen::VectorXf &optimized_coefficients) const override;
 
     void
-    projectPoints (const std::vector<int> &, const Eigen::VectorXf &, PointCloud &,
+    projectPoints (const std::vector<int> &,
+                   const Eigen::VectorXf &,
+                   PointCloud &,
                    bool = true) const override{};
 
     bool
-    doSamplesVerifyModel (const std::set<int> &, const Eigen::VectorXf &,
+    doSamplesVerifyModel (const std::set<int> &,
+                          const Eigen::VectorXf &,
                           const double) const override
     {
       return (false);

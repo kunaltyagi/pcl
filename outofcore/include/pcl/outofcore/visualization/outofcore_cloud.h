@@ -81,8 +81,10 @@ class OutofcoreCloud : public Object
   class CloudDataCacheItem : public LRUCacheItem<vtkSmartPointer<vtkPolyData>>
   {
     public:
-    CloudDataCacheItem (std::string pcd_file, float coverage,
-                        vtkSmartPointer<vtkPolyData> cloud_data, size_t timestamp)
+    CloudDataCacheItem (std::string pcd_file,
+                        float coverage,
+                        vtkSmartPointer<vtkPolyData> cloud_data,
+                        size_t timestamp)
     {
       this->pcd_file = pcd_file;
       this->coverage = coverage;

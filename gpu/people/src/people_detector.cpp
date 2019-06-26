@@ -287,8 +287,8 @@ pcl::gpu::people::PeopleDetector::processProb ()
     // Process input pointcloud with RDF
     rdf_detector_->processProb (depth_device1_);
 
-    probability_processor_->SelectLabel (depth_device1_, rdf_detector_->labels_,
-                                         rdf_detector_->P_l_);
+    probability_processor_->SelectLabel (
+        depth_device1_, rdf_detector_->labels_, rdf_detector_->P_l_);
   }
   // Join probabilities from previous result
   else {
@@ -313,22 +313,27 @@ pcl::gpu::people::PeopleDetector::processProb ()
     for (int i = 0; i < kernel_size; i++)
       PCL_DEBUG ("\t Entry %d \t: %lf\n", i, kernel_ptr_host[i]);
 
-    if (probability_processor_->GaussianBlur (
-            depth_device1_, rdf_detector_->P_l_2_, kernel_device,
-            rdf_detector_->P_l_Gaus_Temp_, rdf_detector_->P_l_Gaus_) != 1)
+    if (probability_processor_->GaussianBlur (depth_device1_,
+                                              rdf_detector_->P_l_2_,
+                                              kernel_device,
+                                              rdf_detector_->P_l_Gaus_Temp_,
+                                              rdf_detector_->P_l_Gaus_) != 1)
       PCL_ERROR ("[pcl::gpu::people::PeopleDetector::processProb] : (E) : Gaussian "
                  "Blur failed\n");
 
     // merge with prior probabilities at this line
-    probability_processor_->CombineProb (depth_device1_, rdf_detector_->P_l_Gaus_, 0.5,
-                                         rdf_detector_->P_l_, 0.5,
+    probability_processor_->CombineProb (depth_device1_,
+                                         rdf_detector_->P_l_Gaus_,
+                                         0.5,
+                                         rdf_detector_->P_l_,
+                                         0.5,
                                          rdf_detector_->P_l_Gaus_Temp_);
     PCL_DEBUG (
         "[pcl::gpu::people::PeopleDetector::processProb] : (D) : CombineProb called\n");
 
     // get labels
-    probability_processor_->SelectLabel (depth_device1_, rdf_detector_->labels_,
-                                         rdf_detector_->P_l_Gaus_Temp_);
+    probability_processor_->SelectLabel (
+        depth_device1_, rdf_detector_->labels_, rdf_detector_->P_l_Gaus_Temp_);
   }
 
   // This executes the connected components
@@ -370,8 +375,8 @@ pcl::gpu::people::PeopleDetector::processProb ()
     // TODO: merge with prior probabilities at this line
 
     // get labels
-    probability_processor_->SelectLabel (depth_device1_, rdf_detector_->labels_,
-                                         rdf_detector_->P_l_);
+    probability_processor_->SelectLabel (
+        depth_device1_, rdf_detector_->labels_, rdf_detector_->P_l_);
     // This executes the connected components
     rdf_detector_->processSmooth (depth_device2_, cloud_host_, AREA_THRES2);
     // This creates the blobmatrix
@@ -414,9 +419,15 @@ pcl::gpu::people::PeopleDetector::processProb ()
 namespace
 {
   void
-  getProjectedRadiusSearchBox (int rows, int cols, const pcl::device::Intr &intr,
-                               const pcl::PointXYZ &point, float squared_radius,
-                               int &minX, int &maxX, int &minY, int &maxY)
+  getProjectedRadiusSearchBox (int rows,
+                               int cols,
+                               const pcl::device::Intr &intr,
+                               const pcl::PointXYZ &point,
+                               float squared_radius,
+                               int &minX,
+                               int &maxX,
+                               int &minY,
+                               int &maxY)
   {
     int min, max;
 
@@ -528,8 +539,8 @@ pcl::gpu::people::PeopleDetector::shs5 (const pcl::PointCloud<PointT> &cloud,
 
       // search window
       int left, right, top, bottom;
-      getProjectedRadiusSearchBox (cloud.height, cloud.width, intr, q, squared_radius,
-                                   left, right, top, bottom);
+      getProjectedRadiusSearchBox (
+          cloud.height, cloud.width, intr, q, squared_radius, left, right, top, bottom);
 
       int yEnd = (bottom + 1) * cloud.width + right + 1;
       int idx = top * cloud.width + left;

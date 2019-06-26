@@ -16,7 +16,8 @@
 
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-ON_OBJECT_IMPLEMENT (ON_SurfaceProxy, ON_Surface,
+ON_OBJECT_IMPLEMENT (ON_SurfaceProxy,
+                     ON_Surface,
                      "4ED7D4E2-E947-11d3-BFE5-0010830122F0");
 
 ON_SurfaceProxy::ON_SurfaceProxy () : m_surface (0), m_bTransposed (0) {}
@@ -214,9 +215,10 @@ ON_SurfaceProxy::Degree (int dir) const
 }
 
 ON_BOOL32
-ON_SurfaceProxy::GetParameterTolerance (int dir, double t, // t = parameter in domain
-                                        double *tminus,    // tminus
-                                        double *tplus      // tplus
+ON_SurfaceProxy::GetParameterTolerance (int dir,
+                                        double t,       // t = parameter in domain
+                                        double *tminus, // tminus
+                                        double *tplus   // tplus
                                         ) const
 {
   if (m_bTransposed) {
@@ -236,7 +238,8 @@ ON_SurfaceProxy::IsClosed (int dir) const
 
 ON_Surface::ISO
 ON_SurfaceProxy::IsIsoparametric ( // returns isoparametric status of 2d curve
-    const ON_Curve &crv, const ON_Interval *subdomain) const
+    const ON_Curve &crv,
+    const ON_Interval *subdomain) const
 {
   // this is a virtual overide of an ON_Surface::IsIsoparametric
 
@@ -343,8 +346,13 @@ ON_SurfaceProxy::IsPeriodic (int dir) const
 }
 
 bool
-ON_SurfaceProxy::GetNextDiscontinuity (int dir, ON::continuity c, double t0, double t1,
-                                       double *t, int *hint, int *dtype,
+ON_SurfaceProxy::GetNextDiscontinuity (int dir,
+                                       ON::continuity c,
+                                       double t0,
+                                       double t1,
+                                       double *t,
+                                       int *hint,
+                                       int *dtype,
                                        double cos_angle_tolerance,
                                        double curvature_tolerance) const
 {
@@ -352,8 +360,14 @@ ON_SurfaceProxy::GetNextDiscontinuity (int dir, ON::continuity c, double t0, dou
   bool rc = false;
 
   if (0 != m_surface && dir >= 0 && dir <= 1) {
-    rc = m_surface->GetNextDiscontinuity (m_bTransposed ? 1 - dir : dir, c, t0, t1, t,
-                                          hint, dtype, cos_angle_tolerance,
+    rc = m_surface->GetNextDiscontinuity (m_bTransposed ? 1 - dir : dir,
+                                          c,
+                                          t0,
+                                          t1,
+                                          t,
+                                          hint,
+                                          dtype,
+                                          cos_angle_tolerance,
                                           curvature_tolerance);
   }
 
@@ -400,7 +414,10 @@ ON_SurfaceProxy::Transpose ()
 
 bool
 ON_SurfaceProxy::IsContinuous (
-    ON::continuity desired_continuity, double s, double t, int *hint, // default = NULL,
+    ON::continuity desired_continuity,
+    double s,
+    double t,
+    int *hint,                  // default = NULL,
     double point_tolerance,     // default=ON_ZERO_TOLERANCE
     double d1_tolerance,        // default==ON_ZERO_TOLERANCE
     double d2_tolerance,        // default==ON_ZERO_TOLERANCE
@@ -415,8 +432,14 @@ ON_SurfaceProxy::IsContinuous (
       s = t;
       t = x;
     }
-    rc = m_surface->IsContinuous (desired_continuity, s, t, hint, point_tolerance,
-                                  d1_tolerance, d2_tolerance, cos_angle_tolerance,
+    rc = m_surface->IsContinuous (desired_continuity,
+                                  s,
+                                  t,
+                                  hint,
+                                  point_tolerance,
+                                  d1_tolerance,
+                                  d2_tolerance,
+                                  cos_angle_tolerance,
                                   curvature_tolerance);
   }
   return rc;
@@ -424,11 +447,12 @@ ON_SurfaceProxy::IsContinuous (
 
 ON_BOOL32
 ON_SurfaceProxy::Evaluate ( // returns false if unable to evaluate
-    double s, double t,     // evaluation parameters
-    int der_count,          // number of derivatives (>=0)
-    int v_stride,           // v[] array stride (>=Dimension())
-    double *v,              // v[] array of length stride*(ndir+1)
-    int side,               // optional - determines which side to evaluate from
+    double s,
+    double t,      // evaluation parameters
+    int der_count, // number of derivatives (>=0)
+    int v_stride,  // v[] array stride (>=Dimension())
+    double *v,     // v[] array of length stride*(ndir+1)
+    int side,      // optional - determines which side to evaluate from
     //         0 = default
     //      <  0 to evaluate from below,
     //      >  0 to evaluate from above
@@ -473,7 +497,8 @@ ON_SurfaceProxy::
                   //            surface's parameterization and the NURBS
                   //            parameterization may not match to the
                   //            desired accuracy.
-        ON_NurbsSurface &nurbs, double tolerance) const
+        ON_NurbsSurface &nurbs,
+        double tolerance) const
 {
   ON_BOOL32 rc = (m_surface) ? m_surface->GetNurbForm (nurbs, tolerance) : false;
   if (rc && m_bTransposed) {
@@ -482,17 +507,18 @@ ON_SurfaceProxy::
   return rc;
 }
 
-int ON_SurfaceProxy::HasNurbForm ( // returns 0: unable to create NURBS representation
-    //            with desired accuracy.
-    //         1: success - returned NURBS parameterization
-    //            matches the surface's to wthe desired accuracy
-    //         2: success - returned NURBS point locus matches
-    //            the surfaces's to the desired accuracy but, on
-    //            the interior of the surface's domain, the
-    //            surface's parameterization and the NURBS
-    //            parameterization may not match to the
-    //            desired accuracy.
-    ) const
+int ON_SurfaceProxy::
+    HasNurbForm ( // returns 0: unable to create NURBS representation
+                  //            with desired accuracy.
+                  //         1: success - returned NURBS parameterization
+                  //            matches the surface's to wthe desired accuracy
+                  //         2: success - returned NURBS point locus matches
+                  //            the surfaces's to the desired accuracy but, on
+                  //            the interior of the surface's domain, the
+                  //            surface's parameterization and the NURBS
+                  //            parameterization may not match to the
+                  //            desired accuracy.
+        ) const
 
 {
   if (!m_surface)

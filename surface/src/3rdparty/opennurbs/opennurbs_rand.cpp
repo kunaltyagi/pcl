@@ -249,10 +249,7 @@ ON_RandomNumberGenerator::Seed (ON__UINT32 s)
 }
 
 ON__UINT32
-ON_RandomNumberGenerator::RandomNumber ()
-{
-  return on_random_number (&m_rand_context);
-}
+ON_RandomNumberGenerator::RandomNumber () { return on_random_number (&m_rand_context); }
 
 double
 ON_RandomNumberGenerator::RandomDouble ()
@@ -307,7 +304,8 @@ Swap8 (size_t count, ON__UINT64 *a, ON__UINT64 *b)
 }
 
 void
-ON_RandomNumberGenerator::RandomPermutation (void *base, size_t nel,
+ON_RandomNumberGenerator::RandomPermutation (void *base,
+                                             size_t nel,
                                              size_t sizeof_element)
 {
   ON__UINT32 i, j, n;

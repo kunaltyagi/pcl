@@ -94,7 +94,9 @@ class ON_CLASS ON_Arc : public ON_Circle
     radius - [in]
     angle_in_radians - [in]
   */
-  ON_Arc (const ON_Plane &plane, const ON_3dPoint &center, double radius,
+  ON_Arc (const ON_Plane &plane,
+          const ON_3dPoint &center,
+          double radius,
           double angle_in_radians);
 
   /*
@@ -105,7 +107,8 @@ class ON_CLASS ON_Arc : public ON_Circle
     interior_point - [in]
     end_point - [in]
   */
-  ON_Arc (const ON_2dPoint &start_point, const ON_2dPoint &interior_point,
+  ON_Arc (const ON_2dPoint &start_point,
+          const ON_2dPoint &interior_point,
           const ON_2dPoint &end_point);
 
   /*
@@ -116,7 +119,8 @@ class ON_CLASS ON_Arc : public ON_Circle
     interior_point - [in]
     end_point - [in]
   */
-  ON_Arc (const ON_3dPoint &start_point, const ON_3dPoint &interior_point,
+  ON_Arc (const ON_3dPoint &start_point,
+          const ON_3dPoint &interior_point,
           const ON_3dPoint &end_point);
 
   /*
@@ -187,7 +191,9 @@ class ON_CLASS ON_Arc : public ON_Circle
     angle_in_radians - [in]
   */
   bool
-  Create (const ON_Plane &plane, const ON_3dPoint &center, double radius,
+  Create (const ON_Plane &plane,
+          const ON_3dPoint &center,
+          double radius,
           double angle_in_radians);
 
   /*
@@ -199,7 +205,8 @@ class ON_CLASS ON_Arc : public ON_Circle
     end_point - [in]
   */
   bool
-  Create (const ON_2dPoint &start_point, const ON_2dPoint &interior_point,
+  Create (const ON_2dPoint &start_point,
+          const ON_2dPoint &interior_point,
           const ON_2dPoint &end_point);
 
   /*
@@ -211,7 +218,8 @@ class ON_CLASS ON_Arc : public ON_Circle
     end_point - [in]
   */
   bool
-  Create (const ON_3dPoint &start_point, const ON_3dPoint &interior_point,
+  Create (const ON_3dPoint &start_point,
+          const ON_3dPoint &interior_point,
           const ON_3dPoint &end_point);
 
   /*
@@ -224,7 +232,8 @@ class ON_CLASS ON_Arc : public ON_Circle
     end_point - [in]
   */
   bool
-  Create (const ON_2dPoint &start_point, const ON_2dVector &dir_at_start,
+  Create (const ON_2dPoint &start_point,
+          const ON_2dVector &dir_at_start,
           const ON_2dPoint &end_point);
 
   /*
@@ -237,7 +246,8 @@ class ON_CLASS ON_Arc : public ON_Circle
     end_point - [in]
   */
   bool
-  Create (const ON_3dPoint &start_point, const ON_3dVector &dir_at_start,
+  Create (const ON_3dPoint &start_point,
+          const ON_3dVector &dir_at_start,
           const ON_3dPoint &end_point);
 
   ON_Arc &
@@ -301,7 +311,8 @@ class ON_CLASS ON_Arc : public ON_Circle
     True if a valid tight_bbox is returned.
   */
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   // Returns:

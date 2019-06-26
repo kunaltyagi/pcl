@@ -109,7 +109,9 @@ namespace pcl
        * \param[in] max_nn maximum numver of results returned
        */
       void
-      radiusSearchHost (const PointType &center, float radius, std::vector<int> &out,
+      radiusSearchHost (const PointType &center,
+                        float radius,
+                        std::vector<int> &out,
                         int max_nn = INT_MAX);
 
       /** \brief Performs approximate nearest neighbor search on CPU. It call \a
@@ -127,7 +129,9 @@ namespace pcl
        * \param[out] result results packed to single array
        */
       void
-      radiusSearch (const Queries &centers, float radius, int max_results,
+      radiusSearch (const Queries &centers,
+                    float radius,
+                    int max_results,
                     NeighborIndices &result) const;
 
       /** \brief Performs batch radius search on GPU
@@ -137,7 +141,9 @@ namespace pcl
        * \param[out] result results packed to single array
        */
       void
-      radiusSearch (const Queries &centers, const Radiuses &radiuses, int max_results,
+      radiusSearch (const Queries &centers,
+                    const Radiuses &radiuses,
+                    int max_results,
                     NeighborIndices &result) const;
 
       /** \brief Performs batch radius search on GPU
@@ -148,8 +154,11 @@ namespace pcl
        * single array
        */
       void
-      radiusSearch (const Queries &centers, const Indices &indices, float radius,
-                    int max_results, NeighborIndices &result) const;
+      radiusSearch (const Queries &centers,
+                    const Indices &indices,
+                    float radius,
+                    int max_results,
+                    NeighborIndices &result) const;
 
       /** \brief Batch approximate nearest search on GPU
        * \param[in] queries array of centers
@@ -164,7 +173,8 @@ namespace pcl
        * \param[out] results array of results
        */
       void
-      nearestKSearchBatch (const Queries &queries, int k,
+      nearestKSearchBatch (const Queries &queries,
+                           int k,
                            NeighborIndices &results) const;
 
       /** \brief Desroys octree and release all resources */
@@ -186,8 +196,10 @@ namespace pcl
      */
     PCL_EXPORTS void
     bruteForceRadiusSearchGPU (const Octree::PointCloud &cloud,
-                               const Octree::PointType &query, float radius,
-                               DeviceArray<int> &result, DeviceArray<int> &buffer);
+                               const Octree::PointType &query,
+                               float radius,
+                               DeviceArray<int> &result,
+                               DeviceArray<int> &buffer);
   } // namespace gpu
 } // namespace pcl
 

@@ -469,8 +469,12 @@ Returns:
 */
 ON_DECL
 bool
-ON_GetMatrixSVD (int row_count, int col_count, double const *const *A, double **&U,
-                 double *&W, double **&V);
+ON_GetMatrixSVD (int row_count,
+                 int col_count,
+                 double const *const *A,
+                 double **&U,
+                 double *&W,
+                 double **&V);
 
 /*
 Description:
@@ -573,8 +577,13 @@ Returns:
 */
 ON_DECL
 bool
-ON_SolveSVD (int row_count, int col_count, double const *const *U, const double *invW,
-             double const *const *V, const double *B, double *&X);
+ON_SolveSVD (int row_count,
+             int col_count,
+             double const *const *U,
+             const double *invW,
+             double const *const *V,
+             const double *B,
+             double *&X);
 
 /*
 Description:
@@ -601,7 +610,11 @@ Returns:
 */
 ON_DECL
 int
-ON_RowReduce (int row_count, int col_count, double zero_pivot, double **A, double **B,
+ON_RowReduce (int row_count,
+              int col_count,
+              double zero_pivot,
+              double **A,
+              double **B,
               double pivots[2]);
 
 #endif

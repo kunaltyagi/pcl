@@ -58,8 +58,10 @@ TEST (PCL_FeaturesGPU, ppf)
   source.estimateNormals ();
 
   vector<PointXYZ> normals_for_gpu (source.normals->points.size ());
-  std::transform (source.normals->points.begin (), source.normals->points.end (),
-                  normals_for_gpu.begin (), DataSource::Normal2PointXYZ ());
+  std::transform (source.normals->points.begin (),
+                  source.normals->points.end (),
+                  normals_for_gpu.begin (),
+                  DataSource::Normal2PointXYZ ());
 
   // uploading data to GPU
 
@@ -115,8 +117,10 @@ TEST (PCL_FeaturesGPU, ppfrgb)
   source.estimateNormals ();
 
   vector<PointXYZ> normals_for_gpu (source.normals->points.size ());
-  std::transform (source.normals->points.begin (), source.normals->points.end (),
-                  normals_for_gpu.begin (), DataSource::Normal2PointXYZ ());
+  std::transform (source.normals->points.begin (),
+                  source.normals->points.end (),
+                  normals_for_gpu.begin (),
+                  DataSource::Normal2PointXYZ ());
 
   // uploading data to GPU
 
@@ -206,8 +210,10 @@ TEST (PCL_FeaturesGPU, ppfrgb_region)
   source.estimateNormals ();
 
   vector<PointXYZ> normals_for_gpu (source.normals->points.size ());
-  std::transform (source.normals->points.begin (), source.normals->points.end (),
-                  normals_for_gpu.begin (), DataSource::Normal2PointXYZ ());
+  std::transform (source.normals->points.begin (),
+                  source.normals->points.end (),
+                  normals_for_gpu.begin (),
+                  DataSource::Normal2PointXYZ ());
 
   // uploading data to GPU
   //////////////////////////////////////////////////////////////////////////////////////////////

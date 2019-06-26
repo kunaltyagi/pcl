@@ -47,7 +47,8 @@ pcl::Permutohedral::Permutohedral ()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::Permutohedral::init (const std::vector<float> &feature,
-                          const int feature_dimension, const int N)
+                          const int feature_dimension,
+                          const int N)
 {
   N_ = N;
   d_ = feature_dimension;
@@ -252,8 +253,12 @@ pcl::Permutohedral::init (const std::vector<float> &feature,
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::Permutohedral::compute (std::vector<float> &out, const std::vector<float> &in,
-                             int value_size, int in_offset, int out_offset, int in_size,
+pcl::Permutohedral::compute (std::vector<float> &out,
+                             const std::vector<float> &in,
+                             int value_size,
+                             int in_offset,
+                             int out_offset,
+                             int in_size,
                              int out_size) const
 {
   if (in_size == -1)
@@ -313,7 +318,8 @@ pcl::Permutohedral::compute (std::vector<float> &out, const std::vector<float> &
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::Permutohedral::initOLD (const std::vector<float> &feature,
-                             const int feature_dimension, const int N)
+                             const int feature_dimension,
+                             const int N)
 {
   // Compute the lattice coordinates for each feature [there is going to be a lot of
   // magic here
@@ -474,9 +480,13 @@ pcl::Permutohedral::initOLD (const std::vector<float> &feature,
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::Permutohedral::computeOLD (std::vector<float> &out, const std::vector<float> &in,
-                                int value_size, int in_offset, int out_offset,
-                                int in_size, int out_size) const
+pcl::Permutohedral::computeOLD (std::vector<float> &out,
+                                const std::vector<float> &in,
+                                int value_size,
+                                int in_offset,
+                                int out_offset,
+                                int in_size,
+                                int out_size) const
 {
   if (in_size == -1)
     in_size = N_ - in_offset;

@@ -110,14 +110,22 @@ namespace pcl
       getViewPoint (float &vpx, float &vpy, float &vpz);
 
       static void
-      computeNormals (const PointCloud &cloud, const NeighborIndices &nn_indices,
+      computeNormals (const PointCloud &cloud,
+                      const NeighborIndices &nn_indices,
                       Normals &normals);
       static void
-      flipNormalTowardsViewpoint (const PointCloud &cloud, float vp_x, float vp_y,
-                                  float vp_z, Normals &normals);
+      flipNormalTowardsViewpoint (const PointCloud &cloud,
+                                  float vp_x,
+                                  float vp_y,
+                                  float vp_z,
+                                  Normals &normals);
       static void
-      flipNormalTowardsViewpoint (const PointCloud &cloud, const Indices &indices,
-                                  float vp_x, float vp_y, float vp_z, Normals &normals);
+      flipNormalTowardsViewpoint (const PointCloud &cloud,
+                                  const Indices &indices,
+                                  float vp_x,
+                                  float vp_y,
+                                  float vp_z,
+                                  Normals &normals);
 
       private:
       float vpx_, vpy_, vpz_;
@@ -130,7 +138,8 @@ namespace pcl
     {
       public:
       void
-      compute (const PointCloud &cloud, const Normals &normals,
+      compute (const PointCloud &cloud,
+               const Normals &normals,
                const NeighborIndices &neighb_indices,
                DeviceArray2D<PFHSignature125> &features);
       void
@@ -149,7 +158,8 @@ namespace pcl
       public:
       using PointType = PointXYZ; // 16 bytes for xyzrgb
       void
-      compute (const PointCloud &cloud, const Normals &normals,
+      compute (const PointCloud &cloud,
+               const Normals &normals,
                const NeighborIndices &neighb_indices,
                DeviceArray2D<PFHRGBSignature250> &features);
       void
@@ -173,7 +183,8 @@ namespace pcl
       compute (DeviceArray2D<FPFHSignature33> &features);
 
       void
-      compute (const PointCloud &cloud, const Normals &normals,
+      compute (const PointCloud &cloud,
+               const Normals &normals,
                const NeighborIndices &neighbours,
                DeviceArray2D<FPFHSignature33> &features);
 

@@ -12,36 +12,45 @@ namespace pcl
   template <typename PointT>
   int
   OrganizedNeighborSearch<PointT>::radiusSearch (
-      const PointCloudConstPtr &cloud_arg, int index_arg, double radius_arg,
-      std::vector<int> &k_indices_arg, std::vector<float> &k_sqr_distances_arg,
+      const PointCloudConstPtr &cloud_arg,
+      int index_arg,
+      double radius_arg,
+      std::vector<int> &k_indices_arg,
+      std::vector<float> &k_sqr_distances_arg,
       int max_nn_arg)
   {
     this->setInputCloud (cloud_arg);
 
-    return radiusSearch (index_arg, radius_arg, k_indices_arg, k_sqr_distances_arg,
-                         max_nn_arg);
+    return radiusSearch (
+        index_arg, radius_arg, k_indices_arg, k_sqr_distances_arg, max_nn_arg);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////
   template <typename PointT>
   int
   OrganizedNeighborSearch<PointT>::radiusSearch (
-      int index_arg, const double radius_arg, std::vector<int> &k_indices_arg,
-      std::vector<float> &k_sqr_distances_arg, int max_nn_arg) const
+      int index_arg,
+      const double radius_arg,
+      std::vector<int> &k_indices_arg,
+      std::vector<float> &k_sqr_distances_arg,
+      int max_nn_arg) const
   {
 
     const PointT searchPoint = getPointByIndex (index_arg);
 
-    return radiusSearch (searchPoint, radius_arg, k_indices_arg, k_sqr_distances_arg,
-                         max_nn_arg);
+    return radiusSearch (
+        searchPoint, radius_arg, k_indices_arg, k_sqr_distances_arg, max_nn_arg);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////
   template <typename PointT>
   int
   OrganizedNeighborSearch<PointT>::radiusSearch (
-      const PointT &p_q_arg, const double radius_arg, std::vector<int> &k_indices_arg,
-      std::vector<float> &k_sqr_distances_arg, int max_nn_arg) const
+      const PointT &p_q_arg,
+      const double radius_arg,
+      std::vector<int> &k_indices_arg,
+      std::vector<float> &k_sqr_distances_arg,
+      int max_nn_arg) const
   {
     if (input_->height == 1) {
       PCL_ERROR ("[pcl::%s::radiusSearch] Input dataset is not organized!",
@@ -57,8 +66,8 @@ namespace pcl
 
     double squared_radius = radius_arg * radius_arg;
 
-    this->getProjectedRadiusSearchBox (p_q_arg, squared_radius, leftX, rightX, leftY,
-                                       rightY);
+    this->getProjectedRadiusSearchBox (
+        p_q_arg, squared_radius, leftX, rightX, leftY, rightY);
 
     // iterate over all children
     int nnn = 0;
@@ -91,8 +100,12 @@ namespace pcl
   template <typename PointT>
   void
   OrganizedNeighborSearch<PointT>::getProjectedRadiusSearchBox (
-      const PointT &point_arg, double squared_radius_arg, int &minX_arg, int &maxX_arg,
-      int &minY_arg, int &maxY_arg) const
+      const PointT &point_arg,
+      double squared_radius_arg,
+      int &minX_arg,
+      int &maxX_arg,
+      int &minY_arg,
+      int &maxY_arg) const
   {
     double r_sqr, r_quadr, z_sqr;
     double sqrt_term_y, sqrt_term_x, norm;
@@ -138,7 +151,9 @@ namespace pcl
   template <typename PointT>
   int
   OrganizedNeighborSearch<PointT>::nearestKSearch (
-      int index_arg, int k_arg, std::vector<int> &k_indices_arg,
+      int index_arg,
+      int k_arg,
+      std::vector<int> &k_indices_arg,
       std::vector<float> &k_sqr_distances_arg)
   {
 
@@ -151,8 +166,11 @@ namespace pcl
   template <typename PointT>
   int
   OrganizedNeighborSearch<PointT>::nearestKSearch (
-      const PointCloudConstPtr &cloud_arg, int index_arg, int k_arg,
-      std::vector<int> &k_indices_arg, std::vector<float> &k_sqr_distances_arg)
+      const PointCloudConstPtr &cloud_arg,
+      int index_arg,
+      int k_arg,
+      std::vector<int> &k_indices_arg,
+      std::vector<float> &k_sqr_distances_arg)
   {
     this->setInputCloud (cloud_arg);
 
@@ -163,7 +181,9 @@ namespace pcl
   template <typename PointT>
   int
   OrganizedNeighborSearch<PointT>::nearestKSearch (
-      const PointT &p_q_arg, int k_arg, std::vector<int> &k_indices_arg,
+      const PointT &p_q_arg,
+      int k_arg,
+      std::vector<int> &k_indices_arg,
       std::vector<float> &k_sqr_distances_arg)
   {
     int x_pos, y_pos, x, y, idx;
@@ -256,8 +276,8 @@ namespace pcl
       squared_radius = std::min<double> (nearestNeighbors.back ().squared_distance_,
                                          squaredMaxSearchRadius);
 
-      this->getProjectedRadiusSearchBox (p_q_arg, squared_radius, leftX, rightX, leftY,
-                                         rightY);
+      this->getProjectedRadiusSearchBox (
+          p_q_arg, squared_radius, leftX, rightX, leftY, rightY);
 
       leftX *= leftX;
       rightX *= rightX;
@@ -329,8 +349,8 @@ namespace pcl
         k_radius_indices.reserve (k_arg * 2);
         k_radius_distances.reserve (k_arg * 2);
 
-        radiusSearch (p_q_arg, sqrt (squared_radius), k_radius_indices,
-                      k_radius_distances);
+        radiusSearch (
+            p_q_arg, sqrt (squared_radius), k_radius_indices, k_radius_distances);
 
         std::cout << k_radius_indices.size () << std::endl;
 

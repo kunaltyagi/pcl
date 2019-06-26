@@ -80,7 +80,8 @@ pcl::recognition::ORROctree::build (const float *bounds, float voxel_size)
 
   float extent = std::max (std::max (bounds[1] - bounds[0], bounds[3] - bounds[2]),
                            bounds[5] - bounds[4]);
-  float center[3] = {0.5f * (bounds[0] + bounds[1]), 0.5f * (bounds[2] + bounds[3]),
+  float center[3] = {0.5f * (bounds[0] + bounds[1]),
+                     0.5f * (bounds[2] + bounds[3]),
                      0.5f * (bounds[4] + bounds[5])};
   float arg = extent / voxel_size;
 
@@ -113,8 +114,10 @@ pcl::recognition::ORROctree::build (const float *bounds, float voxel_size)
 //================================================================================================================================================================
 
 void
-pcl::recognition::ORROctree::build (const PointCloudIn &points, float voxel_size,
-                                    const PointCloudN *normals, float enlarge_bounds)
+pcl::recognition::ORROctree::build (const PointCloudIn &points,
+                                    float voxel_size,
+                                    const PointCloudN *normals,
+                                    float enlarge_bounds)
 {
   if (voxel_size <= 0.0f)
     return;
@@ -126,8 +129,8 @@ pcl::recognition::ORROctree::build (const PointCloudIn &points, float voxel_size
   // Enlarge the bounds a bit to avoid points lying exact on the octree boundaries
   float eps = enlarge_bounds *
               std::max (std::max (max.x - min.x, max.y - min.y), max.z - min.z);
-  float b[6] = {min.x - eps, max.x + eps, min.y - eps,
-                max.y + eps, min.z - eps, max.z + eps};
+  float b[6] = {
+      min.x - eps, max.x + eps, min.y - eps, max.y + eps, min.z - eps, max.z + eps};
 
   // Build an empty octree with the right boundaries and the right number of levels
   this->build (b, voxel_size);
@@ -138,7 +141,12 @@ pcl::recognition::ORROctree::build (const PointCloudIn &points, float voxel_size
           "[%f, %f]\n"
           "[%f, %f]\n"
           "[%f, %f]\n",
-          min.x, max.x, min.y, max.y, min.z, max.z);
+          min.x,
+          max.x,
+          min.y,
+          max.y,
+          min.z,
+          max.z);
 #endif
 
   size_t num_points = points.size ();
@@ -153,15 +161,18 @@ pcl::recognition::ORROctree::build (const PointCloudIn &points, float voxel_size
       fprintf (stderr,
                "WARNING in 'ORROctree::%s()': the point (%f, %f, %f) should be within "
                "the octree bounds!\n",
-               __func__, points[i].x, points[i].y, points[i].z);
+               __func__,
+               points[i].x,
+               points[i].y,
+               points[i].z);
       continue;
     }
 
     // Now, that we have the right leaf -> fill it
     node->getData ()->addToPoint (points[i].x, points[i].y, points[i].z);
     if (normals)
-      node->getData ()->addToNormal (normals->at (i).normal_x, normals->at (i).normal_y,
-                                     normals->at (i).normal_z);
+      node->getData ()->addToNormal (
+          normals->at (i).normal_x, normals->at (i).normal_y, normals->at (i).normal_z);
   }
 
   // Compute the normals and average points for each full octree node
@@ -343,8 +354,8 @@ pcl::recognition::ORROctree::getRandomFullLeafOnSphere (const float *p,
   vector<int> tmp_ids;
   tmp_ids.reserve (8);
 
-  pcl::common::UniformGenerator<int> randgen (0, 1,
-                                              static_cast<uint32_t> (time (nullptr)));
+  pcl::common::UniformGenerator<int> randgen (
+      0, 1, static_cast<uint32_t> (time (nullptr)));
 
   list<ORROctree::Node *> nodes;
   nodes.push_back (root_);
@@ -423,7 +434,8 @@ pcl::recognition::ORROctree::getFullLeavesPoints (PointCloudOut &out) const
 
   // Now iterate over all full leaves and compute the normals and average points
   for (vector<ORROctree::Node *>::const_iterator it = full_leaves_.begin ();
-       it != full_leaves_.end (); ++it, ++i) {
+       it != full_leaves_.end ();
+       ++it, ++i) {
     out[i].x = (*it)->getData ()->getPoint ()[0];
     out[i].y = (*it)->getData ()->getPoint ()[1];
     out[i].z = (*it)->getData ()->getPoint ()[2];
@@ -440,7 +452,8 @@ pcl::recognition::ORROctree::getNormalsOfFullLeaves (PointCloudN &out) const
 
   // Now iterate over all full leaves and compute the normals and average points
   for (vector<ORROctree::Node *>::const_iterator it = full_leaves_.begin ();
-       it != full_leaves_.end (); ++it, ++i) {
+       it != full_leaves_.end ();
+       ++it, ++i) {
     out[i].normal_x = (*it)->getData ()->getNormal ()[0];
     out[i].normal_y = (*it)->getData ()->getNormal ()[1];
     out[i].normal_z = (*it)->getData ()->getNormal ()[2];

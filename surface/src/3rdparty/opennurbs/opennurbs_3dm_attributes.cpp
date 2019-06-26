@@ -16,7 +16,8 @@
 
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-ON_OBJECT_IMPLEMENT (ON_3dmObjectAttributes, ON_Object,
+ON_OBJECT_IMPLEMENT (ON_3dmObjectAttributes,
+                     ON_Object,
                      "A828C015-09F5-477c-8665-F0482F5D6996");
 
 ON_3dmObjectAttributes::ON_3dmObjectAttributes () { Default (); }
@@ -1095,7 +1096,8 @@ ON_3dmObjectAttributes::ApplyParentalControl (
 
 unsigned int
 ON_3dmObjectAttributes::ApplyParentalControl (
-    const ON_3dmObjectAttributes &parents_attributes, const ON_Layer &parent_layer,
+    const ON_3dmObjectAttributes &parents_attributes,
+    const ON_Layer &parent_layer,
     unsigned int control_limits)
 {
   unsigned int rc = 0;

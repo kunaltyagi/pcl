@@ -51,9 +51,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT, typename PointLT>
 void
-pcl::OrganizedConnectedComponentSegmentation<
-    PointT, PointLT>::findLabeledRegionBoundary (int start_idx, PointCloudLPtr labels,
-                                                 pcl::PointIndices &boundary_indices)
+pcl::OrganizedConnectedComponentSegmentation<PointT, PointLT>::
+    findLabeledRegionBoundary (int start_idx,
+                               PointCloudLPtr labels,
+                               pcl::PointIndices &boundary_indices)
 {
   boundary_indices.indices.clear ();
   int curr_idx = start_idx;

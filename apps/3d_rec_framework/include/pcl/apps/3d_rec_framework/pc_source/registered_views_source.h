@@ -269,7 +269,8 @@ namespace pcl
       }
 
       void
-      getModelsInDirectory (bf::path &dir, std::string &rel_path_so_far,
+      getModelsInDirectory (bf::path &dir,
+                            std::string &rel_path_so_far,
                             std::vector<std::string> &relative_paths)
       {
         bf::directory_iterator end_itr;

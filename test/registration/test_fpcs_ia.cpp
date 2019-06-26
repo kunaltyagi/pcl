@@ -58,8 +58,8 @@ TEST (PCL, FPCSInitialAlignment)
   float angle = static_cast<float> (M_PI) / 2.f;
   Eigen::Quaternionf initial_rotation (cos (angle / 2.f), 0, 0, sin (angle / 2.f));
   PointCloud<PointXYZ> cloud_source_transformed;
-  transformPointCloud (cloud_source, cloud_source_transformed, initial_offset,
-                       initial_rotation);
+  transformPointCloud (
+      cloud_source, cloud_source_transformed, initial_offset, initial_rotation);
 
   // create shared pointers
   PointCloud<PointXYZ>::Ptr cloud_source_ptr, cloud_target_ptr;

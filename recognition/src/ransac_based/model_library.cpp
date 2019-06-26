@@ -49,7 +49,8 @@ using namespace pcl::recognition;
 
 //============================================================================================================================================
 
-ModelLibrary::ModelLibrary (float pair_width, float voxel_size,
+ModelLibrary::ModelLibrary (float pair_width,
+                            float voxel_size,
                             float max_coplanarity_angle)
     : pair_width_ (pair_width), voxel_size_ (voxel_size),
       max_coplanarity_angle_ (max_coplanarity_angle), ignore_coplanar_opps_ (true)
@@ -61,9 +62,12 @@ ModelLibrary::ModelLibrary (float pair_width, float voxel_size,
   // Compute the bounds of the hash table
   float eps = 0.000001f; // To be sure that an angle of 0 or PI will not be excluded
                          // because it lies on the boundary of the voxel structure
-  float bounds[6] = {-eps, static_cast<float> (M_PI) + eps,
-                     -eps, static_cast<float> (M_PI) + eps,
-                     -eps, static_cast<float> (M_PI) + eps};
+  float bounds[6] = {-eps,
+                     static_cast<float> (M_PI) + eps,
+                     -eps,
+                     static_cast<float> (M_PI) + eps,
+                     -eps,
+                     static_cast<float> (M_PI) + eps};
 
   hash_table_.build (bounds, num_of_cells_);
 }
@@ -101,9 +105,11 @@ ModelLibrary::removeAllModels ()
 //============================================================================================================================================
 
 bool
-ModelLibrary::addModel (const PointCloudIn &points, const PointCloudN &normals,
+ModelLibrary::addModel (const PointCloudIn &points,
+                        const PointCloudN &normals,
                         const std::string &object_name,
-                        float frac_of_points_for_registration, void *user_data)
+                        float frac_of_points_for_registration,
+                        void *user_data)
 {
 #ifdef OBJ_REC_RANSAC_VERBOSE
   printf ("ModelLibrary::%s(): begin [%s]\n", __func__, object_name.c_str ());
@@ -120,8 +126,12 @@ ModelLibrary::addModel (const PointCloudIn &points, const PointCloudN &normals,
   }
 
   // It is unique -> create a new library model and save it
-  Model *new_model = new Model (points, normals, voxel_size_, object_name,
-                                frac_of_points_for_registration, user_data);
+  Model *new_model = new Model (points,
+                                normals,
+                                voxel_size_,
+                                object_name,
+                                frac_of_points_for_registration,
+                                user_data);
   result.first->second = new_model;
 
   const ORROctree &octree = new_model->getOctree ();
@@ -135,8 +145,8 @@ ModelLibrary::addModel (const PointCloudIn &points, const PointCloudN &normals,
 
     // Get all full leaves at the right distance to the current leaf
     inter_leaves.clear ();
-    octree.getFullLeavesIntersectedBySphere (node_data1->getPoint (), pair_width_,
-                                             inter_leaves);
+    octree.getFullLeavesIntersectedBySphere (
+        node_data1->getPoint (), pair_width_, inter_leaves);
 
     for (const auto &inter_leaf : inter_leaves) {
       // Compute the hash table key
@@ -146,8 +156,8 @@ ModelLibrary::addModel (const PointCloudIn &points, const PointCloudN &normals,
   }
 
 #ifdef OBJ_REC_RANSAC_VERBOSE
-  printf ("ModelLibrary::%s(): end [%i oriented point pairs]\n", __func__,
-          num_of_pairs);
+  printf (
+      "ModelLibrary::%s(): end [%i oriented point pairs]\n", __func__, num_of_pairs);
 #endif
 
   return (true);
@@ -156,15 +166,18 @@ ModelLibrary::addModel (const PointCloudIn &points, const PointCloudN &normals,
 //============================================================================================================================================
 
 bool
-ModelLibrary::addToHashTable (Model *model, const ORROctree::Node::Data *data1,
+ModelLibrary::addToHashTable (Model *model,
+                              const ORROctree::Node::Data *data1,
                               const ORROctree::Node::Data *data2)
 {
   float key[3];
 
   // Compute the descriptor signature for the oriented point pair (i, j)
-  ObjRecRANSAC::compute_oriented_point_pair_signature (
-      data1->getPoint (), data1->getNormal (), data2->getPoint (), data2->getNormal (),
-      key);
+  ObjRecRANSAC::compute_oriented_point_pair_signature (data1->getPoint (),
+                                                       data1->getNormal (),
+                                                       data2->getPoint (),
+                                                       data2->getNormal (),
+                                                       key);
 
   if (ignore_coplanar_opps_) {
     // If the angle between one of the normals and the connecting vector is about 90°

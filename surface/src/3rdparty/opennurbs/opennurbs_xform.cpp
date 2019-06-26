@@ -486,7 +486,9 @@ ON_Xform::ON_Xform (const float *m)
   m_xform[3][3] = (double)m[15];
 }
 
-ON_Xform::ON_Xform (const ON_3dPoint &P, const ON_3dVector &X, const ON_3dVector &Y,
+ON_Xform::ON_Xform (const ON_3dPoint &P,
+                    const ON_3dVector &X,
+                    const ON_3dVector &Y,
                     const ON_3dVector &Z)
 {
   m_xform[0][0] = X[0];
@@ -728,15 +730,21 @@ ON_Xform::Scale (ON_3dPoint fixed_point, double scale_factor)
 }
 
 void
-ON_Xform::Scale (const ON_Plane &plane, double x_scale_factor, double y_scale_factor,
+ON_Xform::Scale (const ON_Plane &plane,
+                 double x_scale_factor,
+                 double y_scale_factor,
                  double z_scale_factor)
 {
-  Shear (plane, x_scale_factor * plane.xaxis, y_scale_factor * plane.yaxis,
+  Shear (plane,
+         x_scale_factor * plane.xaxis,
+         y_scale_factor * plane.yaxis,
          z_scale_factor * plane.zaxis);
 }
 
 void
-ON_Xform::Shear (const ON_Plane &plane, const ON_3dVector &x1, const ON_3dVector &y1,
+ON_Xform::Shear (const ON_Plane &plane,
+                 const ON_3dVector &x1,
+                 const ON_3dVector &y1,
                  const ON_3dVector &z1)
 {
   ON_Xform t0, t1, s0 (1), s1 (1);
@@ -1223,7 +1231,8 @@ ON_Xform::Rotation (double angle,
 }
 
 void
-ON_Xform::Rotation (ON_3dVector start_dir, ON_3dVector end_dir,
+ON_Xform::Rotation (ON_3dVector start_dir,
+                    ON_3dVector end_dir,
                     ON_3dPoint rotation_center)
 {
   if (fabs (start_dir.Length () - 1.0) > ON_SQRT_EPSILON)
@@ -1243,7 +1252,9 @@ ON_Xform::Rotation (ON_3dVector start_dir, ON_3dVector end_dir,
 }
 
 void
-ON_Xform::Rotation (double sin_angle, double cos_angle, ON_3dVector axis,
+ON_Xform::Rotation (double sin_angle,
+                    double cos_angle,
+                    ON_3dVector axis,
                     ON_3dPoint center)
 {
   Identity ();
@@ -1371,8 +1382,14 @@ ON_Xform::Rotation (
 void
 ON_Xform::Rotation (const ON_Plane &plane0, const ON_Plane &plane1)
 {
-  Rotation (plane0.origin, plane0.xaxis, plane0.yaxis, plane0.zaxis, plane1.origin,
-            plane1.xaxis, plane1.yaxis, plane1.zaxis);
+  Rotation (plane0.origin,
+            plane0.xaxis,
+            plane0.yaxis,
+            plane0.zaxis,
+            plane1.origin,
+            plane1.xaxis,
+            plane1.yaxis,
+            plane1.zaxis);
 }
 
 void
@@ -1446,8 +1463,14 @@ ON_Xform::ChangeBasis (
     const ON_Plane &plane1  // final plane
 )
 {
-  return ChangeBasis (plane0.origin, plane0.xaxis, plane0.yaxis, plane0.zaxis,
-                      plane1.origin, plane1.xaxis, plane1.yaxis, plane1.zaxis);
+  return ChangeBasis (plane0.origin,
+                      plane0.xaxis,
+                      plane0.yaxis,
+                      plane0.zaxis,
+                      plane1.origin,
+                      plane1.xaxis,
+                      plane1.yaxis,
+                      plane1.zaxis);
 }
 
 bool
@@ -1625,8 +1648,10 @@ ON_Xform::ChangeBasis (
 }
 
 void
-ON_Xform::WorldToCamera (const ON_3dPoint &cameraLocation, const ON_3dVector &cameraX,
-                         const ON_3dVector &cameraY, const ON_3dVector &cameraZ)
+ON_Xform::WorldToCamera (const ON_3dPoint &cameraLocation,
+                         const ON_3dVector &cameraX,
+                         const ON_3dVector &cameraY,
+                         const ON_3dVector &cameraZ)
 {
   // see comments in tl2_xform.h for details.
   /* compute world to camera coordinate xform */
@@ -1650,8 +1675,10 @@ ON_Xform::WorldToCamera (const ON_3dPoint &cameraLocation, const ON_3dVector &ca
 }
 
 void
-ON_Xform::CameraToWorld (const ON_3dPoint &cameraLocation, const ON_3dVector &cameraX,
-                         const ON_3dVector &cameraY, const ON_3dVector &cameraZ)
+ON_Xform::CameraToWorld (const ON_3dPoint &cameraLocation,
+                         const ON_3dVector &cameraX,
+                         const ON_3dVector &cameraY,
+                         const ON_3dVector &cameraZ)
 {
   // see comments in tl2_xform.h for details.
   /* compute camera to world coordinate m_xform */
@@ -1672,8 +1699,13 @@ ON_Xform::CameraToWorld (const ON_3dPoint &cameraLocation, const ON_3dVector &ca
 }
 
 bool
-ON_Xform::CameraToClip (ON_BOOL32 bPerspective, double left, double right,
-                        double bottom, double top, double near_dist, double far_dist)
+ON_Xform::CameraToClip (ON_BOOL32 bPerspective,
+                        double left,
+                        double right,
+                        double bottom,
+                        double top,
+                        double near_dist,
+                        double far_dist)
 {
   double dd;
 
@@ -1684,11 +1716,11 @@ ON_Xform::CameraToClip (ON_BOOL32 bPerspective, double left, double right,
     // parallel projection
     // d = 1.0/(left-right);
     // m_xform[0][0] = -2.0*d; m_xform[0][3] = (left+right)*d; m_xform[0][1] =
-    // m_xform[0][2] = 0.0; d = 1.0/(bottom-top); m_xform[1][1] = -2.0*d; m_xform[1][3] =
-    // (bottom+top)*d; m_xform[1][0] = m_xform[1][2] = 0.0; d = 1.0/(far_dist-near_dist);
-    // m_xform[2][2] = 2.0*d;  m_xform[2][3] = (far_dist+near_dist)*d;   m_xform[2][0] =
-    // m_xform[2][1] = 0.0; m_xform[3][0] = m_xform[3][1] = m_xform[3][2] = 0.0;
-    // m_xform[3][3] = 1.0;
+    // m_xform[0][2] = 0.0; d = 1.0/(bottom-top); m_xform[1][1] = -2.0*d; m_xform[1][3]
+    // = (bottom+top)*d; m_xform[1][0] = m_xform[1][2] = 0.0; d
+    // = 1.0/(far_dist-near_dist); m_xform[2][2] = 2.0*d;  m_xform[2][3] =
+    // (far_dist+near_dist)*d;   m_xform[2][0] = m_xform[2][1] = 0.0; m_xform[3][0] =
+    // m_xform[3][1] = m_xform[3][2] = 0.0; m_xform[3][3] = 1.0;
 
     dd = (left - right);
     m_xform[0][0] = -2.0 / dd;
@@ -1761,8 +1793,13 @@ ON_Xform::CameraToClip (ON_BOOL32 bPerspective, double left, double right,
 }
 
 bool
-ON_Xform::ClipToCamera (ON_BOOL32 bPerspective, double left, double right,
-                        double bottom, double top, double near_dist, double far_dist)
+ON_Xform::ClipToCamera (ON_BOOL32 bPerspective,
+                        double left,
+                        double right,
+                        double bottom,
+                        double top,
+                        double near_dist,
+                        double far_dist)
 {
   // see comments in tl2_xform.h for details.
   double dd;
@@ -1826,8 +1863,8 @@ ON_Xform::ClipToCamera (ON_BOOL32 bPerspective, double left, double right,
 }
 
 bool
-ON_Xform::ClipToScreen (double left, double right, double bottom, double top,
-                        double near_z, double far_z)
+ON_Xform::ClipToScreen (
+    double left, double right, double bottom, double top, double near_z, double far_z)
 {
   // see comments in tl2_xform.h for details.
   if (left == right || bottom == top)
@@ -1857,8 +1894,8 @@ ON_Xform::ClipToScreen (double left, double right, double bottom, double top,
 }
 
 bool
-ON_Xform::ScreenToClip (double left, double right, double bottom, double top,
-                        double near_z, double far_z)
+ON_Xform::ScreenToClip (
+    double left, double right, double bottom, double top, double near_z, double far_z)
 {
   // see comments in tl2_xform.h for details.
   ON_Xform c2s;
@@ -1947,7 +1984,9 @@ ON_Xform::ClipFlag3d (const double *point) const
 }
 
 int
-ON_Xform::ClipFlag4d (int count, int stride, const double *point,
+ON_Xform::ClipFlag4d (int count,
+                      int stride,
+                      const double *point,
                       ON_BOOL32 bTestZ) const
 {
   int clip = 1 | 2 | 4 | 8;
@@ -1962,7 +2001,9 @@ ON_Xform::ClipFlag4d (int count, int stride, const double *point,
 }
 
 int
-ON_Xform::ClipFlag3d (int count, int stride, const double *point,
+ON_Xform::ClipFlag3d (int count,
+                      int stride,
+                      const double *point,
                       ON_BOOL32 bTestZ) const
 {
   int clip = 1 | 2 | 4 | 8;

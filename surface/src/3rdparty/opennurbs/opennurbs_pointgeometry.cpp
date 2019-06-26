@@ -73,8 +73,8 @@ ON_Point::Dimension () const
 ON_BOOL32
 ON_Point::GetBBox (double *boxmin, double *boxmax, ON_BOOL32 bGrowBox) const
 {
-  return ON_GetPointListBoundingBox (3, 0, 1, 3, &point.x, boxmin, boxmax,
-                                     bGrowBox ? true : false);
+  return ON_GetPointListBoundingBox (
+      3, 0, 1, 3, &point.x, boxmin, boxmax, bGrowBox ? true : false);
 }
 
 bool

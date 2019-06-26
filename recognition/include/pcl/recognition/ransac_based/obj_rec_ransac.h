@@ -107,8 +107,10 @@ namespace pcl
       class Output
       {
         public:
-        Output (const std::string &object_name, const float rigid_transform[12],
-                float match_confidence, void *user_data)
+        Output (const std::string &object_name,
+                const float rigid_transform[12],
+                float match_confidence,
+                void *user_data)
             : object_name_ (object_name), match_confidence_ (match_confidence),
               user_data_ (user_data)
         {
@@ -126,7 +128,9 @@ namespace pcl
       class OrientedPointPair
       {
         public:
-        OrientedPointPair (const float *p1, const float *n1, const float *p2,
+        OrientedPointPair (const float *p1,
+                           const float *n1,
+                           const float *p2,
                            const float *n2)
             : p1_ (p1), n1_ (n1), p2_ (p2), n2_ (n2)
         {
@@ -249,10 +253,14 @@ namespace pcl
        * library and false otherwise (e.g., if 'object_name' is already in use).
        */
       inline bool
-      addModel (const PointCloudIn &points, const PointCloudN &normals,
-                const std::string &object_name, void *user_data = nullptr)
+      addModel (const PointCloudIn &points,
+                const PointCloudN &normals,
+                const std::string &object_name,
+                void *user_data = nullptr)
       {
-        return (model_library_.addModel (points, normals, object_name,
+        return (model_library_.addModel (points,
+                                         normals,
+                                         object_name,
                                          frac_of_points_for_icp_refinement_,
                                          user_data));
       }
@@ -269,7 +277,8 @@ namespace pcl
        * all objects in the scene.
        */
       void
-      recognize (const PointCloudIn &scene, const PointCloudN &normals,
+      recognize (const PointCloudIn &scene,
+                 const PointCloudN &normals,
                  std::list<ObjRecRANSAC::Output> &recognized_objects,
                  double success_probability = 0.99);
 
@@ -399,7 +408,8 @@ namespace pcl
       /** \brief Groups close hypotheses in 'hypotheses'. Saves a representative for
        * each group in 'out'. Returns the number of hypotheses after grouping. */
       int
-      groupHypotheses (std::list<HypothesisBase> &hypotheses, int num_hypotheses,
+      groupHypotheses (std::list<HypothesisBase> &hypotheses,
+                       int num_hypotheses,
                        RigidTransformSpace &transform_space,
                        HypothesisOctree &grouped_hypotheses) const;
 
@@ -432,9 +442,14 @@ namespace pcl
        * 'rigid_transform' which is an array of length 12. The first 9 elements are the
        * rotational part (row major order) and the last 3 are the translation. */
       inline void
-      computeRigidTransform (const float *a1, const float *a1_n, const float *b1,
-                             const float *b1_n, const float *a2, const float *a2_n,
-                             const float *b2, const float *b2_n,
+      computeRigidTransform (const float *a1,
+                             const float *a1_n,
+                             const float *b1,
+                             const float *b1_n,
+                             const float *a2,
+                             const float *a2_n,
+                             const float *b2,
+                             const float *b2_n,
                              float *rigid_transform) const
       {
         // Some local variables
@@ -500,8 +515,10 @@ namespace pcl
        * \param[out] signature is an array of three doubles saving the three angles in
        * the order shown above. */
       static inline void
-      compute_oriented_point_pair_signature (const float *p1, const float *n1,
-                                             const float *p2, const float *n2,
+      compute_oriented_point_pair_signature (const float *p1,
+                                             const float *n1,
+                                             const float *p2,
+                                             const float *n2,
                                              float signature[3])
       {
         // Get the line from p1 to p2

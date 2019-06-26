@@ -202,8 +202,8 @@ namespace pcl
       binary_tree_out_arg.reserve (this->branch_count_);
       leaf_container_vector_arg.reserve (this->leaf_count_);
 
-      serializeTreeRecursive (root_node_, new_key, &binary_tree_out_arg,
-                              &leaf_container_vector_arg);
+      serializeTreeRecursive (
+          root_node_, new_key, &binary_tree_out_arg, &leaf_container_vector_arg);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -239,8 +239,13 @@ namespace pcl
       std::vector<char>::const_iterator binary_tree_out_it_end =
           binary_tree_out_arg.end ();
 
-      deserializeTreeRecursive (root_node_, depth_mask_, new_key, binary_tree_out_it,
-                                binary_tree_out_it_end, nullptr, nullptr);
+      deserializeTreeRecursive (root_node_,
+                                depth_mask_,
+                                new_key,
+                                binary_tree_out_it,
+                                binary_tree_out_it_end,
+                                nullptr,
+                                nullptr);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -269,8 +274,12 @@ namespace pcl
       std::vector<char>::const_iterator binary_tree_input_it_end =
           binary_tree_in_arg.end ();
 
-      deserializeTreeRecursive (root_node_, depth_mask_, new_key, binary_tree_input_it,
-                                binary_tree_input_it_end, &leaf_vector_it,
+      deserializeTreeRecursive (root_node_,
+                                depth_mask_,
+                                new_key,
+                                binary_tree_input_it,
+                                binary_tree_input_it_end,
+                                &leaf_vector_it,
                                 &leaf_vector_it_end);
     }
 
@@ -278,8 +287,11 @@ namespace pcl
     template <typename LeafContainerT, typename BranchContainerT>
     unsigned int
     OctreeBase<LeafContainerT, BranchContainerT>::createLeafRecursive (
-        const OctreeKey &key_arg, unsigned int depth_mask_arg, BranchNode *branch_arg,
-        LeafNode *&return_leaf_arg, BranchNode *&parent_of_leaf_arg)
+        const OctreeKey &key_arg,
+        unsigned int depth_mask_arg,
+        BranchNode *branch_arg,
+        LeafNode *&return_leaf_arg,
+        BranchNode *&parent_of_leaf_arg)
     {
       // index to branch child
       unsigned char child_idx;
@@ -297,8 +309,11 @@ namespace pcl
           branch_count_++;
 
           // recursively proceed with indexed child branch
-          return createLeafRecursive (key_arg, depth_mask_arg / 2, childBranch,
-                                      return_leaf_arg, parent_of_leaf_arg);
+          return createLeafRecursive (key_arg,
+                                      depth_mask_arg / 2,
+                                      childBranch,
+                                      return_leaf_arg,
+                                      parent_of_leaf_arg);
 
         } else {
           // if leaf node at child_idx does not exist
@@ -312,9 +327,11 @@ namespace pcl
         switch (child_node->getNodeType ()) {
         case BRANCH_NODE:
           // recursively proceed with indexed child branch
-          return createLeafRecursive (key_arg, depth_mask_arg / 2,
+          return createLeafRecursive (key_arg,
+                                      depth_mask_arg / 2,
                                       static_cast<BranchNode *> (child_node),
-                                      return_leaf_arg, parent_of_leaf_arg);
+                                      return_leaf_arg,
+                                      parent_of_leaf_arg);
           break;
 
         case LEAF_NODE:
@@ -332,7 +349,9 @@ namespace pcl
     template <typename LeafContainerT, typename BranchContainerT>
     void
     OctreeBase<LeafContainerT, BranchContainerT>::findLeafRecursive (
-        const OctreeKey &key_arg, unsigned int depth_mask_arg, BranchNode *branch_arg,
+        const OctreeKey &key_arg,
+        unsigned int depth_mask_arg,
+        BranchNode *branch_arg,
         LeafContainerT *&result_arg) const
     {
       // index to branch child
@@ -422,7 +441,8 @@ namespace pcl
     template <typename LeafContainerT, typename BranchContainerT>
     void
     OctreeBase<LeafContainerT, BranchContainerT>::serializeTreeRecursive (
-        const BranchNode *branch_arg, OctreeKey &key_arg,
+        const BranchNode *branch_arg,
+        OctreeKey &key_arg,
         std::vector<char> *binary_tree_out_arg,
         typename std::vector<LeafContainerT *> *leaf_container_vector_arg) const
     {
@@ -449,7 +469,8 @@ namespace pcl
           case BRANCH_NODE: {
             // recursively proceed with indexed child branch
             serializeTreeRecursive (static_cast<const BranchNode *> (childNode),
-                                    key_arg, binary_tree_out_arg,
+                                    key_arg,
+                                    binary_tree_out_arg,
                                     leaf_container_vector_arg);
             break;
           }
@@ -477,7 +498,9 @@ namespace pcl
     template <typename LeafContainerT, typename BranchContainerT>
     void
     OctreeBase<LeafContainerT, BranchContainerT>::deserializeTreeRecursive (
-        BranchNode *branch_arg, unsigned int depth_mask_arg, OctreeKey &key_arg,
+        BranchNode *branch_arg,
+        unsigned int depth_mask_arg,
+        OctreeKey &key_arg,
         typename std::vector<char>::const_iterator &binary_tree_input_it_arg,
         typename std::vector<char>::const_iterator &binary_tree_input_it_end_arg,
         typename std::vector<LeafContainerT *>::const_iterator
@@ -506,10 +529,13 @@ namespace pcl
               branch_count_++;
 
               // recursively proceed with new child branch
-              deserializeTreeRecursive (
-                  newBranch, depth_mask_arg / 2, key_arg, binary_tree_input_it_arg,
-                  binary_tree_input_it_end_arg, leaf_container_vector_it_arg,
-                  leaf_container_vector_it_end_arg);
+              deserializeTreeRecursive (newBranch,
+                                        depth_mask_arg / 2,
+                                        key_arg,
+                                        binary_tree_input_it_arg,
+                                        binary_tree_input_it_end_arg,
+                                        leaf_container_vector_it_arg,
+                                        leaf_container_vector_it_end_arg);
             } else {
               // we reached leaf node level
 

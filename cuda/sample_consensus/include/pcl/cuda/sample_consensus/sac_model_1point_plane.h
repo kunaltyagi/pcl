@@ -68,7 +68,8 @@ namespace pcl
       float threshold;
       const typename Storage<PointXYZRGB>::type &input_;
 
-      NewCheckPlanarInlier (float4 coeff, float thresh,
+      NewCheckPlanarInlier (float4 coeff,
+                            float thresh,
                             const typename Storage<PointXYZRGB>::type &input)
           : coefficients (coeff), threshold (thresh), input_ (input)
       {
@@ -113,7 +114,8 @@ namespace pcl
       float threshold;
       float angle_threshold;
 
-      CheckPlanarInlierKinectNormalIndices (float4 coeff, float thresh,
+      CheckPlanarInlierKinectNormalIndices (float4 coeff,
+                                            float thresh,
                                             float angle_thresh)
           : coefficients (coeff), threshold (thresh), angle_threshold (angle_thresh)
       {
@@ -218,14 +220,22 @@ namespace pcl
        * resultant model inliers \param inliers_stencil
        */
       int
-      selectWithinDistance (const Coefficients &model_coefficients, float threshold,
-                            IndicesPtr &inliers, IndicesPtr &inliers_stencil);
+      selectWithinDistance (const Coefficients &model_coefficients,
+                            float threshold,
+                            IndicesPtr &inliers,
+                            IndicesPtr &inliers_stencil);
       int
-      selectWithinDistance (const Hypotheses &h, int idx, float threshold,
-                            IndicesPtr &inliers, IndicesPtr &inliers_stencil);
+      selectWithinDistance (const Hypotheses &h,
+                            int idx,
+                            float threshold,
+                            IndicesPtr &inliers,
+                            IndicesPtr &inliers_stencil);
       int
-      selectWithinDistance (Hypotheses &h, int idx, float threshold,
-                            IndicesPtr &inliers_stencil, float3 &centroid);
+      selectWithinDistance (Hypotheses &h,
+                            int idx,
+                            float threshold,
+                            IndicesPtr &inliers_stencil,
+                            float3 &centroid);
       int
       countWithinDistance (const Coefficients &model_coefficients, float threshold);
 
@@ -251,8 +261,10 @@ namespace pcl
       int nr_indices;
       float bad_value;
 
-      Create1PointPlaneHypothesis (const PointXYZRGB *_input, const int *_indices,
-                                   int _nr_indices, float bad)
+      Create1PointPlaneHypothesis (const PointXYZRGB *_input,
+                                   const int *_indices,
+                                   int _nr_indices,
+                                   float bad)
           : input (_input), indices (_indices), nr_indices (_nr_indices),
             bad_value (bad)
       {
@@ -282,8 +294,11 @@ namespace pcl
       thrust::default_random_engine rng;
 
       Create1PointPlaneSampleHypothesis (const PointXYZRGB *_input,
-                                         const float4 *normals, const int *_indices,
-                                         int width, int height, int _nr_indices,
+                                         const float4 *normals,
+                                         const int *_indices,
+                                         int width,
+                                         int height,
+                                         int _nr_indices,
                                          float bad)
           : input (_input), normals_ (normals), indices (_indices), width_ (width),
             height_ (height), nr_indices (_nr_indices), bad_value (bad)

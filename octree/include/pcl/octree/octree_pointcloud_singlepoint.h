@@ -56,7 +56,8 @@ namespace pcl
      *  \author Julius Kammerl (julius@kammerl.de)
      */
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    template <typename PointT, typename LeafContainerT = OctreeContainerPointIndex,
+    template <typename PointT,
+              typename LeafContainerT = OctreeContainerPointIndex,
               typename BranchContainerT = OctreeContainerEmpty,
               typename OctreeT = OctreeBase<LeafContainerT, BranchContainerT>>
 
@@ -67,7 +68,9 @@ namespace pcl
       public:
       // public typedefs for single/double buffering
       using SingleBuffer =
-          OctreePointCloudSinglePoint<PointT, LeafContainerT, BranchContainerT,
+          OctreePointCloudSinglePoint<PointT,
+                                      LeafContainerT,
+                                      BranchContainerT,
                                       OctreeBase<LeafContainerT, BranchContainerT>>;
       //      typedef OctreePointCloudSinglePoint<PointT, LeafContainerT,
       //      BranchContainerT,

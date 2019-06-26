@@ -25,11 +25,17 @@ namespace pcl
 {
   namespace face_detection
   {
-    template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+    template <class FeatureType,
+              class DataSet,
+              class LabelType,
+              class ExampleIndex,
               class NodeType>
     class FaceDetectorDataProvider
-        : public pcl::DecisionTreeTrainerDataProvider<FeatureType, DataSet, LabelType,
-                                                      ExampleIndex, NodeType>
+        : public pcl::DecisionTreeTrainerDataProvider<FeatureType,
+                                                      DataSet,
+                                                      LabelType,
+                                                      ExampleIndex,
+                                                      NodeType>
     {
       private:
       int num_images_;
@@ -40,8 +46,10 @@ namespace pcl
       int min_images_per_bin_;
 
       void
-      getFilesInDirectory (bf::path &dir, std::string &rel_path_so_far,
-                           std::vector<std::string> &relative_paths, std::string &ext)
+      getFilesInDirectory (bf::path &dir,
+                           std::string &rel_path_so_far,
+                           std::vector<std::string> &relative_paths,
+                           std::string &ext)
       {
         bf::directory_iterator end_itr;
         for (bf::directory_iterator itr (dir); itr != end_itr; ++itr) {
@@ -90,15 +98,18 @@ namespace pcl
       }
 
       bool
-      check_inside (int col, int row, int min_col, int max_col, int min_row,
-                    int max_row)
+      check_inside (
+          int col, int row, int min_col, int max_col, int min_row, int max_row)
       {
         return col >= min_col && col <= max_col && row >= min_row && row <= max_row;
       }
 
       template <class PointInT>
       void
-      cropCloud (int min_col, int max_col, int min_row, int max_row,
+      cropCloud (int min_col,
+                 int max_col,
+                 int min_row,
+                 int max_row,
                  pcl::PointCloud<PointInT> &cloud_in,
                  pcl::PointCloud<PointInT> &cloud_out)
       {
@@ -115,9 +126,11 @@ namespace pcl
       }
 
       public:
-      using Ptr =
-          boost::shared_ptr<FaceDetectorDataProvider<FeatureType, DataSet, LabelType,
-                                                     ExampleIndex, NodeType>>;
+      using Ptr = boost::shared_ptr<FaceDetectorDataProvider<FeatureType,
+                                                             DataSet,
+                                                             LabelType,
+                                                             ExampleIndex,
+                                                             NodeType>>;
 
       FaceDetectorDataProvider ()
       {
@@ -167,7 +180,8 @@ namespace pcl
       // extract positive and negative samples
       // create training examples and labels
       void
-      getDatasetAndLabels (DataSet &data_set, std::vector<LabelType> &label_data,
+      getDatasetAndLabels (DataSet &data_set,
+                           std::vector<LabelType> &label_data,
                            std::vector<ExampleIndex> &examples) override;
     };
   } // namespace face_detection

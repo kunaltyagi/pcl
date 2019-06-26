@@ -86,7 +86,8 @@ pcl::CPCSegmentation<PointT>::applyCuttingPlane (uint32_t depth_levels_left)
       std::map<uint32_t, pcl::PointCloud<WeightSACPointType>::Ptr>;
 
   pcl::console::print_info ("Cutting at level %d (maximum %d)\n",
-                            max_cuts_ - depth_levels_left + 1, max_cuts_);
+                            max_cuts_ - depth_levels_left + 1,
+                            max_cuts_);
   // stop if we reached the 0 level
   if (depth_levels_left <= 0)
     return;
@@ -190,8 +191,8 @@ pcl::CPCSegmentation<PointT>::applyCuttingPlane (uint32_t depth_levels_left)
     pcl::Indices cut_support_indices;
 
     if (use_local_constrains_) {
-      Eigen::Vector3f plane_normal (model_coefficients[0], model_coefficients[1],
-                                    model_coefficients[2]);
+      Eigen::Vector3f plane_normal (
+          model_coefficients[0], model_coefficients[1], model_coefficients[2]);
       // Cut the connections.
       // We only iterate through the points which are within the support (when we are
       // local, otherwise all points in the segment). We also just actually cut when the
@@ -350,8 +351,8 @@ pcl::CPCSegmentation<PointT>::WeightedRandomSampleConsensus::computeModel (int)
     pcl::IndicesPtr current_inliers (new pcl::Indices);
     sac_model_->selectWithinDistance (model_coefficients, threshold_, *current_inliers);
     double current_score = 0;
-    Eigen::Vector3f plane_normal (model_coefficients[0], model_coefficients[1],
-                                  model_coefficients[2]);
+    Eigen::Vector3f plane_normal (
+        model_coefficients[0], model_coefficients[1], model_coefficients[2]);
     for (const int &current_index : *current_inliers) {
       double index_score = weights_[current_index];
       if (use_directed_weights_)
@@ -377,7 +378,10 @@ pcl::CPCSegmentation<PointT>::WeightedRandomSampleConsensus::computeModel (int)
     ++iterations_;
     PCL_DEBUG ("[pcl::CPCSegmentation<PointT>::WeightedRandomSampleConsensus::"
                "computeModel] Trial %d (max %d): score is %f (best is: %f so far).\n",
-               iterations_, max_iterations_, current_score, best_score_);
+               iterations_,
+               max_iterations_,
+               current_score,
+               best_score_);
     if (iterations_ > max_iterations_) {
       PCL_DEBUG ("[pcl::CPCSegmentation<PointT>::WeightedRandomSampleConsensus::"
                  "computeModel] RANSAC reached the maximum number of trials.\n");
@@ -387,7 +391,8 @@ pcl::CPCSegmentation<PointT>::WeightedRandomSampleConsensus::computeModel (int)
   //   std::cout << "Took us " << iterations_ - 1 << " iterations" << std::endl;
   PCL_DEBUG ("[pcl::CPCSegmentation<PointT>::WeightedRandomSampleConsensus::"
              "computeModel] Model: %lu size, %f score.\n",
-             model_.size (), best_score_);
+             model_.size (),
+             best_score_);
 
   if (model_.empty ()) {
     inliers_.clear ();

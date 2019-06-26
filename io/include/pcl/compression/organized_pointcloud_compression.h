@@ -81,8 +81,10 @@ namespace pcl
       void
       encodePointCloud (const PointCloudConstPtr &cloud_arg,
                         std::ostream &compressedDataOut_arg,
-                        bool doColorEncoding = false, bool convertToMono = false,
-                        bool bShowStatistics_arg = true, int pngLevel_arg = -1);
+                        bool doColorEncoding = false,
+                        bool convertToMono = false,
+                        bool bShowStatistics_arg = true,
+                        int pngLevel_arg = -1);
 
       /** \brief Encode raw disparity map and color image.
        * \note Default values are configured according to the kinect/asus device
@@ -99,13 +101,18 @@ namespace pcl
        * \param[in] disparityScale_arg disparity scaling
        */
       void
-      encodeRawDisparityMapWithColorImage (
-          std::vector<uint16_t> &disparityMap_arg, std::vector<uint8_t> &colorImage_arg,
-          uint32_t width_arg, uint32_t height_arg, std::ostream &compressedDataOut_arg,
-          bool doColorEncoding = false, bool convertToMono = false,
-          bool bShowStatistics_arg = true, int pngLevel_arg = -1,
-          float focalLength_arg = 525.0f, float disparityShift_arg = 174.825f,
-          float disparityScale_arg = -0.161175f);
+      encodeRawDisparityMapWithColorImage (std::vector<uint16_t> &disparityMap_arg,
+                                           std::vector<uint8_t> &colorImage_arg,
+                                           uint32_t width_arg,
+                                           uint32_t height_arg,
+                                           std::ostream &compressedDataOut_arg,
+                                           bool doColorEncoding = false,
+                                           bool convertToMono = false,
+                                           bool bShowStatistics_arg = true,
+                                           int pngLevel_arg = -1,
+                                           float focalLength_arg = 525.0f,
+                                           float disparityShift_arg = 174.825f,
+                                           float disparityScale_arg = -0.161175f);
 
       /** \brief Decode point cloud from input stream
        * \param[in] compressedDataIn_arg: binary input stream containing compressed data
@@ -114,7 +121,8 @@ namespace pcl
        * \return false if an I/O error occurred.
        */
       bool
-      decodePointCloud (std::istream &compressedDataIn_arg, PointCloudPtr &cloud_arg,
+      decodePointCloud (std::istream &compressedDataIn_arg,
+                        PointCloudPtr &cloud_arg,
                         bool bShowStatistics_arg = true);
 
       protected:
@@ -123,7 +131,8 @@ namespace pcl
        * calculated maximum depth \param[out] focalLength_arg: estimated focal length
        */
       void
-      analyzeOrganizedCloud (PointCloudConstPtr cloud_arg, float &maxDepth_arg,
+      analyzeOrganizedCloud (PointCloudConstPtr cloud_arg,
+                             float &maxDepth_arg,
                              float &focalLength_arg) const;
 
       private:

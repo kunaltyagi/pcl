@@ -44,9 +44,10 @@
 //////////////////////////////////////////////////////////////////////////////////////////////
 pcl::modeler::RenderWindowItem::RenderWindowItem (QTreeWidget *parent)
     : QTreeWidgetItem (parent), render_window_ (new RenderWindow (this)),
-      background_color_ (new ColorParameter (
-          "Background Color", "The background color of the render window",
-          QColor (0, 0, 0))),
+      background_color_ (
+          new ColorParameter ("Background Color",
+                              "The background color of the render window",
+                              QColor (0, 0, 0))),
       show_axes_ (new BoolParameter ("Show Axes", "Show Axes", true))
 {
   setFlags (flags () & (~Qt::ItemIsDragEnabled));
@@ -101,7 +102,8 @@ pcl::modeler::RenderWindowItem::prepareProperties (ParameterDialog *parameter_di
 {
   double r, g, b;
   render_window_->getBackground (r, g, b);
-  QColor color (static_cast<int> (r * 255), static_cast<int> (g * 255),
+  QColor color (static_cast<int> (r * 255),
+                static_cast<int> (g * 255),
                 static_cast<int> (b * 255));
   background_color_->setDefaultValue (color);
   parameter_dialog->addParameter (background_color_);
@@ -113,8 +115,8 @@ void
 pcl::modeler::RenderWindowItem::setProperties ()
 {
   QColor color = *background_color_;
-  render_window_->setBackground (color.red () / 255.0, color.green () / 255.0,
-                                 color.blue () / 255.0);
+  render_window_->setBackground (
+      color.red () / 255.0, color.green () / 255.0, color.blue () / 255.0);
 
   render_window_->setShowAxes (*show_axes_);
 

@@ -50,7 +50,10 @@ namespace pcl
 {
 
   /** \brief Utility class for evaluating a decision forests. */
-  template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+  template <class FeatureType,
+            class DataSet,
+            class LabelType,
+            class ExampleIndex,
             class NodeType>
   class DecisionForestEvaluator
   {
@@ -73,7 +76,8 @@ namespace pcl
               pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> &feature_handler,
               pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex>
                   &stats_estimator,
-              DataSet &data_set, std::vector<ExampleIndex> &examples,
+              DataSet &data_set,
+              std::vector<ExampleIndex> &examples,
               std::vector<LabelType> &label_data);
 
     /** \brief Evaluates a specific patch using the supplied forest.
@@ -89,7 +93,9 @@ namespace pcl
               pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> &feature_handler,
               pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex>
                   &stats_estimator,
-              DataSet &data_set, ExampleIndex example, std::vector<NodeType> &leaves);
+              DataSet &data_set,
+              ExampleIndex example,
+              std::vector<NodeType> &leaves);
 
     private:
     /** \brief Evaluator for decision trees. */

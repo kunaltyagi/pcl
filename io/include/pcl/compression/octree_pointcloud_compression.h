@@ -64,7 +64,8 @@ namespace pcl
      * on octree data structures. \note \note typename: PointT: type of point used in
      * pointcloud \author Julius Kammerl (julius@kammerl.de)
      */
-    template <typename PointT, typename LeafT = OctreeContainerPointIndices,
+    template <typename PointT,
+              typename LeafT = OctreeContainerPointIndices,
               typename BranchT = OctreeContainerEmpty,
               typename OctreeT = Octree2BufBase<LeafT, BranchT>>
     class OctreePointCloudCompression
@@ -76,8 +77,9 @@ namespace pcl
           typename OctreePointCloud<PointT, LeafT, BranchT, OctreeT>::PointCloud;
       using PointCloudPtr =
           typename OctreePointCloud<PointT, LeafT, BranchT, OctreeT>::PointCloudPtr;
-      using PointCloudConstPtr = typename OctreePointCloud<PointT, LeafT, BranchT,
-                                                           OctreeT>::PointCloudConstPtr;
+      using PointCloudConstPtr =
+          typename OctreePointCloud<PointT, LeafT, BranchT, OctreeT>::
+              PointCloudConstPtr;
 
       // Boost shared pointers
       using Ptr = boost::shared_ptr<
@@ -89,10 +91,14 @@ namespace pcl
       using BranchNode = typename OctreeT::BranchNode;
 
       using RealTimeStreamCompression =
-          OctreePointCloudCompression<PointT, LeafT, BranchT,
+          OctreePointCloudCompression<PointT,
+                                      LeafT,
+                                      BranchT,
                                       Octree2BufBase<LeafT, BranchT>>;
       using SinglePointCloudCompressionLowMemory =
-          OctreePointCloudCompression<PointT, LeafT, BranchT,
+          OctreePointCloudCompression<PointT,
+                                      LeafT,
+                                      BranchT,
                                       OctreeBase<LeafT, BranchT>>;
 
       /** \brief Constructor
@@ -312,9 +318,8 @@ namespace pcl
 
     // define frame identifier
     template <typename PointT, typename LeafT, typename BranchT, typename OctreeT>
-    const char *OctreePointCloudCompression<PointT, LeafT, BranchT,
-                                            OctreeT>::frame_header_identifier_ =
-        "<PCL-OCT-COMPRESSED>";
+    const char *OctreePointCloudCompression<PointT, LeafT, BranchT, OctreeT>::
+        frame_header_identifier_ = "<PCL-OCT-COMPRESSED>";
   } // namespace io
 
 } // namespace pcl

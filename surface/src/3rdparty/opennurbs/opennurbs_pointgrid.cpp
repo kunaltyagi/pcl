@@ -173,7 +173,8 @@ ON_PointGrid::operator= (const ON_PointGrid &src)
     if (PointCount () > 0) {
       // copy cv array
       if (m_point_stride0 == src.m_point_stride0) {
-        memcpy (m_point.Array (), src.m_point.Array (),
+        memcpy (m_point.Array (),
+                src.m_point.Array (),
                 PointCount () * sizeof (ON_3dPoint));
       } else {
         int i, j;
@@ -194,8 +195,14 @@ ON_PointGrid::Dump (ON_TextLog &dump) const
   if (m_point.Count () < 1) {
     dump.Print ("  NO point array\n");
   } else {
-    dump.PrintPointGrid (3, false, m_point_count[0], m_point_count[1],
-                         3 * m_point_stride0, 3, &m_point[0].x, "  point");
+    dump.PrintPointGrid (3,
+                         false,
+                         m_point_count[0],
+                         m_point_count[1],
+                         3 * m_point_stride0,
+                         3,
+                         &m_point[0].x,
+                         "  point");
   }
 }
 
@@ -203,8 +210,13 @@ ON_BOOL32
 ON_PointGrid::IsValid (ON_TextLog *text_log) const
 {
   ON_BOOL32 rc = false;
-  if (ON_IsValidPointGrid (3, false, m_point_count[0], m_point_count[1],
-                           m_point_stride0 * 3, 3, &m_point[0].x)) {
+  if (ON_IsValidPointGrid (3,
+                           false,
+                           m_point_count[0],
+                           m_point_count[1],
+                           m_point_stride0 * 3,
+                           3,
+                           &m_point[0].x)) {
     if (m_point.Count () >= m_point_stride0 * m_point_count[0])
       rc = true;
   }
@@ -218,13 +230,21 @@ ON_PointGrid::GetBBox ( // returns true if successful
     ON_BOOL32 bGrowBox  // true means grow box
     ) const
 {
-  return ON_GetPointGridBoundingBox (3, 0, m_point_count[0], m_point_count[1],
-                                     m_point_stride0 * 3, 3, &m_point[0].x, boxmin,
-                                     boxmax, bGrowBox ? true : false);
+  return ON_GetPointGridBoundingBox (3,
+                                     0,
+                                     m_point_count[0],
+                                     m_point_count[1],
+                                     m_point_stride0 * 3,
+                                     3,
+                                     &m_point[0].x,
+                                     boxmin,
+                                     boxmax,
+                                     bGrowBox ? true : false);
 }
 
 bool
-ON_PointGrid::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_PointGrid::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                   int bGrowBox,
                                    const ON_Xform *xform) const
 {
   if (bGrowBox && !tight_bbox.IsValid ()) {
@@ -236,8 +256,8 @@ ON_PointGrid::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
 
   int i;
   for (i = 0; i < m_point_count[0]; i++) {
-    if (ON_GetPointListBoundingBox (3, 0, m_point_count[1], 3, &m_point[i].x,
-                                    tight_bbox, bGrowBox, xform))
+    if (ON_GetPointListBoundingBox (
+            3, 0, m_point_count[1], 3, &m_point[i].x, tight_bbox, bGrowBox, xform))
       bGrowBox = true;
   }
   return bGrowBox ? true : false;
@@ -247,8 +267,14 @@ ON_BOOL32
 ON_PointGrid::Transform (const ON_Xform &xform)
 {
   TransformUserData (xform);
-  return ON_TransformPointGrid (3, false, m_point_count[0], m_point_count[1],
-                                m_point_stride0 * 3, 3, Point (0, 0), xform);
+  return ON_TransformPointGrid (3,
+                                false,
+                                m_point_count[0],
+                                m_point_count[1],
+                                m_point_stride0 * 3,
+                                3,
+                                Point (0, 0),
+                                xform);
 }
 
 // virtual ON_Geometry::IsDeformable() override
@@ -269,8 +295,8 @@ ON_BOOL32
 ON_PointGrid::SwapCoordinates (int i, int j // indices of coords to swap
 )
 {
-  return ON_SwapPointGridCoordinates (m_point_count[0], m_point_count[1],
-                                      m_point_stride0 * 3, 3, Point (0, 0), i, j);
+  return ON_SwapPointGridCoordinates (
+      m_point_count[0], m_point_count[1], m_point_stride0 * 3, 3, Point (0, 0), i, j);
 }
 
 ON_BOOL32
@@ -298,15 +324,27 @@ ON_PointGrid::ObjectType () const
 ON_BOOL32
 ON_PointGrid::IsClosed (int dir) const
 {
-  return ON_IsPointGridClosed (3, 0, m_point_count[0], m_point_count[1],
-                               m_point_stride0 * 3, 3, &m_point[0].x, dir);
+  return ON_IsPointGridClosed (3,
+                               0,
+                               m_point_count[0],
+                               m_point_count[1],
+                               m_point_stride0 * 3,
+                               3,
+                               &m_point[0].x,
+                               dir);
 }
 
 ON_BOOL32
 ON_PointGrid::Reverse (int dir)
 {
-  return ON_ReversePointGrid (3, false, m_point_count[0], m_point_count[1],
-                              m_point_stride0 * 3, 3, Point (0, 0), dir);
+  return ON_ReversePointGrid (3,
+                              false,
+                              m_point_count[0],
+                              m_point_count[1],
+                              m_point_stride0 * 3,
+                              3,
+                              Point (0, 0),
+                              dir);
 }
 
 ON_BOOL32

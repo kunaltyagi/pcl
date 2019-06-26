@@ -66,7 +66,8 @@ pcl::SamplingSurfaceNormal<PointT>::applyFilter (PointCloud &output)
 template <typename PointT>
 void
 pcl::SamplingSurfaceNormal<PointT>::findXYZMaxMin (const PointCloud &cloud,
-                                                   Vector &max_vec, Vector &min_vec)
+                                                   Vector &max_vec,
+                                                   Vector &min_vec)
 {
   float maxval = cloud.points[0].x;
   float minval = cloud.points[0].x;
@@ -114,8 +115,10 @@ pcl::SamplingSurfaceNormal<PointT>::findXYZMaxMin (const PointCloud &cloud,
 ///////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 void
-pcl::SamplingSurfaceNormal<PointT>::partition (const PointCloud &cloud, const int first,
-                                               const int last, const Vector min_values,
+pcl::SamplingSurfaceNormal<PointT>::partition (const PointCloud &cloud,
+                                               const int first,
+                                               const int last,
+                                               const Vector min_values,
                                                const Vector max_values,
                                                std::vector<int> &indices,
                                                PointCloud &output)
@@ -133,8 +136,10 @@ pcl::SamplingSurfaceNormal<PointT>::partition (const PointCloud &cloud, const in
   assert (last - rightCount == first + leftCount);
 
   // sort, hack std::nth_element
-  std::nth_element (indices.begin () + first, indices.begin () + first + leftCount,
-                    indices.begin () + last, CompareDim (cutDim, cloud));
+  std::nth_element (indices.begin () + first,
+                    indices.begin () + first + leftCount,
+                    indices.begin () + last,
+                    CompareDim (cutDim, cloud));
 
   const int cutIndex (indices[first + leftCount]);
   const float cutVal = findCutVal (cloud, cutDim, cutIndex);
@@ -147,17 +152,18 @@ pcl::SamplingSurfaceNormal<PointT>::partition (const PointCloud &cloud, const in
   rightMinValues[cutDim] = cutVal;
 
   // recurse
-  partition (cloud, first, first + leftCount, min_values, leftMaxValues, indices,
-             output);
-  partition (cloud, first + leftCount, last, rightMinValues, max_values, indices,
-             output);
+  partition (
+      cloud, first, first + leftCount, min_values, leftMaxValues, indices, output);
+  partition (
+      cloud, first + leftCount, last, rightMinValues, max_values, indices, output);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 void
 pcl::SamplingSurfaceNormal<PointT>::samplePartition (const PointCloud &data,
-                                                     const int first, const int last,
+                                                     const int first,
+                                                     const int last,
                                                      std::vector<int> &indices,
                                                      PointCloud &output)
 {
@@ -228,7 +234,8 @@ pcl::SamplingSurfaceNormal<PointT>::computeNormal (const PointCloud &cloud,
 template <typename PointT>
 inline unsigned int
 pcl::SamplingSurfaceNormal<PointT>::computeMeanAndCovarianceMatrix (
-    const pcl::PointCloud<PointT> &cloud, Eigen::Matrix3f &covariance_matrix,
+    const pcl::PointCloud<PointT> &cloud,
+    Eigen::Matrix3f &covariance_matrix,
     Eigen::Vector4f &centroid)
 {
   // create the buffer on the stack which is much faster than using
@@ -275,7 +282,10 @@ pcl::SamplingSurfaceNormal<PointT>::computeMeanAndCovarianceMatrix (
 template <typename PointT>
 void
 pcl::SamplingSurfaceNormal<PointT>::solvePlaneParameters (
-    const Eigen::Matrix3f &covariance_matrix, float &nx, float &ny, float &nz,
+    const Eigen::Matrix3f &covariance_matrix,
+    float &nx,
+    float &ny,
+    float &nz,
     float &curvature)
 {
   // Extract the smallest eigenvalue and its eigenvector
@@ -300,7 +310,8 @@ pcl::SamplingSurfaceNormal<PointT>::solvePlaneParameters (
 template <typename PointT>
 float
 pcl::SamplingSurfaceNormal<PointT>::findCutVal (const PointCloud &cloud,
-                                                const int cut_dim, const int cut_index)
+                                                const int cut_dim,
+                                                const int cut_index)
 {
   if (cut_dim == 0)
     return (cloud.points[cut_index].x);

@@ -65,7 +65,9 @@ printHelp (int, char **argv)
 }
 
 void
-compute (PointCloud<PointXYZ>::ConstPtr cloud_in, bool convex_concave_hull, float alpha,
+compute (PointCloud<PointXYZ>::ConstPtr cloud_in,
+         bool convex_concave_hull,
+         float alpha,
          PolygonMesh &mesh_out)
 {
   if (!convex_concave_hull) {
@@ -77,7 +79,8 @@ compute (PointCloud<PointXYZ>::ConstPtr cloud_in, bool convex_concave_hull, floa
   } else {
     print_info ("Computing the concave hull (alpha shapes) with alpha %f of a cloud "
                 "with %lu points.\n",
-                alpha, cloud_in->size ());
+                alpha,
+                cloud_in->size ());
     ConcaveHull<PointXYZ> concave_hull;
     concave_hull.setInputCloud (cloud_in);
     concave_hull.setAlpha (alpha);

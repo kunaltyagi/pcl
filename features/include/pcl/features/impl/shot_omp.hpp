@@ -169,7 +169,8 @@ pcl::SHOTEstimationOMP<PointInT, PointNT, PointOutT, PointRFT>::computeFeature (
         !std::isfinite (current_frame.z_axis[0])) {
       PCL_WARN ("[pcl::%s::computeFeature] The local reference frame is not valid! "
                 "Aborting description of point with index %d\n",
-                getClassName ().c_str (), (*indices_)[idx]);
+                getClassName ().c_str (),
+                (*indices_)[idx]);
       lrf_is_nan = true;
     }
 
@@ -179,8 +180,8 @@ pcl::SHOTEstimationOMP<PointInT, PointNT, PointOutT, PointRFT>::computeFeature (
     std::vector<float> nn_dists (k_);
 
     if (!isFinite ((*input_)[(*indices_)[idx]]) || lrf_is_nan ||
-        this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                  nn_dists) == 0) {
+        this->searchForNeighbors (
+            (*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0) {
       // Copy into the resultant cloud
       for (Eigen::Index d = 0; d < shot.size (); ++d)
         output.points[idx].descriptor[d] = std::numeric_limits<float>::quiet_NaN ();
@@ -208,8 +209,8 @@ pcl::SHOTEstimationOMP<PointInT, PointNT, PointOutT, PointRFT>::computeFeature (
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointInT, typename PointNT, typename PointOutT, typename PointRFT>
 void
-pcl::SHOTColorEstimationOMP<PointInT, PointNT, PointOutT,
-                            PointRFT>::setNumberOfThreads (unsigned int nr_threads)
+pcl::SHOTColorEstimationOMP<PointInT, PointNT, PointOutT, PointRFT>::
+    setNumberOfThreads (unsigned int nr_threads)
 {
   if (nr_threads == 0)
 #ifdef _OPENMP
@@ -262,13 +263,14 @@ pcl::SHOTColorEstimationOMP<PointInT, PointNT, PointOutT, PointRFT>::computeFeat
         !std::isfinite (current_frame.z_axis[0])) {
       PCL_WARN ("[pcl::%s::computeFeature] The local reference frame is not valid! "
                 "Aborting description of point with index %d\n",
-                getClassName ().c_str (), (*indices_)[idx]);
+                getClassName ().c_str (),
+                (*indices_)[idx]);
       lrf_is_nan = true;
     }
 
     if (!isFinite ((*input_)[(*indices_)[idx]]) || lrf_is_nan ||
-        this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                  nn_dists) == 0) {
+        this->searchForNeighbors (
+            (*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0) {
       // Copy into the resultant cloud
       for (Eigen::Index d = 0; d < shot.size (); ++d)
         output.points[idx].descriptor[d] = std::numeric_limits<float>::quiet_NaN ();

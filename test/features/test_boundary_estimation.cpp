@@ -88,28 +88,28 @@ TEST (PCL, BoundaryEstimation)
   bool pt = false;
   pt = b.isBoundaryPoint (cloud, 0, indices, u, v, float(M_PI) / 2.0);
   EXPECT_EQ (pt, false);
-  pt = b.isBoundaryPoint (cloud, static_cast<int> (indices.size ()) / 3, indices, u, v,
-                          float(M_PI) / 2.0);
+  pt = b.isBoundaryPoint (
+      cloud, static_cast<int> (indices.size ()) / 3, indices, u, v, float(M_PI) / 2.0);
   EXPECT_EQ (pt, false);
-  pt = b.isBoundaryPoint (cloud, static_cast<int> (indices.size ()) / 2, indices, u, v,
-                          float(M_PI) / 2.0);
+  pt = b.isBoundaryPoint (
+      cloud, static_cast<int> (indices.size ()) / 2, indices, u, v, float(M_PI) / 2.0);
   EXPECT_EQ (pt, false);
-  pt = b.isBoundaryPoint (cloud, static_cast<int> (indices.size ()) - 1, indices, u, v,
-                          float(M_PI) / 2.0);
+  pt = b.isBoundaryPoint (
+      cloud, static_cast<int> (indices.size ()) - 1, indices, u, v, float(M_PI) / 2.0);
   EXPECT_EQ (pt, true);
 
   // isBoundaryPoint (points)
   pt = false;
   pt = b.isBoundaryPoint (cloud, cloud.points[0], indices, u, v, float(M_PI) / 2.0);
   EXPECT_EQ (pt, false);
-  pt = b.isBoundaryPoint (cloud, cloud.points[indices.size () / 3], indices, u, v,
-                          float(M_PI) / 2.0);
+  pt = b.isBoundaryPoint (
+      cloud, cloud.points[indices.size () / 3], indices, u, v, float(M_PI) / 2.0);
   EXPECT_EQ (pt, false);
-  pt = b.isBoundaryPoint (cloud, cloud.points[indices.size () / 2], indices, u, v,
-                          float(M_PI) / 2.0);
+  pt = b.isBoundaryPoint (
+      cloud, cloud.points[indices.size () / 2], indices, u, v, float(M_PI) / 2.0);
   EXPECT_EQ (pt, false);
-  pt = b.isBoundaryPoint (cloud, cloud.points[indices.size () - 1], indices, u, v,
-                          float(M_PI) / 2.0);
+  pt = b.isBoundaryPoint (
+      cloud, cloud.points[indices.size () - 1], indices, u, v, float(M_PI) / 2.0);
   EXPECT_EQ (pt, true);
 
   // Object

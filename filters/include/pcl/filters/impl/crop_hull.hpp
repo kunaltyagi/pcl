@@ -182,9 +182,10 @@ pcl::CropHull<PointT>::applyFilter3D (PointCloud &output)
 
     for (size_t poly = 0; poly < hull_polygons_.size (); poly++)
       for (size_t ray = 0; ray < 3; ray++)
-        crossings[ray] +=
-            rayTriangleIntersect (input_->points[(*indices_)[index]], rays[ray],
-                                  hull_polygons_[poly], *hull_cloud_);
+        crossings[ray] += rayTriangleIntersect (input_->points[(*indices_)[index]],
+                                                rays[ray],
+                                                hull_polygons_[poly],
+                                                *hull_cloud_);
 
     if (crop_outside_ &&
         (crossings[0] & 1) + (crossings[1] & 1) + (crossings[2] & 1) > 1)
@@ -208,9 +209,10 @@ pcl::CropHull<PointT>::applyFilter3D (std::vector<int> &indices)
 
     for (size_t poly = 0; poly < hull_polygons_.size (); poly++)
       for (size_t ray = 0; ray < 3; ray++)
-        crossings[ray] +=
-            rayTriangleIntersect (input_->points[(*indices_)[index]], rays[ray],
-                                  hull_polygons_[poly], *hull_cloud_);
+        crossings[ray] += rayTriangleIntersect (input_->points[(*indices_)[index]],
+                                                rays[ray],
+                                                hull_polygons_[poly],
+                                                *hull_cloud_);
 
     if (crop_outside_ &&
         (crossings[0] & 1) + (crossings[1] & 1) + (crossings[2] & 1) > 1)

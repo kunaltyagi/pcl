@@ -101,9 +101,13 @@ namespace mets
     ///
     /// @param K The "Boltzmann" constant that we want ot use (default is 1).
     simulated_annealing (evaluable_solution &starting_point,
-                         solution_recorder &recorder, move_manager_type &moveman,
-                         termination_criteria_chain &tc, abstract_cooling_schedule &cs,
-                         double starting_temp, double stop_temp = 1e-7, double K = 1.0);
+                         solution_recorder &recorder,
+                         move_manager_type &moveman,
+                         termination_criteria_chain &tc,
+                         abstract_cooling_schedule &cs,
+                         double starting_temp,
+                         double stop_temp = 1e-7,
+                         double K = 1.0);
 
     /// purposely not implemented (see Effective C++)
     simulated_annealing (const simulated_annealing &);
@@ -212,9 +216,14 @@ namespace mets
 
 template <typename move_manager_t>
 mets::simulated_annealing<move_manager_t>::simulated_annealing (
-    evaluable_solution &working, solution_recorder &recorder, move_manager_t &moveman,
-    termination_criteria_chain &tc, abstract_cooling_schedule &cs, double starting_temp,
-    double stop_temp, double K)
+    evaluable_solution &working,
+    solution_recorder &recorder,
+    move_manager_t &moveman,
+    termination_criteria_chain &tc,
+    abstract_cooling_schedule &cs,
+    double starting_temp,
+    double stop_temp,
+    double K)
     : abstract_search<move_manager_t> (working, recorder, moveman),
       termination_criteria_m (tc), cooling_schedule_m (cs),
       starting_temp_m (starting_temp), stop_temp_m (stop_temp), current_temp_m (),
@@ -240,7 +249,8 @@ static_cast<mets::evaluable_solution&>(base_t::working_solution_m)
 
     base_t::moves_m.refresh (base_t::working_solution_m);
     for (typename move_manager_t::iterator movit = base_t::moves_m.begin ();
-         movit != base_t::moves_m.end (); ++movit) {
+         movit != base_t::moves_m.end ();
+         ++movit) {
       // apply move and record proposed cost function
       gol_type cost;
       if (apply_and_evaluate) {

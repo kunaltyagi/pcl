@@ -1069,7 +1069,8 @@ TEST (PCL, demeanPointCloud)
 
   EXPECT_XYZ_NEAR (cloud_demean[0], PointXYZ (0.034503, 0.010837, 0.013447), 1e-4);
   EXPECT_XYZ_NEAR (cloud_demean[cloud_demean.size () - 1],
-                   PointXYZ (-0.048849, 0.072507, -0.071702), 1e-4);
+                   PointXYZ (-0.048849, 0.072507, -0.071702),
+                   1e-4);
 
   std::vector<int> indices (cloud.size ());
   for (int i = 0; i < static_cast<int> (indices.size ()); ++i) {
@@ -1085,7 +1086,8 @@ TEST (PCL, demeanPointCloud)
 
   EXPECT_XYZ_NEAR (cloud_demean[0], PointXYZ (0.034503, 0.010837, 0.013447), 1e-4);
   EXPECT_XYZ_NEAR (cloud_demean[cloud_demean.size () - 1],
-                   PointXYZ (-0.048849, 0.072507, -0.071702), 1e-4);
+                   PointXYZ (-0.048849, 0.072507, -0.071702),
+                   1e-4);
 
   // Check eigen demean
   Eigen::MatrixXf mat_demean;

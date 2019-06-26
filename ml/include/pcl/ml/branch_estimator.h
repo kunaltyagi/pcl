@@ -64,8 +64,10 @@ namespace pcl
      * \param[out] branch_index The destination for the computed branch index.
      */
     virtual void
-    computeBranchIndex (const float result, const unsigned char flag,
-                        const float threshold, unsigned char &branch_index) const = 0;
+    computeBranchIndex (const float result,
+                        const unsigned char flag,
+                        const float threshold,
+                        unsigned char &branch_index) const = 0;
   };
 
   /** \brief Branch estimator for binary trees where the branch is computed only from
@@ -92,7 +94,8 @@ namespace pcl
      * \param[out] branch_index The destination for the computed branch index.
      */
     inline void
-    computeBranchIndex (const float result, const unsigned char flag,
+    computeBranchIndex (const float result,
+                        const unsigned char flag,
                         const float threshold,
                         unsigned char &branch_index) const override
     {
@@ -125,7 +128,8 @@ namespace pcl
      * \param[out] branch_index The destination for the computed branch index.
      */
     inline void
-    computeBranchIndex (const float result, const unsigned char flag,
+    computeBranchIndex (const float result,
+                        const unsigned char flag,
                         const float threshold,
                         unsigned char &branch_index) const override
     {

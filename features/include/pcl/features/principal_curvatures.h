@@ -58,7 +58,8 @@ namespace pcl
    * \author Radu B. Rusu, Jared Glover
    * \ingroup features
    */
-  template <typename PointInT, typename PointNT,
+  template <typename PointInT,
+            typename PointNT,
             typename PointOutT = pcl::PrincipalCurvatures>
   class PrincipalCurvaturesEstimation
       : public FeatureFromNormals<PointInT, PointNT, PointOutT>
@@ -103,9 +104,14 @@ namespace pcl
      * \param[out] pc2 the min eigenvalue of curvature
      */
     void
-    computePointPrincipalCurvatures (const pcl::PointCloud<PointNT> &normals, int p_idx,
-                                     const std::vector<int> &indices, float &pcx,
-                                     float &pcy, float &pcz, float &pc1, float &pc2);
+    computePointPrincipalCurvatures (const pcl::PointCloud<PointNT> &normals,
+                                     int p_idx,
+                                     const std::vector<int> &indices,
+                                     float &pcx,
+                                     float &pcy,
+                                     float &pcz,
+                                     float &pc1,
+                                     float &pc2);
 
     protected:
     /** \brief Estimate the principal curvature (eigenvector of the max eigenvalue),

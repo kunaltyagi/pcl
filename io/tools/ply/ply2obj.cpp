@@ -68,20 +68,25 @@ class ply_to_obj_converter
   ply_to_obj_converter (flags_type flags = 0);
 
   bool
-  convert (std::istream &istream, const std::string &istream_filename,
-           std::ostream &ostream, const std::string &ostream_filename);
+  convert (std::istream &istream,
+           const std::string &istream_filename,
+           std::ostream &ostream,
+           const std::string &ostream_filename);
 
   private:
   void
-  info_callback (const std::string &filename, std::size_t line_number,
+  info_callback (const std::string &filename,
+                 std::size_t line_number,
                  const std::string &message);
 
   void
-  warning_callback (const std::string &filename, std::size_t line_number,
+  warning_callback (const std::string &filename,
+                    std::size_t line_number,
                     const std::string &message);
 
   void
-  error_callback (const std::string &filename, std::size_t line_number,
+  error_callback (const std::string &filename,
+                  std::size_t line_number,
                   const std::string &message);
 
   boost::tuple<std::function<void()>, std::function<void()>>
@@ -93,7 +98,8 @@ class ply_to_obj_converter
                                        const std::string &property_name);
 
   template <typename SizeType, typename ScalarType>
-  boost::tuple<std::function<void(SizeType)>, std::function<void(ScalarType)>,
+  boost::tuple<std::function<void(SizeType)>,
+               std::function<void(ScalarType)>,
                std::function<void()>>
   list_property_definition_callback (const std::string &element_name,
                                      const std::string &property_name);
@@ -208,7 +214,8 @@ ply_to_obj_converter::scalar_property_definition_callback (
 
 template <>
 boost::tuple<std::function<void(pcl::io::ply::uint8)>,
-             std::function<void(pcl::io::ply::int32)>, std::function<void()>>
+             std::function<void(pcl::io::ply::int32)>,
+             std::function<void()>>
 ply_to_obj_converter::list_property_definition_callback (
     const std::string &element_name, const std::string &property_name)
 {
@@ -300,18 +307,28 @@ ply_to_obj_converter::face_end ()
 }
 
 bool
-ply_to_obj_converter::convert (std::istream &, const std::string &istream_filename,
-                               std::ostream &ostream, const std::string &)
+ply_to_obj_converter::convert (std::istream &,
+                               const std::string &istream_filename,
+                               std::ostream &ostream,
+                               const std::string &)
 {
   pcl::io::ply::ply_parser ply_parser;
 
-  ply_parser.info_callback (boost::bind (&ply_to_obj_converter::info_callback, this,
-                                         boost::ref (istream_filename), _1, _2));
+  ply_parser.info_callback (boost::bind (&ply_to_obj_converter::info_callback,
+                                         this,
+                                         boost::ref (istream_filename),
+                                         _1,
+                                         _2));
   ply_parser.warning_callback (boost::bind (&ply_to_obj_converter::warning_callback,
-                                            this, boost::ref (istream_filename), _1,
+                                            this,
+                                            boost::ref (istream_filename),
+                                            _1,
                                             _2));
-  ply_parser.error_callback (boost::bind (&ply_to_obj_converter::error_callback, this,
-                                          boost::ref (istream_filename), _1, _2));
+  ply_parser.error_callback (boost::bind (&ply_to_obj_converter::error_callback,
+                                          this,
+                                          boost::ref (istream_filename),
+                                          _1,
+                                          _2));
 
   ply_parser.element_definition_callback (
       boost::bind (&ply_to_obj_converter::element_definition_callback, this, _1, _2));
@@ -322,7 +339,9 @@ ply_to_obj_converter::convert (std::istream &, const std::string &istream_filena
       scalar_property_definition_callbacks) =
       boost::bind (&ply_to_obj_converter::scalar_property_definition_callback<
                        pcl::io::ply::float32>,
-                   this, _1, _2);
+                   this,
+                   _1,
+                   _2);
   ply_parser.scalar_property_definition_callbacks (
       scalar_property_definition_callbacks);
 
@@ -333,7 +352,9 @@ ply_to_obj_converter::convert (std::istream &, const std::string &istream_filena
       boost::bind (
           &ply_to_obj_converter::list_property_definition_callback<pcl::io::ply::uint8,
                                                                    pcl::io::ply::int32>,
-          this, _1, _2);
+          this,
+          _1,
+          _2);
   ply_parser.list_property_definition_callbacks (list_property_definition_callbacks);
 
   ostream_ = &ostream;
@@ -515,6 +536,6 @@ main (int argc, char *argv[])
   std::ostream &ostream = ofstream.is_open () ? ofstream : std::cout;
 
   class ply_to_obj_converter ply_to_obj_converter (ply_to_obj_converter_flags);
-  return ply_to_obj_converter.convert (istream, istream_filename, ostream,
-                                       ostream_filename);
+  return ply_to_obj_converter.convert (
+      istream, istream_filename, ostream, ostream_filename);
 }

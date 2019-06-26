@@ -143,8 +143,14 @@ namespace pcl
 
           // read the header of the pcd file and get the number of points
           PCDReader reader;
-          reader.readHeader (disk_storage_filename_, cloud_info, origin, orientation,
-                             pcd_version, data_type, data_index, 0);
+          reader.readHeader (disk_storage_filename_,
+                             cloud_info,
+                             origin,
+                             orientation,
+                             pcd_version,
+                             data_type,
+                             data_index,
+                             0);
 
           filelen_ = cloud_info.width * cloud_info.height;
         }
@@ -183,7 +189,8 @@ namespace pcl
         PCL_WARN ("[pcl::outofcore::OutofcoreOctreeDiskContainer::%s] Flushing "
                   "writebuffer in a dangerous way to file %s. This might overwrite "
                   "data in destination file\n",
-                  __FUNCTION__, disk_storage_filename_.c_str ());
+                  __FUNCTION__,
+                  disk_storage_filename_.c_str ());
 
         // Write ascii for now to debug
         int res = writer.writeBinaryCompressed (disk_storage_filename_, *cloud);
@@ -273,7 +280,9 @@ namespace pcl
     template <typename PointT>
     void
     OutofcoreOctreeDiskContainer<PointT>::readRangeSubSample_bernoulli (
-        const uint64_t start, const uint64_t count, const double percent,
+        const uint64_t start,
+        const uint64_t count,
+        const double percent,
         AlignedPointTVector &dst)
     {
       if (count == 0) {
@@ -531,7 +540,8 @@ namespace pcl
         pcl::PCDWriter writer;
         PCL_DEBUG ("[pcl::outofcore::OutofcoreOctreeDiskContainer::%s] Concatenating "
                    "point cloud from %s to new cloud\n",
-                   __FUNCTION__, disk_storage_filename_.c_str ());
+                   __FUNCTION__,
+                   disk_storage_filename_.c_str ());
 
         size_t previous_num_pts = tmp_cloud->width * tmp_cloud->height +
                                   input_cloud->width * input_cloud->height;
@@ -561,7 +571,8 @@ namespace pcl
 
     template <typename PointT>
     void
-    OutofcoreOctreeDiskContainer<PointT>::readRange (const uint64_t, const uint64_t,
+    OutofcoreOctreeDiskContainer<PointT>::readRange (const uint64_t,
+                                                     const uint64_t,
                                                      pcl::PCLPointCloud2::Ptr &dst)
     {
       pcl::PCDReader reader;
@@ -574,14 +585,15 @@ namespace pcl
         //            PCL_INFO ("[pcl::outofcore::OutofcoreOctreeDiskContainer::%s]
         //            Reading points from disk from %s.\n", __FUNCTION__ ,
         //            disk_storage_filename_->c_str ());
-        int res = reader.read (disk_storage_filename_, *dst, origin, orientation,
-                               pcd_version);
+        int res = reader.read (
+            disk_storage_filename_, *dst, origin, orientation, pcd_version);
         (void)res;
         assert (res != -1);
       } else {
         PCL_ERROR ("[pcl::outofcore::OutofcoreOctreeDiskContainer::%s] File %s does "
                    "not exist in node.\n",
-                   __FUNCTION__, disk_storage_filename_.c_str ());
+                   __FUNCTION__,
+                   disk_storage_filename_.c_str ());
       }
     }
 
@@ -605,7 +617,8 @@ namespace pcl
       } else {
         PCL_ERROR ("[pcl::outofcore::OutofcoreOctreeDiskContainer::%s] File %s does "
                    "not exist in node.\n",
-                   __FUNCTION__, disk_storage_filename_.c_str ());
+                   __FUNCTION__,
+                   disk_storage_filename_.c_str ());
         return (-1);
       }
 
@@ -696,8 +709,14 @@ namespace pcl
 
       // read the header of the pcd file and get the number of points
       PCDReader reader;
-      reader.readHeader (disk_storage_filename_, cloud_info, origin, orientation,
-                         pcd_version, data_type, data_index, 0);
+      reader.readHeader (disk_storage_filename_,
+                         cloud_info,
+                         origin,
+                         orientation,
+                         pcd_version,
+                         data_type,
+                         data_index,
+                         0);
 
       boost::uint64_t total_points =
           cloud_info.width * cloud_info.height + writebuff_.size ();

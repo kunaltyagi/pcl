@@ -82,9 +82,13 @@ namespace pcl
      * after the header (e.g., 513).
      */
     virtual int
-    readHeader (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
-                Eigen::Vector4f &origin, Eigen::Quaternionf &orientation,
-                int &file_version, int &data_type, unsigned int &data_idx,
+    readHeader (const std::string &file_name,
+                pcl::PCLPointCloud2 &cloud,
+                Eigen::Vector4f &origin,
+                Eigen::Quaternionf &orientation,
+                int &file_version,
+                int &data_type,
+                unsigned int &data_idx,
                 const int offset = 0) = 0;
 
     /** \brief Read a point cloud data from a FILE file and store it into a
@@ -100,8 +104,11 @@ namespace pcl
      * the offset to the next byte after the header (e.g., 513).
      */
     virtual int
-    read (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
-          Eigen::Vector4f &origin, Eigen::Quaternionf &orientation, int &file_version,
+    read (const std::string &file_name,
+          pcl::PCLPointCloud2 &cloud,
+          Eigen::Vector4f &origin,
+          Eigen::Quaternionf &orientation,
+          int &file_version,
           const int offset = 0) = 0;
 
     /** \brief Read a point cloud data from a FILE file (FILE_V6 only!) and store it
@@ -122,7 +129,8 @@ namespace pcl
      * header (e.g., 513).
      */
     int
-    read (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
+    read (const std::string &file_name,
+          pcl::PCLPointCloud2 &cloud,
           const int offset = 0)
     {
       Eigen::Vector4f origin;
@@ -142,13 +150,18 @@ namespace pcl
      */
     template <typename PointT>
     inline int
-    read (const std::string &file_name, pcl::PointCloud<PointT> &cloud,
+    read (const std::string &file_name,
+          pcl::PointCloud<PointT> &cloud,
           const int offset = 0)
     {
       pcl::PCLPointCloud2 blob;
       int file_version;
-      int res = read (file_name, blob, cloud.sensor_origin_, cloud.sensor_orientation_,
-                      file_version, offset);
+      int res = read (file_name,
+                      blob,
+                      cloud.sensor_origin_,
+                      cloud.sensor_orientation_,
+                      file_version,
+                      offset);
 
       // Exit in case of error
       if (res < 0)
@@ -181,7 +194,8 @@ namespace pcl
      * FILE format, false (default) for ASCII
      */
     virtual int
-    write (const std::string &file_name, const pcl::PCLPointCloud2 &cloud,
+    write (const std::string &file_name,
+           const pcl::PCLPointCloud2 &cloud,
            const Eigen::Vector4f &origin = Eigen::Vector4f::Zero (),
            const Eigen::Quaternionf &orientation = Eigen::Quaternionf::Identity (),
            const bool binary = false) = 0;
@@ -195,7 +209,8 @@ namespace pcl
      * \param[in] orientation the sensor acquisition orientation
      */
     inline int
-    write (const std::string &file_name, const pcl::PCLPointCloud2::ConstPtr &cloud,
+    write (const std::string &file_name,
+           const pcl::PCLPointCloud2::ConstPtr &cloud,
            const Eigen::Vector4f &origin = Eigen::Vector4f::Zero (),
            const Eigen::Quaternionf &orientation = Eigen::Quaternionf::Identity (),
            const bool binary = false)
@@ -211,7 +226,8 @@ namespace pcl
      */
     template <typename PointT>
     inline int
-    write (const std::string &file_name, const pcl::PointCloud<PointT> &cloud,
+    write (const std::string &file_name,
+           const pcl::PointCloud<PointT> &cloud,
            const bool binary = false)
     {
       Eigen::Vector4f origin = cloud.sensor_origin_;
@@ -239,9 +255,12 @@ namespace pcl
    */
   template <typename Type>
   inline std::enable_if_t<std::is_floating_point<Type>::value>
-  copyValueString (const pcl::PCLPointCloud2 &cloud, const unsigned int point_index,
-                   const int point_size, const unsigned int field_idx,
-                   const unsigned int fields_count, std::ostream &stream)
+  copyValueString (const pcl::PCLPointCloud2 &cloud,
+                   const unsigned int point_index,
+                   const int point_size,
+                   const unsigned int field_idx,
+                   const unsigned int fields_count,
+                   std::ostream &stream)
   {
     Type value;
     memcpy (&value,
@@ -256,9 +275,12 @@ namespace pcl
 
   template <typename Type>
   inline std::enable_if_t<std::is_integral<Type>::value>
-  copyValueString (const pcl::PCLPointCloud2 &cloud, const unsigned int point_index,
-                   const int point_size, const unsigned int field_idx,
-                   const unsigned int fields_count, std::ostream &stream)
+  copyValueString (const pcl::PCLPointCloud2 &cloud,
+                   const unsigned int point_index,
+                   const int point_size,
+                   const unsigned int field_idx,
+                   const unsigned int fields_count,
+                   std::ostream &stream)
   {
     Type value;
     memcpy (&value,
@@ -271,9 +293,11 @@ namespace pcl
   template <>
   inline void
   copyValueString<int8_t> (const pcl::PCLPointCloud2 &cloud,
-                           const unsigned int point_index, const int point_size,
+                           const unsigned int point_index,
+                           const int point_size,
                            const unsigned int field_idx,
-                           const unsigned int fields_count, std::ostream &stream)
+                           const unsigned int fields_count,
+                           std::ostream &stream)
   {
     int8_t value;
     memcpy (&value,
@@ -287,9 +311,11 @@ namespace pcl
   template <>
   inline void
   copyValueString<uint8_t> (const pcl::PCLPointCloud2 &cloud,
-                            const unsigned int point_index, const int point_size,
+                            const unsigned int point_index,
+                            const int point_size,
                             const unsigned int field_idx,
-                            const unsigned int fields_count, std::ostream &stream)
+                            const unsigned int fields_count,
+                            std::ostream &stream)
   {
     uint8_t value;
     memcpy (&value,
@@ -313,8 +339,10 @@ namespace pcl
    */
   template <typename Type>
   inline std::enable_if_t<std::is_floating_point<Type>::value, bool>
-  isValueFinite (const pcl::PCLPointCloud2 &cloud, const unsigned int point_index,
-                 const int point_size, const unsigned int field_idx,
+  isValueFinite (const pcl::PCLPointCloud2 &cloud,
+                 const unsigned int point_index,
+                 const int point_size,
+                 const unsigned int field_idx,
                  const unsigned int fields_count)
   {
     Type value;
@@ -328,7 +356,8 @@ namespace pcl
   template <typename Type>
   inline std::enable_if_t<std::is_integral<Type>::value, bool>
   isValueFinite (const pcl::PCLPointCloud2 & /* cloud */,
-                 const unsigned int /* point_index */, const int /* point_size */,
+                 const unsigned int /* point_index */,
+                 const int /* point_size */,
                  const unsigned int /* field_idx */,
                  const unsigned int /* fields_count */)
   {
@@ -349,8 +378,10 @@ namespace pcl
    */
   template <typename Type>
   inline void
-  copyStringValue (const std::string &st, pcl::PCLPointCloud2 &cloud,
-                   unsigned int point_index, unsigned int field_idx,
+  copyStringValue (const std::string &st,
+                   pcl::PCLPointCloud2 &cloud,
+                   unsigned int point_index,
+                   unsigned int field_idx,
                    unsigned int fields_count)
   {
     Type value;
@@ -366,13 +397,16 @@ namespace pcl
 
     memcpy (&cloud.data[point_index * cloud.point_step +
                         cloud.fields[field_idx].offset + fields_count * sizeof (Type)],
-            reinterpret_cast<char *> (&value), sizeof (Type));
+            reinterpret_cast<char *> (&value),
+            sizeof (Type));
   }
 
   template <>
   inline void
-  copyStringValue<int8_t> (const std::string &st, pcl::PCLPointCloud2 &cloud,
-                           unsigned int point_index, unsigned int field_idx,
+  copyStringValue<int8_t> (const std::string &st,
+                           pcl::PCLPointCloud2 &cloud,
+                           unsigned int point_index,
+                           unsigned int field_idx,
                            unsigned int fields_count)
   {
     int8_t value;
@@ -393,13 +427,16 @@ namespace pcl
     memcpy (
         &cloud.data[point_index * cloud.point_step + cloud.fields[field_idx].offset +
                     fields_count * sizeof (int8_t)],
-        reinterpret_cast<char *> (&value), sizeof (int8_t));
+        reinterpret_cast<char *> (&value),
+        sizeof (int8_t));
   }
 
   template <>
   inline void
-  copyStringValue<uint8_t> (const std::string &st, pcl::PCLPointCloud2 &cloud,
-                            unsigned int point_index, unsigned int field_idx,
+  copyStringValue<uint8_t> (const std::string &st,
+                            pcl::PCLPointCloud2 &cloud,
+                            unsigned int point_index,
+                            unsigned int field_idx,
                             unsigned int fields_count)
   {
     uint8_t value;
@@ -420,7 +457,8 @@ namespace pcl
     memcpy (
         &cloud.data[point_index * cloud.point_step + cloud.fields[field_idx].offset +
                     fields_count * sizeof (uint8_t)],
-        reinterpret_cast<char *> (&value), sizeof (uint8_t));
+        reinterpret_cast<char *> (&value),
+        sizeof (uint8_t));
   }
 
 } // namespace pcl

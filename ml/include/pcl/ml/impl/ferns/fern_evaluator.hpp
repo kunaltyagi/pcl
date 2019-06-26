@@ -47,30 +47,40 @@
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
-pcl::FernEvaluator<FeatureType, DataSet, LabelType, ExampleIndex,
-                   NodeType>::FernEvaluator ()
+pcl::FernEvaluator<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
+    FernEvaluator ()
 {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
-pcl::FernEvaluator<FeatureType, DataSet, LabelType, ExampleIndex,
-                   NodeType>::~FernEvaluator ()
+pcl::FernEvaluator<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
+    ~FernEvaluator ()
 {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
 void
 pcl::FernEvaluator<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::evaluate (
     pcl::Fern<FeatureType, NodeType> &fern,
     pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> &feature_handler,
     pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex> &stats_estimator,
-    DataSet &data_set, std::vector<ExampleIndex> &examples,
+    DataSet &data_set,
+    std::vector<ExampleIndex> &examples,
     std::vector<LabelType> &label_data)
 {
   const size_t num_of_examples = examples.size ();
@@ -88,10 +98,13 @@ pcl::FernEvaluator<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::eva
     flags[feature_index].reserve (num_of_examples);
     branch_indices[feature_index].reserve (num_of_examples);
 
-    feature_handler.evaluateFeature (fern.accessFeature (feature_index), data_set,
-                                     examples, results[feature_index],
+    feature_handler.evaluateFeature (fern.accessFeature (feature_index),
+                                     data_set,
+                                     examples,
+                                     results[feature_index],
                                      flags[feature_index]);
-    stats_estimator.computeBranchIndices (results[feature_index], flags[feature_index],
+    stats_estimator.computeBranchIndices (results[feature_index],
+                                          flags[feature_index],
                                           fern.accessThreshold (feature_index),
                                           branch_indices[feature_index]);
   }
@@ -108,7 +121,10 @@ pcl::FernEvaluator<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::eva
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
 void
 pcl::FernEvaluator<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
@@ -117,7 +133,8 @@ pcl::FernEvaluator<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
         pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> &feature_handler,
         pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex>
             &stats_estimator,
-        DataSet &data_set, std::vector<ExampleIndex> &examples,
+        DataSet &data_set,
+        std::vector<ExampleIndex> &examples,
         std::vector<LabelType> &label_data)
 {
   const size_t num_of_examples = examples.size ();
@@ -133,10 +150,13 @@ pcl::FernEvaluator<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
     flags[feature_index].reserve (num_of_examples);
     branch_indices[feature_index].reserve (num_of_examples);
 
-    feature_handler.evaluateFeature (fern.accessFeature (feature_index), data_set,
-                                     examples, results[feature_index],
+    feature_handler.evaluateFeature (fern.accessFeature (feature_index),
+                                     data_set,
+                                     examples,
+                                     results[feature_index],
                                      flags[feature_index]);
-    stats_estimator.computeBranchIndices (results[feature_index], flags[feature_index],
+    stats_estimator.computeBranchIndices (results[feature_index],
+                                          flags[feature_index],
                                           fern.accessThreshold (feature_index),
                                           branch_indices[feature_index]);
   }
@@ -153,14 +173,18 @@ pcl::FernEvaluator<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
 void
 pcl::FernEvaluator<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::getNodes (
     pcl::Fern<FeatureType, NodeType> &fern,
     pcl::FeatureHandler<FeatureType, DataSet, ExampleIndex> &feature_handler,
     pcl::StatsEstimator<LabelType, NodeType, DataSet, ExampleIndex> &stats_estimator,
-    DataSet &data_set, std::vector<ExampleIndex> &examples,
+    DataSet &data_set,
+    std::vector<ExampleIndex> &examples,
     std::vector<NodeType *> &nodes)
 {
   const size_t num_of_examples = examples.size ();
@@ -178,10 +202,13 @@ pcl::FernEvaluator<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::get
     flags[feature_index].reserve (num_of_examples);
     branch_indices[feature_index].reserve (num_of_examples);
 
-    feature_handler.evaluateFeature (fern.accessFeature (feature_index), data_set,
-                                     examples, results[feature_index],
+    feature_handler.evaluateFeature (fern.accessFeature (feature_index),
+                                     data_set,
+                                     examples,
+                                     results[feature_index],
                                      flags[feature_index]);
-    stats_estimator.computeBranchIndices (results[feature_index], flags[feature_index],
+    stats_estimator.computeBranchIndices (results[feature_index],
+                                          flags[feature_index],
                                           fern.accessThreshold (feature_index),
                                           branch_indices[feature_index]);
   }

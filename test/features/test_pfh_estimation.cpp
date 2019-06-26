@@ -60,12 +60,15 @@ static std::vector<int> indices;
 static KdTreePtr tree;
 
 ///////////////////////////////////////////////////////////////////////////////////
-template <template <class, class, class> class FeatureEstimation, typename PointT,
-          typename NormalT, typename OutputT>
+template <template <class, class, class> class FeatureEstimation,
+          typename PointT,
+          typename NormalT,
+          typename OutputT>
 void
 testIndicesAndSearchSurface (const typename PointCloud<PointT>::Ptr &points,
                              const typename PointCloud<NormalT>::Ptr &normals,
-                             const pcl::IndicesPtr &indices, int ndims)
+                             const pcl::IndicesPtr &indices,
+                             int ndims)
 
 {
   using KdTreeT = pcl::search::KdTree<PointT>;
@@ -173,7 +176,8 @@ TEST (PCL, PFHEstimation)
   EXPECT_NEAR (pfh_histogram[1], 2.32429, 1e-2);
   EXPECT_NEAR (pfh_histogram[2], 0.357477, 1e-2);
   EXPECT_NEAR (pfh_histogram[3], 0.848541, 1e-2);
-  EXPECT_NEAR (pfh_histogram[4], 3.65565,
+  EXPECT_NEAR (pfh_histogram[4],
+               3.65565,
                2e-2); // larger error w.r.t. considering all point pairs (feature
                       // bins=0,1,1 where 1 is middle, so angle of 0)
   EXPECT_NEAR (pfh_histogram[5], 0.178104, 1e-2);
@@ -193,7 +197,8 @@ TEST (PCL, PFHEstimation)
   EXPECT_NEAR (pfh_histogram[19], 6.78336, 1e-2);
   EXPECT_NEAR (pfh_histogram[20], 1.63858, 1e-2);
   EXPECT_NEAR (pfh_histogram[21], 9.93842, 1e-2);
-  EXPECT_NEAR (pfh_histogram[22], 18.4947,
+  EXPECT_NEAR (pfh_histogram[22],
+               18.4947,
                2e-2); // larger error w.r.t. considering all point pairs (feature
                       // bins=2,1,1 where 1 is middle, so angle of 0)
   EXPECT_NEAR (pfh_histogram[23], 1.96553, 1e-4);
@@ -232,7 +237,8 @@ TEST (PCL, PFHEstimation)
     EXPECT_NEAR (point.histogram[9], 0.0038165, 1e-4);
     EXPECT_NEAR (point.histogram[10], 0.103046, 1e-4);
     EXPECT_NEAR (point.histogram[11], 0.214997, 1e-4);
-    EXPECT_NEAR (point.histogram[12], 0.398186,
+    EXPECT_NEAR (point.histogram[12],
+                 0.398186,
                  3e-2); // larger error w.r.t. considering all point pairs (feature
                         // bins=0,2,2 where 2 is middle, so angle of 0)
     EXPECT_NEAR (point.histogram[13], 0.298959, 1e-4);
@@ -313,8 +319,8 @@ TYPED_TEST (FPFHTest, Estimation)
   hist_f2.setZero ();
   hist_f3.setZero ();
   for (int i = 0; i < static_cast<int> (indices.size ()); ++i)
-    fpfh.computePointSPFHSignature (*cloud, *cloud, i, i, indices, hist_f1, hist_f2,
-                                    hist_f3);
+    fpfh.computePointSPFHSignature (
+        *cloud, *cloud, i, i, indices, hist_f1, hist_f2, hist_f3);
 
   EXPECT_NEAR (hist_f1 (0, 0), 0.757576, 1e-4);
   EXPECT_NEAR (hist_f1 (0, 1), 0.757576, 1e-4);
@@ -358,8 +364,8 @@ TYPED_TEST (FPFHTest, Estimation)
   std::vector<float> dists (indices.size ());
   for (size_t i = 0; i < dists.size (); ++i)
     dists[i] = static_cast<float> (i);
-  fpfh.weightPointSPFHSignature (hist_f1, hist_f2, hist_f3, indices, dists,
-                                 fpfh_histogram);
+  fpfh.weightPointSPFHSignature (
+      hist_f1, hist_f2, hist_f3, indices, dists, fpfh_histogram);
 
   EXPECT_NEAR (fpfh_histogram[0], 1.9798, 1e-2);
   EXPECT_NEAR (fpfh_histogram[1], 2.86927, 1e-2);
@@ -513,8 +519,22 @@ TEST (PCL, GFPFH)
   PointCloud<GFPFHSignature16> descriptor;
   gfpfh.compute (descriptor);
 
-  const float ref_values[] = {1877, 6375, 5361,  14393, 6674,  2471, 2248, 2753,
-                              3117, 4585, 14388, 32407, 15122, 3061, 3202, 794};
+  const float ref_values[] = {1877,
+                              6375,
+                              5361,
+                              14393,
+                              6674,
+                              2471,
+                              2248,
+                              2753,
+                              3117,
+                              4585,
+                              14388,
+                              32407,
+                              15122,
+                              3061,
+                              3202,
+                              794};
 
   EXPECT_EQ (descriptor.points.size (), 1);
   for (size_t i = 0; i < size_t (descriptor.points[0].descriptorSize ()); ++i) {

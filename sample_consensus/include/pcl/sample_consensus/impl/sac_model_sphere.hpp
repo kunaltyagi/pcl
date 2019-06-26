@@ -150,7 +150,8 @@ pcl::SampleConsensusModelSphere<PointT>::getDistancesToModel (
 template <typename PointT>
 void
 pcl::SampleConsensusModelSphere<PointT>::selectWithinDistance (
-    const Eigen::VectorXf &model_coefficients, const double threshold,
+    const Eigen::VectorXf &model_coefficients,
+    const double threshold,
     std::vector<int> &inliers)
 {
   // Check if the model is valid given the user constraints
@@ -224,7 +225,8 @@ pcl::SampleConsensusModelSphere<PointT>::countWithinDistance (
 template <typename PointT>
 void
 pcl::SampleConsensusModelSphere<PointT>::optimizeModelCoefficients (
-    const std::vector<int> &inliers, const Eigen::VectorXf &model_coefficients,
+    const std::vector<int> &inliers,
+    const Eigen::VectorXf &model_coefficients,
     Eigen::VectorXf &optimized_coefficients) const
 {
   optimized_coefficients = model_coefficients;
@@ -256,9 +258,15 @@ pcl::SampleConsensusModelSphere<PointT>::optimizeModelCoefficients (
   PCL_DEBUG ("[pcl::SampleConsensusModelSphere::optimizeModelCoefficients] LM solver "
              "finished with exit code %i, having a residual norm of %g. \nInitial "
              "solution: %g %g %g %g \nFinal solution: %g %g %g %g\n",
-             info, lm.fvec.norm (), model_coefficients[0], model_coefficients[1],
-             model_coefficients[2], model_coefficients[3], optimized_coefficients[0],
-             optimized_coefficients[1], optimized_coefficients[2],
+             info,
+             lm.fvec.norm (),
+             model_coefficients[0],
+             model_coefficients[1],
+             model_coefficients[2],
+             model_coefficients[3],
+             optimized_coefficients[0],
+             optimized_coefficients[1],
+             optimized_coefficients[2],
              optimized_coefficients[3]);
 }
 
@@ -266,8 +274,10 @@ pcl::SampleConsensusModelSphere<PointT>::optimizeModelCoefficients (
 template <typename PointT>
 void
 pcl::SampleConsensusModelSphere<PointT>::projectPoints (
-    const std::vector<int> &, const Eigen::VectorXf &model_coefficients,
-    PointCloud &projected_points, bool) const
+    const std::vector<int> &,
+    const Eigen::VectorXf &model_coefficients,
+    PointCloud &projected_points,
+    bool) const
 {
   // Needs a valid model coefficients
   if (model_coefficients.size () != 4) {
@@ -292,7 +302,8 @@ pcl::SampleConsensusModelSphere<PointT>::projectPoints (
 template <typename PointT>
 bool
 pcl::SampleConsensusModelSphere<PointT>::doSamplesVerifyModel (
-    const std::set<int> &indices, const Eigen::VectorXf &model_coefficients,
+    const std::set<int> &indices,
+    const Eigen::VectorXf &model_coefficients,
     const double threshold) const
 {
   // Needs a valid model coefficients

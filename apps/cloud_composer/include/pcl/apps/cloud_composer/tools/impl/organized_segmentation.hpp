@@ -111,8 +111,12 @@ pcl::cloud_composer::OrganizedSegmentationTool::performTemplatedAction (
     pcl::PointCloud<pcl::Label>::Ptr labels (new pcl::PointCloud<pcl::Label>);
     std::vector<pcl::PointIndices> label_indices;
     std::vector<pcl::PointIndices> boundary_indices;
-    mps.segmentAndRefine (regions, model_coefficients, inlier_indices, labels,
-                          label_indices, boundary_indices);
+    mps.segmentAndRefine (regions,
+                          model_coefficients,
+                          inlier_indices,
+                          labels,
+                          label_indices,
+                          boundary_indices);
 
     auto plane_labels = boost::make_shared<std::set<uint32_t>> ();
     for (size_t i = 0; i < label_indices.size (); ++i)
@@ -140,8 +144,8 @@ pcl::cloud_composer::OrganizedSegmentationTool::performTemplatedAction (
     for (size_t i = 0; i < euclidean_label_indices.size (); i++) {
       if (euclidean_label_indices[i].indices.size () >= (size_t)min_cluster_size) {
         typename PointCloud<PointT>::Ptr cluster (new PointCloud<PointT>);
-        pcl::copyPointCloud (*input_cloud, euclidean_label_indices[i].indices,
-                             *cluster);
+        pcl::copyPointCloud (
+            *input_cloud, euclidean_label_indices[i].indices, *cluster);
         qDebug () << "Found cluster with size " << cluster->width;
         QString name = input_item->text () + tr ("- Clstr %1").arg (i);
         CloudItem *new_cloud_item =

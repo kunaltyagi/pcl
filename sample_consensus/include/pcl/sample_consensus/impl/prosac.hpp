@@ -169,7 +169,8 @@ pcl::ProgressiveSampleConsensus<PointT>::computeModel (int debug_verbosity_level
       size_t I_possible_n_star = I_N;
       for (std::vector<int>::const_reverse_iterator last_inlier = inliers.rbegin (),
                                                     inliers_end = inliers.rend ();
-           last_inlier != inliers_end; ++last_inlier, --I_possible_n_star) {
+           last_inlier != inliers_end;
+           ++last_inlier, --I_possible_n_star) {
         // The best possible_n_star for a given I_possible_n_star is the index of the
         // last inlier
         unsigned int possible_n_star = (*last_inlier) + 1;
@@ -222,7 +223,10 @@ pcl::ProgressiveSampleConsensus<PointT>::computeModel (int debug_verbosity_level
     if (debug_verbosity_level > 1)
       PCL_DEBUG ("[pcl::ProgressiveSampleConsensus::computeModel] Trial %d out of %d: "
                  "%d inliers (best is: %d so far).\n",
-                 iterations_, k_n_star, I_N, I_N_best);
+                 iterations_,
+                 k_n_star,
+                 I_N,
+                 I_N_best);
     if (iterations_ > max_iterations_) {
       if (debug_verbosity_level > 0)
         PCL_DEBUG ("[pcl::ProgressiveSampleConsensus::computeModel] RANSAC reached the "
@@ -234,7 +238,8 @@ pcl::ProgressiveSampleConsensus<PointT>::computeModel (int debug_verbosity_level
   if (debug_verbosity_level > 0)
     PCL_DEBUG ("[pcl::ProgressiveSampleConsensus::computeModel] Model: %lu size, %d "
                "inliers.\n",
-               model_.size (), I_N_best);
+               model_.size (),
+               I_N_best);
 
   if (model_.empty ()) {
     inliers_.clear ();

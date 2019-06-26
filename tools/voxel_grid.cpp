@@ -97,9 +97,14 @@ loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
 }
 
 void
-compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output,
-         float leaf_x, float leaf_y, float leaf_z, const std::string &field,
-         double fmin, double fmax)
+compute (const pcl::PCLPointCloud2::ConstPtr &input,
+         pcl::PCLPointCloud2 &output,
+         float leaf_x,
+         float leaf_y,
+         float leaf_z,
+         const std::string &field,
+         double fmin,
+         double fmax)
 {
   TicToc tt;
   tt.tic ();

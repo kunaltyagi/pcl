@@ -940,7 +940,8 @@ ON_ClippingRegion::TransformPoint (const ON_3fPoint &P, ON_3dPoint &Q) const
 }
 
 int
-ON_ClippingRegion::TransformPoints (int count, ON_4dPoint *p,
+ON_ClippingRegion::TransformPoints (int count,
+                                    ON_4dPoint *p,
                                     unsigned int *pflags) const
 {
   // transforms cv's to pick coordinates
@@ -1105,7 +1106,9 @@ ON_ClippingRegion::TransformPoints (int count, ON_4dPoint *p) const
 }
 
 bool
-ON_ClippingRegion::GetLineClipPlaneParamters (ON_4dPoint P0, ON_4dPoint P1, double *t0,
+ON_ClippingRegion::GetLineClipPlaneParamters (ON_4dPoint P0,
+                                              ON_4dPoint P1,
+                                              double *t0,
                                               double *t1) const
 {
   double s0, s1, x0, x1, s;
@@ -1250,7 +1253,9 @@ ON_BoundingBox::ClosestPoint (const ON_3dPoint &test_point) const
 }
 
 int
-ON_BoundingBox::GetClosestPoint (const ON_Line &line, ON_3dPoint &box_point, double *t0,
+ON_BoundingBox::GetClosestPoint (const ON_Line &line,
+                                 ON_3dPoint &box_point,
+                                 double *t0,
                                  double *t1) const
 {
   if (!IsValid () || !line.IsValid ())
@@ -1721,11 +1726,11 @@ ON_BoundingBox::Area () const
 }
 
 bool
-ON_BoundingBox::Set (int dim, int is_rat, int count, int stride, const double *points,
-                     int bGrowBox)
+ON_BoundingBox::Set (
+    int dim, int is_rat, int count, int stride, const double *points, int bGrowBox)
 {
-  return ON_GetPointListBoundingBox (dim, is_rat, count, stride, points, *this,
-                                     bGrowBox != 0, 0);
+  return ON_GetPointListBoundingBox (
+      dim, is_rat, count, stride, points, *this, bGrowBox != 0, 0);
 }
 
 bool
@@ -1776,8 +1781,8 @@ ON_BoundingBox::Set (const ON_SimpleArray<ON_2dPoint> &a, int bGrowBox)
 }
 
 ON_BoundingBox
-ON_PointListBoundingBox (int dim, int is_rat, int count, int stride,
-                         const double *points)
+ON_PointListBoundingBox (
+    int dim, int is_rat, int count, int stride, const double *points)
 {
   ON_BoundingBox bbox;
   ON_GetPointListBoundingBox (dim, is_rat, count, stride, points, bbox, false, 0);
@@ -1785,9 +1790,14 @@ ON_PointListBoundingBox (int dim, int is_rat, int count, int stride,
 }
 
 bool
-ON_GetPointListBoundingBox (int dim, int is_rat, int count, int stride,
-                            const double *points, ON_BoundingBox &tight_bbox,
-                            int bGrowBox, const ON_Xform *xform)
+ON_GetPointListBoundingBox (int dim,
+                            int is_rat,
+                            int count,
+                            int stride,
+                            const double *points,
+                            ON_BoundingBox &tight_bbox,
+                            int bGrowBox,
+                            const ON_Xform *xform)
 {
   // bounding box workhorse
   bool rc = false;
@@ -1955,9 +1965,14 @@ ON_GetPointListBoundingBox (int dim, int is_rat, int count, int stride,
 }
 
 bool
-ON_GetPointListBoundingBox (int dim, int is_rat, int count, int stride,
-                            const float *points, ON_BoundingBox &tight_bbox,
-                            int bGrowBox, const ON_Xform *xform)
+ON_GetPointListBoundingBox (int dim,
+                            int is_rat,
+                            int count,
+                            int stride,
+                            const float *points,
+                            ON_BoundingBox &tight_bbox,
+                            int bGrowBox,
+                            const ON_Xform *xform)
 {
   // bounding box workhorse
   ON_BoundingBox bbox;
@@ -2135,8 +2150,13 @@ ON_GetPointListBoundingBox (int dim, int is_rat, int count, int stride,
 }
 
 bool
-ON_GetPointListBoundingBox (int dim, int is_rat, int count, int stride,
-                            const double *points, double *boxmin, double *boxmax,
+ON_GetPointListBoundingBox (int dim,
+                            int is_rat,
+                            int count,
+                            int stride,
+                            const double *points,
+                            double *boxmin,
+                            double *boxmax,
                             int bGrowBox)
 /*****************************************************************************
 Bounding Box of a set of points
@@ -2239,8 +2259,8 @@ OUTPUT:
 }
 
 ON_BoundingBox
-ON_PointListBoundingBox (int dim, int is_rat, int count, int stride,
-                         const float *points)
+ON_PointListBoundingBox (
+    int dim, int is_rat, int count, int stride, const float *points)
 {
   ON_BoundingBox bbox;
   ON_GetPointListBoundingBox (dim, is_rat, count, stride, points, bbox, false, 0);
@@ -2248,8 +2268,13 @@ ON_PointListBoundingBox (int dim, int is_rat, int count, int stride,
 }
 
 bool
-ON_GetPointListBoundingBox (int dim, int is_rat, int count, int stride,
-                            const float *points, float *boxmin, float *boxmax,
+ON_GetPointListBoundingBox (int dim,
+                            int is_rat,
+                            int count,
+                            int stride,
+                            const float *points,
+                            float *boxmin,
+                            float *boxmax,
                             int bGrowBox)
 /*****************************************************************************
 Bounding Box of a set of points
@@ -2337,23 +2362,43 @@ OUTPUT:
 }
 
 ON_BoundingBox
-ON_PointGridBoundingBox (int dim, ON_BOOL32 is_rat, int point_count0, int point_count1,
-                         int point_stride0, int point_stride1, const double *p)
+ON_PointGridBoundingBox (int dim,
+                         ON_BOOL32 is_rat,
+                         int point_count0,
+                         int point_count1,
+                         int point_stride0,
+                         int point_stride1,
+                         const double *p)
 {
   ON_BoundingBox bbox;
   if (dim > 3) {
     // strides control stepping - no need to waste time on coordinates we don't return
     dim = 3;
   }
-  ON_GetPointGridBoundingBox (dim, is_rat, point_count0, point_count1, point_stride0,
-                              point_stride1, p, &bbox.m_min.x, &bbox.m_max.x, false);
+  ON_GetPointGridBoundingBox (dim,
+                              is_rat,
+                              point_count0,
+                              point_count1,
+                              point_stride0,
+                              point_stride1,
+                              p,
+                              &bbox.m_min.x,
+                              &bbox.m_max.x,
+                              false);
   return bbox;
 }
 
 bool
-ON_GetPointGridBoundingBox (int dim, int is_rat, int point_count0, int point_count1,
-                            int point_stride0, int point_stride1, const double *p,
-                            double *boxmin, double *boxmax, int bGrowBox)
+ON_GetPointGridBoundingBox (int dim,
+                            int is_rat,
+                            int point_count0,
+                            int point_count1,
+                            int point_stride0,
+                            int point_stride1,
+                            const double *p,
+                            double *boxmin,
+                            double *boxmax,
+                            int bGrowBox)
 {
   int i;
   for (i = 0; i < dim && bGrowBox; i++) {
@@ -2362,8 +2407,14 @@ ON_GetPointGridBoundingBox (int dim, int is_rat, int point_count0, int point_cou
   }
   bool rc = bGrowBox ? true : false;
   for (i = 0; i < point_count0; i++) {
-    if (!ON_GetPointListBoundingBox (dim, is_rat, point_count1, point_stride1,
-                                     p + i * point_stride0, boxmin, boxmax, bGrowBox)) {
+    if (!ON_GetPointListBoundingBox (dim,
+                                     is_rat,
+                                     point_count1,
+                                     point_stride1,
+                                     p + i * point_stride0,
+                                     boxmin,
+                                     boxmax,
+                                     bGrowBox)) {
       rc = false;
       break;
     } else {

@@ -45,8 +45,18 @@
 namespace pcl
 {
   /** \brief The 12 edges of a cell. */
-  const int I_SHIFT_EP[12][2] = {{0, 4}, {1, 5}, {2, 6}, {3, 7}, {0, 1}, {1, 2},
-                                 {2, 3}, {3, 0}, {4, 5}, {5, 6}, {6, 7}, {7, 4}};
+  const int I_SHIFT_EP[12][2] = {{0, 4},
+                                 {1, 5},
+                                 {2, 6},
+                                 {3, 7},
+                                 {0, 1},
+                                 {1, 2},
+                                 {2, 3},
+                                 {3, 0},
+                                 {4, 5},
+                                 {5, 6},
+                                 {6, 7},
+                                 {7, 4}};
 
   const int I_SHIFT_PT[4] = {0, 4, 5, 7};
 
@@ -85,7 +95,10 @@ namespace pcl
       Eigen::Vector3f vect_at_grid_pt;
     };
 
-    typedef std::unordered_map<int, Leaf, std::hash<int>, std::equal_to<int>,
+    typedef std::unordered_map<int,
+                               Leaf,
+                               std::hash<int>,
+                               std::equal_to<int>,
                                Eigen::aligned_allocator<std::pair<const int, Leaf>>>
         HashMap;
 
@@ -331,7 +344,8 @@ namespace pcl
      * cell and padding cells \param projection the resultant point projected
      */
     void
-    getProjection (const Eigen::Vector4f &p, std::vector<int> &pt_union_indices,
+    getProjection (const Eigen::Vector4f &p,
+                   std::vector<int> &pt_union_indices,
                    Eigen::Vector4f &projection);
 
     /** \brief Given the coordinates of one point, project it onto the surface,
@@ -352,7 +366,8 @@ namespace pcl
      * padding cells \param vo the resultant vector
      */
     void
-    getVectorAtPoint (const Eigen::Vector4f &p, std::vector<int> &pt_union_indices,
+    getVectorAtPoint (const Eigen::Vector4f &p,
+                      std::vector<int> &pt_union_indices,
                       Eigen::Vector3f &vo);
 
     /** \brief Given the location of a point, get it's vector
@@ -363,8 +378,10 @@ namespace pcl
      * \param vo the resultant vector
      */
     void
-    getVectorAtPointKNN (const Eigen::Vector4f &p, std::vector<int> &k_indices,
-                         std::vector<float> &k_squared_distances, Eigen::Vector3f &vo);
+    getVectorAtPointKNN (const Eigen::Vector4f &p,
+                         std::vector<int> &k_indices,
+                         std::vector<float> &k_squared_distances,
+                         Eigen::Vector3f &vo);
 
     /** \brief Get the magnitude of the vector by summing up the distance.
      * \param p the coordinate of the input point
@@ -381,7 +398,8 @@ namespace pcl
      * padding cells
      */
     double
-    getD1AtPoint (const Eigen::Vector4f &p, const Eigen::Vector3f &vec,
+    getD1AtPoint (const Eigen::Vector4f &p,
+                  const Eigen::Vector3f &vec,
                   const std::vector<int> &pt_union_indices);
 
     /** \brief Get the 2nd derivative
@@ -391,7 +409,8 @@ namespace pcl
      * padding cells
      */
     double
-    getD2AtPoint (const Eigen::Vector4f &p, const Eigen::Vector3f &vec,
+    getD2AtPoint (const Eigen::Vector4f &p,
+                  const Eigen::Vector3f &vec,
                   const std::vector<int> &pt_union_indices);
 
     /** \brief Test whether the edge is intersected by the surface by
@@ -426,7 +445,8 @@ namespace pcl
             &end_pts,
         const std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f>>
             &vect_at_end_pts,
-        const Eigen::Vector4f &start_pt, std::vector<int> &pt_union_indices,
+        const Eigen::Vector4f &start_pt,
+        std::vector<int> &pt_union_indices,
         Eigen::Vector4f &intersection);
 
     /** \brief Go through all the entries in the hash table and update the
@@ -444,7 +464,8 @@ namespace pcl
      * cell_data information stored in the cell
      */
     void
-    storeVectAndSurfacePoint (int index_1d, const Eigen::Vector3i &index_3d,
+    storeVectAndSurfacePoint (int index_1d,
+                              const Eigen::Vector3i &index_3d,
                               std::vector<int> &pt_union_indices,
                               const Leaf &cell_data);
 
@@ -462,7 +483,8 @@ namespace pcl
      * information stored in the cell
      */
     void
-    storeVectAndSurfacePointKNN (int index_1d, const Eigen::Vector3i &index_3d,
+    storeVectAndSurfacePointKNN (int index_1d,
+                                 const Eigen::Vector3i &index_3d,
                                  const Leaf &cell_data);
 
     private:

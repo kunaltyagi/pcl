@@ -40,7 +40,8 @@
 
 #include <pcl/console/print.h>
 
-pcl::FeatureHistogram::FeatureHistogram (size_t const number_of_bins, const float min,
+pcl::FeatureHistogram::FeatureHistogram (size_t const number_of_bins,
+                                         const float min,
                                          const float max)
     : histogram_ (number_of_bins, 0)
 {

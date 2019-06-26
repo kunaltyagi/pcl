@@ -44,7 +44,7 @@
 #include <exception>
 #include <string>
 //#include <pcl/pcl_macros.h> <-- because current header is included in NVCC-compiled
-//code and contains <Eigen/Core>. Consider <pcl/pcl_exports.h>
+// code and contains <Eigen/Core>. Consider <pcl/pcl_exports.h>
 
 // fom <pcl/pcl_macros.h>
 #if defined _WIN32 && defined _MSC_VER && !defined __PRETTY_FUNCTION__
@@ -75,8 +75,10 @@ namespace openni_wrapper
      * @param[in] line_number the line number where this exception was created.
      * @param[in] message the message of the exception
      */
-    OpenNIException (const std::string &function_name, const std::string &file_name,
-                     unsigned line_number, const std::string &message) throw ();
+    OpenNIException (const std::string &function_name,
+                     const std::string &file_name,
+                     unsigned line_number,
+                     const std::string &message) throw ();
 
     /**
      * @brief virtual Destructor that never throws an exception
@@ -138,8 +140,11 @@ namespace openni_wrapper
    * @param[in] ... optional arguments for the printf style format.
    */
   inline void
-  throwOpenNIException (const char *function_name, const char *file_name,
-                        unsigned line_number, const char *format, ...)
+  throwOpenNIException (const char *function_name,
+                        const char *file_name,
+                        unsigned line_number,
+                        const char *format,
+                        ...)
   {
     static char msg[1024];
     va_list args;

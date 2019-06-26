@@ -88,8 +88,14 @@ namespace pcl
        * (using bilinear interpolation). \param[out] H Gradient histograms.
        */
       void
-      gradHist (float *M, float *O, int h, int w, int bin_size, int n_orients,
-                bool soft_bin, float *H) const;
+      gradHist (float *M,
+                float *O,
+                int h,
+                int w,
+                int bin_size,
+                int n_orients,
+                bool soft_bin,
+                float *H) const;
 
       /**
        * \brief Normalize histogram of gradients.
@@ -103,7 +109,12 @@ namespace pcl
        * \param[out] G Normalized gradient histograms.
        */
       void
-      normalization (float *H, int h, int w, int bin_size, int n_orients, float clip,
+      normalization (float *H,
+                     int h,
+                     int w,
+                     int bin_size,
+                     int n_orients,
+                     float clip,
                      float *G) const;
 
       /**
@@ -119,8 +130,14 @@ namespace pcl
        * (using bilinear interpolation). \param[out] descriptor HOG descriptor.
        */
       void
-      compute (float *I, int h, int w, int n_channels, int bin_size, int n_orients,
-               bool soft_bin, float *descriptor);
+      compute (float *I,
+               int h,
+               int w,
+               int n_channels,
+               int bin_size,
+               int n_orients,
+               bool soft_bin,
+               float *descriptor);
 
       /**
        * \brief Compute HOG descriptor with default parameters.
@@ -148,8 +165,16 @@ namespace pcl
        * \brief Helper for gradHist, quantize O and M into O0, O1 and M0, M1 (uses sse).
        */
       void
-      gradQuantize (float *O, float *M, int *O0, int *O1, float *M0, float *M1,
-                    int n_orients, int nb, int n, float norm) const;
+      gradQuantize (float *O,
+                    float *M,
+                    int *O0,
+                    int *O1,
+                    float *M0,
+                    float *M1,
+                    int n_orients,
+                    int nb,
+                    int n,
+                    float norm) const;
 
       /**
        * \brief Platform independent aligned memory allocation (see also alFree).

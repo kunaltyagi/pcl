@@ -69,7 +69,8 @@ namespace pcl
    * implementation of the FPFH (Fast Point Feature Histogram). \author Radu B. Rusu
    * \ingroup features
    */
-  template <typename PointInT, typename PointNT,
+  template <typename PointInT,
+            typename PointNT,
             typename PointOutT = pcl::VFHSignature308>
   class VFHEstimation : public FeatureFromNormals<PointInT, PointNT, PointOutT>
   {

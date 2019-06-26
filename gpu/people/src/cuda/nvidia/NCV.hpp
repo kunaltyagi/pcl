@@ -292,8 +292,8 @@ ncvSetDebugOutputHandler (NCVDebugOutputHandler *func);
 #define ncvAssertReturnNcvStat(ncvOp)                                                  \
   do {                                                                                 \
     NCVStatus _ncvStat = ncvOp;                                                        \
-    ncvAssertPrintReturn (NCV_SUCCESS == _ncvStat, "NcvStat=" << (int)_ncvStat,        \
-                          _ncvStat);                                                   \
+    ncvAssertPrintReturn (                                                             \
+        NCV_SUCCESS == _ncvStat, "NcvStat=" << (int)_ncvStat, _ncvStat);               \
   } while (0)
 
 #define ncvAssertCUDAReturn(cudacall, errCode)                                         \
@@ -464,7 +464,9 @@ class NCV_EXPORTS NCVMemStackAllocator : public INCVMemAllocator
 
   public:
   explicit NCVMemStackAllocator (Ncv32u alignment);
-  NCVMemStackAllocator (NCVMemoryType memT, size_t capacity, Ncv32u alignment,
+  NCVMemStackAllocator (NCVMemoryType memT,
+                        size_t capacity,
+                        Ncv32u alignment,
                         void *reusePtr = nullptr);
   virtual ~NCVMemStackAllocator ();
 
@@ -536,13 +538,23 @@ class NCV_EXPORTS NCVMemNativeAllocator : public INCVMemAllocator
  * Copy dispatchers
  */
 NCV_EXPORTS NCVStatus
-memSegCopyHelper (void *dst, NCVMemoryType dstType, const void *src,
-                  NCVMemoryType srcType, size_t sz, cudaStream_t cuStream);
+memSegCopyHelper (void *dst,
+                  NCVMemoryType dstType,
+                  const void *src,
+                  NCVMemoryType srcType,
+                  size_t sz,
+                  cudaStream_t cuStream);
 
 NCV_EXPORTS NCVStatus
-memSegCopyHelper2D (void *dst, Ncv32u dstPitch, NCVMemoryType dstType, const void *src,
-                    Ncv32u srcPitch, NCVMemoryType srcType, Ncv32u widthbytes,
-                    Ncv32u height, cudaStream_t cuStream);
+memSegCopyHelper2D (void *dst,
+                    Ncv32u dstPitch,
+                    NCVMemoryType dstType,
+                    const void *src,
+                    Ncv32u srcPitch,
+                    NCVMemoryType srcType,
+                    Ncv32u widthbytes,
+                    Ncv32u height,
+                    cudaStream_t cuStream);
 
 /**
  * NCVVector (1D)
@@ -582,8 +594,8 @@ class NCVVector
 
     NCVStatus ncvStat = NCV_SUCCESS;
     if (this->_memtype != NCVMemoryTypeNone) {
-      ncvStat = memSegCopyHelper (dst._ptr, dst._memtype, this->_ptr, this->_memtype,
-                                  howMuch, cuStream);
+      ncvStat = memSegCopyHelper (
+          dst._ptr, dst._memtype, this->_ptr, this->_memtype, howMuch, cuStream);
     }
 
     return ncvStat;
@@ -770,8 +782,8 @@ class NCVMatrix
 
     NCVStatus ncvStat = NCV_SUCCESS;
     if (this->_memtype != NCVMemoryTypeNone) {
-      ncvStat = memSegCopyHelper (dst._ptr, dst._memtype, this->_ptr, this->_memtype,
-                                  howMuch, cuStream);
+      ncvStat = memSegCopyHelper (
+          dst._ptr, dst._memtype, this->_ptr, this->_memtype, howMuch, cuStream);
     }
 
     return ncvStat;
@@ -789,9 +801,15 @@ class NCVMatrix
 
     NCVStatus ncvStat = NCV_SUCCESS;
     if (this->_memtype != NCVMemoryTypeNone) {
-      ncvStat = memSegCopyHelper2D (dst._ptr, dst._pitch, dst._memtype, this->_ptr,
-                                    this->_pitch, this->_memtype,
-                                    roi.width * sizeof (T), roi.height, cuStream);
+      ncvStat = memSegCopyHelper2D (dst._ptr,
+                                    dst._pitch,
+                                    dst._memtype,
+                                    this->_ptr,
+                                    this->_pitch,
+                                    this->_memtype,
+                                    roi.width * sizeof (T),
+                                    roi.height,
+                                    cuStream);
     }
 
     return ncvStat;
@@ -860,7 +878,9 @@ class NCVMatrixAlloc : public NCVMatrix<T>
   operator= (const NCVMatrixAlloc &) = delete;
 
   public:
-  NCVMatrixAlloc (INCVMemAllocator &allocator, Ncv32u width, Ncv32u height,
+  NCVMatrixAlloc (INCVMemAllocator &allocator,
+                  Ncv32u width,
+                  Ncv32u height,
                   Ncv32u pitch = 0)
       : allocator (allocator)
   {
@@ -936,8 +956,12 @@ class NCVMatrixReuse : public NCVMatrix<T>
   NCVMatrixReuse (const NCVMatrixReuse &) = delete;
 
   public:
-  NCVMatrixReuse (const NCVMemSegment &memSegment, Ncv32u alignment, Ncv32u width,
-                  Ncv32u height, Ncv32u pitch = 0, NcvBool bSkipPitchCheck = false)
+  NCVMatrixReuse (const NCVMemSegment &memSegment,
+                  Ncv32u alignment,
+                  Ncv32u width,
+                  Ncv32u height,
+                  Ncv32u pitch = 0,
+                  NcvBool bSkipPitchCheck = false)
   {
     this->bReused = false;
     this->clear ();
@@ -1003,28 +1027,49 @@ class NCVMatrixReuse : public NCVMatrix<T>
  * Operations with rectangles
  */
 NCV_EXPORTS NCVStatus
-ncvGroupRectangles_host (NCVVector<NcvRect32u> &hypotheses, Ncv32u &numHypotheses,
-                         Ncv32u minNeighbors, Ncv32f intersectEps,
+ncvGroupRectangles_host (NCVVector<NcvRect32u> &hypotheses,
+                         Ncv32u &numHypotheses,
+                         Ncv32u minNeighbors,
+                         Ncv32f intersectEps,
                          NCVVector<Ncv32u> *hypothesesWeights);
 
 NCV_EXPORTS NCVStatus
-ncvDrawRects_8u_host (Ncv8u *h_dst, Ncv32u dstStride, Ncv32u dstWidth, Ncv32u dstHeight,
-                      NcvRect32u *h_rects, Ncv32u numRects, Ncv8u color);
+ncvDrawRects_8u_host (Ncv8u *h_dst,
+                      Ncv32u dstStride,
+                      Ncv32u dstWidth,
+                      Ncv32u dstHeight,
+                      NcvRect32u *h_rects,
+                      Ncv32u numRects,
+                      Ncv8u color);
 
 NCV_EXPORTS NCVStatus
-ncvDrawRects_32u_host (Ncv32u *h_dst, Ncv32u dstStride, Ncv32u dstWidth,
-                       Ncv32u dstHeight, NcvRect32u *h_rects, Ncv32u numRects,
+ncvDrawRects_32u_host (Ncv32u *h_dst,
+                       Ncv32u dstStride,
+                       Ncv32u dstWidth,
+                       Ncv32u dstHeight,
+                       NcvRect32u *h_rects,
+                       Ncv32u numRects,
                        Ncv32u color);
 
 NCV_EXPORTS NCVStatus
-ncvDrawRects_8u_device (Ncv8u *d_dst, Ncv32u dstStride, Ncv32u dstWidth,
-                        Ncv32u dstHeight, NcvRect32u *d_rects, Ncv32u numRects,
-                        Ncv8u color, cudaStream_t cuStream);
+ncvDrawRects_8u_device (Ncv8u *d_dst,
+                        Ncv32u dstStride,
+                        Ncv32u dstWidth,
+                        Ncv32u dstHeight,
+                        NcvRect32u *d_rects,
+                        Ncv32u numRects,
+                        Ncv8u color,
+                        cudaStream_t cuStream);
 
 NCV_EXPORTS NCVStatus
-ncvDrawRects_32u_device (Ncv32u *d_dst, Ncv32u dstStride, Ncv32u dstWidth,
-                         Ncv32u dstHeight, NcvRect32u *d_rects, Ncv32u numRects,
-                         Ncv32u color, cudaStream_t cuStream);
+ncvDrawRects_32u_device (Ncv32u *d_dst,
+                         Ncv32u dstStride,
+                         Ncv32u dstWidth,
+                         Ncv32u dstHeight,
+                         NcvRect32u *d_rects,
+                         Ncv32u numRects,
+                         Ncv32u color,
+                         cudaStream_t cuStream);
 
 #define CLAMP(x, a, b) ((x) > (b) ? (b) : ((x) < (a) ? (a) : (x)))
 #define CLAMP_TOP(x, a) (((x) > (a)) ? (a) : (x))

@@ -50,7 +50,8 @@ namespace pcl
     class NormalsItem : public CloudComposerItem
     {
       public:
-      NormalsItem (QString name, pcl::PointCloud<pcl::Normal>::Ptr normals_ptr,
+      NormalsItem (QString name,
+                   pcl::PointCloud<pcl::Normal>::Ptr normals_ptr,
                    double radius);
       NormalsItem (const NormalsItem &to_copy);
       ~NormalsItem ();

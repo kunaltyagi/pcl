@@ -139,7 +139,8 @@ namespace pcl
      * \param op the operator to use when making the comparison
      * \param compare_val the constant value to compare the field value too
      */
-    FieldComparison (const std::string &field_name, ComparisonOps::CompareOp op,
+    FieldComparison (const std::string &field_name,
+                     ComparisonOps::CompareOp op,
                      double compare_val);
 
     /** \brief Copy constructor.
@@ -200,7 +201,8 @@ namespace pcl
      * \param op the operator to use when making the comparison
      * \param compare_val the constant value to compare the component value too
      */
-    PackedRGBComparison (const std::string &component_name, ComparisonOps::CompareOp op,
+    PackedRGBComparison (const std::string &component_name,
+                         ComparisonOps::CompareOp op,
                          double compare_val);
 
     /** \brief Destructor. */
@@ -244,7 +246,8 @@ namespace pcl
      * \param op the operator to use when making the comparison
      * \param compare_val the constant value to compare the component value too
      */
-    PackedHSIComparison (const std::string &component_name, ComparisonOps::CompareOp op,
+    PackedHSIComparison (const std::string &component_name,
+                         ComparisonOps::CompareOp op,
                          double compare_val);
 
     /** \brief Destructor. */
@@ -326,7 +329,8 @@ namespace pcl
     TfQuadraticXYZComparison (
         const pcl::ComparisonOps::CompareOp op,
         const Eigen::Matrix3f &comparison_matrix,
-        const Eigen::Vector3f &comparison_vector, const float &comparison_scalar,
+        const Eigen::Vector3f &comparison_vector,
+        const float &comparison_scalar,
         const Eigen::Affine3f &comparison_transform = Eigen::Affine3f::Identity ());
 
     /** \brief set the operator "[OP]" of the comparison "p'Ap + 2v'p + c [OP] 0".

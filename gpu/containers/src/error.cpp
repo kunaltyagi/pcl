@@ -40,7 +40,9 @@
 #include <iostream>
 
 void
-pcl::gpu::error (const char *error_string, const char *file, const int line,
+pcl::gpu::error (const char *error_string,
+                 const char *file,
+                 const int line,
                  const char *func)
 {
   std::cout << "Error: " << error_string << "\t" << file << ":" << line << std::endl;

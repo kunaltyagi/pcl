@@ -77,9 +77,13 @@ namespace pcl
      * after the header (e.g., 513).
      */
     int
-    readHeader (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
-                Eigen::Vector4f &origin, Eigen::Quaternionf &orientation,
-                int &file_version, int &data_type, unsigned int &data_idx,
+    readHeader (const std::string &file_name,
+                pcl::PCLPointCloud2 &cloud,
+                Eigen::Vector4f &origin,
+                Eigen::Quaternionf &orientation,
+                int &file_version,
+                int &data_type,
+                unsigned int &data_idx,
                 const int offset = 0) override;
 
     /** \brief Read a point cloud data from a FILE file and store it into a
@@ -95,8 +99,11 @@ namespace pcl
      * the offset to the next byte after the header (e.g., 513).
      */
     int
-    read (const std::string &file_name, pcl::PCLPointCloud2 &cloud,
-          Eigen::Vector4f &origin, Eigen::Quaternionf &orientation, int &file_version,
+    read (const std::string &file_name,
+          pcl::PCLPointCloud2 &cloud,
+          Eigen::Vector4f &origin,
+          Eigen::Quaternionf &orientation,
+          int &file_version,
           const int offset = 0) override;
 
     /** \brief Set the ascii file point fields.
@@ -152,7 +159,8 @@ namespace pcl
      *  returns the size of the parsed point field in bytes
      */
     int
-    parse (const std::string &token, const pcl::PCLPointField &field,
+    parse (const std::string &token,
+           const pcl::PCLPointField &field,
            uint8_t *data_target);
 
     /** \brief Returns the size in bytes of a point field type.

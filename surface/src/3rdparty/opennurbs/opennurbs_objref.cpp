@@ -864,7 +864,8 @@ ON_MeshParent (const ON_Geometry *geo)
 }
 
 bool
-ON_ObjRef::SetParentIRef (const ON_InstanceRef &iref, ON_UUID iref_id,
+ON_ObjRef::SetParentIRef (const ON_InstanceRef &iref,
+                          ON_UUID iref_id,
                           int idef_geometry_index)
 {
   bool rc = false;

@@ -81,8 +81,12 @@ loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
 }
 
 void
-project (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output,
-         float a, float b, float c, float d)
+project (const pcl::PCLPointCloud2::ConstPtr &input,
+         pcl::PCLPointCloud2 &output,
+         float a,
+         float b,
+         float c,
+         float d)
 {
   Eigen::Vector4f coeffs;
   coeffs << a, b, c, d;

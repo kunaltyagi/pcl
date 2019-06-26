@@ -122,12 +122,16 @@ namespace pcl
       rowsAboutToBeRemoved (const QModelIndex &parent, int start, int end);
 
       void
-      selectionCompleted (vtkObject *caller, unsigned long event_id, void *client_data,
+      selectionCompleted (vtkObject *caller,
+                          unsigned long event_id,
+                          void *client_data,
                           void *call_data);
 
       void
-      manipulationCompleted (vtkObject *caller, unsigned long event_id,
-                             void *client_data, void *call_data);
+      manipulationCompleted (vtkObject *caller,
+                             unsigned long event_id,
+                             void *client_data,
+                             void *call_data);
 
       protected:
       void

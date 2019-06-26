@@ -255,7 +255,8 @@ class ON_CLASS ON_Layer : public ON_Object
     settings exist for the specified viewport_id.
   */
   bool
-  CopyPerViewportSettings (const ON_Layer &source_layer, ON_UUID viewport_id,
+  CopyPerViewportSettings (const ON_Layer &source_layer,
+                           ON_UUID viewport_id,
                            unsigned int settings_mask);
 
   /*

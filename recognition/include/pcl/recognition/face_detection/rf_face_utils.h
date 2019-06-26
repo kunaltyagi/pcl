@@ -144,8 +144,10 @@ namespace pcl
        * results.
        */
       void
-      evaluateFeature (const FT &feature, DataSet &data_set,
-                       std::vector<ExampleIndex> &examples, std::vector<float> &results,
+      evaluateFeature (const FT &feature,
+                       DataSet &data_set,
+                       std::vector<ExampleIndex> &examples,
+                       std::vector<float> &results,
                        std::vector<unsigned char> &flags) const override
       {
         results.resize (examples.size ());
@@ -162,26 +164,34 @@ namespace pcl
        * \param[out] flag Flags that are supplied together with the results.
        */
       void
-      evaluateFeature (const FT &feature, DataSet &data_set,
-                       const ExampleIndex &example, float &result,
+      evaluateFeature (const FT &feature,
+                       DataSet &data_set,
+                       const ExampleIndex &example,
+                       float &result,
                        unsigned char &flag) const override
       {
         TrainingExample te = data_set[example];
         int el_f1 = te.iimages_[feature.used_ii_]->getFiniteElementsCount (
-            te.col_ + feature.col1_, te.row_ + feature.row1_, feature.wsizex1_,
+            te.col_ + feature.col1_,
+            te.row_ + feature.row1_,
+            feature.wsizex1_,
             feature.wsizey1_);
         int el_f2 = te.iimages_[feature.used_ii_]->getFiniteElementsCount (
-            te.col_ + feature.col2_, te.row_ + feature.row2_, feature.wsizex2_,
+            te.col_ + feature.col2_,
+            te.row_ + feature.row2_,
+            feature.wsizex2_,
             feature.wsizey2_);
 
-        float sum_f1 =
-            static_cast<float> (te.iimages_[feature.used_ii_]->getFirstOrderSum (
-                te.col_ + feature.col1_, te.row_ + feature.row1_, feature.wsizex1_,
-                feature.wsizey1_));
-        float sum_f2 =
-            static_cast<float> (te.iimages_[feature.used_ii_]->getFirstOrderSum (
-                te.col_ + feature.col2_, te.row_ + feature.row2_, feature.wsizex2_,
-                feature.wsizey2_));
+        float sum_f1 = static_cast<float> (
+            te.iimages_[feature.used_ii_]->getFirstOrderSum (te.col_ + feature.col1_,
+                                                             te.row_ + feature.row1_,
+                                                             feature.wsizex1_,
+                                                             feature.wsizey1_));
+        float sum_f2 = static_cast<float> (
+            te.iimages_[feature.used_ii_]->getFirstOrderSum (te.col_ + feature.col2_,
+                                                             te.row_ + feature.row2_,
+                                                             feature.wsizex2_,
+                                                             feature.wsizey2_));
 
         float f = min_valid_small_patch_depth_;
         if (el_f1 == 0 || el_f2 == 0 ||
@@ -346,7 +356,8 @@ namespace pcl
        * \param[in] threshold The threshold for which the information gain is computed.
        */
       float
-      computeInformationGain (DataSet &data_set, std::vector<ExampleIndex> &examples,
+      computeInformationGain (DataSet &data_set,
+                              std::vector<ExampleIndex> &examples,
                               std::vector<LabelDataType> &label_data,
                               std::vector<float> &results,
                               std::vector<unsigned char> &flags,
@@ -368,8 +379,8 @@ namespace pcl
         for (size_t example_index = 0; example_index < num_of_examples;
              ++example_index) {
           unsigned char branch_index;
-          computeBranchIndex (results[example_index], flags[example_index], threshold,
-                              branch_index);
+          computeBranchIndex (
+              results[example_index], flags[example_index], threshold, branch_index);
 
           LabelDataType label = label_data[example_index];
 
@@ -409,8 +420,8 @@ namespace pcl
           for (size_t example_index = 0; example_index < num_of_examples;
                ++example_index) {
             unsigned char branch_index;
-            computeBranchIndex (results[example_index], flags[example_index], threshold,
-                                branch_index);
+            computeBranchIndex (
+                results[example_index], flags[example_index], threshold, branch_index);
 
             LabelDataType label = label_data[example_index];
 
@@ -438,10 +449,12 @@ namespace pcl
 
           for (size_t branch_index = 0; branch_index < (num_of_branches + 1);
                ++branch_index) {
-            computeMeanAndCovarianceOffset (data_set, positive_examples[branch_index],
+            computeMeanAndCovarianceOffset (data_set,
+                                            positive_examples[branch_index],
                                             offset_covariances[branch_index],
                                             offset_centroids[branch_index]);
-            computeMeanAndCovarianceAngles (data_set, positive_examples[branch_index],
+            computeMeanAndCovarianceAngles (data_set,
+                                            positive_examples[branch_index],
                                             angle_covariances[branch_index],
                                             angle_centroids[branch_index]);
           }
@@ -488,7 +501,8 @@ namespace pcl
        */
       void
       computeBranchIndices (std::vector<float> &results,
-                            std::vector<unsigned char> &flags, const float threshold,
+                            std::vector<unsigned char> &flags,
+                            const float threshold,
                             std::vector<unsigned char> &branch_indices) const override
       {
         const size_t num_of_results = results.size ();
@@ -496,8 +510,8 @@ namespace pcl
         branch_indices.resize (num_of_results);
         for (size_t result_index = 0; result_index < num_of_results; ++result_index) {
           unsigned char branch_index;
-          computeBranchIndex (results[result_index], flags[result_index], threshold,
-                              branch_index);
+          computeBranchIndex (
+              results[result_index], flags[result_index], threshold, branch_index);
           branch_indices[result_index] = branch_index;
         }
       }
@@ -509,7 +523,8 @@ namespace pcl
        * \param[out] branch_index The destination for the computed branch index.
        */
       inline void
-      computeBranchIndex (const float result, const unsigned char flag,
+      computeBranchIndex (const float result,
+                          const unsigned char flag,
                           const float threshold,
                           unsigned char &branch_index) const override
       {
@@ -523,7 +538,8 @@ namespace pcl
        * examples. \param[out] node The destination node for the statistics.
        */
       void
-      computeAndSetNodeStats (DataSet &data_set, std::vector<ExampleIndex> &examples,
+      computeAndSetNodeStats (DataSet &data_set,
+                              std::vector<ExampleIndex> &examples,
                               std::vector<LabelDataType> &label_data,
                               NodeType &node) const override
       {
@@ -559,10 +575,10 @@ namespace pcl
         }
 
         // compute covariance from offsets and angles
-        computeMeanAndCovarianceOffset (data_set, positive_examples,
-                                        node.covariance_trans_, node.trans_mean_);
-        computeMeanAndCovarianceAngles (data_set, positive_examples,
-                                        node.covariance_rot_, node.rot_mean_);
+        computeMeanAndCovarianceOffset (
+            data_set, positive_examples, node.covariance_trans_, node.trans_mean_);
+        computeMeanAndCovarianceAngles (
+            data_set, positive_examples, node.covariance_rot_, node.rot_mean_);
       }
 
       /** \brief Generates code for branch index computation.

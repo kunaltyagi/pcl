@@ -84,7 +84,9 @@ namespace pcl
         points_explained_by_rm_; // if inner size > 1, conflict
     std::map<int, RecognitionModelPtr> graph_id_model_map_;
 
-    using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS,
+    using Graph = boost::adjacency_list<boost::vecS,
+                                        boost::vecS,
+                                        boost::undirectedS,
                                         RecognitionModelPtr>;
     Graph conflict_graph_;
 

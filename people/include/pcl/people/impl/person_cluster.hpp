@@ -48,10 +48,11 @@ pcl::people::PersonCluster<PointT>::PersonCluster (const PointCloudPtr &input_cl
                                                    const pcl::PointIndices &indices,
                                                    const Eigen::VectorXf &ground_coeffs,
                                                    float sqrt_ground_coeffs,
-                                                   bool head_centroid, bool vertical)
+                                                   bool head_centroid,
+                                                   bool vertical)
 {
-  init (input_cloud, indices, ground_coeffs, sqrt_ground_coeffs, head_centroid,
-        vertical);
+  init (
+      input_cloud, indices, ground_coeffs, sqrt_ground_coeffs, head_centroid, vertical);
 }
 
 template <typename PointT>
@@ -59,7 +60,8 @@ void
 pcl::people::PersonCluster<PointT>::init (const PointCloudPtr &input_cloud,
                                           const pcl::PointIndices &indices,
                                           const Eigen::VectorXf &ground_coeffs,
-                                          float sqrt_ground_coeffs, bool head_centroid,
+                                          float sqrt_ground_coeffs,
+                                          bool head_centroid,
                                           bool vertical)
 {
 
@@ -84,7 +86,8 @@ pcl::people::PersonCluster<PointT>::init (const PointCloudPtr &input_cloud,
   points_indices_.indices = indices.indices;
 
   for (std::vector<int>::const_iterator pit = points_indices_.indices.begin ();
-       pit != points_indices_.indices.end (); pit++) {
+       pit != points_indices_.indices.end ();
+       pit++) {
     PointT *p = &input_cloud->points[*pit];
 
     min_x_ = std::min (p->x, min_x_);
@@ -130,7 +133,8 @@ pcl::people::PersonCluster<PointT>::init (const PointCloudPtr &input_cloud,
       head_threshold_value =
           min_y_ + height_ / 8.0f; // head is suppose to be 1/8 of the human height
       for (std::vector<int>::const_iterator pit = points_indices_.indices.begin ();
-           pit != points_indices_.indices.end (); pit++) {
+           pit != points_indices_.indices.end ();
+           pit++) {
         PointT *p = &input_cloud->points[*pit];
 
         if (p->y < head_threshold_value) {
@@ -144,7 +148,8 @@ pcl::people::PersonCluster<PointT>::init (const PointCloudPtr &input_cloud,
       head_threshold_value =
           max_x_ - height_ / 8.0f; // head is suppose to be 1/8 of the human height
       for (std::vector<int>::const_iterator pit = points_indices_.indices.begin ();
-           pit != points_indices_.indices.end (); pit++) {
+           pit != points_indices_.indices.end ();
+           pit++) {
         PointT *p = &input_cloud->points[*pit];
 
         if (p->x > head_threshold_value) {
@@ -167,7 +172,8 @@ pcl::people::PersonCluster<PointT>::init (const PointCloudPtr &input_cloud,
     float max_x = c_x_;
     float max_z = c_z_;
     for (std::vector<int>::const_iterator pit = points_indices_.indices.begin ();
-         pit != points_indices_.indices.end (); pit++) {
+         pit != points_indices_.indices.end ();
+         pit++) {
       PointT *p = &input_cloud->points[*pit];
 
       min_x = std::min (p->x, min_x);
@@ -204,7 +210,8 @@ pcl::people::PersonCluster<PointT>::init (const PointCloudPtr &input_cloud,
     float max_y = c_y_;
     float max_z = c_z_;
     for (std::vector<int>::const_iterator pit = points_indices_.indices.begin ();
-         pit != points_indices_.indices.end (); pit++) {
+         pit != points_indices_.indices.end ();
+         pit++) {
       PointT *p = &input_cloud->points[*pit];
 
       min_y = std::min (p->y, min_y);
@@ -421,10 +428,10 @@ pcl::people::PersonCluster<PointT>::drawTBoundingBox (
   bbox_name << "bbox_person_" << person_number;
   viewer.removeShape (bbox_name.str ());
   viewer.addCube (coeffs, bbox_name.str ());
-  viewer.setShapeRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 0.0,
-                                      1.0, 0.0, bbox_name.str ());
-  viewer.setShapeRenderingProperties (pcl::visualization::PCL_VISUALIZER_LINE_WIDTH, 2,
-                                      bbox_name.str ());
+  viewer.setShapeRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_COLOR, 0.0, 1.0, 0.0, bbox_name.str ());
+  viewer.setShapeRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_LINE_WIDTH, 2, bbox_name.str ());
 
   //      std::stringstream confid;
   //      confid << person_confidence_;

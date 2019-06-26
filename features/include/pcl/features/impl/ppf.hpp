@@ -76,8 +76,11 @@ pcl::PPFEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
             pcl::computePairFeatures (input_->points[i].getVector4fMap (),
                                       normals_->points[i].getNormalVector4fMap (),
                                       input_->points[j].getVector4fMap (),
-                                      normals_->points[j].getNormalVector4fMap (), p.f1,
-                                      p.f2, p.f3, p.f4)) {
+                                      normals_->points[j].getNormalVector4fMap (),
+                                      p.f1,
+                                      p.f2,
+                                      p.f3,
+                                      p.f4)) {
           // Calculate alpha_m angle
           Eigen::Vector3f model_reference_point = input_->points[i].getVector3fMap (),
                           model_reference_normal =
@@ -106,7 +109,9 @@ pcl::PPFEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
         } else {
           PCL_ERROR ("[pcl::%s::computeFeature] Computing pair feature vector between "
                      "points %u and %u went wrong.\n",
-                     getClassName ().c_str (), i, j);
+                     getClassName ().c_str (),
+                     i,
+                     j);
           p.f1 = p.f2 = p.f3 = p.f4 = p.alpha_m =
               std::numeric_limits<float>::quiet_NaN ();
           output.is_dense = false;

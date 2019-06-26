@@ -85,13 +85,18 @@ onmbsdup (const unsigned char *);
 
 ON_DECL
 size_t
-onmemoryusecount (size_t *malloc_count, size_t *realloc_count, size_t *free_count,
+onmemoryusecount (size_t *malloc_count,
+                  size_t *realloc_count,
+                  size_t *free_count,
                   size_t *pool_count);
 
 ON_DECL
 size_t
-onmemoryusecountex (size_t *malloc_count, size_t *realloc_count, size_t *free_count,
-                    size_t *pool_count, size_t *malloc_zero_count,
+onmemoryusecountex (size_t *malloc_count,
+                    size_t *realloc_count,
+                    size_t *free_count,
+                    size_t *pool_count,
+                    size_t *malloc_zero_count,
                     size_t *free_null_count);
 
 /* define to handle _TCHAR* ontcsdup( const _TCHAR* ) */

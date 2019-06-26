@@ -18,7 +18,8 @@
 
 ON_OBJECT_IMPLEMENT (ON_NurbsCage, ON_Geometry, "06936AFB-3D3C-41ac-BF70-C9319FA480A1");
 
-ON_OBJECT_IMPLEMENT (ON_MorphControl, ON_Geometry,
+ON_OBJECT_IMPLEMENT (ON_MorphControl,
+                     ON_Geometry,
                      "D379E6D8-7C31-4407-A913-E3B7040D034A");
 
 ON_BOOL32
@@ -115,8 +116,8 @@ ON_NurbsCage::Read (ON_BinaryArchive &archive)
         break;
       }
 
-      rc = Create (dim, is_rat == 1, order0, order1, order2, cv_count0, cv_count1,
-                   cv_count2);
+      rc = Create (
+          dim, is_rat == 1, order0, order1, order2, cv_count0, cv_count1, cv_count2);
       if (!rc)
         break;
 
@@ -221,8 +222,14 @@ ON_NurbsCage::ON_NurbsCage () : m_dim (0), m_is_rat (0), m_cv_capacity (0), m_cv
   m_cv_stride[2] = 0;
 }
 
-ON_NurbsCage::ON_NurbsCage (int dim, bool is_rat, int order0, int order1, int order2,
-                            int cv_count0, int cv_count1, int cv_count2)
+ON_NurbsCage::ON_NurbsCage (int dim,
+                            bool is_rat,
+                            int order0,
+                            int order1,
+                            int order2,
+                            int cv_count0,
+                            int cv_count1,
+                            int cv_count2)
     : m_dim (0), m_is_rat (0), m_cv_capacity (0), m_cv (0)
 {
   m_order[0] = 0;
@@ -243,8 +250,13 @@ ON_NurbsCage::ON_NurbsCage (int dim, bool is_rat, int order0, int order1, int or
   Create (dim, is_rat, order0, order1, order2, cv_count0, cv_count1, cv_count2);
 }
 
-ON_NurbsCage::ON_NurbsCage (const ON_BoundingBox &bbox, int order0, int order1,
-                            int order2, int cv_count0, int cv_count1, int cv_count2)
+ON_NurbsCage::ON_NurbsCage (const ON_BoundingBox &bbox,
+                            int order0,
+                            int order1,
+                            int order2,
+                            int cv_count0,
+                            int cv_count1,
+                            int cv_count2)
     : m_dim (0), m_is_rat (0), m_cv_capacity (0), m_cv (0)
 {
   m_order[0] = 0;
@@ -313,8 +325,13 @@ ON_NurbsCage::IsParallelogram (double tolerance) const
   return rc;
 }
 
-ON_NurbsCage::ON_NurbsCage (const ON_3dPoint *box_corners, int order0, int order1,
-                            int order2, int cv_count0, int cv_count1, int cv_count2)
+ON_NurbsCage::ON_NurbsCage (const ON_3dPoint *box_corners,
+                            int order0,
+                            int order1,
+                            int order2,
+                            int cv_count0,
+                            int cv_count1,
+                            int cv_count2)
     : m_dim (0), m_is_rat (0), m_cv_capacity (0), m_cv (0)
 {
   m_order[0] = 0;
@@ -387,7 +404,8 @@ ON_NurbsCage::IsDeformable () const
 }
 
 bool
-ON_NurbsCage::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_NurbsCage::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                   int bGrowBox,
                                    const ON_Xform *xform) const
 {
   if (bGrowBox && !tight_bbox.IsValid ()) {
@@ -447,8 +465,14 @@ ON_NurbsCage::ObjectType () const
 ON_NurbsCage &
 ON_NurbsCage::operator= (const ON_BezierCage &src)
 {
-  if (Create (src.m_dim, src.m_is_rat, src.m_order[0], src.m_order[1], src.m_order[2],
-              src.m_order[0], src.m_order[1], src.m_order[2])) {
+  if (Create (src.m_dim,
+              src.m_is_rat,
+              src.m_order[0],
+              src.m_order[1],
+              src.m_order[2],
+              src.m_order[0],
+              src.m_order[1],
+              src.m_order[2])) {
     int i, j, k;
     for (i = 0; i < m_cv_count[0]; i++) {
       for (j = 0; j < m_cv_count[1]; j++) {
@@ -532,8 +556,14 @@ ON_NurbsCage::operator= (const ON_NurbsCage &src)
 {
   if (this != &src) {
     ON_Geometry::operator= (src);
-    if (Create (src.m_dim, src.m_is_rat, src.m_order[0], src.m_order[1], src.m_order[2],
-                src.m_cv_count[0], src.m_cv_count[1], src.m_cv_count[2])) {
+    if (Create (src.m_dim,
+                src.m_is_rat,
+                src.m_order[0],
+                src.m_order[1],
+                src.m_order[2],
+                src.m_cv_count[0],
+                src.m_cv_count[1],
+                src.m_cv_count[2])) {
       if (m_order[0] >= 2 && m_cv_count[0] >= m_order[0] && m_knot[0] && src.m_knot[0])
         memcpy (m_knot[0], src.m_knot[0], KnotCount (0) * sizeof (m_knot[0][0]));
       if (m_order[1] >= 2 && m_cv_count[1] >= m_order[1] && m_knot[1] && src.m_knot[1])
@@ -548,8 +578,8 @@ ON_NurbsCage::operator= (const ON_NurbsCage &src)
         if (m_cv_stride[0] == src.m_cv_stride[0] &&
             m_cv_stride[1] == src.m_cv_stride[1] &&
             m_cv_stride[2] == src.m_cv_stride[2]) {
-          memcpy (m_cv, src.m_cv,
-                  m_cv_count[0] * m_cv_count[1] * m_cv_count[2] * sizeofcv);
+          memcpy (
+              m_cv, src.m_cv, m_cv_count[0] * m_cv_count[1] * m_cv_count[2] * sizeofcv);
         } else {
           int i, j, k;
           double *cv = m_cv;
@@ -638,8 +668,15 @@ ON_NurbsCage::Dump (ON_TextLog &dump) const
 {
   dump.Print ("ON_NurbsCage dim = %d is_rat = %d\n"
               "        order = (%d, %d, %d) \n",
-              "        cv_count = (%d, %d, %d) \n", m_dim, m_is_rat, m_order[0],
-              m_order[1], m_order[2], m_cv_count[0], m_cv_count[1], m_cv_count[2]);
+              "        cv_count = (%d, %d, %d) \n",
+              m_dim,
+              m_is_rat,
+              m_order[0],
+              m_order[1],
+              m_order[2],
+              m_cv_count[0],
+              m_cv_count[1],
+              m_cv_count[2]);
 
   int dir;
   for (dir = 0; dir < 3; dir++) {
@@ -663,8 +700,8 @@ ON_NurbsCage::Dump (ON_TextLog &dump) const
           dump.Print ("\n");
         sPreamble[0] = 0;
         sprintf (sPreamble, "  CV[%2d][%2d]", i, j);
-        dump.PrintPointList (m_dim, m_is_rat, m_cv_count[2], m_cv_stride[2],
-                             CV (i, j, 0), sPreamble);
+        dump.PrintPointList (
+            m_dim, m_is_rat, m_cv_count[2], m_cv_stride[2], CV (i, j, 0), sPreamble);
       }
       if (i < m_order[0] - 1)
         dump.Print ("\n");
@@ -679,8 +716,13 @@ ON_NurbsCage::Dimension () const
 }
 
 bool
-ON_NurbsCage::Create (const ON_BoundingBox &bbox, int order0, int order1, int order2,
-                      int cv_count0, int cv_count1, int cv_count2)
+ON_NurbsCage::Create (const ON_BoundingBox &bbox,
+                      int order0,
+                      int order1,
+                      int order2,
+                      int cv_count0,
+                      int cv_count1,
+                      int cv_count2)
 {
   /*
             7______________6
@@ -710,8 +752,14 @@ ON_NurbsCage::Create (const ON_BoundingBox &bbox, int order0, int order1, int or
 }
 
 bool
-ON_NurbsCage::Create (int dim, bool is_rat, int order0, int order1, int order2,
-                      int cv_count0, int cv_count1, int cv_count2)
+ON_NurbsCage::Create (int dim,
+                      bool is_rat,
+                      int order0,
+                      int order1,
+                      int order2,
+                      int cv_count0,
+                      int cv_count1,
+                      int cv_count2)
 {
   Destroy ();
   if (order0 < 2 || order1 < 2 || order2 < 2) {
@@ -776,8 +824,13 @@ ON_NurbsCage::Create (int dim, bool is_rat, int order0, int order1, int order2,
 }
 
 bool
-ON_NurbsCage::Create (const ON_3dPoint *box_corners, int order0, int order1, int order2,
-                      int cv_count0, int cv_count1, int cv_count2)
+ON_NurbsCage::Create (const ON_3dPoint *box_corners,
+                      int order0,
+                      int order1,
+                      int order2,
+                      int cv_count0,
+                      int cv_count1,
+                      int cv_count2)
 {
   int i, j, k;
   double r, s, t;
@@ -914,8 +967,13 @@ ON_NurbsCage::GetBBox ( // returns true if successful
   } else {
     for (i = 0; rc && i < m_cv_count[0]; i++)
       for (j = 0; rc && j < m_cv_count[1]; j++) {
-        rc = ON_GetPointListBoundingBox (m_dim, m_is_rat, m_cv_count[2], m_cv_stride[2],
-                                         CV (i, j, 0), boxmin, boxmax,
+        rc = ON_GetPointListBoundingBox (m_dim,
+                                         m_is_rat,
+                                         m_cv_count[2],
+                                         m_cv_stride[2],
+                                         CV (i, j, 0),
+                                         boxmin,
+                                         boxmax,
                                          bGrowBox ? true : false);
         bGrowBox = true;
       }
@@ -938,8 +996,8 @@ ON_NurbsCage::Transform (const ON_Xform &xform)
 
     for (i = 0; rc && i < m_cv_count[0]; i++) {
       for (j = 0; rc && j < m_cv_count[1]; j++) {
-        rc = ON_TransformPointList (m_dim, m_is_rat, m_cv_count[2], m_cv_stride[2],
-                                    CV (i, j, 0), xform);
+        rc = ON_TransformPointList (
+            m_dim, m_is_rat, m_cv_count[2], m_cv_stride[2], CV (i, j, 0), xform);
       }
     }
   }
@@ -951,18 +1009,31 @@ ON_NurbsCage::Domain (int dir) const
 {
   ON_Interval d;
   if (dir < 0 || dir > 2 ||
-      !ON_GetKnotVectorDomain (m_order[dir], m_cv_count[dir], m_knot[dir], &d.m_t[0],
-                               &d.m_t[1]))
+      !ON_GetKnotVectorDomain (
+          m_order[dir], m_cv_count[dir], m_knot[dir], &d.m_t[0], &d.m_t[1]))
     d.Destroy ();
   return d;
 }
 
 bool
-ON_EvaluateNurbsCageSpan (int dim, int is_rat, int order0, int order1, int order2,
-                          const double *knot0, const double *knot1, const double *knot2,
-                          int cv_stride0, int cv_stride1, int cv_stride2,
-                          const double *cv0, int der_count, double t0, double t1,
-                          double t2, int v_stride, double *v)
+ON_EvaluateNurbsCageSpan (int dim,
+                          int is_rat,
+                          int order0,
+                          int order1,
+                          int order2,
+                          const double *knot0,
+                          const double *knot1,
+                          const double *knot2,
+                          int cv_stride0,
+                          int cv_stride1,
+                          int cv_stride2,
+                          const double *cv0,
+                          int der_count,
+                          double t0,
+                          double t1,
+                          double t2,
+                          int v_stride,
+                          double *v)
 {
   double c;
   double *N_0, *N_1, *N_2, *P, *P0, *P00;
@@ -1100,21 +1171,23 @@ ON_EvaluateNurbsCageSpan (int dim, int is_rat, int order0, int order1, int order
 }
 
 bool
-ON_NurbsCage::Evaluate (          // returns false if unable to evaluate
-    double r, double s, double t, // evaluation parameter
-    int der_count,                // number of derivatives (>=0)
-    int v_stride,                 // array stride (>=Dimension())
-    double *v,                    // array of length stride*(ndir+1)*(ndir+2)/2
-    int side,                     // optional - determines which side to evaluate from
-                                  //         0 = default
-                                  //         1 = from upper NE quadrant
-                                  //         2 = from upper NW quadrant
-                                  //         3 = from upper SW quadrant
-                                  //         4 = from upper SE quadrant
-                                  //         5 = from lower NE quadrant
-                                  //         6 = from lower NW quadrant
-                                  //         7 = from lower SW quadrant
-                                  //         8 = from lower SE quadrant
+ON_NurbsCage::Evaluate ( // returns false if unable to evaluate
+    double r,
+    double s,
+    double t,      // evaluation parameter
+    int der_count, // number of derivatives (>=0)
+    int v_stride,  // array stride (>=Dimension())
+    double *v,     // array of length stride*(ndir+1)*(ndir+2)/2
+    int side,      // optional - determines which side to evaluate from
+                   //         0 = default
+                   //         1 = from upper NE quadrant
+                   //         2 = from upper NW quadrant
+                   //         3 = from upper SW quadrant
+                   //         4 = from upper SE quadrant
+                   //         5 = from lower NE quadrant
+                   //         6 = from lower NW quadrant
+                   //         7 = from lower SW quadrant
+                   //         8 = from lower SE quadrant
     int *hint) const
 {
   int side0 = (side && (side == 2 || side == 3 || side == 6 || side == 7)) ? -1 : 1;
@@ -1131,13 +1204,26 @@ ON_NurbsCage::Evaluate (          // returns false if unable to evaluate
   const int span_index2 =
       ON_NurbsSpanIndex (m_order[2], m_cv_count[2], m_knot[2], t, side2, hint2);
 
-  bool rc = ON_EvaluateNurbsCageSpan (
-      m_dim, m_is_rat, m_order[0], m_order[1], m_order[2], m_knot[0] + span_index0,
-      m_knot[1] + span_index1, m_knot[2] + span_index2, m_cv_stride[0], m_cv_stride[1],
-      m_cv_stride[2],
-      m_cv + (m_cv_stride[0] * span_index0 + m_cv_stride[1] * span_index1 +
-              m_cv_stride[2] * span_index2),
-      der_count, r, s, t, v_stride, v);
+  bool rc = ON_EvaluateNurbsCageSpan (m_dim,
+                                      m_is_rat,
+                                      m_order[0],
+                                      m_order[1],
+                                      m_order[2],
+                                      m_knot[0] + span_index0,
+                                      m_knot[1] + span_index1,
+                                      m_knot[2] + span_index2,
+                                      m_cv_stride[0],
+                                      m_cv_stride[1],
+                                      m_cv_stride[2],
+                                      m_cv + (m_cv_stride[0] * span_index0 +
+                                              m_cv_stride[1] * span_index1 +
+                                              m_cv_stride[2] * span_index2),
+                                      der_count,
+                                      r,
+                                      s,
+                                      t,
+                                      v_stride,
+                                      v);
 
   if (hint) {
     hint[0] = span_index0;
@@ -1278,13 +1364,15 @@ ON_NurbsCage::IsoSurface (int dir, double c, ON_NurbsSurface *srf) const
   }
 
   ON_NurbsSurface *iso_srf = srf ? srf : ON_NurbsSurface::New ();
-  iso_srf->Create (m_dim, m_is_rat, m_order[jj], m_order[kk], m_cv_count[jj],
-                   m_cv_count[kk]);
+  iso_srf->Create (
+      m_dim, m_is_rat, m_order[jj], m_order[kk], m_cv_count[jj], m_cv_count[kk]);
   nurbs_curve.Evaluate (c, 0, nurbs_curve.m_dim, iso_srf->m_cv, 0, 0);
   nurbs_curve.m_knot = 0;
-  memcpy (iso_srf->m_knot[0], m_knot[jj],
+  memcpy (iso_srf->m_knot[0],
+          m_knot[jj],
           iso_srf->KnotCount (0) * sizeof (*iso_srf->m_knot[0]));
-  memcpy (iso_srf->m_knot[1], m_knot[kk],
+  memcpy (iso_srf->m_knot[1],
+          m_knot[kk],
           iso_srf->KnotCount (1) * sizeof (*iso_srf->m_knot[1]));
 
   return iso_srf;
@@ -1700,7 +1788,8 @@ ON_NurbsCage::MakeRational ()
         }
         m_is_rat = 1;
         ReserveCVCapacity (m_cv_count[0] * m_cv_count[1] * m_cv_count[2] * (dim + 1));
-        memcpy (m_cv, new_cv,
+        memcpy (m_cv,
+                new_cv,
                 m_cv_count[0] * m_cv_count[1] * m_cv_count[2] * (dim + 1) *
                     sizeof (*m_cv));
         onfree (new_cv);
@@ -2033,7 +2122,8 @@ ON_MorphControl::GetBBox (double *boxmin, double *boxmax, int bGrowBox) const
 }
 
 bool
-ON_MorphControl::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_MorphControl::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                      int bGrowBox,
                                       const ON_Xform *xform) const
 {
   bool rc = false;
@@ -2565,8 +2655,8 @@ ON_MorphControl::AddControlLocalizer (double support_distance, double falloff_di
 
       ON_SimpleArray<ON_Plane> planes (6);
 
-      ON_3dPoint C (d[0].ParameterAt (0.5), d[1].ParameterAt (0.5),
-                    d[2].ParameterAt (0.5));
+      ON_3dPoint C (
+          d[0].ParameterAt (0.5), d[1].ParameterAt (0.5), d[2].ParameterAt (0.5));
       ON_3dPoint P;
       ON_3dVector N;
       int i;
@@ -2600,26 +2690,29 @@ ON_MorphControl::AddControlLocalizer (double support_distance, double falloff_di
 }
 
 bool
-ON_MorphControl::AddSphereLocalizer (ON_3dPoint center, double support_distance,
+ON_MorphControl::AddSphereLocalizer (ON_3dPoint center,
+                                     double support_distance,
                                      double falloff_distance)
 {
   bool rc = (center.IsValid () && support_distance >= 0.0 && falloff_distance > 0.0);
   if (rc) {
     ON_Localizer &localizer = m_localizers.AppendNew ();
-    rc = localizer.CreateSphereLocalizer (center, support_distance + falloff_distance,
-                                          support_distance);
+    rc = localizer.CreateSphereLocalizer (
+        center, support_distance + falloff_distance, support_distance);
   }
   return rc;
 }
 
 bool
-ON_MorphControl::AddCylinderLocalizer (ON_Line axis, double support_distance,
+ON_MorphControl::AddCylinderLocalizer (ON_Line axis,
+                                       double support_distance,
                                        double falloff_distance)
 {
   bool rc = (axis.IsValid () && support_distance >= 0.0 && falloff_distance > 0.0);
   if (rc) {
     ON_Localizer &localizer = m_localizers.AppendNew ();
-    rc = localizer.CreateCylinderLocalizer (axis.from, axis.Tangent (),
+    rc = localizer.CreateCylinderLocalizer (axis.from,
+                                            axis.Tangent (),
                                             support_distance + falloff_distance,
                                             support_distance);
   }
@@ -2627,7 +2720,8 @@ ON_MorphControl::AddCylinderLocalizer (ON_Line axis, double support_distance,
 }
 
 bool
-ON_MorphControl::AddBoxLocalizer (ON_BoundingBox bbox, double support_distance,
+ON_MorphControl::AddBoxLocalizer (ON_BoundingBox bbox,
+                                  double support_distance,
                                   double falloff_distance)
 {
   ON_SimpleArray<ON_Plane> planes (6);
@@ -2656,7 +2750,8 @@ ON_MorphControl::AddBoxLocalizer (ON_BoundingBox bbox, double support_distance,
 }
 
 bool
-ON_MorphControl::AddPlaneLocalizer (const ON_Plane &plane, double support_distance,
+ON_MorphControl::AddPlaneLocalizer (const ON_Plane &plane,
+                                    double support_distance,
                                     double falloff_distance)
 {
   ON_SimpleArray<ON_Plane> planes (1);
@@ -2676,7 +2771,8 @@ ON_MorphControl::AddConvexPolygonLocalizer (const ON_SimpleArray<ON_Plane> &plan
     for (i = 0; i < count && rc; i++) {
       const ON_Plane &plane = planes[i];
       ON_Localizer &localizer = m_localizers.AppendNew ();
-      rc = localizer.CreatePlaneLocalizer (plane.origin, plane.zaxis,
+      rc = localizer.CreatePlaneLocalizer (plane.origin,
+                                           plane.zaxis,
                                            support_distance + falloff_distance,
                                            support_distance);
     }

@@ -68,13 +68,13 @@ namespace pcl
   class IterativeClosestPointNonLinear
       : public IterativeClosestPoint<PointSource, PointTarget, Scalar>
   {
-    using IterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::min_number_correspondences_;
+    using IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+        min_number_correspondences_;
     using IterativeClosestPoint<PointSource, PointTarget, Scalar>::reg_name_;
-    using IterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::transformation_estimation_;
-    using IterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::computeTransformation;
+    using IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+        transformation_estimation_;
+    using IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+        computeTransformation;
 
     public:
     using Ptr = boost::shared_ptr<
@@ -91,8 +91,8 @@ namespace pcl
       reg_name_ = "IterativeClosestPointNonLinear";
 
       transformation_estimation_.reset (
-          new pcl::registration::TransformationEstimationLM<PointSource, PointTarget,
-                                                            Scalar>);
+          new pcl::registration::
+              TransformationEstimationLM<PointSource, PointTarget, Scalar>);
     }
   };
 } // namespace pcl

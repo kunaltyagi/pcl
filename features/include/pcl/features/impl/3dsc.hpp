@@ -136,7 +136,9 @@ pcl::ShapeContext3DEstimation<PointInT, PointNT, PointOutT>::initCompute ()
 template <typename PointInT, typename PointNT, typename PointOutT>
 bool
 pcl::ShapeContext3DEstimation<PointInT, PointNT, PointOutT>::computePoint (
-    size_t index, const pcl::PointCloud<PointNT> &normals, float rf[9],
+    size_t index,
+    const pcl::PointCloud<PointNT> &normals,
+    float rf[9],
     std::vector<float> &desc)
 {
   // The RF is formed as this x_axis | y_axis | normal
@@ -188,7 +190,8 @@ pcl::ShapeContext3DEstimation<PointInT, PointNT, PointOutT>::computePoint (
   // Check if the computed x axis is orthogonal to the normal
   assert (pcl::utils::equal (x_axis[0] * normal[0] + x_axis[1] * normal[1] +
                                  x_axis[2] * normal[2],
-                             0.0f, 1E-6f));
+                             0.0f,
+                             1E-6f));
 
   // Store the 3rd frame vector
   y_axis.matrix () = normal.cross (x_axis);
@@ -254,9 +257,11 @@ pcl::ShapeContext3DEstimation<PointInT, PointNT, PointOutT>::computePoint (
     // "point_density_radius_" around the current neighbour
     std::vector<int> neighbour_indices;
     std::vector<float> neighbour_distances;
-    int point_density =
-        searchForNeighbors (*surface_, nn_indices[ne], point_density_radius_,
-                            neighbour_indices, neighbour_distances);
+    int point_density = searchForNeighbors (*surface_,
+                                            nn_indices[ne],
+                                            point_density_radius_,
+                                            neighbour_indices,
+                                            neighbour_distances);
     // point_density is NOT always bigger than 0 (on error, searchForNeighbors returns
     // 0), so we must check for that
     if (point_density == 0)

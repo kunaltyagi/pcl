@@ -38,7 +38,8 @@
 #include <pcl/common/gaussian.h>
 
 void
-pcl::GaussianKernel::compute (float sigma, Eigen::VectorXf &kernel,
+pcl::GaussianKernel::compute (float sigma,
+                              Eigen::VectorXf &kernel,
                               unsigned kernel_width) const
 {
   assert (kernel_width % 2 == 1);
@@ -74,8 +75,10 @@ pcl::GaussianKernel::compute (float sigma, Eigen::VectorXf &kernel,
 }
 
 void
-pcl::GaussianKernel::compute (float sigma, Eigen::VectorXf &kernel,
-                              Eigen::VectorXf &derivative, unsigned kernel_width) const
+pcl::GaussianKernel::compute (float sigma,
+                              Eigen::VectorXf &kernel,
+                              Eigen::VectorXf &derivative,
+                              unsigned kernel_width) const
 {
   assert (kernel_width % 2 == 1);
   assert (sigma >= 0);
@@ -159,7 +162,8 @@ pcl::GaussianKernel::convolveRows (const pcl::PointCloud<float> &input,
     for (; i < input_->width - radius; i++) {
       output (i, j) = 0;
       for (int k = static_cast<int> (kernel_width), l = static_cast<int> (i - radius);
-           k >= 0; k--, l++)
+           k >= 0;
+           k--, l++)
         output (i, j) += (*input_) (l, j) * kernel[k];
     }
 
@@ -199,7 +203,8 @@ pcl::GaussianKernel::convolveCols (const pcl::PointCloud<float> &input,
     for (; j < input_->height - radius; j++) {
       output (i, j) = 0;
       for (int k = static_cast<int> (kernel_width), l = static_cast<int> (j - radius);
-           k >= 0; k--, l++) {
+           k >= 0;
+           k--, l++) {
         output (i, j) += (*input_) (i, l) * kernel[k];
       }
     }

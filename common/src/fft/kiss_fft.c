@@ -52,7 +52,9 @@ kf_bfly2 (kiss_fft_cpx *Fout, const size_t fstride, const kiss_fft_cfg st, int m
 }
 
 static void
-kf_bfly4 (kiss_fft_cpx *Fout, const size_t fstride, const kiss_fft_cfg st,
+kf_bfly4 (kiss_fft_cpx *Fout,
+          const size_t fstride,
+          const kiss_fft_cfg st,
           const size_t m)
 {
   kiss_fft_cpx *tw1, *tw2, *tw3;
@@ -210,8 +212,8 @@ kf_bfly5 (kiss_fft_cpx *Fout, const size_t fstride, const kiss_fft_cfg st, int m
 
 /* perform the butterfly for one stage of a mixed radix FFT */
 static void
-kf_bfly_generic (kiss_fft_cpx *Fout, const size_t fstride, const kiss_fft_cfg st, int m,
-                 int p)
+kf_bfly_generic (
+    kiss_fft_cpx *Fout, const size_t fstride, const kiss_fft_cfg st, int m, int p)
 {
   kiss_fft_cpx *twiddles = st->twiddles;
   kiss_fft_cpx t;
@@ -246,8 +248,12 @@ kf_bfly_generic (kiss_fft_cpx *Fout, const size_t fstride, const kiss_fft_cfg st
 }
 
 static void
-kf_work (kiss_fft_cpx *Fout, const kiss_fft_cpx *f, const size_t fstride, int in_stride,
-         int *factors, const kiss_fft_cfg st)
+kf_work (kiss_fft_cpx *Fout,
+         const kiss_fft_cpx *f,
+         const size_t fstride,
+         int in_stride,
+         int *factors,
+         const kiss_fft_cfg st)
 {
   kiss_fft_cpx *Fout_beg = Fout;
   const int p = *factors++; /* the radix  */
@@ -263,8 +269,12 @@ kf_work (kiss_fft_cpx *Fout, const kiss_fft_cpx *f, const size_t fstride, int in
     // execute the p different work units in different threads
 #pragma omp parallel for
     for (k = 0; k < p; ++k)
-      kf_work (Fout + k * m, f + fstride * in_stride * k, fstride * p, in_stride,
-               factors, st);
+      kf_work (Fout + k * m,
+               f + fstride * in_stride * k,
+               fstride * p,
+               in_stride,
+               factors,
+               st);
     // all threads have joined by this point
 
     switch (p) {
@@ -400,7 +410,9 @@ kiss_fft_alloc (int nfft, int inverse_fft, void *mem, size_t *lenmem)
 }
 
 void
-kiss_fft_stride (kiss_fft_cfg st, const kiss_fft_cpx *fin, kiss_fft_cpx *fout,
+kiss_fft_stride (kiss_fft_cfg st,
+                 const kiss_fft_cpx *fin,
+                 kiss_fft_cpx *fout,
                  int in_stride)
 {
   if (fin == fout) {

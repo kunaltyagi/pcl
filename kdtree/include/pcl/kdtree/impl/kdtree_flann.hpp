@@ -126,7 +126,8 @@ pcl::KdTreeFLANN<PointT, Dist>::setInputCloud (const PointCloudConstPtr &cloud,
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT, typename Dist>
 int
-pcl::KdTreeFLANN<PointT, Dist>::nearestKSearch (const PointT &point, int k,
+pcl::KdTreeFLANN<PointT, Dist>::nearestKSearch (const PointT &point,
+                                                int k,
                                                 std::vector<int> &k_indices,
                                                 std::vector<float> &k_distances) const
 {
@@ -145,8 +146,11 @@ pcl::KdTreeFLANN<PointT, Dist>::nearestKSearch (const PointT &point, int k,
   ::flann::Matrix<int> k_indices_mat (&k_indices[0], 1, k);
   ::flann::Matrix<float> k_distances_mat (&k_distances[0], 1, k);
   // Wrap the k_indices and k_distances vectors (no data copy)
-  flann_index_->knnSearch (::flann::Matrix<float> (&query[0], 1, dim_), k_indices_mat,
-                           k_distances_mat, k, param_k_);
+  flann_index_->knnSearch (::flann::Matrix<float> (&query[0], 1, dim_),
+                           k_indices_mat,
+                           k_distances_mat,
+                           k,
+                           param_k_);
 
   // Do mapping to original point cloud
   if (!identity_mapping_) {
@@ -162,7 +166,8 @@ pcl::KdTreeFLANN<PointT, Dist>::nearestKSearch (const PointT &point, int k,
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT, typename Dist>
 int
-pcl::KdTreeFLANN<PointT, Dist>::radiusSearch (const PointT &point, double radius,
+pcl::KdTreeFLANN<PointT, Dist>::radiusSearch (const PointT &point,
+                                              double radius,
                                               std::vector<int> &k_indices,
                                               std::vector<float> &k_sqr_dists,
                                               unsigned int max_nn) const
@@ -187,8 +192,11 @@ pcl::KdTreeFLANN<PointT, Dist>::radiusSearch (const PointT &point, double radius
     params.max_neighbors = max_nn;
 
   int neighbors_in_radius =
-      flann_index_->radiusSearch (::flann::Matrix<float> (&query[0], 1, dim_), indices,
-                                  dists, static_cast<float> (radius * radius), params);
+      flann_index_->radiusSearch (::flann::Matrix<float> (&query[0], 1, dim_),
+                                  indices,
+                                  dists,
+                                  static_cast<float> (radius * radius),
+                                  params);
 
   k_indices = indices[0];
   k_sqr_dists = dists[0];

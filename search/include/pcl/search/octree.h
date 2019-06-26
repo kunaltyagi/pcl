@@ -97,7 +97,8 @@ namespace pcl
        */
       Octree (const double resolution)
           : Search<PointT> ("Octree"),
-            tree_ (new pcl::octree::OctreePointCloudSearch<PointT, LeafTWrap,
+            tree_ (new pcl::octree::OctreePointCloudSearch<PointT,
+                                                           LeafTWrap,
                                                            BranchTWrap> (resolution))
       {
       }
@@ -143,7 +144,9 @@ namespace pcl
        * number of neighbors found
        */
       inline int
-      nearestKSearch (const PointCloud &cloud, int index, int k,
+      nearestKSearch (const PointCloud &cloud,
+                      int index,
+                      int k,
                       std::vector<int> &k_indices,
                       std::vector<float> &k_sqr_distances) const override
       {
@@ -159,7 +162,9 @@ namespace pcl
        * number of neighbors found
        */
       inline int
-      nearestKSearch (const PointT &point, int k, std::vector<int> &k_indices,
+      nearestKSearch (const PointT &point,
+                      int k,
+                      std::vector<int> &k_indices,
                       std::vector<float> &k_sqr_distances) const override
       {
         return (tree_->nearestKSearch (point, k, k_indices, k_sqr_distances));
@@ -178,7 +183,9 @@ namespace pcl
        * number of neighbors found
        */
       inline int
-      nearestKSearch (int index, int k, std::vector<int> &k_indices,
+      nearestKSearch (int index,
+                      int k,
+                      std::vector<int> &k_indices,
                       std::vector<float> &k_sqr_distances) const override
       {
         return (tree_->nearestKSearch (index, k, k_indices, k_sqr_distances));
@@ -194,8 +201,11 @@ namespace pcl
        * value \return number of neighbors found in radius
        */
       inline int
-      radiusSearch (const PointCloud &cloud, int index, double radius,
-                    std::vector<int> &k_indices, std::vector<float> &k_sqr_distances,
+      radiusSearch (const PointCloud &cloud,
+                    int index,
+                    double radius,
+                    std::vector<int> &k_indices,
+                    std::vector<float> &k_sqr_distances,
                     unsigned int max_nn = 0) const override
       {
         tree_->radiusSearch (cloud, index, radius, k_indices, k_sqr_distances, max_nn);
@@ -213,7 +223,9 @@ namespace pcl
        * value \return number of neighbors found in radius
        */
       inline int
-      radiusSearch (const PointT &p_q, double radius, std::vector<int> &k_indices,
+      radiusSearch (const PointT &p_q,
+                    double radius,
+                    std::vector<int> &k_indices,
                     std::vector<float> &k_sqr_distances,
                     unsigned int max_nn = 0) const override
       {
@@ -233,7 +245,9 @@ namespace pcl
        * neighbors to this value \return number of neighbors found in radius
        */
       inline int
-      radiusSearch (int index, double radius, std::vector<int> &k_indices,
+      radiusSearch (int index,
+                    double radius,
+                    std::vector<int> &k_indices,
                     std::vector<float> &k_sqr_distances,
                     unsigned int max_nn = 0) const override
       {
@@ -251,11 +265,13 @@ namespace pcl
        * point \return number of neighbors found
        */
       inline void
-      approxNearestSearch (const PointCloudConstPtr &cloud, int query_index,
-                           int &result_index, float &sqr_distance)
+      approxNearestSearch (const PointCloudConstPtr &cloud,
+                           int query_index,
+                           int &result_index,
+                           float &sqr_distance)
       {
-        return (tree_->approxNearestSearch (cloud->points[query_index], result_index,
-                                            sqr_distance));
+        return (tree_->approxNearestSearch (
+            cloud->points[query_index], result_index, sqr_distance));
       }
 
       /** \brief Search for approximate nearest neighbor at the query point.

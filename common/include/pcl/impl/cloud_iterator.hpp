@@ -347,7 +347,8 @@ pcl::CloudIterator<PointT>::CloudIterator (PointCloud<PointT> &cloud,
 //////////////////////////////////////////////////////////////////////////////
 template <class PointT>
 pcl::CloudIterator<PointT>::CloudIterator (PointCloud<PointT> &cloud,
-                                           const Correspondences &corrs, bool source)
+                                           const Correspondences &corrs,
+                                           bool source)
 {
   std::vector<int> indices;
   indices.reserve (corrs.size ());

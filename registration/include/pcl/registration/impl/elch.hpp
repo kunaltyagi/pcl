@@ -73,7 +73,8 @@ pcl::registration::ELCH<PointT>::loopOptimizerAlgorithm (LOAGraph &g, double *we
     dist = -1;
     // find shortest crossing for all vertices on the loop
     for (auto crossings_it = crossings.begin (); crossings_it != crossings.end ();) {
-      dijkstra_shortest_paths (g, *crossings_it,
+      dijkstra_shortest_paths (g,
+                               *crossings_it,
                                predecessor_map (boost::make_iterator_property_map (
                                                     p, get (boost::vertex_index, g)))
                                    .distance_map (boost::make_iterator_property_map (
@@ -137,7 +138,8 @@ pcl::registration::ELCH<PointT>::loopOptimizerAlgorithm (LOAGraph &g, double *we
     branches.pop_front ();
 
     for (boost::tuples::tie (adjacent_it, adjacent_it_end) = adjacent_vertices (s, g);
-         adjacent_it != adjacent_it_end; ++adjacent_it) {
+         adjacent_it != adjacent_it_end;
+         ++adjacent_it) {
       weights[*adjacent_it] = weights[s];
       if (degree (*adjacent_it, g) > 1)
         branches.push_back (static_cast<int> (*adjacent_it));
@@ -173,11 +175,13 @@ pcl::registration::ELCH<PointT>::initCompute ()
     typename boost::graph_traits<LoopGraph>::adjacency_iterator si, si_end;
     for (boost::tuples::tie (si, si_end) =
              adjacent_vertices (loop_start_, *loop_graph_);
-         si != si_end; si++)
+         si != si_end;
+         si++)
       *meta_start += *(*loop_graph_)[*si].cloud;
 
     for (boost::tuples::tie (si, si_end) = adjacent_vertices (loop_end_, *loop_graph_);
-         si != si_end; si++)
+         si != si_end;
+         si++)
       *meta_end += *(*loop_graph_)[*si].cloud;
 
     // TODO use real pose instead of centroid
@@ -220,9 +224,12 @@ pcl::registration::ELCH<PointT>::compute ()
 
   typename boost::graph_traits<LoopGraph>::edge_iterator edge_it, edge_it_end;
   for (boost::tuples::tie (edge_it, edge_it_end) = edges (*loop_graph_);
-       edge_it != edge_it_end; edge_it++) {
+       edge_it != edge_it_end;
+       edge_it++) {
     for (auto &j : grb)
-      add_edge (source (*edge_it, *loop_graph_), target (*edge_it, *loop_graph_), 1,
+      add_edge (source (*edge_it, *loop_graph_),
+                target (*edge_it, *loop_graph_),
+                1,
                 j); // TODO add variance
   }
 

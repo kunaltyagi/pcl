@@ -55,7 +55,8 @@ namespace pcl
   template <typename PointT>
   inline bool
   computePointNormal (const pcl::PointCloud<PointT> &cloud,
-                      Eigen::Vector4f &plane_parameters, float &curvature)
+                      Eigen::Vector4f &plane_parameters,
+                      float &curvature)
   {
     // Placeholder for the 3x3 covariance matrix at each surface patch
     EIGEN_ALIGN16 Eigen::Matrix3f covariance_matrix;
@@ -86,15 +87,16 @@ namespace pcl
   inline bool
   computePointNormal (const pcl::PointCloud<PointT> &cloud,
                       const std::vector<int> &indices,
-                      Eigen::Vector4f &plane_parameters, float &curvature)
+                      Eigen::Vector4f &plane_parameters,
+                      float &curvature)
   {
     // Placeholder for the 3x3 covariance matrix at each surface patch
     EIGEN_ALIGN16 Eigen::Matrix3f covariance_matrix;
     // 16-bytes aligned placeholder for the XYZ centroid of a surface patch
     Eigen::Vector4f xyz_centroid;
     if (indices.size () < 3 ||
-        computeMeanAndCovarianceMatrix (cloud, indices, covariance_matrix,
-                                        xyz_centroid) == 0) {
+        computeMeanAndCovarianceMatrix (
+            cloud, indices, covariance_matrix, xyz_centroid) == 0) {
       plane_parameters.setConstant (std::numeric_limits<float>::quiet_NaN ());
       curvature = std::numeric_limits<float>::quiet_NaN ();
       return false;
@@ -114,7 +116,10 @@ namespace pcl
    */
   template <typename PointT, typename Scalar>
   inline void
-  flipNormalTowardsViewpoint (const PointT &point, float vp_x, float vp_y, float vp_z,
+  flipNormalTowardsViewpoint (const PointT &point,
+                              float vp_x,
+                              float vp_y,
+                              float vp_z,
                               Eigen::Matrix<Scalar, 4, 1> &normal)
   {
     Eigen::Matrix<Scalar, 4, 1> vp (vp_x - point.x, vp_y - point.y, vp_z - point.z, 0);
@@ -141,7 +146,10 @@ namespace pcl
    */
   template <typename PointT, typename Scalar>
   inline void
-  flipNormalTowardsViewpoint (const PointT &point, float vp_x, float vp_y, float vp_z,
+  flipNormalTowardsViewpoint (const PointT &point,
+                              float vp_x,
+                              float vp_y,
+                              float vp_z,
                               Eigen::Matrix<Scalar, 3, 1> &normal)
   {
     Eigen::Matrix<Scalar, 3, 1> vp (vp_x - point.x, vp_y - point.y, vp_z - point.z);
@@ -163,8 +171,13 @@ namespace pcl
    */
   template <typename PointT>
   inline void
-  flipNormalTowardsViewpoint (const PointT &point, float vp_x, float vp_y, float vp_z,
-                              float &nx, float &ny, float &nz)
+  flipNormalTowardsViewpoint (const PointT &point,
+                              float vp_x,
+                              float vp_y,
+                              float vp_z,
+                              float &nx,
+                              float &ny,
+                              float &nz)
   {
     // See if we need to flip any plane normals
     vp_x -= point.x;
@@ -273,19 +286,20 @@ namespace pcl
     inline bool
     computePointNormal (const pcl::PointCloud<PointInT> &cloud,
                         const std::vector<int> &indices,
-                        Eigen::Vector4f &plane_parameters, float &curvature)
+                        Eigen::Vector4f &plane_parameters,
+                        float &curvature)
     {
       if (indices.size () < 3 ||
-          computeMeanAndCovarianceMatrix (cloud, indices, covariance_matrix_,
-                                          xyz_centroid_) == 0) {
+          computeMeanAndCovarianceMatrix (
+              cloud, indices, covariance_matrix_, xyz_centroid_) == 0) {
         plane_parameters.setConstant (std::numeric_limits<float>::quiet_NaN ());
         curvature = std::numeric_limits<float>::quiet_NaN ();
         return false;
       }
 
       // Get the plane normal and surface curvature
-      solvePlaneParameters (covariance_matrix_, xyz_centroid_, plane_parameters,
-                            curvature);
+      solvePlaneParameters (
+          covariance_matrix_, xyz_centroid_, plane_parameters, curvature);
       return true;
     }
 
@@ -300,12 +314,15 @@ namespace pcl
      */
     inline bool
     computePointNormal (const pcl::PointCloud<PointInT> &cloud,
-                        const std::vector<int> &indices, float &nx, float &ny,
-                        float &nz, float &curvature)
+                        const std::vector<int> &indices,
+                        float &nx,
+                        float &ny,
+                        float &nz,
+                        float &curvature)
     {
       if (indices.size () < 3 ||
-          computeMeanAndCovarianceMatrix (cloud, indices, covariance_matrix_,
-                                          xyz_centroid_) == 0) {
+          computeMeanAndCovarianceMatrix (
+              cloud, indices, covariance_matrix_, xyz_centroid_) == 0) {
         nx = ny = nz = curvature = std::numeric_limits<float>::quiet_NaN ();
         return false;
       }

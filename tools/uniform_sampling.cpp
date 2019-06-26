@@ -92,7 +92,8 @@ loadCloud (const string &filename, pcl::PCLPointCloud2 &cloud)
 }
 
 void
-compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output,
+compute (const pcl::PCLPointCloud2::ConstPtr &input,
+         pcl::PCLPointCloud2 &output,
          double radius)
 {
   // Convert data to PointCloud<T>
@@ -133,8 +134,8 @@ saveCloud (const string &filename, const pcl::PCLPointCloud2 &output)
   PCDWriter w_pcd;
   PLYWriter w_ply;
   std::string output_ext = boost::filesystem::extension (filename);
-  std::transform (output_ext.begin (), output_ext.end (), output_ext.begin (),
-                  ::tolower);
+  std::transform (
+      output_ext.begin (), output_ext.end (), output_ext.begin (), ::tolower);
 
   if (output_ext == ".pcd") {
     w_pcd.writeBinaryCompressed (filename, output);

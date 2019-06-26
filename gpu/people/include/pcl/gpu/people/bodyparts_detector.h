@@ -81,7 +81,8 @@ namespace pcl
          * and builds the blob matrix
          */
         void
-        process (const Depth &depth, const PointCloud<PointXYZ> &cloud,
+        process (const Depth &depth,
+                 const PointCloud<PointXYZ> &cloud,
                  int min_pts_per_cluster);
         // This are the different sub-parts of process()
         /**
@@ -95,7 +96,8 @@ namespace pcl
          * \brief This smooths the labels and does the connected components
          */
         void
-        processSmooth (const Depth &depth, const PointCloud<PointXYZ> &cloud,
+        processSmooth (const Depth &depth,
+                       const PointCloud<PointXYZ> &cloud,
                        int min_pts_per_cluster);
 
         /**

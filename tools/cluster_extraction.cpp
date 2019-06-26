@@ -99,7 +99,9 @@ loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
 
 void
 compute (const pcl::PCLPointCloud2::ConstPtr &input,
-         std::vector<pcl::PCLPointCloud2::Ptr> &output, int min, int max,
+         std::vector<pcl::PCLPointCloud2::Ptr> &output,
+         int min,
+         int max,
          double tolerance)
 {
   // Convert data to PointCloud<T>
@@ -133,7 +135,8 @@ compute (const pcl::PCLPointCloud2::ConstPtr &input,
 
   output.reserve (cluster_indices.size ());
   for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin ();
-       it != cluster_indices.end (); ++it) {
+       it != cluster_indices.end ();
+       ++it) {
     pcl::ExtractIndices<pcl::PCLPointCloud2> extract;
     extract.setInputCloud (input);
     extract.setIndices (boost::make_shared<const pcl::PointIndices> (*it));

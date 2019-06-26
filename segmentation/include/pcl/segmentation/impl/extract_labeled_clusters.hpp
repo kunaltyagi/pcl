@@ -43,14 +43,19 @@
 template <typename PointT>
 void
 pcl::extractLabeledEuclideanClusters (
-    const PointCloud<PointT> &cloud, const typename search::Search<PointT>::Ptr &tree,
-    float tolerance, std::vector<std::vector<PointIndices>> &labeled_clusters,
-    unsigned int min_pts_per_cluster, unsigned int max_pts_per_cluster, unsigned int)
+    const PointCloud<PointT> &cloud,
+    const typename search::Search<PointT>::Ptr &tree,
+    float tolerance,
+    std::vector<std::vector<PointIndices>> &labeled_clusters,
+    unsigned int min_pts_per_cluster,
+    unsigned int max_pts_per_cluster,
+    unsigned int)
 {
   if (tree->getInputCloud ()->points.size () != cloud.points.size ()) {
     PCL_ERROR ("[pcl::extractLabeledEuclideanClusters] Tree built for a different "
                "point cloud dataset (%lu) than the input cloud (%lu)!\n",
-               tree->getInputCloud ()->points.size (), cloud.points.size ());
+               tree->getInputCloud ()->points.size (),
+               cloud.points.size ());
     return;
   }
   // Create a bool vector of processed point indices, and initialize it to false
@@ -72,8 +77,11 @@ pcl::extractLabeledEuclideanClusters (
 
     while (sq_idx < static_cast<int> (seed_queue.size ())) {
       // Search for sq_idx
-      int ret = tree->radiusSearch (seed_queue[sq_idx], tolerance, nn_indices,
-                                    nn_distances, std::numeric_limits<int>::max ());
+      int ret = tree->radiusSearch (seed_queue[sq_idx],
+                                    tolerance,
+                                    nn_indices,
+                                    nn_distances,
+                                    std::numeric_limits<int>::max ());
       if (ret == -1)
         PCL_ERROR ("radiusSearch on tree came back with error -1");
       if (!ret) {
@@ -138,14 +146,18 @@ pcl::LabeledEuclideanClusterExtraction<PointT>::extract (
 
   // Send the input dataset to the spatial locator
   tree_->setInputCloud (input_);
-  extractLabeledEuclideanClusters (
-      *input_, tree_, static_cast<float> (cluster_tolerance_), labeled_clusters,
-      min_pts_per_cluster_, max_pts_per_cluster_, max_label_);
+  extractLabeledEuclideanClusters (*input_,
+                                   tree_,
+                                   static_cast<float> (cluster_tolerance_),
+                                   labeled_clusters,
+                                   min_pts_per_cluster_,
+                                   max_pts_per_cluster_,
+                                   max_label_);
 
   // Sort the clusters based on their size (largest one first)
   for (auto &labeled_cluster : labeled_clusters)
-    std::sort (labeled_cluster.rbegin (), labeled_cluster.rend (),
-               comparePointClusters);
+    std::sort (
+        labeled_cluster.rbegin (), labeled_cluster.rend (), comparePointClusters);
 
   deinitCompute ();
 }
@@ -154,8 +166,12 @@ pcl::LabeledEuclideanClusterExtraction<PointT>::extract (
   template class PCL_EXPORTS pcl::LabeledEuclideanClusterExtraction<T>;
 #define PCL_INSTANTIATE_extractLabeledEuclideanClusters(T)                             \
   template void PCL_EXPORTS pcl::extractLabeledEuclideanClusters<T> (                  \
-      const pcl::PointCloud<T> &, const typename pcl::search::Search<T>::Ptr &, float, \
-      std::vector<std::vector<pcl::PointIndices>> &, unsigned int, unsigned int,       \
+      const pcl::PointCloud<T> &,                                                      \
+      const typename pcl::search::Search<T>::Ptr &,                                    \
+      float,                                                                           \
+      std::vector<std::vector<pcl::PointIndices>> &,                                   \
+      unsigned int,                                                                    \
+      unsigned int,                                                                    \
       unsigned int);
 
 #endif // PCL_EXTRACT_CLUSTERS_IMPL_H_

@@ -73,13 +73,17 @@ namespace pcl
 
   float
   RangeImageBorderExtractor::getNeighborDistanceChangeScore (
-      const RangeImageBorderExtractor::LocalSurface &local_surface, int x, int y,
-      int offset_x, int offset_y, int pixel_radius) const
+      const RangeImageBorderExtractor::LocalSurface &local_surface,
+      int x,
+      int y,
+      int offset_x,
+      int offset_y,
+      int pixel_radius) const
   {
     const PointWithRange &point = range_image_->getPoint (x, y);
     PointWithRange neighbor;
-    range_image_->get1dPointAverage (x + offset_x, y + offset_y, offset_x, offset_y,
-                                     pixel_radius, neighbor);
+    range_image_->get1dPointAverage (
+        x + offset_x, y + offset_y, offset_x, offset_y, pixel_radius, neighbor);
     if (std::isinf (neighbor.range)) {
       if (neighbor.range < 0.0f)
         return 0.0f;
@@ -125,14 +129,15 @@ namespace pcl
   // if (shadow_side)
   // ret = -ret;
   ////cout <<
-  ///PVARC(normal_distance_to_plane_squared)<<PVAR(distance_to_plane_squared)<<" =>
+  /// PVARC(normal_distance_to_plane_squared)<<PVAR(distance_to_plane_squared)<<" =>
   ///"<<ret<<"\n";
   // return ret;
   //}
 
   bool
   RangeImageBorderExtractor::get3dDirection (
-      const BorderDescription &border_description, Eigen::Vector3f &direction,
+      const BorderDescription &border_description,
+      Eigen::Vector3f &direction,
       const LocalSurface *local_surface)
   {
     const BorderTraits border_traits = border_description.traits;
@@ -154,7 +159,8 @@ namespace pcl
     const PointWithRange &point = range_image_->getPoint (x, y);
     Eigen::Vector3f neighbor_point;
     range_image_->calculate3DPoint (static_cast<float> (x + delta_x),
-                                    static_cast<float> (y + delta_y), point.range,
+                                    static_cast<float> (y + delta_y),
+                                    point.range,
                                     neighbor_point);
     // cout << "Neighborhood point is "<<neighbor_point[0]<<", "<<neighbor_point[1]<<",
     // "<<neighbor_point[2]<<".\n";
@@ -190,8 +196,8 @@ namespace pcl
     if (!border_traits[BORDER_TRAIT__OBSTACLE_BORDER])
       return;
     border_direction = new Eigen::Vector3f (0.0f, 0.0f, 0.0f);
-    if (!get3dDirection (border_description, *border_direction,
-                         surface_structure_[index])) {
+    if (!get3dDirection (
+            border_description, *border_direction, surface_structure_[index])) {
       delete border_direction;
       border_direction = nullptr;
       return;
@@ -200,8 +206,13 @@ namespace pcl
 
   bool
   RangeImageBorderExtractor::changeScoreAccordingToShadowBorderValue (
-      int x, int y, int offset_x, int offset_y, float *border_scores,
-      float *border_scores_other_direction, int &shadow_border_idx) const
+      int x,
+      int y,
+      int offset_x,
+      int offset_y,
+      float *border_scores,
+      float *border_scores_other_direction,
+      int &shadow_border_idx) const
   {
     float &border_score = border_scores[y * range_image_->width + x];
 
@@ -219,7 +230,8 @@ namespace pcl
     float best_shadow_border_score = 0.0f;
 
     for (int neighbor_distance = 1;
-         neighbor_distance <= parameters_.pixel_radius_borders; ++neighbor_distance) {
+         neighbor_distance <= parameters_.pixel_radius_borders;
+         ++neighbor_distance) {
       int neighbor_x = x + neighbor_distance * offset_x,
           neighbor_y = y + neighbor_distance * offset_y;
       if (!range_image_->isInImage (neighbor_x, neighbor_y))
@@ -281,8 +293,11 @@ namespace pcl
   }
 
   bool
-  RangeImageBorderExtractor::checkPotentialBorder (int x, int y, int offset_x,
-                                                   int offset_y, float *border_scores,
+  RangeImageBorderExtractor::checkPotentialBorder (int x,
+                                                   int y,
+                                                   int offset_x,
+                                                   int offset_y,
+                                                   float *border_scores,
                                                    float *border_scores_other_direction,
                                                    int &shadow_border_idx) const
   {
@@ -294,7 +309,8 @@ namespace pcl
     float best_shadow_border_score = -0.5f * parameters_.minimum_border_probability;
 
     for (int neighbor_distance = 1;
-         neighbor_distance <= parameters_.pixel_radius_borders; ++neighbor_distance) {
+         neighbor_distance <= parameters_.pixel_radius_borders;
+         ++neighbor_distance) {
       int neighbor_x = x + neighbor_distance * offset_x,
           neighbor_y = y + neighbor_distance * offset_y;
       if (!range_image_->isInImage (neighbor_x, neighbor_y))
@@ -316,7 +332,10 @@ namespace pcl
   }
 
   bool
-  RangeImageBorderExtractor::checkIfMaximum (int x, int y, int offset_x, int offset_y,
+  RangeImageBorderExtractor::checkIfMaximum (int x,
+                                             int y,
+                                             int offset_x,
+                                             int offset_y,
                                              float *border_scores,
                                              int shadow_border_idx) const
   {
@@ -327,7 +346,8 @@ namespace pcl
       return false;
 
     for (int neighbor_distance = 1;
-         neighbor_distance <= parameters_.pixel_radius_borders; ++neighbor_distance) {
+         neighbor_distance <= parameters_.pixel_radius_borders;
+         ++neighbor_distance) {
       neighbor_x = x + neighbor_distance * offset_x;
       neighbor_y = y + neighbor_distance * offset_y;
       if (!range_image_->isInImage (neighbor_x, neighbor_y))

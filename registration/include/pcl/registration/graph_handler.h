@@ -99,7 +99,8 @@ namespace pcl
       GraphHandler () : graph_impl_ (new GraphT ())
       {
         if (!init ())
-          throw InitFailedException ("Graph Initialization Failed", __FILE__,
+          throw InitFailedException ("Graph Initialization Failed",
+                                     __FILE__,
                                      "pcl::registration::GraphHandler::GraphHandler ()",
                                      __LINE__);
       }
@@ -114,7 +115,8 @@ namespace pcl
         deinit ();
         graph_impl_.reset (new GraphT ());
         if (!init ())
-          throw InitFailedException ("Graph Initialization Failed", __FILE__,
+          throw InitFailedException ("Graph Initialization Failed",
+                                     __FILE__,
                                      "pcl::registration::GraphHandler::clear ()",
                                      __LINE__);
       }
@@ -166,14 +168,15 @@ namespace pcl
        */
       template <class InformationT>
       inline Edge
-      addPoseConstraint (const Vertex &v_start, const Vertex &v_end,
+      addPoseConstraint (const Vertex &v_start,
+                         const Vertex &v_end,
                          const Eigen::Matrix4f &relative_transformation,
                          const InformationT &information_matrix)
       {
-        return add_edge (PoseMeasurement<Vertex, InformationT> (v_start, v_end,
-                                                                relative_transformation,
-                                                                information_matrix),
-                         *graph_impl_);
+        return add_edge (
+            PoseMeasurement<Vertex, InformationT> (
+                v_start, v_end, relative_transformation, information_matrix),
+            *graph_impl_);
       }
 
       /** \brief Add a generic constraint created according to the given measurement

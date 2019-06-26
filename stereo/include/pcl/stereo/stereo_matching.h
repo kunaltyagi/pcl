@@ -193,7 +193,10 @@ namespace pcl
      * and non-dense, with NaNs where 3D points are invalid
      */
     virtual bool
-    getPointCloud (float u_c, float v_c, float focal, float baseline,
+    getPointCloud (float u_c,
+                   float v_c,
+                   float focal,
+                   float baseline,
                    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);
 
     /** \brief computation of the 3D point cloud from the previously computed disparity
@@ -210,7 +213,10 @@ namespace pcl
      * cloud a color triplet
      */
     virtual bool
-    getPointCloud (float u_c, float v_c, float focal, float baseline,
+    getPointCloud (float u_c,
+                   float v_c,
+                   float focal,
+                   float baseline,
                    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,
                    pcl::PointCloud<pcl::RGB>::Ptr texture);
 
@@ -301,8 +307,12 @@ namespace pcl
     }
 
     inline short int
-    doStereoRatioFilter (int *acc, short int dbest, int sad_min, int ratio_filter,
-                         int maxdisp, int precision = 100)
+    doStereoRatioFilter (int *acc,
+                         short int dbest,
+                         int sad_min,
+                         int ratio_filter,
+                         int maxdisp,
+                         int precision = 100)
     {
       int sad_second_min = std::numeric_limits<int>::max ();
 
@@ -321,8 +331,12 @@ namespace pcl
     }
 
     inline short int
-    doStereoRatioFilter (float *acc, short int dbest, float sad_min, int ratio_filter,
-                         int maxdisp, int precision = 100)
+    doStereoRatioFilter (float *acc,
+                         short int dbest,
+                         float sad_min,
+                         int ratio_filter,
+                         int maxdisp,
+                         int precision = 100)
     {
       float sad_second_min = std::numeric_limits<float>::max ();
 
@@ -394,7 +408,9 @@ namespace pcl
      * both input arrays
      */
     void
-    compute (unsigned char *ref_img, unsigned char *trg_img, int width,
+    compute (unsigned char *ref_img,
+             unsigned char *trg_img,
+             int width,
              int height) override;
 
     /** \brief stereo processing, it computes a disparity map stored internally by the

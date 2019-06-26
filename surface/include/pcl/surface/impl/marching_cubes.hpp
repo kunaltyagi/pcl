@@ -68,8 +68,10 @@ pcl::MarchingCubes<PointNT>::getBoundingBox ()
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointNT>
 void
-pcl::MarchingCubes<PointNT>::interpolateEdge (Eigen::Vector3f &p1, Eigen::Vector3f &p2,
-                                              float val_p1, float val_p2,
+pcl::MarchingCubes<PointNT>::interpolateEdge (Eigen::Vector3f &p1,
+                                              Eigen::Vector3f &p2,
+                                              float val_p1,
+                                              float val_p2,
                                               Eigen::Vector3f &output)
 {
   const float mu = (iso_level_ - val_p1) / (val_p2 - val_p1);
@@ -226,7 +228,8 @@ pcl::MarchingCubes<PointNT>::performReconstruction (
   if (!(iso_level_ >= 0 && iso_level_ < 1)) {
     PCL_ERROR ("[pcl::%s::performReconstruction] Invalid iso level %f! Please use a "
                "number between 0 and 1.\n",
-               getClassName ().c_str (), iso_level_);
+               getClassName ().c_str (),
+               iso_level_);
     points.width = points.height = 0;
     points.points.clear ();
     polygons.clear ();

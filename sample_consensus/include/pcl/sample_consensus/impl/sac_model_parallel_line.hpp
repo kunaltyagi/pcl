@@ -48,7 +48,8 @@
 template <typename PointT>
 void
 pcl::SampleConsensusModelParallelLine<PointT>::selectWithinDistance (
-    const Eigen::VectorXf &model_coefficients, const double threshold,
+    const Eigen::VectorXf &model_coefficients,
+    const double threshold,
     std::vector<int> &inliers)
 {
   // Check if the model is valid given the user constraints
@@ -57,8 +58,8 @@ pcl::SampleConsensusModelParallelLine<PointT>::selectWithinDistance (
     return;
   }
 
-  SampleConsensusModelLine<PointT>::selectWithinDistance (model_coefficients, threshold,
-                                                          inliers);
+  SampleConsensusModelLine<PointT>::selectWithinDistance (
+      model_coefficients, threshold, inliers);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -102,8 +103,8 @@ pcl::SampleConsensusModelParallelLine<PointT>::isModelValid (
   // Check against template, if given
   if (eps_angle_ > 0.0) {
     // Obtain the line direction
-    Eigen::Vector4f line_dir (model_coefficients[3], model_coefficients[4],
-                              model_coefficients[5], 0);
+    Eigen::Vector4f line_dir (
+        model_coefficients[3], model_coefficients[4], model_coefficients[5], 0);
 
     Eigen::Vector4f axis (axis_[0], axis_[1], axis_[2], 0);
     double angle_diff = fabs (getAngle3D (axis, line_dir));

@@ -86,7 +86,8 @@ namespace pcl
        * \param[in] pyramid_level the level of the down sampled point cloud to be used
        * for projection matrix estimation
        */
-      OrganizedNeighbor (bool sorted_results = false, float eps = 1e-4f,
+      OrganizedNeighbor (bool sorted_results = false,
+                         float eps = 1e-4f,
                          unsigned pyramid_level = 5)
           : Search<PointT> ("OrganizedNeighbor", sorted_results),
             projection_matrix_ (Eigen::Matrix<float, 3, 4, Eigen::RowMajor>::Zero ()),
@@ -142,7 +143,8 @@ namespace pcl
         if (indices_ && !indices_->empty ()) {
           mask_.assign (input_->size (), 0);
           for (std::vector<int>::const_iterator iIt = indices_->begin ();
-               iIt != indices_->end (); ++iIt)
+               iIt != indices_->end ();
+               ++iIt)
             mask_[*iIt] = 1;
         } else
           mask_.assign (input_->size (), 1);
@@ -161,7 +163,9 @@ namespace pcl
        * number of neighbors found in radius
        */
       int
-      radiusSearch (const PointT &p_q, double radius, std::vector<int> &k_indices,
+      radiusSearch (const PointT &p_q,
+                    double radius,
+                    std::vector<int> &k_indices,
                     std::vector<float> &k_sqr_distances,
                     unsigned int max_nn = 0) const override;
 
@@ -180,7 +184,9 @@ namespace pcl
        * @todo still need to implements this functionality
        */
       int
-      nearestKSearch (const PointT &p_q, int k, std::vector<int> &k_indices,
+      nearestKSearch (const PointT &p_q,
+                      int k,
+                      std::vector<int> &k_indices,
                       std::vector<float> &k_sqr_distances) const override;
 
       /** \brief projects a point into the image
@@ -211,7 +217,9 @@ namespace pcl
        * index on point to be tested \return whether the top element changed or not.
        */
       inline bool
-      testPoint (const PointT &query, unsigned k, std::priority_queue<Entry> &queue,
+      testPoint (const PointT &query,
+                 unsigned k,
+                 std::priority_queue<Entry> &queue,
                  unsigned index) const
       {
         const PointT &point = input_->points[index];
@@ -250,8 +258,11 @@ namespace pcl
        * \param[out] maxY the max Y box coordinate
        */
       void
-      getProjectedRadiusSearchBox (const PointT &point, float squared_radius,
-                                   unsigned &minX, unsigned &minY, unsigned &maxX,
+      getProjectedRadiusSearchBox (const PointT &point,
+                                   float squared_radius,
+                                   unsigned &minX,
+                                   unsigned &minY,
+                                   unsigned &maxX,
                                    unsigned &maxY) const;
 
       /** \brief the projection matrix. Either set by user or calculated by the first /

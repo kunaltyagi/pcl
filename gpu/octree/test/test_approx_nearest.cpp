@@ -87,7 +87,9 @@ TEST (PCL_OctreeGPU, approxNearesSearch)
   cloud_host->width = data.points.size ();
   cloud_host->height = 1;
   cloud_host->points.resize (cloud_host->width * cloud_host->height);
-  std::transform (data.points.begin (), data.points.end (), cloud_host->points.begin (),
+  std::transform (data.points.begin (),
+                  data.points.end (),
+                  cloud_host->points.begin (),
                   DataGenerator::ConvPoint<pcl::PointXYZ> ());
 
   // gpu build
@@ -120,8 +122,8 @@ TEST (PCL_OctreeGPU, approxNearesSearch)
 
   for (size_t i = 0; i < data.tests_num; ++i) {
     octree_host.approxNearestSearch (data.queries[i], result_host_pcl[i], dists_pcl[i]);
-    octree_device.approxNearestSearchHost (data.queries[i], result_host_gpu[i],
-                                           dists_gpu[i]);
+    octree_device.approxNearestSearchHost (
+        data.queries[i], result_host_gpu[i], dists_gpu[i]);
   }
 
   ASSERT_EQ ((downloaded == result_host_gpu), true);

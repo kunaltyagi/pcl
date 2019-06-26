@@ -48,7 +48,8 @@ ON_Brep::IsValidForV2 (const ON_BrepTrim &trim) const
   }
 
   if (nurbs_curve->m_cv_count >= 4 &&
-      0 == ON_ComparePoint (nurbs_curve->m_dim, nurbs_curve->m_is_rat,
+      0 == ON_ComparePoint (nurbs_curve->m_dim,
+                            nurbs_curve->m_is_rat,
                             nurbs_curve->m_cv,
                             nurbs_curve->CV (nurbs_curve->m_cv_count - 1))) {
     // 14 April 2003 Dale Lear
@@ -103,7 +104,8 @@ ON_Brep::IsValidForV2 (const ON_BrepEdge &edge) const
   // 14 April 2003 Dale Lear
   //     RR 8808 - V2 requires edges to be strictly closed/open
   if (nurbs_curve->m_cv_count >= 4 &&
-      0 == ON_ComparePoint (nurbs_curve->m_dim, nurbs_curve->m_is_rat,
+      0 == ON_ComparePoint (nurbs_curve->m_dim,
+                            nurbs_curve->m_is_rat,
                             nurbs_curve->m_cv,
                             nurbs_curve->CV (nurbs_curve->m_cv_count - 1))) {
     if (edge.m_vi[0] != edge.m_vi[1])

@@ -280,21 +280,27 @@ class Writer
       io::LZFYUV422ImageWriter lrgb;
       lrgb.write (
           reinterpret_cast<const char *> (&frame->image->getMetaData ().Data ()[0]),
-          frame->image->getWidth (), frame->image->getHeight (), ss1.str ());
+          frame->image->getWidth (),
+          frame->image->getHeight (),
+          ss1.str ());
       break;
     }
     case openni_wrapper::Image::RGB: {
       io::LZFRGB24ImageWriter lrgb;
       lrgb.write (
           reinterpret_cast<const char *> (&frame->image->getMetaData ().Data ()[0]),
-          frame->image->getWidth (), frame->image->getHeight (), ss1.str ());
+          frame->image->getWidth (),
+          frame->image->getHeight (),
+          ss1.str ());
       break;
     }
     case openni_wrapper::Image::BAYER_GRBG: {
       io::LZFBayer8ImageWriter lrgb;
       lrgb.write (
           reinterpret_cast<const char *> (&frame->image->getMetaData ().Data ()[0]),
-          frame->image->getWidth (), frame->image->getHeight (), ss1.str ());
+          frame->image->getWidth (),
+          frame->image->getHeight (),
+          ss1.str ());
       break;
     }
     }
@@ -305,7 +311,8 @@ class Writer
     // io::LZFShift11ImageWriter ld;
     ld.write (reinterpret_cast<const char *> (
                   &frame->depth_image->getDepthMetaData ().Data ()[0]),
-              frame->depth_image->getWidth (), frame->depth_image->getHeight (),
+              frame->depth_image->getWidth (),
+              frame->depth_image->getHeight (),
               ss2.str ());
 
     // Save depth data
@@ -415,7 +422,8 @@ class Driver
   grabAndSend ()
   {
     std::function<void(const boost::shared_ptr<openni_wrapper::Image> &,
-                       const boost::shared_ptr<openni_wrapper::DepthImage> &, float)>
+                       const boost::shared_ptr<openni_wrapper::DepthImage> &,
+                       float)>
         image_cb = boost::bind (&Driver::image_callback, this, _1, _2, _3);
     boost::signals2::connection image_connection = grabber_.registerCallback (image_cb);
 
@@ -461,14 +469,14 @@ class Viewer
     string mouseMsg2D ("Mouse coordinates in image viewer");
     string keyMsg2D ("Key event for image viewer");
 
-    image_viewer_->registerMouseCallback (&Viewer::mouse_callback, *this,
-                                          static_cast<void *> (&mouseMsg2D));
-    image_viewer_->registerKeyboardCallback (&Viewer::keyboard_callback, *this,
-                                             static_cast<void *> (&keyMsg2D));
-    depth_image_viewer_->registerMouseCallback (&Viewer::mouse_callback, *this,
-                                                static_cast<void *> (&mouseMsg2D));
-    depth_image_viewer_->registerKeyboardCallback (&Viewer::keyboard_callback, *this,
-                                                   static_cast<void *> (&keyMsg2D));
+    image_viewer_->registerMouseCallback (
+        &Viewer::mouse_callback, *this, static_cast<void *> (&mouseMsg2D));
+    image_viewer_->registerKeyboardCallback (
+        &Viewer::keyboard_callback, *this, static_cast<void *> (&keyMsg2D));
+    depth_image_viewer_->registerMouseCallback (
+        &Viewer::mouse_callback, *this, static_cast<void *> (&mouseMsg2D));
+    depth_image_viewer_->registerKeyboardCallback (
+        &Viewer::keyboard_callback, *this, static_cast<void *> (&keyMsg2D));
 
     // Position the first window (RGB)
     if (!image_cld_init_) {
@@ -497,27 +505,31 @@ class Viewer
           static vector<unsigned char> rgb_data (frame->image->getWidth () *
                                                  frame->image->getHeight () * 3);
           if (frame->image->getEncoding () != openni_wrapper::Image::RGB) {
-            frame->image->fillRGB (frame->image->getWidth (),
-                                   frame->image->getHeight (), &rgb_data[0]);
+            frame->image->fillRGB (
+                frame->image->getWidth (), frame->image->getHeight (), &rgb_data[0]);
           } else
-            memcpy (&rgb_data[0], frame->image->getMetaData ().Data (),
-                    rgb_data.size ());
+            memcpy (
+                &rgb_data[0], frame->image->getMetaData ().Data (), rgb_data.size ());
 
           image_viewer_->addRGBImage (reinterpret_cast<unsigned char *> (&rgb_data[0]),
                                       frame->image->getWidth (),
-                                      frame->image->getHeight (), "rgb_image");
+                                      frame->image->getHeight (),
+                                      "rgb_image");
         }
 
         if (frame->depth_image) {
           unsigned char *data = visualization::FloatImageUtils::getVisualImage (
               reinterpret_cast<const unsigned short *> (
                   &frame->depth_image->getDepthMetaData ().Data ()[0]),
-              frame->depth_image->getWidth (), frame->depth_image->getHeight (),
+              frame->depth_image->getWidth (),
+              frame->depth_image->getHeight (),
               numeric_limits<unsigned short>::min (),
               // Scale so that the colors look brigher on screen
-              numeric_limits<unsigned short>::max () / 10, true);
+              numeric_limits<unsigned short>::max () / 10,
+              true);
 
-          depth_image_viewer_->addRGBImage (data, frame->depth_image->getWidth (),
+          depth_image_viewer_->addRGBImage (data,
+                                            frame->depth_image->getWidth (),
                                             frame->depth_image->getHeight (),
                                             "rgb_image");
           if (!depth_image_cld_init_) {
@@ -695,7 +707,8 @@ main (int argc, char **argv)
                << " , " << device->getProductName () << endl;
           modes = grabber.getAvailableImageModes ();
           for (vector<pair<int, XnMapOutputMode>>::const_iterator it = modes.begin ();
-               it != modes.end (); ++it) {
+               it != modes.end ();
+               ++it) {
             cout << it->first << " = " << it->second.nXRes << " x " << it->second.nYRes
                  << " @ " << it->second.nFPS << endl;
           }
@@ -705,7 +718,8 @@ main (int argc, char **argv)
                  << " , " << device->getProductName () << endl;
             modes = grabber.getAvailableDepthModes ();
             for (vector<pair<int, XnMapOutputMode>>::const_iterator it = modes.begin ();
-                 it != modes.end (); ++it) {
+                 it != modes.end ();
+                 ++it) {
               cout << it->first << " = " << it->second.nXRes << " x "
                    << it->second.nYRes << " @ " << it->second.nFPS << endl;
             }

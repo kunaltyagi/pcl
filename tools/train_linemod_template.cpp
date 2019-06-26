@@ -107,8 +107,10 @@ loadCloud (const std::string &filename, PointCloudXYZRGBA &cloud)
 }
 
 std::vector<bool>
-maskForegroundPoints (const PointCloudXYZRGBA::ConstPtr &input, float min_depth,
-                      float max_depth, float max_height)
+maskForegroundPoints (const PointCloudXYZRGBA::ConstPtr &input,
+                      float min_depth,
+                      float max_depth,
+                      float max_height)
 {
   std::vector<bool> foreground_mask (input->size (), false);
 
@@ -156,7 +158,8 @@ maskForegroundPoints (const PointCloudXYZRGBA::ConstPtr &input, float min_depth,
 
 void
 trainTemplate (const PointCloudXYZRGBA::ConstPtr &input,
-               const std::vector<bool> &foreground_mask, pcl::LINEMOD &linemod)
+               const std::vector<bool> &foreground_mask,
+               pcl::LINEMOD &linemod)
 {
   pcl::ColorGradientModality<pcl::PointXYZRGBA> color_grad_mod;
   color_grad_mod.setInputCloud (input);
@@ -200,8 +203,11 @@ trainTemplate (const PointCloudXYZRGBA::ConstPtr &input,
 }
 
 void
-compute (const PointCloudXYZRGBA::ConstPtr &input, float min_depth, float max_depth,
-         float max_height, const std::string &template_pcd_filename,
+compute (const PointCloudXYZRGBA::ConstPtr &input,
+         float min_depth,
+         float max_depth,
+         float max_height,
+         const std::string &template_pcd_filename,
          const std::string &template_sqmmt_filename)
 {
   // Segment the foreground object

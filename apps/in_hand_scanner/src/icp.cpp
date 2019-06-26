@@ -231,7 +231,8 @@ pcl::ihs::ICP::findTransformation (const MeshConstPtr &mesh_model,
     cloud_data_corr.clear ();
     sw.reset ();
     for (CloudNormal::const_iterator it_d = cloud_data_selected->begin ();
-         it_d != cloud_data_selected->end (); ++it_d) {
+         it_d != cloud_data_selected->end ();
+         ++it_d) {
       // Transform the data point
       pt_d = *it_d;
       pt_d.getVector4fMap () = T_cur * pt_d.getVector4fMap ();

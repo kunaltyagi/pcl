@@ -44,7 +44,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename Scalar>
 bool
-pcl::registration::CorrespondenceEstimationOrganizedProjection<PointSource, PointTarget,
+pcl::registration::CorrespondenceEstimationOrganizedProjection<PointSource,
+                                                               PointTarget,
                                                                Scalar>::initCompute ()
 {
   // Set the target_cloud_updated_ variable to true, so that the kd-tree is not built -
@@ -73,9 +74,10 @@ pcl::registration::CorrespondenceEstimationOrganizedProjection<PointSource, Poin
 template <typename PointSource, typename PointTarget, typename Scalar>
 void
 pcl::registration::CorrespondenceEstimationOrganizedProjection<
-    PointSource, PointTarget, Scalar>::determineCorrespondences (pcl::Correspondences
-                                                                     &correspondences,
-                                                                 double max_distance)
+    PointSource,
+    PointTarget,
+    Scalar>::determineCorrespondences (pcl::Correspondences &correspondences,
+                                       double max_distance)
 {
   if (!initCompute ())
     return;
@@ -84,7 +86,8 @@ pcl::registration::CorrespondenceEstimationOrganizedProjection<
   size_t c_index = 0;
 
   for (std::vector<int>::const_iterator src_it = indices_->begin ();
-       src_it != indices_->end (); ++src_it) {
+       src_it != indices_->end ();
+       ++src_it) {
     if (isFinite (input_->points[*src_it])) {
       Eigen::Vector4f p_src (src_to_tgt_transformation_ *
                              input_->points[*src_it].getVector4fMap ());
@@ -122,7 +125,8 @@ pcl::registration::CorrespondenceEstimationOrganizedProjection<
 template <typename PointSource, typename PointTarget, typename Scalar>
 void
 pcl::registration::CorrespondenceEstimationOrganizedProjection<
-    PointSource, PointTarget,
+    PointSource,
+    PointTarget,
     Scalar>::determineReciprocalCorrespondences (pcl::Correspondences &correspondences,
                                                  double max_distance)
 {

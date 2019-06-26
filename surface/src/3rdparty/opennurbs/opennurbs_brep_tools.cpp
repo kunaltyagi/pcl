@@ -88,8 +88,10 @@ SynchFaceOrientation (ON_Brep &brep, int fi)
 }
 
 ON_BrepFace *
-ON_Brep::NewRuledFace (const ON_BrepEdge &edgeA, bool bRevEdgeA,
-                       const ON_BrepEdge &edgeB, bool bRevEdgeB)
+ON_Brep::NewRuledFace (const ON_BrepEdge &edgeA,
+                       bool bRevEdgeA,
+                       const ON_BrepEdge &edgeB,
+                       bool bRevEdgeB)
 {
   if (edgeA.m_edge_index == edgeB.m_edge_index)
     return NULL;
@@ -163,7 +165,8 @@ ON_Brep::NewRuledFace (const ON_BrepEdge &edgeA, bool bRevEdgeA,
 }
 
 ON_BrepFace *
-ON_Brep::NewConeFace (const ON_BrepVertex &vertex, const ON_BrepEdge &edge,
+ON_Brep::NewConeFace (const ON_BrepVertex &vertex,
+                      const ON_BrepEdge &edge,
                       bool bRevEdge)
 {
   if (Edge (edge.m_edge_index) != &edge)
@@ -321,10 +324,14 @@ ON_Brep::SetTrimBoundingBox (ON_BrepTrim &trim, ON_BOOL32 bLazy)
 }
 
 void
-ON_Brep::SetTolerancesBoxesAndFlags (
-    ON_BOOL32 bLazy, ON_BOOL32 bSetVertexTolerances, ON_BOOL32 bSetEdgeTolerances,
-    ON_BOOL32 bSetTrimTolerances, ON_BOOL32 bSetTrimIsoFlags,
-    ON_BOOL32 bSetTrimTypeFlags, ON_BOOL32 bSetLoopTypeFlags, ON_BOOL32 bSetTrimBoxes)
+ON_Brep::SetTolerancesBoxesAndFlags (ON_BOOL32 bLazy,
+                                     ON_BOOL32 bSetVertexTolerances,
+                                     ON_BOOL32 bSetEdgeTolerances,
+                                     ON_BOOL32 bSetTrimTolerances,
+                                     ON_BOOL32 bSetTrimIsoFlags,
+                                     ON_BOOL32 bSetTrimTypeFlags,
+                                     ON_BOOL32 bSetLoopTypeFlags,
+                                     ON_BOOL32 bSetTrimBoxes)
 {
   int ei, ti, li;
   const int trim_count = m_T.Count ();
@@ -663,8 +670,8 @@ ON_Brep::NewOuterLoop (int face_index, int vid[4], int eid[4], ON_BOOL32 bRev3d[
   corners[2].Set (u[1], v[1], 0.0);
   corners[3].Set (u[0], v[1], 0.0);
 
-  ON_Surface::ISO srf_iso[4] = {ON_Surface::S_iso, ON_Surface::E_iso, ON_Surface::N_iso,
-                                ON_Surface::W_iso};
+  ON_Surface::ISO srf_iso[4] = {
+      ON_Surface::S_iso, ON_Surface::E_iso, ON_Surface::N_iso, ON_Surface::W_iso};
 
   for (i = 0; i < 4; i++) {
     ON_NurbsCurve *c2 = new ON_NurbsCurve (2, 0, 2, 2);
@@ -1069,7 +1076,9 @@ ON_BrepTorus (const ON_Torus &torus, ON_Brep *pBrep)
 }
 
 ON_Brep *
-ON_BrepCylinder (const ON_Cylinder &cylinder, ON_BOOL32 bCapBottom, ON_BOOL32 bCapTop,
+ON_BrepCylinder (const ON_Cylinder &cylinder,
+                 ON_BOOL32 bCapBottom,
+                 ON_BOOL32 bCapTop,
                  ON_Brep *pBrep)
 {
   ON_BOOL32 bArcLengthParameterization = true;
@@ -1114,7 +1123,9 @@ ON_BrepCone (const ON_Cone &cone, ON_BOOL32 bCapBase, ON_Brep *pBrep)
 }
 
 ON_Brep *
-ON_BrepRevSurface (ON_RevSurface *&pRevSurface, ON_BOOL32 bCapStart, ON_BOOL32 bCapEnd,
+ON_BrepRevSurface (ON_RevSurface *&pRevSurface,
+                   ON_BOOL32 bCapStart,
+                   ON_BOOL32 bCapEnd,
                    ON_Brep *pBrep)
 {
   ON_Brep *brep = 0;
@@ -1277,7 +1288,8 @@ AddC3Curve (const ON_Curve *c3, ON_SimpleArray<ON_Curve *> &C3)
 }
 
 bool
-ON_Brep::NewPlanarFaceLoop (int face_index, ON_BrepLoop::TYPE loop_type,
+ON_Brep::NewPlanarFaceLoop (int face_index,
+                            ON_BrepLoop::TYPE loop_type,
                             ON_SimpleArray<ON_Curve *> &boundary,
                             ON_BOOL32 bDuplicateCurves)
 {
@@ -1452,8 +1464,10 @@ ON_Brep::NewPlanarFaceLoop (int face_index, ON_BrepLoop::TYPE loop_type,
 }
 
 ON_Brep *
-ON_BrepTrimmedPlane (const ON_Plane &plane, ON_SimpleArray<ON_Curve *> &boundary,
-                     ON_BOOL32 bDuplicateCurves, ON_Brep *pBrep)
+ON_BrepTrimmedPlane (const ON_Plane &plane,
+                     ON_SimpleArray<ON_Curve *> &boundary,
+                     ON_BOOL32 bDuplicateCurves,
+                     ON_Brep *pBrep)
 {
   ON_Brep *brep;
   if (pBrep) {
@@ -1471,8 +1485,8 @@ ON_BrepTrimmedPlane (const ON_Plane &plane, ON_SimpleArray<ON_Curve *> &boundary
   const int si = brep->AddSurface (s);
   ON_BrepFace &face = brep->NewFace (si);
   face.DestroyRuntimeCache ();
-  if (brep->NewPlanarFaceLoop (face.m_face_index, ON_BrepLoop::outer, boundary,
-                               bDuplicateCurves)) {
+  if (brep->NewPlanarFaceLoop (
+          face.m_face_index, ON_BrepLoop::outer, boundary, bDuplicateCurves)) {
     // set face domain
     const ON_BrepLoop *loop = brep->m_L.Last ();
     s->SetDomain (0, loop->m_pbox.m_min.x, loop->m_pbox.m_max.x);
@@ -1501,7 +1515,8 @@ ON_BrepTrimmedPlane (const ON_Plane &plane, const ON_Curve &boundary, ON_Brep *p
 }
 
 ON_Brep *
-ON_BrepFromMesh (const ON_MeshTopology &mesh_topology, ON_BOOL32 bTrimmedTriangles,
+ON_BrepFromMesh (const ON_MeshTopology &mesh_topology,
+                 ON_BOOL32 bTrimmedTriangles,
                  ON_Brep *pBrep)
 {
   ON_BezierCurve edge_line (3, false, 2);
@@ -1527,10 +1542,10 @@ ON_BrepFromMesh (const ON_MeshTopology &mesh_topology, ON_BOOL32 bTrimmedTriangl
     ON_Interval srf_dom[2];
     ON_3dPoint srf_2d_corner[4];
     ON_3dPoint srf_3d_corner[4];
-    ON_Surface::ISO quad_iso[4] = {ON_Surface::S_iso, ON_Surface::E_iso,
-                                   ON_Surface::N_iso, ON_Surface::W_iso};
-    ON_Surface::ISO tri_iso[3] = {ON_Surface::S_iso, ON_Surface::E_iso,
-                                  ON_Surface::not_iso};
+    ON_Surface::ISO quad_iso[4] = {
+        ON_Surface::S_iso, ON_Surface::E_iso, ON_Surface::N_iso, ON_Surface::W_iso};
+    ON_Surface::ISO tri_iso[3] = {
+        ON_Surface::S_iso, ON_Surface::E_iso, ON_Surface::not_iso};
 
     // May 1, 2012 Tim Fix for RR 104209
     // Use double precision vertexes from the mesh if they exist
@@ -1589,13 +1604,17 @@ ON_BrepFromMesh (const ON_MeshTopology &mesh_topology, ON_BOOL32 bTrimmedTriangl
           srf_3d_corner[0], srf_3d_corner[1], srf_3d_corner[2], srf_3d_corner[3]);
       srf_dom[0] = pSurface->Domain (0);
       srf_dom[1] = pSurface->Domain (1);
-      srf_2d_corner[0].Set (srf_dom[0][0], srf_dom[1][0],
+      srf_2d_corner[0].Set (srf_dom[0][0],
+                            srf_dom[1][0],
                             0.0); // SW parameter space corner
-      srf_2d_corner[1].Set (srf_dom[0][1], srf_dom[1][0],
+      srf_2d_corner[1].Set (srf_dom[0][1],
+                            srf_dom[1][0],
                             0.0); // SE parameter space corner
-      srf_2d_corner[2].Set (srf_dom[0][1], srf_dom[1][1],
+      srf_2d_corner[2].Set (srf_dom[0][1],
+                            srf_dom[1][1],
                             0.0); // NE parameter space corner
-      srf_2d_corner[3].Set (srf_dom[0][0], srf_dom[1][1],
+      srf_2d_corner[3].Set (srf_dom[0][0],
+                            srf_dom[1][1],
                             0.0); // NW parameter space corner
       si = brep->AddSurface (pSurface);
       ON_BrepFace &face = brep->NewFace (si);
@@ -1826,16 +1845,10 @@ ON_Brep::ChangeVertex (int old_vi, int new_vi, bool bClearTolerances)
 }
 
 ON_BOOL32
-ON_BrepEdge::SetStartPoint (ON_3dPoint start_point)
-{
-  return false;
-}
+ON_BrepEdge::SetStartPoint (ON_3dPoint start_point) { return false; }
 
 ON_BOOL32
-ON_BrepEdge::SetEndPoint (ON_3dPoint end_point)
-{
-  return false;
-}
+ON_BrepEdge::SetEndPoint (ON_3dPoint end_point) { return false; }
 
 ON_BOOL32
 ON_BrepTrim::SetStartPoint (ON_3dPoint point)
@@ -1878,10 +1891,7 @@ ON_BrepTrim::SetStartPoint (ON_3dPoint point)
 }
 
 ON_BOOL32
-ON_BrepTrim::SetEndPoint (ON_3dPoint end_point)
-{
-  return false;
-}
+ON_BrepTrim::SetEndPoint (ON_3dPoint end_point) { return false; }
 
 bool
 ON_Brep::CloseTrimGap (ON_BrepTrim &trim0, ON_BrepTrim &trim1)
@@ -2393,9 +2403,11 @@ ON_BrepRemoveSlits (ON_BrepFace &F)
 }
 
 static void
-CreateNewTrimList (const ON_BrepLoop &L0, int tid0, // into L0.m_ti
-                   const ON_BrepLoop &L1, int tid1, // into L1.m_ti
-                   ON_SimpleArray<int> &new_tids    // into brep.m_T
+CreateNewTrimList (const ON_BrepLoop &L0,
+                   int tid0, // into L0.m_ti
+                   const ON_BrepLoop &L1,
+                   int tid1,                     // into L1.m_ti
+                   ON_SimpleArray<int> &new_tids // into brep.m_T
 )
 
 {

@@ -143,13 +143,19 @@ namespace pcl
         range_image_->getPoint (x, y, point);
         // cout << PVARN(point);
         if (!range_image_->getSurfaceInformation (
-                x, y, parameters_.pixel_radius_plane_extraction, point,
-                no_of_nearest_neighbors, step_size,
+                x,
+                y,
+                parameters_.pixel_radius_plane_extraction,
+                point,
+                no_of_nearest_neighbors,
+                step_size,
                 local_surface->max_neighbor_distance_squared,
                 local_surface->normal_no_jumps,
                 local_surface->neighborhood_mean_no_jumps,
-                local_surface->eigen_values_no_jumps, &local_surface->normal,
-                &local_surface->neighborhood_mean, &local_surface->eigen_values)) {
+                local_surface->eigen_values_no_jumps,
+                &local_surface->normal,
+                &local_surface->neighborhood_mean,
+                &local_surface->eigen_values)) {
           delete local_surface;
           local_surface = nullptr;
         }
@@ -193,14 +199,14 @@ namespace pcl
           continue;
         }
 
-        left = getNeighborDistanceChangeScore (*local_surface_ptr, x, y, -1, 0,
-                                               parameters_.pixel_radius_borders);
-        right = getNeighborDistanceChangeScore (*local_surface_ptr, x, y, 1, 0,
-                                                parameters_.pixel_radius_borders);
-        top = getNeighborDistanceChangeScore (*local_surface_ptr, x, y, 0, -1,
-                                              parameters_.pixel_radius_borders);
-        bottom = getNeighborDistanceChangeScore (*local_surface_ptr, x, y, 0, 1,
-                                                 parameters_.pixel_radius_borders);
+        left = getNeighborDistanceChangeScore (
+            *local_surface_ptr, x, y, -1, 0, parameters_.pixel_radius_borders);
+        right = getNeighborDistanceChangeScore (
+            *local_surface_ptr, x, y, 1, 0, parameters_.pixel_radius_borders);
+        top = getNeighborDistanceChangeScore (
+            *local_surface_ptr, x, y, 0, -1, parameters_.pixel_radius_borders);
+        bottom = getNeighborDistanceChangeScore (
+            *local_surface_ptr, x, y, 0, 1, parameters_.pixel_radius_borders);
       }
     }
   }
@@ -268,7 +274,11 @@ namespace pcl
         shadow_border_indices = nullptr;
         int shadow_border_idx;
 
-        if (changeScoreAccordingToShadowBorderValue (x, y, -1, 0, border_scores_left_,
+        if (changeScoreAccordingToShadowBorderValue (x,
+                                                     y,
+                                                     -1,
+                                                     0,
+                                                     border_scores_left_,
                                                      border_scores_right_,
                                                      shadow_border_idx)) {
           shadow_border_indices =
@@ -276,7 +286,11 @@ namespace pcl
                                                 : shadow_border_indices);
           shadow_border_indices->left = shadow_border_idx;
         }
-        if (changeScoreAccordingToShadowBorderValue (x, y, 1, 0, border_scores_right_,
+        if (changeScoreAccordingToShadowBorderValue (x,
+                                                     y,
+                                                     1,
+                                                     0,
+                                                     border_scores_right_,
                                                      border_scores_left_,
                                                      shadow_border_idx)) {
           shadow_border_indices =
@@ -284,7 +298,11 @@ namespace pcl
                                                 : shadow_border_indices);
           shadow_border_indices->right = shadow_border_idx;
         }
-        if (changeScoreAccordingToShadowBorderValue (x, y, 0, -1, border_scores_top_,
+        if (changeScoreAccordingToShadowBorderValue (x,
+                                                     y,
+                                                     0,
+                                                     -1,
+                                                     border_scores_top_,
                                                      border_scores_bottom_,
                                                      shadow_border_idx)) {
           shadow_border_indices =
@@ -292,7 +310,11 @@ namespace pcl
                                                 : shadow_border_indices);
           shadow_border_indices->top = shadow_border_idx;
         }
-        if (changeScoreAccordingToShadowBorderValue (x, y, 0, 1, border_scores_bottom_,
+        if (changeScoreAccordingToShadowBorderValue (x,
+                                                     y,
+                                                     0,
+                                                     1,
+                                                     border_scores_bottom_,
                                                      border_scores_top_,
                                                      shadow_border_idx)) {
           shadow_border_indices =
@@ -365,10 +387,11 @@ namespace pcl
 
         float border_direction_in_image_x, border_direction_in_image_y;
         float tmp_factor = point.range * range_image_->getAngularResolution ();
-        range_image_->getImagePoint (
-            point.x + tmp_factor * direction[0], point.y + tmp_factor * direction[1],
-            point.z + tmp_factor * direction[2], border_direction_in_image_x,
-            border_direction_in_image_y);
+        range_image_->getImagePoint (point.x + tmp_factor * direction[0],
+                                     point.y + tmp_factor * direction[1],
+                                     point.z + tmp_factor * direction[2],
+                                     border_direction_in_image_x,
+                                     border_direction_in_image_y);
         border_direction_in_image_x -= static_cast<float> (x);
         border_direction_in_image_y -= static_cast<float> (y);
         angle = atan2f (border_direction_in_image_y, border_direction_in_image_x);
@@ -535,9 +558,11 @@ namespace pcl
         average_border_direction = new Eigen::Vector3f (*border_direction);
         float weight_sum = 1.0f;
         for (int y2 = (std::max) (0, y - radius);
-             y2 <= (std::min) (y + radius, height - 1); ++y2) {
+             y2 <= (std::min) (y + radius, height - 1);
+             ++y2) {
           for (int x2 = (std::max) (0, x - radius);
-               x2 <= (std::min) (x + radius, width - 1); ++x2) {
+               x2 <= (std::min) (x + radius, width - 1);
+               ++x2) {
             int index2 = y2 * width + x2;
             const Eigen::Vector3f *neighbor_border_direction =
                 border_directions_[index2];
@@ -613,8 +638,11 @@ namespace pcl
           surface_change_direction = *border_directions_[index];
         } else {
           if (!calculateMainPrincipalCurvature (
-                  x, y, parameters_.pixel_radius_principal_curvature,
-                  surface_change_score, surface_change_direction)) {
+                  x,
+                  y,
+                  parameters_.pixel_radius_principal_curvature,
+                  surface_change_score,
+                  surface_change_direction)) {
             surface_change_score = 0.0f;
             continue;
           }

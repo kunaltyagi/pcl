@@ -48,10 +48,10 @@
 
 using namespace pcl;
 
-using TransformTypes =
-    ::testing::Types<Eigen::Transform<float, 3, Eigen::Affine>,
-                     Eigen::Transform<double, 3, Eigen::Affine>,
-                     Eigen::Matrix<float, 4, 4>, Eigen::Matrix<double, 4, 4>>;
+using TransformTypes = ::testing::Types<Eigen::Transform<float, 3, Eigen::Affine>,
+                                        Eigen::Transform<double, 3, Eigen::Affine>,
+                                        Eigen::Matrix<float, 4, 4>,
+                                        Eigen::Matrix<double, 4, 4>>;
 
 template <typename Transform>
 class Transforms : public ::testing::Test
@@ -180,8 +180,8 @@ TYPED_TEST (Transforms, PointCloudXYZRGBNormalDenseIndexed)
   // Copy all fields
   {
     pcl::PointCloud<pcl::PointXYZRGBNormal> p;
-    pcl::transformPointCloudWithNormals (this->p_xyz_normal, this->indices, p, this->tf,
-                                         true);
+    pcl::transformPointCloudWithNormals (
+        this->p_xyz_normal, this->indices, p, this->tf, true);
     ASSERT_EQ (p.size (), this->indices.size ());
     ASSERT_EQ (p.width, this->indices.size ());
     ASSERT_EQ (p.height, 1);
@@ -194,8 +194,8 @@ TYPED_TEST (Transforms, PointCloudXYZRGBNormalDenseIndexed)
   // Do not copy all fields
   {
     pcl::PointCloud<pcl::PointXYZRGBNormal> p;
-    pcl::transformPointCloudWithNormals (this->p_xyz_normal, this->indices, p, this->tf,
-                                         false);
+    pcl::transformPointCloudWithNormals (
+        this->p_xyz_normal, this->indices, p, this->tf, false);
     ASSERT_EQ (p.size (), this->indices.size ());
     ASSERT_EQ (p.width, this->indices.size ());
     ASSERT_EQ (p.height, 1);

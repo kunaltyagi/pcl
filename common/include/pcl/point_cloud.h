@@ -370,11 +370,15 @@ namespace pcl
     {
       if (Eigen::MatrixXf::Flags & Eigen::RowMajorBit)
         return (Eigen::Map<Eigen::MatrixXf, Eigen::Aligned, Eigen::OuterStride<>> (
-            reinterpret_cast<float *> (&points[0]) + offset, points.size (), dim,
+            reinterpret_cast<float *> (&points[0]) + offset,
+            points.size (),
+            dim,
             Eigen::OuterStride<> (stride)));
       else
         return (Eigen::Map<Eigen::MatrixXf, Eigen::Aligned, Eigen::OuterStride<>> (
-            reinterpret_cast<float *> (&points[0]) + offset, dim, points.size (),
+            reinterpret_cast<float *> (&points[0]) + offset,
+            dim,
+            points.size (),
             Eigen::OuterStride<> (stride)));
     }
 
@@ -404,12 +408,16 @@ namespace pcl
         return (
             Eigen::Map<const Eigen::MatrixXf, Eigen::Aligned, Eigen::OuterStride<>> (
                 reinterpret_cast<float *> (const_cast<PointT *> (&points[0])) + offset,
-                points.size (), dim, Eigen::OuterStride<> (stride)));
+                points.size (),
+                dim,
+                Eigen::OuterStride<> (stride)));
       else
         return (
             Eigen::Map<const Eigen::MatrixXf, Eigen::Aligned, Eigen::OuterStride<>> (
                 reinterpret_cast<float *> (const_cast<PointT *> (&points[0])) + offset,
-                dim, points.size (), Eigen::OuterStride<> (stride)));
+                dim,
+                points.size (),
+                Eigen::OuterStride<> (stride)));
     }
 
     /** \brief Return an Eigen MatrixXf (assumes float values) mapped to the PointCloud.
@@ -420,8 +428,8 @@ namespace pcl
     inline Eigen::Map<Eigen::MatrixXf, Eigen::Aligned, Eigen::OuterStride<>>
     getMatrixXfMap ()
     {
-      return (getMatrixXfMap (sizeof (PointT) / sizeof (float),
-                              sizeof (PointT) / sizeof (float), 0));
+      return (getMatrixXfMap (
+          sizeof (PointT) / sizeof (float), sizeof (PointT) / sizeof (float), 0));
     }
 
     /** \brief Return an Eigen MatrixXf (assumes float values) mapped to the PointCloud.
@@ -432,8 +440,8 @@ namespace pcl
     inline const Eigen::Map<const Eigen::MatrixXf, Eigen::Aligned, Eigen::OuterStride<>>
     getMatrixXfMap () const
     {
-      return (getMatrixXfMap (sizeof (PointT) / sizeof (float),
-                              sizeof (PointT) / sizeof (float), 0));
+      return (getMatrixXfMap (
+          sizeof (PointT) / sizeof (float), sizeof (PointT) / sizeof (float), 0));
     }
 
     /** \brief The point cloud header. It contains information about the acquisition

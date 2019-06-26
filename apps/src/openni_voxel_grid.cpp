@@ -67,9 +67,13 @@ class OpenNIVoxelGrid
   using CloudPtr = typename Cloud::Ptr;
   using CloudConstPtr = typename Cloud::ConstPtr;
 
-  OpenNIVoxelGrid (const std::string &device_id = "", const std::string & = "z",
-                   float = 0, float = 5.0, float leaf_size_x = 0.01,
-                   float leaf_size_y = 0.01, float leaf_size_z = 0.01)
+  OpenNIVoxelGrid (const std::string &device_id = "",
+                   const std::string & = "z",
+                   float = 0,
+                   float = 5.0,
+                   float leaf_size_x = 0.01,
+                   float leaf_size_y = 0.01,
+                   float leaf_size_z = 0.01)
       : viewer ("PCL OpenNI VoxelGrid Viewer"), device_id_ (device_id)
   {
     grid_.setLeafSize (leaf_size_x, leaf_size_y, leaf_size_z);
@@ -178,20 +182,20 @@ main (int argc, char **argv)
   pcl::console::parse_2x_arguments (argc, argv, "-minmax", min_v, max_v);
   std::string field_name ("z");
   pcl::console::parse_argument (argc, argv, "-field", field_name);
-  PCL_INFO ("Filtering data on %s between %f -> %f.\n", field_name.c_str (), min_v,
-            max_v);
+  PCL_INFO (
+      "Filtering data on %s between %f -> %f.\n", field_name.c_str (), min_v, max_v);
   float leaf_x = 0.01f, leaf_y = 0.01f, leaf_z = 0.01f;
   pcl::console::parse_3x_arguments (argc, argv, "-leaf", leaf_x, leaf_y, leaf_z);
   PCL_INFO ("Using %f, %f, %f as a leaf size for VoxelGrid.\n", leaf_x, leaf_y, leaf_z);
 
   pcl::OpenNIGrabber grabber ("");
   if (grabber.providesCallback<pcl::OpenNIGrabber::sig_cb_openni_point_cloud_rgba> ()) {
-    OpenNIVoxelGrid<pcl::PointXYZRGBA> v ("", field_name, min_v, max_v, leaf_x, leaf_y,
-                                          leaf_z);
+    OpenNIVoxelGrid<pcl::PointXYZRGBA> v (
+        "", field_name, min_v, max_v, leaf_x, leaf_y, leaf_z);
     v.run ();
   } else {
-    OpenNIVoxelGrid<pcl::PointXYZ> v ("", field_name, min_v, max_v, leaf_x, leaf_y,
-                                      leaf_z);
+    OpenNIVoxelGrid<pcl::PointXYZ> v (
+        "", field_name, min_v, max_v, leaf_x, leaf_y, leaf_z);
     v.run ();
   }
 

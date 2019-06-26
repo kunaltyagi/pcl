@@ -143,7 +143,8 @@ namespace pcl
     void
     getMinMax (const PointCloudConstPtr &cloud,
                const boost::shared_ptr<std::vector<int>> &indices,
-               Eigen::Vector4f &min_p, Eigen::Vector4f &max_p) const;
+               Eigen::Vector4f &min_p,
+               Eigen::Vector4f &max_p) const;
 
     /** \brief Compute the median value of a 3D point cloud using a given set point
      * indices and return it as a Point32. \param[in] cloud the point cloud data message

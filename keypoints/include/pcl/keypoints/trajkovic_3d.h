@@ -78,7 +78,8 @@ namespace pcl
      * \param[in] first_threshold the threshold used in the simple cornerness test.
      * \param[in] second_threshold the threshold used to reject weak corners.
      */
-    TrajkovicKeypoint3D (ComputationMethod method = FOUR_CORNERS, int window_size = 3,
+    TrajkovicKeypoint3D (ComputationMethod method = FOUR_CORNERS,
+                         int window_size = 3,
                          float first_threshold = 0.00046,
                          float second_threshold = 0.03589)
         : method_ (method), window_size_ (window_size),

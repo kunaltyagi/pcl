@@ -74,7 +74,9 @@ pcl::modeler::PoissonReconstructionWorker::setupParameters ()
     is no larger than 2^d x 2^d x 2^d. Note that since the reconstructor adapts \
     the octree to the sampling density, the specified reconstruction depth \
     is only an upper bound.",
-      poisson.getDepth (), 2, 16);
+      poisson.getDepth (),
+      2,
+      16);
 
   solver_divide_ = new IntParameter (
       "Solver Divide",
@@ -83,7 +85,9 @@ pcl::modeler::PoissonReconstructionWorker::setupParameters ()
     a small increase in reconstruction time. (In practice, we have found that for \
     reconstructions of depth 9 or higher a subdivide depth of 7 or 8 can greatly \
     reduce the memory usage.)",
-      poisson.getSolverDivide (), 2, 16);
+      poisson.getSolverDivide (),
+      2,
+      16);
 
   iso_divide_ = new IntParameter (
       "Iso Divide",
@@ -92,7 +96,9 @@ pcl::modeler::PoissonReconstructionWorker::setupParameters ()
     of a small increase in extraction time. (In practice, we have found that for \
     reconstructions of depth 9 or higher a subdivide depth of 7 or 8 can greatly \
     reduce the memory usage.)",
-      poisson.getIsoDivide (), 2, 16);
+      poisson.getIsoDivide (),
+      2,
+      16);
 
   degree_ = new IntParameter ("Degree", "Degree", poisson.getDegree (), 1, 5);
 
@@ -100,7 +106,10 @@ pcl::modeler::PoissonReconstructionWorker::setupParameters ()
       "Scale",
       "The ratio between the diameter of the cube used for reconstruction and the \
     diameter of the samples' bounding cube.",
-      poisson.getScale (), 0.1, 10.0, 0.01);
+      poisson.getScale (),
+      0.1,
+      10.0,
+      0.01);
 
   samples_per_node_ = new DoubleParameter (
       "Samples Per Node",
@@ -108,7 +117,10 @@ pcl::modeler::PoissonReconstructionWorker::setupParameters ()
     the octree construction is adapted to sampling density. For noise-free samples, small \
     values in the range [1.0 - 5.0] can be used. For more noisy samples, larger values in \
     the range [15.0 - 20.0] may be needed to provide a smoother, noise-reduced, reconstruction.",
-      poisson.getScale (), 0.1, 10.0, 0.01);
+      poisson.getScale (),
+      0.1,
+      10.0,
+      0.01);
 
   parameter_dialog_->addParameter (depth_);
   parameter_dialog_->addParameter (solver_divide_);

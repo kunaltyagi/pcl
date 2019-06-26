@@ -51,7 +51,8 @@ TEST (CorrespondenceEstimation, CorrespondenceEstimationNormalShooting)
   for (float i = 0.0f; i < 10.0f; i += 0.2f) {
     for (float z = 0.0f; z < 5.0f; z += 0.2f) {
       cloud1->points.emplace_back (i, 0, z);
-      cloud2->points.emplace_back (i, 2,
+      cloud2->points.emplace_back (i,
+                                   2,
                                    z); // Ideally this should be the corresponding point
                                        // to the point defined in the previous line
     }
@@ -69,9 +70,9 @@ TEST (CorrespondenceEstimation, CorrespondenceEstimationNormalShooting)
   ne.compute (*cloud1_normals); // All normals are perpendicular to the plane defined
 
   pcl::CorrespondencesPtr corr (new pcl::Correspondences);
-  pcl::registration::CorrespondenceEstimationNormalShooting<pcl::PointXYZ,
-                                                            pcl::PointXYZ, pcl::Normal>
-      ce;
+  pcl::registration::
+      CorrespondenceEstimationNormalShooting<pcl::PointXYZ, pcl::PointXYZ, pcl::Normal>
+          ce;
   ce.setInputSource (cloud1);
   ce.setKSearch (10);
   ce.setSourceNormals (cloud1_normals);

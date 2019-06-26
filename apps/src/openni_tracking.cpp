@@ -120,9 +120,12 @@ class OpenNISegmentTracking
   using CoherencePtr = ParticleFilter::CoherencePtr;
   using KdTree = pcl::search::KdTree<PointType>;
   using KdTreePtr = typename KdTree::Ptr;
-  OpenNISegmentTracking (const std::string &device_id, int thread_nr,
-                         double downsampling_grid_size, bool use_convex_hull,
-                         bool visualize_non_downsample, bool visualize_particles,
+  OpenNISegmentTracking (const std::string &device_id,
+                         int thread_nr,
+                         double downsampling_grid_size,
+                         bool use_convex_hull,
+                         bool visualize_non_downsample,
+                         bool visualize_particles,
                          bool use_fixed)
       : viewer_ ("PCL OpenNI Tracking Viewer"), device_id_ (device_id),
         new_cloud_ (false), ne_ (thread_nr), counter_ (0),
@@ -233,11 +236,11 @@ class OpenNISegmentTracking
     RefCloudPtr result_cloud (new RefCloud ());
 
     if (!visualize_non_downsample_)
-      pcl::transformPointCloud<RefPointType> (*(tracker_->getReferenceCloud ()),
-                                              *result_cloud, transformation);
+      pcl::transformPointCloud<RefPointType> (
+          *(tracker_->getReferenceCloud ()), *result_cloud, transformation);
     else
-      pcl::transformPointCloud<RefPointType> (*reference_, *result_cloud,
-                                              transformation);
+      pcl::transformPointCloud<RefPointType> (
+          *reference_, *result_cloud, transformation);
 
     {
       pcl::visualization::PointCloudColorHandlerCustom<RefPointType> red_color (
@@ -280,36 +283,72 @@ class OpenNISegmentTracking
         viz.addText ((boost::format ("number of Reference PointClouds: %d") %
                       tracker_->getReferenceCloud ()->points.size ())
                          .str (),
-                     10, 20, 20, 1.0, 1.0, 1.0, "N");
+                     10,
+                     20,
+                     20,
+                     1.0,
+                     1.0,
+                     1.0,
+                     "N");
 
         viz.removeShape ("M");
         viz.addText ((boost::format ("number of Measured PointClouds:  %d") %
                       cloud_pass_downsampled_->points.size ())
                          .str (),
-                     10, 40, 20, 1.0, 1.0, 1.0, "M");
+                     10,
+                     40,
+                     20,
+                     1.0,
+                     1.0,
+                     1.0,
+                     "M");
 
         viz.removeShape ("tracking");
         viz.addText (
             (boost::format ("tracking:        %f fps") % (1.0 / tracking_time_)).str (),
-            10, 60, 20, 1.0, 1.0, 1.0, "tracking");
+            10,
+            60,
+            20,
+            1.0,
+            1.0,
+            1.0,
+            "tracking");
 
         viz.removeShape ("downsampling");
         viz.addText (
             (boost::format ("downsampling:    %f fps") % (1.0 / downsampling_time_))
                 .str (),
-            10, 80, 20, 1.0, 1.0, 1.0, "downsampling");
+            10,
+            80,
+            20,
+            1.0,
+            1.0,
+            1.0,
+            "downsampling");
 
         viz.removeShape ("computation");
         viz.addText (
             (boost::format ("computation:     %f fps") % (1.0 / computation_time_))
                 .str (),
-            10, 100, 20, 1.0, 1.0, 1.0, "computation");
+            10,
+            100,
+            20,
+            1.0,
+            1.0,
+            1.0,
+            "computation");
 
         viz.removeShape ("particles");
         viz.addText ((boost::format ("particles:     %d") %
                       tracker_->getParticles ()->points.size ())
                          .str (),
-                     10, 120, 20, 1.0, 1.0, 1.0, "particles");
+                     10,
+                     120,
+                     20,
+                     1.0,
+                     1.0,
+                     1.0,
+                     "particles");
       }
     }
     new_cloud_ = false;
@@ -371,7 +410,8 @@ class OpenNISegmentTracking
     double start = pcl::getTime ();
     // pcl::VoxelGrid<PointType> grid;
     pcl::ApproximateVoxelGrid<PointType> grid;
-    grid.setLeafSize (static_cast<float> (leaf_size), static_cast<float> (leaf_size),
+    grid.setLeafSize (static_cast<float> (leaf_size),
+                      static_cast<float> (leaf_size),
                       static_cast<float> (leaf_size));
     grid.setInputCloud (cloud);
     grid.filter (result);
@@ -382,7 +422,8 @@ class OpenNISegmentTracking
   }
 
   void
-  planeSegmentation (const CloudConstPtr &cloud, pcl::ModelCoefficients &coefficients,
+  planeSegmentation (const CloudConstPtr &cloud,
+                     pcl::ModelCoefficients &coefficients,
                      pcl::PointIndices &inliers)
   {
     FPS_CALC_BEGIN;
@@ -398,7 +439,8 @@ class OpenNISegmentTracking
   }
 
   void
-  planeProjection (const CloudConstPtr &cloud, Cloud &result,
+  planeProjection (const CloudConstPtr &cloud,
+                   Cloud &result,
                    const pcl::ModelCoefficients::ConstPtr &coefficients)
   {
     FPS_CALC_BEGIN;
@@ -411,7 +453,8 @@ class OpenNISegmentTracking
   }
 
   void
-  convexHull (const CloudConstPtr &cloud, Cloud &,
+  convexHull (const CloudConstPtr &cloud,
+              Cloud &,
               std::vector<pcl::Vertices> &hull_vertices)
   {
     FPS_CALC_BEGIN;
@@ -444,7 +487,8 @@ class OpenNISegmentTracking
 
   void
   addNormalToCloud (const CloudConstPtr &cloud,
-                    const pcl::PointCloud<pcl::Normal>::ConstPtr &, RefCloud &result)
+                    const pcl::PointCloud<pcl::Normal>::ConstPtr &,
+                    RefCloud &result)
   {
     result.width = cloud->width;
     result.height = cloud->height;
@@ -463,7 +507,8 @@ class OpenNISegmentTracking
   }
 
   void
-  extractNonPlanePoints (const CloudConstPtr &cloud, const CloudConstPtr &cloud_hull,
+  extractNonPlanePoints (const CloudConstPtr &cloud,
+                         const CloudConstPtr &cloud_hull,
                          Cloud &result)
   {
     pcl::ExtractPolygonalPrismData<PointType> polygon_extract;
@@ -499,7 +544,8 @@ class OpenNISegmentTracking
   void
   extractSegmentCluster (const CloudConstPtr &cloud,
                          const std::vector<pcl::PointIndices> &cluster_indices,
-                         const int segment_index, Cloud &result)
+                         const int segment_index,
+                         Cloud &result)
   {
     pcl::PointIndices segmented_indices = cluster_indices[segment_index];
     for (const int &index : segmented_indices.indices) {
@@ -538,8 +584,8 @@ class OpenNISegmentTracking
           planeProjection (cloud_pass_downsampled_, *cloud_projected, coefficients);
           convexHull (cloud_projected, *cloud_hull_, hull_vertices_);
 
-          extractNonPlanePoints (cloud_pass_downsampled_, cloud_hull_,
-                                 *nonplane_cloud_);
+          extractNonPlanePoints (
+              cloud_pass_downsampled_, cloud_hull_, *nonplane_cloud_);
           target_cloud = nonplane_cloud_;
         } else {
           PCL_WARN ("cannot segment plane\n");
@@ -573,8 +619,8 @@ class OpenNISegmentTracking
           }
 
           segmented_cloud_.reset (new Cloud);
-          extractSegmentCluster (target_cloud, cluster_indices, segment_index,
-                                 *segmented_cloud_);
+          extractSegmentCluster (
+              target_cloud, cluster_indices, segment_index, *segmented_cloud_);
           // pcl::PointCloud<pcl::Normal>::Ptr normals (new
           // pcl::PointCloud<pcl::Normal>); normalEstimation (segmented_cloud_,
           // *normals);
@@ -592,8 +638,8 @@ class OpenNISegmentTracking
           trans.translation ().matrix () = Eigen::Vector3f (c[0], c[1], c[2]);
           // pcl::transformPointCloudWithNormals<RefPointType> (*ref_cloud,
           // *transed_ref, trans.inverse());
-          pcl::transformPointCloud<RefPointType> (*nonzero_ref, *transed_ref,
-                                                  trans.inverse ());
+          pcl::transformPointCloud<RefPointType> (
+              *nonzero_ref, *transed_ref, trans.inverse ());
           CloudPtr transed_ref_downsampled (new Cloud);
           gridSample (transed_ref, *transed_ref_downsampled, downsampling_grid_size_);
           tracker_->setReferenceCloud (transed_ref_downsampled);
@@ -713,8 +759,12 @@ main (int argc, char **argv)
   }
 
   // open kinect
-  OpenNISegmentTracking<pcl::PointXYZRGBA> v (device_id, 8, downsampling_grid_size,
-                                              use_convex_hull, visualize_non_downsample,
-                                              visualize_particles, use_fixed);
+  OpenNISegmentTracking<pcl::PointXYZRGBA> v (device_id,
+                                              8,
+                                              downsampling_grid_size,
+                                              use_convex_hull,
+                                              visualize_non_downsample,
+                                              visualize_particles,
+                                              use_fixed);
   v.run ();
 }

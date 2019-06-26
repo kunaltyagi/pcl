@@ -54,7 +54,8 @@ pcl::NormalBasedSignatureEstimation<PointT, PointNT, PointFeature>::computeFeatu
   if (N_prime_ * M_prime_ != sizeof (test_feature.values) / sizeof (float)) {
     PCL_ERROR ("NormalBasedSignatureEstimation: not using the proper signature size: "
                "%u vs %u\n",
-               N_prime_ * M_prime_, sizeof (test_feature.values) / sizeof (float));
+               N_prime_ * M_prime_,
+               sizeof (test_feature.values) / sizeof (float));
     return;
   }
 
@@ -112,8 +113,8 @@ pcl::NormalBasedSignatureEstimation<PointT, PointNT, PointFeature>::computeFeatu
         zeta_point_pcl.y = zeta_point_plus_center.y ();
         zeta_point_pcl.z = zeta_point_plus_center.z ();
 
-        tree_->radiusSearch (zeta_point_pcl, search_radius_, k_indices,
-                             k_sqr_distances);
+        tree_->radiusSearch (
+            zeta_point_pcl, search_radius_, k_indices, k_sqr_distances);
 
         // Do k nearest search if there are no neighbors nearby
         if (k_indices.empty ()) {

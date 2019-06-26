@@ -156,7 +156,8 @@ class ON_CLASS ON_Curve : public ON_Geometry
     bounding box.
   */
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   ////////////////////////////////////////////////////////////////////
@@ -317,7 +318,8 @@ class ON_CLASS ON_Curve : public ON_Geometry
   //   specified points.  If ON_Arc.m_angle is 2.0*ON_PI, then the curve
   //   is a circle.
   virtual ON_BOOL32
-  IsArc (const ON_Plane *plane = NULL, ON_Arc *arc = NULL,
+  IsArc (const ON_Plane *plane = NULL,
+         ON_Arc *arc = NULL,
          double tolerance = ON_ZERO_TOLERANCE) const;
 
   /*
@@ -343,11 +345,16 @@ class ON_CLASS ON_Curve : public ON_Geometry
     True if the paramter t is on a arc segment of the curve.
   */
   bool
-  IsArcAt (double t, const ON_Plane *plane = 0, ON_Arc *arc = 0,
-           double tolerance = ON_ZERO_TOLERANCE, double *t0 = 0, double *t1 = 0) const;
+  IsArcAt (double t,
+           const ON_Plane *plane = 0,
+           ON_Arc *arc = 0,
+           double tolerance = ON_ZERO_TOLERANCE,
+           double *t0 = 0,
+           double *t1 = 0) const;
 
   virtual bool
-  IsEllipse (const ON_Plane *plane = NULL, ON_Ellipse *ellipse = NULL,
+  IsEllipse (const ON_Plane *plane = NULL,
+             ON_Ellipse *ellipse = NULL,
              double tolerance = ON_ZERO_TOLERANCE) const;
 
   // Description:
@@ -391,7 +398,8 @@ class ON_CLASS ON_Curve : public ON_Geometry
   */
 
   bool
-  IsClosable (double tolerance, double min_abs_size = 0.0,
+  IsClosable (double tolerance,
+              double min_abs_size = 0.0,
               double min_rel_size = 10.0) const;
 
   // Description:
@@ -463,8 +471,12 @@ class ON_CLASS ON_Curve : public ON_Geometry
       the ends of their domains.
   */
   virtual bool
-  GetNextDiscontinuity (ON::continuity c, double t0, double t1, double *t,
-                        int *hint = NULL, int *dtype = NULL,
+  GetNextDiscontinuity (ON::continuity c,
+                        double t0,
+                        double t1,
+                        double *t,
+                        int *hint = NULL,
+                        int *dtype = NULL,
                         double cos_angle_tolerance = ON_DEFAULT_ANGLE_TOLERANCE_COSINE,
                         double curvature_tolerance = ON_SQRT_EPSILON) const;
 
@@ -502,7 +514,9 @@ class ON_CLASS ON_Curve : public ON_Geometry
     the parameter t.
   */
   virtual bool
-  IsContinuous (ON::continuity c, double t, int *hint = NULL,
+  IsContinuous (ON::continuity c,
+                double t,
+                int *hint = NULL,
                 double point_tolerance = ON_ZERO_TOLERANCE,
                 double d1_tolerance = ON_ZERO_TOLERANCE,
                 double d2_tolerance = ON_ZERO_TOLERANCE,
@@ -685,7 +699,10 @@ class ON_CLASS ON_Curve : public ON_Geometry
   //   ON_Curve::EvTangent
   //   ON_Curve::Evaluate
   ON_BOOL32
-  Ev1Der (double t, ON_3dPoint &point, ON_3dVector &first_derivative, int side = 0,
+  Ev1Der (double t,
+          ON_3dPoint &point,
+          ON_3dVector &first_derivative,
+          int side = 0,
           int *hint = 0) const;
 
   // Description:
@@ -707,8 +724,12 @@ class ON_CLASS ON_Curve : public ON_Geometry
   //   ON_Curve::EvCurvature
   //   ON_Curve::Evaluate
   ON_BOOL32
-  Ev2Der (double t, ON_3dPoint &point, ON_3dVector &first_derivative,
-          ON_3dVector &second_derivative, int side = 0, int *hint = 0) const;
+  Ev2Der (double t,
+          ON_3dPoint &point,
+          ON_3dVector &first_derivative,
+          ON_3dVector &second_derivative,
+          int side = 0,
+          int *hint = 0) const;
 
   /*
   Description:
@@ -729,7 +750,10 @@ class ON_CLASS ON_Curve : public ON_Geometry
     ON_Curve::Ev1Der
   */
   ON_BOOL32
-  EvTangent (double t, ON_3dPoint &point, ON_3dVector &tangent, int side = 0,
+  EvTangent (double t,
+             ON_3dPoint &point,
+             ON_3dVector &tangent,
+             int side = 0,
              int *hint = 0) const;
 
   /*
@@ -753,8 +777,12 @@ class ON_CLASS ON_Curve : public ON_Geometry
     ON_EvCurvature
   */
   ON_BOOL32
-  EvCurvature (double t, ON_3dPoint &point, ON_3dVector &tangent, ON_3dVector &kappa,
-               int side = 0, int *hint = 0) const;
+  EvCurvature (double t,
+               ON_3dPoint &point,
+               ON_3dVector &tangent,
+               ON_3dVector &kappa,
+               int side = 0,
+               int *hint = 0) const;
 
   /*
   Description:
@@ -782,7 +810,11 @@ class ON_CLASS ON_Curve : public ON_Geometry
     ON_Curve::Ev2Der
   */
   virtual ON_BOOL32
-  Evaluate (double t, int der_count, int v_stride, double *v, int side = 0,
+  Evaluate (double t,
+            int der_count,
+            int v_stride,
+            double *v,
+            int side = 0,
             int *hint = 0) const = 0;
 
   /*
@@ -897,7 +929,8 @@ class ON_CLASS ON_Curve : public ON_Geometry
     ON_Curve::NurbsCurve
   */
   virtual int
-  GetNurbForm (ON_NurbsCurve &nurbs_curve, double tolerance = 0.0,
+  GetNurbForm (ON_NurbsCurve &nurbs_curve,
+               double tolerance = 0.0,
                const ON_Interval *subdomain = NULL) const;
   /*
   Description:
@@ -946,7 +979,8 @@ class ON_CLASS ON_Curve : public ON_Geometry
     ON_Curve::GetNurbForm
   */
   ON_NurbsCurve *
-  NurbsCurve (ON_NurbsCurve *pNurbsCurve = NULL, double tolerance = 0.0,
+  NurbsCurve (ON_NurbsCurve *pNurbsCurve = NULL,
+              double tolerance = 0.0,
               const ON_Interval *subdomain = NULL) const;
 
   // Description:
@@ -1020,7 +1054,9 @@ class ON_CLASS ON_Curve : public ON_Geometry
   */
   protected:
   bool
-  ParameterSearch (double t, int &index, bool bEnableSnap,
+  ParameterSearch (double t,
+                   int &index,
+                   bool bEnableSnap,
                    const ON_SimpleArray<double> &m_t,
                    double RelTol = ON_SQRT_EPSILON) const;
 
@@ -1072,7 +1108,8 @@ class ON_CLASS ON_CurveArray : public ON_SimpleArray<ON_Curve *>
     bounding box.
   */
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 };
 
@@ -1132,8 +1169,10 @@ at most 3.
 ON_DECL
 int
 ON_JoinCurves (const ON_SimpleArray<const ON_Curve *> &InCurves,
-               ON_SimpleArray<ON_Curve *> &OutCurves, double join_tol,
-               bool bPreserveDirection = false, ON_SimpleArray<int> *key = 0);
+               ON_SimpleArray<ON_Curve *> &OutCurves,
+               double join_tol,
+               bool bPreserveDirection = false,
+               ON_SimpleArray<int> *key = 0);
 
 /*
 Description:
@@ -1189,7 +1228,9 @@ Returns:
 */
 ON_DECL
 bool
-ON_SortCurves (int curve_count, const ON_Curve *const *curve_list, int *index,
+ON_SortCurves (int curve_count,
+               const ON_Curve *const *curve_list,
+               int *index,
                bool *bReverse);
 
 /*
@@ -1209,7 +1250,8 @@ Returns:
 ON_DECL
 bool
 ON_SortCurves (const ON_SimpleArray<const ON_Curve *> &curves,
-               ON_SimpleArray<int> &index, ON_SimpleArray<bool> &bReverse);
+               ON_SimpleArray<int> &index,
+               ON_SimpleArray<bool> &bReverse);
 
 /*
 Description:
@@ -1228,7 +1270,8 @@ Returns:
 */
 ON_DECL
 bool
-ON_SortCurves (const ON_SimpleArray<ON_Curve *> &curves, ON_SimpleArray<int> &index,
+ON_SortCurves (const ON_SimpleArray<ON_Curve *> &curves,
+               ON_SimpleArray<int> &index,
                ON_SimpleArray<bool> &bReverse);
 
 /*

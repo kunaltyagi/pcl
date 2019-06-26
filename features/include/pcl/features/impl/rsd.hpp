@@ -49,8 +49,12 @@ template <typename PointInT, typename PointNT, typename PointOutT>
 Eigen::MatrixXf
 pcl::computeRSD (const pcl::PointCloud<PointInT> &surface,
                  const pcl::PointCloud<PointNT> &normals,
-                 const std::vector<int> &indices, double max_dist, int nr_subdiv,
-                 double plane_radius, PointOutT &radii, bool compute_histogram)
+                 const std::vector<int> &indices,
+                 double max_dist,
+                 int nr_subdiv,
+                 double plane_radius,
+                 PointOutT &radii,
+                 bool compute_histogram)
 {
   // Check if the full histogram has to be saved or not
   Eigen::MatrixXf histogram;
@@ -157,8 +161,12 @@ pcl::computeRSD (const pcl::PointCloud<PointInT> &surface,
 template <typename PointNT, typename PointOutT>
 Eigen::MatrixXf
 pcl::computeRSD (const pcl::PointCloud<PointNT> &normals,
-                 const std::vector<int> &indices, const std::vector<float> &sqr_dists,
-                 double max_dist, int nr_subdiv, double plane_radius, PointOutT &radii,
+                 const std::vector<int> &indices,
+                 const std::vector<float> &sqr_dists,
+                 double max_dist,
+                 int nr_subdiv,
+                 double plane_radius,
+                 PointOutT &radii,
                  bool compute_histogram)
 {
   // Check if the full histogram has to be saved or not
@@ -286,24 +294,35 @@ pcl::RSDEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
     // Iterating over the entire index vector
     for (size_t idx = 0; idx < indices_->size (); ++idx) {
       // Compute and store r_min and r_max in the output cloud
-      this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                nn_sqr_dists);
+      this->searchForNeighbors (
+          (*indices_)[idx], search_parameter_, nn_indices, nn_sqr_dists);
       // histograms_->push_back (computeRSD (*surface_, *normals_, nn_indices,
       // search_radius_, nr_subdiv_, plane_radius_, output.points[idx], true));
-      histograms_->push_back (computeRSD (*normals_, nn_indices, nn_sqr_dists,
-                                          search_radius_, nr_subdiv_, plane_radius_,
-                                          output.points[idx], true));
+      histograms_->push_back (computeRSD (*normals_,
+                                          nn_indices,
+                                          nn_sqr_dists,
+                                          search_radius_,
+                                          nr_subdiv_,
+                                          plane_radius_,
+                                          output.points[idx],
+                                          true));
     }
   } else {
     // Iterating over the entire index vector
     for (size_t idx = 0; idx < indices_->size (); ++idx) {
       // Compute and store r_min and r_max in the output cloud
-      this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                nn_sqr_dists);
+      this->searchForNeighbors (
+          (*indices_)[idx], search_parameter_, nn_indices, nn_sqr_dists);
       // computeRSD (*surface_, *normals_, nn_indices, search_radius_, nr_subdiv_,
       // plane_radius_, output.points[idx], false);
-      computeRSD (*normals_, nn_indices, nn_sqr_dists, search_radius_, nr_subdiv_,
-                  plane_radius_, output.points[idx], false);
+      computeRSD (*normals_,
+                  nn_indices,
+                  nn_sqr_dists,
+                  search_radius_,
+                  nr_subdiv_,
+                  plane_radius_,
+                  output.points[idx],
+                  false);
     }
   }
 }

@@ -163,14 +163,29 @@ class BFGS
   BFGS &
   operator= (const BFGS &);
   BFGSSpace::Status
-  lineSearch (Scalar rho, Scalar sigma, Scalar tau1, Scalar tau2, Scalar tau3,
-              int order, Scalar alpha1, Scalar &alpha_new);
+  lineSearch (Scalar rho,
+              Scalar sigma,
+              Scalar tau1,
+              Scalar tau2,
+              Scalar tau3,
+              int order,
+              Scalar alpha1,
+              Scalar &alpha_new);
   Scalar
-  interpolate (Scalar a, Scalar fa, Scalar fpa, Scalar b, Scalar fb, Scalar fpb,
-               Scalar xmin, Scalar xmax, int order);
+  interpolate (Scalar a,
+               Scalar fa,
+               Scalar fpa,
+               Scalar b,
+               Scalar fb,
+               Scalar fpb,
+               Scalar xmin,
+               Scalar xmax,
+               int order);
   void
-  checkExtremum (const Eigen::Matrix<Scalar, 4, 1> &coefficients, Scalar x,
-                 Scalar &xmin, Scalar &fmin);
+  checkExtremum (const Eigen::Matrix<Scalar, 4, 1> &coefficients,
+                 Scalar x,
+                 Scalar &xmin,
+                 Scalar &fmin);
   void
   moveTo (Scalar alpha);
   Scalar
@@ -208,7 +223,9 @@ class BFGS
 template <typename FunctorType>
 void
 BFGS<FunctorType>::checkExtremum (const Eigen::Matrix<Scalar, 4, 1> &coefficients,
-                                  Scalar x, Scalar &xmin, Scalar &fmin)
+                                  Scalar x,
+                                  Scalar &xmin,
+                                  Scalar &fmin)
 {
   Scalar y = Eigen::poly_eval (coefficients, x);
   if (y < fmin) {
@@ -288,7 +305,9 @@ BFGS<FunctorType>::applyFDF (Scalar alpha, Scalar &f, Scalar &df)
 
 template <typename FunctorType>
 void
-BFGS<FunctorType>::updatePosition (Scalar alpha, FVectorType &x, Scalar &f,
+BFGS<FunctorType>::updatePosition (Scalar alpha,
+                                   FVectorType &x,
+                                   Scalar &f,
                                    FVectorType &g)
 {
   {
@@ -376,9 +395,14 @@ BFGS<FunctorType>::minimizeOneStep (FVectorType &x)
   } else
     alpha1 = fabs (parameters.step_size);
 
-  BFGSSpace::Status status =
-      lineSearch (parameters.rho, parameters.sigma, parameters.tau1, parameters.tau2,
-                  parameters.tau3, parameters.order, alpha1, alpha);
+  BFGSSpace::Status status = lineSearch (parameters.rho,
+                                         parameters.sigma,
+                                         parameters.tau1,
+                                         parameters.tau2,
+                                         parameters.tau3,
+                                         parameters.order,
+                                         alpha1,
+                                         alpha);
 
   if (status != BFGSSpace::Success)
     return status;
@@ -450,8 +474,15 @@ BFGS<FunctorType>::testGradient (Scalar epsilon)
 
 template <typename FunctorType>
 typename BFGS<FunctorType>::Scalar
-BFGS<FunctorType>::interpolate (Scalar a, Scalar fa, Scalar fpa, Scalar b, Scalar fb,
-                                Scalar fpb, Scalar xmin, Scalar xmax, int order)
+BFGS<FunctorType>::interpolate (Scalar a,
+                                Scalar fa,
+                                Scalar fpa,
+                                Scalar b,
+                                Scalar fb,
+                                Scalar fpb,
+                                Scalar xmin,
+                                Scalar xmax,
+                                int order)
 {
   /* Map [a,b] to [0,1] */
   Scalar y, alpha, ymin, ymax, fmin;
@@ -541,8 +572,14 @@ BFGS<FunctorType>::interpolate (Scalar a, Scalar fa, Scalar fpa, Scalar b, Scala
 
 template <typename FunctorType>
 BFGSSpace::Status
-BFGS<FunctorType>::lineSearch (Scalar rho, Scalar sigma, Scalar tau1, Scalar tau2,
-                               Scalar tau3, int order, Scalar alpha1, Scalar &alpha_new)
+BFGS<FunctorType>::lineSearch (Scalar rho,
+                               Scalar sigma,
+                               Scalar tau1,
+                               Scalar tau2,
+                               Scalar tau3,
+                               int order,
+                               Scalar alpha1,
+                               Scalar &alpha_new)
 {
   Scalar f0, fp0, falpha, falpha_prev, fpalpha, fpalpha_prev, delta, alpha_next;
   Scalar alpha = alpha1, alpha_prev = 0.0;
@@ -601,8 +638,15 @@ BFGS<FunctorType>::lineSearch (Scalar rho, Scalar sigma, Scalar tau1, Scalar tau
       Scalar lower = alpha + delta;
       Scalar upper = alpha + tau1 * delta;
 
-      alpha_next = interpolate (alpha_prev, falpha_prev, fpalpha_prev, alpha, falpha,
-                                fpalpha, lower, upper, order);
+      alpha_next = interpolate (alpha_prev,
+                                falpha_prev,
+                                fpalpha_prev,
+                                alpha,
+                                falpha,
+                                fpalpha,
+                                lower,
+                                upper,
+                                order);
     }
 
     alpha_prev = alpha;

@@ -45,7 +45,10 @@ Parameters
 */
 ON_DECL
 void
-ON_Sort (ON::sort_algorithm method, int *index, const void *base, size_t count,
+ON_Sort (ON::sort_algorithm method,
+         int *index,
+         const void *base,
+         size_t count,
          size_t sizeof_element,
          int (*compare) (const void *,
                          const void *) // int compar(const void*,const void*)
@@ -82,9 +85,13 @@ Parameters
 */
 ON_DECL
 void
-ON_Sort (ON::sort_algorithm method, int *index, const void *base, size_t count,
+ON_Sort (ON::sort_algorithm method,
+         int *index,
+         const void *base,
+         size_t count,
          size_t sizeof_element,
-         int (*compare) (const void *, const void *,
+         int (*compare) (const void *,
+                         const void *,
                          void *), // int compar(const void* a,const void* b, void* ptr)
          void *context);
 
@@ -121,23 +128,33 @@ Remarks:
 */
 ON_DECL
 void
-ON_hsort (void *base, size_t count, size_t sizeof_element,
+ON_hsort (void *base,
+          size_t count,
+          size_t sizeof_element,
           int (*compare) (const void *, const void *));
 
 ON_DECL
 void
-ON_qsort (void *base, size_t count, size_t sizeof_element,
+ON_qsort (void *base,
+          size_t count,
+          size_t sizeof_element,
           int (*compare) (const void *, const void *));
 
 ON_DECL
 void
-ON_hsort (void *base, size_t count, size_t sizeof_element,
-          int (*compare) (void *, const void *, const void *), void *context);
+ON_hsort (void *base,
+          size_t count,
+          size_t sizeof_element,
+          int (*compare) (void *, const void *, const void *),
+          void *context);
 
 ON_DECL
 void
-ON_qsort (void *base, size_t count, size_t sizeof_element,
-          int (*compare) (void *, const void *, const void *), void *context);
+ON_qsort (void *base,
+          size_t count,
+          size_t sizeof_element,
+          int (*compare) (void *, const void *, const void *),
+          void *context);
 
 /*
 Description:
@@ -192,7 +209,8 @@ Parameters:
 */
 ON_DECL
 void
-ON_SortUnsignedIntArray (ON::sort_algorithm sort_algorithm, unsigned int *a,
+ON_SortUnsignedIntArray (ON::sort_algorithm sort_algorithm,
+                         unsigned int *a,
                          size_t nel);
 
 /*
@@ -219,7 +237,8 @@ ON_BinarySearchIntArray (int key, const int *base, size_t nel);
 
 ON_DECL
 const unsigned int *
-ON_BinarySearchUnsignedIntArray (unsigned int key, const unsigned int *base,
+ON_BinarySearchUnsignedIntArray (unsigned int key,
+                                 const unsigned int *base,
                                  size_t nel);
 
 ON_DECL
@@ -683,7 +702,10 @@ class ON_CLASS ON_String
     on_splitpath
   */
   static void
-  SplitPath (const char *path, ON_String *drive, ON_String *dir, ON_String *fname,
+  SplitPath (const char *path,
+             ON_String *drive,
+             ON_String *dir,
+             ON_String *fname,
              ON_String *ext);
 
   // Implementation
@@ -1143,11 +1165,17 @@ class PCL_EXPORTS ON_CLASS ON_wString
     on_wsplitpath
   */
   static void
-  SplitPath (const char *path, ON_wString *drive, ON_wString *dir, ON_wString *fname,
+  SplitPath (const char *path,
+             ON_wString *drive,
+             ON_wString *dir,
+             ON_wString *fname,
              ON_wString *ext);
 
   static void
-  SplitPath (const wchar_t *path, ON_wString *drive, ON_wString *dir, ON_wString *fname,
+  SplitPath (const wchar_t *path,
+             ON_wString *drive,
+             ON_wString *dir,
+             ON_wString *fname,
              ON_wString *ext);
   // Implementation
   public:

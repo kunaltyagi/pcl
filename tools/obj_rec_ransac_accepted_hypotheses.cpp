@@ -74,8 +74,10 @@ using namespace recognition;
 using namespace visualization;
 
 bool
-vtk_to_pointcloud (const char *file_name, PointCloud<PointXYZ> &pcl_points,
-                   PointCloud<Normal> &pcl_normals, vtkPolyData *vtk_dst = nullptr);
+vtk_to_pointcloud (const char *file_name,
+                   PointCloud<PointXYZ> &pcl_points,
+                   PointCloud<Normal> &pcl_normals,
+                   vtkPolyData *vtk_dst = nullptr);
 
 //#define _SHOW_SCENE_POINTS_
 #define _SHOW_OCTREE_POINTS_
@@ -85,8 +87,10 @@ vtk_to_pointcloud (const char *file_name, PointCloud<PointXYZ> &pcl_points,
 class CallbackParameters
 {
   public:
-  CallbackParameters (ObjRecRANSAC &objrec, PCLVisualizer &viz,
-                      PointCloud<PointXYZ> &points, PointCloud<Normal> &normals,
+  CallbackParameters (ObjRecRANSAC &objrec,
+                      PCLVisualizer &viz,
+                      PointCloud<PointXYZ> &points,
+                      PointCloud<Normal> &normals,
                       int num_hypotheses_to_show)
       : objrec_ (objrec), viz_ (viz), points_ (points), normals_ (normals),
         num_hypotheses_to_show_ (num_hypotheses_to_show), show_models_ (true)
@@ -105,8 +109,10 @@ class CallbackParameters
 //===============================================================================================================================
 
 bool
-vtk_to_pointcloud (const char *file_name, PointCloud<PointXYZ> &pcl_points,
-                   PointCloud<Normal> &pcl_normals, vtkPolyData *vtk_dst)
+vtk_to_pointcloud (const char *file_name,
+                   PointCloud<PointXYZ> &pcl_points,
+                   PointCloud<Normal> &pcl_normals,
+                   vtkPolyData *vtk_dst)
 {
   size_t len = strlen (file_name);
   if (file_name[len - 3] != 'v' || file_name[len - 2] != 't' ||
@@ -161,7 +167,8 @@ vtk_to_pointcloud (const char *file_name, PointCloud<PointXYZ> &pcl_points,
 //===============================================================================================================================
 
 void
-showHypothesisAsCoordinateFrame (Hypothesis &hypo, CallbackParameters *parameters,
+showHypothesisAsCoordinateFrame (Hypothesis &hypo,
+                                 CallbackParameters *parameters,
                                  const string &frame_name)
 {
   float rot_col[3], x_dir[3], y_dir[3], z_dir[3], origin[3],
@@ -170,8 +177,8 @@ showHypothesisAsCoordinateFrame (Hypothesis &hypo, CallbackParameters *parameter
   coeffs.values.resize (6);
 
   // Get the origin of the coordinate frame
-  aux::transform (hypo.rigid_transform_, hypo.obj_model_->getOctreeCenterOfMass (),
-                  origin);
+  aux::transform (
+      hypo.rigid_transform_, hypo.obj_model_->getOctreeCenterOfMass (), origin);
   coeffs.values[0] = origin[0];
   coeffs.values[1] = origin[1];
   coeffs.values[2] = origin[2];
@@ -283,7 +290,8 @@ update (CallbackParameters *params)
 
   // Insert the points and compute the lines
   for (list<ObjRecRANSAC::OrientedPointPair>::const_iterator it = opps.begin ();
-       it != opps.end (); ++it) {
+       it != opps.end ();
+       ++it) {
     vtk_opps_points->SetPoint (ids[0], it->p1_[0], it->p1_[1], it->p1_[2]);
     vtk_opps_points->SetPoint (ids[1], it->p2_[0], it->p2_[1], it->p2_[2]);
     vtk_opps_lines->InsertNextCell (2, ids);
@@ -307,13 +315,13 @@ update (CallbackParameters *params)
   // The lines
   string lines_str_id = "opps";
   params->viz_.addModelFromPolyData (vtk_opps, lines_str_id);
-  params->viz_.setShapeRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR,
-                                            0.0, 0.0, 1.0, lines_str_id);
+  params->viz_.setShapeRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_COLOR, 0.0, 0.0, 1.0, lines_str_id);
   // The normals
   string normals_str_id = "opps normals";
   params->viz_.addModelFromPolyData (vtk_hh->GetOutput (), normals_str_id);
-  params->viz_.setShapeRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR,
-                                            1.0, 1.0, 0.0, normals_str_id);
+  params->viz_.setShapeRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 1.0, 0.0, normals_str_id);
 #endif
 
   // Now show some of the accepted hypotheses
@@ -322,8 +330,8 @@ update (CallbackParameters *params)
   int i = 0;
 
   // Sort the hypotheses vector such that the strongest hypotheses are at the front
-  std::sort (accepted_hypotheses.begin (), accepted_hypotheses.end (),
-             compareHypotheses);
+  std::sort (
+      accepted_hypotheses.begin (), accepted_hypotheses.end (), compareHypotheses);
 
   // Show the hypotheses
   for (vector<Hypothesis>::iterator acc_hypo = accepted_hypotheses.begin ();
@@ -421,7 +429,8 @@ keyboardCB (const pcl::visualization::KeyboardEvent &event, void *params_void)
     params->show_models_ = !params->show_models_;
 
     for (list<vtkActor *>::iterator it = params->model_actors_.begin ();
-         it != params->model_actors_.end (); ++it)
+         it != params->model_actors_.end ();
+         ++it)
       (*it)->SetVisibility (static_cast<int> (params->show_models_));
 
     params->viz_.getRenderWindow ()->Render ();
@@ -431,7 +440,9 @@ keyboardCB (const pcl::visualization::KeyboardEvent &event, void *params_void)
 //===============================================================================================================================
 
 void
-run (float pair_width, float voxel_size, float max_coplanarity_angle,
+run (float pair_width,
+     float voxel_size,
+     float max_coplanarity_angle,
      int num_hypotheses_to_show)
 {
   PointCloud<PointXYZ>::Ptr scene_points (new PointCloud<PointXYZ> ()),
@@ -440,14 +451,14 @@ run (float pair_width, float voxel_size, float max_coplanarity_angle,
       model_normals (new PointCloud<Normal> ());
 
   // Get the points and normals from the scene
-  if (!vtk_to_pointcloud ("../../test/tum_table_scene.vtk", *scene_points,
-                          *scene_normals))
+  if (!vtk_to_pointcloud (
+          "../../test/tum_table_scene.vtk", *scene_points, *scene_normals))
     return;
 
   vtkPolyData *vtk_model = vtkPolyData::New ();
   // Get the points and normals from the scene
-  if (!vtk_to_pointcloud ("../../test/tum_amicelli_box.vtk", *model_points,
-                          *model_normals, vtk_model))
+  if (!vtk_to_pointcloud (
+          "../../test/tum_amicelli_box.vtk", *model_points, *model_normals, vtk_model))
     return;
 
   // The recognition object
@@ -461,8 +472,8 @@ run (float pair_width, float voxel_size, float max_coplanarity_angle,
   // The visualizer
   PCLVisualizer viz;
 
-  CallbackParameters params (objrec, viz, *scene_points, *scene_normals,
-                             num_hypotheses_to_show);
+  CallbackParameters params (
+      objrec, viz, *scene_points, *scene_normals, num_hypotheses_to_show);
   viz.registerKeyboardCallback (keyboardCB, static_cast<void *> (&params));
 
   // Run the recognition and update the viewer
@@ -470,25 +481,25 @@ run (float pair_width, float voxel_size, float max_coplanarity_angle,
 
 #ifdef _SHOW_SCENE_POINTS_
   viz.addPointCloud (scene_points, "cloud in");
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
-                                        2, "cloud in");
+  viz.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud in");
 #endif
 
 #ifdef _SHOW_OCTREE_POINTS_
   PointCloud<PointXYZ>::Ptr octree_points (new PointCloud<PointXYZ> ());
   objrec.getSceneOctree ().getFullLeavesPoints (*octree_points);
   viz.addPointCloud (octree_points, "octree points");
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
-                                        5, "octree points");
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 1.0,
-                                        0.0, 0.0, "octree points");
+  viz.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "octree points");
+  viz.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 0.0, 0.0, "octree points");
 #endif
 
 #if defined _SHOW_OCTREE_NORMALS_ && defined _SHOW_OCTREE_POINTS_
   PointCloud<Normal>::Ptr octree_normals (new PointCloud<Normal> ());
   objrec.getSceneOctree ().getNormalsOfFullLeaves (*octree_normals);
-  viz.addPointCloudNormals<PointXYZ, Normal> (octree_points, octree_normals, 1, 6.0f,
-                                              "normals out");
+  viz.addPointCloudNormals<PointXYZ, Normal> (
+      octree_points, octree_normals, 1, 6.0f, "normals out");
 #endif
 
   // Enter the main loop
@@ -511,7 +522,8 @@ main (int argc, char **argv)
           "<show_hypotheses_as_coordinate_frames>\n\n");
 
   const int num_params = 4;
-  float parameters[num_params] = {40.0f /*pair width*/, 5.0f /*voxel size*/,
+  float parameters[num_params] = {40.0f /*pair width*/,
+                                  5.0f /*voxel size*/,
                                   15.0f /*max co-planarity angle*/,
                                   1 /*n_hypotheses_to_show*/};
   string parameter_names[num_params] = {
@@ -526,7 +538,9 @@ main (int argc, char **argv)
     cout << "  " << parameter_names[i] << " = " << parameters[i] << endl;
   cout << endl;
 
-  run (parameters[0], parameters[1], parameters[2],
+  run (parameters[0],
+       parameters[1],
+       parameters[2],
        static_cast<int> (parameters[3] + 0.5f));
 
   return (0);

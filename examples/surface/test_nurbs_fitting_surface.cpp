@@ -10,8 +10,11 @@ using Point = pcl::PointXYZ;
 
 void
 CreateCylinderPoints (pcl::PointCloud<Point>::Ptr cloud,
-                      pcl::on_nurbs::vector_vec3d &data, unsigned npoints, double alpha,
-                      double h, double r)
+                      pcl::on_nurbs::vector_vec3d &data,
+                      unsigned npoints,
+                      double alpha,
+                      double h,
+                      double r)
 {
   for (unsigned i = 0; i < npoints; i++) {
     double da = alpha * double(rand ()) / RAND_MAX;

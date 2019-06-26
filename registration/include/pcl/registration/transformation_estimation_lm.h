@@ -76,7 +76,8 @@ namespace pcl
 
       using VectorX = Eigen::Matrix<MatScalar, Eigen::Dynamic, 1>;
       using Vector4 = Eigen::Matrix<MatScalar, 4, 1>;
-      using Matrix4 = typename TransformationEstimation<PointSource, PointTarget,
+      using Matrix4 = typename TransformationEstimation<PointSource,
+                                                        PointTarget,
                                                         MatScalar>::Matrix4;
 
       /** \brief Constructor. */
@@ -160,8 +161,9 @@ namespace pcl
        * \param[in] warp_fcn a shared pointer to an object that warps points
        */
       void
-      setWarpFunction (const typename WarpPointRigid<PointSource, PointTarget,
-                                                     MatScalar>::Ptr &warp_fcn)
+      setWarpFunction (
+          const typename WarpPointRigid<PointSource, PointTarget, MatScalar>::Ptr
+              &warp_fcn)
       {
         warp_point_ = warp_fcn;
       }
@@ -212,8 +214,8 @@ namespace pcl
       mutable const std::vector<int> *tmp_idx_tgt_;
 
       /** \brief The parameterized function used to warp the source to the target. */
-      typename pcl::registration::WarpPointRigid<PointSource, PointTarget,
-                                                 MatScalar>::Ptr warp_point_;
+      typename pcl::registration::WarpPointRigid<PointSource, PointTarget, MatScalar>::
+          Ptr warp_point_;
 
       /** Base functor all the models that need non linear optimization must
        * define their own one and implement operator() (const Eigen::VectorXd& x,

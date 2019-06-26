@@ -103,8 +103,8 @@ pcl::gpu::PseudoConvexHull3D::reconstruct (const Cloud &cloud,
     ps.classify (fs);
 
     if (!fs.canSplit ())
-      throw PCLException ("Can't split facets, please enlarge default buffer", __FILE__,
-                          "", __LINE__);
+      throw PCLException (
+          "Can't split facets, please enlarge default buffer", __FILE__, "", __LINE__);
 
     fs.splitFacets ();
   }
@@ -130,8 +130,8 @@ pcl::gpu::PseudoConvexHull3D::reconstruct (const Cloud &points, Cloud &output)
   reconstruct (points, vertexes);
 
   DeviceArray<int> cont (vertexes.cols () * vertexes.rows ());
-  DeviceArray2D<int> buf (3, vertexes.cols (), cont.ptr (),
-                          vertexes.cols () * sizeof (int));
+  DeviceArray2D<int> buf (
+      3, vertexes.cols (), cont.ptr (), vertexes.cols () * sizeof (int));
   vertexes.copyTo (buf);
 
   size_t new_size = device::remove_duplicates (cont);

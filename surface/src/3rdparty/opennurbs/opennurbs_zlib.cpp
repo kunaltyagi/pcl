@@ -674,8 +674,8 @@ ON_CompressedBuffer::Read (ON_BinaryArchive &binary_archive)
 {
   int major_version = 0;
   int minor_version = 0;
-  bool rc = binary_archive.BeginRead3dmChunk (TCODE_ANONYMOUS_CHUNK, &major_version,
-                                              &minor_version);
+  bool rc = binary_archive.BeginRead3dmChunk (
+      TCODE_ANONYMOUS_CHUNK, &major_version, &minor_version);
   if (!rc)
     return false;
 
@@ -776,7 +776,9 @@ ON_CompressedBuffer::Compress (
 
   if (bToggleByteOrder) {
     ON_BinaryFile::ToggleByteOrder ((int)(sizeof__inbuffer / m_sizeof_element),
-                                    m_sizeof_element, inbuffer, (void *)inbuffer);
+                                    m_sizeof_element,
+                                    inbuffer,
+                                    (void *)inbuffer);
   }
 
   m_method = (sizeof__inbuffer > 128) ? 1 : 0;
@@ -816,7 +818,9 @@ ON_CompressedBuffer::Compress (
 
   if (bToggleByteOrder) {
     ON_BinaryFile::ToggleByteOrder ((int)(sizeof__inbuffer / m_sizeof_element),
-                                    m_sizeof_element, inbuffer, (void *)inbuffer);
+                                    m_sizeof_element,
+                                    inbuffer,
+                                    (void *)inbuffer);
   }
 
   if (rc) {
@@ -880,7 +884,9 @@ ON_CompressedBuffer::Uncompress (void *outbuffer, int *bFailedCRC) const
     if (0 == (m_sizeof_uncompressed % m_sizeof_element)) {
       if (ON::big_endian == ON::Endian ()) {
         ON_BinaryFile::ToggleByteOrder ((int)(m_sizeof_uncompressed / m_sizeof_element),
-                                        m_sizeof_element, outbuffer, outbuffer);
+                                        m_sizeof_element,
+                                        outbuffer,
+                                        outbuffer);
       }
     }
     break;

@@ -53,19 +53,29 @@ namespace pcl
       public:
       // Debayering methods
       void
-      debayerBilinear (const unsigned char *bayer_pixel, unsigned char *rgb_buffer,
-                       unsigned width, unsigned height, int bayer_line_step = 0,
-                       int bayer_line_step2 = 0, unsigned rgb_line_step = 0) const;
+      debayerBilinear (const unsigned char *bayer_pixel,
+                       unsigned char *rgb_buffer,
+                       unsigned width,
+                       unsigned height,
+                       int bayer_line_step = 0,
+                       int bayer_line_step2 = 0,
+                       unsigned rgb_line_step = 0) const;
 
       void
-      debayerEdgeAware (const unsigned char *bayer_pixel, unsigned char *rgb_buffer,
-                        unsigned width, unsigned height, int bayer_line_step = 0,
-                        int bayer_line_step2 = 0, unsigned rgb_line_step = 0) const;
+      debayerEdgeAware (const unsigned char *bayer_pixel,
+                        unsigned char *rgb_buffer,
+                        unsigned width,
+                        unsigned height,
+                        int bayer_line_step = 0,
+                        int bayer_line_step2 = 0,
+                        unsigned rgb_line_step = 0) const;
 
       void
       debayerEdgeAwareWeighted (const unsigned char *bayer_pixel,
-                                unsigned char *rgb_buffer, unsigned width,
-                                unsigned height, int bayer_line_step = 0,
+                                unsigned char *rgb_buffer,
+                                unsigned width,
+                                unsigned height,
+                                int bayer_line_step = 0,
                                 int bayer_line_step2 = 0,
                                 unsigned rgb_line_step = 0) const;
     };

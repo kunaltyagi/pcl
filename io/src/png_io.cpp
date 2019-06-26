@@ -62,8 +62,11 @@ namespace
 }; // namespace
 
 void
-pcl::io::saveCharPNGFile (const std::string &file_name, const unsigned char *char_data,
-                          int width, int height, int channels)
+pcl::io::saveCharPNGFile (const std::string &file_name,
+                          const unsigned char *char_data,
+                          int width,
+                          int height,
+                          int channels)
 {
   vtkSmartPointer<vtkImageImport> importer = vtkSmartPointer<vtkImageImport>::New ();
   importer->SetNumberOfScalarComponents (channels);
@@ -80,7 +83,9 @@ pcl::io::saveCharPNGFile (const std::string &file_name, const unsigned char *cha
 
 void
 pcl::io::saveShortPNGFile (const std::string &file_name,
-                           const unsigned short *short_image, int width, int height,
+                           const unsigned short *short_image,
+                           int width,
+                           int height,
                            int channels)
 {
   vtkSmartPointer<vtkImageImport> importer = vtkSmartPointer<vtkImageImport>::New ();
@@ -97,8 +102,10 @@ pcl::io::saveShortPNGFile (const std::string &file_name,
 }
 
 void
-pcl::io::saveRgbPNGFile (const std::string &file_name, const unsigned char *rgb_image,
-                         int width, int height)
+pcl::io::saveRgbPNGFile (const std::string &file_name,
+                         const unsigned char *rgb_image,
+                         int width,
+                         int height)
 {
   saveCharPNGFile (file_name, rgb_image, width, height, 3);
 }
@@ -127,7 +134,9 @@ pcl::io::savePNGFile (const std::string &file_name, const pcl::PCLImage &image)
   } else if (image.encoding == "mono16") {
     saveShortPNGFile (file_name,
                       reinterpret_cast<const unsigned short *> (&image.data[0]),
-                      image.width, image.height, 1);
+                      image.width,
+                      image.height,
+                      1);
   } else {
     PCL_ERROR ("[pcl::io::savePNGFile] Unsupported image encoding \"%s\".\n",
                image.encoding.c_str ());

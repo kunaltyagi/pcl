@@ -105,7 +105,8 @@ Object::removeActor (vtkActor *actor)
 
   if (actor_it != associated_renderers_.end ()) {
     for (auto renderer_it = associated_renderers_[actor].cbegin ();
-         renderer_it != associated_renderers_[actor].cend (); ++renderer_it) {
+         renderer_it != associated_renderers_[actor].cend ();
+         ++renderer_it) {
       (*renderer_it)->RemoveActor (actor);
     }
     associated_renderers_.erase (actor);

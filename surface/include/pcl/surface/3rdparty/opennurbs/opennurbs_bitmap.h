@@ -229,7 +229,7 @@ class ON_CLASS ON_EmbeddedFile : public ON_Object
 
   public:
   ON__UINT32
-      m_buffer_crc; // will be different from m_file_crc if the buffer is compressed.
+  m_buffer_crc; // will be different from m_file_crc if the buffer is compressed.
   ON_Buffer m_buffer;
   unsigned char m_bCompressedBuffer; // true if m_buffer is compressed.
 
@@ -304,12 +304,12 @@ struct ON_WindowsBITMAPINFOHEADER {
                               //             32-bit-per-pixel bitmaps.
                               //         =4  BI_JPEG (not supported in Win 95/NT4)
                               //
-  unsigned int biSizeImage;    // DWORD = bytes in image
-  int biXPelsPerMeter;         // LONG
-  int biYPelsPerMeter;         // LONG
-  unsigned int biClrUsed;      // DWORD = 0 or true length of bmiColors[] array.  If 0,
-                               //           then the value of biBitCount determines the
-                               //           length of the bmiColors[] array.
+  unsigned int biSizeImage;   // DWORD = bytes in image
+  int biXPelsPerMeter;        // LONG
+  int biYPelsPerMeter;        // LONG
+  unsigned int biClrUsed;     // DWORD = 0 or true length of bmiColors[] array.  If 0,
+                              //           then the value of biBitCount determines the
+                              //           length of the bmiColors[] array.
   unsigned int biClrImportant; // DWORD
 };
 

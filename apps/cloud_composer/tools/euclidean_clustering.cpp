@@ -75,15 +75,16 @@ pcl::cloud_composer::EuclideanClusteringTool::performAction (ConstItemList input
       int cluster_count = 0;
       pcl::ExtractIndices<pcl::PCLPointCloud2> filter;
       for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin ();
-           it != cluster_indices.end (); ++it) {
+           it != cluster_indices.end ();
+           ++it) {
         filter.setInputCloud (input_cloud);
         // It's annoying that I have to do this, but Euclidean returns a PointIndices
         // struct
         pcl::PointIndices::ConstPtr indices_ptr =
             boost::make_shared<pcl::PointIndices> (*it);
         filter.setIndices (indices_ptr);
-        extracted_indices->insert (extracted_indices->end (), it->indices.begin (),
-                                   it->indices.end ());
+        extracted_indices->insert (
+            extracted_indices->end (), it->indices.begin (), it->indices.end ());
         // This means remove the other points
         filter.setKeepOrganized (false);
         pcl::PCLPointCloud2::Ptr cloud_filtered (new pcl::PCLPointCloud2);
@@ -92,7 +93,9 @@ pcl::cloud_composer::EuclideanClusteringTool::performAction (ConstItemList input
         qDebug () << "Cluster has " << cloud_filtered->width << " data points.";
         CloudItem *cloud_item =
             new CloudItem (input_item->text () + tr ("-Clstr %1").arg (cluster_count),
-                           cloud_filtered, source_origin, source_orientation);
+                           cloud_filtered,
+                           source_origin,
+                           source_orientation);
         output.append (cloud_item);
         ++cluster_count;
       }
@@ -107,9 +110,10 @@ pcl::cloud_composer::EuclideanClusteringTool::performAction (ConstItemList input
       }
       qDebug () << "Cloud has " << remainder_cloud->width
                 << " data points after clusters removed.";
-      CloudItem *cloud_item =
-          new CloudItem (input_item->text () + " unclustered", remainder_cloud,
-                         source_origin, source_orientation);
+      CloudItem *cloud_item = new CloudItem (input_item->text () + " unclustered",
+                                             remainder_cloud,
+                                             source_origin,
+                                             source_orientation);
       output.push_front (cloud_item);
     } else
       qCritical () << "Input item in Clustering is not SANITIZED!!!";
@@ -127,12 +131,12 @@ pcl::cloud_composer::EuclideanClusteringToolFactory::createToolParameterModel (
 {
   PropertiesModel *parameter_model = new PropertiesModel (parent);
 
-  parameter_model->addProperty ("Cluster Tolerance", 0.02,
-                                Qt::ItemIsEditable | Qt::ItemIsEnabled);
-  parameter_model->addProperty ("Min Cluster Size", 100,
-                                Qt::ItemIsEditable | Qt::ItemIsEnabled);
-  parameter_model->addProperty ("Max Cluster Size", 25000,
-                                Qt::ItemIsEditable | Qt::ItemIsEnabled);
+  parameter_model->addProperty (
+      "Cluster Tolerance", 0.02, Qt::ItemIsEditable | Qt::ItemIsEnabled);
+  parameter_model->addProperty (
+      "Min Cluster Size", 100, Qt::ItemIsEditable | Qt::ItemIsEnabled);
+  parameter_model->addProperty (
+      "Max Cluster Size", 25000, Qt::ItemIsEditable | Qt::ItemIsEnabled);
 
   return parameter_model;
 }

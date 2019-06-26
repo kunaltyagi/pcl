@@ -91,8 +91,8 @@ normalizeQuaternion (const boost::math::quaternion<float> &q)
   float y = q.R_component_3 ();
   float z = q.R_component_4 ();
   float inv_len = 1.0f / std::sqrt (w * w + x * x + y * y + z * z);
-  return boost::math::quaternion<float> (w * inv_len, x * inv_len, y * inv_len,
-                                         z * inv_len);
+  return boost::math::quaternion<float> (
+      w * inv_len, x * inv_len, y * inv_len, z * inv_len);
 }
 
 boost::math::quaternion<float>

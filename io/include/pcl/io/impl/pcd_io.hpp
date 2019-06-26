@@ -125,15 +125,20 @@ pcl::PCDWriter::writeBinary (const std::string &file_name,
   data_idx = static_cast<int> (oss.tellp ());
 
 #if _WIN32
-  HANDLE h_native_file =
-      CreateFileA (file_name.c_str (), GENERIC_READ | GENERIC_WRITE, 0, NULL,
-                   CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+  HANDLE h_native_file = CreateFileA (file_name.c_str (),
+                                      GENERIC_READ | GENERIC_WRITE,
+                                      0,
+                                      NULL,
+                                      CREATE_ALWAYS,
+                                      FILE_ATTRIBUTE_NORMAL,
+                                      NULL);
   if (h_native_file == INVALID_HANDLE_VALUE) {
     throw pcl::IOException ("[pcl::PCDWriter::writeBinary] Error during CreateFile!");
     return (-1);
   }
 #else
-  int fd = io::raw_open (file_name.c_str (), O_RDWR | O_CREAT | O_TRUNC,
+  int fd = io::raw_open (file_name.c_str (),
+                         O_RDWR | O_CREAT | O_TRUNC,
                          S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
   if (fd < 0) {
     throw pcl::IOException ("[pcl::PCDWriter::writeBinary] Error during open!");
@@ -166,8 +171,8 @@ pcl::PCDWriter::writeBinary (const std::string &file_name,
 
   // Prepare the map
 #if _WIN32
-  HANDLE fm = CreateFileMappingA (h_native_file, NULL, PAGE_READWRITE, 0,
-                                  (DWORD) (data_idx + data_size), NULL);
+  HANDLE fm = CreateFileMappingA (
+      h_native_file, NULL, PAGE_READWRITE, 0, (DWORD) (data_idx + data_size), NULL);
   if (fm == NULL) {
     throw pcl::IOException (
         "[pcl::PCDWriter::writeBinary] Error during memory map creation ()!");
@@ -183,7 +188,8 @@ pcl::PCDWriter::writeBinary (const std::string &file_name,
     io::raw_close (fd);
     resetLockingPermissions (file_name, file_lock);
     PCL_ERROR ("[pcl::PCDWriter::writeBinary] posix_fallocate errno: %d strerror: %s\n",
-               errno, strerror (errno));
+               errno,
+               strerror (errno));
 
     throw pcl::IOException (
         "[pcl::PCDWriter::writeBinary] Error during posix_fallocate ()!");
@@ -209,7 +215,8 @@ pcl::PCDWriter::writeBinary (const std::string &file_name,
   for (size_t i = 0; i < cloud.points.size (); ++i) {
     int nrj = 0;
     for (const auto &field : fields) {
-      memcpy (out, reinterpret_cast<const char *> (&cloud.points[i]) + field.offset,
+      memcpy (out,
+              reinterpret_cast<const char *> (&cloud.points[i]) + field.offset,
               fields_sizes[nrj]);
       out += fields_sizes[nrj++];
     }
@@ -260,16 +267,21 @@ pcl::PCDWriter::writeBinaryCompressed (const std::string &file_name,
   data_idx = static_cast<int> (oss.tellp ());
 
 #if _WIN32
-  HANDLE h_native_file =
-      CreateFileA (file_name.c_str (), GENERIC_READ | GENERIC_WRITE, 0, NULL,
-                   CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+  HANDLE h_native_file = CreateFileA (file_name.c_str (),
+                                      GENERIC_READ | GENERIC_WRITE,
+                                      0,
+                                      NULL,
+                                      CREATE_ALWAYS,
+                                      FILE_ATTRIBUTE_NORMAL,
+                                      NULL);
   if (h_native_file == INVALID_HANDLE_VALUE) {
     throw pcl::IOException (
         "[pcl::PCDWriter::writeBinaryCompressed] Error during CreateFile!");
     return (-1);
   }
 #else
-  int fd = io::raw_open (file_name.c_str (), O_RDWR | O_CREAT | O_TRUNC,
+  int fd = io::raw_open (file_name.c_str (),
+                         O_RDWR | O_CREAT | O_TRUNC,
                          S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
   if (fd < 0) {
     throw pcl::IOException (
@@ -350,9 +362,11 @@ pcl::PCDWriter::writeBinaryCompressed (const std::string &file_name,
   char *temp_buf = static_cast<char *> (
       malloc (static_cast<size_t> (static_cast<float> (data_size) * 1.5f + 8.0f)));
   // Compress the valid data
-  unsigned int compressed_size = pcl::lzfCompress (
-      only_valid_data, static_cast<uint32_t> (data_size), &temp_buf[8],
-      static_cast<uint32_t> (static_cast<float> (data_size) * 1.5f));
+  unsigned int compressed_size =
+      pcl::lzfCompress (only_valid_data,
+                        static_cast<uint32_t> (data_size),
+                        &temp_buf[8],
+                        static_cast<uint32_t> (static_cast<float> (data_size) * 1.5f));
   unsigned int compressed_final_size = 0;
   // Was the compression successful?
   if (compressed_size) {
@@ -373,8 +387,8 @@ pcl::PCDWriter::writeBinaryCompressed (const std::string &file_name,
 
   // Prepare the map
 #if _WIN32
-  HANDLE fm = CreateFileMapping (h_native_file, NULL, PAGE_READWRITE, 0,
-                                 compressed_final_size, NULL);
+  HANDLE fm = CreateFileMapping (
+      h_native_file, NULL, PAGE_READWRITE, 0, compressed_final_size, NULL);
   char *map = static_cast<char *> (
       MapViewOfFile (fm, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, compressed_final_size));
   CloseHandle (fm);
@@ -386,7 +400,8 @@ pcl::PCDWriter::writeBinaryCompressed (const std::string &file_name,
     resetLockingPermissions (file_name, file_lock);
     PCL_ERROR ("[pcl::PCDWriter::writeBinaryCompressed] posix_fallocate errno: %d "
                "strerror: %s\n",
-               errno, strerror (errno));
+               errno,
+               strerror (errno));
 
     throw pcl::IOException (
         "[pcl::PCDWriter::writeBinaryCompressed] Error during posix_fallocate ()!");
@@ -446,7 +461,8 @@ pcl::PCDWriter::writeBinaryCompressed (const std::string &file_name,
 template <typename PointT>
 int
 pcl::PCDWriter::writeASCII (const std::string &file_name,
-                            const pcl::PointCloud<PointT> &cloud, const int precision)
+                            const pcl::PointCloud<PointT> &cloud,
+                            const int precision)
 {
   if (cloud.empty ()) {
     throw pcl::IOException (
@@ -634,15 +650,20 @@ pcl::PCDWriter::writeBinary (const std::string &file_name,
   data_idx = static_cast<int> (oss.tellp ());
 
 #if _WIN32
-  HANDLE h_native_file =
-      CreateFileA (file_name.c_str (), GENERIC_READ | GENERIC_WRITE, 0, NULL,
-                   CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+  HANDLE h_native_file = CreateFileA (file_name.c_str (),
+                                      GENERIC_READ | GENERIC_WRITE,
+                                      0,
+                                      NULL,
+                                      CREATE_ALWAYS,
+                                      FILE_ATTRIBUTE_NORMAL,
+                                      NULL);
   if (h_native_file == INVALID_HANDLE_VALUE) {
     throw pcl::IOException ("[pcl::PCDWriter::writeBinary] Error during CreateFile!");
     return (-1);
   }
 #else
-  int fd = io::raw_open (file_name.c_str (), O_RDWR | O_CREAT | O_TRUNC,
+  int fd = io::raw_open (file_name.c_str (),
+                         O_RDWR | O_CREAT | O_TRUNC,
                          S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
   if (fd < 0) {
     throw pcl::IOException ("[pcl::PCDWriter::writeBinary] Error during open!");
@@ -675,8 +696,8 @@ pcl::PCDWriter::writeBinary (const std::string &file_name,
 
   // Prepare the map
 #if _WIN32
-  HANDLE fm = CreateFileMapping (h_native_file, NULL, PAGE_READWRITE, 0,
-                                 data_idx + data_size, NULL);
+  HANDLE fm = CreateFileMapping (
+      h_native_file, NULL, PAGE_READWRITE, 0, data_idx + data_size, NULL);
   char *map = static_cast<char *> (
       MapViewOfFile (fm, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, data_idx + data_size));
   CloseHandle (fm);
@@ -687,7 +708,8 @@ pcl::PCDWriter::writeBinary (const std::string &file_name,
     io::raw_close (fd);
     resetLockingPermissions (file_name, file_lock);
     PCL_ERROR ("[pcl::PCDWriter::writeBinary] posix_fallocate errno: %d strerror: %s\n",
-               errno, strerror (errno));
+               errno,
+               strerror (errno));
 
     throw pcl::IOException (
         "[pcl::PCDWriter::writeBinary] Error during posix_fallocate ()!");
@@ -713,7 +735,8 @@ pcl::PCDWriter::writeBinary (const std::string &file_name,
   for (const int &index : indices) {
     int nrj = 0;
     for (const auto &field : fields) {
-      memcpy (out, reinterpret_cast<const char *> (&cloud.points[index]) + field.offset,
+      memcpy (out,
+              reinterpret_cast<const char *> (&cloud.points[index]) + field.offset,
               fields_sizes[nrj]);
       out += fields_sizes[nrj++];
     }
@@ -752,7 +775,8 @@ template <typename PointT>
 int
 pcl::PCDWriter::writeASCII (const std::string &file_name,
                             const pcl::PointCloud<PointT> &cloud,
-                            const std::vector<int> &indices, const int precision)
+                            const std::vector<int> &indices,
+                            const int precision)
 {
   if (cloud.points.empty () || indices.empty ()) {
     throw pcl::IOException ("[pcl::PCDWriter::writeASCII] Input point cloud has no "

@@ -17,7 +17,9 @@ pcl::cloud_composer::PropertiesModel::PropertiesModel (CloudComposerItem *parent
   setHorizontalHeaderItem (0, new QStandardItem ("Name"));
   setHorizontalHeaderItem (1, new QStandardItem ("Value"));
 
-  connect (this, SIGNAL (itemChanged (QStandardItem *)), this,
+  connect (this,
+           SIGNAL (itemChanged (QStandardItem *)),
+           this,
            SLOT (propertyChanged (QStandardItem *)));
 }
 
@@ -41,7 +43,8 @@ pcl::cloud_composer::PropertiesModel::~PropertiesModel () {}
 
 void
 pcl::cloud_composer::PropertiesModel::addProperty (const QString prop_name,
-                                                   QVariant value, Qt::ItemFlags flags,
+                                                   QVariant value,
+                                                   Qt::ItemFlags flags,
                                                    QString category)
 {
   QStandardItem *parent_item = invisibleRootItem ();

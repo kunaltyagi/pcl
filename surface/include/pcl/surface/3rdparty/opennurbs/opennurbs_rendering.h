@@ -127,7 +127,8 @@ class ON_CLASS ON_ObjectRenderingAttributes : public ON_RenderingAttributes
     plug-in and channel.
   */
   bool
-  AddMappingChannel (const ON_UUID &plugin_id, int mapping_channel_id,
+  AddMappingChannel (const ON_UUID &plugin_id,
+                     int mapping_channel_id,
                      const ON_UUID &mapping_id);
 
   /*
@@ -154,7 +155,8 @@ class ON_CLASS ON_ObjectRenderingAttributes : public ON_RenderingAttributes
     True if a matching mapping channel was found and changed.
   */
   bool
-  ChangeMappingChannel (const ON_UUID &plugin_id, int old_mapping_channel_id,
+  ChangeMappingChannel (const ON_UUID &plugin_id,
+                        int old_mapping_channel_id,
                         int new_mapping_channel_id);
 
   // Use AddMappingRef() or AddMappingChannel() if you

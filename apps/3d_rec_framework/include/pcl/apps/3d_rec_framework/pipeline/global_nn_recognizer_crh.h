@@ -90,7 +90,8 @@ namespace pcl
       std::vector<flann_model> flann_models_;
 
       bool use_cache_;
-      std::map<std::pair<std::string, int>, Eigen::Matrix4f,
+      std::map<std::pair<std::string, int>,
+               Eigen::Matrix4f,
                std::less<std::pair<std::string, int>>,
                Eigen::aligned_allocator<
                    std::pair<const std::pair<std::string, int>, Eigen::Matrix4f>>>
@@ -111,7 +112,8 @@ namespace pcl
         data.cols = models[0].descr.size (); // number of histogram bins
 
         flann::Matrix<float> flann_data (
-            new float[models.size () * models[0].descr.size ()], models.size (),
+            new float[models.size () * models[0].descr.size ()],
+            models.size (),
             models[0].descr.size ());
 
         for (size_t i = 0; i < data.rows; ++i)
@@ -123,8 +125,11 @@ namespace pcl
       }
 
       void
-      nearestKSearch (flann::Index<DistT> *index, const flann_model &model, int k,
-                      flann::Matrix<int> &indices, flann::Matrix<float> &distances);
+      nearestKSearch (flann::Index<DistT> *index,
+                      const flann_model &model,
+                      int k,
+                      flann::Matrix<int> &indices,
+                      flann::Matrix<float> &distances);
 
       void
       getPose (ModelT &model, int view_id, Eigen::Matrix4f &pose_matrix);

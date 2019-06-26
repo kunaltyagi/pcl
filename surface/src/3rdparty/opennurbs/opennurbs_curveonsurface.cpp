@@ -16,7 +16,8 @@
 
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-ON_OBJECT_IMPLEMENT (ON_CurveOnSurface, ON_Curve,
+ON_OBJECT_IMPLEMENT (ON_CurveOnSurface,
+                     ON_Curve,
                      "4ED7D4D8-E947-11d3-BFE5-0010830122F0");
 
 ON_CurveOnSurface::ON_CurveOnSurface () : m_c2 (0), m_c3 (0), m_s (0) {}

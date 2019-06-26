@@ -57,7 +57,8 @@ namespace pcl
     template <>
     void
     pcl::octree::OctreePointCloudAdjacencyContainer<
-        pcl::PointXYZRGB, pcl::SupervoxelClustering<pcl::PointXYZRGB>::VoxelData>::
+        pcl::PointXYZRGB,
+        pcl::SupervoxelClustering<pcl::PointXYZRGB>::VoxelData>::
         addPoint (const pcl::PointXYZRGB &new_point)
     {
       ++num_points_;
@@ -74,7 +75,8 @@ namespace pcl
     template <>
     void
     pcl::octree::OctreePointCloudAdjacencyContainer<
-        pcl::PointXYZRGBA, pcl::SupervoxelClustering<pcl::PointXYZRGBA>::VoxelData>::
+        pcl::PointXYZRGBA,
+        pcl::SupervoxelClustering<pcl::PointXYZRGBA>::VoxelData>::
         addPoint (const pcl::PointXYZRGBA &new_point)
     {
       ++num_points_;
@@ -121,7 +123,8 @@ namespace pcl
     template <>
     void
     pcl::octree::OctreePointCloudAdjacencyContainer<
-        pcl::PointXYZ, pcl::SupervoxelClustering<pcl::PointXYZ>::VoxelData>::
+        pcl::PointXYZ,
+        pcl::SupervoxelClustering<pcl::PointXYZ>::VoxelData>::
         addPoint (const pcl::PointXYZ &new_point)
     {
       ++num_points_;

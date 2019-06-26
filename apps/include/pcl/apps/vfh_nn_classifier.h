@@ -252,7 +252,8 @@ namespace pcl
      * 0.002 by default \return pair of label and score for each relevant training class
      */
     ResultPtr
-    classify (const pcl::PCLPointCloud2 &testing_data, double radius = 300,
+    classify (const pcl::PCLPointCloud2 &testing_data,
+              double radius = 300,
               double min_score = 0.002)
     {
       // compute the VFH feature for this point cloud

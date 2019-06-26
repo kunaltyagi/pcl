@@ -84,7 +84,8 @@ loadTrainedFeatures (std::vector<FeatureT::Ptr> &out,
     return false;
 
   for (boost::filesystem::directory_iterator it (base_dir);
-       it != boost::filesystem::directory_iterator (); ++it) {
+       it != boost::filesystem::directory_iterator ();
+       ++it) {
     if (!boost::filesystem::is_directory (it->status ()) &&
         boost::filesystem::extension (it->path ()) == ".pcd") {
       std::stringstream ss;
@@ -122,8 +123,11 @@ loadCloud (const std::string &filename, CloudT::Ptr &cloud)
 }
 
 void
-compute (const CloudT::Ptr &input, std::vector<FeatureT::Ptr> &trained_features,
-         CloudLT::Ptr &out, float normal_radius_search, float fpfh_radius_search,
+compute (const CloudT::Ptr &input,
+         std::vector<FeatureT::Ptr> &trained_features,
+         CloudLT::Ptr &out,
+         float normal_radius_search,
+         float fpfh_radius_search,
          float feature_threshold)
 {
   TicToc tt;
@@ -218,7 +222,11 @@ main (int argc, char **argv)
   print_info ("fpfh-radius-search: %f \n\n", fpfh_radius_search);
 
   CloudLT::Ptr out (new CloudLT);
-  compute (cloud, trained_features, out, normal_radius_search, fpfh_radius_search,
+  compute (cloud,
+           trained_features,
+           out,
+           normal_radius_search,
+           fpfh_radius_search,
            feature_threshold);
 
   saveCloud (argv[p_file_indices[1]], out);

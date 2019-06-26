@@ -68,9 +68,13 @@ pcl::VoxelGridCovariance<PointT>::applyFilter (PointCloud &output)
   Eigen::Vector4f min_p, max_p;
   // Get the minimum and maximum dimensions
   if (!filter_field_name_.empty ()) // If we don't want to process the entire cloud...
-    getMinMax3D<PointT> (
-        input_, filter_field_name_, static_cast<float> (filter_limit_min_),
-        static_cast<float> (filter_limit_max_), min_p, max_p, filter_limit_negative_);
+    getMinMax3D<PointT> (input_,
+                         filter_field_name_,
+                         static_cast<float> (filter_limit_min_),
+                         static_cast<float> (filter_limit_max_),
+                         min_p,
+                         max_p,
+                         filter_limit_negative_);
   else
     getMinMax3D<PointT> (*input_, min_p, max_p);
 
@@ -129,7 +133,8 @@ pcl::VoxelGridCovariance<PointT>::applyFilter (PointCloud &output)
     int distance_idx = pcl::getFieldIndex (*input_, filter_field_name_, fields);
     if (distance_idx == -1)
       PCL_WARN ("[pcl::%s::applyFilter] Invalid filter field name. Index is %d.\n",
-                getClassName ().c_str (), distance_idx);
+                getClassName ().c_str (),
+                distance_idx);
 
     // First pass: go over all points and insert them into the right leaf
     for (size_t cp = 0; cp < input_->points.size (); ++cp) {
@@ -176,8 +181,8 @@ pcl::VoxelGridCovariance<PointT>::applyFilter (PointCloud &output)
         leaf.centroid.setZero ();
       }
 
-      Eigen::Vector3d pt3d (input_->points[cp].x, input_->points[cp].y,
-                            input_->points[cp].z);
+      Eigen::Vector3d pt3d (
+          input_->points[cp].x, input_->points[cp].y, input_->points[cp].z);
       // Accumulate point sum for centroid calculation
       leaf.mean_ += pt3d;
       // Accumulate x*xT for single pass covariance calculation
@@ -185,8 +190,8 @@ pcl::VoxelGridCovariance<PointT>::applyFilter (PointCloud &output)
 
       // Do we need to process all the fields?
       if (!downsample_all_data_) {
-        Eigen::Vector4f pt (input_->points[cp].x, input_->points[cp].y,
-                            input_->points[cp].z, 0);
+        Eigen::Vector4f pt (
+            input_->points[cp].x, input_->points[cp].y, input_->points[cp].z, 0);
         leaf.centroid.template head<4> () += pt;
       } else {
         // Copy all the fields
@@ -240,8 +245,8 @@ pcl::VoxelGridCovariance<PointT>::applyFilter (PointCloud &output)
         leaf.centroid.setZero ();
       }
 
-      Eigen::Vector3d pt3d (input_->points[cp].x, input_->points[cp].y,
-                            input_->points[cp].z);
+      Eigen::Vector3d pt3d (
+          input_->points[cp].x, input_->points[cp].y, input_->points[cp].z);
       // Accumulate point sum for centroid calculation
       leaf.mean_ += pt3d;
       // Accumulate x*xT for single pass covariance calculation
@@ -249,8 +254,8 @@ pcl::VoxelGridCovariance<PointT>::applyFilter (PointCloud &output)
 
       // Do we need to process all the fields?
       if (!downsample_all_data_) {
-        Eigen::Vector4f pt (input_->points[cp].x, input_->points[cp].y,
-                            input_->points[cp].z, 0);
+        Eigen::Vector4f pt (
+            input_->points[cp].x, input_->points[cp].y, input_->points[cp].z, 0);
         leaf.centroid.template head<4> () += pt;
       } else {
         // Copy all the fields
@@ -291,7 +296,8 @@ pcl::VoxelGridCovariance<PointT>::applyFilter (PointCloud &output)
   double min_covar_eigvalue;
 
   for (typename std::map<size_t, Leaf>::iterator it = leaves_.begin ();
-       it != leaves_.end (); ++it) {
+       it != leaves_.end ();
+       ++it) {
 
     // Normalize the centroid
     Leaf &leaf = it->second;
@@ -388,7 +394,8 @@ pcl::VoxelGridCovariance<PointT>::getNeighborhoodAtPoint (
   Eigen::MatrixXi relative_coordinates = pcl::getAllNeighborCellIndices ();
   Eigen::Vector4i ijk (static_cast<int> (floor (reference_point.x / leaf_size_[0])),
                        static_cast<int> (floor (reference_point.y / leaf_size_[1])),
-                       static_cast<int> (floor (reference_point.z / leaf_size_[2])), 0);
+                       static_cast<int> (floor (reference_point.z / leaf_size_[2])),
+                       0);
   Eigen::Array4i diff2min = min_b_ - ijk;
   Eigen::Array4i diff2max = max_b_ - ijk;
   neighbors.reserve (relative_coordinates.cols ());
@@ -436,7 +443,8 @@ pcl::VoxelGridCovariance<PointT>::getDisplayCloud (
 
   // Generate points for each occupied voxel with sufficient points.
   for (typename std::map<size_t, Leaf>::iterator it = leaves_.begin ();
-       it != leaves_.end (); ++it) {
+       it != leaves_.end ();
+       ++it) {
     Leaf &leaf = it->second;
 
     if (leaf.nr_points >= min_points_per_voxel_) {

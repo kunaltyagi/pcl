@@ -106,12 +106,18 @@ PCDVideoPlayer::PCDVideoPlayer ()
   connect (ui_->backButton, SIGNAL (clicked ()), this, SLOT (backButtonPressed ()));
   connect (ui_->nextButton, SIGNAL (clicked ()), this, SLOT (nextButtonPressed ()));
 
-  connect (ui_->selectFolderButton, SIGNAL (clicked ()), this,
+  connect (ui_->selectFolderButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (selectFolderButtonPressed ()));
-  connect (ui_->selectFilesButton, SIGNAL (clicked ()), this,
+  connect (ui_->selectFilesButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (selectFilesButtonPressed ()));
 
-  connect (ui_->indexSlider, SIGNAL (valueChanged (int)), this,
+  connect (ui_->indexSlider,
+           SIGNAL (valueChanged (int)),
+           this,
            SLOT (indexSliderValueChanged (int)));
 }
 
@@ -149,7 +155,9 @@ PCDVideoPlayer::selectFolderButtonPressed ()
   pcd_files_.clear (); // Clear the std::vector
   pcd_paths_.clear (); // Clear the boost filesystem paths
 
-  dir_ = QFileDialog::getExistingDirectory (this, tr ("Open Directory"), "/home",
+  dir_ = QFileDialog::getExistingDirectory (this,
+                                            tr ("Open Directory"),
+                                            "/home",
                                             QFileDialog::ShowDirsOnly |
                                                 QFileDialog::DontResolveSymlinks);
 
@@ -157,7 +165,8 @@ PCDVideoPlayer::selectFolderButtonPressed ()
 
   if (boost::filesystem::is_directory (dir_.toStdString ())) {
     for (boost::filesystem::directory_iterator itr (dir_.toStdString ());
-         itr != end_itr; ++itr) {
+         itr != end_itr;
+         ++itr) {
       std::string ext = itr->path ().extension ().string ();
       if (ext == ".pcd") {
         pcd_files_.push_back (itr->path ().string ());

@@ -137,43 +137,57 @@ pcl::visualization::PCLPainter2D::addPolygon (std::vector<float> p)
 void
 pcl::visualization::PCLPainter2D::addEllipse (float x, float y, float rx, float ry)
 {
-  figures_.push_back (new FEllipticArc2D (x, y, rx, ry, 0, 360, current_pen_,
-                                          current_brush_, current_transform_));
+  figures_.push_back (new FEllipticArc2D (
+      x, y, rx, ry, 0, 360, current_pen_, current_brush_, current_transform_));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
 pcl::visualization::PCLPainter2D::addCircle (float x, float y, float r)
 {
-  figures_.push_back (new FEllipticArc2D (x, y, r, r, 0, 360, current_pen_,
-                                          current_brush_, current_transform_));
+  figures_.push_back (new FEllipticArc2D (
+      x, y, r, r, 0, 360, current_pen_, current_brush_, current_transform_));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::PCLPainter2D::addEllipticArc (float x, float y, float rx, float ry,
-                                                  float start_angle, float end_angle)
+pcl::visualization::PCLPainter2D::addEllipticArc (
+    float x, float y, float rx, float ry, float start_angle, float end_angle)
 {
-  figures_.push_back (new FEllipticArc2D (x, y, rx, ry, start_angle, end_angle,
-                                          current_pen_, current_brush_,
+  figures_.push_back (new FEllipticArc2D (x,
+                                          y,
+                                          rx,
+                                          ry,
+                                          start_angle,
+                                          end_angle,
+                                          current_pen_,
+                                          current_brush_,
                                           current_transform_));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::PCLPainter2D::addArc (float x, float y, float r, float start_angle,
-                                          float end_angle)
+pcl::visualization::PCLPainter2D::addArc (
+    float x, float y, float r, float start_angle, float end_angle)
 {
-  figures_.push_back (new FEllipticArc2D (x, y, r, r, start_angle, end_angle,
-                                          current_pen_, current_brush_,
+  figures_.push_back (new FEllipticArc2D (x,
+                                          y,
+                                          r,
+                                          r,
+                                          start_angle,
+                                          end_angle,
+                                          current_pen_,
+                                          current_brush_,
                                           current_transform_));
 }
 
 ///////////////////////////////////////Pen and Brush
-///functions////////////////////////////////////////////////////////
+/// functions////////////////////////////////////////////////////////
 void
-pcl::visualization::PCLPainter2D::setPenColor (unsigned char r, unsigned char g,
-                                               unsigned char b, unsigned char a)
+pcl::visualization::PCLPainter2D::setPenColor (unsigned char r,
+                                               unsigned char g,
+                                               unsigned char b,
+                                               unsigned char a)
 {
   current_pen_->SetColor (r, g, b, a);
 }
@@ -209,8 +223,10 @@ pcl::visualization::PCLPainter2D::getPenType ()
 }
 
 void
-pcl::visualization::PCLPainter2D::setBrushColor (unsigned char r, unsigned char g,
-                                                 unsigned char b, unsigned char a)
+pcl::visualization::PCLPainter2D::setBrushColor (unsigned char r,
+                                                 unsigned char g,
+                                                 unsigned char b,
+                                                 unsigned char a)
 {
   current_brush_->SetColor (r, g, b, a);
 }
@@ -245,7 +261,7 @@ pcl::visualization::PCLPainter2D::getBrush ()
   return current_brush_;
 }
 //////////////////////////////////////////End of Pen and Brush
-///functions//////////////////////////////////////////////
+/// functions//////////////////////////////////////////////
 
 void
 pcl::visualization::PCLPainter2D::translatePen (double x, double y)
@@ -304,7 +320,8 @@ pcl::visualization::PCLPainter2D::display ()
   view_->GetRenderWindow ()->SetSize (win_width_, win_height_);
 
   // vtkOpenGLContextDevice2D::SafeDownCast (view_->GetContext ()->GetDevice
-  // ())->SetStringRendererToFreeType (); view_->GetRenderWindow ()->SetMultiSamples (3);
+  // ())->SetStringRendererToFreeType (); view_->GetRenderWindow ()->SetMultiSamples
+  // (3);
 
   view_->GetInteractor ()->Initialize ();
   view_->GetRenderer ()->Render ();
@@ -342,7 +359,8 @@ pcl::visualization::PCLPainter2D::spin ()
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::visualization::PCLPainter2D::setBackgroundColor (const double r, const double g,
+pcl::visualization::PCLPainter2D::setBackgroundColor (const double r,
+                                                      const double g,
                                                       const double b)
 {
   bkg_color_[0] = r;

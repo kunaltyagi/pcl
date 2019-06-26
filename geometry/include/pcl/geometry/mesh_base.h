@@ -120,9 +120,11 @@ namespace pcl
 
       // Data
       using HasVertexData = std::integral_constant<
-          bool, !std::is_same<VertexData, pcl::geometry::NoData>::value>;
+          bool,
+          !std::is_same<VertexData, pcl::geometry::NoData>::value>;
       using HasHalfEdgeData = std::integral_constant<
-          bool, !std::is_same<HalfEdgeData, pcl::geometry::NoData>::value>;
+          bool,
+          !std::is_same<HalfEdgeData, pcl::geometry::NoData>::value>;
       using HasEdgeData =
           std::integral_constant<bool,
                                  !std::is_same<EdgeData, pcl::geometry::NoData>::value>;
@@ -199,14 +201,15 @@ namespace pcl
        * behavior!
        */
       inline FaceIndex
-      addFace (const VertexIndices &vertices, const FaceData &face_data = FaceData (),
+      addFace (const VertexIndices &vertices,
+               const FaceData &face_data = FaceData (),
                const EdgeData &edge_data = EdgeData (),
                const HalfEdgeData &half_edge_data = HalfEdgeData ())
       {
         // NOTE: The derived class has to implement addFaceImpl. If needed it can use
         // the general method addFaceImplBase.
-        return (static_cast<Derived *> (this)->addFaceImpl (vertices, face_data,
-                                                            edge_data, half_edge_data));
+        return (static_cast<Derived *> (this)->addFaceImpl (
+            vertices, face_data, edge_data, half_edge_data));
       }
 
       /** \brief Mark the given vertex and all connected half-edges and faces as
@@ -231,7 +234,8 @@ namespace pcl
         } while (++circ != circ_end);
 
         for (FaceIndices::const_iterator it = delete_faces_vertex_.begin ();
-             it != delete_faces_vertex_.end (); ++it) {
+             it != delete_faces_vertex_.end ();
+             ++it) {
           this->deleteFace (*it);
         }
       }
@@ -295,7 +299,9 @@ namespace pcl
             this->remove<Vertices, VertexDataCloud, VertexIndices, HasVertexData> (
                 vertices_, vertex_data_cloud_);
         const HalfEdgeIndices new_half_edge_indices =
-            this->remove<HalfEdges, HalfEdgeDataCloud, HalfEdgeIndices,
+            this->remove<HalfEdges,
+                         HalfEdgeDataCloud,
+                         HalfEdgeIndices,
                          HasHalfEdgeData> (half_edges_, half_edge_data_cloud_);
         const FaceIndices new_face_indices =
             this->remove<Faces, FaceDataCloud, FaceIndices, HasFaceData> (
@@ -308,7 +314,8 @@ namespace pcl
 
           for (auto it_ind = new_half_edge_indices.cbegin (),
                     it_ind_end = new_half_edge_indices.cend ();
-               it_ind != it_ind_end; it_ind += 2, ++it_ed_old) {
+               it_ind != it_ind_end;
+               it_ind += 2, ++it_ed_old) {
             if (it_ind->isValid ()) {
               *it_ed_new++ = *it_ed_old;
             }
@@ -908,7 +915,8 @@ namespace pcl
 
       /** \brief Resize the edges to n elements (half-edges will hold 2*n elements). */
       inline void
-      resizeEdges (const size_t n, const EdgeData &edge_data = EdgeData (),
+      resizeEdges (const size_t n,
+                   const EdgeData &edge_data = EdgeData (),
                    const HalfEdgeData he_data = HalfEdgeData ())
       {
         half_edges_.resize (2 * n);
@@ -1166,8 +1174,10 @@ namespace pcl
 
       /** \brief General implementation of addFace. */
       FaceIndex
-      addFaceImplBase (const VertexIndices &vertices, const FaceData &face_data,
-                       const EdgeData &edge_data, const HalfEdgeData &half_edge_data)
+      addFaceImplBase (const VertexIndices &vertices,
+                       const FaceData &face_data,
+                       const EdgeData &edge_data,
+                       const HalfEdgeData &half_edge_data)
       {
         const int n = static_cast<int> (vertices.size ());
         if (n < 3)
@@ -1179,16 +1189,24 @@ namespace pcl
         is_new_.resize (n);
         make_adjacent_.resize (n);
         for (int i = 0; i < n; ++i) {
-          if (!this->checkTopology1 (vertices[i], vertices[(i + 1) % n], inner_he_[i],
-                                     is_new_[i], IsManifold ())) {
+          if (!this->checkTopology1 (vertices[i],
+                                     vertices[(i + 1) % n],
+                                     inner_he_[i],
+                                     is_new_[i],
+                                     IsManifold ())) {
             return (FaceIndex ());
           }
         }
         for (int i = 0; i < n; ++i) {
           int j = (i + 1) % n;
-          if (!this->checkTopology2 (inner_he_[i], inner_he_[j], is_new_[i], is_new_[j],
-                                     this->isIsolated (vertices[j]), make_adjacent_[i],
-                                     free_he_[i], IsManifold ())) {
+          if (!this->checkTopology2 (inner_he_[i],
+                                     inner_he_[j],
+                                     is_new_[i],
+                                     is_new_[j],
+                                     this->isIsolated (vertices[j]),
+                                     make_adjacent_[i],
+                                     free_he_[i],
+                                     IsManifold ())) {
             return (FaceIndex ());
           }
         }
@@ -1205,8 +1223,8 @@ namespace pcl
         // Add new half-edges if needed
         for (int i = 0; i < n; ++i) {
           if (is_new_[i]) {
-            inner_he_[i] = this->addEdge (vertices[i], vertices[(i + 1) % n],
-                                          half_edge_data, edge_data);
+            inner_he_[i] = this->addEdge (
+                vertices[i], vertices[(i + 1) % n], half_edge_data, edge_data);
           }
         }
 
@@ -1214,15 +1232,15 @@ namespace pcl
         for (int i = 0; i < n; ++i) {
           int j = (i + 1) % n;
           if (is_new_[i] && is_new_[j])
-            this->connectNewNew (inner_he_[i], inner_he_[j], vertices[j],
-                                 IsManifold ());
+            this->connectNewNew (
+                inner_he_[i], inner_he_[j], vertices[j], IsManifold ());
           else if (is_new_[i] && !is_new_[j])
             this->connectNewOld (inner_he_[i], inner_he_[j], vertices[j]);
           else if (!is_new_[i] && is_new_[j])
             this->connectOldNew (inner_he_[i], inner_he_[j], vertices[j]);
           else
-            this->connectOldOld (inner_he_[i], inner_he_[j], vertices[j],
-                                 IsManifold ());
+            this->connectOldOld (
+                inner_he_[i], inner_he_[j], vertices[j], IsManifold ());
         }
         return (this->connectFace (inner_he_, face_data));
       }
@@ -1240,8 +1258,10 @@ namespace pcl
        * vertex a to vertex b.
        */
       HalfEdgeIndex
-      addEdge (const VertexIndex &idx_v_a, const VertexIndex &idx_v_b,
-               const HalfEdgeData &he_data, const EdgeData &edge_data)
+      addEdge (const VertexIndex &idx_v_a,
+               const VertexIndex &idx_v_b,
+               const HalfEdgeData &he_data,
+               const EdgeData &edge_data)
       {
         half_edges_.push_back (HalfEdge (idx_v_b));
         half_edges_.push_back (HalfEdge (idx_v_a));
@@ -1265,8 +1285,10 @@ namespace pcl
        * Must be initialized with true! \return true if the half-edge may be added.
        */
       bool
-      checkTopology1 (const VertexIndex &idx_v_a, const VertexIndex &idx_v_b,
-                      HalfEdgeIndex &idx_he_ab, std::vector<bool>::reference is_new_ab,
+      checkTopology1 (const VertexIndex &idx_v_a,
+                      const VertexIndex &idx_v_b,
+                      HalfEdgeIndex &idx_he_ab,
+                      std::vector<bool>::reference is_new_ab,
                       std::true_type /*is_manifold*/) const
       {
         is_new_ab = true;
@@ -1284,8 +1306,10 @@ namespace pcl
 
       /** \brief Non manifold version of checkTopology1 */
       bool
-      checkTopology1 (const VertexIndex &idx_v_a, const VertexIndex &idx_v_b,
-                      HalfEdgeIndex &idx_he_ab, std::vector<bool>::reference is_new_ab,
+      checkTopology1 (const VertexIndex &idx_v_a,
+                      const VertexIndex &idx_v_b,
+                      HalfEdgeIndex &idx_he_ab,
+                      std::vector<bool>::reference is_new_ab,
                       std::false_type /*is_manifold*/) const
       {
         is_new_ab = true;
@@ -1315,8 +1339,10 @@ namespace pcl
       /** \brief Check if the face may be added (mesh does not become non-manifold). */
       inline bool
       checkTopology2 (const HalfEdgeIndex & /*idx_he_ab*/,
-                      const HalfEdgeIndex & /*idx_he_bc*/, const bool is_new_ab,
-                      const bool is_new_bc, const bool is_isolated_b,
+                      const HalfEdgeIndex & /*idx_he_bc*/,
+                      const bool is_new_ab,
+                      const bool is_new_bc,
+                      const bool is_isolated_b,
                       std::vector<bool>::reference /*make_adjacent_ab_bc*/,
                       HalfEdgeIndex & /*idx_free_half_edge*/,
                       std::true_type /*is_manifold*/) const
@@ -1337,8 +1363,10 @@ namespace pcl
        * \return true if addFace may be continued.
        */
       inline bool
-      checkTopology2 (const HalfEdgeIndex &idx_he_ab, const HalfEdgeIndex &idx_he_bc,
-                      const bool is_new_ab, const bool is_new_bc,
+      checkTopology2 (const HalfEdgeIndex &idx_he_ab,
+                      const HalfEdgeIndex &idx_he_bc,
+                      const bool is_new_ab,
+                      const bool is_new_bc,
                       const bool /*is_isolated_b*/,
                       std::vector<bool>::reference make_adjacent_ab_bc,
                       HalfEdgeIndex &idx_free_half_edge,
@@ -1380,7 +1408,8 @@ namespace pcl
        * re-connect the half-edges around vertex b.
        */
       void
-      makeAdjacent (const HalfEdgeIndex &idx_he_ab, const HalfEdgeIndex &idx_he_bc,
+      makeAdjacent (const HalfEdgeIndex &idx_he_ab,
+                    const HalfEdgeIndex &idx_he_bc,
                     HalfEdgeIndex &idx_free_half_edge)
       {
         // Re-link. No references!
@@ -1429,8 +1458,10 @@ namespace pcl
 
       /** \brief Both half-edges are new (manifold version). */
       void
-      connectNewNew (const HalfEdgeIndex &idx_he_ab, const HalfEdgeIndex &idx_he_bc,
-                     const VertexIndex &idx_v_b, std::true_type /*is_manifold*/)
+      connectNewNew (const HalfEdgeIndex &idx_he_ab,
+                     const HalfEdgeIndex &idx_he_bc,
+                     const VertexIndex &idx_v_b,
+                     std::true_type /*is_manifold*/)
       {
         const HalfEdgeIndex idx_he_ba = this->getOppositeHalfEdgeIndex (idx_he_ab);
         const HalfEdgeIndex idx_he_cb = this->getOppositeHalfEdgeIndex (idx_he_bc);
@@ -1443,8 +1474,10 @@ namespace pcl
 
       /** \brief Both half-edges are new (non-manifold version). */
       void
-      connectNewNew (const HalfEdgeIndex &idx_he_ab, const HalfEdgeIndex &idx_he_bc,
-                     const VertexIndex &idx_v_b, std::false_type /*is_manifold*/)
+      connectNewNew (const HalfEdgeIndex &idx_he_ab,
+                     const HalfEdgeIndex &idx_he_bc,
+                     const VertexIndex &idx_v_b,
+                     std::false_type /*is_manifold*/)
       {
         if (this->isIsolated (idx_v_b)) {
           this->connectNewNew (idx_he_ab, idx_he_bc, idx_v_b, std::true_type ());
@@ -1465,7 +1498,8 @@ namespace pcl
 
       /** \brief The first half-edge is new. */
       void
-      connectNewOld (const HalfEdgeIndex &idx_he_ab, const HalfEdgeIndex &idx_he_bc,
+      connectNewOld (const HalfEdgeIndex &idx_he_ab,
+                     const HalfEdgeIndex &idx_he_bc,
                      const VertexIndex &idx_v_b)
       {
         const HalfEdgeIndex idx_he_ba = this->getOppositeHalfEdgeIndex (idx_he_ab);
@@ -1480,7 +1514,8 @@ namespace pcl
 
       /** \brief The second half-edge is new. */
       void
-      connectOldNew (const HalfEdgeIndex &idx_he_ab, const HalfEdgeIndex &idx_he_bc,
+      connectOldNew (const HalfEdgeIndex &idx_he_ab,
+                     const HalfEdgeIndex &idx_he_bc,
                      const VertexIndex &idx_v_b)
       {
         const HalfEdgeIndex idx_he_cb = this->getOppositeHalfEdgeIndex (idx_he_bc);
@@ -1497,14 +1532,16 @@ namespace pcl
       void
       connectOldOld (const HalfEdgeIndex & /*idx_he_ab*/,
                      const HalfEdgeIndex & /*idx_he_bc*/,
-                     const VertexIndex & /*idx_v_b*/, std::true_type /*is_manifold*/)
+                     const VertexIndex & /*idx_v_b*/,
+                     std::true_type /*is_manifold*/)
       {
       }
 
       /** \brief Both half-edges are old (non-manifold version). */
       void
       connectOldOld (const HalfEdgeIndex & /*idx_he_ab*/,
-                     const HalfEdgeIndex &idx_he_bc, const VertexIndex &idx_v_b,
+                     const HalfEdgeIndex &idx_he_bc,
+                     const VertexIndex &idx_v_b,
                      std::false_type /*is_manifold*/)
       {
         const HalfEdgeIndex &idx_he_b_out = this->getOutgoingHalfEdgeIndex (idx_v_b);
@@ -1532,7 +1569,8 @@ namespace pcl
       /** \brief Add mesh data. */
       template <class DataT>
       inline void
-      addData (pcl::PointCloud<DataT> &cloud, const DataT &data,
+      addData (pcl::PointCloud<DataT> &cloud,
+               const DataT &data,
                std::true_type /*has_data*/)
       {
         cloud.push_back (data);
@@ -1541,7 +1579,8 @@ namespace pcl
       /** \brief Does nothing. */
       template <class DataT>
       inline void
-      addData (pcl::PointCloud<DataT> & /*cloud*/, const DataT & /*data*/,
+      addData (pcl::PointCloud<DataT> & /*cloud*/,
+               const DataT & /*data*/,
                std::false_type /*has_data*/)
       {
       }
@@ -1597,8 +1636,8 @@ namespace pcl
         if (IsManifold::value) {
           for (int i = 0; i < n; ++i) {
             j = (i + 1) % n;
-            this->reconnect (inner_he_[i], inner_he_[j], is_boundary_[i],
-                             is_boundary_[j]);
+            this->reconnect (
+                inner_he_[i], inner_he_[j], is_boundary_[i], is_boundary_[j]);
           }
           for (int i = 0; i < n; ++i) {
             this->getHalfEdge (inner_he_[i]).idx_face_.invalidate ();
@@ -1606,8 +1645,8 @@ namespace pcl
         } else {
           for (int i = 0; i < n; ++i) {
             j = (i + 1) % n;
-            this->reconnect (inner_he_[i], inner_he_[j], is_boundary_[i],
-                             is_boundary_[j]);
+            this->reconnect (
+                inner_he_[i], inner_he_[j], is_boundary_[i], is_boundary_[j]);
             this->getHalfEdge (inner_he_[i]).idx_face_.invalidate ();
           }
         }
@@ -1622,8 +1661,10 @@ namespace pcl
       /** \brief Deconnect the input half-edges from the mesh and adjust the indices of
        * the connected half-edges. */
       void
-      reconnect (const HalfEdgeIndex &idx_he_ab, const HalfEdgeIndex &idx_he_bc,
-                 const bool is_boundary_ba, const bool is_boundary_cb)
+      reconnect (const HalfEdgeIndex &idx_he_ab,
+                 const HalfEdgeIndex &idx_he_bc,
+                 const bool is_boundary_ba,
+                 const bool is_boundary_cb)
       {
         const HalfEdgeIndex idx_he_ba = this->getOppositeHalfEdgeIndex (idx_he_ab);
         const HalfEdgeIndex idx_he_cb = this->getOppositeHalfEdgeIndex (idx_he_bc);
@@ -1664,8 +1705,10 @@ namespace pcl
 
       /** \brief Both edges are not on the boundary. Manifold version. */
       void
-      reconnectNBNB (const HalfEdgeIndex &idx_he_bc, const HalfEdgeIndex &idx_he_cb,
-                     const VertexIndex &idx_v_b, std::true_type /*is_manifold*/)
+      reconnectNBNB (const HalfEdgeIndex &idx_he_bc,
+                     const HalfEdgeIndex &idx_he_cb,
+                     const VertexIndex &idx_v_b,
+                     std::true_type /*is_manifold*/)
       {
         if (this->isBoundary (idx_v_b)) {
           // Deletion of this face makes the mesh non-manifold
@@ -1699,7 +1742,8 @@ namespace pcl
       /** \brief Both edges are not on the boundary. Non-manifold version. */
       void
       reconnectNBNB (const HalfEdgeIndex &idx_he_bc,
-                     const HalfEdgeIndex & /*idx_he_cb*/, const VertexIndex &idx_v_b,
+                     const HalfEdgeIndex & /*idx_he_cb*/,
+                     const VertexIndex &idx_v_b,
                      std::false_type /*is_manifold*/)
       {
         if (!this->isBoundary (idx_v_b)) {
@@ -1760,7 +1804,9 @@ namespace pcl
        * indices to the new elements for each non-deleted element and an invalid index
        * if it is deleted.
        */
-      template <class ElementContainerT, class DataContainerT, class IndexContainerT,
+      template <class ElementContainerT,
+                class DataContainerT,
+                class IndexContainerT,
                 class HasDataT>
       IndexContainerT
       remove (ElementContainerT &elements, DataContainerT &data_cloud)
@@ -1831,7 +1877,8 @@ namespace pcl
       /** \brief Assign the source iterator to the target iterator. */
       template <class ConstIteratorT, class IteratorT>
       inline void
-      assignIf (const ConstIteratorT source, IteratorT target,
+      assignIf (const ConstIteratorT source,
+                IteratorT target,
                 std::true_type /*has_data*/) const
       {
         *target = *source;
@@ -1840,7 +1887,8 @@ namespace pcl
       /** \brief Does nothing. */
       template <class ConstIteratorT, class IteratorT>
       inline void
-      assignIf (const ConstIteratorT /*source*/, IteratorT /*target*/,
+      assignIf (const ConstIteratorT /*source*/,
+                IteratorT /*target*/,
                 std::false_type /*has_data*/) const
       {
       }
@@ -1994,7 +2042,8 @@ namespace pcl
       /** \brief Does nothing */
       template <class DataCloudT>
       inline void
-      reserveData (DataCloudT & /*cloud*/, const size_t /*n*/,
+      reserveData (DataCloudT & /*cloud*/,
+                   const size_t /*n*/,
                    std::false_type /*has_data*/) const
       {
       }
@@ -2002,7 +2051,8 @@ namespace pcl
       /** \brief Resize the mesh data. */
       template <class DataCloudT>
       inline void
-      resizeData (DataCloudT & /*data_cloud*/, const size_t n,
+      resizeData (DataCloudT & /*data_cloud*/,
+                  const size_t n,
                   const typename DataCloudT::value_type &data,
                   std::true_type /*has_data*/) const
       {
@@ -2012,7 +2062,8 @@ namespace pcl
       /** \brief Does nothing. */
       template <class DataCloudT>
       inline void
-      resizeData (DataCloudT & /*data_cloud*/, const size_t /*n*/,
+      resizeData (DataCloudT & /*data_cloud*/,
+                  const size_t /*n*/,
                   const typename DataCloudT::value_type & /*data*/,
                   std::false_type /*has_data*/) const
       {

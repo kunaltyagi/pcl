@@ -132,8 +132,8 @@ pcl::cloud_composer::SelectedTrackballStyleInteractor::Rotate ()
   // Convert them to display coord
   double disp_obj_center[3];
 
-  this->ComputeWorldToDisplay (obj_center[0], obj_center[1], obj_center[2],
-                               disp_obj_center);
+  this->ComputeWorldToDisplay (
+      obj_center[0], obj_center[1], obj_center[2], disp_obj_center);
 
   this->ComputeWorldToDisplay (outsidept[0], outsidept[1], outsidept[2], outsidept);
 
@@ -218,8 +218,8 @@ pcl::cloud_composer::SelectedTrackballStyleInteractor::Spin ()
 
   double disp_obj_center[3];
 
-  this->ComputeWorldToDisplay (obj_center[0], obj_center[1], obj_center[2],
-                               disp_obj_center);
+  this->ComputeWorldToDisplay (
+      obj_center[0], obj_center[1], obj_center[2], disp_obj_center);
 
   double newAngle = vtkMath::DegreesFromRadians (
       atan2 (rwi->GetEventPosition ()[1] - disp_obj_center[1],
@@ -271,14 +271,17 @@ pcl::cloud_composer::SelectedTrackballStyleInteractor::Pan ()
   double disp_obj_center[3], new_pick_point[4];
   double old_pick_point[4], motion_vector[3];
 
-  this->ComputeWorldToDisplay (obj_center[0], obj_center[1], obj_center[2],
-                               disp_obj_center);
+  this->ComputeWorldToDisplay (
+      obj_center[0], obj_center[1], obj_center[2], disp_obj_center);
 
-  this->ComputeDisplayToWorld (rwi->GetEventPosition ()[0], rwi->GetEventPosition ()[1],
-                               disp_obj_center[2], new_pick_point);
+  this->ComputeDisplayToWorld (rwi->GetEventPosition ()[0],
+                               rwi->GetEventPosition ()[1],
+                               disp_obj_center[2],
+                               new_pick_point);
 
   this->ComputeDisplayToWorld (rwi->GetLastEventPosition ()[0],
-                               rwi->GetLastEventPosition ()[1], disp_obj_center[2],
+                               rwi->GetLastEventPosition ()[1],
+                               disp_obj_center[2],
                                old_pick_point);
 
   motion_vector[0] = new_pick_point[0] - old_pick_point[0];

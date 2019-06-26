@@ -44,8 +44,9 @@
 
 // Instantiations of specific point types
 #ifdef PCL_ONLY_CORE_POINT_TYPES
-PCL_INSTANTIATE (SACSegmentation, (pcl::PointXYZ) (pcl::PointXYZI) (pcl::PointXYZRGBA) (
-                                      pcl::PointXYZRGB) (pcl::PointXYZRGBNormal))
+PCL_INSTANTIATE (SACSegmentation,
+                 (pcl::PointXYZ) (pcl::PointXYZI) (pcl::PointXYZRGBA) (
+                     pcl::PointXYZRGB) (pcl::PointXYZRGBNormal))
 PCL_INSTANTIATE_PRODUCT (SACSegmentationFromNormals,
                          ((pcl::PointXYZ) (pcl::PointXYZI) (pcl::PointXYZRGBA) (
                              pcl::PointXYZRGB)) ((pcl::Normal)))

@@ -47,9 +47,14 @@ namespace pcl
   {
 
     struct DisparityBoundSmoothing {
-      DisparityBoundSmoothing (int width, int height, int window_size,
-                               float focal_length, float baseline,
-                               float disparity_threshold, float *data, float *raw_data)
+      DisparityBoundSmoothing (int width,
+                               int height,
+                               int window_size,
+                               float focal_length,
+                               float baseline,
+                               float disparity_threshold,
+                               float *data,
+                               float *raw_data)
           : width_ (width), height_ (height), window_size_ (window_size),
             focal_length_ (focal_length), baseline_ (baseline),
             disparity_threshold_ (disparity_threshold), data_ (data),
@@ -112,8 +117,10 @@ namespace pcl
         int yIdx = idx / width_;
         // TODO: test median
         // This implements a fixed window size in image coordinates (pixels)
-        int4 bounds = make_int4 (xIdx - window_size_, xIdx + window_size_,
-                                 yIdx - window_size_, yIdx + window_size_);
+        int4 bounds = make_int4 (xIdx - window_size_,
+                                 xIdx + window_size_,
+                                 yIdx - window_size_,
+                                 yIdx + window_size_);
 
         // clamp the coordinates to fit to depth image size
         bounds.x = clamp (bounds.x, 0, width_ - 1);
@@ -148,8 +155,11 @@ namespace pcl
     // This version requires a pre-computed map of float3 (nr_valid_points,
     // min_allowable_depth, max_allowable_depth);
     struct DisparityClampedSmoothing {
-      DisparityClampedSmoothing (float *data, float3 *disparity_helper_map, int width,
-                                 int height, int window_size)
+      DisparityClampedSmoothing (float *data,
+                                 float3 *disparity_helper_map,
+                                 int width,
+                                 int height,
+                                 int window_size)
           : data_ (data), disparity_helper_map_ (disparity_helper_map), width_ (width),
             height_ (height), window_size_ (window_size)
       {
@@ -182,8 +192,10 @@ namespace pcl
         int yIdx = idx / width_;
 
         // This implements a fixed window size in image coordinates (pixels)
-        int4 bounds = make_int4 (xIdx - window_size_, xIdx + window_size_,
-                                 yIdx - window_size_, yIdx + window_size_);
+        int4 bounds = make_int4 (xIdx - window_size_,
+                                 xIdx + window_size_,
+                                 yIdx - window_size_,
+                                 yIdx + window_size_);
 
         // clamp the coordinates to fit to disparity image size
         bounds.x = clamp (bounds.x, 0, width_ - 1);
@@ -205,8 +217,13 @@ namespace pcl
     };
 
     struct DisparityHelperMap {
-      DisparityHelperMap (float *data, int width, int height, int window_size,
-                          float baseline, float focal_length, float disp_thresh)
+      DisparityHelperMap (float *data,
+                          int width,
+                          int height,
+                          int window_size,
+                          float baseline,
+                          float focal_length,
+                          float disp_thresh)
           : data_ (data), width_ (width), height_ (height), window_size_ (window_size),
             baseline_ (baseline), focal_length_ (focal_length),
             disp_thresh_ (disp_thresh)
@@ -250,8 +267,10 @@ namespace pcl
         int yIdx = idx / width_;
 
         // This implements a fixed window size in image coordinates (pixels)
-        int4 bounds = make_int4 (xIdx - window_size_, xIdx + window_size_,
-                                 yIdx - window_size_, yIdx + window_size_);
+        int4 bounds = make_int4 (xIdx - window_size_,
+                                 xIdx + window_size_,
+                                 yIdx - window_size_,
+                                 yIdx + window_size_);
 
         // clamp the coordinates to fit to disparity image size
         bounds.x = clamp (bounds.x, 0, width_ - 1);
@@ -273,7 +292,8 @@ namespace pcl
           }
         }
 
-        return make_float3 ((float)counter, disparity2depth (disparity + disp_thresh_),
+        return make_float3 ((float)counter,
+                            disparity2depth (disparity + disp_thresh_),
                             disparity2depth (disparity - disp_thresh_));
       }
     };

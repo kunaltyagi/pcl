@@ -17,8 +17,12 @@ namespace pcl
   namespace face_detection
   {
     inline void
-    showBining (int num_pitch, float res_pitch, int min_pitch, int num_yaw,
-                float res_yaw, int min_yaw,
+    showBining (int num_pitch,
+                float res_pitch,
+                int min_pitch,
+                int num_yaw,
+                float res_yaw,
+                int min_yaw,
                 std::vector<std::vector<int>> &yaw_pitch_bins)
     {
       std::cout << "\t\t";
@@ -46,12 +50,15 @@ namespace pcl
   } // namespace face_detection
 } // namespace pcl
 
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
 void
-pcl::face_detection::FaceDetectorDataProvider<
-    FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::initialize (std::string
-                                                                              &data_dir)
+pcl::face_detection::
+    FaceDetectorDataProvider<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
+        initialize (std::string &data_dir)
 {
   std::string start;
   std::string ext = std::string ("pcd");
@@ -121,8 +128,8 @@ pcl::face_detection::FaceDetectorDataProvider<
     }
   }
 
-  pcl::face_detection::showBining (num_pitch, res_pitch, min_pitch, num_yaw, res_yaw,
-                                   min_yaw, yaw_pitch_bins);
+  pcl::face_detection::showBining (
+      num_pitch, res_pitch, min_pitch, num_yaw, res_yaw, min_yaw, yaw_pitch_bins);
 
   int max_elems = 0;
   int total_elems = 0;
@@ -160,8 +167,8 @@ pcl::face_detection::FaceDetectorDataProvider<
     }
   }
 
-  pcl::face_detection::showBining (num_pitch, res_pitch, min_pitch, num_yaw, res_yaw,
-                                   min_yaw, yaw_pitch_bins);
+  pcl::face_detection::showBining (
+      num_pitch, res_pitch, min_pitch, num_yaw, res_yaw, min_yaw, yaw_pitch_bins);
   std::cout << "Total number of images in the dataset:" << image_files_.size ()
             << std::endl;
 }
@@ -170,14 +177,17 @@ pcl::face_detection::FaceDetectorDataProvider<
 // extract positive and negative samples
 // create training examples and labels
 
-template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+template <class FeatureType,
+          class DataSet,
+          class LabelType,
+          class ExampleIndex,
           class NodeType>
 void
-pcl::face_detection::FaceDetectorDataProvider<
-    FeatureType, DataSet, LabelType, ExampleIndex,
-    NodeType>::getDatasetAndLabels (DataSet &data_set,
-                                    std::vector<LabelType> &label_data,
-                                    std::vector<ExampleIndex> &examples)
+pcl::face_detection::
+    FaceDetectorDataProvider<FeatureType, DataSet, LabelType, ExampleIndex, NodeType>::
+        getDatasetAndLabels (DataSet &data_set,
+                             std::vector<LabelType> &label_data,
+                             std::vector<ExampleIndex> &examples)
 {
   srand (static_cast<unsigned int> (time (nullptr)));
   std::random_shuffle (image_files_.begin (), image_files_.end ());
@@ -246,10 +256,10 @@ pcl::face_detection::FaceDetectorDataProvider<
       // std::cout << min_col << " - " << max_col << std::endl;
       // std::cout << min_row << " - " << max_row << std::endl;
 
-      cropCloud<pcl::PointXYZ> (min_col, max_col, min_row, max_row, *loaded_cloud,
-                                *cloud);
-      cropCloud<pcl::PointXYZL> (min_col, max_col, min_row, max_row,
-                                 *loaded_cloud_labels, *cloud_labels);
+      cropCloud<pcl::PointXYZ> (
+          min_col, max_col, min_row, max_row, *loaded_cloud, *cloud);
+      cropCloud<pcl::PointXYZL> (
+          min_col, max_col, min_row, max_row, *loaded_cloud_labels, *cloud_labels);
 
       /*pcl::visualization::PCLVisualizer vis ("training");
        vis.addPointCloud(loaded_cloud);
@@ -263,8 +273,8 @@ pcl::face_detection::FaceDetectorDataProvider<
     int element_stride = sizeof (pcl::PointXYZ) / sizeof (float);
     int row_stride = element_stride * cloud->width;
     const float *data = reinterpret_cast<const float *> (&cloud->points[0]);
-    integral_image_depth->setInput (data + 2, cloud->width, cloud->height,
-                                    element_stride, row_stride);
+    integral_image_depth->setInput (
+        data + 2, cloud->width, cloud->height, element_stride, row_stride);
 
     // Compute normals and normal integral images
     pcl::PointCloud<pcl::Normal>::Ptr normals (new pcl::PointCloud<pcl::Normal>);
@@ -290,18 +300,27 @@ pcl::face_detection::FaceDetectorDataProvider<
     if (USE_NORMALS_) {
       integral_image_normal_x.reset (new pcl::IntegralImage2D<float, 1> (false));
       const float *data_nx = reinterpret_cast<const float *> (&normals->points[0]);
-      integral_image_normal_x->setInput (data_nx, normals->width, normals->height,
-                                         element_stride_normal, row_stride_normal);
+      integral_image_normal_x->setInput (data_nx,
+                                         normals->width,
+                                         normals->height,
+                                         element_stride_normal,
+                                         row_stride_normal);
 
       integral_image_normal_y.reset (new pcl::IntegralImage2D<float, 1> (false));
       const float *data_ny = reinterpret_cast<const float *> (&normals->points[0]);
-      integral_image_normal_y->setInput (data_ny + 1, normals->width, normals->height,
-                                         element_stride_normal, row_stride_normal);
+      integral_image_normal_y->setInput (data_ny + 1,
+                                         normals->width,
+                                         normals->height,
+                                         element_stride_normal,
+                                         row_stride_normal);
 
       integral_image_normal_z.reset (new pcl::IntegralImage2D<float, 1> (false));
       const float *data_nz = reinterpret_cast<const float *> (&normals->points[0]);
-      integral_image_normal_z->setInput (data_nz + 2, normals->width, normals->height,
-                                         element_stride_normal, row_stride_normal);
+      integral_image_normal_z->setInput (data_nz + 2,
+                                         normals->width,
+                                         normals->height,
+                                         element_stride_normal,
+                                         row_stride_normal);
     }
 
     // Using cloud labels estimate a 2D window from where to extract positive samples
@@ -537,5 +556,8 @@ pcl::face_detection::FaceDetectorDataProvider<
 }
 
 template class pcl::face_detection::FaceDetectorDataProvider<
-    pcl::face_detection::FeatureType, std::vector<pcl::face_detection::TrainingExample>,
-    float, int, pcl::face_detection::RFTreeNode<pcl::face_detection::FeatureType>>;
+    pcl::face_detection::FeatureType,
+    std::vector<pcl::face_detection::TrainingExample>,
+    float,
+    int,
+    pcl::face_detection::RFTreeNode<pcl::face_detection::FeatureType>>;

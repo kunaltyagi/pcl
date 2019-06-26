@@ -100,8 +100,8 @@ pcl::SurfelSmoothing<PointT, PointNT>::smoothCloudIteration (
 
     // get neighbors
     // @todo using 5x the scale for searching instead of all the points to avoid O(N^2)
-    tree_->radiusSearch (interm_cloud_->points[i], 5 * scale_, nn_indices,
-                         nn_distances);
+    tree_->radiusSearch (
+        interm_cloud_->points[i], 5 * scale_, nn_indices, nn_distances);
 
     float theta_normalization_factor = 0.0;
     std::vector<float> theta (nn_indices.size ());
@@ -133,8 +133,9 @@ pcl::SurfelSmoothing<PointT, PointNT>::smoothCloudIteration (
       smoothed_point (3) = 0.0f;
       for (size_t nn_index_i = 0; nn_index_i < nn_indices.size (); ++nn_index_i) {
         Eigen::Vector4f neighbor =
-            input_->points[nn_indices[nn_index_i]].getVector4fMap (); // interm_cloud_->points[nn_indices[nn_index_i]].getVector4fMap
-                                                                      // ();
+            input_->points[nn_indices[nn_index_i]]
+                .getVector4fMap (); // interm_cloud_->points[nn_indices[nn_index_i]].getVector4fMap
+                                    // ();
         neighbor (3) = 0.0f;
         float dot_product = smoothed_normal.dot (neighbor - smoothed_point);
         e_residual += theta[nn_index_i] * dot_product; // * dot_product;
@@ -282,7 +283,8 @@ pcl::SurfelSmoothing<PointT, PointNT>::computeSmoothedCloud (
 template <typename PointT, typename PointNT>
 void
 pcl::SurfelSmoothing<PointT, PointNT>::extractSalientFeaturesBetweenScales (
-    PointCloudInPtr &cloud2, NormalCloudPtr &cloud2_normals,
+    PointCloudInPtr &cloud2,
+    NormalCloudPtr &cloud2_normals,
     pcl::IndicesPtr &output_features)
 {
   if (interm_cloud_->points.size () != cloud2->points.size () ||

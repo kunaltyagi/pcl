@@ -47,7 +47,8 @@ class ON_BrepRegionTopologyUserData : public ON_UserData
   ON_BrepRegionTopology m_region_topology;
 };
 
-ON_OBJECT_IMPLEMENT (ON_BrepRegionTopologyUserData, ON_UserData,
+ON_OBJECT_IMPLEMENT (ON_BrepRegionTopologyUserData,
+                     ON_UserData,
                      "7FE23D63-E536-43f1-98E2-C807A2625AFF");
 
 ON_BrepRegionTopology *
@@ -105,10 +106,7 @@ ON_BrepRegionTopologyUserData::SizeOf () const
 }
 
 ON_BOOL32
-ON_BrepRegionTopologyUserData::Archive () const
-{
-  return true;
-}
+ON_BrepRegionTopologyUserData::Archive () const { return true; }
 
 ON_BOOL32
 ON_BrepRegionTopologyUserData::Transform (const ON_Xform &xform)
@@ -165,14 +163,12 @@ ON_BrepRegionTopologyUserData::GetDescription (ON_wString &description)
   return true;
 }
 
-ON_OBJECT_IMPLEMENT (ON_BrepFaceSide, ON_Object,
+ON_OBJECT_IMPLEMENT (ON_BrepFaceSide,
+                     ON_Object,
                      "30930370-0D5B-4ee4-8083-BD635C7398A4");
 
 ON_BOOL32
-ON_BrepFaceSide::IsValid (ON_TextLog *text_log) const
-{
-  return true;
-}
+ON_BrepFaceSide::IsValid (ON_TextLog *text_log) const { return true; }
 
 ON_BrepFaceSide::ON_BrepFaceSide ()
 {
@@ -306,10 +302,7 @@ ON_BrepFaceSide::SurfaceNormalDirection () const
 ON_OBJECT_IMPLEMENT (ON_BrepRegion, ON_Object, "CA7A0092-7EE6-4f99-B9D2-E1D6AA798AA1");
 
 ON_BOOL32
-ON_BrepRegion::IsValid (ON_TextLog *text_log) const
-{
-  return true;
-}
+ON_BrepRegion::IsValid (ON_TextLog *text_log) const { return true; }
 
 ON_BrepRegion::ON_BrepRegion ()
 {
@@ -626,13 +619,15 @@ ON_BrepRegionTopology::IsValid (ON_TextLog *text_log) const
       return false;
     }
     if (fi != fs.m_fi) {
-      PRINT_MSG3 ("ON_BrepRegionTopology::m_FS[%d].m_fi = %d != %d\n", fsi, fs.m_fi,
-                  fi);
+      PRINT_MSG3 (
+          "ON_BrepRegionTopology::m_FS[%d].m_fi = %d != %d\n", fsi, fs.m_fi, fi);
       return false;
     }
     if (fs.m_srf_dir != srf_dir) {
-      PRINT_MSG3 ("ON_BrepRegionTopology::m_FS[%d].m_srf_dir = %d != %d\n", fsi,
-                  fs.m_srf_dir, srf_dir);
+      PRINT_MSG3 ("ON_BrepRegionTopology::m_FS[%d].m_srf_dir = %d != %d\n",
+                  fsi,
+                  fs.m_srf_dir,
+                  srf_dir);
       return false;
     }
     if (-1 == fs.m_ri) {
@@ -662,7 +657,8 @@ ON_BrepRegionTopology::IsValid (ON_TextLog *text_log) const
     if (0 == region.m_type) {
       if (infinite_region_index >= 0) {
         PRINT_MSG2 ("ON_BrepRegionTopology::m_R[%d and %d].m_type = 0\n",
-                    infinite_region_index, ri);
+                    infinite_region_index,
+                    ri);
         return false;
       }
       infinite_region_index = ri;
@@ -674,21 +670,25 @@ ON_BrepRegionTopology::IsValid (ON_TextLog *text_log) const
     for (int rfsi = 0; rfsi < region.m_fsi.Count (); rfsi++) {
       fsi = region.m_fsi[rfsi];
       if (fsi < 0 || fsi >= faceside_count) {
-        PRINT_MSG2 ("ON_BrepRegionTopology::m_R[%d].m_fsi[%d] is out of range\n", ri,
-                    rfsi);
+        PRINT_MSG2 (
+            "ON_BrepRegionTopology::m_R[%d].m_fsi[%d] is out of range\n", ri, rfsi);
         return false;
       }
       const ON_BrepFaceSide &faceside = m_FS[fsi];
       if (faceside.m_ri != ri) {
-        PRINT_MSG3 ("ON_BrepRegionTopology::m_FS[m_R[%d].m_fsi[%d]].m_ri != %d\n", ri,
-                    rfsi, ri);
+        PRINT_MSG3 ("ON_BrepRegionTopology::m_FS[m_R[%d].m_fsi[%d]].m_ri != %d\n",
+                    ri,
+                    rfsi,
+                    ri);
         return false;
       }
       for (int j = rfsi + 1; j < region.m_fsi.Count (); j++) {
         if (fsi == region.m_fsi[j]) {
           PRINT_MSG3 (
-              "ON_BrepRegionTopology::m_R[%d].m_fsi[%d and %d]] are duplicates\n", ri,
-              rfsi, j);
+              "ON_BrepRegionTopology::m_R[%d].m_fsi[%d and %d]] are duplicates\n",
+              ri,
+              rfsi,
+              j);
           return false;
         }
       }
@@ -699,7 +699,8 @@ ON_BrepRegionTopology::IsValid (ON_TextLog *text_log) const
   if (faceside_count != rfs_count + void_regionside_count) {
     PRINT_MSG2 (
         "Sum of ON_BrepRegionTopology::m_R[%d].m_fsi.Count() = %d != m_FS.Count()\n",
-        ri, rfs_count);
+        ri,
+        rfs_count);
     return false;
   }
 
@@ -1022,7 +1023,8 @@ ON_Brep::SubBrep (int subfi_count, const int *subfi, ON_Brep *sub_brep) const
       Vmap[i] = sub_vertex.m_vertex_index;
       sub_vertex.CopyUserData (vertex);
       // March 29, 2010 Lowell - Copy user fields
-      memcpy (&sub_vertex.m_vertex_user, &vertex.m_vertex_user,
+      memcpy (&sub_vertex.m_vertex_user,
+              &vertex.m_vertex_user,
               sizeof (sub_vertex.m_vertex_user));
     } else
       Vmap[i] = -1;
@@ -1104,12 +1106,12 @@ ON_Brep::SubBrep (int subfi_count, const int *subfi, ON_Brep *sub_brep) const
           return 0;
         if (trim.m_ei >= 0) {
           ON_BrepEdge &sub_edge = sub_brep->m_E[Emap[trim.m_ei]];
-          sub_brep->NewTrim (sub_edge, trim.m_bRev3d, sub_loop,
-                             sub_brep->m_C2.Count () - 1);
+          sub_brep->NewTrim (
+              sub_edge, trim.m_bRev3d, sub_loop, sub_brep->m_C2.Count () - 1);
         } else if (ON_BrepTrim::singular == trim.m_type) {
           ON_BrepVertex &sub_vertex = sub_brep->m_V[Vmap[trim.m_vi[0]]];
-          sub_brep->NewSingularTrim (sub_vertex, sub_loop, trim.m_iso,
-                                     sub_brep->m_C2.Count () - 1);
+          sub_brep->NewSingularTrim (
+              sub_vertex, sub_loop, trim.m_iso, sub_brep->m_C2.Count () - 1);
         }
         // March 29, 2010 Lowell - copy ptonsrf type
         else if (ON_BrepTrim::ptonsrf == trim.m_type) {
@@ -1130,8 +1132,8 @@ ON_Brep::SubBrep (int subfi_count, const int *subfi, ON_Brep *sub_brep) const
         sub_trim.m_pbox = trim.m_pbox;
         sub_trim.m_iso = trim.m_iso;
         // April 19, 2010 Lowell - Copy user fields
-        memcpy (&sub_trim.m_trim_user, &trim.m_trim_user,
-                sizeof (sub_trim.m_trim_user));
+        memcpy (
+            &sub_trim.m_trim_user, &trim.m_trim_user, sizeof (sub_trim.m_trim_user));
 
         // Since we are extracting a subset of the original brep,
         // some mated edges could turn into boundary edges. The

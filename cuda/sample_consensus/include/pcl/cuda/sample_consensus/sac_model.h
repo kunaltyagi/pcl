@@ -210,14 +210,22 @@ namespace pcl
        * \param inliers_stencil
        */
       virtual int
-      selectWithinDistance (const Coefficients &model_coefficients, float threshold,
-                            IndicesPtr &inliers, IndicesPtr &inliers_stencil) = 0;
+      selectWithinDistance (const Coefficients &model_coefficients,
+                            float threshold,
+                            IndicesPtr &inliers,
+                            IndicesPtr &inliers_stencil) = 0;
       virtual int
-      selectWithinDistance (const Hypotheses &h, int idx, float threshold,
-                            IndicesPtr &inliers, IndicesPtr &inliers_stencil) = 0;
+      selectWithinDistance (const Hypotheses &h,
+                            int idx,
+                            float threshold,
+                            IndicesPtr &inliers,
+                            IndicesPtr &inliers_stencil) = 0;
       virtual int
-      selectWithinDistance (Hypotheses &h, int idx, float threshold,
-                            IndicesPtr &inliers_stencil, float3 &centroid) = 0;
+      selectWithinDistance (Hypotheses &h,
+                            int idx,
+                            float threshold,
+                            IndicesPtr &inliers_stencil,
+                            float3 &centroid) = 0;
 
       virtual int
       countWithinDistance (const Coefficients &model_coefficients, float threshold) = 0;
@@ -228,7 +236,9 @@ namespace pcl
       int
       deleteIndices (const IndicesPtr &indices_stencil);
       int
-      deleteIndices (const Hypotheses &h, int idx, IndicesPtr &inliers,
+      deleteIndices (const Hypotheses &h,
+                     int idx,
+                     IndicesPtr &inliers,
                      const IndicesPtr &inliers_delete);
 
       /*  \brief Create a new point cloud with inliers projected onto the model. Pure
@@ -293,8 +303,10 @@ namespace pcl
       {
         if (nr_indices_in_stencil_ != indices_->size ()) {
           typename Indices::iterator last =
-              thrust::remove_copy (indices_stencil_->begin (), indices_stencil_->end (),
-                                   indices_->begin (), -1);
+              thrust::remove_copy (indices_stencil_->begin (),
+                                   indices_stencil_->end (),
+                                   indices_->begin (),
+                                   -1);
           indices_->erase (last, indices_->end ());
         }
 

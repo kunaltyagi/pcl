@@ -294,7 +294,8 @@ namespace pcl
                   "bigger than the octree's depth.\n");
         PCL_WARN (
             "[pcl::octree::FixedDepthIterator] fixed_depth = %d (instead of %d)\n",
-            this->octree_->getTreeDepth (), fixed_depth_);
+            this->octree_->getTreeDepth (),
+            fixed_depth_);
       }
 
       // By default for the parent class OctreeBreadthFirstIterator, if the
@@ -334,10 +335,12 @@ namespace pcl
     //////////////////////////////////////////////////////////////////////////////////////////////
     template <typename OctreeT>
     OctreeLeafNodeBreadthFirstIterator<OctreeT>::OctreeLeafNodeBreadthFirstIterator (
-        OctreeT *octree_arg, unsigned int max_depth_arg, IteratorState *current_state,
+        OctreeT *octree_arg,
+        unsigned int max_depth_arg,
+        IteratorState *current_state,
         const std::deque<IteratorState> &fifo)
-        : OctreeBreadthFirstIterator<OctreeT> (octree_arg, max_depth_arg, current_state,
-                                               fifo)
+        : OctreeBreadthFirstIterator<OctreeT> (
+              octree_arg, max_depth_arg, current_state, fifo)
     {
     }
 

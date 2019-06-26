@@ -63,14 +63,15 @@ pcl::gpu::Octree::Octree () : cloud_ (nullptr), impl (nullptr)
 
   if (prop.major < 2)
     pcl::gpu::error ("This code requires devices with compute capability >= 2.0",
-                     __FILE__, __LINE__);
+                     __FILE__,
+                     __LINE__);
 
   int bin, ptx;
   OctreeImpl::get_gpu_arch_compiled_for (bin, ptx);
 
   if (bin < 20 && ptx < 20)
-    pcl::gpu::error ("This must be compiled for compute capability >= 2.0", __FILE__,
-                     __LINE__);
+    pcl::gpu::error (
+        "This must be compiled for compute capability >= 2.0", __FILE__, __LINE__);
 
   impl = new OctreeImpl ();
   built_ = false;
@@ -113,8 +114,10 @@ pcl::gpu::Octree::internalDownload ()
 }
 
 void
-pcl::gpu::Octree::radiusSearchHost (const PointType &center, float radius,
-                                    std::vector<int> &out, int max_nn)
+pcl::gpu::Octree::radiusSearchHost (const PointType &center,
+                                    float radius,
+                                    std::vector<int> &out,
+                                    int max_nn)
 {
   if (!static_cast<OctreeImpl *> (impl)->host_octree.downloaded)
     internalDownload ();
@@ -128,7 +131,8 @@ pcl::gpu::Octree::radiusSearchHost (const PointType &center, float radius,
 }
 
 void
-pcl::gpu::Octree::approxNearestSearchHost (const PointType &query, int &out_index,
+pcl::gpu::Octree::approxNearestSearchHost (const PointType &query,
+                                           int &out_index,
                                            float &sqr_dist)
 {
   if (!static_cast<OctreeImpl *> (impl)->host_octree.downloaded)
@@ -143,7 +147,9 @@ pcl::gpu::Octree::approxNearestSearchHost (const PointType &query, int &out_inde
 }
 
 void
-pcl::gpu::Octree::radiusSearch (const Queries &queries, float radius, int max_results,
+pcl::gpu::Octree::radiusSearch (const Queries &queries,
+                                float radius,
+                                int max_results,
                                 NeighborIndices &results) const
 {
   assert (queries.size () > 0);
@@ -155,8 +161,10 @@ pcl::gpu::Octree::radiusSearch (const Queries &queries, float radius, int max_re
 }
 
 void
-pcl::gpu::Octree::radiusSearch (const Queries &queries, const Radiuses &radiuses,
-                                int max_results, NeighborIndices &results) const
+pcl::gpu::Octree::radiusSearch (const Queries &queries,
+                                const Radiuses &radiuses,
+                                int max_results,
+                                NeighborIndices &results) const
 {
   assert (queries.size () > 0);
   assert (queries.size () == radiuses.size ());
@@ -168,8 +176,10 @@ pcl::gpu::Octree::radiusSearch (const Queries &queries, const Radiuses &radiuses
 }
 
 void
-pcl::gpu::Octree::radiusSearch (const Queries &queries, const Indices &indices,
-                                float radius, int max_results,
+pcl::gpu::Octree::radiusSearch (const Queries &queries,
+                                const Indices &indices,
+                                float radius,
+                                int max_results,
                                 NeighborIndices &results) const
 {
   assert (queries.size () > 0 && indices.size () > 0);
@@ -192,12 +202,13 @@ pcl::gpu::Octree::approxNearestSearch (const Queries &queries,
 }
 
 void
-pcl::gpu::Octree::nearestKSearchBatch (const Queries &queries, int k,
+pcl::gpu::Octree::nearestKSearchBatch (const Queries &queries,
+                                       int k,
                                        NeighborIndices &results) const
 {
   if (k != 1)
-    throw pcl::PCLException ("OctreeGPU::knnSearch is supported only for k == 1",
-                             __FILE__, "", __LINE__);
+    throw pcl::PCLException (
+        "OctreeGPU::knnSearch is supported only for k == 1", __FILE__, "", __LINE__);
 
   assert (queries.size () > 0);
   results.create (static_cast<int> (queries.size ()), k);
@@ -212,8 +223,10 @@ pcl::gpu::Octree::nearestKSearchBatch (const Queries &queries, int k,
 
 void
 pcl::gpu::bruteForceRadiusSearchGPU (const Octree::PointCloud &cloud,
-                                     const PointXYZ &query, float radius,
-                                     DeviceArray<int> &result, DeviceArray<int> &buffer)
+                                     const PointXYZ &query,
+                                     float radius,
+                                     DeviceArray<int> &result,
+                                     DeviceArray<int> &buffer)
 {
   using PointType = OctreeImpl::PointType;
   using PointCloud = OctreeImpl::PointCloud;

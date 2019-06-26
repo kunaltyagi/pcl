@@ -318,7 +318,9 @@ class ON_CLASS ON_SerialNumberMap
     substantially faster than repeated calls to FindElement().
   */
   size_t
-  GetElements (unsigned int sn0, unsigned int sn1, size_t max_count,
+  GetElements (unsigned int sn0,
+               unsigned int sn1,
+               size_t max_count,
                ON_SimpleArray<SN_ELEMENT> &elements) const;
 
   /*
@@ -373,7 +375,8 @@ class ON_CLASS ON_SerialNumberMap
     void
     SortBlockHelper ();
     bool
-    IsValidBlock (ON_TextLog *textlog, struct SN_ELEMENT *const *hash_table,
+    IsValidBlock (ON_TextLog *textlog,
+                  struct SN_ELEMENT *const *hash_table,
                   size_t *active_id_count) const;
     struct SN_ELEMENT *
     BinarySearchBlockHelper (unsigned int sn);

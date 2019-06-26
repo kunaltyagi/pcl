@@ -296,7 +296,9 @@ namespace pcl
                                  OpenNI2VideoMode &mode) const;
 
         bool
-        resizingSupported (size_t input_width, size_t input_height, size_t output_width,
+        resizingSupported (size_t input_width,
+                           size_t input_height,
+                           size_t output_width,
                            size_t output_height) const;
 
         // Members

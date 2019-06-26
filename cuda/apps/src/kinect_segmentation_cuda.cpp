@@ -123,26 +123,26 @@ class Segmentation
         first_time = false;
 
       if (enable_normal_viz)
-        viz.addPointCloudNormals<pcl::PointXYZRGBNormal> (normal_cloud, normal_viz_step,
-                                                          0.1, "normalcloud");
+        viz.addPointCloudNormals<pcl::PointXYZRGBNormal> (
+            normal_cloud, normal_viz_step, 0.1, "normalcloud");
 
       if (enable_color == 1) {
         using ColorHandler =
             pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGBNormal>;
         ColorHandler Color_handler (normal_cloud);
-        viz.addPointCloud<pcl::PointXYZRGBNormal> (normal_cloud, Color_handler,
-                                                   std::string (cloud_name));
+        viz.addPointCloud<pcl::PointXYZRGBNormal> (
+            normal_cloud, Color_handler, std::string (cloud_name));
       } else {
         using ColorHandler = pcl::visualization::PointCloudColorHandlerGenericField<
             pcl::PointXYZRGBNormal>;
         ColorHandler Color_handler (normal_cloud, "curvature");
-        viz.addPointCloud<pcl::PointXYZRGBNormal> (normal_cloud, Color_handler,
-                                                   cloud_name, 0);
+        viz.addPointCloud<pcl::PointXYZRGBNormal> (
+            normal_cloud, Color_handler, cloud_name, 0);
       }
       viz.setPointCloudRenderingProperties (
           pcl::visualization::PCL_VISUALIZER_LINE_WIDTH, linesize, cloud_name);
-      viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_OPACITY,
-                                            opacity, cloud_name);
+      viz.setPointCloudRenderingProperties (
+          pcl::visualization::PCL_VISUALIZER_OPACITY, opacity, cloud_name);
       viz.setPointCloudRenderingProperties (
           pcl::visualization::PCL_VISUALIZER_POINT_SIZE, psize, cloud_name);
       new_cloud = false;
@@ -223,8 +223,14 @@ class Segmentation
     // Compute the PointCloud on the device
     {
       ScopeTimeCPU time ("disparity smoothing");
-      d2c.compute<Storage> (depth_image, image, constant, data, false, 1,
-                            smoothing_nr_iterations, smoothing_filter_size);
+      d2c.compute<Storage> (depth_image,
+                            image,
+                            constant,
+                            data,
+                            false,
+                            1,
+                            smoothing_nr_iterations,
+                            smoothing_filter_size);
     }
 
     boost::shared_ptr<typename Storage<float4>::type> normals;
@@ -235,8 +241,11 @@ class Segmentation
       else {
         constexpr float focallength = 580 / 2.0;
         normals = computePointNormals<Storage> (data->points.begin (),
-                                                data->points.end (), focallength, data,
-                                                radius_cm / 100.0f, nr_neighbors);
+                                                data->points.end (),
+                                                focallength,
+                                                data,
+                                                radius_cm / 100.0f,
+                                                nr_neighbors);
       }
       cudaDeviceSynchronize ();
     }
@@ -246,8 +255,8 @@ class Segmentation
     typename StoragePointer<Storage, char4>::type ptr;
     {
       ScopeTimeCPU time ("Matrix Creation");
-      ImageType<Storage>::createContinuous ((int)data->height, (int)data->width,
-                                            CV_8UC4, normal_image);
+      ImageType<Storage>::createContinuous (
+          (int)data->height, (int)data->width, CV_8UC4, normal_image);
       ptr = typename StoragePointer<Storage, char4>::type ((char4 *)normal_image.data);
       createNormalsImage<Storage> (ptr, *normals);
     }
@@ -257,8 +266,8 @@ class Segmentation
     {
       ScopeTimeCPU time ("Mean Shift");
       if (enable_mean_shift == 1) {
-        cv::gpu::meanShiftSegmentation (normal_image, seg, meanshift_sp, meanshift_sr,
-                                        meanshift_minsize);
+        cv::gpu::meanShiftSegmentation (
+            normal_image, seg, meanshift_sp, meanshift_sr, meanshift_minsize);
         typename Storage<char4>::type new_colors ((char4 *)seg.datastart,
                                                   (char4 *)seg.dataend);
         colorCloud<Storage> (data, new_colors);
@@ -294,7 +303,8 @@ class Segmentation
             typename Storage<int>::type region_mask;
             markInliers<Storage> (data, region_mask, planes);
             thrust::host_vector<int> regions_host;
-            std::copy (regions_host.begin (), regions_host.end (),
+            std::copy (regions_host.begin (),
+                       regions_host.end (),
                        std::ostream_iterator<int> (std::cerr, " "));
             {
               ScopeTimeCPU t ("retrieving inliers");
@@ -336,8 +346,8 @@ class Segmentation
       cv::namedWindow ("Parameters", CV_WINDOW_NORMAL);
       cvCreateTrackbar ("iterations", "Parameters", &smoothing_nr_iterations, 50, NULL);
       cvCreateTrackbar ("filter_size", "Parameters", &smoothing_filter_size, 10, NULL);
-      cvCreateTrackbar ("enable_visualization", "Parameters", &enable_visualization, 1,
-                        NULL);
+      cvCreateTrackbar (
+          "enable_visualization", "Parameters", &enable_visualization, 1, NULL);
       cvCreateTrackbar ("enable_color", "Parameters", &enable_color, 1, NULL);
       cvCreateTrackbar ("normal_method", "Parameters", &normal_method, 1, NULL);
       cvCreateTrackbar ("neighborhood_radius", "Parameters", &radius_cm, 50, NULL);
@@ -346,10 +356,10 @@ class Segmentation
       cvCreateTrackbar ("enable_mean_shift", "Parameters", &enable_mean_shift, 1, NULL);
       cvCreateTrackbar ("meanshift_sp", "Parameters", &meanshift_sp, 100, NULL);
       cvCreateTrackbar ("meanshift_sr", "Parameters", &meanshift_sr, 100, NULL);
-      cvCreateTrackbar ("meanshift_minsize", "Parameters", &meanshift_minsize, 500,
-                        NULL);
-      cvCreateTrackbar ("enable_plane_fitting", "Parameters", &enable_plane_fitting, 1,
-                        NULL);
+      cvCreateTrackbar (
+          "meanshift_minsize", "Parameters", &meanshift_minsize, 500, NULL);
+      cvCreateTrackbar (
+          "enable_plane_fitting", "Parameters", &enable_plane_fitting, 1, NULL);
       cvCreateTrackbar ("enable_normal_viz", "Parameters", &enable_normal_viz, 1, NULL);
       if (enable_visualization == 1) {
 
@@ -409,7 +419,8 @@ class Segmentation
         std::cerr << "[Segmentation] Using GPU..." << std::endl;
         std::function<void(
             const boost::shared_ptr<openni_wrapper::Image> &image,
-            const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image, float)>
+            const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image,
+            float)>
             f = boost::bind (&Segmentation::cloud_cb<Device>, this, _1, _2, _3);
         c = grabber->registerCallback (f);
       } else {

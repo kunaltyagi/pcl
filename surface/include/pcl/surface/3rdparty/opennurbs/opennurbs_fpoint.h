@@ -675,13 +675,13 @@ class ON_CLASS ON_2fVector
   Length () const;
 
   bool
-  Decompose ( // Computes a, b such that this vector = a*X + b*Y
-              // Returns false if unable to solve for a,b.  This happens
-              // when X,Y is not really a basis.
-              //
-              // If X,Y is known to be an orthonormal frame,
-              // then a = V*X, b = V*Y will compute
-              // the same result more quickly.
+  Decompose (              // Computes a, b such that this vector = a*X + b*Y
+                           // Returns false if unable to solve for a,b.  This happens
+                           // when X,Y is not really a basis.
+                           //
+                           // If X,Y is known to be an orthonormal frame,
+                           // then a = V*X, b = V*Y will compute
+                           // the same result more quickly.
       const ON_2fVector &, // X
       const ON_2fVector &, // Y
       double *,            // a

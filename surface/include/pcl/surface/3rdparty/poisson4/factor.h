@@ -60,7 +60,12 @@ namespace pcl
     PCL_EXPORTS int
     Factor (double a3, double a2, double a1, double a0, double roots[3][2], double EPS);
     PCL_EXPORTS int
-    Factor (double a4, double a3, double a2, double a1, double a0, double roots[4][2],
+    Factor (double a4,
+            double a3,
+            double a2,
+            double a1,
+            double a0,
+            double roots[4][2],
             double EPS);
 
     PCL_EXPORTS int

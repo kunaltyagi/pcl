@@ -60,8 +60,11 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS void
-    saveCharPNGFile (const std::string &file_name, const unsigned char *mono_image,
-                     int width, int height, int channels);
+    saveCharPNGFile (const std::string &file_name,
+                     const unsigned char *mono_image,
+                     int width,
+                     int height,
+                     int channels);
 
     /** \brief Saves 16-bit encoded image to PNG file.
      * \param[in] file_name the name of the file to write to disk
@@ -72,8 +75,11 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS void
-    saveShortPNGFile (const std::string &file_name, const unsigned short *short_image,
-                      int width, int height, int channels);
+    saveShortPNGFile (const std::string &file_name,
+                      const unsigned short *short_image,
+                      int width,
+                      int height,
+                      int channels);
 
     /** \brief Saves 8-bit encoded RGB image to PNG file.
      * \param[in] file_name the name of the file to write to disk
@@ -83,8 +89,10 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS void
-    saveRgbPNGFile (const std::string &file_name, const unsigned char *rgb_image,
-                    int width, int height);
+    saveRgbPNGFile (const std::string &file_name,
+                    const unsigned char *rgb_image,
+                    int width,
+                    int height);
 
     /** \brief Saves 8-bit grayscale cloud as image to PNG file.
      * \param[in] file_name the name of the file to write to disk
@@ -120,7 +128,8 @@ namespace pcl
      */
     template <typename PointT>
     void
-    savePNGFile (const std::string &file_name, const pcl::PointCloud<PointT> &cloud,
+    savePNGFile (const std::string &file_name,
+                 const pcl::PointCloud<PointT> &cloud,
                  const std::string &field_name)
     {
       using PointCloudImageExtractorPtr =

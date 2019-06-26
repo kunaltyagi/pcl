@@ -28,13 +28,15 @@ pcl::cloud_composer::ItemInspector::setModel (ProjectModel *new_model)
 
   if (current_selection_model_) {
     disconnect (current_selection_model_,
-                SIGNAL (currentChanged (const QModelIndex, const QModelIndex)), this,
+                SIGNAL (currentChanged (const QModelIndex, const QModelIndex)),
+                this,
                 SLOT (selectionChanged (const QModelIndex, const QModelIndex)));
     removeTabs ();
   }
   current_selection_model_ = new_selection_model;
   connect (current_selection_model_,
-           SIGNAL (currentChanged (const QModelIndex, const QModelIndex)), this,
+           SIGNAL (currentChanged (const QModelIndex, const QModelIndex)),
+           this,
            SLOT (selectionChanged (const QModelIndex, const QModelIndex)));
 
   updateView ();

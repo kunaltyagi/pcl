@@ -104,7 +104,8 @@ namespace pcl
      * 12345 (default: false)
      */
     SampleConsensusModelCylinder (const PointCloudConstPtr &cloud,
-                                  const std::vector<int> &indices, bool random = false)
+                                  const std::vector<int> &indices,
+                                  bool random = false)
         : SampleConsensusModel<PointT> (cloud, indices, random),
           SampleConsensusModelFromNormals<PointT, PointNT> (),
           axis_ (Eigen::Vector3f::Zero ()), eps_angle_ (0)
@@ -202,7 +203,8 @@ namespace pcl
      */
     void
     selectWithinDistance (const Eigen::VectorXf &model_coefficients,
-                          const double threshold, std::vector<int> &inliers) override;
+                          const double threshold,
+                          std::vector<int> &inliers) override;
 
     /** \brief Count all the points which respect the given model coefficients as
      * inliers.
@@ -278,8 +280,10 @@ namespace pcl
      * resultant projected point
      */
     inline void
-    projectPointToLine (const Eigen::Vector4f &pt, const Eigen::Vector4f &line_pt,
-                        const Eigen::Vector4f &line_dir, Eigen::Vector4f &pt_proj) const
+    projectPointToLine (const Eigen::Vector4f &pt,
+                        const Eigen::Vector4f &line_pt,
+                        const Eigen::Vector4f &line_dir,
+                        Eigen::Vector4f &pt_proj) const
     {
       float k = (pt.dot (line_dir) - line_pt.dot (line_dir)) / line_dir.dot (line_dir);
       // Calculate the projection of the point on the line
@@ -346,7 +350,8 @@ namespace pcl
           // dist = f - r
           Eigen::Vector4f pt (model_->input_->points[indices_[i]].x,
                               model_->input_->points[indices_[i]].y,
-                              model_->input_->points[indices_[i]].z, 0);
+                              model_->input_->points[indices_[i]].z,
+                              0);
 
           fvec[i] = static_cast<float> (
               pcl::sqrPointToLineDistance (pt, line_pt, line_dir) - x[6] * x[6]);

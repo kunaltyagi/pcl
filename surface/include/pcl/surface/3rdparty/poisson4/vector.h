@@ -83,7 +83,10 @@ namespace pcl
       Vector &
       SubtractScaled (const Vector &V, const T &scale);
       static void
-      Add (const Vector &V1, const T &scale1, const Vector &V2, const T &scale2,
+      Add (const Vector &V1,
+           const T &scale1,
+           const Vector &V2,
+           const T &scale2,
            Vector &Out);
       static void
       Add (const Vector &V1, const T &scale1, const Vector &V2, Vector &Out);
@@ -167,7 +170,10 @@ namespace pcl
       NVector &
       SubtractScaled (const NVector &V, const T &scale);
       static void
-      Add (const NVector &V1, const T &scale1, const NVector &V2, const T &scale2,
+      Add (const NVector &V1,
+           const T &scale1,
+           const NVector &V2,
+           const T &scale2,
            NVector &Out);
       static void
       Add (const NVector &V1, const T &scale1, const NVector &V2, NVector &Out);

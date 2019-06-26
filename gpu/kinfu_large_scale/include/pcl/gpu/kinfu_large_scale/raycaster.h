@@ -76,14 +76,20 @@ namespace pcl
          * \param[in] cx principal point x
          * \param[in] cy principal point y
          */
-        RayCaster (int rows = 480, int cols = 640, float fx = 525.f, float fy = 525.f,
-                   float cx = -1, float cy = -1);
+        RayCaster (int rows = 480,
+                   int cols = 640,
+                   float fx = 525.f,
+                   float fy = 525.f,
+                   float cx = -1,
+                   float cy = -1);
 
         ~RayCaster ();
 
         /** \brief Sets camera intrinsics */
         void
-        setIntrinsics (float fx = 525.f, float fy = 525.f, float cx = -1,
+        setIntrinsics (float fx = 525.f,
+                       float fy = 525.f,
+                       float cx = -1,
                        float cy = -1);
 
         /** \brief Runs raycasting algorithm from given camera pose. It writes results
@@ -91,7 +97,8 @@ namespace pcl
          * camera_pose camera pose \param buffer
          */
         void
-        run (const TsdfVolume &volume, const Eigen::Affine3f &camera_pose,
+        run (const TsdfVolume &volume,
+             const Eigen::Affine3f &camera_pose,
              tsdf_buffer *buffer);
 
         /** \brief Generates scene view using data raycasted by run method. So call it

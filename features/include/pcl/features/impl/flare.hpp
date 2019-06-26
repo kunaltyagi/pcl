@@ -43,11 +43,13 @@
 #include <pcl/features/flare.h>
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointNT, typename PointOutT,
+template <typename PointInT,
+          typename PointNT,
+          typename PointOutT,
           typename SignedDistanceT>
 bool
-pcl::FLARELocalReferenceFrameEstimation<PointInT, PointNT, PointOutT,
-                                        SignedDistanceT>::initCompute ()
+pcl::FLARELocalReferenceFrameEstimation<PointInT, PointNT, PointOutT, SignedDistanceT>::
+    initCompute ()
 {
   if (!FeatureFromNormals<PointInT, PointNT, PointOutT>::initCompute ()) {
     PCL_ERROR ("[pcl::%s::initCompute] Init failed.\n", getClassName ().c_str ());
@@ -91,11 +93,13 @@ pcl::FLARELocalReferenceFrameEstimation<PointInT, PointNT, PointOutT,
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointNT, typename PointOutT,
+template <typename PointInT,
+          typename PointNT,
+          typename PointOutT,
           typename SignedDistanceT>
 bool
-pcl::FLARELocalReferenceFrameEstimation<PointInT, PointNT, PointOutT,
-                                        SignedDistanceT>::deinitCompute ()
+pcl::FLARELocalReferenceFrameEstimation<PointInT, PointNT, PointOutT, SignedDistanceT>::
+    deinitCompute ()
 {
   // Reset the surface
   if (fake_surface_) {
@@ -111,7 +115,9 @@ pcl::FLARELocalReferenceFrameEstimation<PointInT, PointNT, PointOutT,
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointNT, typename PointOutT,
+template <typename PointInT,
+          typename PointNT,
+          typename PointOutT,
           typename SignedDistanceT>
 SignedDistanceT
 pcl::FLARELocalReferenceFrameEstimation<PointInT, PointNT, PointOutT, SignedDistanceT>::
@@ -140,13 +146,16 @@ pcl::FLARELocalReferenceFrameEstimation<PointInT, PointNT, PointOutT, SignedDist
     fitted_normal = (*normals_)[index].getNormalVector3fMap ();
   } else {
     float plane_curvature;
-    normal_estimation_.computePointNormal (*surface_, neighbours_indices,
-                                           fitted_normal (0), fitted_normal (1),
-                                           fitted_normal (2), plane_curvature);
+    normal_estimation_.computePointNormal (*surface_,
+                                           neighbours_indices,
+                                           fitted_normal (0),
+                                           fitted_normal (1),
+                                           fitted_normal (2),
+                                           plane_curvature);
 
     // disambiguate Z axis with normal mean
-    if (!pcl::flipNormalTowardsNormalsMean<PointNT> (*normals_, neighbours_indices,
-                                                     fitted_normal)) {
+    if (!pcl::flipNormalTowardsNormalsMean<PointNT> (
+            *normals_, neighbours_indices, fitted_normal)) {
       // all normals in the neighbourood are invalid
       // setting lrf to NaN
       lrf.setConstant (std::numeric_limits<float>::quiet_NaN ());
@@ -160,8 +169,8 @@ pcl::FLARELocalReferenceFrameEstimation<PointInT, PointNT, PointOutT, SignedDist
   // find X axis
 
   // extract support points for Rx radius
-  n_neighbours = sampled_tree_->radiusSearch ((*input_)[index], tangent_radius_,
-                                              neighbours_indices, neighbours_distances);
+  n_neighbours = sampled_tree_->radiusSearch (
+      (*input_)[index], tangent_radius_, neighbours_indices, neighbours_distances);
 
   if (n_neighbours < min_neighbors_for_tangent_axis_) {
     // set X axis as a random axis
@@ -219,7 +228,8 @@ pcl::FLARELocalReferenceFrameEstimation<PointInT, PointNT, PointOutT, SignedDist
   // find orthogonal axis directed to best_shape_index point projection on plane with
   // fittedNormal as axis
   x_axis = pcl::geometry::projectedAsUnitVector (
-      sampled_surface_->at (best_shape_index).getVector3fMap (), feature_point,
+      sampled_surface_->at (best_shape_index).getVector3fMap (),
+      feature_point,
       fitted_normal);
 
   y_axis = fitted_normal.cross (x_axis);
@@ -233,7 +243,9 @@ pcl::FLARELocalReferenceFrameEstimation<PointInT, PointNT, PointOutT, SignedDist
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-template <typename PointInT, typename PointNT, typename PointOutT,
+template <typename PointInT,
+          typename PointNT,
+          typename PointOutT,
           typename SignedDistanceT>
 void
 pcl::FLARELocalReferenceFrameEstimation<PointInT, PointNT, PointOutT, SignedDistanceT>::

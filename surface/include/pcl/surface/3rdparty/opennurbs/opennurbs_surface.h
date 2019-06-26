@@ -150,7 +150,8 @@ class PCL_EXPORTS ON_CLASS ON_Surface : public ON_Geometry
 
   ON_BOOL32
   GetDomain (int dir, // 0 gets first parameter, 1 gets second parameter
-             double *t0, double *t1) const;
+             double *t0,
+             double *t1) const;
 
   bool
   SetDomain (
@@ -160,7 +161,8 @@ class PCL_EXPORTS ON_CLASS ON_Surface : public ON_Geometry
   virtual ON_BOOL32
   SetDomain (
       int dir, // 0 sets first parameter's domain, 1 gets second parameter's domain
-      double t0, double t1);
+      double t0,
+      double t1);
 
   virtual ON_Interval
   Domain (int dir // 0 gets first parameter's domain, 1 gets second parameter's domain
@@ -439,8 +441,13 @@ class PCL_EXPORTS ON_CLASS ON_Surface : public ON_Geometry
       the ends of their domains.
   */
   virtual bool
-  GetNextDiscontinuity (int dir, ON::continuity c, double t0, double t1, double *t,
-                        int *hint = NULL, int *dtype = NULL,
+  GetNextDiscontinuity (int dir,
+                        ON::continuity c,
+                        double t0,
+                        double t1,
+                        double *t,
+                        int *hint = NULL,
+                        int *dtype = NULL,
                         double cos_angle_tolerance = ON_DEFAULT_ANGLE_TOLERANCE_COSINE,
                         double curvature_tolerance = ON_SQRT_EPSILON) const;
 
@@ -470,7 +477,10 @@ class PCL_EXPORTS ON_CLASS ON_Surface : public ON_Geometry
     true if the surface has at least the c type continuity at the parameter t.
   */
   virtual bool
-  IsContinuous (ON::continuity c, double s, double t, int *hint = NULL,
+  IsContinuous (ON::continuity c,
+                double s,
+                double t,
+                int *hint = NULL,
                 double point_tolerance = ON_ZERO_TOLERANCE,
                 double d1_tolerance = ON_ZERO_TOLERANCE,
                 double d2_tolerance = ON_ZERO_TOLERANCE,
@@ -494,57 +504,61 @@ class PCL_EXPORTS ON_CLASS ON_Surface : public ON_Geometry
   FrameAt (double u, double v, ON_Plane &frame) const;
 
   ON_BOOL32
-  EvPoint (               // returns false if unable to evaluate
-      double u, double v, // evaluation parameters
-      ON_3dPoint &point,  // returns value of surface
-      int quadrant = 0,   // optional - determines which side to evaluate from
-                          //         0 = default
-                          //         1 from NE quadrant
-                          //         2 from NW quadrant
-                          //         3 from SW quadrant
-                          //         4 from SE quadrant
-      int *hint = 0       // optional - evaluation hint (int[2]) used to speed
-                          //            repeated evaluations
+  EvPoint ( // returns false if unable to evaluate
+      double u,
+      double v,          // evaluation parameters
+      ON_3dPoint &point, // returns value of surface
+      int quadrant = 0,  // optional - determines which side to evaluate from
+                         //         0 = default
+                         //         1 from NE quadrant
+                         //         2 from NW quadrant
+                         //         3 from SW quadrant
+                         //         4 from SE quadrant
+      int *hint = 0      // optional - evaluation hint (int[2]) used to speed
+                         //            repeated evaluations
       ) const;
 
   ON_BOOL32
-  Ev1Der (                // returns false if unable to evaluate
-      double u, double v, // evaluation parameters (s,t)
-      ON_3dPoint &point,  // returns value of surface
-      ON_3dVector &du,    // first partial derivatives (Ds)
-      ON_3dVector &dv,    // (Dt)
-      int quadrant = 0,   // optional - determines which side to evaluate from
-                          //         0 = default
-                          //         1 from NE quadrant
-                          //         2 from NW quadrant
-                          //         3 from SW quadrant
-                          //         4 from SE quadrant
-      int *hint = 0       // optional - evaluation hint (int[2]) used to speed
-                          //            repeated evaluations
+  Ev1Der ( // returns false if unable to evaluate
+      double u,
+      double v,          // evaluation parameters (s,t)
+      ON_3dPoint &point, // returns value of surface
+      ON_3dVector &du,   // first partial derivatives (Ds)
+      ON_3dVector &dv,   // (Dt)
+      int quadrant = 0,  // optional - determines which side to evaluate from
+                         //         0 = default
+                         //         1 from NE quadrant
+                         //         2 from NW quadrant
+                         //         3 from SW quadrant
+                         //         4 from SE quadrant
+      int *hint = 0      // optional - evaluation hint (int[2]) used to speed
+                         //            repeated evaluations
       ) const;
 
   ON_BOOL32
-  Ev2Der (                // returns false if unable to evaluate
-      double u, double v, // evaluation parameters (s,t)
-      ON_3dPoint &point,  // returns value of surface
-      ON_3dVector &du,    // first partial derivatives (Ds)
-      ON_3dVector &dv,    // (Dt)
-      ON_3dVector &duu,   // second partial derivatives (Dss)
-      ON_3dVector &duv,   // (Dst)
-      ON_3dVector &dvv,   // (Dtt)
-      int quadrant = 0,   // optional - determines which side to evaluate from
-                          //         0 = default
-                          //         1 from NE quadrant
-                          //         2 from NW quadrant
-                          //         3 from SW quadrant
-                          //         4 from SE quadrant
-      int *hint = 0       // optional - evaluation hint (int[2]) used to speed
-                          //            repeated evaluations
+  Ev2Der ( // returns false if unable to evaluate
+      double u,
+      double v,          // evaluation parameters (s,t)
+      ON_3dPoint &point, // returns value of surface
+      ON_3dVector &du,   // first partial derivatives (Ds)
+      ON_3dVector &dv,   // (Dt)
+      ON_3dVector &duu,  // second partial derivatives (Dss)
+      ON_3dVector &duv,  // (Dst)
+      ON_3dVector &dvv,  // (Dtt)
+      int quadrant = 0,  // optional - determines which side to evaluate from
+                         //         0 = default
+                         //         1 from NE quadrant
+                         //         2 from NW quadrant
+                         //         3 from SW quadrant
+                         //         4 from SE quadrant
+      int *hint = 0      // optional - evaluation hint (int[2]) used to speed
+                         //            repeated evaluations
       ) const;
 
   ON_BOOL32
-  EvNormal (               // returns false if unable to evaluate
-      double u, double v,  // evaluation parameters (s,t)
+  EvNormal ( // returns false if unable to evaluate
+      double u,
+      double v,            // evaluation parameters (s,t)
       ON_3dPoint &point,   // returns value of surface
       ON_3dVector &normal, // unit normal
       int quadrant = 0,    // optional - determines which side to evaluate from
@@ -558,8 +572,9 @@ class PCL_EXPORTS ON_CLASS ON_Surface : public ON_Geometry
       ) const;
 
   ON_BOOL32
-  EvNormal (               // returns false if unable to evaluate
-      double u, double v,  // evaluation parameters (s,t)
+  EvNormal ( // returns false if unable to evaluate
+      double u,
+      double v,            // evaluation parameters (s,t)
       ON_3dVector &normal, // unit normal
       int quadrant = 0,    // optional - determines which side to evaluate from
                            //         0 = default
@@ -572,8 +587,9 @@ class PCL_EXPORTS ON_CLASS ON_Surface : public ON_Geometry
       ) const;
 
   ON_BOOL32
-  EvNormal (               // returns false if unable to evaluate
-      double u, double v,  // evaluation parameters (s,t)
+  EvNormal ( // returns false if unable to evaluate
+      double u,
+      double v,            // evaluation parameters (s,t)
       ON_3dPoint &point,   // returns value of surface
       ON_3dVector &du,     // first partial derivatives (Ds)
       ON_3dVector &dv,     // (Dt)
@@ -590,19 +606,20 @@ class PCL_EXPORTS ON_CLASS ON_Surface : public ON_Geometry
 
   // work horse evaluator
   virtual ON_BOOL32
-  Evaluate (              // returns false if unable to evaluate
-      double u, double v, // evaluation parameters
-      int num_der,        // number of derivatives (>=0)
-      int array_stride,   // array stride (>=Dimension())
-      double *der_array,  // array of length stride*(ndir+1)*(ndir+2)/2
-      int quadrant = 0,   // optional - determines which quadrant to evaluate from
-                          //         0 = default
-                          //         1 from NE quadrant
-                          //         2 from NW quadrant
-                          //         3 from SW quadrant
-                          //         4 from SE quadrant
-      int *hint = 0       // optional - evaluation hint (int[2]) used to speed
-                          //            repeated evaluations
+  Evaluate ( // returns false if unable to evaluate
+      double u,
+      double v,          // evaluation parameters
+      int num_der,       // number of derivatives (>=0)
+      int array_stride,  // array stride (>=Dimension())
+      double *der_array, // array of length stride*(ndir+1)*(ndir+2)/2
+      int quadrant = 0,  // optional - determines which quadrant to evaluate from
+                         //         0 = default
+                         //         1 from NE quadrant
+                         //         2 from NW quadrant
+                         //         3 from SW quadrant
+                         //         4 from SE quadrant
+      int *hint = 0      // optional - evaluation hint (int[2]) used to speed
+                         //            repeated evaluations
       ) const = 0;
 
   /*
@@ -694,7 +711,9 @@ class PCL_EXPORTS ON_CLASS ON_Surface : public ON_Geometry
 
   */
   virtual ON_BOOL32
-  Split (int dir, double c, ON_Surface *&west_or_south_side,
+  Split (int dir,
+         double c,
+         ON_Surface *&west_or_south_side,
          ON_Surface *&east_or_north_side) const;
 
   /*
@@ -779,17 +798,22 @@ class PCL_EXPORTS ON_CLASS ON_Surface : public ON_Geometry
   // See Also:
   //   ON_Surface::GetNurbForm
   ON_NurbsSurface *
-  NurbsSurface (ON_NurbsSurface *pNurbsSurface = NULL, double tolerance = 0.0,
+  NurbsSurface (ON_NurbsSurface *pNurbsSurface = NULL,
+                double tolerance = 0.0,
                 const ON_Interval *s_subdomain = NULL,
                 const ON_Interval *t_subdomain = NULL) const;
 
   virtual bool
-  GetSurfaceParameterFromNurbFormParameter (double nurbs_s, double nurbs_t,
-                                            double *surface_s, double *surface_t) const;
+  GetSurfaceParameterFromNurbFormParameter (double nurbs_s,
+                                            double nurbs_t,
+                                            double *surface_s,
+                                            double *surface_t) const;
 
   virtual bool
-  GetNurbFormParameterFromSurfaceParameter (double surface_s, double surface_t,
-                                            double *nurbs_s, double *nurbs_t) const;
+  GetNurbFormParameterFromSurfaceParameter (double surface_s,
+                                            double surface_t,
+                                            double *nurbs_s,
+                                            double *nurbs_t) const;
 
   // If the geometry surface is modified in any way, then
   // call DestroySurfaceTree().

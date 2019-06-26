@@ -166,7 +166,8 @@ ON_RevSurface::IsValid (ON_TextLog *text_log) const
     if (text_log)
       text_log->Print (
           "ON_RevSurface.m_angle = (%g,%g) (should be an increasing interval)\n",
-          m_angle[0], m_angle[1]);
+          m_angle[0],
+          m_angle[1]);
     return false;
   }
   double length = m_angle.Length ();
@@ -186,7 +187,8 @@ ON_RevSurface::IsValid (ON_TextLog *text_log) const
   if (!m_t.IsIncreasing ()) {
     if (text_log)
       text_log->Print (
-          "ON_RevSurface.m_t = (%g,%g) (should be an increasing interval)\n", m_t[0],
+          "ON_RevSurface.m_t = (%g,%g) (should be an increasing interval)\n",
+          m_t[0],
           m_t[1]);
     return false;
   }
@@ -527,8 +529,11 @@ ON_RevolutionTensor::DimensionC () const
 }
 
 bool
-ON_RevolutionTensor::Evaluate (double a, const double *ArcPoint, double b,
-                               const double *ShapePoint, double *SrfPoint)
+ON_RevolutionTensor::Evaluate (double a,
+                               const double *ArcPoint,
+                               double b,
+                               const double *ShapePoint,
+                               double *SrfPoint)
 {
   double x, y, z, c, s, rx, ry, A[2], B[3];
 
@@ -666,7 +671,8 @@ ON_RevSurface::HasNurbForm () const
 }
 
 bool
-ON_RevSurface::GetSurfaceParameterFromNurbFormParameter (double nurbs_s, double nurbs_t,
+ON_RevSurface::GetSurfaceParameterFromNurbFormParameter (double nurbs_s,
+                                                         double nurbs_t,
                                                          double *surface_s,
                                                          double *surface_t) const
 {
@@ -880,7 +886,9 @@ ON_RevSurface::Extend (int dir, const ON_Interval &domain)
 }
 
 ON_BOOL32
-ON_RevSurface::Split (int dir, double c, ON_Surface *&west_or_south_side,
+ON_RevSurface::Split (int dir,
+                      double c,
+                      ON_Surface *&west_or_south_side,
                       ON_Surface *&east_or_north_side) const
 {
   ON_BOOL32 rc = false;
@@ -998,7 +1006,9 @@ ON_RevSurface::Transpose ()
 
 bool
 ON_RevSurface::IsContinuous (
-    ON::continuity desired_continuity, double s, double t,
+    ON::continuity desired_continuity,
+    double s,
+    double t,
     int *hint,                  // default = NULL,
     double point_tolerance,     // default=ON_ZERO_TOLERANCE
     double d1_tolerance,        // default==ON_ZERO_TOLERANCE
@@ -1010,8 +1020,13 @@ ON_RevSurface::IsContinuous (
   bool rc = true;
   if (m_curve) {
     double curve_t = m_bTransposed ? s : t;
-    rc = m_curve->IsContinuous (desired_continuity, curve_t, hint, point_tolerance,
-                                d1_tolerance, d2_tolerance, cos_angle_tolerance,
+    rc = m_curve->IsContinuous (desired_continuity,
+                                curve_t,
+                                hint,
+                                point_tolerance,
+                                d1_tolerance,
+                                d2_tolerance,
+                                cos_angle_tolerance,
                                 curvature_tolerance);
   }
   return rc;
@@ -1037,8 +1052,13 @@ ON_RevSurface::Reverse (int dir)
 }
 
 bool
-ON_RevSurface::GetNextDiscontinuity (int dir, ON::continuity c, double t0, double t1,
-                                     double *t, int *hint, int *dtype,
+ON_RevSurface::GetNextDiscontinuity (int dir,
+                                     ON::continuity c,
+                                     double t0,
+                                     double t1,
+                                     double *t,
+                                     int *hint,
+                                     int *dtype,
                                      double cos_angle_tolerance,
                                      double curvature_tolerance) const
 {
@@ -1049,11 +1069,23 @@ ON_RevSurface::GetNextDiscontinuity (int dir, ON::continuity c, double t0, doubl
     ON_Circle circle (ON_xy_plane, 1.0);
     ON_Arc arc (circle, m_angle);
     ON_ArcCurve arc_curve (arc, m_t[0], m_t[1]);
-    rc = arc_curve.GetNextDiscontinuity (c, t0, t1, t, (hint ? &hint[dir] : 0), dtype,
-                                         cos_angle_tolerance, curvature_tolerance);
+    rc = arc_curve.GetNextDiscontinuity (c,
+                                         t0,
+                                         t1,
+                                         t,
+                                         (hint ? &hint[dir] : 0),
+                                         dtype,
+                                         cos_angle_tolerance,
+                                         curvature_tolerance);
   } else {
-    rc = m_curve->GetNextDiscontinuity (c, t0, t1, t, (hint ? &hint[dir] : 0), dtype,
-                                        cos_angle_tolerance, curvature_tolerance);
+    rc = m_curve->GetNextDiscontinuity (c,
+                                        t0,
+                                        t1,
+                                        t,
+                                        (hint ? &hint[dir] : 0),
+                                        dtype,
+                                        cos_angle_tolerance,
+                                        curvature_tolerance);
   }
   return rc;
 }
@@ -1195,7 +1227,8 @@ ON_RevSurface::GetParameterTolerance ( // returns tminus < tplus: parameters tmi
 ON_BOOL32
 ON_RevSurface::SetDomain (
     int dir, // 0 sets first parameter's domain, 1 gets second parameter's domain
-    double t0, double t1)
+    double t0,
+    double t1)
 {
   bool rc = false;
   if (m_bTransposed)
@@ -2018,8 +2051,13 @@ ON_Surface::IsTorus (ON_Torus *torus, double tolerance) const
 }
 
 static bool
-ON__IsCylConeHelper (const ON_Line &axis, const ON_Curve *curve, double tolerance,
-                     ON_Plane &plane, ON_Line &line, double r[2], double &h)
+ON__IsCylConeHelper (const ON_Line &axis,
+                     const ON_Curve *curve,
+                     double tolerance,
+                     ON_Plane &plane,
+                     ON_Line &line,
+                     double r[2],
+                     double &h)
 {
   if (!axis.IsValid ())
     return false;

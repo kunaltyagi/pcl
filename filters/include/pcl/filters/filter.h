@@ -58,7 +58,8 @@ namespace pcl
   template <typename PointT>
   void
   removeNaNFromPointCloud (const pcl::PointCloud<PointT> &cloud_in,
-                           pcl::PointCloud<PointT> &cloud_out, std::vector<int> &index);
+                           pcl::PointCloud<PointT> &cloud_out,
+                           std::vector<int> &index);
 
   /** \brief Removes points that have their normals invalid (i.e., equal to NaN)
    * \param[in] cloud_in the input point cloud

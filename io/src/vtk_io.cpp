@@ -45,7 +45,8 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 int
-pcl::io::saveVTKFile (const std::string &file_name, const pcl::PolygonMesh &triangles,
+pcl::io::saveVTKFile (const std::string &file_name,
+                      const pcl::PolygonMesh &triangles,
                       unsigned precision)
 {
   if (triangles.cloud.data.empty ()) {
@@ -147,7 +148,8 @@ pcl::io::saveVTKFile (const std::string &file_name, const pcl::PolygonMesh &tria
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 int
-pcl::io::saveVTKFile (const std::string &file_name, const pcl::PCLPointCloud2 &cloud,
+pcl::io::saveVTKFile (const std::string &file_name,
+                      const pcl::PCLPointCloud2 &cloud,
                       unsigned precision)
 {
   if (cloud.data.empty ()) {
@@ -179,7 +181,8 @@ pcl::io::saveVTKFile (const std::string &file_name, const pcl::PCLPointCloud2 &c
           (cloud.fields[d].name == "x" || cloud.fields[d].name == "y" ||
            cloud.fields[d].name == "z")) {
         float value;
-        memcpy (&value, &cloud.data[i * point_size + cloud.fields[d].offset],
+        memcpy (&value,
+                &cloud.data[i * point_size + cloud.fields[d].offset],
                 sizeof (float));
         fs << value;
         if (++xyz == 3)
@@ -210,7 +213,8 @@ pcl::io::saveVTKFile (const std::string &file_name, const pcl::PCLPointCloud2 &c
             1; // we simply cannot tolerate 0 counts (coming from older converter code)
       if (cloud.fields[field_index].datatype == pcl::PCLPointField::FLOAT32) {
         pcl::RGB color;
-        memcpy (&color, &cloud.data[i * point_size + cloud.fields[field_index].offset],
+        memcpy (&color,
+                &cloud.data[i * point_size + cloud.fields[field_index].offset],
                 sizeof (RGB));
         int r = color.r;
         int g = color.g;

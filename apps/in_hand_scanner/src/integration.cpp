@@ -159,12 +159,12 @@ pcl::ihs::Integration::reconstructMesh (const CloudXYZRGBNormalConstPtr &cloud_d
         pt_m_0 = PointIHS (pt_d_0, weight);
       }
 
-      this->addToMesh (pt_m_0, pt_m_1, pt_m_2, pt_m_3, vi_0, vi_1, vi_2, vi_3,
-                       mesh_model);
+      this->addToMesh (
+          pt_m_0, pt_m_1, pt_m_2, pt_m_3, vi_0, vi_1, vi_2, vi_3, mesh_model);
       if (Mesh::IsManifold::value) // Only needed for the manifold mesh
       {
-        this->addToMesh (pt_m_0, pt_m_2, pt_m_4, pt_m_3, vi_0, vi_2, vi_4, vi_3,
-                         mesh_model);
+        this->addToMesh (
+            pt_m_0, pt_m_2, pt_m_4, pt_m_3, vi_0, vi_2, vi_4, vi_3, mesh_model);
       }
     }
   }
@@ -176,7 +176,8 @@ pcl::ihs::Integration::reconstructMesh (const CloudXYZRGBNormalConstPtr &cloud_d
 
 bool
 pcl::ihs::Integration::merge (const CloudXYZRGBNormalConstPtr &cloud_data,
-                              MeshPtr &mesh_model, const Eigen::Matrix4f &T) const
+                              MeshPtr &mesh_model,
+                              const Eigen::Matrix4f &T) const
 {
   if (!cloud_data) {
     std::cerr << "ERROR in integration.cpp: Cloud pointer is invalid\n";
@@ -359,12 +360,12 @@ pcl::ihs::Integration::merge (const CloudXYZRGBNormalConstPtr &cloud_data,
       // 4 - 2   1  //
       //   \   \    //
       // *   3 - 0  //
-      this->addToMesh (pt_d_t_0, pt_d_t_1, pt_d_t_2, pt_d_t_3, vi_0, vi_1, vi_2, vi_3,
-                       mesh_model);
+      this->addToMesh (
+          pt_d_t_0, pt_d_t_1, pt_d_t_2, pt_d_t_3, vi_0, vi_1, vi_2, vi_3, mesh_model);
       if (Mesh::IsManifold::value) // Only needed for the manifold mesh
       {
-        this->addToMesh (pt_d_t_0, pt_d_t_2, pt_d_t_4, pt_d_t_3, vi_0, vi_2, vi_4, vi_3,
-                         mesh_model);
+        this->addToMesh (
+            pt_d_t_0, pt_d_t_2, pt_d_t_4, pt_d_t_3, vi_0, vi_2, vi_4, vi_3, mesh_model);
       }
     }
   }
@@ -486,10 +487,14 @@ pcl::ihs::Integration::trimRGB (const float val) const
 ////////////////////////////////////////////////////////////////////////////////
 
 void
-pcl::ihs::Integration::addToMesh (const PointIHS &pt_0, const PointIHS &pt_1,
-                                  const PointIHS &pt_2, const PointIHS &pt_3,
-                                  VertexIndex &vi_0, VertexIndex &vi_1,
-                                  VertexIndex &vi_2, VertexIndex &vi_3,
+pcl::ihs::Integration::addToMesh (const PointIHS &pt_0,
+                                  const PointIHS &pt_1,
+                                  const PointIHS &pt_2,
+                                  const PointIHS &pt_3,
+                                  VertexIndex &vi_0,
+                                  VertexIndex &vi_1,
+                                  VertexIndex &vi_2,
+                                  VertexIndex &vi_3,
                                   const MeshPtr &mesh) const
 {
   // Treated bitwise
@@ -539,9 +544,12 @@ pcl::ihs::Integration::addToMesh (const PointIHS &pt_0, const PointIHS &pt_1,
 ////////////////////////////////////////////////////////////////////////////////
 
 void
-pcl::ihs::Integration::addToMesh (const PointIHS &pt_0, const PointIHS &pt_1,
-                                  const PointIHS &pt_2, VertexIndex &vi_0,
-                                  VertexIndex &vi_1, VertexIndex &vi_2,
+pcl::ihs::Integration::addToMesh (const PointIHS &pt_0,
+                                  const PointIHS &pt_1,
+                                  const PointIHS &pt_2,
+                                  VertexIndex &vi_0,
+                                  VertexIndex &vi_1,
+                                  VertexIndex &vi_2,
                                   const MeshPtr &mesh) const
 {
   if (!distanceThreshold (pt_0, pt_1, pt_2))
@@ -562,7 +570,8 @@ pcl::ihs::Integration::addToMesh (const PointIHS &pt_0, const PointIHS &pt_1,
 ////////////////////////////////////////////////////////////////////////////////
 
 bool
-pcl::ihs::Integration::distanceThreshold (const PointIHS &pt_0, const PointIHS &pt_1,
+pcl::ihs::Integration::distanceThreshold (const PointIHS &pt_0,
+                                          const PointIHS &pt_1,
                                           const PointIHS &pt_2) const
 {
   if ((pt_0.getVector3fMap () - pt_1.getVector3fMap ()).squaredNorm () >
@@ -580,7 +589,8 @@ pcl::ihs::Integration::distanceThreshold (const PointIHS &pt_0, const PointIHS &
 ////////////////////////////////////////////////////////////////////////////////
 
 bool
-pcl::ihs::Integration::distanceThreshold (const PointIHS &pt_0, const PointIHS &pt_1,
+pcl::ihs::Integration::distanceThreshold (const PointIHS &pt_0,
+                                          const PointIHS &pt_1,
                                           const PointIHS &pt_2,
                                           const PointIHS &pt_3) const
 {

@@ -567,7 +567,10 @@ ON_SimpleArray<T>::BinarySearch (const T *key,
 {
   const T *found =
       (key && m_a && m_count > 0)
-          ? (const T *)bsearch (key, m_a, m_count, sizeof (T),
+          ? (const T *)bsearch (key,
+                                m_a,
+                                m_count,
+                                sizeof (T),
                                 (int (*) (const void *, const void *))compar)
           : 0;
 
@@ -608,7 +611,8 @@ ON_SimpleArray<T>::BinarySearch (const T *key,
 
 template <class T>
 int
-ON_SimpleArray<T>::BinarySearch (const T *key, int (*compar) (const T *, const T *),
+ON_SimpleArray<T>::BinarySearch (const T *key,
+                                 int (*compar) (const T *, const T *),
                                  int count) const
 {
   if (count > m_count)
@@ -617,7 +621,10 @@ ON_SimpleArray<T>::BinarySearch (const T *key, int (*compar) (const T *, const T
     return -1;
   const T *found =
       (key && m_a && m_count > 0)
-          ? (const T *)bsearch (key, m_a, count, sizeof (T),
+          ? (const T *)bsearch (key,
+                                m_a,
+                                count,
+                                sizeof (T),
                                 (int (*) (const void *, const void *))compar)
           : 0;
 
@@ -683,13 +690,18 @@ ON_SimpleArray<T>::QuickSort (int (*compar) (const T *, const T *))
 
 template <class T>
 bool
-ON_SimpleArray<T>::Sort (ON::sort_algorithm sa, int *index,
+ON_SimpleArray<T>::Sort (ON::sort_algorithm sa,
+                         int *index,
                          int (*compar) (const T *, const T *)) const
 {
   bool rc = false;
   if (m_a && m_count > 0 && compar && index) {
     if (m_count > 1)
-      ON_Sort (sa, index, m_a, m_count, sizeof (T),
+      ON_Sort (sa,
+               index,
+               m_a,
+               m_count,
+               sizeof (T),
                (int (*) (const void *, const void *))compar);
     else if (m_count == 1)
       index[0] = 0;
@@ -700,14 +712,21 @@ ON_SimpleArray<T>::Sort (ON::sort_algorithm sa, int *index,
 
 template <class T>
 bool
-ON_SimpleArray<T>::Sort (ON::sort_algorithm sa, int *index,
-                         int (*compar) (const T *, const T *, void *), void *p) const
+ON_SimpleArray<T>::Sort (ON::sort_algorithm sa,
+                         int *index,
+                         int (*compar) (const T *, const T *, void *),
+                         void *p) const
 {
   bool rc = false;
   if (m_a && m_count > 0 && compar && index) {
     if (m_count > 1)
-      ON_Sort (sa, index, m_a, m_count, sizeof (T),
-               (int (*) (const void *, const void *, void *))compar, p);
+      ON_Sort (sa,
+               index,
+               m_a,
+               m_count,
+               sizeof (T),
+               (int (*) (const void *, const void *, void *))compar,
+               p);
     else if (m_count == 1)
       index[0] = 0;
     rc = true;
@@ -725,7 +744,8 @@ ON_SimpleArray<T>::Permute (const int *index)
     T *buffer = (T *)onmalloc (m_count * sizeof (buffer[0]));
     memcpy (buffer, m_a, m_count * sizeof (T));
     for (i = 0; i < m_count; i++)
-      memcpy (m_a + i, buffer + index[i],
+      memcpy (m_a + i,
+              buffer + index[i],
               sizeof (T)); // must use memcopy and not operator=
     onfree (buffer);
     rc = true;
@@ -1497,7 +1517,10 @@ ON_ClassArray<T>::BinarySearch (const T *key,
 {
   const T *found =
       (key && m_a && m_count > 0)
-          ? (const T *)bsearch (key, m_a, m_count, sizeof (T),
+          ? (const T *)bsearch (key,
+                                m_a,
+                                m_count,
+                                sizeof (T),
                                 (int (*) (const void *, const void *))compar)
           : 0;
 #if defined(ON_COMPILER_MSC1300)
@@ -1511,7 +1534,8 @@ ON_ClassArray<T>::BinarySearch (const T *key,
 
 template <class T>
 int
-ON_ClassArray<T>::BinarySearch (const T *key, int (*compar) (const T *, const T *),
+ON_ClassArray<T>::BinarySearch (const T *key,
+                                int (*compar) (const T *, const T *),
                                 int count) const
 {
   if (count > m_count)
@@ -1520,7 +1544,10 @@ ON_ClassArray<T>::BinarySearch (const T *key, int (*compar) (const T *, const T 
     return -1;
   const T *found =
       (key && m_a && m_count > 0)
-          ? (const T *)bsearch (key, m_a, count, sizeof (T),
+          ? (const T *)bsearch (key,
+                                m_a,
+                                count,
+                                sizeof (T),
                                 (int (*) (const void *, const void *))compar)
           : 0;
 #if defined(ON_COMPILER_MSC1300)
@@ -1567,7 +1594,9 @@ ON_ObjectArray<T>::HeapSort (int (*compar) (const T *, const T *))
   // are needed for gcc 4 to compile.
   if (this->m_a && this->m_count > 0 && compar) {
     if (this->m_count > 1) {
-      ON_hsort (this->m_a, this->m_count, sizeof (T),
+      ON_hsort (this->m_a,
+                this->m_count,
+                sizeof (T),
                 (int (*) (const void *, const void *))compar);
 
       // The MemoryRelocate step is required to synch userdata back pointers
@@ -1591,7 +1620,9 @@ ON_ObjectArray<T>::QuickSort (int (*compar) (const T *, const T *))
   // are needed for gcc 4 to compile.
   if (this->m_a && this->m_count > 0 && compar) {
     if (this->m_count > 1) {
-      ON_qsort (this->m_a, this->m_count, sizeof (T),
+      ON_qsort (this->m_a,
+                this->m_count,
+                sizeof (T),
                 (int (*) (const void *, const void *))compar);
 
       // The MemoryRelocate step is required to synch userdata back pointers
@@ -1608,13 +1639,18 @@ ON_ObjectArray<T>::QuickSort (int (*compar) (const T *, const T *))
 
 template <class T>
 bool
-ON_ClassArray<T>::Sort (ON::sort_algorithm sa, int *index,
+ON_ClassArray<T>::Sort (ON::sort_algorithm sa,
+                        int *index,
                         int (*compar) (const T *, const T *)) const
 {
   bool rc = false;
   if (m_a && m_count > 0 && compar && index) {
     if (m_count > 1)
-      ON_Sort (sa, index, m_a, m_count, sizeof (T),
+      ON_Sort (sa,
+               index,
+               m_a,
+               m_count,
+               sizeof (T),
                (int (*) (const void *, const void *))compar);
     else if (m_count == 1)
       index[0] = 0;
@@ -1625,14 +1661,21 @@ ON_ClassArray<T>::Sort (ON::sort_algorithm sa, int *index,
 
 template <class T>
 bool
-ON_ClassArray<T>::Sort (ON::sort_algorithm sa, int *index,
-                        int (*compar) (const T *, const T *, void *), void *p) const
+ON_ClassArray<T>::Sort (ON::sort_algorithm sa,
+                        int *index,
+                        int (*compar) (const T *, const T *, void *),
+                        void *p) const
 {
   bool rc = false;
   if (m_a && m_count > 0 && compar && index) {
     if (m_count > 1)
-      ON_Sort (sa, index, m_a, m_count, sizeof (T),
-               (int (*) (const void *, const void *, void *))compar, p);
+      ON_Sort (sa,
+               index,
+               m_a,
+               m_count,
+               sizeof (T),
+               (int (*) (const void *, const void *, void *))compar,
+               p);
     else if (m_count == 1)
       index[0] = 0;
     rc = true;
@@ -1650,7 +1693,8 @@ ON_ClassArray<T>::Permute (const int *index)
     T *buffer = (T *)onmalloc (m_count * sizeof (buffer[0]));
     memcpy (buffer, m_a, m_count * sizeof (T));
     for (i = 0; i < m_count; i++)
-      memcpy (m_a + i, buffer + index[i],
+      memcpy (m_a + i,
+              buffer + index[i],
               sizeof (T)); // must use memcopy and not operator=
     onfree (buffer);
     rc = true;

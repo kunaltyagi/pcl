@@ -48,7 +48,8 @@ pcl::registration::CorrespondenceRejectorOneToOne::getRemainingCorrespondences (
   /* not really an efficient implementation */
   pcl::Correspondences input = original_correspondences;
 
-  std::sort (input.begin (), input.end (),
+  std::sort (input.begin (),
+             input.end (),
              pcl::registration::sortCorrespondencesByMatchIndexAndDistance ());
 
   remaining_correspondences.resize (input.size ());

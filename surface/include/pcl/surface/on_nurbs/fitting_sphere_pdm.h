@@ -102,7 +102,8 @@ namespace pcl
       /** \brief Initializing a cylindric B-Spline surface using
        * principal-component-analysis and eigen values */
       static ON_NurbsSurface
-      initNurbsSphere (int order, NurbsDataSurface *data,
+      initNurbsSphere (int order,
+                       NurbsDataSurface *data,
                        Eigen::Vector3d pole_axis = Eigen::Vector3d (0.0, 0.0, 1.0));
 
       /** \brief Get the elements of a cylindric B-Spline surface.*/
@@ -123,10 +124,16 @@ namespace pcl
        * lower than accuracy the function returns \return closest point on surface in
        * parametric domain.*/
       static Eigen::Vector2d
-      inverseMapping (const ON_NurbsSurface &nurbs, const Eigen::Vector3d &pt,
-                      const Eigen::Vector2d &hint, double &error, Eigen::Vector3d &p,
-                      Eigen::Vector3d &tu, Eigen::Vector3d &tv, int maxSteps = 100,
-                      double accuracy = 1e-6, bool quiet = true);
+      inverseMapping (const ON_NurbsSurface &nurbs,
+                      const Eigen::Vector3d &pt,
+                      const Eigen::Vector2d &hint,
+                      double &error,
+                      Eigen::Vector3d &p,
+                      Eigen::Vector3d &tu,
+                      Eigen::Vector3d &tv,
+                      int maxSteps = 100,
+                      double accuracy = 1e-6,
+                      bool quiet = true);
 
       /** \brief Given a point pt, the function finds the closest midpoint of the
        * elements of the surface. \param[in] nurbs the B-Spline surface. \param[in] pt
@@ -148,8 +155,10 @@ namespace pcl
       /** \brief Add minimization constraint: point-to-surface distance
        * (point-distance-minimization). */
       void
-      addPointConstraint (const Eigen::Vector2d &params, const Eigen::Vector3d &point,
-                          double weight, unsigned &row);
+      addPointConstraint (const Eigen::Vector2d &params,
+                          const Eigen::Vector3d &point,
+                          double weight,
+                          unsigned &row);
 
       /** \brief Add minimization constraint: interior smoothness by control point
        * regularisation. */

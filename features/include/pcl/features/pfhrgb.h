@@ -44,7 +44,8 @@
 
 namespace pcl
 {
-  template <typename PointInT, typename PointNT,
+  template <typename PointInT,
+            typename PointNT,
             typename PointOutT = pcl::PFHRGBSignature250>
   class PFHRGBEstimation : public FeatureFromNormals<PointInT, PointNT, PointOutT>
   {
@@ -68,14 +69,22 @@ namespace pcl
 
     bool
     computeRGBPairFeatures (const pcl::PointCloud<PointInT> &cloud,
-                            const pcl::PointCloud<PointNT> &normals, int p_idx,
-                            int q_idx, float &f1, float &f2, float &f3, float &f4,
-                            float &f5, float &f6, float &f7);
+                            const pcl::PointCloud<PointNT> &normals,
+                            int p_idx,
+                            int q_idx,
+                            float &f1,
+                            float &f2,
+                            float &f3,
+                            float &f4,
+                            float &f5,
+                            float &f6,
+                            float &f7);
 
     void
     computePointPFHRGBSignature (const pcl::PointCloud<PointInT> &cloud,
                                  const pcl::PointCloud<PointNT> &normals,
-                                 const std::vector<int> &indices, int nr_split,
+                                 const std::vector<int> &indices,
+                                 int nr_split,
                                  Eigen::VectorXf &pfhrgb_histogram);
 
     protected:

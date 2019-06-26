@@ -15,9 +15,11 @@
 */
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-ON_OBJECT_IMPLEMENT (ON_PlaneSurface, ON_Surface,
+ON_OBJECT_IMPLEMENT (ON_PlaneSurface,
+                     ON_Surface,
                      "4ED7D4DF-E947-11d3-BFE5-0010830122F0");
-ON_OBJECT_IMPLEMENT (ON_ClippingPlaneSurface, ON_PlaneSurface,
+ON_OBJECT_IMPLEMENT (ON_ClippingPlaneSurface,
+                     ON_PlaneSurface,
                      "DBC5A584-CE3F-4170-98A8-497069CA5C36");
 
 ON_PlaneSurface::ON_PlaneSurface () {}
@@ -155,8 +157,8 @@ ON_PlaneSurface::GetBBox ( // returns true if successful
     for (j = 0; j < 2; j++) {
       corner[k++] = PointAt (m_domain[0].m_t[i], m_domain[1].m_t[j]);
     }
-  return ON_GetPointListBoundingBox (3, 0, 4, 3, &corner[0].x, boxmin, boxmax,
-                                     bGrowBox ? true : false);
+  return ON_GetPointListBoundingBox (
+      3, 0, 4, 3, &corner[0].x, boxmin, boxmax, bGrowBox ? true : false);
 }
 
 ON_BOOL32
@@ -230,8 +232,8 @@ ON_PlaneSurface::GetParameterTolerance (int dir,
                                         ) const
 {
   dir = (dir) ? 1 : 0;
-  return ON_GetParameterTolerance (m_domain[dir][0], m_domain[dir][1], t, tminus,
-                                   tplus);
+  return ON_GetParameterTolerance (
+      m_domain[dir][0], m_domain[dir][1], t, tminus, tplus);
 }
 
 ON_BOOL32
@@ -252,13 +254,18 @@ ON_BOOL32
 ON_PlaneSurface::IsSingular (int side) const { return false; }
 
 bool
-ON_PlaneSurface::GetNextDiscontinuity (int dir, ON::continuity c, double t0, double t1,
-                                       double *t, int *hint, int *dtype,
+ON_PlaneSurface::GetNextDiscontinuity (int dir,
+                                       ON::continuity c,
+                                       double t0,
+                                       double t1,
+                                       double *t,
+                                       int *hint,
+                                       int *dtype,
                                        double cos_angle_tolerance,
                                        double curvature_tolerance) const
 {
-  return ON_Surface::GetNextDiscontinuity (dir, c, t0, t1, t, hint, dtype,
-                                           cos_angle_tolerance, curvature_tolerance);
+  return ON_Surface::GetNextDiscontinuity (
+      dir, c, t0, t1, t, hint, dtype, cos_angle_tolerance, curvature_tolerance);
 }
 
 ON_BOOL32
@@ -279,7 +286,9 @@ ON_PlaneSurface::Reverse (int dir)
 
 bool
 ON_PlaneSurface::IsContinuous (
-    ON::continuity desired_continuity, double s, double t,
+    ON::continuity desired_continuity,
+    double s,
+    double t,
     int *hint,                  // default = NULL,
     double point_tolerance,     // default=ON_ZERO_TOLERANCE
     double d1_tolerance,        // default==ON_ZERO_TOLERANCE
@@ -310,16 +319,17 @@ ON_PlaneSurface::Transpose ()
 
 ON_BOOL32
 ON_PlaneSurface::Evaluate ( // returns false if unable to evaluate
-    double s, double t,     // evaluation parameters
-    int der_count,          // number of derivatives (>=0)
-    int v_stride,           // v[] array stride (>=Dimension())
-    double *v,              // v[] array of length stride*(ndir+1)
-    int side,               // optional - determines which side to evaluate from
-                            //         0 = default
-                            //      <  0 to evaluate from below,
-                            //      >  0 to evaluate from above
-    int *hint               // optional - evaluation hint (int) used to speed
-                            //            repeated evaluations
+    double s,
+    double t,      // evaluation parameters
+    int der_count, // number of derivatives (>=0)
+    int v_stride,  // v[] array stride (>=Dimension())
+    double *v,     // v[] array of length stride*(ndir+1)
+    int side,      // optional - determines which side to evaluate from
+                   //         0 = default
+                   //      <  0 to evaluate from below,
+                   //      >  0 to evaluate from above
+    int *hint      // optional - evaluation hint (int) used to speed
+                   //            repeated evaluations
     ) const
 {
   double ds = 1.0;
@@ -350,7 +360,8 @@ ON_PlaneSurface::Evaluate ( // returns false if unable to evaluate
 
     if (der_count > 1) {
       // zero higher partials
-      memset (v, 0,
+      memset (v,
+              0,
               (((der_count + 1) * (der_count + 2) / 2 - 4) * v_stride + 3) *
                   sizeof (*v));
     }
@@ -438,7 +449,9 @@ ON_PlaneSurface::Extend (int dir, const ON_Interval &domain)
 }
 
 ON_BOOL32
-ON_PlaneSurface::Split (int dir, double c, ON_Surface *&west_or_south_side,
+ON_PlaneSurface::Split (int dir,
+                        double c,
+                        ON_Surface *&west_or_south_side,
                         ON_Surface *&east_or_north_side) const
 {
   ON_PlaneSurface *ws_side = 0;
@@ -492,7 +505,8 @@ ON_PlaneSurface::Split (int dir, double c, ON_Surface *&west_or_south_side,
 
 bool
 ON_PlaneSurface::GetClosestPoint (
-    const ON_3dPoint &test_point, double *s,
+    const ON_3dPoint &test_point,
+    double *s,
     double *t, // parameters of local closest point returned here
     double maximum_distance,
     const ON_Interval *sdomain, // first parameter sub_domain
@@ -552,10 +566,12 @@ ON_PlaneSurface::GetClosestPoint (
 ON_BOOL32
 ON_PlaneSurface::GetLocalClosestPoint (
     const ON_3dPoint &test_point, // test_point
-    double s0, double t0,         // seed_parameters
-    double *s, double *t,         // parameters of local closest point returned here
-    const ON_Interval *sdomain,   // first parameter sub_domain
-    const ON_Interval *tdomain    // second parameter sub_domain
+    double s0,
+    double t0, // seed_parameters
+    double *s,
+    double *t,                  // parameters of local closest point returned here
+    const ON_Interval *sdomain, // first parameter sub_domain
+    const ON_Interval *tdomain  // second parameter sub_domain
     ) const
 {
   // for planes, global serach is fast and returns same answer as local search
@@ -563,7 +579,8 @@ ON_PlaneSurface::GetLocalClosestPoint (
 }
 
 ON_Surface *
-ON_PlaneSurface::Offset (double offset_distance, double tolerance,
+ON_PlaneSurface::Offset (double offset_distance,
+                         double tolerance,
                          double *max_deviation) const
 {
   if (max_deviation)
@@ -591,7 +608,8 @@ ON_PlaneSurface::
                   //            surface's parameterization and the NURBS
                   //            parameterization may not match to the
                   //            desired accuracy.
-        ON_NurbsSurface &nurbs, double tolerance) const
+        ON_NurbsSurface &nurbs,
+        double tolerance) const
 {
   ON_BOOL32 rc = IsValid ();
 
@@ -670,7 +688,8 @@ ON_PlaneSurface::Extents (int dir) const
 
 bool
 ON_PlaneSurface::CreatePseudoInfinitePlane (ON_PlaneEquation plane_equation,
-                                            const ON_BoundingBox &bbox, double padding)
+                                            const ON_BoundingBox &bbox,
+                                            double padding)
 {
   ON_Plane plane (&plane_equation.x);
   return CreatePseudoInfinitePlane (plane, bbox, padding);
@@ -678,7 +697,8 @@ ON_PlaneSurface::CreatePseudoInfinitePlane (ON_PlaneEquation plane_equation,
 
 bool
 ON_PlaneSurface::CreatePseudoInfinitePlane (const ON_Plane &plane,
-                                            const ON_BoundingBox &bbox, double padding)
+                                            const ON_BoundingBox &bbox,
+                                            double padding)
 {
   ON_3dPoint bbox_corners[8];
   if (!bbox.GetCorners (bbox_corners))
@@ -687,7 +707,8 @@ ON_PlaneSurface::CreatePseudoInfinitePlane (const ON_Plane &plane,
 }
 
 bool
-ON_PlaneSurface::CreatePseudoInfinitePlane (const ON_Plane &plane, int point_count,
+ON_PlaneSurface::CreatePseudoInfinitePlane (const ON_Plane &plane,
+                                            int point_count,
                                             const ON_3dPoint *point_list,
                                             double padding)
 {

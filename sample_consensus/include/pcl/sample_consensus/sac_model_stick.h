@@ -98,7 +98,8 @@ namespace pcl
      * 12345 (default: false)
      */
     SampleConsensusModelStick (const PointCloudConstPtr &cloud,
-                               const std::vector<int> &indices, bool random = false)
+                               const std::vector<int> &indices,
+                               bool random = false)
         : SampleConsensusModel<PointT> (cloud, indices, random)
     {
       model_name_ = "SampleConsensusModelStick";
@@ -137,7 +138,8 @@ namespace pcl
      */
     void
     selectWithinDistance (const Eigen::VectorXf &model_coefficients,
-                          const double threshold, std::vector<int> &inliers) override;
+                          const double threshold,
+                          std::vector<int> &inliers) override;
 
     /** \brief Count all the points which respect the given model coefficients as
      * inliers.

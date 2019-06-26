@@ -73,24 +73,34 @@ pcl::modeler::MainWindow::~MainWindow () { saveGlobalSettings (); }
 void
 pcl::modeler::MainWindow::connectFileMenuActions ()
 {
-  connect (ui_->actionOpenPointCloud, SIGNAL (triggered ()), ui_->scene_tree_,
+  connect (ui_->actionOpenPointCloud,
+           SIGNAL (triggered ()),
+           ui_->scene_tree_,
            SLOT (slotOpenPointCloud ()));
-  connect (ui_->actionImportPointCloud, SIGNAL (triggered ()), ui_->scene_tree_,
+  connect (ui_->actionImportPointCloud,
+           SIGNAL (triggered ()),
+           ui_->scene_tree_,
            SLOT (slotImportPointCloud ()));
-  connect (ui_->actionSavePointCloud, SIGNAL (triggered ()), ui_->scene_tree_,
+  connect (ui_->actionSavePointCloud,
+           SIGNAL (triggered ()),
+           ui_->scene_tree_,
            SLOT (slotSavePointCloud ()));
-  connect (ui_->actionClosePointCloud, SIGNAL (triggered ()), ui_->scene_tree_,
+  connect (ui_->actionClosePointCloud,
+           SIGNAL (triggered ()),
+           ui_->scene_tree_,
            SLOT (slotClosePointCloud ()));
-  connect (ui_->scene_tree_, SIGNAL (fileOpened (QString)), this,
+  connect (ui_->scene_tree_,
+           SIGNAL (fileOpened (QString)),
+           this,
            SLOT (slotUpdateRecentFile (QString)));
   createRecentPointCloudActions ();
 
-  connect (ui_->actionOpenProject, SIGNAL (triggered ()), this,
-           SLOT (slotOpenProject ()));
-  connect (ui_->actionSaveProject, SIGNAL (triggered ()), this,
-           SLOT (slotSaveProject ()));
-  connect (ui_->actionCloseProject, SIGNAL (triggered ()), this,
-           SLOT (slotCloseProject ()));
+  connect (
+      ui_->actionOpenProject, SIGNAL (triggered ()), this, SLOT (slotOpenProject ()));
+  connect (
+      ui_->actionSaveProject, SIGNAL (triggered ()), this, SLOT (slotSaveProject ()));
+  connect (
+      ui_->actionCloseProject, SIGNAL (triggered ()), this, SLOT (slotCloseProject ()));
   createRecentProjectActions ();
 
   connect (ui_->actionExit, SIGNAL (triggered ()), this, SLOT (slotExit ()));
@@ -100,9 +110,13 @@ pcl::modeler::MainWindow::connectFileMenuActions ()
 void
 pcl::modeler::MainWindow::connectViewMenuActions ()
 {
-  connect (ui_->actionCreateRenderWindow, SIGNAL (triggered ()), this,
+  connect (ui_->actionCreateRenderWindow,
+           SIGNAL (triggered ()),
+           this,
            SLOT (slotCreateRenderWindow ()));
-  connect (ui_->actionCloseRenderWindow, SIGNAL (triggered ()), ui_->scene_tree_,
+  connect (ui_->actionCloseRenderWindow,
+           SIGNAL (triggered ()),
+           ui_->scene_tree_,
            SLOT (slotCloseRenderWindow ()));
 }
 
@@ -110,15 +124,25 @@ pcl::modeler::MainWindow::connectViewMenuActions ()
 void
 pcl::modeler::MainWindow::connectEditMenuActions ()
 {
-  connect (ui_->actionICPRegistration, SIGNAL (triggered ()), ui_->scene_tree_,
+  connect (ui_->actionICPRegistration,
+           SIGNAL (triggered ()),
+           ui_->scene_tree_,
            SLOT (slotICPRegistration ()));
-  connect (ui_->actionVoxelGridDownsample, SIGNAL (triggered ()), ui_->scene_tree_,
+  connect (ui_->actionVoxelGridDownsample,
+           SIGNAL (triggered ()),
+           ui_->scene_tree_,
            SLOT (slotVoxelGridDownsampleFilter ()));
-  connect (ui_->actionStatisticalOutlierRemoval, SIGNAL (triggered ()),
-           ui_->scene_tree_, SLOT (slotStatisticalOutlierRemovalFilter ()));
-  connect (ui_->actionEstimateNormals, SIGNAL (triggered ()), ui_->scene_tree_,
+  connect (ui_->actionStatisticalOutlierRemoval,
+           SIGNAL (triggered ()),
+           ui_->scene_tree_,
+           SLOT (slotStatisticalOutlierRemovalFilter ()));
+  connect (ui_->actionEstimateNormals,
+           SIGNAL (triggered ()),
+           ui_->scene_tree_,
            SLOT (slotEstimateNormal ()));
-  connect (ui_->actionPoissonReconstruction, SIGNAL (triggered ()), ui_->scene_tree_,
+  connect (ui_->actionPoissonReconstruction,
+           SIGNAL (triggered ()),
+           ui_->scene_tree_,
            SLOT (slotPoissonReconstruction ()));
 }
 
@@ -217,7 +241,9 @@ pcl::modeler::MainWindow::createRecentPointCloudActions ()
         boost::shared_ptr<QAction> (new QAction (this)));
     ui_->menuRecentPointClouds->addAction (recent_pointcloud_actions_[i].get ());
     recent_pointcloud_actions_[i]->setVisible (false);
-    connect (recent_pointcloud_actions_[i].get (), SIGNAL (triggered ()), this,
+    connect (recent_pointcloud_actions_[i].get (),
+             SIGNAL (triggered ()),
+             this,
              SLOT (slotOpenRecentPointCloud ()));
   }
 
@@ -241,7 +267,9 @@ pcl::modeler::MainWindow::createRecentProjectActions ()
     recent_project_actions_.push_back (boost::shared_ptr<QAction> (new QAction (this)));
     ui_->menuRecentPointClouds->addAction (recent_project_actions_[i].get ());
     recent_project_actions_[i]->setVisible (false);
-    connect (recent_project_actions_[i].get (), SIGNAL (triggered ()), this,
+    connect (recent_project_actions_[i].get (),
+             SIGNAL (triggered ()),
+             this,
              SLOT (slotOpenRecentProject ()));
   }
 

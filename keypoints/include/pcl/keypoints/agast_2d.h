@@ -72,8 +72,10 @@ namespace pcl
          * \param[in] threshold the corner detection threshold
          * \param[in] bmax the max image value (default: 255)
          */
-        AbstractAgastDetector (const size_t width, const size_t height,
-                               const double threshold, const double bmax)
+        AbstractAgastDetector (const size_t width,
+                               const size_t height,
+                               const double threshold,
+                               const double bmax)
             : width_ (width), height_ (height), threshold_ (threshold),
               nr_max_keypoints_ (std::numeric_limits<unsigned int>::max ()),
               bmax_ (bmax)
@@ -274,8 +276,10 @@ namespace pcl
          * \param[in] threshold the corner detection threshold
          * \param[in] bmax the max image value (default: 255)
          */
-        AgastDetector7_12s (const size_t width, const size_t height,
-                            const double threshold, const double bmax = 255)
+        AgastDetector7_12s (const size_t width,
+                            const size_t height,
+                            const double threshold,
+                            const double bmax = 255)
             : AbstractAgastDetector (width, height, threshold, bmax)
         {
           initPattern ();
@@ -347,8 +351,10 @@ namespace pcl
          * \param[in] threshold the corner detection threshold
          * \param[in] bmax the max image value (default: 255)
          */
-        AgastDetector5_8 (const size_t width, const size_t height,
-                          const double threshold, const double bmax = 255)
+        AgastDetector5_8 (const size_t width,
+                          const size_t height,
+                          const double threshold,
+                          const double bmax = 255)
             : AbstractAgastDetector (width, height, threshold, bmax)
         {
           initPattern ();
@@ -420,8 +426,10 @@ namespace pcl
          * \param[in] threshold the corner detection threshold
          * \param[in] bmax the max image value (default: 255)
          */
-        OastDetector9_16 (const size_t width, const size_t height,
-                          const double threshold, const double bmax = 255)
+        OastDetector9_16 (const size_t width,
+                          const size_t height,
+                          const double threshold,
+                          const double bmax = 255)
             : AbstractAgastDetector (width, height, threshold, bmax)
         {
           initPattern ();
@@ -555,7 +563,8 @@ namespace pcl
    * \author Stefan Holzer, Radu B. Rusu
    * \ingroup keypoints
    */
-  template <typename PointInT, typename PointOutT,
+  template <typename PointInT,
+            typename PointOutT,
             typename IntensityT = pcl::common::IntensityFieldAccessor<PointInT>>
   class AgastKeypoint2DBase : public Keypoint<PointInT, PointOutT>
   {
@@ -718,7 +727,8 @@ namespace pcl
    */
   template <typename PointInT, typename PointOutT = pcl::PointUV>
   class AgastKeypoint2D
-      : public AgastKeypoint2DBase<PointInT, PointOutT,
+      : public AgastKeypoint2DBase<PointInT,
+                                   PointOutT,
                                    pcl::common::IntensityFieldAccessor<PointInT>>
   {
     public:
@@ -729,18 +739,26 @@ namespace pcl
     using Keypoint<PointInT, PointOutT>::indices_;
     using Keypoint<PointInT, PointOutT>::k_;
     using AgastKeypoint2DBase<
-        PointInT, PointOutT, pcl::common::IntensityFieldAccessor<PointInT>>::intensity_;
+        PointInT,
+        PointOutT,
+        pcl::common::IntensityFieldAccessor<PointInT>>::intensity_;
     using AgastKeypoint2DBase<
-        PointInT, PointOutT, pcl::common::IntensityFieldAccessor<PointInT>>::threshold_;
-    using AgastKeypoint2DBase<PointInT, PointOutT,
+        PointInT,
+        PointOutT,
+        pcl::common::IntensityFieldAccessor<PointInT>>::threshold_;
+    using AgastKeypoint2DBase<PointInT,
+                              PointOutT,
                               pcl::common::IntensityFieldAccessor<PointInT>>::bmax_;
     using AgastKeypoint2DBase<
-        PointInT, PointOutT,
+        PointInT,
+        PointOutT,
         pcl::common::IntensityFieldAccessor<PointInT>>::apply_non_max_suppression_;
-    using AgastKeypoint2DBase<PointInT, PointOutT,
+    using AgastKeypoint2DBase<PointInT,
+                              PointOutT,
                               pcl::common::IntensityFieldAccessor<PointInT>>::detector_;
     using AgastKeypoint2DBase<
-        PointInT, PointOutT,
+        PointInT,
+        PointOutT,
         pcl::common::IntensityFieldAccessor<PointInT>>::nr_max_keypoints_;
 
     /** \brief Constructor */
@@ -787,7 +805,8 @@ namespace pcl
    */
   template <>
   class AgastKeypoint2D<pcl::PointXYZ, pcl::PointUV>
-      : public AgastKeypoint2DBase<pcl::PointXYZ, pcl::PointUV,
+      : public AgastKeypoint2DBase<pcl::PointXYZ,
+                                   pcl::PointUV,
                                    pcl::common::IntensityFieldAccessor<pcl::PointXYZ>>
   {
     public:

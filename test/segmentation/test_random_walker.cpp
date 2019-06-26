@@ -54,8 +54,11 @@ std::string TEST_DATA_DIR;
 using Weight = float;
 using Color = uint32_t;
 using Graph = boost::adjacency_list<
-    boost::vecS, boost::vecS, boost::undirectedS,
-    boost::property<boost::vertex_color_t, Color,
+    boost::vecS,
+    boost::vecS,
+    boost::undirectedS,
+    boost::property<boost::vertex_color_t,
+                    Color,
                     boost::property<boost::vertex_degree_t, Weight>>,
     boost::property<boost::edge_weight_t, Weight>>;
 using GraphTraits = boost::graph_traits<Graph>;
@@ -146,7 +149,8 @@ class RandomWalkerTest : public ::testing::TestWithParam<const char *>
 
 TEST_P (RandomWalkerTest, BuildLinearSystem)
 {
-  RandomWalker rw (g.graph, boost::get (boost::edge_weight, g.graph),
+  RandomWalker rw (g.graph,
+                   boost::get (boost::edge_weight, g.graph),
                    boost::get (boost::vertex_color, g.graph));
 
   rw.computeVertexDegrees ();
@@ -196,8 +200,11 @@ TEST_P (RandomWalkerTest, GetPotentials)
   Matrix p;
   std::map<Color, size_t> map;
 
-  pcl::segmentation::randomWalker (g.graph, boost::get (boost::edge_weight, g.graph),
-                                   boost::get (boost::vertex_color, g.graph), p, map);
+  pcl::segmentation::randomWalker (g.graph,
+                                   boost::get (boost::edge_weight, g.graph),
+                                   boost::get (boost::vertex_color, g.graph),
+                                   p,
+                                   map);
 
   ASSERT_EQ (g.size, p.rows ());
   ASSERT_EQ (g.colors.size (), p.cols ());
@@ -210,10 +217,16 @@ TEST_P (RandomWalkerTest, GetPotentials)
       }
 }
 
-INSTANTIATE_TEST_CASE_P (VariousGraphs, RandomWalkerTest,
-                         ::testing::Values ("graph0.info", "graph1.info", "graph2.info",
-                                            "graph3.info", "graph4.info", "graph5.info",
-                                            "graph6.info", "graph7.info",
+INSTANTIATE_TEST_CASE_P (VariousGraphs,
+                         RandomWalkerTest,
+                         ::testing::Values ("graph0.info",
+                                            "graph1.info",
+                                            "graph2.info",
+                                            "graph3.info",
+                                            "graph4.info",
+                                            "graph5.info",
+                                            "graph6.info",
+                                            "graph7.info",
                                             "graph8.info"));
 
 int

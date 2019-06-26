@@ -96,8 +96,13 @@ pcl::visualization::ImageViewer::showRGBImage (const pcl::PointCloud<T> &cloud,
 template <typename T>
 bool
 pcl::visualization::ImageViewer::addMask (
-    const typename pcl::PointCloud<T>::ConstPtr &image, const pcl::PointCloud<T> &mask,
-    double r, double g, double b, const std::string &layer_id, double opacity)
+    const typename pcl::PointCloud<T>::ConstPtr &image,
+    const pcl::PointCloud<T> &mask,
+    double r,
+    double g,
+    double b,
+    const std::string &layer_id,
+    double opacity)
 {
   // We assume that the data passed into image is organized, otherwise this doesn't make
   // sense
@@ -144,8 +149,10 @@ pcl::visualization::ImageViewer::addMask (
 template <typename T>
 bool
 pcl::visualization::ImageViewer::addMask (
-    const typename pcl::PointCloud<T>::ConstPtr &image, const pcl::PointCloud<T> &mask,
-    const std::string &layer_id, double opacity)
+    const typename pcl::PointCloud<T>::ConstPtr &image,
+    const pcl::PointCloud<T> &mask,
+    const std::string &layer_id,
+    double opacity)
 {
   return (addMask (image, mask, 1.0, 0.0, 0.0, layer_id, opacity));
 }
@@ -155,8 +162,12 @@ template <typename T>
 bool
 pcl::visualization::ImageViewer::addPlanarPolygon (
     const typename pcl::PointCloud<T>::ConstPtr &image,
-    const pcl::PlanarPolygon<T> &polygon, double r, double g, double b,
-    const std::string &layer_id, double opacity)
+    const pcl::PlanarPolygon<T> &polygon,
+    double r,
+    double g,
+    double b,
+    const std::string &layer_id,
+    double opacity)
 {
   // We assume that the data passed into image is organized, otherwise this doesn't make
   // sense
@@ -208,7 +219,9 @@ template <typename T>
 bool
 pcl::visualization::ImageViewer::addPlanarPolygon (
     const typename pcl::PointCloud<T>::ConstPtr &image,
-    const pcl::PlanarPolygon<T> &polygon, const std::string &layer_id, double opacity)
+    const pcl::PlanarPolygon<T> &polygon,
+    const std::string &layer_id,
+    double opacity)
 {
   return (addPlanarPolygon (image, polygon, 1.0, 0.0, 0.0, layer_id, opacity));
 }
@@ -217,8 +230,13 @@ pcl::visualization::ImageViewer::addPlanarPolygon (
 template <typename T>
 bool
 pcl::visualization::ImageViewer::addRectangle (
-    const typename pcl::PointCloud<T>::ConstPtr &image, const T &min_pt,
-    const T &max_pt, double r, double g, double b, const std::string &layer_id,
+    const typename pcl::PointCloud<T>::ConstPtr &image,
+    const T &min_pt,
+    const T &max_pt,
+    double r,
+    double g,
+    double b,
+    const std::string &layer_id,
     double opacity)
 {
   // We assume that the data passed into image is organized, otherwise this doesn't make
@@ -311,8 +329,11 @@ pcl::visualization::ImageViewer::addRectangle (
 template <typename T>
 bool
 pcl::visualization::ImageViewer::addRectangle (
-    const typename pcl::PointCloud<T>::ConstPtr &image, const T &min_pt,
-    const T &max_pt, const std::string &layer_id, double opacity)
+    const typename pcl::PointCloud<T>::ConstPtr &image,
+    const T &min_pt,
+    const T &max_pt,
+    const std::string &layer_id,
+    double opacity)
 {
   return (addRectangle<T> (image, min_pt, max_pt, 0.0, 1.0, 0.0, layer_id, opacity));
 }
@@ -321,8 +342,13 @@ pcl::visualization::ImageViewer::addRectangle (
 template <typename T>
 bool
 pcl::visualization::ImageViewer::addRectangle (
-    const typename pcl::PointCloud<T>::ConstPtr &image, const pcl::PointCloud<T> &mask,
-    double r, double g, double b, const std::string &layer_id, double opacity)
+    const typename pcl::PointCloud<T>::ConstPtr &image,
+    const pcl::PointCloud<T> &mask,
+    double r,
+    double g,
+    double b,
+    const std::string &layer_id,
+    double opacity)
 {
   // We assume that the data passed into image is organized, otherwise this doesn't make
   // sense
@@ -381,8 +407,10 @@ pcl::visualization::ImageViewer::addRectangle (
 template <typename T>
 bool
 pcl::visualization::ImageViewer::addRectangle (
-    const typename pcl::PointCloud<T>::ConstPtr &image, const pcl::PointCloud<T> &mask,
-    const std::string &layer_id, double opacity)
+    const typename pcl::PointCloud<T>::ConstPtr &image,
+    const pcl::PointCloud<T> &mask,
+    const std::string &layer_id,
+    double opacity)
 {
   return (addRectangle (image, mask, 0.0, 1.0, 0.0, layer_id, opacity));
 }
@@ -393,7 +421,9 @@ bool
 pcl::visualization::ImageViewer::showCorrespondences (
     const pcl::PointCloud<PointT> &source_img,
     const pcl::PointCloud<PointT> &target_img,
-    const pcl::Correspondences &correspondences, int nth, const std::string &layer_id)
+    const pcl::Correspondences &correspondences,
+    int nth,
+    const std::string &layer_id)
 {
   if (correspondences.empty ()) {
     PCL_DEBUG ("[pcl::visualization::ImageViewer::addCorrespondences] An empty set of "
@@ -409,8 +439,11 @@ pcl::visualization::ImageViewer::showCorrespondences (
     PCL_DEBUG ("[pcl::visualization::ImageViewer::addCorrespondences] No layer with "
                "ID='%s' found. Creating new one...\n",
                layer_id.c_str ());
-    am_it = createLayer (layer_id, source_img.width + target_img.width,
-                         std::max (source_img.height, target_img.height), 1.0, false);
+    am_it = createLayer (layer_id,
+                         source_img.width + target_img.width,
+                         std::max (source_img.height, target_img.height),
+                         1.0,
+                         false);
   }
 
   int src_size = source_img.width * source_img.height * 3;
@@ -458,7 +491,8 @@ pcl::visualization::ImageViewer::showCorrespondences (
 
   vtkSmartPointer<vtkImageData> image = vtkSmartPointer<vtkImageData>::New ();
   image->SetDimensions (source_img.width + target_img.width,
-                        std::max (source_img.height, target_img.height), 1);
+                        std::max (source_img.height, target_img.height),
+                        1);
   image->AllocateScalars (VTK_UNSIGNED_CHAR, 3);
   image->GetPointData ()->GetScalars ()->SetVoidArray (data, data_size_, 1);
   vtkSmartPointer<PCLContextImageItem> image_item =

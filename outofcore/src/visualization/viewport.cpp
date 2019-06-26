@@ -22,8 +22,11 @@
 
 // Operators
 // -----------------------------------------------------------------------------
-Viewport::Viewport (vtkSmartPointer<vtkRenderWindow> window, double xmin /*=0.0*/,
-                    double ymin /*=0.0*/, double xmax /*=1.0*/, double ymax /*=1.0*/)
+Viewport::Viewport (vtkSmartPointer<vtkRenderWindow> window,
+                    double xmin /*=0.0*/,
+                    double ymin /*=0.0*/,
+                    double xmax /*=1.0*/,
+                    double ymax /*=1.0*/)
 {
   renderer_ = vtkSmartPointer<vtkRenderer>::New ();
   renderer_->SetViewport (xmin, ymin, xmax, ymax);
@@ -98,7 +101,8 @@ Viewport::Viewport (vtkSmartPointer<vtkRenderWindow> window, double xmin /*=0.0*
 void
 Viewport::viewportModifiedCallback (vtkObject *vtkNotUsed (caller),
                                     unsigned long int vtkNotUsed (eventId),
-                                    void *clientData, void *vtkNotUsed (callData))
+                                    void *clientData,
+                                    void *vtkNotUsed (callData))
 {
   Viewport *viewport = reinterpret_cast<Viewport *> (clientData);
   viewport->viewportModified ();
@@ -123,7 +127,8 @@ Viewport::viewportModified ()
 void
 Viewport::viewportActorUpdateCallback (vtkObject * /*caller*/,
                                        unsigned long int vtkNotUsed (eventId),
-                                       void *clientData, void *vtkNotUsed (callData))
+                                       void *clientData,
+                                       void *vtkNotUsed (callData))
 {
   Viewport *viewport = reinterpret_cast<Viewport *> (clientData);
   viewport->viewportActorUpdate ();
@@ -150,7 +155,8 @@ Viewport::viewportActorUpdate ()
 void
 Viewport::viewportHudUpdateCallback (vtkObject *vtkNotUsed (caller),
                                      unsigned long int vtkNotUsed (eventId),
-                                     void *clientData, void *vtkNotUsed (callData))
+                                     void *clientData,
+                                     void *vtkNotUsed (callData))
 {
   Viewport *viewport = reinterpret_cast<Viewport *> (clientData);
   viewport->viewportHudUpdate ();
@@ -180,7 +186,10 @@ Viewport::viewportHudUpdate ()
   }
 
   char points_loaded_str[50];
-  snprintf (points_loaded_str, sizeof (points_loaded_str), "%llu points/%llu mb",
-            points_loaded, data_loaded / 1024);
+  snprintf (points_loaded_str,
+            sizeof (points_loaded_str),
+            "%llu points/%llu mb",
+            points_loaded,
+            data_loaded / 1024);
   points_hud_actor_->SetInput (points_loaded_str);
 }

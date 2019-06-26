@@ -43,7 +43,8 @@ using std::cerr;
 using std::cout;
 
 void
-pcl::visualization::FloatImageUtils::getColorForFloat (float value, unsigned char &r,
+pcl::visualization::FloatImageUtils::getColorForFloat (float value,
+                                                       unsigned char &r,
                                                        unsigned char &g,
                                                        unsigned char &b)
 {
@@ -98,7 +99,8 @@ pcl::visualization::FloatImageUtils::getColorForFloat (float value, unsigned cha
 }
 
 void
-pcl::visualization::FloatImageUtils::getColorForAngle (float value, unsigned char &r,
+pcl::visualization::FloatImageUtils::getColorForAngle (float value,
+                                                       unsigned char &r,
                                                        unsigned char &g,
                                                        unsigned char &b)
 {
@@ -151,8 +153,10 @@ pcl::visualization::FloatImageUtils::getColorForHalfAngle (float value,
 
 unsigned char *
 pcl::visualization::FloatImageUtils::getVisualImage (const float *float_image,
-                                                     int width, int height,
-                                                     float min_value, float max_value,
+                                                     int width,
+                                                     int height,
+                                                     float min_value,
+                                                     float max_value,
                                                      bool gray_scale)
 {
   // MEASURE_FUNCTION_TIME;
@@ -210,7 +214,8 @@ pcl::visualization::FloatImageUtils::getVisualImage (const float *float_image,
 
 unsigned char *
 pcl::visualization::FloatImageUtils::getVisualImage (const unsigned short *short_image,
-                                                     int width, int height,
+                                                     int width,
+                                                     int height,
                                                      unsigned short min_value,
                                                      unsigned short max_value,
                                                      bool gray_scale)
@@ -246,7 +251,8 @@ pcl::visualization::FloatImageUtils::getVisualImage (const unsigned short *short
 
 unsigned char *
 pcl::visualization::FloatImageUtils::getVisualAngleImage (const float *angle_image,
-                                                          int width, int height)
+                                                          int width,
+                                                          int height)
 {
   int size = width * height;
   int arraySize = 3 * size;
@@ -265,7 +271,8 @@ pcl::visualization::FloatImageUtils::getVisualAngleImage (const float *angle_ima
 
 unsigned char *
 pcl::visualization::FloatImageUtils::getVisualHalfAngleImage (const float *angle_image,
-                                                              int width, int height)
+                                                              int width,
+                                                              int height)
 {
   int size = width * height;
   int arraySize = 3 * size;

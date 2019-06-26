@@ -128,8 +128,8 @@ pcl::BilateralUpsampling<PointInT, PointOutT>::performProcessing (PointCloudOut 
 
       if (norm_sum != 0.0f) {
         float depth = sum / norm_sum;
-        Eigen::Vector3f pc (static_cast<float> (x) * depth,
-                            static_cast<float> (y) * depth, depth);
+        Eigen::Vector3f pc (
+            static_cast<float> (x) * depth, static_cast<float> (y) * depth, depth);
         Eigen::Vector3f pw (unprojection_matrix_ * pc);
         output.points[y * input_->width + x].x = pw[0];
         output.points[y * input_->width + x].y = pw[1];

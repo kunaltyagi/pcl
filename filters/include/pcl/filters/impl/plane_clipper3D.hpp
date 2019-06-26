@@ -152,7 +152,8 @@ pcl::PlaneClipper3D<PointT>::clipPlanarPolygon3D (
 
   for (typename std::vector<PointT, Eigen::aligned_allocator<PointT>>::const_iterator
            pIt = prev_it + 1;
-       pIt != polygon.end (); prev_it = pIt++) {
+       pIt != polygon.end ();
+       prev_it = pIt++) {
     // if we intersect plane
     float distance = getDistance (*pIt);
     if (distance * previous_distance < 0) {

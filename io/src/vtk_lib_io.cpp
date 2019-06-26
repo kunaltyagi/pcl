@@ -81,14 +81,18 @@ pcl::io::loadPolygonFile (const std::string &file_name, pcl::PolygonMesh &mesh)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::io::savePolygonFile (const std::string &file_name, const pcl::PolygonMesh &mesh,
+pcl::io::savePolygonFile (const std::string &file_name,
+                          const pcl::PolygonMesh &mesh,
                           const bool binary_format)
 {
   // TODO: what about sensor position and orientation?!?!?!?
   std::string extension = file_name.substr (file_name.find_last_of ('.') + 1);
   if (extension == "pcd") // no Polygon, but only a point cloud
-    return (pcl::io::savePCDFile (file_name, mesh.cloud, Eigen::Vector4f::Zero (),
-                                  Eigen::Quaternionf::Identity (), binary_format) == 0);
+    return (pcl::io::savePCDFile (file_name,
+                                  mesh.cloud,
+                                  Eigen::Vector4f::Zero (),
+                                  Eigen::Quaternionf::Identity (),
+                                  binary_format) == 0);
   else if (extension == "vtk")
     return (pcl::io::savePolygonFileVTK (file_name, mesh, binary_format));
   else if (extension == "ply")
@@ -173,7 +177,8 @@ pcl::io::loadPolygonFileSTL (const std::string &file_name, pcl::PolygonMesh &mes
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::io::savePolygonFileVTK (const std::string &file_name, const pcl::PolygonMesh &mesh,
+pcl::io::savePolygonFileVTK (const std::string &file_name,
+                             const pcl::PolygonMesh &mesh,
                              const bool binary_format)
 {
   vtkSmartPointer<vtkPolyData> poly_data = vtkSmartPointer<vtkPolyData>::New ();
@@ -195,7 +200,8 @@ pcl::io::savePolygonFileVTK (const std::string &file_name, const pcl::PolygonMes
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::io::savePolygonFilePLY (const std::string &file_name, const pcl::PolygonMesh &mesh,
+pcl::io::savePolygonFilePLY (const std::string &file_name,
+                             const pcl::PolygonMesh &mesh,
                              const bool binary_format)
 {
   vtkSmartPointer<vtkPolyData> poly_data = vtkSmartPointer<vtkPolyData>::New ();
@@ -217,7 +223,8 @@ pcl::io::savePolygonFilePLY (const std::string &file_name, const pcl::PolygonMes
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::io::savePolygonFileSTL (const std::string &file_name, const pcl::PolygonMesh &mesh,
+pcl::io::savePolygonFileSTL (const std::string &file_name,
+                             const pcl::PolygonMesh &mesh,
                              const bool binary_format)
 {
   vtkSmartPointer<vtkPolyData> poly_data = vtkSmartPointer<vtkPolyData>::New ();
@@ -441,7 +448,8 @@ pcl::io::mesh2vtk (const pcl::PolygonMesh &mesh,
     Eigen::Vector4f pt = Eigen::Vector4f::Zero ();
     Eigen::Array4i xyz_offset (mesh.cloud.fields[idx_x].offset,
                                mesh.cloud.fields[idx_y].offset,
-                               mesh.cloud.fields[idx_z].offset, 0);
+                               mesh.cloud.fields[idx_z].offset,
+                               0);
     for (vtkIdType cp = 0; cp < static_cast<vtkIdType> (nr_points);
          ++cp, xyz_offset += mesh.cloud.point_step) {
       memcpy (&pt[0], &mesh.cloud.data[xyz_offset[0]], sizeof (float));
@@ -473,8 +481,8 @@ pcl::io::mesh2vtk (const pcl::PolygonMesh &mesh,
     int offset = (idx_rgb != -1) ? mesh.cloud.fields[idx_rgb].offset
                                  : mesh.cloud.fields[idx_rgba].offset;
     for (vtkIdType cp = 0; cp < nr_points; ++cp) {
-      memcpy (&rgb, &mesh.cloud.data[cp * mesh.cloud.point_step + offset],
-              sizeof (RGB));
+      memcpy (
+          &rgb, &mesh.cloud.data[cp * mesh.cloud.point_step + offset], sizeof (RGB));
       const unsigned char color[3] = {rgb.r, rgb.g, rgb.b};
       colors->InsertNextTupleValue (color);
     }

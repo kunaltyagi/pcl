@@ -42,8 +42,10 @@
 template <typename PointT>
 void
 pcl::approximatePolygon (const PlanarPolygon<PointT> &polygon,
-                         PlanarPolygon<PointT> &approx_polygon, float threshold,
-                         bool refine, bool closed)
+                         PlanarPolygon<PointT> &approx_polygon,
+                         float threshold,
+                         bool refine,
+                         bool closed)
 {
   const Eigen::Vector4f &coefficients = polygon.getCoefficients ();
   const typename pcl::PointCloud<PointT>::VectorType &contour = polygon.getContour ();
@@ -78,7 +80,9 @@ template <typename PointT>
 void
 pcl::approximatePolygon2D (const typename pcl::PointCloud<PointT>::VectorType &polygon,
                            typename pcl::PointCloud<PointT>::VectorType &approx_polygon,
-                           float threshold, bool refine, bool closed)
+                           float threshold,
+                           bool refine,
+                           bool closed)
 {
   approx_polygon.clear ();
   if (polygon.size () < 3)
@@ -284,7 +288,8 @@ pcl::approximatePolygon2D (const typename pcl::PointCloud<PointT>::VectorType &p
   } else {
     // we have a new polygon in results, but inverted (clockwise <-> counter-clockwise)
     for (std::vector<unsigned>::reverse_iterator it = result.rbegin ();
-         it != result.rend (); ++it)
+         it != result.rend ();
+         ++it)
       approx_polygon.push_back (polygon[*it]);
   }
 }

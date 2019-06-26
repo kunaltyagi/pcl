@@ -90,8 +90,8 @@ segmentAndClassify (
       cluster_name << "cluster_" << i;
       pcl::visualization::PointCloudColorHandlerRandom<pcl::PointXYZ> random_handler (
           clusters[i]);
-      vis.addPointCloud<pcl::PointXYZ> (clusters[i], random_handler,
-                                        cluster_name.str ());
+      vis.addPointCloud<pcl::PointXYZ> (
+          clusters[i], random_handler, cluster_name.str ());
 
       global.setInputCloud (xyz_points);
       global.setIndices (indices[i].indices);
@@ -118,8 +118,8 @@ segmentAndClassify (
 
         std::stringstream cluster_text;
         cluster_text << "cluster_" << previous_categories_size << "_text";
-        vis.addText3D (prob_str.str (), pos, text_scale, 1, 0, 1, cluster_text.str (),
-                       0);
+        vis.addText3D (
+            prob_str.str (), pos, text_scale, 1, 0, 1, cluster_text.str (), 0);
         previous_categories_size++;
       }
     }
@@ -192,9 +192,9 @@ main (int argc, char **argv)
         pcl::rec_3d_framework::VFHEstimation<pcl::PointXYZ, pcl::VFHSignature308>> (
         vfh_estimator);
 
-    pcl::rec_3d_framework::GlobalNNPipeline<flann::L1, pcl::PointXYZ,
-                                            pcl::VFHSignature308>
-        global;
+    pcl::rec_3d_framework::
+        GlobalNNPipeline<flann::L1, pcl::PointXYZ, pcl::VFHSignature308>
+            global;
     global.setDataSource (cast_source);
     global.setTrainingDir (training_dir);
     global.setDescriptorName (desc_name);
@@ -221,7 +221,8 @@ main (int argc, char **argv)
         vfh_estimator);
 
     pcl::rec_3d_framework::GlobalNNPipeline<Metrics::HistIntersectionUnionDistance,
-                                            pcl::PointXYZ, pcl::VFHSignature308>
+                                            pcl::PointXYZ,
+                                            pcl::VFHSignature308>
         global;
     global.setDataSource (cast_source);
     global.setTrainingDir (training_dir);
@@ -230,7 +231,8 @@ main (int argc, char **argv)
     global.setNN (NN);
     global.initialize (false);
 
-    segmentAndClassify<Metrics::HistIntersectionUnionDistance, pcl::PointXYZ,
+    segmentAndClassify<Metrics::HistIntersectionUnionDistance,
+                       pcl::PointXYZ,
                        pcl::VFHSignature308> (global);
   }
 
@@ -248,9 +250,9 @@ main (int argc, char **argv)
         pcl::rec_3d_framework::ESFEstimation<pcl::PointXYZ, pcl::ESFSignature640>> (
         estimator);
 
-    pcl::rec_3d_framework::GlobalNNPipeline<flann::L1, pcl::PointXYZ,
-                                            pcl::ESFSignature640>
-        global;
+    pcl::rec_3d_framework::
+        GlobalNNPipeline<flann::L1, pcl::PointXYZ, pcl::ESFSignature640>
+            global;
     global.setDataSource (cast_source);
     global.setTrainingDir (training_dir);
     global.setDescriptorName (desc_name);

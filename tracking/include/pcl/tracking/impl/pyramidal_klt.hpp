@@ -125,14 +125,18 @@ pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::initCompute ()
     if ((track_height_ * track_width_) % 2 == 0) {
       PCL_ERROR (
           "[pcl::tracking::%s::initCompute] Tracking window (%dx%d) must be odd!\n",
-          tracker_name_.c_str (), track_width_, track_height_);
+          tracker_name_.c_str (),
+          track_width_,
+          track_height_);
       return (false);
     }
 
     if (track_height_ < 3 || track_width_ < 3) {
       PCL_ERROR (
           "[pcl::tracking::%s::initCompute] Tracking window (%dx%d) must be >= 3x3!\n",
-          tracker_name_.c_str (), track_width_, track_height_);
+          tracker_name_.c_str (),
+          track_width_,
+          track_height_);
       return (false);
     }
 
@@ -254,8 +258,10 @@ pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::downsample (
 template <typename PointInT, typename IntensityT>
 void
 pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::downsample (
-    const FloatImageConstPtr &input, FloatImageConstPtr &output,
-    FloatImageConstPtr &output_grad_x, FloatImageConstPtr &output_grad_y) const
+    const FloatImageConstPtr &input,
+    FloatImageConstPtr &output,
+    FloatImageConstPtr &output_grad_x,
+    FloatImageConstPtr &output_grad_y) const
 {
   downsample (input, output);
   FloatImagePtr grad_x (new FloatImage (input->width, input->height));
@@ -343,7 +349,8 @@ pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::convolveCols (
 template <typename PointInT, typename IntensityT>
 void
 pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::computePyramids (
-    const PointCloudInConstPtr &input, std::vector<FloatImageConstPtr> &pyramid,
+    const PointCloudInConstPtr &input,
+    std::vector<FloatImageConstPtr> &pyramid,
     pcl::InterpolationType border_type) const
 {
   int step = 3;
@@ -361,8 +368,14 @@ pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::computePyramids (
   FloatImagePtr img (new FloatImage (previous->width + 2 * track_width_,
                                      previous->height + 2 * track_height_));
 
-  pcl::copyPointCloud (*tmp, *img, track_height_, track_height_, track_width_,
-                       track_width_, border_type, 0.f);
+  pcl::copyPointCloud (*tmp,
+                       *img,
+                       track_height_,
+                       track_height_,
+                       track_width_,
+                       track_width_,
+                       border_type,
+                       0.f);
   pyramid[0] = img;
 
   // compute first level gradients
@@ -372,14 +385,26 @@ pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::computePyramids (
   // copy to bigger clouds
   FloatImagePtr grad_x (new FloatImage (previous->width + 2 * track_width_,
                                         previous->height + 2 * track_height_));
-  pcl::copyPointCloud (*g_x, *grad_x, track_height_, track_height_, track_width_,
-                       track_width_, pcl::BORDER_CONSTANT, 0.f);
+  pcl::copyPointCloud (*g_x,
+                       *grad_x,
+                       track_height_,
+                       track_height_,
+                       track_width_,
+                       track_width_,
+                       pcl::BORDER_CONSTANT,
+                       0.f);
   pyramid[1] = grad_x;
 
   FloatImagePtr grad_y (new FloatImage (previous->width + 2 * track_width_,
                                         previous->height + 2 * track_height_));
-  pcl::copyPointCloud (*g_y, *grad_y, track_height_, track_height_, track_width_,
-                       track_width_, pcl::BORDER_CONSTANT, 0.f);
+  pcl::copyPointCloud (*g_y,
+                       *grad_y,
+                       track_height_,
+                       track_height_,
+                       track_width_,
+                       track_width_,
+                       pcl::BORDER_CONSTANT,
+                       0.f);
   pyramid[2] = grad_y;
 
   for (int level = 1; level < nb_levels_; ++level) {
@@ -391,18 +416,36 @@ pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::computePyramids (
     // copy to bigger clouds
     FloatImagePtr image (new FloatImage (current->width + 2 * track_width_,
                                          current->height + 2 * track_height_));
-    pcl::copyPointCloud (*current, *image, track_height_, track_height_, track_width_,
-                         track_width_, border_type, 0.f);
+    pcl::copyPointCloud (*current,
+                         *image,
+                         track_height_,
+                         track_height_,
+                         track_width_,
+                         track_width_,
+                         border_type,
+                         0.f);
     pyramid[level * step] = image;
     FloatImagePtr gradx (new FloatImage (g_x->width + 2 * track_width_,
                                          g_x->height + 2 * track_height_));
-    pcl::copyPointCloud (*g_x, *gradx, track_height_, track_height_, track_width_,
-                         track_width_, pcl::BORDER_CONSTANT, 0.f);
+    pcl::copyPointCloud (*g_x,
+                         *gradx,
+                         track_height_,
+                         track_height_,
+                         track_width_,
+                         track_width_,
+                         pcl::BORDER_CONSTANT,
+                         0.f);
     pyramid[level * step + 1] = gradx;
     FloatImagePtr grady (new FloatImage (g_y->width + 2 * track_width_,
                                          g_y->height + 2 * track_height_));
-    pcl::copyPointCloud (*g_y, *grady, track_height_, track_height_, track_width_,
-                         track_width_, pcl::BORDER_CONSTANT, 0.f);
+    pcl::copyPointCloud (*g_y,
+                         *grady,
+                         track_height_,
+                         track_height_,
+                         track_width_,
+                         track_width_,
+                         pcl::BORDER_CONSTANT,
+                         0.f);
     pyramid[level * step + 2] = grady;
     // set the new level
     previous = current;
@@ -413,9 +456,14 @@ pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::computePyramids (
 template <typename PointInT, typename IntensityT>
 void
 pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::spatialGradient (
-    const FloatImage &img, const FloatImage &grad_x, const FloatImage &grad_y,
-    const Eigen::Array2i &location, const Eigen::Array4f &weight, Eigen::ArrayXXf &win,
-    Eigen::ArrayXXf &grad_x_win, Eigen::ArrayXXf &grad_y_win,
+    const FloatImage &img,
+    const FloatImage &grad_x,
+    const FloatImage &grad_y,
+    const Eigen::Array2i &location,
+    const Eigen::Array4f &weight,
+    Eigen::ArrayXXf &win,
+    Eigen::ArrayXXf &grad_x_win,
+    Eigen::ArrayXXf &grad_y_win,
     Eigen::Array3f &covariance) const
 {
   const int step = img.width;
@@ -454,9 +502,12 @@ pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::spatialGradient (
 template <typename PointInT, typename IntensityT>
 void
 pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::mismatchVector (
-    const Eigen::ArrayXXf &prev, const Eigen::ArrayXXf &prev_grad_x,
-    const Eigen::ArrayXXf &prev_grad_y, const FloatImage &next,
-    const Eigen::Array2i &location, const Eigen::Array4f &weight,
+    const Eigen::ArrayXXf &prev,
+    const Eigen::ArrayXXf &prev_grad_x,
+    const Eigen::ArrayXXf &prev_grad_y,
+    const FloatImage &next,
+    const Eigen::Array2i &location,
+    const Eigen::Array4f &weight,
     Eigen::Array2f &b) const
 {
   const int step = next.width;
@@ -481,11 +532,13 @@ pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::mismatchVector (
 template <typename PointInT, typename IntensityT>
 void
 pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::track (
-    const PointCloudInConstPtr &prev_input, const PointCloudInConstPtr &input,
+    const PointCloudInConstPtr &prev_input,
+    const PointCloudInConstPtr &input,
     const std::vector<FloatImageConstPtr> &prev_pyramid,
     const std::vector<FloatImageConstPtr> &pyramid,
     const pcl::PointCloud<pcl::PointUV>::ConstPtr &prev_keypoints,
-    pcl::PointCloud<pcl::PointUV>::Ptr &keypoints, std::vector<int> &status,
+    pcl::PointCloud<pcl::PointUV>::Ptr &keypoints,
+    std::vector<int> &status,
     Eigen::Affine3f &motion) const
 {
   std::vector<Eigen::Array2f, Eigen::aligned_allocator<Eigen::Array2f>> next_pts (
@@ -536,8 +589,15 @@ pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::track (
       weight[3] = 1 - weight[0] - weight[1] - weight[2];
 
       Eigen::Array3f covar = Eigen::Array3f::Zero ();
-      spatialGradient (prev, grad_x, grad_y, iprev_point, weight, prev_win, grad_x_win,
-                       grad_y_win, covar);
+      spatialGradient (prev,
+                       grad_x,
+                       grad_y,
+                       iprev_point,
+                       weight,
+                       prev_win,
+                       grad_x_win,
+                       grad_y_win,
+                       covar);
 
       float det = covar[0] * covar[2] - covar[1] * covar[1];
       float min_eigenvalue = (covar[2] + covar[0] -
@@ -623,8 +683,8 @@ pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::track (
             prev_input->points[iprev_point[1] * prev_input->width + iprev_point[0]];
         const PointInT &next_pt =
             input->points[inext_point[1] * input->width + inext_point[0]];
-        transformation_computer.add (prev_pt.getVector3fMap (),
-                                     next_pt.getVector3fMap (), 1.0);
+        transformation_computer.add (
+            prev_pt.getVector3fMap (), next_pt.getVector3fMap (), 1.0);
       }
     }
   }

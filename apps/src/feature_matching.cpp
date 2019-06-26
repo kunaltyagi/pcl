@@ -166,8 +166,8 @@ ICCVTutorial<FeatureType>::ICCVTutorial (
       correspondences_ (new pcl::Correspondences), show_source2target_ (false),
       show_target2source_ (false), show_correspondences (false)
 {
-  visualizer_.registerKeyboardCallback (&ICCVTutorial::keyboard_callback, *this,
-                                        nullptr);
+  visualizer_.registerKeyboardCallback (
+      &ICCVTutorial::keyboard_callback, *this, nullptr);
 
   segmentation (source_, source_segmented_);
   segmentation (target_, target_segmented_);
@@ -368,11 +368,13 @@ ICCVTutorial<FeatureType>::determineInitialTransformation ()
                                                              pcl::PointXYZI>);
 
   transformation_estimation->estimateRigidTransformation (
-      *source_keypoints_, *target_keypoints_, *correspondences_,
+      *source_keypoints_,
+      *target_keypoints_,
+      *correspondences_,
       initial_transformation_matrix_);
 
-  pcl::transformPointCloud (*source_segmented_, *source_transformed_,
-                            initial_transformation_matrix_);
+  pcl::transformPointCloud (
+      *source_segmented_, *source_transformed_, initial_transformation_matrix_);
   cout << "OK" << endl;
 }
 
@@ -478,8 +480,8 @@ ICCVTutorial<FeatureType>::keyboard_callback (
             keypoint_color (source_keypoints_, 0, 0, 255);
         // pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZI>
         // keypoint_color (source_keypoints_, "intensity");
-        visualizer_.addPointCloud (source_keypoints_, keypoint_color,
-                                   "source_keypoints");
+        visualizer_.addPointCloud (
+            source_keypoints_, keypoint_color, "source_keypoints");
       }
       break;
 
@@ -489,8 +491,8 @@ ICCVTutorial<FeatureType>::keyboard_callback (
         // keypoint_color (target_keypoints_, "intensity");
         pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZI>
             keypoint_color (target_keypoints_, 255, 0, 0);
-        visualizer_.addPointCloud (target_keypoints_, keypoint_color,
-                                   "target_keypoints");
+        visualizer_.addPointCloud (
+            target_keypoints_, keypoint_color, "target_keypoints");
       }
       break;
 
@@ -675,8 +677,8 @@ main (int argc, char **argv)
   switch (descriptor_type) {
   case 1: {
     pcl::Feature<pcl::PointXYZRGB, pcl::FPFHSignature33>::Ptr feature_extractor (
-        new pcl::FPFHEstimationOMP<pcl::PointXYZRGB, pcl::Normal,
-                                   pcl::FPFHSignature33>);
+        new pcl::
+            FPFHEstimationOMP<pcl::PointXYZRGB, pcl::Normal, pcl::FPFHSignature33>);
     feature_extractor->setSearchMethod (pcl::search::Search<pcl::PointXYZRGB>::Ptr (
         new pcl::search::KdTree<pcl::PointXYZRGB>));
     feature_extractor->setRadiusSearch (0.05);
@@ -690,8 +692,8 @@ main (int argc, char **argv)
         new pcl::SHOTColorEstimationOMP<pcl::PointXYZRGB, pcl::Normal, pcl::SHOT1344>;
     shot->setRadiusSearch (0.04);
     pcl::Feature<pcl::PointXYZRGB, pcl::SHOT1344>::Ptr feature_extractor (shot);
-    ICCVTutorial<pcl::SHOT1344> tutorial (keypoint_detector, feature_extractor,
-                                          surface_reconstruction, source, target);
+    ICCVTutorial<pcl::SHOT1344> tutorial (
+        keypoint_detector, feature_extractor, surface_reconstruction, source, target);
     tutorial.run ();
   } break;
 
@@ -706,8 +708,8 @@ main (int argc, char **argv)
 
   case 4: {
     pcl::Feature<pcl::PointXYZRGB, pcl::PFHRGBSignature250>::Ptr feature_extractor (
-        new pcl::PFHRGBEstimation<pcl::PointXYZRGB, pcl::Normal,
-                                  pcl::PFHRGBSignature250>);
+        new pcl::
+            PFHRGBEstimation<pcl::PointXYZRGB, pcl::Normal, pcl::PFHRGBSignature250>);
     feature_extractor->setKSearch (50);
     ICCVTutorial<pcl::PFHRGBSignature250> tutorial (
         keypoint_detector, feature_extractor, surface_reconstruction, source, target);

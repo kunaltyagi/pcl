@@ -62,17 +62,17 @@ namespace pcl
     {
       public:
       using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::initCompute;
-      using CorrespondenceEstimationBase<PointSource, PointTarget,
-                                         Scalar>::input_transformed_;
+      using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::
+          input_transformed_;
       using PCLBase<PointSource>::deinitCompute;
       using PCLBase<PointSource>::input_;
       using PCLBase<PointSource>::indices_;
-      using CorrespondenceEstimationBase<PointSource, PointTarget,
-                                         Scalar>::getClassName;
-      using CorrespondenceEstimationBase<PointSource, PointTarget,
-                                         Scalar>::point_representation_;
-      using CorrespondenceEstimationBase<PointSource, PointTarget,
-                                         Scalar>::target_cloud_updated_;
+      using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::
+          getClassName;
+      using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::
+          point_representation_;
+      using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::
+          target_cloud_updated_;
 
       using PointCloudSource = pcl::PointCloud<PointSource>;
       using PointCloudSourcePtr = typename PointCloudSource::Ptr;
@@ -82,11 +82,14 @@ namespace pcl
       using PointCloudTargetPtr = typename PointCloudTarget::Ptr;
       using PointCloudTargetConstPtr = typename PointCloudTarget::ConstPtr;
 
-      using Ptr = boost::shared_ptr<CorrespondenceEstimationOrganizedProjection<
-          PointSource, PointTarget, Scalar>>;
-      using ConstPtr =
-          boost::shared_ptr<const CorrespondenceEstimationOrganizedProjection<
-              PointSource, PointTarget, Scalar>>;
+      using Ptr =
+          boost::shared_ptr<CorrespondenceEstimationOrganizedProjection<PointSource,
+                                                                        PointTarget,
+                                                                        Scalar>>;
+      using ConstPtr = boost::shared_ptr<
+          const CorrespondenceEstimationOrganizedProjection<PointSource,
+                                                            PointTarget,
+                                                            Scalar>>;
 
       /** \brief Empty constructor that sets all the intrinsic calibration to the
        * default Kinect values. */
@@ -206,9 +209,9 @@ namespace pcl
           typename CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::Ptr
           clone () const
       {
-        Ptr copy (
-            new CorrespondenceEstimationOrganizedProjection<PointSource, PointTarget,
-                                                            Scalar> (*this));
+        Ptr copy (new CorrespondenceEstimationOrganizedProjection<PointSource,
+                                                                  PointTarget,
+                                                                  Scalar> (*this));
         return (copy);
       }
 

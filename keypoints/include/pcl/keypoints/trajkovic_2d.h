@@ -50,7 +50,8 @@ namespace pcl
    * \author Nizar Sallem
    * \ingroup keypoints
    */
-  template <typename PointInT, typename PointOutT,
+  template <typename PointInT,
+            typename PointOutT,
             typename IntensityT = pcl::common::IntensityFieldAccessor<PointInT>>
   class TrajkovicKeypoint2D : public Keypoint<PointInT, PointOutT>
   {
@@ -75,8 +76,10 @@ namespace pcl
      * \param[in] first_threshold the threshold used in the simple cornerness test.
      * \param[in] second_threshold the threshold used to reject weak corners.
      */
-    TrajkovicKeypoint2D (ComputationMethod method = FOUR_CORNERS, int window_size = 3,
-                         float first_threshold = 0.1, float second_threshold = 100.0)
+    TrajkovicKeypoint2D (ComputationMethod method = FOUR_CORNERS,
+                         int window_size = 3,
+                         float first_threshold = 0.1,
+                         float second_threshold = 100.0)
         : method_ (method), window_size_ (window_size),
           first_threshold_ (first_threshold), second_threshold_ (second_threshold),
           threads_ (1)

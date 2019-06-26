@@ -51,8 +51,11 @@ namespace pcl
     void
     seededHueSegmentation (
         const boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB>> &host_cloud_,
-        const pcl::gpu::Octree::Ptr &tree, float tolerance, PointIndices &clusters_in,
-        PointIndices &clusters_out, float delta_hue = 0.0);
+        const pcl::gpu::Octree::Ptr &tree,
+        float tolerance,
+        PointIndices &clusters_in,
+        PointIndices &clusters_out,
+        float delta_hue = 0.0);
 
     class SeededHueSegmentation
     {

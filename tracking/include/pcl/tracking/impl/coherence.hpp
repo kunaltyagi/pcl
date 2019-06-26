@@ -50,7 +50,8 @@ namespace pcl
     template <typename PointInT>
     void
     PointCloudCoherence<PointInT>::compute (const PointCloudInConstPtr &cloud,
-                                            const IndicesConstPtr &indices, float &w)
+                                            const IndicesConstPtr &indices,
+                                            float &w)
     {
       if (!initCompute ()) {
         PCL_ERROR ("[pcl::%s::compute] Init failed.\n", getClassName ().c_str ());

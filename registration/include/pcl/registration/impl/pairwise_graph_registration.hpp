@@ -76,8 +76,8 @@ pcl::PairwiseGraphRegistration<GraphT, PointT>::computeRegistration ()
 
     const Eigen::Matrix4f global_ref_final_tr =
         last_aligned_vertex_pose * registration_method_->getFinalTransformation ();
-    boost::set_estimate<PointT> (*last_vx_it, global_ref_final_tr,
-                                 *(graph_handler_->getGraph ()));
+    boost::set_estimate<PointT> (
+        *last_vx_it, global_ref_final_tr, *(graph_handler_->getGraph ()));
     last_aligned_vertex_ = *last_vx_it;
     registration_method_->setInputTarget (boost::get_cloud<PointT> (
         last_aligned_vertex_, *(graph_handler_->getGraph ())));

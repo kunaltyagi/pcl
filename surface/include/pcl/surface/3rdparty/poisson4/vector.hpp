@@ -193,15 +193,20 @@ namespace pcl
     }
     template <class T>
     void
-    Vector<T>::Add (const Vector<T> &V1, const T &scale1, const Vector<T> &V2,
-                    const T &scale2, Vector<T> &Out)
+    Vector<T>::Add (const Vector<T> &V1,
+                    const T &scale1,
+                    const Vector<T> &V2,
+                    const T &scale2,
+                    Vector<T> &Out)
     {
       for (size_t i = 0; i < V1.m_N; i++)
         Out.m_pV[i] = V1.m_pV[i] * scale1 + V2.m_pV[i] * scale2;
     }
     template <class T>
     void
-    Vector<T>::Add (const Vector<T> &V1, const T &scale1, const Vector<T> &V2,
+    Vector<T>::Add (const Vector<T> &V1,
+                    const T &scale1,
+                    const Vector<T> &V2,
                     Vector<T> &Out)
     {
       for (size_t i = 0; i < V1.m_N; i++)
@@ -487,8 +492,10 @@ namespace pcl
     }
     template <class T, int Dim>
     void
-    NVector<T, Dim>::Add (const NVector<T, Dim> &V1, const T &scale1,
-                          const NVector<T, Dim> &V2, const T &scale2,
+    NVector<T, Dim>::Add (const NVector<T, Dim> &V1,
+                          const T &scale1,
+                          const NVector<T, Dim> &V2,
+                          const T &scale2,
                           NVector<T, Dim> &Out)
     {
       for (size_t i = 0; i < V1.m_N * Dim; i++)
@@ -496,8 +503,10 @@ namespace pcl
     }
     template <class T, int Dim>
     void
-    NVector<T, Dim>::Add (const NVector<T, Dim> &V1, const T &scale1,
-                          const NVector<T, Dim> &V2, NVector<T, Dim> &Out)
+    NVector<T, Dim>::Add (const NVector<T, Dim> &V1,
+                          const T &scale1,
+                          const NVector<T, Dim> &V2,
+                          NVector<T, Dim> &Out)
     {
       for (size_t i = 0; i < V1.m_N * Dim; i++)
         Out.m_pV[i] = V1.m_pV[i] * scale1 + V2.m_pV[i];

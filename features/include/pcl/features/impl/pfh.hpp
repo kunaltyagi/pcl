@@ -45,13 +45,22 @@
 template <typename PointInT, typename PointNT, typename PointOutT>
 bool
 pcl::PFHEstimation<PointInT, PointNT, PointOutT>::computePairFeatures (
-    const pcl::PointCloud<PointInT> &cloud, const pcl::PointCloud<PointNT> &normals,
-    int p_idx, int q_idx, float &f1, float &f2, float &f3, float &f4)
+    const pcl::PointCloud<PointInT> &cloud,
+    const pcl::PointCloud<PointNT> &normals,
+    int p_idx,
+    int q_idx,
+    float &f1,
+    float &f2,
+    float &f3,
+    float &f4)
 {
   pcl::computePairFeatures (cloud.points[p_idx].getVector4fMap (),
                             normals.points[p_idx].getNormalVector4fMap (),
                             cloud.points[q_idx].getVector4fMap (),
-                            normals.points[q_idx].getNormalVector4fMap (), f1, f2, f3,
+                            normals.points[q_idx].getNormalVector4fMap (),
+                            f1,
+                            f2,
+                            f3,
                             f4);
   return (true);
 }
@@ -60,8 +69,11 @@ pcl::PFHEstimation<PointInT, PointNT, PointOutT>::computePairFeatures (
 template <typename PointInT, typename PointNT, typename PointOutT>
 void
 pcl::PFHEstimation<PointInT, PointNT, PointOutT>::computePointPFHSignature (
-    const pcl::PointCloud<PointInT> &cloud, const pcl::PointCloud<PointNT> &normals,
-    const std::vector<int> &indices, int nr_split, Eigen::VectorXf &pfh_histogram)
+    const pcl::PointCloud<PointInT> &cloud,
+    const pcl::PointCloud<PointNT> &normals,
+    const std::vector<int> &indices,
+    int nr_split,
+    Eigen::VectorXf &pfh_histogram)
 {
   int h_index, h_p;
 
@@ -100,7 +112,9 @@ pcl::PFHEstimation<PointInT, PointNT, PointOutT>::computePointPFHSignature (
         key = std::pair<int, int> (p1, p2);
 
         // Check to see if we already estimated this pair in the global hashmap
-        std::map<std::pair<int, int>, Eigen::Vector4f, std::less<std::pair<int, int>>,
+        std::map<std::pair<int, int>,
+                 Eigen::Vector4f,
+                 std::less<std::pair<int, int>>,
                  Eigen::aligned_allocator<std::pair<const std::pair<int, int>,
                                                     Eigen::Vector4f>>>::iterator fm_it =
             feature_map_.find (key);
@@ -109,15 +123,25 @@ pcl::PFHEstimation<PointInT, PointNT, PointOutT>::computePointPFHSignature (
           key_found = true;
         } else {
           // Compute the pair NNi to NNj
-          if (!computePairFeatures (cloud, normals, indices[i_idx], indices[j_idx],
-                                    pfh_tuple_[0], pfh_tuple_[1], pfh_tuple_[2],
+          if (!computePairFeatures (cloud,
+                                    normals,
+                                    indices[i_idx],
+                                    indices[j_idx],
+                                    pfh_tuple_[0],
+                                    pfh_tuple_[1],
+                                    pfh_tuple_[2],
                                     pfh_tuple_[3]))
             continue;
 
           key_found = false;
         }
-      } else if (!computePairFeatures (cloud, normals, indices[i_idx], indices[j_idx],
-                                       pfh_tuple_[0], pfh_tuple_[1], pfh_tuple_[2],
+      } else if (!computePairFeatures (cloud,
+                                       normals,
+                                       indices[i_idx],
+                                       indices[j_idx],
+                                       pfh_tuple_[0],
+                                       pfh_tuple_[1],
+                                       pfh_tuple_[2],
                                        pfh_tuple_[3]))
         continue;
 
@@ -190,8 +214,8 @@ pcl::PFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
   if (input_->is_dense) {
     // Iterating over the entire index vector
     for (size_t idx = 0; idx < indices_->size (); ++idx) {
-      if (this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                    nn_dists) == 0) {
+      if (this->searchForNeighbors (
+              (*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0) {
         for (Eigen::Index d = 0; d < pfh_histogram_.size (); ++d)
           output.points[idx].histogram[d] = std::numeric_limits<float>::quiet_NaN ();
 
@@ -200,8 +224,8 @@ pcl::PFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
       }
 
       // Estimate the PFH signature at each patch
-      computePointPFHSignature (*surface_, *normals_, nn_indices, nr_subdiv_,
-                                pfh_histogram_);
+      computePointPFHSignature (
+          *surface_, *normals_, nn_indices, nr_subdiv_, pfh_histogram_);
 
       // Copy into the resultant cloud
       for (Eigen::Index d = 0; d < pfh_histogram_.size (); ++d)
@@ -211,8 +235,8 @@ pcl::PFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
     // Iterating over the entire index vector
     for (size_t idx = 0; idx < indices_->size (); ++idx) {
       if (!isFinite ((*input_)[(*indices_)[idx]]) ||
-          this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                    nn_dists) == 0) {
+          this->searchForNeighbors (
+              (*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0) {
         for (Eigen::Index d = 0; d < pfh_histogram_.size (); ++d)
           output.points[idx].histogram[d] = std::numeric_limits<float>::quiet_NaN ();
 
@@ -221,8 +245,8 @@ pcl::PFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
       }
 
       // Estimate the PFH signature at each patch
-      computePointPFHSignature (*surface_, *normals_, nn_indices, nr_subdiv_,
-                                pfh_histogram_);
+      computePointPFHSignature (
+          *surface_, *normals_, nn_indices, nr_subdiv_, pfh_histogram_);
 
       // Copy into the resultant cloud
       for (Eigen::Index d = 0; d < pfh_histogram_.size (); ++d)

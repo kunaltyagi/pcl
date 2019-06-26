@@ -90,7 +90,8 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS int
-    save (const std::string &file_name, const pcl::PCLPointCloud2 &blob,
+    save (const std::string &file_name,
+          const pcl::PCLPointCloud2 &blob,
           unsigned precision = 5);
 
     /** \brief Save point cloud to a binary file when available else to ASCII.
@@ -109,7 +110,8 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS int
-    save (const std::string &file_name, const pcl::TextureMesh &tex_mesh,
+    save (const std::string &file_name,
+          const pcl::TextureMesh &tex_mesh,
           unsigned precision = 5);
 
     /** \brief Saves a PolygonMesh to a binary file when available else to ASCII.
@@ -119,7 +121,8 @@ namespace pcl
      * \ingroup io
      */
     PCL_EXPORTS int
-    save (const std::string &file_name, const pcl::PolygonMesh &mesh,
+    save (const std::string &file_name,
+          const pcl::PolygonMesh &mesh,
           unsigned precision = 5);
   } // namespace io
 } // namespace pcl

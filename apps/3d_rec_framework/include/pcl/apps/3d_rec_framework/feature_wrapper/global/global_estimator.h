@@ -31,7 +31,8 @@ namespace pcl
 
       virtual void
       estimate (
-          PointInTPtr &in, PointInTPtr &processed,
+          PointInTPtr &in,
+          PointInTPtr &processed,
           std::vector<pcl::PointCloud<FeatureT>,
                       Eigen::aligned_allocator<pcl::PointCloud<FeatureT>>> &signatures,
           std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f>>

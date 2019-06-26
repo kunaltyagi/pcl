@@ -7,7 +7,8 @@ pcl::cloud_composer::SignalMultiplexer::SignalMultiplexer (QObject *parent)
 }
 
 void
-pcl::cloud_composer::SignalMultiplexer::connect (QObject *sender, const char *signal,
+pcl::cloud_composer::SignalMultiplexer::connect (QObject *sender,
+                                                 const char *signal,
                                                  const char *slot)
 {
   Connection conn;
@@ -20,7 +21,8 @@ pcl::cloud_composer::SignalMultiplexer::connect (QObject *sender, const char *si
 }
 
 void
-pcl::cloud_composer::SignalMultiplexer::connect (const char *signal, QObject *receiver,
+pcl::cloud_composer::SignalMultiplexer::connect (const char *signal,
+                                                 QObject *receiver,
                                                  const char *slot)
 {
   Connection conn;
@@ -33,7 +35,8 @@ pcl::cloud_composer::SignalMultiplexer::connect (const char *signal, QObject *re
 }
 
 bool
-pcl::cloud_composer::SignalMultiplexer::disconnect (QObject *sender, const char *signal,
+pcl::cloud_composer::SignalMultiplexer::disconnect (QObject *sender,
+                                                    const char *signal,
                                                     const char *slot)
 {
   QMutableListIterator<Connection> it (connections);
@@ -51,7 +54,8 @@ pcl::cloud_composer::SignalMultiplexer::disconnect (QObject *sender, const char 
 
 bool
 pcl::cloud_composer::SignalMultiplexer::disconnect (const char *signal,
-                                                    QObject *receiver, const char *slot)
+                                                    QObject *receiver,
+                                                    const char *slot)
 {
   QMutableListIterator<Connection> it (connections);
   while (it.hasNext ()) {
@@ -75,11 +79,11 @@ pcl::cloud_composer::SignalMultiplexer::connect (const Connection &conn)
     return;
 
   if (conn.sender)
-    QObject::connect ((QObject *)conn.sender, conn.signal, (QObject *)object,
-                      conn.slot);
+    QObject::connect (
+        (QObject *)conn.sender, conn.signal, (QObject *)object, conn.slot);
   else
-    QObject::connect ((QObject *)object, conn.signal, (QObject *)conn.receiver,
-                      conn.slot);
+    QObject::connect (
+        (QObject *)object, conn.signal, (QObject *)conn.receiver, conn.slot);
 }
 
 void
@@ -91,11 +95,11 @@ pcl::cloud_composer::SignalMultiplexer::disconnect (const Connection &conn)
     return;
 
   if (conn.sender)
-    QObject::disconnect ((QObject *)conn.sender, conn.signal, (QObject *)object,
-                         conn.slot);
+    QObject::disconnect (
+        (QObject *)conn.sender, conn.signal, (QObject *)object, conn.slot);
   else
-    QObject::disconnect ((QObject *)object, conn.signal, (QObject *)conn.receiver,
-                         conn.slot);
+    QObject::disconnect (
+        (QObject *)object, conn.signal, (QObject *)conn.receiver, conn.slot);
 }
 
 void

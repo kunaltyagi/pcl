@@ -92,7 +92,8 @@ namespace pcl
       bool load_views_;
 
       void
-      getIdAndClassFromFilename (const std::string &filename, std::string &id,
+      getIdAndClassFromFilename (const std::string &filename,
+                                 std::string &id,
                                  std::string &classname)
       {
 
@@ -120,7 +121,8 @@ namespace pcl
       }
 
       void
-      createClassAndModelDirectories (std::string &training_dir, std::string &class_str,
+      createClassAndModelDirectories (std::string &training_dir,
+                                      std::string &class_str,
                                       std::string &id_str)
       {
         std::vector<std::string> strs;
@@ -166,8 +168,10 @@ namespace pcl
       }
 
       void
-      getModelsInDirectory (bf::path &dir, std::string &rel_path_so_far,
-                            std::vector<std::string> &relative_paths, std::string &ext)
+      getModelsInDirectory (bf::path &dir,
+                            std::string &rel_path_so_far,
+                            std::vector<std::string> &relative_paths,
+                            std::string &ext)
       {
         bf::directory_iterator end_itr;
         for (bf::directory_iterator itr (dir); itr != end_itr; ++itr) {

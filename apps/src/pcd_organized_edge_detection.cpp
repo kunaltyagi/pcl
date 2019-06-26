@@ -111,8 +111,11 @@ saveCloud (const std::string &filename, const pcl::PCLPointCloud2 &output)
   print_highlight ("Saving ");
   print_value ("%s ", filename.c_str ());
 
-  pcl::io::savePCDFile (filename, output, Eigen::Vector4f::Zero (),
-                        Eigen::Quaternionf::Identity (), true); // Save as binary
+  pcl::io::savePCDFile (filename,
+                        output,
+                        Eigen::Vector4f::Zero (),
+                        Eigen::Quaternionf::Identity (),
+                        true); // Save as binary
 
   print_info ("[done, ");
   print_value ("%g", tt.toc ());
@@ -131,7 +134,8 @@ keyboard_callback (const pcl::visualization::KeyboardEvent &event, void *)
       viewer.getPointCloudRenderingProperties (
           pcl::visualization::PCL_VISUALIZER_OPACITY, opacity, "nan boundary edges");
       viewer.setPointCloudRenderingProperties (
-          pcl::visualization::PCL_VISUALIZER_OPACITY, 1.0 - opacity,
+          pcl::visualization::PCL_VISUALIZER_OPACITY,
+          1.0 - opacity,
           "nan boundary edges");
       break;
     case '2':
@@ -150,7 +154,8 @@ keyboard_callback (const pcl::visualization::KeyboardEvent &event, void *)
       viewer.getPointCloudRenderingProperties (
           pcl::visualization::PCL_VISUALIZER_OPACITY, opacity, "high curvature edges");
       viewer.setPointCloudRenderingProperties (
-          pcl::visualization::PCL_VISUALIZER_OPACITY, 1.0 - opacity,
+          pcl::visualization::PCL_VISUALIZER_OPACITY,
+          1.0 - opacity,
           "high curvature edges");
       break;
     case '5':
@@ -164,8 +169,10 @@ keyboard_callback (const pcl::visualization::KeyboardEvent &event, void *)
 }
 
 void
-compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output,
-         float th_dd, int max_search)
+compute (const pcl::PCLPointCloud2::ConstPtr &input,
+         pcl::PCLPointCloud2 &output,
+         float th_dd,
+         int max_search)
 {
   CloudPtr cloud (new Cloud);
   fromPCLPointCloud2 (*input, *cloud);
@@ -228,34 +235,38 @@ compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output
   viewer.addPointCloud<pcl::PointXYZRGBA> (nan_boundary_edges, "nan boundary edges");
   viewer.setPointCloudRenderingProperties (
       pcl::visualization::PCL_VISUALIZER_POINT_SIZE, point_size, "nan boundary edges");
-  viewer.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR,
-                                           0.0f, 0.0f, 1.0f, "nan boundary edges");
+  viewer.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_COLOR, 0.0f, 0.0f, 1.0f, "nan boundary edges");
 
   viewer.addPointCloud<pcl::PointXYZRGBA> (occluding_edges, "occluding edges");
   viewer.setPointCloudRenderingProperties (
       pcl::visualization::PCL_VISUALIZER_POINT_SIZE, point_size, "occluding edges");
-  viewer.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR,
-                                           0.0f, 1.0f, 0.0f, "occluding edges");
+  viewer.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_COLOR, 0.0f, 1.0f, 0.0f, "occluding edges");
 
   viewer.addPointCloud<pcl::PointXYZRGBA> (occluded_edges, "occluded edges");
   viewer.setPointCloudRenderingProperties (
       pcl::visualization::PCL_VISUALIZER_POINT_SIZE, point_size, "occluded edges");
-  viewer.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR,
-                                           1.0f, 0.0f, 0.0f, "occluded edges");
+  viewer.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_COLOR, 1.0f, 0.0f, 0.0f, "occluded edges");
 
   viewer.addPointCloud<pcl::PointXYZRGBA> (high_curvature_edges,
                                            "high curvature edges");
   viewer.setPointCloudRenderingProperties (
-      pcl::visualization::PCL_VISUALIZER_POINT_SIZE, point_size,
+      pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
+      point_size,
       "high curvature edges");
   viewer.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR,
-                                           1.0f, 1.0f, 0.0f, "high curvature edges");
+                                           1.0f,
+                                           1.0f,
+                                           0.0f,
+                                           "high curvature edges");
 
   viewer.addPointCloud<pcl::PointXYZRGBA> (rgb_edges, "rgb edges");
   viewer.setPointCloudRenderingProperties (
       pcl::visualization::PCL_VISUALIZER_POINT_SIZE, point_size, "rgb edges");
-  viewer.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR,
-                                           0.0f, 1.0f, 1.0f, "rgb edges");
+  viewer.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_COLOR, 0.0f, 1.0f, 1.0f, "rgb edges");
 
   while (!viewer.wasStopped ()) {
     viewer.spinOnce ();

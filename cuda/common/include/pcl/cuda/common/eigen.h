@@ -475,23 +475,25 @@ namespace pcl
       centroid.x = centroid.y = centroid.z = 0;
       // we need a way to iterate over the inliers in the point cloud..
       // permutation_iterator to the rescue
-      centroid = transform_reduce (begin, end, convert_point_to_float3 (), centroid,
-                                   AddPoints ());
+      centroid = transform_reduce (
+          begin, end, convert_point_to_float3 (), centroid, AddPoints ());
       centroid /= (float)(end - begin);
     }
 
     /** \brief Computes a covariance matrix for a given range of points. */
     template <class IteratorT>
     void
-    computeCovariance (IteratorT begin, IteratorT end, CovarianceMatrix &cov,
+    computeCovariance (IteratorT begin,
+                       IteratorT end,
+                       CovarianceMatrix &cov,
                        float3 centroid)
     {
       cov.data[0] = make_float3 (0.0f, 0.0f, 0.0f);
       cov.data[1] = make_float3 (0.0f, 0.0f, 0.0f);
       cov.data[2] = make_float3 (0.0f, 0.0f, 0.0f);
 
-      cov = transform_reduce (begin, end, ComputeCovarianceForPoint (centroid), cov,
-                              AddCovariances ());
+      cov = transform_reduce (
+          begin, end, ComputeCovarianceForPoint (centroid), cov, AddCovariances ());
 
       // fill in the lower triangle (symmetry)
       cov.data[1].x = cov.data[0].y;
@@ -605,7 +607,8 @@ namespace pcl
 
       //////////////////////////////////////////////////////////////////////////////////////////////
       inline __host__ __device__ int
-      computeCovarianceOnline (const float3 &query_pt, CovarianceMatrix &cov,
+      computeCovarianceOnline (const float3 &query_pt,
+                               CovarianceMatrix &cov,
                                float sqrt_desired_nr_neighbors)
       {
         // bounds.x = min_x, .y = max_x, .z = min_y, .w = max_y
@@ -691,7 +694,8 @@ namespace pcl
 
       //////////////////////////////////////////////////////////////////////////////////////////////
       inline __host__ __device__ float3
-      computeCentroid (const float3 &query_pt, CovarianceMatrix &cov,
+      computeCentroid (const float3 &query_pt,
+                       CovarianceMatrix &cov,
                        float sqrt_desired_nr_neighbors)
       {
         // bounds.x = min_x, .y = max_x, .z = min_y, .w = max_y

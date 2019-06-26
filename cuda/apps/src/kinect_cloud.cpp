@@ -57,7 +57,8 @@ ros::Publisher pub;
 
 struct EventHelper {
   void
-  callback (const pcl::PCLImage::ConstPtr &depth, const pcl::PCLImage::ConstPtr &rgb,
+  callback (const pcl::PCLImage::ConstPtr &depth,
+            const pcl::PCLImage::ConstPtr &rgb,
             const pcl::CameraInfo::ConstPtr &info)
   {
     // using Indices = pcl_cuda::SampleConsensusModel<pcl_cuda::Host>::Indices;

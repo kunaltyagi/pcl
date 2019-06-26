@@ -79,13 +79,17 @@ keyboardCB (const pcl::visualization::KeyboardEvent &event, void *params_void);
 void
 update (CallbackParameters *params);
 bool
-vtk2PointCloud (const char *file_name, PointCloud<PointXYZ> &pcl_points,
-                PointCloud<Normal> &pcl_normals, vtkPolyData *vtk_data);
+vtk2PointCloud (const char *file_name,
+                PointCloud<PointXYZ> &pcl_points,
+                PointCloud<Normal> &pcl_normals,
+                vtkPolyData *vtk_data);
 void
 run (float pair_width, float voxel_size, float max_coplanarity_angle);
 bool
-loadScene (const char *file_name, PointCloud<PointXYZ> &non_plane_points,
-           PointCloud<Normal> &non_plane_normals, PointCloud<PointXYZ> &plane_points);
+loadScene (const char *file_name,
+           PointCloud<PointXYZ> &non_plane_points,
+           PointCloud<Normal> &non_plane_normals,
+           PointCloud<PointXYZ> &plane_points);
 
 //#define _SHOW_SCENE_POINTS_
 #define _SHOW_OCTREE_POINTS_
@@ -95,7 +99,8 @@ loadScene (const char *file_name, PointCloud<PointXYZ> &non_plane_points,
 class CallbackParameters
 {
   public:
-  CallbackParameters (ObjRecRANSAC &objrec, PCLVisualizer &viz,
+  CallbackParameters (ObjRecRANSAC &objrec,
+                      PCLVisualizer &viz,
                       PointCloud<PointXYZ> &scene_points,
                       PointCloud<Normal> &scene_normals)
       : objrec_ (objrec), viz_ (viz), scene_points_ (scene_points),
@@ -119,17 +124,19 @@ main (int argc, char **argv)
           "<max_coplanarity_angle>\n\n");
 
   const int num_params = 3;
-  float parameters[num_params] = {40.0f /*pair width*/, 5.0f /*voxel size*/,
-                                  15.0f /*max co-planarity angle*/};
-  string parameter_names[num_params] = {"pair_width", "voxel_size",
-                                        "max_coplanarity_angle"};
+  float parameters[num_params] = {
+      40.0f /*pair width*/, 5.0f /*voxel size*/, 15.0f /*max co-planarity angle*/};
+  string parameter_names[num_params] = {
+      "pair_width", "voxel_size", "max_coplanarity_angle"};
 
   // Read the user input if any
   for (int i = 0; i < argc - 1 && i < num_params; ++i) {
     parameters[i] = static_cast<float> (atof (argv[i + 1]));
     if (parameters[i] <= 0.0f) {
-      fprintf (stderr, "ERROR: the %i-th parameter has to be positive and not %f\n",
-               i + 1, parameters[i]);
+      fprintf (stderr,
+               "ERROR: the %i-th parameter has to be positive and not %f\n",
+               i + 1,
+               parameters[i]);
       return (-1);
     }
   }
@@ -189,8 +196,10 @@ run (float pair_width, float voxel_size, float max_coplanarity_angle)
   PointCloud<Normal>::Ptr non_plane_normals (new PointCloud<Normal> ());
 
   // Detect the largest plane in the dataset
-  if (!loadScene ("../../test/tum_table_scene.vtk", *non_plane_points,
-                  *non_plane_normals, *plane_points))
+  if (!loadScene ("../../test/tum_table_scene.vtk",
+                  *non_plane_points,
+                  *non_plane_normals,
+                  *plane_points))
     return;
 
   // The parameters for the callback function and the visualizer
@@ -209,8 +218,8 @@ run (float pair_width, float voxel_size, float max_coplanarity_angle)
 
 #ifdef _SHOW_SCENE_POINTS_
   viz.addPointCloud (scene_points, "scene points");
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
-                                        2, "scene points");
+  viz.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "scene points");
 #endif
 
 #ifdef _SHOW_OCTREE_POINTS_
@@ -219,19 +228,19 @@ run (float pair_width, float voxel_size, float max_coplanarity_angle)
   viz.addPointCloud (octree_points, "octree points");
   //  viz.setPointCloudRenderingProperties
   //  (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "octree points");
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 1.0,
-                                        0.0, 0.0, "octree points");
+  viz.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_COLOR, 1.0, 0.0, 0.0, "octree points");
 
   viz.addPointCloud (plane_points, "plane points");
-  viz.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 0.9,
-                                        0.9, 0.9, "plane points");
+  viz.setPointCloudRenderingProperties (
+      pcl::visualization::PCL_VISUALIZER_COLOR, 0.9, 0.9, 0.9, "plane points");
 #endif
 
 #if defined _SHOW_OCTREE_NORMALS_ && defined _SHOW_OCTREE_POINTS_
   PointCloud<Normal>::Ptr normals_octree (new PointCloud<Normal> ());
   objrec.getSceneOctree ().getNormalsOfFullLeaves (*normals_octree);
-  viz.addPointCloudNormals<PointXYZ, Normal> (points_octree, normals_octree, 1, 6.0f,
-                                              "normals out");
+  viz.addPointCloudNormals<PointXYZ, Normal> (
+      points_octree, normals_octree, 1, 6.0f, "normals out");
 #endif
 
   // Enter the main loop
@@ -275,7 +284,8 @@ update (CallbackParameters *params)
 
   // Show the hypotheses
   for (list<ObjRecRANSAC::Output>::iterator it = rec_output.begin ();
-       it != rec_output.end (); ++it, ++i) {
+       it != rec_output.end ();
+       ++it, ++i) {
     cout << it->object_name_ << " has a confidence value of " << it->match_confidence_
          << endl;
 
@@ -326,13 +336,18 @@ update (CallbackParameters *params)
 
 #ifdef _SHOW_TRANSFORM_SPACE_
     if (transform_space.getPositionCellBounds ((*acc_hypo)->pos_id_, cb)) {
-      sprintf (pos_cell_name, "cell [%i, %i, %i]\n", (*acc_hypo)->pos_id_[0],
-               (*acc_hypo)->pos_id_[1], (*acc_hypo)->pos_id_[2]);
-      params->viz_.addCube (cb[0], cb[1], cb[2], cb[3], cb[4], cb[5], 1.0, 1.0, 1.0,
-                            pos_cell_name);
+      sprintf (pos_cell_name,
+               "cell [%i, %i, %i]\n",
+               (*acc_hypo)->pos_id_[0],
+               (*acc_hypo)->pos_id_[1],
+               (*acc_hypo)->pos_id_[2]);
+      params->viz_.addCube (
+          cb[0], cb[1], cb[2], cb[3], cb[4], cb[5], 1.0, 1.0, 1.0, pos_cell_name);
     } else
-      printf ("WARNING: no cell at position [%i, %i, %i]\n", (*acc_hypo)->pos_id_[0],
-              (*acc_hypo)->pos_id_[1], (*acc_hypo)->pos_id_[2]);
+      printf ("WARNING: no cell at position [%i, %i, %i]\n",
+              (*acc_hypo)->pos_id_[0],
+              (*acc_hypo)->pos_id_[1],
+              (*acc_hypo)->pos_id_[2]);
 #endif
   }
 }
@@ -340,8 +355,10 @@ update (CallbackParameters *params)
 //===============================================================================================================================
 
 bool
-loadScene (const char *file_name, PointCloud<PointXYZ> &non_plane_points,
-           PointCloud<Normal> &non_plane_normals, PointCloud<PointXYZ> &plane_points)
+loadScene (const char *file_name,
+           PointCloud<PointXYZ> &non_plane_points,
+           PointCloud<Normal> &non_plane_normals,
+           PointCloud<PointXYZ> &plane_points)
 {
   PointCloud<PointXYZ>::Ptr all_points (new PointCloud<PointXYZ> ());
   PointCloud<Normal>::Ptr all_normals (new PointCloud<Normal> ());
@@ -402,8 +419,10 @@ loadScene (const char *file_name, PointCloud<PointXYZ> &non_plane_points,
 //===============================================================================================================================
 
 bool
-vtk2PointCloud (const char *file_name, PointCloud<PointXYZ> &pcl_points,
-                PointCloud<Normal> &pcl_normals, vtkPolyData *vtk_data)
+vtk2PointCloud (const char *file_name,
+                PointCloud<PointXYZ> &pcl_points,
+                PointCloud<Normal> &pcl_normals,
+                vtkPolyData *vtk_data)
 {
   size_t len = strlen (file_name);
   if (file_name[len - 3] != 'v' || file_name[len - 2] != 't' ||

@@ -46,8 +46,8 @@ pcl::tracking::ParticleFilterOMPTracker<PointInT, StateT>::weight ()
 #endif
         for (int i = 0; i < particle_num_; i++) {
           IndicesPtr indices; // dummy
-          coherence_->compute (transed_reference_vector_[i], indices,
-                               particles_->points[i].weight);
+          coherence_->compute (
+              transed_reference_vector_[i], indices, particles_->points[i].weight);
         }
       } else
         changed_ = false;
@@ -60,8 +60,8 @@ pcl::tracking::ParticleFilterOMPTracker<PointInT, StateT>::weight ()
 #endif
       for (int i = 0; i < particle_num_; i++) {
         IndicesPtr indices; // dummy
-        coherence_->compute (transed_reference_vector_[i], indices,
-                             particles_->points[i].weight);
+        coherence_->compute (
+            transed_reference_vector_[i], indices, particles_->points[i].weight);
       }
     }
   } else {
@@ -86,8 +86,8 @@ pcl::tracking::ParticleFilterOMPTracker<PointInT, StateT>::weight ()
 #pragma omp parallel for num_threads(threads_)
 #endif
     for (int i = 0; i < particle_num_; i++) {
-      coherence_->compute (transed_reference_vector_[i], indices_list[i],
-                           particles_->points[i].weight);
+      coherence_->compute (
+          transed_reference_vector_[i], indices_list[i], particles_->points[i].weight);
     }
   }
 

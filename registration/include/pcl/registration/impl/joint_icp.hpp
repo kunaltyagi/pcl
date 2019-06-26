@@ -46,9 +46,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename Scalar>
 void
-pcl::JointIterativeClosestPoint<
-    PointSource, PointTarget, Scalar>::computeTransformation (PointCloudSource &output,
-                                                              const Matrix4 &guess)
+pcl::JointIterativeClosestPoint<PointSource, PointTarget, Scalar>::
+    computeTransformation (PointCloudSource &output, const Matrix4 &guess)
 {
   // Point clouds containing the correspondences of each point in <input, indices>
   if (sources_.size () != targets_.size () || sources_.empty () || targets_.empty ()) {
@@ -172,7 +171,9 @@ pcl::JointIterativeClosestPoint<
       }
       PCL_DEBUG ("[pcl::%s::computeTransformation] Found %d partial correspondences "
                  "for cloud [%d]\n",
-                 getClassName ().c_str (), partial_correspondences_[i]->size (), i);
+                 getClassName ().c_str (),
+                 partial_correspondences_[i]->size (),
+                 i);
       for (size_t j = 0; j < partial_correspondences_[i]->size (); j++) {
         pcl::Correspondence corr = partial_correspondences_[i]->at (j);
         // Update the offsets to be for the combined clouds
@@ -182,7 +183,8 @@ pcl::JointIterativeClosestPoint<
       }
     }
     PCL_DEBUG ("[pcl::%s::computeTransformation] Total correspondences: %d\n",
-               getClassName ().c_str (), correspondences_->size ());
+               getClassName ().c_str (),
+               correspondences_->size ());
 
     PCLPointCloud2::Ptr inputs_transformed_combined_blob;
     if (need_source_blob_) {
@@ -223,16 +225,18 @@ pcl::JointIterativeClosestPoint<
 
     // Estimate the transform jointly, on a combined correspondence set
     transformation_estimation_->estimateRigidTransformation (
-        *inputs_transformed_combined, *targets_combined, *correspondences_,
+        *inputs_transformed_combined,
+        *targets_combined,
+        *correspondences_,
         transformation_);
 
     // Transform the combined data
-    this->transformCloud (*inputs_transformed_combined, *inputs_transformed_combined,
-                          transformation_);
+    this->transformCloud (
+        *inputs_transformed_combined, *inputs_transformed_combined, transformation_);
     // And all its components
     for (size_t i = 0; i < sources_.size (); i++) {
-      this->transformCloud (*inputs_transformed[i], *inputs_transformed[i],
-                            transformation_);
+      this->transformCloud (
+          *inputs_transformed[i], *inputs_transformed[i], transformation_);
     }
 
     // Obtain the final transformation
@@ -250,14 +254,22 @@ pcl::JointIterativeClosestPoint<
   PCL_DEBUG ("Transformation "
              "is:\n\t%5f\t%5f\t%5f\t%5f\n\t%5f\t%5f\t%5f\t%5f\n\t%5f\t%5f\t%5f\t%"
              "5f\n\t%5f\t%5f\t%5f\t%5f\n",
-             final_transformation_ (0, 0), final_transformation_ (0, 1),
-             final_transformation_ (0, 2), final_transformation_ (0, 3),
-             final_transformation_ (1, 0), final_transformation_ (1, 1),
-             final_transformation_ (1, 2), final_transformation_ (1, 3),
-             final_transformation_ (2, 0), final_transformation_ (2, 1),
-             final_transformation_ (2, 2), final_transformation_ (2, 3),
-             final_transformation_ (3, 0), final_transformation_ (3, 1),
-             final_transformation_ (3, 2), final_transformation_ (3, 3));
+             final_transformation_ (0, 0),
+             final_transformation_ (0, 1),
+             final_transformation_ (0, 2),
+             final_transformation_ (0, 3),
+             final_transformation_ (1, 0),
+             final_transformation_ (1, 1),
+             final_transformation_ (1, 2),
+             final_transformation_ (1, 3),
+             final_transformation_ (2, 0),
+             final_transformation_ (2, 1),
+             final_transformation_ (2, 2),
+             final_transformation_ (2, 3),
+             final_transformation_ (3, 0),
+             final_transformation_ (3, 1),
+             final_transformation_ (3, 2),
+             final_transformation_ (3, 3));
 
   // For fitness checks, etc, we'll use an aggregated cloud for now (should be
   // evaluating independently for correctness, but this requires propagating a few
@@ -279,8 +291,8 @@ pcl::JointIterativeClosestPoint<
 
 template <typename PointSource, typename PointTarget, typename Scalar>
 void
-pcl::JointIterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::determineRequiredBlobData ()
+pcl::JointIterativeClosestPoint<PointSource, PointTarget, Scalar>::
+    determineRequiredBlobData ()
 {
   need_source_blob_ = false;
   need_target_blob_ = false;
@@ -312,12 +324,14 @@ pcl::JointIterativeClosestPoint<PointSource, PointTarget,
     if (rej->requiresSourceNormals () && !source_has_normals_) {
       PCL_WARN ("[pcl::%s::determineRequiredBlobData] Rejector %s expects source "
                 "normals, but we can't provide them.\n",
-                getClassName ().c_str (), rej->getClassName ().c_str ());
+                getClassName ().c_str (),
+                rej->getClassName ().c_str ());
     }
     if (rej->requiresTargetNormals () && !target_has_normals_) {
       PCL_WARN ("[pcl::%s::determineRequiredBlobData] Rejector %s expects target "
                 "normals, but we can't provide them.\n",
-                getClassName ().c_str (), rej->getClassName ().c_str ());
+                getClassName ().c_str (),
+                rej->getClassName ().c_str ());
     }
   }
 }

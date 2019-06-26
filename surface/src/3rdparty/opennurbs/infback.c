@@ -25,8 +25,8 @@ local void fixedtables OF ((struct inflate_state FAR * state));
    windowBits is in the range 8..15, and window is a user-supplied
    window and output buffer that is 2**windowBits bytes.
  */
-int ZEXPORT inflateBackInit_ (strm, windowBits, window, version,
-                              stream_size) z_streamp strm;
+int ZEXPORT
+    inflateBackInit_ (strm, windowBits, window, version, stream_size) z_streamp strm;
 int windowBits;
 unsigned char FAR *window;
 const char *version;
@@ -300,12 +300,14 @@ void FAR *out_desc;
         break;
       case 1: /* fixed block */
         fixedtables (state);
-        Tracev ((stderr, "inflate:     fixed codes block%s\n",
+        Tracev ((stderr,
+                 "inflate:     fixed codes block%s\n",
                  state->last ? " (last)" : ""));
         state->mode = LEN; /* decode codes */
         break;
       case 2: /* dynamic block */
-        Tracev ((stderr, "inflate:     dynamic codes block%s\n",
+        Tracev ((stderr,
+                 "inflate:     dynamic codes block%s\n",
                  state->last ? " (last)" : ""));
         state->mode = TABLE;
         break;
@@ -379,8 +381,8 @@ void FAR *out_desc;
       state->next = state->codes;
       state->lencode = (code const FAR *)(state->next);
       state->lenbits = 7;
-      ret = inflate_table (CODES, state->lens, 19, &(state->next), &(state->lenbits),
-                           state->work);
+      ret = inflate_table (
+          CODES, state->lens, 19, &(state->next), &(state->lenbits), state->work);
       if (ret) {
         strm->msg = (char *)"invalid code lengths set";
         state->mode = BAD;
@@ -444,8 +446,12 @@ void FAR *out_desc;
       state->next = state->codes;
       state->lencode = (code const FAR *)(state->next);
       state->lenbits = 9;
-      ret = inflate_table (LENS, state->lens, state->nlen, &(state->next),
-                           &(state->lenbits), state->work);
+      ret = inflate_table (LENS,
+                           state->lens,
+                           state->nlen,
+                           &(state->next),
+                           &(state->lenbits),
+                           state->work);
       if (ret) {
         strm->msg = (char *)"invalid literal/lengths set";
         state->mode = BAD;
@@ -453,8 +459,12 @@ void FAR *out_desc;
       }
       state->distcode = (code const FAR *)(state->next);
       state->distbits = 6;
-      ret = inflate_table (DISTS, state->lens + state->nlen, state->ndist,
-                           &(state->next), &(state->distbits), state->work);
+      ret = inflate_table (DISTS,
+                           state->lens + state->nlen,
+                           state->ndist,
+                           &(state->next),
+                           &(state->distbits),
+                           state->work);
       if (ret) {
         strm->msg = (char *)"invalid distances set";
         state->mode = BAD;

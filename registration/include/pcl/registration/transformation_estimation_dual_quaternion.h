@@ -60,8 +60,10 @@ namespace pcl
       public:
       using Ptr = boost::shared_ptr<
           TransformationEstimationDualQuaternion<PointSource, PointTarget, Scalar>>;
-      using ConstPtr = boost::shared_ptr<const TransformationEstimationDualQuaternion<
-          PointSource, PointTarget, Scalar>>;
+      using ConstPtr =
+          boost::shared_ptr<const TransformationEstimationDualQuaternion<PointSource,
+                                                                         PointTarget,
+                                                                         Scalar>>;
 
       using Matrix4 =
           typename TransformationEstimation<PointSource, PointTarget, Scalar>::Matrix4;

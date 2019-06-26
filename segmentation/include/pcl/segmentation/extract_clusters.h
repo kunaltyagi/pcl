@@ -59,8 +59,10 @@ namespace pcl
   template <typename PointT>
   void
   extractEuclideanClusters (
-      const PointCloud<PointT> &cloud, const typename search::Search<PointT>::Ptr &tree,
-      float tolerance, std::vector<PointIndices> &clusters,
+      const PointCloud<PointT> &cloud,
+      const typename search::Search<PointT>::Ptr &tree,
+      float tolerance,
+      std::vector<PointIndices> &clusters,
       unsigned int min_pts_per_cluster = 1,
       unsigned int max_pts_per_cluster = (std::numeric_limits<int>::max) ());
 
@@ -79,9 +81,12 @@ namespace pcl
   template <typename PointT>
   void
   extractEuclideanClusters (
-      const PointCloud<PointT> &cloud, const std::vector<int> &indices,
-      const typename search::Search<PointT>::Ptr &tree, float tolerance,
-      std::vector<PointIndices> &clusters, unsigned int min_pts_per_cluster = 1,
+      const PointCloud<PointT> &cloud,
+      const std::vector<int> &indices,
+      const typename search::Search<PointT>::Ptr &tree,
+      float tolerance,
+      std::vector<PointIndices> &clusters,
+      unsigned int min_pts_per_cluster = 1,
       unsigned int max_pts_per_cluster = (std::numeric_limits<int>::max) ());
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,22 +105,27 @@ namespace pcl
   template <typename PointT, typename Normal>
   void
   extractEuclideanClusters (
-      const PointCloud<PointT> &cloud, const PointCloud<Normal> &normals,
-      float tolerance, const typename KdTree<PointT>::Ptr &tree,
-      std::vector<PointIndices> &clusters, double eps_angle,
+      const PointCloud<PointT> &cloud,
+      const PointCloud<Normal> &normals,
+      float tolerance,
+      const typename KdTree<PointT>::Ptr &tree,
+      std::vector<PointIndices> &clusters,
+      double eps_angle,
       unsigned int min_pts_per_cluster = 1,
       unsigned int max_pts_per_cluster = (std::numeric_limits<int>::max) ())
   {
     if (tree->getInputCloud ()->points.size () != cloud.points.size ()) {
       PCL_ERROR ("[pcl::extractEuclideanClusters] Tree built for a different point "
                  "cloud dataset (%lu) than the input cloud (%lu)!\n",
-                 tree->getInputCloud ()->points.size (), cloud.points.size ());
+                 tree->getInputCloud ()->points.size (),
+                 cloud.points.size ());
       return;
     }
     if (cloud.points.size () != normals.points.size ()) {
       PCL_ERROR ("[pcl::extractEuclideanClusters] Number of points in the input point "
                  "cloud (%lu) different than normals (%lu)!\n",
-                 cloud.points.size (), normals.points.size ());
+                 cloud.points.size (),
+                 normals.points.size ());
       return;
     }
 
@@ -137,8 +147,8 @@ namespace pcl
 
       while (sq_idx < static_cast<int> (seed_queue.size ())) {
         // Search for sq_idx
-        if (!tree->radiusSearch (seed_queue[sq_idx], tolerance, nn_indices,
-                                 nn_distances)) {
+        if (!tree->radiusSearch (
+                seed_queue[sq_idx], tolerance, nn_indices, nn_distances)) {
           sq_idx++;
           continue;
         }
@@ -201,9 +211,13 @@ namespace pcl
   template <typename PointT, typename Normal>
   void
   extractEuclideanClusters (
-      const PointCloud<PointT> &cloud, const PointCloud<Normal> &normals,
-      const std::vector<int> &indices, const typename KdTree<PointT>::Ptr &tree,
-      float tolerance, std::vector<PointIndices> &clusters, double eps_angle,
+      const PointCloud<PointT> &cloud,
+      const PointCloud<Normal> &normals,
+      const std::vector<int> &indices,
+      const typename KdTree<PointT>::Ptr &tree,
+      float tolerance,
+      std::vector<PointIndices> &clusters,
+      double eps_angle,
       unsigned int min_pts_per_cluster = 1,
       unsigned int max_pts_per_cluster = (std::numeric_limits<int>::max) ())
   {
@@ -213,19 +227,22 @@ namespace pcl
     if (tree->getInputCloud ()->points.size () != cloud.points.size ()) {
       PCL_ERROR ("[pcl::extractEuclideanClusters] Tree built for a different point "
                  "cloud dataset (%lu) than the input cloud (%lu)!\n",
-                 tree->getInputCloud ()->points.size (), cloud.points.size ());
+                 tree->getInputCloud ()->points.size (),
+                 cloud.points.size ());
       return;
     }
     if (tree->getIndices ()->size () != indices.size ()) {
       PCL_ERROR ("[pcl::extractEuclideanClusters] Tree built for a different set of "
                  "indices (%lu) than the input set (%lu)!\n",
-                 tree->getIndices ()->size (), indices.size ());
+                 tree->getIndices ()->size (),
+                 indices.size ());
       return;
     }
     if (cloud.points.size () != normals.points.size ()) {
       PCL_ERROR ("[pcl::extractEuclideanClusters] Number of points in the input point "
                  "cloud (%lu) different than normals (%lu)!\n",
-                 cloud.points.size (), normals.points.size ());
+                 cloud.points.size (),
+                 normals.points.size ());
       return;
     }
     // Create a bool vector of processed point indices, and initialize it to false
@@ -246,8 +263,10 @@ namespace pcl
 
       while (sq_idx < static_cast<int> (seed_queue.size ())) {
         // Search for sq_idx
-        if (!tree->radiusSearch (cloud.points[seed_queue[sq_idx]], tolerance,
-                                 nn_indices, nn_distances)) {
+        if (!tree->radiusSearch (cloud.points[seed_queue[sq_idx]],
+                                 tolerance,
+                                 nn_indices,
+                                 nn_distances)) {
           sq_idx++;
           continue;
         }

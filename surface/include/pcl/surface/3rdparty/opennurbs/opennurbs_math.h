@@ -158,7 +158,9 @@ class ON_CLASS ON_Evaluator
                 increasing finite domains must be specificed
                 when this parameter is not NULL.
   */
-  ON_Evaluator (int parameter_count, int value_count, const ON_Interval *domain,
+  ON_Evaluator (int parameter_count,
+                int value_count,
+                const ON_Interval *domain,
                 const bool *periodic);
 
   virtual ~ON_Evaluator ();
@@ -238,7 +240,9 @@ class ON_CLASS ON_Evaluator
     2 = found answer, terminate search
   */
   virtual int
-  EvaluateHessian (const double *parameters, double *value, double *gradient,
+  EvaluateHessian (const double *parameters,
+                   double *value,
+                   double *gradient,
                    double **hessian);
 
   // Number of the function's input parameters. This number
@@ -485,9 +489,9 @@ ON_SearchMonotoneArray ( // find a value in an increasing array
                          //           )
                          //    length-1: t == array[length-1]
                          //      length: t >= array[length-1]
-    const double *, // array[]
-    int,            // length of array
-    double          // t = value to search for
+    const double *,      // array[]
+    int,                 // length of array
+    double               // t = value to search for
 );
 
 /*
@@ -542,8 +546,9 @@ ON_TrinomialCoefficient (int i, int j, int k);
 
 ON_DECL
 ON_BOOL32
-ON_GetParameterTolerance (double, double, // domain
-                          double,         // parameter in domain
+ON_GetParameterTolerance (double,
+                          double, // domain
+                          double, // parameter in domain
                           double *,
                           double * // parameter tolerance (tminus, tplus) returned here
 );
@@ -600,16 +605,23 @@ Returns:
 */
 ON_DECL
 int
-ON_IsPointListPlanar (bool bRational, int count, int stride, const double *points,
-                      const double *boxMin, const double *boxMax, double tolerance,
+ON_IsPointListPlanar (bool bRational,
+                      int count,
+                      int stride,
+                      const double *points,
+                      const double *boxMin,
+                      const double *boxMax,
+                      double tolerance,
                       ON_PlaneEquation *plane_equation);
 
 ON_DECL
 ON_BOOL32
 ON_IsValidPointGrid (int,       // dim
                      ON_BOOL32, // true for homogeneous rational points
-                     int, int,  // point_count0, point_count1,
-                     int, int,  // point_stride0, point_stride1,
+                     int,
+                     int, // point_count0, point_count1,
+                     int,
+                     int, // point_stride0, point_stride1,
                      const double *);
 
 ON_DECL
@@ -624,31 +636,41 @@ ON_DECL
 ON_BOOL32
 ON_ReversePointGrid (int,       // dim
                      ON_BOOL32, // true for homogeneous rational points
-                     int, int,  // point_count0, point_count1,
-                     int, int,  // point_stride0, point_stride1,
+                     int,
+                     int, // point_count0, point_count1,
+                     int,
+                     int, // point_stride0, point_stride1,
                      double *,
                      int // dir = 0 or 1
 );
 
 ON_DECL
 bool
-ON_SwapPointListCoordinates (int,              // count
-                             int,              // stride
-                             float *, int, int // coordinates to swap
+ON_SwapPointListCoordinates (int, // count
+                             int, // stride
+                             float *,
+                             int,
+                             int // coordinates to swap
 );
 
 ON_DECL
 bool
-ON_SwapPointListCoordinates (int,               // count
-                             int,               // stride
-                             double *, int, int // coordinates to swap
+ON_SwapPointListCoordinates (int, // count
+                             int, // stride
+                             double *,
+                             int,
+                             int // coordinates to swap
 );
 
 ON_DECL
 ON_BOOL32
-ON_SwapPointGridCoordinates (int, int,          // point_count0, point_count1,
-                             int, int,          // point_stride0, point_stride1,
-                             double *, int, int // coordinates to swap
+ON_SwapPointGridCoordinates (int,
+                             int, // point_count0, point_count1,
+                             int,
+                             int, // point_stride0, point_stride1,
+                             double *,
+                             int,
+                             int // coordinates to swap
 );
 
 ON_DECL
@@ -657,7 +679,8 @@ ON_TransformPointList (int,       // dim
                        ON_BOOL32, // true for homogeneous rational points
                        int,       // count
                        int,       // stride
-                       float *, const ON_Xform &);
+                       float *,
+                       const ON_Xform &);
 
 ON_DECL
 bool
@@ -665,29 +688,35 @@ ON_TransformPointList (int,       // dim
                        ON_BOOL32, // true for homogeneous rational points
                        int,       // count
                        int,       // stride
-                       double *, const ON_Xform &);
+                       double *,
+                       const ON_Xform &);
 
 ON_DECL
 ON_BOOL32
 ON_TransformPointGrid (int,       // dim
                        ON_BOOL32, // true for homogeneous rational points
-                       int, int,  // point_count0, point_count1,
-                       int, int,  // point_stride0, point_stride1,
-                       double *, const ON_Xform &);
+                       int,
+                       int, // point_count0, point_count1,
+                       int,
+                       int, // point_stride0, point_stride1,
+                       double *,
+                       const ON_Xform &);
 
 ON_DECL
 ON_BOOL32
 ON_TransformVectorList (int, // dim
                         int, // count
                         int, // stride
-                        float *, const ON_Xform &);
+                        float *,
+                        const ON_Xform &);
 
 ON_DECL
 ON_BOOL32
 ON_TransformVectorList (int, // dim
                         int, // count
                         int, // stride
-                        double *, const ON_Xform &);
+                        double *,
+                        const ON_Xform &);
 
 /*
 Parameters:
@@ -706,7 +735,9 @@ Returns:
 */
 ON_DECL
 bool
-ON_PointsAreCoincident (int dim, int is_rat, const double *pointA,
+ON_PointsAreCoincident (int dim,
+                        int is_rat,
+                        const double *pointA,
                         const double *pointB);
 
 /*
@@ -732,8 +763,8 @@ Returns:
 */
 ON_DECL
 bool
-ON_PointsAreCoincident (int dim, int is_rat, int point_count, int point_stride,
-                        const double *points);
+ON_PointsAreCoincident (
+    int dim, int is_rat, int point_count, int point_stride, const double *points);
 
 ON_DECL
 int
@@ -776,8 +807,10 @@ ON_DECL
 ON_BOOL32
 ON_IsPointGridClosed (int,       // dim
                       ON_BOOL32, // true for homogeneous rational points
-                      int, int,  // point_count0, point_count1,
-                      int, int,  // point_stride0, point_stride1,
+                      int,
+                      int, // point_count0, point_count1,
+                      int,
+                      int, // point_stride0, point_stride1,
                       const double *,
                       int // dir = 0 or 1
 );
@@ -793,8 +826,11 @@ ON_SolveQuadraticEquation ( // solve a*X^2 + b*X + c = 0
                             //        -c/b) -2: failure - a = 0, b  = 0 c != 0 (r0 = r1
                             //        = 0.0) -3: failure - a = 0, b  = 0 c  = 0 (r0 = r1
                             //        = 0.0)
-    double, double, double, // a, b, c
-    double *, double *      // roots r0 and r1 returned here
+    double,
+    double,
+    double, // a, b, c
+    double *,
+    double * // roots r0 and r1 returned here
 );
 
 ON_DECL
@@ -818,11 +854,15 @@ ON_SolveTriDiagonal ( // solve TriDiagMatrix( a,b,c )*X = d
 // is returned
 ON_DECL
 int
-ON_Solve2x2 (double, double,     // a00 a01 = first row of 2x2 matrix
-             double, double,     // a10 a11 = second row of 2x2 matrix
-             double, double,     // b0 b1
-             double *, double *, // x0, x1 if not NULL, then solution is returned here
-             double *            // if not NULL, then pivot_ratio returned here
+ON_Solve2x2 (double,
+             double, // a00 a01 = first row of 2x2 matrix
+             double,
+             double, // a10 a11 = second row of 2x2 matrix
+             double,
+             double, // b0 b1
+             double *,
+             double *, // x0, x1 if not NULL, then solution is returned here
+             double *  // if not NULL, then pivot_ratio returned here
 );
 
 // Description:
@@ -909,9 +949,16 @@ See Also:
 */
 ON_DECL
 int
-ON_Solve3x3 (const double row0[3], const double row1[3], const double row2[3],
-             double d0, double d1, double d2, double *x_addr, double *y_addr,
-             double *z_addr, double *pivot_ratio);
+ON_Solve3x3 (const double row0[3],
+             const double row1[3],
+             const double row2[3],
+             double d0,
+             double d1,
+             double d2,
+             double *x_addr,
+             double *y_addr,
+             double *z_addr,
+             double *pivot_ratio);
 
 /*
 Description:
@@ -963,9 +1010,18 @@ See Also:
 */
 ON_DECL
 int
-ON_Solve4x4 (const double row0[4], const double row1[4], const double row2[4],
-             const double row3[4], double d0, double d1, double d2, double d3,
-             double *x_addr, double *y_addr, double *z_addr, double *w_addr,
+ON_Solve4x4 (const double row0[4],
+             const double row1[4],
+             const double row2[4],
+             const double row3[4],
+             double d0,
+             double d1,
+             double d2,
+             double d3,
+             double *x_addr,
+             double *y_addr,
+             double *z_addr,
+             double *w_addr,
              double *pivot_ratio);
 
 /*
@@ -1025,8 +1081,8 @@ See Also:
 */
 ON_DECL
 double
-ON_SolveNxN (bool bFullPivot, bool bNormalize, int n, double *M[], double B[],
-             double X[]);
+ON_SolveNxN (
+    bool bFullPivot, bool bNormalize, int n, double *M[], double B[], double X[]);
 
 // return false if determinant is (nearly) singular
 ON_DECL
@@ -1057,8 +1113,11 @@ See Also:
 */
 ON_DECL
 int
-ON_DecomposeVector (const ON_3dVector &V, const ON_3dVector &A, const ON_3dVector &B,
-                    double *x, double *y);
+ON_DecomposeVector (const ON_3dVector &V,
+                    const ON_3dVector &A,
+                    const ON_3dVector &B,
+                    double *x,
+                    double *y);
 
 /*
 Description:
@@ -1078,9 +1137,13 @@ Returns:
 */
 ON_DECL
 ON_BOOL32
-ON_EvNormalPartials (const ON_3dVector &ds, const ON_3dVector &dt,
-                     const ON_3dVector &dss, const ON_3dVector &dst,
-                     const ON_3dVector &dtt, ON_3dVector &ns, ON_3dVector &nt);
+ON_EvNormalPartials (const ON_3dVector &ds,
+                     const ON_3dVector &dt,
+                     const ON_3dVector &dss,
+                     const ON_3dVector &dst,
+                     const ON_3dVector &dtt,
+                     ON_3dVector &ns,
+                     ON_3dVector &nt);
 
 ON_DECL
 ON_BOOL32
@@ -1109,8 +1172,10 @@ ON_GetParameterTolerance (
 ON_DECL
 ON_BOOL32
 ON_EvNormal (int, // limit_dir 0=default,1=from quadrant I, 2 = from quadrant II, ...
-             const ON_3dVector &, const ON_3dVector &, // first partials (Du,Dv)
-             const ON_3dVector &, const ON_3dVector &,
+             const ON_3dVector &,
+             const ON_3dVector &, // first partials (Du,Dv)
+             const ON_3dVector &,
+             const ON_3dVector &,
              const ON_3dVector &, // optional second partials (Duu, Duv, Dvv)
              ON_3dVector &        // unit normal returned here
 );
@@ -1190,9 +1255,12 @@ Returns:
 */
 ON_DECL
 bool
-ON_EvSectionalCurvature (const ON_3dVector &S10, const ON_3dVector &S01,
-                         const ON_3dVector &S20, const ON_3dVector &S11,
-                         const ON_3dVector &S02, const ON_3dVector &planeNormal,
+ON_EvSectionalCurvature (const ON_3dVector &S10,
+                         const ON_3dVector &S01,
+                         const ON_3dVector &S20,
+                         const ON_3dVector &S11,
+                         const ON_3dVector &S02,
+                         const ON_3dVector &planeNormal,
                          ON_3dVector &K);
 
 ON_DECL
@@ -1258,16 +1326,22 @@ Returns:
 */
 ON_DECL
 bool
-ON_IsCurvatureDiscontinuity (const ON_3dVector Km, const ON_3dVector Kp,
-                             double cos_angle_tolerance, double curvature_tolerance,
-                             double zero_curvature, double radius_tolerance,
+ON_IsCurvatureDiscontinuity (const ON_3dVector Km,
+                             const ON_3dVector Kp,
+                             double cos_angle_tolerance,
+                             double curvature_tolerance,
+                             double zero_curvature,
+                             double radius_tolerance,
                              double relative_tolerance);
 
 ON_DECL
 bool
-ON_IsCurvatureDiscontinuity (const ON_3dVector Km, const ON_3dVector Kp,
-                             double cos_angle_tolerance, double curvature_tolerance,
-                             double zero_curvature, double radius_tolerance);
+ON_IsCurvatureDiscontinuity (const ON_3dVector Km,
+                             const ON_3dVector Kp,
+                             double cos_angle_tolerance,
+                             double curvature_tolerance,
+                             double zero_curvature,
+                             double radius_tolerance);
 
 /*
 Description:
@@ -1285,8 +1359,10 @@ Returns:
 */
 ON_DECL
 bool
-ON_IsG2CurvatureContinuous (const ON_3dVector Km, const ON_3dVector Kp,
-                            double cos_angle_tolerance, double curvature_tolerance);
+ON_IsG2CurvatureContinuous (const ON_3dVector Km,
+                            const ON_3dVector Kp,
+                            double cos_angle_tolerance,
+                            double curvature_tolerance);
 
 /*
 Description:
@@ -1304,7 +1380,8 @@ Returns:
 */
 ON_DECL
 bool
-ON_IsGsmoothCurvatureContinuous (const ON_3dVector Km, const ON_3dVector Kp,
+ON_IsGsmoothCurvatureContinuous (const ON_3dVector Km,
+                                 const ON_3dVector Kp,
                                  double cos_angle_tolerance,
                                  double curvature_tolerance);
 
@@ -1340,8 +1417,13 @@ Returns:
 */
 ON_DECL
 ON_BOOL32
-ON_IsContinuous (ON::continuity c, ON_3dPoint Pa, ON_3dVector D1a, ON_3dVector D2a,
-                 ON_3dPoint Pb, ON_3dVector D1b, ON_3dVector D2b,
+ON_IsContinuous (ON::continuity c,
+                 ON_3dPoint Pa,
+                 ON_3dVector D1a,
+                 ON_3dVector D2a,
+                 ON_3dPoint Pb,
+                 ON_3dVector D1b,
+                 ON_3dVector D2b,
                  double point_tolerance = ON_ZERO_TOLERANCE,
                  double d1_tolerance = ON_ZERO_TOLERANCE,
                  double d2_tolerance = ON_ZERO_TOLERANCE,
@@ -1350,8 +1432,10 @@ ON_IsContinuous (ON::continuity c, ON_3dPoint Pa, ON_3dVector D1a, ON_3dVector D
 
 ON_DECL
 bool
-ON_TuneupEvaluationParameter (int side, double s0, double s1, // segment domain
-                              double *s                       // segment parameter
+ON_TuneupEvaluationParameter (int side,
+                              double s0,
+                              double s1, // segment domain
+                              double *s  // segment parameter
 );
 
 ON_DECL
@@ -1378,7 +1462,8 @@ ON_BinarySearch2dexArray (int key_i, const ON_2dex *base, size_t nel);
 // returns closest points between the two infinite lines
 ON_DECL
 bool
-ON_Intersect (const ON_Line &, const ON_Line &,
+ON_Intersect (const ON_Line &,
+              const ON_Line &,
               double *, // parameter on first line
               double *  // parameter on second line
 );
@@ -1389,19 +1474,23 @@ ON_Intersect (const ON_Line &, const ON_Line &,
 // does not intersect the plane
 ON_DECL
 bool
-ON_Intersect (const ON_Line &, const ON_Plane &,
+ON_Intersect (const ON_Line &,
+              const ON_Plane &,
               double * // parameter on line
 );
 
 ON_DECL
 bool
-ON_Intersect (const ON_Plane &, const ON_Plane &,
+ON_Intersect (const ON_Plane &,
+              const ON_Plane &,
               ON_Line & // intersection line is returned here
 );
 
 ON_DECL
 bool
-ON_Intersect (const ON_Plane &, const ON_Plane &, const ON_Plane &,
+ON_Intersect (const ON_Plane &,
+              const ON_Plane &,
+              const ON_Plane &,
               ON_3dPoint & // intersection point is returned here
 );
 
@@ -1429,7 +1518,9 @@ ON_Intersect (const ON_Plane &, const ON_Sphere &, ON_Circle &);
 // the sphere.
 ON_DECL
 int
-ON_Intersect (const ON_Line &, const ON_Sphere &, ON_3dPoint &,
+ON_Intersect (const ON_Line &,
+              const ON_Sphere &,
+              ON_3dPoint &,
               ON_3dPoint & // intersection point(s) returned here
 );
 
@@ -1472,8 +1563,12 @@ ON_Intersect (const ON_Line &,     // [in]
 //         and line.PointAt(*line_t1).
 ON_DECL
 int
-ON_Intersect (const ON_Line &line, const ON_Circle &circle, double *line_t0,
-              ON_3dPoint &circle_point0, double *line_t1, ON_3dPoint &circle_point1);
+ON_Intersect (const ON_Line &line,
+              const ON_Circle &circle,
+              double *line_t0,
+              ON_3dPoint &circle_point0,
+              double *line_t1,
+              ON_3dPoint &circle_point1);
 
 // Description:
 //   Intersect a infinte line and arc.
@@ -1491,8 +1586,12 @@ ON_Intersect (const ON_Line &line, const ON_Circle &circle, double *line_t0,
 //         and line.PointAt(*line_t1).
 ON_DECL
 int
-ON_Intersect (const ON_Line &line, const ON_Arc &arc, double *line_t0,
-              ON_3dPoint &arc_point0, double *line_t1, ON_3dPoint &arc_point1);
+ON_Intersect (const ON_Line &line,
+              const ON_Arc &arc,
+              double *line_t0,
+              ON_3dPoint &arc_point0,
+              double *line_t1,
+              ON_3dPoint &arc_point1);
 
 // Description:
 //   Intersect a plane and a circle.
@@ -1509,7 +1608,9 @@ ON_Intersect (const ON_Line &line, const ON_Arc &arc, double *line_t0,
 //	 3		 Circle lies on plane
 ON_DECL
 int
-ON_Intersect (const ON_Plane &plane, const ON_Circle &circle, ON_3dPoint &point0,
+ON_Intersect (const ON_Plane &plane,
+              const ON_Circle &circle,
+              ON_3dPoint &point0,
               ON_3dPoint &point1);
 
 // Description:
@@ -1527,7 +1628,9 @@ ON_Intersect (const ON_Plane &plane, const ON_Circle &circle, ON_3dPoint &point0
 //	 3		 Arc lies on plane
 ON_DECL
 int
-ON_Intersect (const ON_Plane &plane, const ON_Arc &arc, ON_3dPoint &point0,
+ON_Intersect (const ON_Plane &plane,
+              const ON_Arc &arc,
+              ON_3dPoint &point0,
               ON_3dPoint &point1);
 
 // returns 0 = no, 1 = yes, 2 = points are coincident and on line
@@ -1673,8 +1776,10 @@ Returns:
 */
 ON_DECL
 bool
-ON_GetClosestPointInPointList (int point_count, const ON_3dPoint *point_list,
-                               ON_3dPoint P, int *closest_point_index);
+ON_GetClosestPointInPointList (int point_count,
+                               const ON_3dPoint *point_list,
+                               ON_3dPoint P,
+                               int *closest_point_index);
 
 /*
 Description:
@@ -1793,8 +1898,11 @@ Returns:
   *min_pivot = *max_pivot = *zero_pivot = 0.
 */
 ON_DECL bool
-ON_GetConicEquationThrough6Points (int stride, const double *points2d, double conic[6],
-                                   double *max_pivot, double *min_pivot,
+ON_GetConicEquationThrough6Points (int stride,
+                                   const double *points2d,
+                                   double conic[6],
+                                   double *max_pivot,
+                                   double *min_pivot,
                                    double *zero_pivot);
 
 /*
@@ -1819,9 +1927,12 @@ Returns:
   are not changed.
 */
 ON_DECL bool
-ON_IsConicEquationAnEllipse (const double conic[6], ON_2dPoint &center,
-                             ON_2dVector &major_axis, ON_2dVector &minor_axis,
-                             double *major_radius, double *minor_radius);
+ON_IsConicEquationAnEllipse (const double conic[6],
+                             ON_2dPoint &center,
+                             ON_2dVector &major_axis,
+                             ON_2dVector &minor_axis,
+                             double *major_radius,
+                             double *minor_radius);
 
 /*
 Description:
@@ -1865,8 +1976,8 @@ Returns:
   are not changed.
 */
 ON_DECL bool
-ON_GetEllipseConicEquation (double a, double b, double x0, double y0, double alpha,
-                            double conic[6]);
+ON_GetEllipseConicEquation (
+    double a, double b, double x0, double y0, double alpha, double conic[6]);
 
 /*
 Descripton:

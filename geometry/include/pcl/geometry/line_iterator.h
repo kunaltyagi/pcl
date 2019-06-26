@@ -59,8 +59,12 @@ namespace pcl
      * \param width width of the organized structure e.g. image/cloud/map etc..
      * \param neighborhood connectivity of the neighborhood
      */
-    LineIterator (unsigned x_start, unsigned y_start, unsigned x_end, unsigned y_end,
-                  unsigned width, const Neighborhood &neighborhood = Neighbor8);
+    LineIterator (unsigned x_start,
+                  unsigned y_start,
+                  unsigned x_end,
+                  unsigned y_end,
+                  unsigned width,
+                  const Neighborhood &neighborhood = Neighbor8);
 
     /** \brief Destructor*/
     ~LineIterator ();
@@ -139,8 +143,11 @@ namespace pcl
   ////////////////////////////////////////////////////////////////////////////////
 
   ////////////////////////////////////////////////////////////////////////////////
-  inline LineIterator::LineIterator (unsigned x_start, unsigned y_start, unsigned x_end,
-                                     unsigned y_end, unsigned width,
+  inline LineIterator::LineIterator (unsigned x_start,
+                                     unsigned y_start,
+                                     unsigned x_end,
+                                     unsigned y_end,
+                                     unsigned width,
                                      const Neighborhood &neighborhood)
       : OrganizedIndexIterator (width), x_start_ (x_start), y_start_ (y_start),
         x_end_ (x_end), y_end_ (y_end)

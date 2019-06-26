@@ -132,8 +132,8 @@ main (int argc, char **argv)
   PointCloud<PointXYZ>::CloudVectorType views_xyz;
   std::vector<Eigen::Matrix4f, Eigen::aligned_allocator<Eigen::Matrix4f>> poses;
   std::vector<float> enthropies;
-  vis.renderViewTesselatedSphere (resolution, resolution, views_xyz, poses, enthropies,
-                                  tesselated_sphere_level);
+  vis.renderViewTesselatedSphere (
+      resolution, resolution, views_xyz, poses, enthropies, tesselated_sphere_level);
 
   // take views and fuse them together
   std::vector<PointCloud<PointXYZ>::Ptr> aligned_clouds;

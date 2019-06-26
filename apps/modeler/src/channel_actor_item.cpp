@@ -47,9 +47,11 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 pcl::modeler::ChannelActorItem::ChannelActorItem (
-    QTreeWidgetItem *parent, const CloudMesh::Ptr &cloud_mesh,
+    QTreeWidgetItem *parent,
+    const CloudMesh::Ptr &cloud_mesh,
     const vtkSmartPointer<vtkRenderWindow> &render_window,
-    const vtkSmartPointer<vtkActor> &actor, const std::string &channel_name)
+    const vtkSmartPointer<vtkActor> &actor,
+    const std::string &channel_name)
     : QTreeWidgetItem (parent), cloud_mesh_ (cloud_mesh),
       poly_data_ (vtkSmartPointer<vtkPolyData>::New ()), render_window_ (render_window),
       color_scheme_ ("rgb"), actor_ (actor)

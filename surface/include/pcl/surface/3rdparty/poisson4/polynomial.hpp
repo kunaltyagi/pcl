@@ -231,8 +231,8 @@ namespace pcl
     }
     template <int Degree>
     void
-    Polynomial<Degree>::AddScaled (const Polynomial &p1, double w1,
-                                   const Polynomial &p2, double w2, Polynomial &q)
+    Polynomial<Degree>::AddScaled (
+        const Polynomial &p1, double w1, const Polynomial &p2, double w2, Polynomial &q)
     {
       for (int i = 0; i <= Degree; i++) {
         q.coefficients[i] = p1.coefficients[i] * w1 + p2.coefficients[i] * w2;
@@ -240,8 +240,10 @@ namespace pcl
     }
     template <int Degree>
     void
-    Polynomial<Degree>::AddScaled (const Polynomial &p1, double w1,
-                                   const Polynomial &p2, Polynomial &q)
+    Polynomial<Degree>::AddScaled (const Polynomial &p1,
+                                   double w1,
+                                   const Polynomial &p2,
+                                   Polynomial &q)
     {
       for (int i = 0; i <= Degree; i++) {
         q.coefficients[i] = p1.coefficients[i] * w1 + p2.coefficients[i];
@@ -249,8 +251,10 @@ namespace pcl
     }
     template <int Degree>
     void
-    Polynomial<Degree>::AddScaled (const Polynomial &p1, const Polynomial &p2,
-                                   double w2, Polynomial &q)
+    Polynomial<Degree>::AddScaled (const Polynomial &p1,
+                                   const Polynomial &p2,
+                                   double w2,
+                                   Polynomial &q)
     {
       for (int i = 0; i <= Degree; i++) {
         q.coefficients[i] = p1.coefficients[i] + p2.coefficients[i] * w2;
@@ -259,7 +263,8 @@ namespace pcl
 
     template <int Degree>
     void
-    Polynomial<Degree>::Subtract (const Polynomial &p1, const Polynomial &p2,
+    Polynomial<Degree>::Subtract (const Polynomial &p1,
+                                  const Polynomial &p2,
                                   Polynomial &q)
     {
       for (int i = 0; i <= Degree; i++) {
@@ -407,7 +412,8 @@ namespace pcl
     }
     template <int Degree>
     void
-    Polynomial<Degree>::getSolutions (double c, std::vector<double> &roots,
+    Polynomial<Degree>::getSolutions (double c,
+                                      std::vector<double> &roots,
                                       double EPS) const
     {
       double r[4][2];
@@ -421,8 +427,12 @@ namespace pcl
         rCount = Factor (coefficients[2], coefficients[1], coefficients[0] - c, r, EPS);
         break;
       case 3:
-        rCount = Factor (coefficients[3], coefficients[2], coefficients[1],
-                         coefficients[0] - c, r, EPS);
+        rCount = Factor (coefficients[3],
+                         coefficients[2],
+                         coefficients[1],
+                         coefficients[0] - c,
+                         r,
+                         EPS);
         break;
         //	case 4:
         //		rCount=Factor(coefficients[4],coefficients[3],coefficients[2],coefficients[1],coefficients[0]-c,r,EPS);

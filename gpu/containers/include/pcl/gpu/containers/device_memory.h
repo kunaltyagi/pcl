@@ -208,7 +208,9 @@ namespace pcl
        * colsBytes_arg width of host buffer in bytes
        * */
       void
-      upload (const void *host_ptr_arg, size_t host_step_arg, int rows_arg,
+      upload (const void *host_ptr_arg,
+              size_t host_step_arg,
+              int rows_arg,
               int colsBytes_arg);
 
       /** \brief Downloads data from internal buffer to CPU memory. User is responsible

@@ -54,8 +54,8 @@ init ()
   for (int x = -20; x < 20; x++)
     for (int y = -20; y < 20; y++)
       for (int z = -20; z < 20; z++)
-        cloud.push_back (Point (static_cast<float> (x), static_cast<float> (y),
-                                static_cast<float> (z)));
+        cloud.push_back (Point (
+            static_cast<float> (x), static_cast<float> (y), static_cast<float> (z)));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

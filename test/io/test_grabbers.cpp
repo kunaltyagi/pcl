@@ -23,7 +23,8 @@ vector<std::string> pcd_files_;
 
 // Helper function for grabbing a cloud
 void
-cloud_callback (bool *signal_received, CloudT::ConstPtr *ptr_to_fill,
+cloud_callback (bool *signal_received,
+                CloudT::ConstPtr *ptr_to_fill,
                 const CloudT::ConstPtr &input_cloud)
 {
   *signal_received = true;
@@ -40,7 +41,8 @@ cloud_callback_vector (std::vector<CloudT::ConstPtr> *vector_to_fill,
 
 TEST (PCL, PCDGrabber)
 {
-  pcl::PCDGrabber<PointT> grabber (pcd_files_, 10,
+  pcl::PCDGrabber<PointT> grabber (pcd_files_,
+                                   10,
                                    false); // TODO add directory functionality
   EXPECT_EQ (grabber.size (), pcds_.size ());
   vector<CloudT::ConstPtr> grabbed_clouds;
@@ -107,7 +109,9 @@ TEST (PCL, ImageGrabberTIFF)
       boost::bind (cloud_callback, &signal_received, &cloud_buffer, _1);
   grabber.registerCallback (fxn);
   grabber.setCameraIntrinsics (
-      525., 525., 320.,
+      525.,
+      525.,
+      320.,
       240.); // Setting old intrinsics which were used to generate these tests
   grabber.start ();
   for (size_t i = 0; i < grabber.size (); i++) {
@@ -371,13 +375,13 @@ TEST (PCL, ImageGrabberSetIntrinsicsTIFF)
         if (std::isnan (pcd_pt.x))
           EXPECT_TRUE (std::isnan (tiff_pt.x));
         else
-          EXPECT_NEAR (pcd_pt.x * (x - cx_new),
-                       tiff_pt.x * fx_multiplier * (x - cx_old), 1E-4);
+          EXPECT_NEAR (
+              pcd_pt.x * (x - cx_new), tiff_pt.x * fx_multiplier * (x - cx_old), 1E-4);
         if (std::isnan (pcd_pt.y))
           EXPECT_TRUE (std::isnan (tiff_pt.y));
         else
-          EXPECT_NEAR (pcd_pt.y * (y - cy_new),
-                       tiff_pt.y * fy_multiplier * (y - cy_old), 1E-4);
+          EXPECT_NEAR (
+              pcd_pt.y * (y - cy_new), tiff_pt.y * fy_multiplier * (y - cy_old), 1E-4);
         if (std::isnan (pcd_pt.z))
           EXPECT_TRUE (std::isnan (tiff_pt.z));
         else
@@ -438,13 +442,13 @@ TEST (PCL, ImageGrabberSetIntrinsicsPCLZF)
         if (std::isnan (pcd_pt.x))
           EXPECT_TRUE (std::isnan (pclzf_pt.x));
         else
-          EXPECT_NEAR (pcd_pt.x * (x - cx_new),
-                       pclzf_pt.x * fx_multiplier * (x - cx_old), 1E-4);
+          EXPECT_NEAR (
+              pcd_pt.x * (x - cx_new), pclzf_pt.x * fx_multiplier * (x - cx_old), 1E-4);
         if (std::isnan (pcd_pt.y))
           EXPECT_TRUE (std::isnan (pclzf_pt.y));
         else
-          EXPECT_NEAR (pcd_pt.y * (y - cy_new),
-                       pclzf_pt.y * fy_multiplier * (y - cy_old), 1E-4);
+          EXPECT_NEAR (
+              pcd_pt.y * (y - cy_new), pclzf_pt.y * fy_multiplier * (y - cy_old), 1E-4);
         if (std::isnan (pcd_pt.z))
           EXPECT_TRUE (std::isnan (pclzf_pt.z));
         else

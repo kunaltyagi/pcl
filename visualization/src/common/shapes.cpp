@@ -53,8 +53,8 @@ pcl::visualization::createCylinder (const pcl::ModelCoefficients &coefficients,
                                     int numsides)
 {
   vtkSmartPointer<vtkLineSource> line = vtkSmartPointer<vtkLineSource>::New ();
-  line->SetPoint1 (coefficients.values[0], coefficients.values[1],
-                   coefficients.values[2]);
+  line->SetPoint1 (
+      coefficients.values[0], coefficients.values[1], coefficients.values[2]);
   line->SetPoint2 (coefficients.values[3] + coefficients.values[0],
                    coefficients.values[4] + coefficients.values[1],
                    coefficients.values[5] + coefficients.values[2]);
@@ -101,9 +101,10 @@ pcl::visualization::createCube (const pcl::ModelCoefficients &coefficients)
   t->Identity ();
   t->Translate (coefficients.values[0], coefficients.values[1], coefficients.values[2]);
 
-  Eigen::AngleAxisf a (
-      Eigen::Quaternionf (coefficients.values[6], coefficients.values[3],
-                          coefficients.values[4], coefficients.values[5]));
+  Eigen::AngleAxisf a (Eigen::Quaternionf (coefficients.values[6],
+                                           coefficients.values[3],
+                                           coefficients.values[4],
+                                           coefficients.values[5]));
   t->RotateWXYZ (pcl::rad2deg (a.angle ()), a.axis ()[0], a.axis ()[1], a.axis ()[2]);
 
   vtkSmartPointer<vtkCubeSource> cube = vtkSmartPointer<vtkCubeSource>::New ();
@@ -123,8 +124,10 @@ pcl::visualization::createCube (const pcl::ModelCoefficients &coefficients)
 ////////////////////////////////////////////////////////////////////////////////////////////
 vtkSmartPointer<vtkDataSet>
 pcl::visualization::createCube (const Eigen::Vector3f &translation,
-                                const Eigen::Quaternionf &rotation, double width,
-                                double height, double depth)
+                                const Eigen::Quaternionf &rotation,
+                                double width,
+                                double height,
+                                double depth)
 {
   // coefficients = [Tx, Ty, Tz, Qx, Qy, Qz, Qw, width, height, depth]
   vtkSmartPointer<vtkTransform> t = vtkSmartPointer<vtkTransform>::New ();
@@ -150,8 +153,8 @@ pcl::visualization::createCube (const Eigen::Vector3f &translation,
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 vtkSmartPointer<vtkDataSet>
-pcl::visualization::createCube (double x_min, double x_max, double y_min, double y_max,
-                                double z_min, double z_max)
+pcl::visualization::createCube (
+    double x_min, double x_max, double y_min, double y_max, double z_min, double z_max)
 {
   vtkSmartPointer<vtkTransform> t = vtkSmartPointer<vtkTransform>::New ();
 
@@ -166,8 +169,8 @@ vtkSmartPointer<vtkDataSet>
 pcl::visualization::createLine (const pcl::ModelCoefficients &coefficients)
 {
   vtkSmartPointer<vtkLineSource> line = vtkSmartPointer<vtkLineSource>::New ();
-  line->SetPoint1 (coefficients.values[0], coefficients.values[1],
-                   coefficients.values[2]);
+  line->SetPoint1 (
+      coefficients.values[0], coefficients.values[1], coefficients.values[2]);
   line->SetPoint2 (coefficients.values[3] + coefficients.values[0],
                    coefficients.values[4] + coefficients.values[1],
                    coefficients.values[5] + coefficients.values[2]);
@@ -181,8 +184,8 @@ vtkSmartPointer<vtkDataSet>
 pcl::visualization::createPlane (const pcl::ModelCoefficients &coefficients)
 {
   vtkSmartPointer<vtkPlaneSource> plane = vtkSmartPointer<vtkPlaneSource>::New ();
-  plane->SetNormal (coefficients.values[0], coefficients.values[1],
-                    coefficients.values[2]);
+  plane->SetNormal (
+      coefficients.values[0], coefficients.values[1], coefficients.values[2]);
 
   double norm_sqr = coefficients.values[0] * coefficients.values[0] +
                     coefficients.values[1] * coefficients.values[1] +
@@ -195,8 +198,10 @@ pcl::visualization::createPlane (const pcl::ModelCoefficients &coefficients)
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 vtkSmartPointer<vtkDataSet>
-pcl::visualization::createPlane (const pcl::ModelCoefficients &coefficients, double x,
-                                 double y, double z)
+pcl::visualization::createPlane (const pcl::ModelCoefficients &coefficients,
+                                 double x,
+                                 double y,
+                                 double z)
 {
   vtkSmartPointer<vtkPlaneSource> plane = vtkSmartPointer<vtkPlaneSource>::New ();
 
@@ -210,8 +215,8 @@ pcl::visualization::createPlane (const pcl::ModelCoefficients &coefficients, dou
   //  double d  = coefficients.values [3] * norm;
 
   //  plane->SetNormal (nx, ny, nz);
-  plane->SetNormal (coefficients.values[0], coefficients.values[1],
-                    coefficients.values[2]);
+  plane->SetNormal (
+      coefficients.values[0], coefficients.values[1], coefficients.values[2]);
 
   double t = x * coefficients.values[0] + y * coefficients.values[1] +
              z * coefficients.values[2] + coefficients.values[3];
@@ -277,8 +282,8 @@ pcl::visualization::createCone (const pcl::ModelCoefficients &coefficients)
   cone->SetCenter (coefficients.values[0] + coefficients.values[3] * 0.5,
                    coefficients.values[1] + coefficients.values[4] * 0.5,
                    coefficients.values[2] + coefficients.values[5] * 0.5);
-  cone->SetDirection (-coefficients.values[3], -coefficients.values[4],
-                      -coefficients.values[5]);
+  cone->SetDirection (
+      -coefficients.values[3], -coefficients.values[4], -coefficients.values[5]);
   cone->SetResolution (100);
   cone->SetAngle (coefficients.values[6]);
   cone->Update ();

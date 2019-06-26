@@ -294,7 +294,9 @@ pcl::gpu::kinfuLS::TsdfVolume::fetchNormals (const DeviceArray<PointType> &cloud
   normals.create (cloud.size ());
   const float3 device_volume_size = device_cast<const float3> (size_);
   pcl::device::kinfuLS::extractNormals (
-      volume_, device_volume_size, cloud,
+      volume_,
+      device_volume_size,
+      cloud,
       (pcl::device::kinfuLS::PointType *)normals.ptr ());
 }
 
@@ -329,7 +331,9 @@ size_t
 pcl::gpu::kinfuLS::TsdfVolume::fetchSliceAsCloud (
     DeviceArray<PointType> &cloud_buffer_xyz,
     DeviceArray<float> &cloud_buffer_intensity,
-    const pcl::gpu::kinfuLS::tsdf_buffer *buffer, int shiftX, int shiftY,
+    const pcl::gpu::kinfuLS::tsdf_buffer *buffer,
+    int shiftX,
+    int shiftY,
     int shiftZ) const
 {
   if (cloud_buffer_xyz.empty ())
@@ -341,9 +345,14 @@ pcl::gpu::kinfuLS::TsdfVolume::fetchSliceAsCloud (
 
   float3 device_volume_size = device_cast<const float3> (size_);
 
-  size_t size = pcl::device::kinfuLS::extractSliceAsCloud (
-      volume_, device_volume_size, buffer, shiftX, shiftY, shiftZ, cloud_buffer_xyz,
-      cloud_buffer_intensity);
+  size_t size = pcl::device::kinfuLS::extractSliceAsCloud (volume_,
+                                                           device_volume_size,
+                                                           buffer,
+                                                           shiftX,
+                                                           shiftY,
+                                                           shiftZ,
+                                                           cloud_buffer_xyz,
+                                                           cloud_buffer_intensity);
 
   std::cout << " SIZE IS " << size << std::endl;
 
@@ -358,7 +367,9 @@ pcl::gpu::kinfuLS::TsdfVolume::fetchNormals (const DeviceArray<PointType> &cloud
 {
   normals.create (cloud.size ());
   const float3 device_volume_size = device_cast<const float3> (size_);
-  pcl::device::kinfuLS::extractNormals (volume_, device_volume_size, cloud,
+  pcl::device::kinfuLS::extractNormals (volume_,
+                                        device_volume_size,
+                                        cloud,
                                         (pcl::device::kinfuLS::float8 *)normals.ptr ());
 }
 
@@ -486,7 +497,8 @@ pcl::gpu::kinfuLS::TsdfVolume::save (const std::string &filename, bool binary) c
 
       // write data
       for (std::vector<float>::const_iterator iter = volume_host_->begin ();
-           iter != volume_host_->end (); ++iter)
+           iter != volume_host_->end ();
+           ++iter)
         file << *iter << std::endl;
     }
 
@@ -524,13 +536,15 @@ pcl::gpu::kinfuLS::TsdfVolume::load (const std::string &filename, bool binary)
       if (header_.volume_element_size != sizeof (float)) {
         pcl::console::print_error ("[TSDFVolume::load] Error: Given volume element "
                                    "size (%d) doesn't fit data (%d)",
-                                   sizeof (float), header_.volume_element_size);
+                                   sizeof (float),
+                                   header_.volume_element_size);
         return false;
       }
       if (header_.weights_element_size != sizeof (short)) {
         pcl::console::print_error ("[TSDFVolume::load] Error: Given weights element "
                                    "size (%d) doesn't fit data (%d)",
-                                   sizeof (short), header_.weights_element_size);
+                                   sizeof (short),
+                                   header_.weights_element_size);
         return false;
       }
 
@@ -553,8 +567,8 @@ pcl::gpu::kinfuLS::TsdfVolume::load (const std::string &filename, bool binary)
   }
 
   const Eigen::Vector3i &res = this->gridResolution ();
-  pcl::console::print_info ("done [%d voxels, res %dx%dx%d]\n", this->size (), res[0],
-                            res[1], res[2]);
+  pcl::console::print_info (
+      "done [%d voxels, res %dx%dx%d]\n", this->size (), res[0], res[1], res[2]);
 
   return true;
 }

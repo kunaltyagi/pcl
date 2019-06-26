@@ -12,15 +12,18 @@ POINT_CLOUD_REGISTER_POINT_STRUCT (pcl::Histogram<90>,
                                    (float[90], histogram, histogram90))
 
 // Instantiation
-template class pcl::rec_3d_framework::GlobalNNCRHRecognizer<flann::L2, pcl::PointXYZ,
-                                                            pcl::VFHSignature308>;
-template class pcl::rec_3d_framework::GlobalNNCRHRecognizer<flann::L1, pcl::PointXYZ,
-                                                            pcl::VFHSignature308>;
+template class pcl::rec_3d_framework::
+    GlobalNNCRHRecognizer<flann::L2, pcl::PointXYZ, pcl::VFHSignature308>;
+template class pcl::rec_3d_framework::
+    GlobalNNCRHRecognizer<flann::L1, pcl::PointXYZ, pcl::VFHSignature308>;
 template class pcl::rec_3d_framework::GlobalNNCRHRecognizer<
-    Metrics::HistIntersectionUnionDistance, pcl::PointXYZ, pcl::VFHSignature308>;
-template class pcl::rec_3d_framework::GlobalNNCRHRecognizer<
-    flann::ChiSquareDistance, pcl::PointXYZ, pcl::VFHSignature308>;
-template class pcl::rec_3d_framework::GlobalNNCRHRecognizer<flann::L1, pcl::PointXYZ,
-                                                            pcl::ESFSignature640>;
-template class pcl::rec_3d_framework::GlobalNNCRHRecognizer<flann::L2, pcl::PointXYZ,
-                                                            pcl::ESFSignature640>;
+    Metrics::HistIntersectionUnionDistance,
+    pcl::PointXYZ,
+    pcl::VFHSignature308>;
+template class pcl::rec_3d_framework::GlobalNNCRHRecognizer<flann::ChiSquareDistance,
+                                                            pcl::PointXYZ,
+                                                            pcl::VFHSignature308>;
+template class pcl::rec_3d_framework::
+    GlobalNNCRHRecognizer<flann::L1, pcl::PointXYZ, pcl::ESFSignature640>;
+template class pcl::rec_3d_framework::
+    GlobalNNCRHRecognizer<flann::L2, pcl::PointXYZ, pcl::ESFSignature640>;

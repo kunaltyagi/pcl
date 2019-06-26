@@ -41,12 +41,18 @@ using namespace pcl;
 using namespace on_nurbs;
 using namespace Eigen;
 
-SequentialFitter::Parameter::Parameter (int order, int refinement, int iterationsQuad,
-                                        int iterationsBoundary, int iterationsAdjust,
-                                        int iterationsInterior, double forceBoundary,
+SequentialFitter::Parameter::Parameter (int order,
+                                        int refinement,
+                                        int iterationsQuad,
+                                        int iterationsBoundary,
+                                        int iterationsAdjust,
+                                        int iterationsInterior,
+                                        double forceBoundary,
                                         double forceBoundaryInside,
-                                        double forceInterior, double stiffnessBoundary,
-                                        double stiffnessInterior, int resolution)
+                                        double forceInterior,
+                                        double stiffnessBoundary,
+                                        double stiffnessInterior,
+                                        int resolution)
 {
   this->order = order;
   this->refinement = refinement;
@@ -76,8 +82,8 @@ SequentialFitter::compute_quadfit ()
   ON_NurbsSurface nurbs;
 
   if (m_have_corners) {
-    nurbs = FittingSurface::initNurbs4Corners (2, m_corners[0], m_corners[1],
-                                               m_corners[2], m_corners[3]);
+    nurbs = FittingSurface::initNurbs4Corners (
+        2, m_corners[0], m_corners[1], m_corners[2], m_corners[3]);
   } else {
     nurbs = FittingSurface::initNurbsPCA (2, &m_data);
     nurbs.GetCV (0, 0, m_corners[0]);
@@ -98,15 +104,15 @@ SequentialFitter::compute_quadfit ()
       m_corners[2] = tmp[1];
       m_corners[1] = tmp[2];
       m_corners[0] = tmp[3];
-      nurbs = FittingSurface::initNurbs4Corners (2, m_corners[0], m_corners[1],
-                                                 m_corners[2], m_corners[3]);
+      nurbs = FittingSurface::initNurbs4Corners (
+          2, m_corners[0], m_corners[1], m_corners[2], m_corners[3]);
     }
   }
 
   FittingSurface fitting (&m_data, nurbs);
 
-  FittingSurface::Parameter paramFP (m_params.forceInterior, 1.0, 0.0,
-                                     m_params.forceBoundary, 1.0, 0.0);
+  FittingSurface::Parameter paramFP (
+      m_params.forceInterior, 1.0, 0.0, m_params.forceBoundary, 1.0, 0.0);
 
   // Quad fitting
   //  if( !m_quiet && m_dbgWin != NULL )
@@ -126,8 +132,8 @@ void
 SequentialFitter::compute_refinement (FittingSurface *fitting)
 {
   // Refinement
-  FittingSurface::Parameter paramFP (0.0, 1.0, 0.0, m_params.forceBoundary,
-                                     m_params.stiffnessBoundary, 0.0);
+  FittingSurface::Parameter paramFP (
+      0.0, 1.0, 0.0, m_params.forceBoundary, m_params.stiffnessBoundary, 0.0);
 
   for (int r = 0; r < m_params.refinement; r++) {
     fitting->assemble (paramFP);
@@ -140,8 +146,8 @@ SequentialFitter::compute_refinement (FittingSurface *fitting)
 void
 SequentialFitter::compute_boundary (FittingSurface *fitting)
 {
-  FittingSurface::Parameter paramFP (0.0, 1.0, 0.0, m_params.forceBoundary,
-                                     m_params.stiffnessBoundary, 0.0);
+  FittingSurface::Parameter paramFP (
+      0.0, 1.0, 0.0, m_params.forceBoundary, m_params.stiffnessBoundary, 0.0);
 
   // iterate boundary points
   for (int i = 0; i < m_params.iterationsBoundary; i++) {
@@ -154,9 +160,12 @@ SequentialFitter::compute_interior (FittingSurface *fitting)
 {
   // iterate interior points
   // std::vector<double> wInt(m_data.interior.PointCount(), m_params.forceInterior);
-  FittingSurface::Parameter paramFP (m_params.forceInterior, m_params.stiffnessInterior,
-                                     0.0, m_params.forceBoundary,
-                                     m_params.stiffnessBoundary, 0.0);
+  FittingSurface::Parameter paramFP (m_params.forceInterior,
+                                     m_params.stiffnessInterior,
+                                     0.0,
+                                     m_params.forceBoundary,
+                                     m_params.stiffnessBoundary,
+                                     0.0);
 
   for (int i = 0; i < m_params.iterationsInterior; i++) {
     fitting->assemble (paramFP);
@@ -173,7 +182,8 @@ SequentialFitter::project (const Eigen::Vector3d &pt)
                       Eigen::Vector4d (pt (0), pt (1), pt (2), 1.0));
   pr (0) = pr (0) / pr (2);
   pr (1) = pr (1) / pr (2);
-  if (pt.dot (Eigen::Vector3d (m_extrinsic (0, 2), m_extrinsic (1, 2),
+  if (pt.dot (Eigen::Vector3d (m_extrinsic (0, 2),
+                               m_extrinsic (1, 2),
                                m_extrinsic (2, 2))) < 0.0f) { // avoids backprojection
     pr (0) = -pr (0);
     pr (1) = -pr (1);
@@ -182,8 +192,10 @@ SequentialFitter::project (const Eigen::Vector3d &pt)
 }
 
 bool
-SequentialFitter::is_back_facing (const Eigen::Vector3d &v0, const Eigen::Vector3d &v1,
-                                  const Eigen::Vector3d &v2, const Eigen::Vector3d &)
+SequentialFitter::is_back_facing (const Eigen::Vector3d &v0,
+                                  const Eigen::Vector3d &v1,
+                                  const Eigen::Vector3d &v2,
+                                  const Eigen::Vector3d &)
 {
   Eigen::Vector3d e1, e2, e3;
   e1 = v1 - v0;
@@ -287,9 +299,12 @@ SequentialFitter::compute (bool assemble)
 {
   FittingSurface *fitting;
   ON_NurbsSurface nurbs;
-  FittingSurface::Parameter paramFP (m_params.forceInterior, m_params.stiffnessInterior,
-                                     0.0, m_params.forceBoundary,
-                                     m_params.stiffnessBoundary, 0.0);
+  FittingSurface::Parameter paramFP (m_params.forceInterior,
+                                     m_params.stiffnessInterior,
+                                     0.0,
+                                     m_params.forceBoundary,
+                                     m_params.stiffnessBoundary,
+                                     0.0);
 
   //  int surfid = -1;
   //  TomGine::tgRenderModel nurbs;
@@ -460,19 +475,22 @@ SequentialFitter::getBoundaryNormals (
 void
 SequentialFitter::getClosestPointOnNurbs (ON_NurbsSurface nurbs,
                                           const Eigen::Vector3d &pt,
-                                          Eigen::Vector2d &params, int maxSteps,
+                                          Eigen::Vector2d &params,
+                                          int maxSteps,
                                           double accuracy)
 {
   Eigen::Vector3d p, tu, tv;
   double error;
 
   params = FittingSurface::findClosestElementMidPoint (nurbs, pt);
-  params = FittingSurface::inverseMapping (nurbs, pt, params, error, p, tu, tv,
-                                           maxSteps, accuracy);
+  params = FittingSurface::inverseMapping (
+      nurbs, pt, params, error, p, tu, tv, maxSteps, accuracy);
 }
 
 ON_NurbsSurface
-SequentialFitter::grow (float max_dist, float max_angle, unsigned min_length,
+SequentialFitter::grow (float max_dist,
+                        float max_angle,
+                        unsigned min_length,
                         unsigned max_length)
 {
   unsigned num_bnd = unsigned(this->m_data.boundary_param.size ());
@@ -481,15 +499,16 @@ SequentialFitter::grow (float max_dist, float max_angle, unsigned min_length,
     throw std::runtime_error ("[SequentialFitter::grow] No boundary given.");
 
   if (unsigned(this->m_data.boundary.size ()) != num_bnd) {
-    printf ("[SequentialFitter::grow] %lu %u\n", this->m_data.boundary.size (),
-            num_bnd);
+    printf (
+        "[SequentialFitter::grow] %lu %u\n", this->m_data.boundary.size (), num_bnd);
     throw std::runtime_error ("[SequentialFitter::grow] size of boundary and boundary "
                               "parameters do not match.");
   }
 
   if (this->m_boundary_indices->indices.size () != num_bnd) {
     printf ("[SequentialFitter::grow] %lu %u\n",
-            this->m_boundary_indices->indices.size (), num_bnd);
+            this->m_boundary_indices->indices.size (),
+            num_bnd);
     throw std::runtime_error ("[SequentialFitter::grow] size of boundary indices and "
                               "boundary parameters do not match.");
   }
@@ -532,7 +551,8 @@ SequentialFitter::grow (float max_dist, float max_angle, unsigned min_length,
 
     bn.normalize ();
 
-    Eigen::Vector3d e (r (0) + bn (0) * max_dist, r (1) + bn (1) * max_dist,
+    Eigen::Vector3d e (r (0) + bn (0) * max_dist,
+                       r (1) + bn (1) * max_dist,
                        r (2) + bn (2) * max_dist);
 
     // Project into image plane
@@ -602,7 +622,8 @@ SequentialFitter::grow (float max_dist, float max_angle, unsigned min_length,
 
 unsigned
 SequentialFitter::PCL2ON (pcl::PointCloud<pcl::PointXYZRGB>::Ptr &pcl_cloud,
-                          const std::vector<int> &indices, vector_vec3d &on_cloud)
+                          const std::vector<int> &indices,
+                          vector_vec3d &on_cloud)
 {
   size_t numPoints = 0;
 

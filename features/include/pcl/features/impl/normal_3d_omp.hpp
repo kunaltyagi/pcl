@@ -80,10 +80,10 @@ pcl::NormalEstimationOMP<PointInT, PointOutT>::computeFeature (PointCloudOut &ou
     // Iterating over the entire index vector
     for (int idx = 0; idx < static_cast<int> (indices_->size ()); ++idx) {
       Eigen::Vector4f n;
-      if (this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                    nn_dists) == 0 ||
-          !pcl::computePointNormal (*surface_, nn_indices, n,
-                                    output.points[idx].curvature)) {
+      if (this->searchForNeighbors (
+              (*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0 ||
+          !pcl::computePointNormal (
+              *surface_, nn_indices, n, output.points[idx].curvature)) {
         output.points[idx].normal[0] = output.points[idx].normal[1] =
             output.points[idx].normal[2] = output.points[idx].curvature =
                 std::numeric_limits<float>::quiet_NaN ();
@@ -96,7 +96,10 @@ pcl::NormalEstimationOMP<PointInT, PointOutT>::computeFeature (PointCloudOut &ou
       output.points[idx].normal_y = n[1];
       output.points[idx].normal_z = n[2];
 
-      flipNormalTowardsViewpoint (input_->points[(*indices_)[idx]], vpx_, vpy_, vpz_,
+      flipNormalTowardsViewpoint (input_->points[(*indices_)[idx]],
+                                  vpx_,
+                                  vpy_,
+                                  vpz_,
                                   output.points[idx].normal[0],
                                   output.points[idx].normal[1],
                                   output.points[idx].normal[2]);
@@ -110,10 +113,10 @@ pcl::NormalEstimationOMP<PointInT, PointOutT>::computeFeature (PointCloudOut &ou
     for (int idx = 0; idx < static_cast<int> (indices_->size ()); ++idx) {
       Eigen::Vector4f n;
       if (!isFinite ((*input_)[(*indices_)[idx]]) ||
-          this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                    nn_dists) == 0 ||
-          !pcl::computePointNormal (*surface_, nn_indices, n,
-                                    output.points[idx].curvature)) {
+          this->searchForNeighbors (
+              (*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0 ||
+          !pcl::computePointNormal (
+              *surface_, nn_indices, n, output.points[idx].curvature)) {
         output.points[idx].normal[0] = output.points[idx].normal[1] =
             output.points[idx].normal[2] = output.points[idx].curvature =
                 std::numeric_limits<float>::quiet_NaN ();
@@ -126,7 +129,10 @@ pcl::NormalEstimationOMP<PointInT, PointOutT>::computeFeature (PointCloudOut &ou
       output.points[idx].normal_y = n[1];
       output.points[idx].normal_z = n[2];
 
-      flipNormalTowardsViewpoint (input_->points[(*indices_)[idx]], vpx_, vpy_, vpz_,
+      flipNormalTowardsViewpoint (input_->points[(*indices_)[idx]],
+                                  vpx_,
+                                  vpy_,
+                                  vpz_,
                                   output.points[idx].normal[0],
                                   output.points[idx].normal[1],
                                   output.points[idx].normal[2]);

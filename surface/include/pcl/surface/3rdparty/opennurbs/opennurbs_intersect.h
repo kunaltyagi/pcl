@@ -68,8 +68,12 @@ Remarks:
 */
 ON_DECL
 bool
-ON_IntersectLineLine (const ON_Line &lineA, const ON_Line &lineB, double *a, double *b,
-                      double tolerance, bool bIntersectSegments);
+ON_IntersectLineLine (const ON_Line &lineA,
+                      const ON_Line &lineB,
+                      double *a,
+                      double *b,
+                      double tolerance,
+                      bool bIntersectSegments);
 
 /*
 Description:
@@ -102,19 +106,23 @@ ON_Intersect ( // Returns false unless intersection is a single point
                // If returned parameter is < 0 or > 1, then the line
                // segment between line.m_point[0] and line.m_point[1]
                // does not intersect the plane
-    const ON_Line &, const ON_Plane &,
+    const ON_Line &,
+    const ON_Plane &,
     double * // parameter on line
 );
 
 ON_DECL
 bool
-ON_Intersect (const ON_Plane &, const ON_Plane &,
+ON_Intersect (const ON_Plane &,
+              const ON_Plane &,
               ON_Line & // intersection line is returned here
 );
 
 ON_DECL
 bool
-ON_Intersect (const ON_Plane &, const ON_Plane &, const ON_Plane &,
+ON_Intersect (const ON_Plane &,
+              const ON_Plane &,
+              const ON_Plane &,
               ON_3dPoint & // intersection point is returned here
 );
 
@@ -149,7 +157,9 @@ ON_Intersect ( // returns 0 = no intersections,
                // If 1 is returned, first point is obtained by evaluating
                // the line and the second point is obtained by evaluating
                // the sphere.
-    const ON_Line &, const ON_Sphere &, ON_3dPoint &,
+    const ON_Line &,
+    const ON_Sphere &,
+    ON_3dPoint &,
     ON_3dPoint & // intersection point(s) returned here
 );
 
@@ -165,7 +175,9 @@ ON_Intersect ( // returns 0 = no intersections,
                // If 1 is returned, first point is obtained by evaluating
                // the line and the second point is obtained by evaluating
                // the sphere.
-    const ON_Line &, const ON_Cylinder &, ON_3dPoint &,
+    const ON_Line &,
+    const ON_Cylinder &,
+    ON_3dPoint &,
     ON_3dPoint & // intersection point(s) returned here
 );
 
@@ -192,7 +204,9 @@ Returns:
 */
 ON_DECL
 bool
-ON_Intersect (const ON_BoundingBox &bbox, const ON_Line &line, double tolerance,
+ON_Intersect (const ON_BoundingBox &bbox,
+              const ON_Line &line,
+              double tolerance,
               ON_Interval *line_parameters);
 
 /*

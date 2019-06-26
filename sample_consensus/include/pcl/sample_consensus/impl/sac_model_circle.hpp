@@ -138,7 +138,8 @@ pcl::SampleConsensusModelCircle2D<PointT>::getDistancesToModel (
 template <typename PointT>
 void
 pcl::SampleConsensusModelCircle2D<PointT>::selectWithinDistance (
-    const Eigen::VectorXf &model_coefficients, const double threshold,
+    const Eigen::VectorXf &model_coefficients,
+    const double threshold,
     std::vector<int> &inliers)
 {
   // Check if the model is valid given the user constraints
@@ -205,7 +206,8 @@ pcl::SampleConsensusModelCircle2D<PointT>::countWithinDistance (
 template <typename PointT>
 void
 pcl::SampleConsensusModelCircle2D<PointT>::optimizeModelCoefficients (
-    const std::vector<int> &inliers, const Eigen::VectorXf &model_coefficients,
+    const std::vector<int> &inliers,
+    const Eigen::VectorXf &model_coefficients,
     Eigen::VectorXf &optimized_coefficients) const
 {
   optimized_coefficients = model_coefficients;
@@ -237,17 +239,24 @@ pcl::SampleConsensusModelCircle2D<PointT>::optimizeModelCoefficients (
   PCL_DEBUG ("[pcl::SampleConsensusModelCircle2D::optimizeModelCoefficients] LM solver "
              "finished with exit code %i, having a residual norm of %g. \nInitial "
              "solution: %g %g %g \nFinal solution: %g %g %g\n",
-             info, lm.fvec.norm (), model_coefficients[0], model_coefficients[1],
-             model_coefficients[2], optimized_coefficients[0],
-             optimized_coefficients[1], optimized_coefficients[2]);
+             info,
+             lm.fvec.norm (),
+             model_coefficients[0],
+             model_coefficients[1],
+             model_coefficients[2],
+             optimized_coefficients[0],
+             optimized_coefficients[1],
+             optimized_coefficients[2]);
 }
 
 //////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 void
 pcl::SampleConsensusModelCircle2D<PointT>::projectPoints (
-    const std::vector<int> &inliers, const Eigen::VectorXf &model_coefficients,
-    PointCloud &projected_points, bool copy_data_fields) const
+    const std::vector<int> &inliers,
+    const Eigen::VectorXf &model_coefficients,
+    PointCloud &projected_points,
+    bool copy_data_fields) const
 {
   // Needs a valid set of model coefficients
   if (model_coefficients.size () != 3) {
@@ -314,7 +323,8 @@ pcl::SampleConsensusModelCircle2D<PointT>::projectPoints (
 template <typename PointT>
 bool
 pcl::SampleConsensusModelCircle2D<PointT>::doSamplesVerifyModel (
-    const std::set<int> &indices, const Eigen::VectorXf &model_coefficients,
+    const std::set<int> &indices,
+    const Eigen::VectorXf &model_coefficients,
     const double threshold) const
 {
   // Needs a valid model coefficients

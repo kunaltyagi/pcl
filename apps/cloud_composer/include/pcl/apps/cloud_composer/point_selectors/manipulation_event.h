@@ -54,7 +54,8 @@ namespace pcl
       ~ManipulationEvent ();
 
       void
-      addManipulation (QString id, vtkSmartPointer<vtkMatrix4x4> start,
+      addManipulation (QString id,
+                       vtkSmartPointer<vtkMatrix4x4> start,
                        vtkSmartPointer<vtkMatrix4x4> end);
 
       inline QMap<QString, vtkSmartPointer<vtkMatrix4x4>>

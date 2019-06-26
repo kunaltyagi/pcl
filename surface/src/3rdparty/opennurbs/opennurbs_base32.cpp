@@ -41,7 +41,8 @@ ON_Base32ToString (const ON_SimpleArray<unsigned char> &base32_digits,
 }
 
 bool
-ON_Base32ToString (const unsigned char *base32_digits, int base32_digit_count,
+ON_Base32ToString (const unsigned char *base32_digits,
+                   int base32_digit_count,
                    char *sBase32)
 {
   const char *base32_digit_symbol = "0123456789ABCDEFGHJKMNPQRTUVWXYZ";

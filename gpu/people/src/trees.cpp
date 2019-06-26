@@ -98,7 +98,8 @@ using pcl::gpu::people::trees::NUM_ATTRIBS;
 // tree_run
 
 int
-pcl::gpu::people::trees::loadTree (std::istream &is, std::vector<Node> &tree,
+pcl::gpu::people::trees::loadTree (std::istream &is,
+                                   std::vector<Node> &tree,
                                    std::vector<Label> &leaves)
 {
   // load the depth
@@ -125,7 +126,9 @@ pcl::gpu::people::trees::loadTree (std::istream &is, std::vector<Node> &tree,
   // Check loading of the tree in terminal
   PCL_DEBUG ("[pcl::gpu::people::trees::loadTree] : (D) : loaded %d nodes, %d leaves "
              "and depth %d\n",
-             numNodes, numLeaves, maxDepth);
+             numNodes,
+             numLeaves,
+             maxDepth);
 
   if (is.fail ())
     throw std::runtime_error (std::string ("(E) malformed *.tree stream"));
@@ -133,7 +136,8 @@ pcl::gpu::people::trees::loadTree (std::istream &is, std::vector<Node> &tree,
 }
 
 int
-pcl::gpu::people::trees::loadTree (const std::string &filename, std::vector<Node> &tree,
+pcl::gpu::people::trees::loadTree (const std::string &filename,
+                                   std::vector<Node> &tree,
                                    std::vector<Label> &leaves)
 {
   std::ifstream fin (filename.c_str ());
@@ -145,9 +149,13 @@ pcl::gpu::people::trees::loadTree (const std::string &filename, std::vector<Node
 }
 
 void
-pcl::gpu::people::trees::runThroughTree (int maxDepth, const std::vector<Node> &tree,
-                                         const std::vector<Label> &leaves, int W, int H,
-                                         const uint16_t *dmap, Label *lmap)
+pcl::gpu::people::trees::runThroughTree (int maxDepth,
+                                         const std::vector<Node> &tree,
+                                         const std::vector<Label> &leaves,
+                                         int W,
+                                         int H,
+                                         const uint16_t *dmap,
+                                         Label *lmap)
 {
   Tex2Dfetcher tfetch (dmap, W, H); // the tex fetcher
 

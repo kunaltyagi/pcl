@@ -49,8 +49,11 @@
 template <typename PointT>
 int
 pcl::search::OrganizedNeighbor<PointT>::radiusSearch (
-    const PointT &query, const double radius, std::vector<int> &k_indices,
-    std::vector<float> &k_sqr_distances, unsigned int max_nn) const
+    const PointT &query,
+    const double radius,
+    std::vector<int> &k_indices,
+    std::vector<float> &k_sqr_distances,
+    unsigned int max_nn) const
 {
   // NAN test
   assert (isFinite (query) &&
@@ -67,8 +70,8 @@ pcl::search::OrganizedNeighbor<PointT>::radiusSearch (
 
   squared_radius = radius * radius;
 
-  this->getProjectedRadiusSearchBox (query, static_cast<float> (squared_radius), left,
-                                     right, top, bottom);
+  this->getProjectedRadiusSearchBox (
+      query, static_cast<float> (squared_radius), left, right, top, bottom);
 
   // iterate over search box
   if (max_nn == 0 || max_nn >= static_cast<unsigned int> (input_->points.size ()))
@@ -114,7 +117,9 @@ pcl::search::OrganizedNeighbor<PointT>::radiusSearch (
 template <typename PointT>
 int
 pcl::search::OrganizedNeighbor<PointT>::nearestKSearch (
-    const PointT &query, int k, std::vector<int> &k_indices,
+    const PointT &query,
+    int k,
+    std::vector<int> &k_indices,
     std::vector<float> &k_sqr_distances) const
 {
   assert (isFinite (query) &&
@@ -231,8 +236,8 @@ pcl::search::OrganizedNeighbor<PointT>::nearestKSearch (
       // stop here means that the k-nearest neighbor changed -> recalculate bounding box
       // of ellipse.
       if (stop)
-        getProjectedRadiusSearchBox (query, results.top ().distance, left, right, top,
-                                     bottom);
+        getProjectedRadiusSearchBox (
+            query, results.top ().distance, left, right, top, bottom);
     }
     // now we use it as stop flag -> if bounding box is completely within the already
     // examined search box were done!
@@ -260,8 +265,12 @@ pcl::search::OrganizedNeighbor<PointT>::nearestKSearch (
 template <typename PointT>
 void
 pcl::search::OrganizedNeighbor<PointT>::getProjectedRadiusSearchBox (
-    const PointT &point, float squared_radius, unsigned &minX, unsigned &maxX,
-    unsigned &minY, unsigned &maxY) const
+    const PointT &point,
+    float squared_radius,
+    unsigned &minX,
+    unsigned &maxX,
+    unsigned &minY,
+    unsigned &maxY) const
 {
   Eigen::Vector3f queryvec (point.x, point.y, point.z);
   // Eigen::Vector3f q = KR_ * point.getVector3fMap () + projection_matrix_.block <3, 1>
@@ -358,7 +367,8 @@ pcl::search::OrganizedNeighbor<PointT>::estimateProjectionMatrix ()
   if (fabs (residual_sqr) > eps_ * float(indices.size ())) {
     PCL_ERROR ("[pcl::%s::radiusSearch] Input dataset is not from a projective "
                "device!\nResidual (MSE) %f, using %d valid points\n",
-               this->getName ().c_str (), residual_sqr / double(indices.size ()),
+               this->getName ().c_str (),
+               residual_sqr / double(indices.size ()),
                indices.size ());
     return;
   }

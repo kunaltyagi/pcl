@@ -105,12 +105,13 @@ pcl::StatisticalOutlierRemoval<PointT>::applyFilterIndices (std::vector<int> &in
     }
 
     // Perform the nearest k search
-    if (searcher_->nearestKSearch ((*indices_)[iii], mean_k_ + 1, nn_indices,
-                                   nn_dists) == 0) {
+    if (searcher_->nearestKSearch (
+            (*indices_)[iii], mean_k_ + 1, nn_indices, nn_dists) == 0) {
       distances[iii] = 0.0;
       PCL_WARN (
           "[pcl::%s::applyFilter] Searching for the closest %d neighbors failed.\n",
-          getClassName ().c_str (), mean_k_);
+          getClassName ().c_str (),
+          mean_k_);
       continue;
     }
 

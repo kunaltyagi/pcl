@@ -124,7 +124,8 @@ namespace pcl
 
     bool
     addTemplate (const SparseQuantizedMultiModTemplate &sqmmt,
-                 pcl::PointCloud<pcl::PointXYZRGBA> &cloud, size_t object_id = 0);
+                 pcl::PointCloud<pcl::PointXYZRGBA> &cloud,
+                 size_t object_id = 0);
 
     /** \brief Sets the threshold for the detection responses. Responses are between 0
      * and 1, where 1 is a best. \param[in] threshold The threshold used to decide where
@@ -193,8 +194,10 @@ namespace pcl
      */
     int
     createAndAddTemplate (pcl::PointCloud<pcl::PointXYZRGBA> &cloud,
-                          const size_t object_id, const MaskMap &mask_xyz,
-                          const MaskMap &mask_rgb, const RegionXY &region);
+                          const size_t object_id,
+                          const MaskMap &mask_xyz,
+                          const MaskMap &mask_rgb,
+                          const RegionXY &region);
 
     /** \brief Applies the detection process and fills the supplied vector with the
      * detection instances. \param[out] detections The storage for the detection
@@ -211,7 +214,8 @@ namespace pcl
     detectSemiScaleInvariant (
         std::vector<typename pcl::LineRGBD<PointXYZT, PointRGBT>::Detection>
             &detections,
-        float min_scale = 0.6944444f, float max_scale = 1.44f,
+        float min_scale = 0.6944444f,
+        float max_scale = 1.44f,
         float scale_multiplier = 1.2f);
 
     /** \brief Computes and returns the point cloud of the specified detection. This is

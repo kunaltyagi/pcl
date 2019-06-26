@@ -172,10 +172,10 @@ class SimpleOpenNIViewer
 
     string mouseMsg3D ("Mouse coordinates in PCL Visualizer");
     string keyMsg3D ("Key event for PCL Visualizer");
-    cloud_viewer_.registerMouseCallback (&SimpleOpenNIViewer::mouse_callback, *this,
-                                         (void *)(&mouseMsg3D));
-    cloud_viewer_.registerKeyboardCallback (&SimpleOpenNIViewer::keyboard_callback,
-                                            *this, (void *)(&keyMsg3D));
+    cloud_viewer_.registerMouseCallback (
+        &SimpleOpenNIViewer::mouse_callback, *this, (void *)(&mouseMsg3D));
+    cloud_viewer_.registerKeyboardCallback (
+        &SimpleOpenNIViewer::keyboard_callback, *this, (void *)(&keyMsg3D));
     std::function<void(const CloudConstPtr &)> cloud_cb =
         boost::bind (&SimpleOpenNIViewer::cloud_callback, this, _1);
     boost::signals2::connection cloud_connection = grabber_.registerCallback (cloud_cb);
@@ -185,10 +185,10 @@ class SimpleOpenNIViewer
             const boost::shared_ptr<openni_wrapper::Image> &)> ()) {
       string mouseMsg2D ("Mouse coordinates in image viewer");
       string keyMsg2D ("Key event for image viewer");
-      image_viewer_.registerMouseCallback (&SimpleOpenNIViewer::mouse_callback, *this,
-                                           (void *)(&mouseMsg2D));
-      image_viewer_.registerKeyboardCallback (&SimpleOpenNIViewer::keyboard_callback,
-                                              *this, (void *)(&keyMsg2D));
+      image_viewer_.registerMouseCallback (
+          &SimpleOpenNIViewer::mouse_callback, *this, (void *)(&mouseMsg2D));
+      image_viewer_.registerKeyboardCallback (
+          &SimpleOpenNIViewer::keyboard_callback, *this, (void *)(&keyMsg2D));
       std::function<void(const boost::shared_ptr<openni_wrapper::Image> &)> image_cb =
           boost::bind (&SimpleOpenNIViewer::image_callback, this, _1);
       image_connection = grabber_.registerCallback (image_cb);
@@ -208,16 +208,16 @@ class SimpleOpenNIViewer
         boost::shared_ptr<openni_wrapper::Image> image = getLatestImage ();
 
         if (image->getEncoding () == openni_wrapper::Image::RGB) {
-          image_viewer_.showRGBImage (image->getMetaData ().Data (), image->getWidth (),
-                                      image->getHeight ());
+          image_viewer_.showRGBImage (
+              image->getMetaData ().Data (), image->getWidth (), image->getHeight ());
         } else {
           if (rgb_data_size < image->getWidth () * image->getHeight ()) {
             rgb_data_size = image->getWidth () * image->getHeight ();
             rgb_data = new unsigned char[rgb_data_size * 3];
           }
           image->fillRGB (image->getWidth (), image->getHeight (), rgb_data);
-          image_viewer_.showRGBImage (rgb_data, image->getWidth (),
-                                      image->getHeight ());
+          image_viewer_.showRGBImage (
+              rgb_data, image->getWidth (), image->getHeight ());
         }
         // This will crash: image_viewer_.spinOnce (10);
       }
@@ -305,7 +305,8 @@ main (int argc, char **argv)
             grabber.getAvailableDepthModes ();
         for (std::vector<std::pair<int, XnMapOutputMode>>::const_iterator it =
                  modes.begin ();
-             it != modes.end (); ++it) {
+             it != modes.end ();
+             ++it) {
           cout << it->first << " = " << it->second.nXRes << " x " << it->second.nYRes
                << " @ " << it->second.nFPS << endl;
         }
@@ -317,7 +318,8 @@ main (int argc, char **argv)
           modes = grabber.getAvailableImageModes ();
           for (std::vector<std::pair<int, XnMapOutputMode>>::const_iterator it =
                    modes.begin ();
-               it != modes.end (); ++it) {
+               it != modes.end ();
+               ++it) {
             cout << it->first << " = " << it->second.nXRes << " x " << it->second.nYRes
                  << " @ " << it->second.nFPS << endl;
           }

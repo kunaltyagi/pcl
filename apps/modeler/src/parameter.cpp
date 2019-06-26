@@ -47,7 +47,8 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::modeler::Parameter::setModelData (QWidget *editor, QAbstractItemModel *model,
+pcl::modeler::Parameter::setModelData (QWidget *editor,
+                                       QAbstractItemModel *model,
                                        const QModelIndex &index)
 {
   getEditorData (editor);

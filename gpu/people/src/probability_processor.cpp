@@ -58,8 +58,11 @@ pcl::gpu::people::ProbabilityProcessor::SelectLabel (
 /** \brief This will combine two probabilities according their weight **/
 void
 pcl::gpu::people::ProbabilityProcessor::CombineProb (
-    const Depth &depth, pcl::device::LabelProbability &probIn1, float weight1,
-    pcl::device::LabelProbability &probIn2, float weight2,
+    const Depth &depth,
+    pcl::device::LabelProbability &probIn1,
+    float weight1,
+    pcl::device::LabelProbability &probIn2,
+    float weight2,
     pcl::device::LabelProbability &probOut)
 {
   impl_->CUDA_CombineProb (depth, probIn1, weight1, probIn2, weight2, probOut);
@@ -68,7 +71,9 @@ pcl::gpu::people::ProbabilityProcessor::CombineProb (
 /** \brief This will sum a probability multiplied with it's weight **/
 void
 pcl::gpu::people::ProbabilityProcessor::WeightedSumProb (
-    const Depth &depth, pcl::device::LabelProbability &probIn, float weight,
+    const Depth &depth,
+    pcl::device::LabelProbability &probIn,
+    float weight,
     pcl::device::LabelProbability &probOut)
 {
   impl_->CUDA_WeightedSumProb (depth, probIn, weight, probOut);
@@ -77,8 +82,10 @@ pcl::gpu::people::ProbabilityProcessor::WeightedSumProb (
 /** \brief This will do a GaussianBlur over the LabelProbability **/
 int
 pcl::gpu::people::ProbabilityProcessor::GaussianBlur (
-    const Depth &depth, pcl::device::LabelProbability &probIn,
-    DeviceArray<float> &kernel, pcl::device::LabelProbability &probOut)
+    const Depth &depth,
+    pcl::device::LabelProbability &probIn,
+    DeviceArray<float> &kernel,
+    pcl::device::LabelProbability &probOut)
 {
   return impl_->CUDA_GaussianBlur (depth, probIn, kernel, probOut);
 }
@@ -86,8 +93,10 @@ pcl::gpu::people::ProbabilityProcessor::GaussianBlur (
 /** \brief This will do a GaussianBlur over the LabelProbability **/
 int
 pcl::gpu::people::ProbabilityProcessor::GaussianBlur (
-    const Depth &depth, pcl::device::LabelProbability &probIn,
-    DeviceArray<float> &kernel, pcl::device::LabelProbability &probTemp,
+    const Depth &depth,
+    pcl::device::LabelProbability &probIn,
+    DeviceArray<float> &kernel,
+    pcl::device::LabelProbability &probTemp,
     pcl::device::LabelProbability &probOut)
 {
   return impl_->CUDA_GaussianBlur (depth, probIn, kernel, probTemp, probOut);

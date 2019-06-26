@@ -112,7 +112,8 @@ class ON_CLASS ON_LineCurve : public ON_Curve
     bounding box.
   */
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   ON_BOOL32
@@ -197,8 +198,8 @@ class ON_CLASS ON_LineCurve : public ON_Curve
       ) const;
 
   ON_BOOL32
-  IsPlanar (ON_Plane * = NULL, // if not NULL and true is returned, then plane
-                               // parameters are filled in
+  IsPlanar (ON_Plane * = NULL,         // if not NULL and true is returned, then plane
+                                       // parameters are filled in
             double = ON_ZERO_TOLERANCE // tolerance to use when checking
             ) const;
 

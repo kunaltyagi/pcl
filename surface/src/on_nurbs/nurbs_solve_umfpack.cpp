@@ -126,7 +126,9 @@ namespace pcl
   namespace on_nurbs
   {
     bool
-    solveSparseLinearSystem (cholmod_sparse *A, cholmod_dense *b, cholmod_dense *x,
+    solveSparseLinearSystem (cholmod_sparse *A,
+                             cholmod_dense *b,
+                             cholmod_dense *x,
                              bool transpose)
     {
       double *vals = (double *)A->x;
@@ -144,8 +146,8 @@ namespace pcl
       double *null = (double *)NULL;
       void *Symbolic, *Numeric;
 
-      if (umfpack_di_symbolic (A->nrow, A->ncol, cols, rows, vals, &Symbolic, null,
-                               null) != 0) {
+      if (umfpack_di_symbolic (
+              A->nrow, A->ncol, cols, rows, vals, &Symbolic, null, null) != 0) {
         std::cout << "[NurbsSolve[UMFPACK]::solveSparseLinearSystem] Warning: "
                      "something is wrong with input matrix!"
                   << std::endl;
@@ -171,11 +173,11 @@ namespace pcl
 
         // At or A?
         if (transpose)
-          umfpack_di_solve (UMFPACK_At, cols, rows, vals, tempSol, tempRhs, Numeric,
-                            null, null);
+          umfpack_di_solve (
+              UMFPACK_At, cols, rows, vals, tempSol, tempRhs, Numeric, null, null);
         else
-          umfpack_di_solve (UMFPACK_A, cols, rows, vals, tempSol, tempRhs, Numeric,
-                            null, null);
+          umfpack_di_solve (
+              UMFPACK_A, cols, rows, vals, tempSol, tempRhs, Numeric, null, null);
 
         for (int k = 0; k < noOfVerts; k++)
           sol[i * noOfVerts + k] = tempSol[k];
@@ -195,8 +197,8 @@ namespace pcl
       cholmod_start (&c);
       c.print = 4;
 
-      cholmod_sparse *At = cholmod_allocate_sparse (A->ncol, A->nrow, A->ncol * A->nrow,
-                                                    0, 1, 0, CHOLMOD_REAL, &c);
+      cholmod_sparse *At = cholmod_allocate_sparse (
+          A->ncol, A->nrow, A->ncol * A->nrow, 0, 1, 0, CHOLMOD_REAL, &c);
       //  cholmod_dense* Atb = cholmod_allocate_dense(b->nrow, b->ncol, b->nrow,
       //  CHOLMOD_REAL, &c);
       cholmod_dense *Atb =
@@ -217,8 +219,8 @@ namespace pcl
         cholmod_free_sparse (&At, &c);
         cholmod_free_dense (&Atb, &c);
 
-        At = cholmod_allocate_sparse (A->ncol, A->nrow, (i + 2) * A->ncol * A->nrow, 0,
-                                      1, 0, CHOLMOD_REAL, &c);
+        At = cholmod_allocate_sparse (
+            A->ncol, A->nrow, (i + 2) * A->ncol * A->nrow, 0, 1, 0, CHOLMOD_REAL, &c);
         Atb = cholmod_allocate_dense (A->ncol, b->ncol, A->ncol, CHOLMOD_REAL, &c);
 
         double one[2] = {1, 0};
@@ -269,8 +271,8 @@ NurbsSolve::solve ()
 
   //  m_Ksparse.printLong();
 
-  cholmod_sparse *K = cholmod_allocate_sparse (n_rows, n_cols, n_rows * n_cols, 0, 1, 0,
-                                               CHOLMOD_REAL, &c);
+  cholmod_sparse *K = cholmod_allocate_sparse (
+      n_rows, n_cols, n_rows * n_cols, 0, 1, 0, CHOLMOD_REAL, &c);
   cholmod_dense *f = cholmod_allocate_dense (n_rows, n_dims, n_rows, CHOLMOD_REAL, &c);
   cholmod_dense *d = cholmod_allocate_dense (n_cols, n_dims, n_cols, CHOLMOD_REAL, &c);
 
@@ -283,8 +285,16 @@ NurbsSolve::solve ()
   int *cols = (int *)K->p;
   int *rows = (int *)K->i;
 
-  umfpack_di_triplet_to_col (n_rows, n_cols, n_nz, &rowinds[0], &colinds[0], &values[0],
-                             cols, rows, vals, NULL);
+  umfpack_di_triplet_to_col (n_rows,
+                             n_cols,
+                             n_nz,
+                             &rowinds[0],
+                             &colinds[0],
+                             &values[0],
+                             cols,
+                             rows,
+                             vals,
+                             NULL);
 
   double *temp = (double *)f->x;
 

@@ -124,8 +124,8 @@ namespace pcl
     struct __align__ (16) PointXYZRGBNormal
     {
       inline __host__ __device__ PointXYZRGBNormal () {}
-      inline __host__ __device__ PointXYZRGBNormal (float _x, float _y, float _z,
-                                                    int _rgb)
+      inline __host__ __device__ PointXYZRGBNormal (
+          float _x, float _y, float _z, int _rgb)
           : x (_x), y (_y), z (_z), rgb (_rgb)
       {
       }

@@ -392,7 +392,9 @@ namespace pcl
      * points \return number of neighbors found
      */
     int
-    nearestKSearch (const PointT &point, int k, std::vector<LeafConstPtr> &k_leaves,
+    nearestKSearch (const PointT &point,
+                    int k,
+                    std::vector<LeafConstPtr> &k_leaves,
                     std::vector<float> &k_sqr_distances)
     {
       k_leaves.clear ();
@@ -425,7 +427,9 @@ namespace pcl
      * points \return number of neighbors found
      */
     inline int
-    nearestKSearch (const PointCloud &cloud, int index, int k,
+    nearestKSearch (const PointCloud &cloud,
+                    int index,
+                    int k,
                     std::vector<LeafConstPtr> &k_leaves,
                     std::vector<float> &k_sqr_distances)
     {
@@ -443,9 +447,11 @@ namespace pcl
      * points \param[in] max_nn \return number of neighbors found
      */
     int
-    radiusSearch (const PointT &point, double radius,
+    radiusSearch (const PointT &point,
+                  double radius,
                   std::vector<LeafConstPtr> &k_leaves,
-                  std::vector<float> &k_sqr_distances, unsigned int max_nn = 0)
+                  std::vector<float> &k_sqr_distances,
+                  unsigned int max_nn = 0)
     {
       k_leaves.clear ();
 
@@ -477,14 +483,17 @@ namespace pcl
      * points \param[in] max_nn \return number of neighbors found
      */
     inline int
-    radiusSearch (const PointCloud &cloud, int index, double radius,
+    radiusSearch (const PointCloud &cloud,
+                  int index,
+                  double radius,
                   std::vector<LeafConstPtr> &k_leaves,
-                  std::vector<float> &k_sqr_distances, unsigned int max_nn = 0)
+                  std::vector<float> &k_sqr_distances,
+                  unsigned int max_nn = 0)
     {
       if (index >= static_cast<int> (cloud.points.size ()) || index < 0)
         return (0);
-      return (radiusSearch (cloud.points[index], radius, k_leaves, k_sqr_distances,
-                            max_nn));
+      return (radiusSearch (
+          cloud.points[index], radius, k_leaves, k_sqr_distances, max_nn));
     }
 
     protected:

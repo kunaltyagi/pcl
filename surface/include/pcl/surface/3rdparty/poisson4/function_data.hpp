@@ -66,13 +66,17 @@ namespace pcl
     template <int Degree, class Real>
 #if BOUNDARY_CONDITIONS
     void
-    FunctionData<Degree, Real>::set (const int &maxDepth, const PPolynomial<Degree> &F,
-                                     const int &normalize, bool useDotRatios,
+    FunctionData<Degree, Real>::set (const int &maxDepth,
+                                     const PPolynomial<Degree> &F,
+                                     const int &normalize,
+                                     bool useDotRatios,
                                      bool reflectBoundary)
 #else  // !BOUNDARY_CONDITIONS
     void
-    FunctionData<Degree, Real>::set (const int &maxDepth, const PPolynomial<Degree> &F,
-                                     const int &normalize, bool useDotRatios)
+    FunctionData<Degree, Real>::set (const int &maxDepth,
+                                     const PPolynomial<Degree> &F,
+                                     const int &normalize,
+                                     bool useDotRatios)
 #endif // BOUNDARY_CONDITIONS
     {
       this->normalize = normalize;
@@ -348,9 +352,12 @@ namespace pcl
 #if BOUNDARY_CONDITIONS
     template <int Degree, class Real>
     Real
-    FunctionData<Degree, Real>::dotProduct (const double &center1, const double &width1,
-                                            const double &center2, const double &width2,
-                                            int boundary1, int boundary2) const
+    FunctionData<Degree, Real>::dotProduct (const double &center1,
+                                            const double &width1,
+                                            const double &center2,
+                                            const double &width2,
+                                            int boundary1,
+                                            int boundary2) const
     {
       const PPolynomial<Degree> *b1, *b2;
       if (boundary1 == -1)
@@ -389,7 +396,8 @@ namespace pcl
     FunctionData<Degree, Real>::dDotProduct (const double &center1,
                                              const double &width1,
                                              const double &center2,
-                                             const double &width2, int boundary1,
+                                             const double &width2,
+                                             int boundary1,
                                              int boundary2) const
     {
       const PPolynomial<Degree - 1> *b1;
@@ -429,7 +437,8 @@ namespace pcl
     FunctionData<Degree, Real>::d2DotProduct (const double &center1,
                                               const double &width1,
                                               const double &center2,
-                                              const double &width2, int boundary1,
+                                              const double &width2,
+                                              int boundary1,
                                               int boundary2) const
     {
       const PPolynomial<Degree - 1> *b1, *b2;
@@ -467,7 +476,8 @@ namespace pcl
 #else  // !BOUNDARY_CONDITIONS
     template <int Degree, class Real>
     Real
-    FunctionData<Degree, Real>::dotProduct (const double &center1, const double &width1,
+    FunctionData<Degree, Real>::dotProduct (const double &center1,
+                                            const double &width1,
                                             const double &center2,
                                             const double &width2) const
     {
@@ -562,7 +572,8 @@ namespace pcl
     }
     template <int Degree, class Real>
     inline int
-    FunctionData<Degree, Real>::SymmetricIndex (const int &i1, const int &i2,
+    FunctionData<Degree, Real>::SymmetricIndex (const int &i1,
+                                                const int &i2,
                                                 int &index)
     {
       if (i1 < i2) {

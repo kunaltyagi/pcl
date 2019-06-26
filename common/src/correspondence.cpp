@@ -44,7 +44,8 @@
 void
 pcl::getRejectedQueryIndices (const pcl::Correspondences &correspondences_before,
                               const pcl::Correspondences &correspondences_after,
-                              std::vector<int> &indices, bool presorting_required)
+                              std::vector<int> &indices,
+                              bool presorting_required)
 {
   indices.clear ();
 
@@ -74,8 +75,10 @@ pcl::getRejectedQueryIndices (const pcl::Correspondences &correspondences_before
     std::sort (indices_after.begin (), indices_after.end ());
   }
 
-  set_difference (indices_before.begin (), indices_before.end (),
-                  indices_after.begin (), indices_after.end (),
+  set_difference (indices_before.begin (),
+                  indices_before.end (),
+                  indices_after.begin (),
+                  indices_after.end (),
                   inserter (indices, indices.begin ()));
 }
 

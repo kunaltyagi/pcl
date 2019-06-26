@@ -57,7 +57,8 @@ namespace pcl
    * \author Aitor Aldoma
    * \ingroup features
    */
-  template <typename PointInT, typename PointNT,
+  template <typename PointInT,
+            typename PointNT,
             typename PointOutT = pcl::VFHSignature308>
   class OURCVFHEstimation : public FeatureFromNormals<PointInT, PointNT, PointOutT>
   {
@@ -99,8 +100,10 @@ namespace pcl
      * \param[in] center_mat 4x4 matrix concatenated to the resulting transformation
      */
     inline Eigen::Matrix4f
-    createTransFromAxes (Eigen::Vector3f &evx, Eigen::Vector3f &evy,
-                         Eigen::Vector3f &evz, Eigen::Affine3f &transformPC,
+    createTransFromAxes (Eigen::Vector3f &evx,
+                         Eigen::Vector3f &evy,
+                         Eigen::Vector3f &evz,
+                         Eigen::Affine3f &transformPC,
                          Eigen::Matrix4f &center_mat)
     {
       Eigen::Matrix4f trans;
@@ -130,7 +133,8 @@ namespace pcl
      * \param[in] cluster_indices the indices of the stable cluster
      */
     void
-    computeRFAndShapeDistribution (PointInTPtr &processed, PointCloudOut &output,
+    computeRFAndShapeDistribution (PointInTPtr &processed,
+                                   PointCloudOut &output,
                                    std::vector<pcl::PointIndices> &cluster_indices);
 
     /** \brief Computes SGURF
@@ -142,11 +146,13 @@ namespace pcl
      * indices of the stable cluster
      */
     bool
-    sgurf (Eigen::Vector3f &centroid, Eigen::Vector3f &normal_centroid,
+    sgurf (Eigen::Vector3f &centroid,
+           Eigen::Vector3f &normal_centroid,
            PointInTPtr &processed,
            std::vector<Eigen::Matrix4f, Eigen::aligned_allocator<Eigen::Matrix4f>>
                &transformations,
-           PointInTPtr &grid, pcl::PointIndices &indices);
+           PointInTPtr &grid,
+           pcl::PointIndices &indices);
 
     /** \brief Removes normals with high curvature caused by real edges or noisy data
      * \param[in] cloud pointcloud to be filtered
@@ -159,7 +165,8 @@ namespace pcl
     filterNormalsWithHighCurvature (const pcl::PointCloud<PointNT> &cloud,
                                     std::vector<int> &indices_to_use,
                                     std::vector<int> &indices_out,
-                                    std::vector<int> &indices_in, float threshold);
+                                    std::vector<int> &indices_in,
+                                    float threshold);
 
     /** \brief Set the viewpoint.
      * \param[in] vpx the X coordinate of the viewpoint
@@ -405,9 +412,11 @@ namespace pcl
     void
     extractEuclideanClustersSmooth (
         const pcl::PointCloud<pcl::PointNormal> &cloud,
-        const pcl::PointCloud<pcl::PointNormal> &normals, float tolerance,
+        const pcl::PointCloud<pcl::PointNormal> &normals,
+        float tolerance,
         const pcl::search::Search<pcl::PointNormal>::Ptr &tree,
-        std::vector<pcl::PointIndices> &clusters, double eps_angle,
+        std::vector<pcl::PointIndices> &clusters,
+        double eps_angle,
         unsigned int min_pts_per_cluster = 1,
         unsigned int max_pts_per_cluster = (std::numeric_limits<int>::max) ());
 

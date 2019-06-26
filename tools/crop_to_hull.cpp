@@ -105,8 +105,11 @@ saveCloud (std::string const &filename, CloudT const &cloud)
 }
 
 static void
-cropToHull (CloudT::Ptr output, CloudT::Ptr input, CloudT::Ptr hull_cloud,
-            std::vector<pcl::Vertices> const &polygons, int dim)
+cropToHull (CloudT::Ptr output,
+            CloudT::Ptr input,
+            CloudT::Ptr hull_cloud,
+            std::vector<pcl::Vertices> const &polygons,
+            int dim)
 {
   TicToc tt;
   tt.tic ();
@@ -129,7 +132,9 @@ cropToHull (CloudT::Ptr output, CloudT::Ptr input, CloudT::Ptr hull_cloud,
 }
 
 static CloudT::Ptr
-calculateHull (std::vector<pcl::Vertices> &polygons, int &dim, CloudT::Ptr cloud,
+calculateHull (std::vector<pcl::Vertices> &polygons,
+               int &dim,
+               CloudT::Ptr cloud,
                double alpha)
 {
   pcl::ConcaveHull<PointT> hull_calculator;

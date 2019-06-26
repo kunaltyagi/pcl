@@ -48,7 +48,8 @@
 template <typename PointT>
 inline float
 pcl::getMeanPointDensity (const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-                          float max_dist, int nr_threads)
+                          float max_dist,
+                          int nr_threads)
 {
   const float max_dist_sqr = max_dist * max_dist;
   const std::size_t s = cloud.size ();
@@ -83,7 +84,8 @@ pcl::getMeanPointDensity (const typename pcl::PointCloud<PointT>::ConstPtr &clou
 template <typename PointT>
 inline float
 pcl::getMeanPointDensity (const typename pcl::PointCloud<PointT>::ConstPtr &cloud,
-                          const std::vector<int> &indices, float max_dist,
+                          const std::vector<int> &indices,
+                          float max_dist,
                           int nr_threads)
 {
   const float max_dist_sqr = max_dist * max_dist;
@@ -117,8 +119,8 @@ pcl::getMeanPointDensity (const typename pcl::PointCloud<PointT>::ConstPtr &clou
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename NormalT, typename Scalar>
-pcl::registration::FPCSInitialAlignment<PointSource, PointTarget, NormalT,
-                                        Scalar>::FPCSInitialAlignment ()
+pcl::registration::FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
+    FPCSInitialAlignment ()
     : source_normals_ (), target_normals_ (), nr_threads_ (1), approx_overlap_ (0.5f),
       delta_ (1.f), score_threshold_ (FLT_MAX), nr_samples_ (0), max_norm_diff_ (90.f),
       max_runtime_ (0), fitness_score_ (FLT_MAX), diameter_ (),
@@ -212,8 +214,8 @@ pcl::registration::FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scala
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointSource, typename PointTarget, typename NormalT, typename Scalar>
 bool
-pcl::registration::FPCSInitialAlignment<PointSource, PointTarget, NormalT,
-                                        Scalar>::initCompute ()
+pcl::registration::FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scalar>::
+    initCompute ()
 {
   std::srand (static_cast<unsigned int> (std::time (nullptr)));
 
@@ -276,8 +278,8 @@ pcl::registration::FPCSInitialAlignment<PointSource, PointTarget, NormalT,
 
   // normalize the delta
   if (normalize_delta_) {
-    float mean_dist = getMeanPointDensity<PointTarget> (target_, *target_indices_,
-                                                        0.05f * diameter_, nr_threads_);
+    float mean_dist = getMeanPointDensity<PointTarget> (
+        target_, *target_indices_, 0.05f * diameter_, nr_threads_);
     delta_ *= mean_dist;
   }
 
@@ -432,12 +434,14 @@ pcl::registration::FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scala
   for (std::vector<int>::const_iterator i = copy.begin (), i_e = copy.end (); i != i_e;
        i++)
     for (std::vector<int>::const_iterator j = copy.begin (), j_e = copy.end ();
-         j != j_e; j++) {
+         j != j_e;
+         j++) {
       if (i == j)
         continue;
 
       for (std::vector<int>::const_iterator k = copy.begin (), k_e = copy.end ();
-           k != k_e; k++) {
+           k != k_e;
+           k++) {
         if (k == j || k == i)
           continue;
 
@@ -609,7 +613,8 @@ pcl::registration::FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scala
     determineBaseMatches (const std::vector<int> &base_indices,
                           std::vector<std::vector<int>> &matches,
                           const pcl::Correspondences &pairs_a,
-                          const pcl::Correspondences &pairs_b, const float (&ratio)[2])
+                          const pcl::Correspondences &pairs_b,
+                          const float (&ratio)[2])
 {
   // calculate edge lengths of base
   float dist_base[4];
@@ -773,7 +778,8 @@ pcl::registration::FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scala
 
   auto it_match_orig = match_indices.begin ();
   for (auto it_base = base_indices.cbegin (), it_base_e = base_indices.cend ();
-       it_base != it_base_e; it_base++, it_match_orig++) {
+       it_base != it_base_e;
+       it_base++, it_match_orig++) {
     float dist_sqr_1 =
         pcl::squaredEuclideanDistance (target_->points[*it_base], centre_pt_base);
     float best_diff_sqr = FLT_MAX;
@@ -838,8 +844,8 @@ pcl::registration::FPCSInitialAlignment<PointSource, PointTarget, NormalT, Scala
 {
   // transform source point cloud
   PointCloudSource source_transformed;
-  pcl::transformPointCloud (*input_, *source_indices_, source_transformed,
-                            transformation);
+  pcl::transformPointCloud (
+      *input_, *source_indices_, source_transformed, transformation);
 
   std::size_t nr_points = source_transformed.size ();
   std::size_t terminate_value =

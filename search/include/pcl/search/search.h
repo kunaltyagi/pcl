@@ -141,7 +141,9 @@ namespace pcl
        * number of neighbors found
        */
       virtual int
-      nearestKSearch (const PointT &point, int k, std::vector<int> &k_indices,
+      nearestKSearch (const PointT &point,
+                      int k,
+                      std::vector<int> &k_indices,
                       std::vector<float> &k_sqr_distances) const = 0;
 
       /** \brief Search for k-nearest neighbors for the given query point.
@@ -155,7 +157,9 @@ namespace pcl
        */
       template <typename PointTDiff>
       inline int
-      nearestKSearchT (const PointTDiff &point, int k, std::vector<int> &k_indices,
+      nearestKSearchT (const PointTDiff &point,
+                       int k,
+                       std::vector<int> &k_indices,
                        std::vector<float> &k_sqr_distances) const
       {
         PointT p;
@@ -182,7 +186,9 @@ namespace pcl
        * number of points
        */
       virtual int
-      nearestKSearch (const PointCloud &cloud, int index, int k,
+      nearestKSearch (const PointCloud &cloud,
+                      int index,
+                      int k,
                       std::vector<int> &k_indices,
                       std::vector<float> &k_sqr_distances) const;
 
@@ -206,7 +212,9 @@ namespace pcl
        * number of points
        */
       virtual int
-      nearestKSearch (int index, int k, std::vector<int> &k_indices,
+      nearestKSearch (int index,
+                      int k,
+                      std::vector<int> &k_indices,
                       std::vector<float> &k_sqr_distances) const;
 
       /** \brief Search for the k-nearest neighbors for the given query point.
@@ -219,7 +227,9 @@ namespace pcl
        * corresponds to the neighbors of the query point i
        */
       virtual void
-      nearestKSearch (const PointCloud &cloud, const std::vector<int> &indices, int k,
+      nearestKSearch (const PointCloud &cloud,
+                      const std::vector<int> &indices,
+                      int k,
                       std::vector<std::vector<int>> &k_indices,
                       std::vector<std::vector<float>> &k_sqr_distances) const;
 
@@ -239,7 +249,8 @@ namespace pcl
       template <typename PointTDiff>
       void
       nearestKSearchT (const pcl::PointCloud<PointTDiff> &cloud,
-                       const std::vector<int> &indices, int k,
+                       const std::vector<int> &indices,
+                       int k,
                        std::vector<std::vector<int>> &k_indices,
                        std::vector<std::vector<float>> &k_sqr_distances) const
       {
@@ -277,7 +288,9 @@ namespace pcl
        * radius will be returned. \return number of neighbors found in radius
        */
       virtual int
-      radiusSearch (const PointT &point, double radius, std::vector<int> &k_indices,
+      radiusSearch (const PointT &point,
+                    double radius,
+                    std::vector<int> &k_indices,
                     std::vector<float> &k_sqr_distances,
                     unsigned int max_nn = 0) const = 0;
 
@@ -292,8 +305,10 @@ namespace pcl
        */
       template <typename PointTDiff>
       inline int
-      radiusSearchT (const PointTDiff &point, double radius,
-                     std::vector<int> &k_indices, std::vector<float> &k_sqr_distances,
+      radiusSearchT (const PointTDiff &point,
+                     double radius,
+                     std::vector<int> &k_indices,
+                     std::vector<float> &k_sqr_distances,
                      unsigned int max_nn = 0) const
       {
         PointT p;
@@ -323,8 +338,11 @@ namespace pcl
        * number of points
        */
       virtual int
-      radiusSearch (const PointCloud &cloud, int index, double radius,
-                    std::vector<int> &k_indices, std::vector<float> &k_sqr_distances,
+      radiusSearch (const PointCloud &cloud,
+                    int index,
+                    double radius,
+                    std::vector<int> &k_indices,
+                    std::vector<float> &k_sqr_distances,
                     unsigned int max_nn = 0) const;
 
       /** \brief Search for all the nearest neighbors of the query point in a given
@@ -350,8 +368,11 @@ namespace pcl
        * number of points
        */
       virtual int
-      radiusSearch (int index, double radius, std::vector<int> &k_indices,
-                    std::vector<float> &k_sqr_distances, unsigned int max_nn = 0) const;
+      radiusSearch (int index,
+                    double radius,
+                    std::vector<int> &k_indices,
+                    std::vector<float> &k_sqr_distances,
+                    unsigned int max_nn = 0) const;
 
       /** \brief Search for all the nearest neighbors of the query point in a given
        * radius. \param[in] cloud the point cloud data \param[in] indices the indices in
@@ -366,8 +387,10 @@ namespace pcl
        * cloud, all neighbors in \a radius will be returned.
        */
       virtual void
-      radiusSearch (const PointCloud &cloud, const std::vector<int> &indices,
-                    double radius, std::vector<std::vector<int>> &k_indices,
+      radiusSearch (const PointCloud &cloud,
+                    const std::vector<int> &indices,
+                    double radius,
+                    std::vector<std::vector<int>> &k_indices,
                     std::vector<std::vector<float>> &k_sqr_distances,
                     unsigned int max_nn = 0) const;
 
@@ -389,7 +412,8 @@ namespace pcl
       template <typename PointTDiff>
       void
       radiusSearchT (const pcl::PointCloud<PointTDiff> &cloud,
-                     const std::vector<int> &indices, double radius,
+                     const std::vector<int> &indices,
+                     double radius,
                      std::vector<std::vector<int>> &k_indices,
                      std::vector<std::vector<float>> &k_sqr_distances,
                      unsigned int max_nn = 0) const
@@ -405,16 +429,16 @@ namespace pcl
           for (size_t i = 0; i < cloud.size (); ++i)
             pcl::for_each_type<FieldList> (
                 pcl::NdConcatenateFunctor<PointTDiff, PointT> (cloud[i], pc[i]));
-          radiusSearch (pc, std::vector<int> (), radius, k_indices, k_sqr_distances,
-                        max_nn);
+          radiusSearch (
+              pc, std::vector<int> (), radius, k_indices, k_sqr_distances, max_nn);
         } else {
           pc.resize (indices.size ());
           for (size_t i = 0; i < indices.size (); ++i)
             pcl::for_each_type<FieldList> (
                 pcl::NdConcatenateFunctor<PointTDiff, PointT> (cloud[indices[i]],
                                                                pc[i]));
-          radiusSearch (pc, std::vector<int> (), radius, k_indices, k_sqr_distances,
-                        max_nn);
+          radiusSearch (
+              pc, std::vector<int> (), radius, k_indices, k_sqr_distances, max_nn);
         }
       }
 

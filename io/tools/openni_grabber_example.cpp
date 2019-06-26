@@ -79,7 +79,8 @@ class SimpleOpenNIProcessor
 
   void
   imageDepthImageCallback (const openni_wrapper::Image::Ptr &,
-                           const openni_wrapper::DepthImage::Ptr &d_img, float constant)
+                           const openni_wrapper::DepthImage::Ptr &d_img,
+                           float constant)
   {
     static unsigned count = 0;
     static double last = pcl::getTime ();
@@ -117,9 +118,10 @@ class SimpleOpenNIProcessor
 
     // make callback function from member function
     std::function<void(const openni_wrapper::Image::Ptr &,
-                       const openni_wrapper::DepthImage::Ptr &, float constant)>
-        f2 = boost::bind (&SimpleOpenNIProcessor::imageDepthImageCallback, this, _1, _2,
-                          _3);
+                       const openni_wrapper::DepthImage::Ptr &,
+                       float constant)>
+        f2 = boost::bind (
+            &SimpleOpenNIProcessor::imageDepthImageCallback, this, _1, _2, _3);
 
     // connect callback function for desired signal. In this case its a point cloud with
     // color values

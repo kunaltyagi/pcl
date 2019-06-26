@@ -258,12 +258,14 @@ namespace pcl
      * compatible with a given point type. */
     template <typename PointT>
     struct Accumulators {
-      using type =
-          typename boost::fusion::result_of::as_vector<typename boost::mpl::filter_view<
-              boost::mpl::vector<AccumulatorXYZ, AccumulatorNormal,
-                                 AccumulatorCurvature, AccumulatorRGBA,
-                                 AccumulatorIntensity, AccumulatorLabel>,
-              IsAccumulatorCompatible<PointT>>>::type;
+      using type = typename boost::fusion::result_of::as_vector<
+          typename boost::mpl::filter_view<boost::mpl::vector<AccumulatorXYZ,
+                                                              AccumulatorNormal,
+                                                              AccumulatorCurvature,
+                                                              AccumulatorRGBA,
+                                                              AccumulatorIntensity,
+                                                              AccumulatorLabel>,
+                                           IsAccumulatorCompatible<PointT>>>::type;
     };
 
     /* Fusion function object to invoke point addition on every accumulator in

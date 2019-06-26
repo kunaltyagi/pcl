@@ -274,13 +274,22 @@ pcl::gpu::KinfuTracker::operator() (const DepthMap &depth_raw, Eigen::Affine3f *
 
       // integrateTsdfVolume(depth_raw, intr, device_volume_size, device_Rcam_inv,
       // device_tcam, tranc_dist, volume_);
-      device::integrateTsdfVolume (depth_raw, intr, device_volume_size, device_Rcam_inv,
-                                   device_tcam, tsdf_volume_->getTsdfTruncDist (),
-                                   tsdf_volume_->data (), depthRawScaled_);
+      device::integrateTsdfVolume (depth_raw,
+                                   intr,
+                                   device_volume_size,
+                                   device_Rcam_inv,
+                                   device_tcam,
+                                   tsdf_volume_->getTsdfTruncDist (),
+                                   tsdf_volume_->data (),
+                                   depthRawScaled_);
 
       for (int i = 0; i < LEVELS; ++i)
-        device::tranformMaps (vmaps_curr_[i], nmaps_curr_[i], device_Rcam, device_tcam,
-                              vmaps_g_prev_[i], nmaps_g_prev_[i]);
+        device::tranformMaps (vmaps_curr_[i],
+                              nmaps_curr_[i],
+                              device_Rcam,
+                              device_tcam,
+                              vmaps_g_prev_[i],
+                              nmaps_g_prev_[i]);
 
       ++global_time_;
       return (false);
@@ -338,10 +347,21 @@ pcl::gpu::KinfuTracker::operator() (const DepthMap &depth_raw, Eigen::Affine3f *
             //ma.download(cpu);
             //cv::imshow(names[level_index] + string(" --- coresp white == -1"), cpu == -1);
 #else
-          estimateCombined (device_Rcurr, device_tcurr, vmap_curr, nmap_curr,
-                            device_Rprev_inv, device_tprev, intr (level_index),
-                            vmap_g_prev, nmap_g_prev, distThres_, angleThres_, gbuf_,
-                            sumbuf_, A.data (), b.data ());
+          estimateCombined (device_Rcurr,
+                            device_tcurr,
+                            vmap_curr,
+                            nmap_curr,
+                            device_Rprev_inv,
+                            device_tprev,
+                            intr (level_index),
+                            vmap_g_prev,
+                            nmap_g_prev,
+                            distThres_,
+                            angleThres_,
+                            gbuf_,
+                            sumbuf_,
+                            A.data (),
+                            b.data ());
 #endif
           // checking nullspace
           double det = A.determinant ();
@@ -417,9 +437,14 @@ pcl::gpu::KinfuTracker::operator() (const DepthMap &depth_raw, Eigen::Affine3f *
     // ScopeTime time("tsdf");
     // integrateTsdfVolume(depth_raw, intr, device_volume_size, device_Rcurr_inv,
     // device_tcurr, tranc_dist, volume_);
-    integrateTsdfVolume (depth_raw, intr, device_volume_size, device_Rcurr_inv,
-                         device_tcurr, tsdf_volume_->getTsdfTruncDist (),
-                         tsdf_volume_->data (), depthRawScaled_);
+    integrateTsdfVolume (depth_raw,
+                         intr,
+                         device_volume_size,
+                         device_Rcurr_inv,
+                         device_tcurr,
+                         tsdf_volume_->getTsdfTruncDist (),
+                         tsdf_volume_->data (),
+                         depthRawScaled_);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////
@@ -427,8 +452,13 @@ pcl::gpu::KinfuTracker::operator() (const DepthMap &depth_raw, Eigen::Affine3f *
   Mat33 &device_Rcurr = device_cast<Mat33> (Rcurr);
   {
     // ScopeTime time("ray-cast-all");
-    raycast (intr, device_Rcurr, device_tcurr, tsdf_volume_->getTsdfTruncDist (),
-             device_volume_size, tsdf_volume_->data (), vmaps_g_prev_[0],
+    raycast (intr,
+             device_Rcurr,
+             device_tcurr,
+             tsdf_volume_->getTsdfTruncDist (),
+             device_volume_size,
+             tsdf_volume_->data (),
+             vmaps_g_prev_[0],
              nmaps_g_prev_[0]);
     for (int i = 1; i < LEVELS; ++i) {
       resizeVMap (vmaps_g_prev_[i - 1], vmaps_g_prev_[i]);
@@ -559,9 +589,14 @@ pcl::gpu::KinfuTracker::operator() (const DepthMap &depth, const View &colors)
     Mat33 &device_Rcurr_inv = device_cast<Mat33> (R_inv);
     float3 &device_tcurr = device_cast<float3> (t);
 
-    device::updateColorVolume (intr, tsdf_volume_->getTsdfTruncDist (),
-                               device_Rcurr_inv, device_tcurr, vmaps_g_prev_[0], colors,
-                               device_volume_size, color_volume_->data (),
+    device::updateColorVolume (intr,
+                               tsdf_volume_->getTsdfTruncDist (),
+                               device_Rcurr_inv,
+                               device_tcurr,
+                               vmaps_g_prev_[0],
+                               colors,
+                               device_volume_size,
+                               color_volume_->data (),
                                color_volume_->getMaxWeight ());
   }
 
@@ -575,7 +610,8 @@ namespace pcl
   namespace gpu
   {
     PCL_EXPORTS void
-    paint3DView (const KinfuTracker::View &rgb24, KinfuTracker::View &view,
+    paint3DView (const KinfuTracker::View &rgb24,
+                 KinfuTracker::View &view,
                  float colors_weight = 0.5f)
     {
       device::paint3DView (rgb24, view, colors_weight);

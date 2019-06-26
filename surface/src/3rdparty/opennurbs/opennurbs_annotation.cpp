@@ -16,43 +16,33 @@
 
 #include "pcl/surface/3rdparty/opennurbs/opennurbs.h"
 
-ON_VIRTUAL_OBJECT_IMPLEMENT (ON_Annotation, ON_Geometry,
+ON_VIRTUAL_OBJECT_IMPLEMENT (ON_Annotation,
+                             ON_Geometry,
                              "ABAF5873-4145-11d4-800F-0010830122F0");
-ON_OBJECT_IMPLEMENT (ON_LinearDimension, ON_Annotation,
+ON_OBJECT_IMPLEMENT (ON_LinearDimension,
+                     ON_Annotation,
                      "5DE6B20D-486B-11d4-8014-0010830122F0");
-ON_OBJECT_IMPLEMENT (ON_RadialDimension, ON_Annotation,
+ON_OBJECT_IMPLEMENT (ON_RadialDimension,
+                     ON_Annotation,
                      "5DE6B20E-486B-11d4-8014-0010830122F0");
-ON_OBJECT_IMPLEMENT (ON_AngularDimension, ON_Annotation,
+ON_OBJECT_IMPLEMENT (ON_AngularDimension,
+                     ON_Annotation,
                      "5DE6B20F-486B-11d4-8014-0010830122F0");
-ON_OBJECT_IMPLEMENT (ON_TextEntity, ON_Annotation,
+ON_OBJECT_IMPLEMENT (ON_TextEntity,
+                     ON_Annotation,
                      "5DE6B210-486B-11d4-8014-0010830122F0");
 ON_OBJECT_IMPLEMENT (ON_Leader, ON_Annotation, "5DE6B211-486B-11d4-8014-0010830122F0");
 
 ON_BOOL32
-ON_LinearDimension::IsRealObject () const
-{
-  return true;
-}
+ON_LinearDimension::IsRealObject () const { return true; }
 ON_BOOL32
-ON_RadialDimension::IsRealObject () const
-{
-  return true;
-}
+ON_RadialDimension::IsRealObject () const { return true; }
 ON_BOOL32
-ON_AngularDimension::IsRealObject () const
-{
-  return true;
-}
+ON_AngularDimension::IsRealObject () const { return true; }
 ON_BOOL32
-ON_TextEntity::IsRealObject () const
-{
-  return true;
-}
+ON_TextEntity::IsRealObject () const { return true; }
 ON_BOOL32
-ON_Leader::IsRealObject () const
-{
-  return true;
-}
+ON_Leader::IsRealObject () const { return true; }
 
 #define REALLY_BIG_NUMBER 1e150
 
@@ -346,7 +336,8 @@ ON_Annotation::Dimension () const
 
 ON_BOOL32
 ON_Annotation::GetBBox ( // returns true if successful
-    double *boxmin, double *boxmax,
+    double *boxmin,
+    double *boxmax,
     ON_BOOL32 bGrowBox // default = false
     ) const
 {
@@ -398,8 +389,14 @@ bool
 ON_Annotation::GetECStoWCSXform (ON_Xform &xform) const
 {
   ON_3dVector z = ON_CrossProduct (m_plane.xaxis, m_plane.yaxis);
-  return xform.ChangeBasis (m_plane.origin, m_plane.xaxis, m_plane.yaxis, z, ON_origin,
-                            ON_xaxis, ON_yaxis, ON_zaxis);
+  return xform.ChangeBasis (m_plane.origin,
+                            m_plane.xaxis,
+                            m_plane.yaxis,
+                            z,
+                            ON_origin,
+                            ON_xaxis,
+                            ON_yaxis,
+                            ON_zaxis);
 }
 
 // Converts from WCS 3d points to 2d points in annotation
@@ -407,8 +404,14 @@ bool
 ON_Annotation::GeWCStoECSXform (ON_Xform &xform) const
 {
   ON_3dVector z = ON_CrossProduct (m_plane.xaxis, m_plane.yaxis);
-  return xform.ChangeBasis (ON_origin, ON_xaxis, ON_yaxis, ON_zaxis, m_plane.origin,
-                            m_plane.xaxis, m_plane.yaxis, z);
+  return xform.ChangeBasis (ON_origin,
+                            ON_xaxis,
+                            ON_yaxis,
+                            ON_zaxis,
+                            m_plane.origin,
+                            m_plane.xaxis,
+                            m_plane.yaxis,
+                            z);
 }
 
 void
@@ -663,7 +666,8 @@ ON_Leader::EmergencyDestroy ()
   ON_Annotation::EmergencyDestroy ();
 }
 
-ON_OBJECT_IMPLEMENT (ON_AnnotationTextDot, ON_Point,
+ON_OBJECT_IMPLEMENT (ON_AnnotationTextDot,
+                     ON_Point,
                      "8BD94E19-59E1-11d4-8018-0010830122F0");
 
 ON_AnnotationTextDot::ON_AnnotationTextDot () {}
@@ -734,7 +738,8 @@ ON_AnnotationTextDot::Read (ON_BinaryArchive &file)
   return rc;
 }
 
-ON_OBJECT_IMPLEMENT (ON_AnnotationArrow, ON_Geometry,
+ON_OBJECT_IMPLEMENT (ON_AnnotationArrow,
+                     ON_Geometry,
                      "8BD94E1A-59E1-11d4-8018-0010830122F0");
 
 ON_AnnotationArrow::ON_AnnotationArrow ()
@@ -826,8 +831,8 @@ ON_AnnotationArrow::Dimension () const
 ON_BOOL32
 ON_AnnotationArrow::GetBBox (double *boxmin, double *boxmax, ON_BOOL32 bGrowBox) const
 {
-  ON_BOOL32 rc = ON_GetPointListBoundingBox (3, false, 1, 3, m_tail, boxmin, boxmax,
-                                             bGrowBox ? true : false);
+  ON_BOOL32 rc = ON_GetPointListBoundingBox (
+      3, false, 1, 3, m_tail, boxmin, boxmax, bGrowBox ? true : false);
   if (rc)
     rc = ON_GetPointListBoundingBox (3, false, 1, 3, m_head, boxmin, boxmax, true);
   return rc;

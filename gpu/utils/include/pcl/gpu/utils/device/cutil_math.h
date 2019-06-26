@@ -1220,8 +1220,8 @@ fminf (float3 a, float3 b)
 inline __host__ __device__ float4
 fminf (float4 a, float4 b)
 {
-  return make_float4 (fminf (a.x, b.x), fminf (a.y, b.y), fminf (a.z, b.z),
-                      fminf (a.w, b.w));
+  return make_float4 (
+      fminf (a.x, b.x), fminf (a.y, b.y), fminf (a.z, b.z), fminf (a.w, b.w));
 }
 
 inline __host__ __device__ int2
@@ -1273,8 +1273,8 @@ fmaxf (float3 a, float3 b)
 inline __host__ __device__ float4
 fmaxf (float4 a, float4 b)
 {
-  return make_float4 (fmaxf (a.x, b.x), fmaxf (a.y, b.y), fmaxf (a.z, b.z),
-                      fmaxf (a.w, b.w));
+  return make_float4 (
+      fmaxf (a.x, b.x), fmaxf (a.y, b.y), fmaxf (a.z, b.z), fmaxf (a.w, b.w));
 }
 
 inline __host__ __device__ int2
@@ -1374,20 +1374,22 @@ clamp (float3 v, float a, float b)
 inline __device__ __host__ float3
 clamp (float3 v, float3 a, float3 b)
 {
-  return make_float3 (clamp (v.x, a.x, b.x), clamp (v.y, a.y, b.y),
-                      clamp (v.z, a.z, b.z));
+  return make_float3 (
+      clamp (v.x, a.x, b.x), clamp (v.y, a.y, b.y), clamp (v.z, a.z, b.z));
 }
 inline __device__ __host__ float4
 clamp (float4 v, float a, float b)
 {
-  return make_float4 (clamp (v.x, a, b), clamp (v.y, a, b), clamp (v.z, a, b),
-                      clamp (v.w, a, b));
+  return make_float4 (
+      clamp (v.x, a, b), clamp (v.y, a, b), clamp (v.z, a, b), clamp (v.w, a, b));
 }
 inline __device__ __host__ float4
 clamp (float4 v, float4 a, float4 b)
 {
-  return make_float4 (clamp (v.x, a.x, b.x), clamp (v.y, a.y, b.y),
-                      clamp (v.z, a.z, b.z), clamp (v.w, a.w, b.w));
+  return make_float4 (clamp (v.x, a.x, b.x),
+                      clamp (v.y, a.y, b.y),
+                      clamp (v.z, a.z, b.z),
+                      clamp (v.w, a.w, b.w));
 }
 
 inline __device__ __host__ int2
@@ -1408,19 +1410,21 @@ clamp (int3 v, int a, int b)
 inline __device__ __host__ int3
 clamp (int3 v, int3 a, int3 b)
 {
-  return make_int3 (clamp (v.x, a.x, b.x), clamp (v.y, a.y, b.y),
-                    clamp (v.z, a.z, b.z));
+  return make_int3 (
+      clamp (v.x, a.x, b.x), clamp (v.y, a.y, b.y), clamp (v.z, a.z, b.z));
 }
 inline __device__ __host__ int4
 clamp (int4 v, int a, int b)
 {
-  return make_int4 (clamp (v.x, a, b), clamp (v.y, a, b), clamp (v.z, a, b),
-                    clamp (v.w, a, b));
+  return make_int4 (
+      clamp (v.x, a, b), clamp (v.y, a, b), clamp (v.z, a, b), clamp (v.w, a, b));
 }
 inline __device__ __host__ int4
 clamp (int4 v, int4 a, int4 b)
 {
-  return make_int4 (clamp (v.x, a.x, b.x), clamp (v.y, a.y, b.y), clamp (v.z, a.z, b.z),
+  return make_int4 (clamp (v.x, a.x, b.x),
+                    clamp (v.y, a.y, b.y),
+                    clamp (v.z, a.z, b.z),
                     clamp (v.w, a.w, b.w));
 }
 
@@ -1442,20 +1446,22 @@ clamp (uint3 v, uint a, uint b)
 inline __device__ __host__ uint3
 clamp (uint3 v, uint3 a, uint3 b)
 {
-  return make_uint3 (clamp (v.x, a.x, b.x), clamp (v.y, a.y, b.y),
-                     clamp (v.z, a.z, b.z));
+  return make_uint3 (
+      clamp (v.x, a.x, b.x), clamp (v.y, a.y, b.y), clamp (v.z, a.z, b.z));
 }
 inline __device__ __host__ uint4
 clamp (uint4 v, uint a, uint b)
 {
-  return make_uint4 (clamp (v.x, a, b), clamp (v.y, a, b), clamp (v.z, a, b),
-                     clamp (v.w, a, b));
+  return make_uint4 (
+      clamp (v.x, a, b), clamp (v.y, a, b), clamp (v.z, a, b), clamp (v.w, a, b));
 }
 inline __device__ __host__ uint4
 clamp (uint4 v, uint4 a, uint4 b)
 {
-  return make_uint4 (clamp (v.x, a.x, b.x), clamp (v.y, a.y, b.y),
-                     clamp (v.z, a.z, b.z), clamp (v.w, a.w, b.w));
+  return make_uint4 (clamp (v.x, a.x, b.x),
+                     clamp (v.y, a.y, b.y),
+                     clamp (v.z, a.z, b.z),
+                     clamp (v.w, a.w, b.w));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1615,8 +1621,8 @@ fmodf (float3 a, float3 b)
 inline __host__ __device__ float4
 fmodf (float4 a, float4 b)
 {
-  return make_float4 (fmodf (a.x, b.x), fmodf (a.y, b.y), fmodf (a.z, b.z),
-                      fmodf (a.w, b.w));
+  return make_float4 (
+      fmodf (a.x, b.x), fmodf (a.y, b.y), fmodf (a.z, b.z), fmodf (a.w, b.w));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1674,8 +1680,8 @@ reflect (float3 i, float3 n)
 inline __host__ __device__ float3
 cross (float3 a, float3 b)
 {
-  return make_float3 (a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z,
-                      a.x * b.y - a.y * b.x);
+  return make_float3 (
+      a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

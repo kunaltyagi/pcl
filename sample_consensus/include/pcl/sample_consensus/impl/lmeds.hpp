@@ -125,7 +125,9 @@ pcl::LeastMedianSquares<PointT>::computeModel (int debug_verbosity_level)
     if (debug_verbosity_level > 1)
       PCL_DEBUG ("[pcl::LeastMedianSquares::computeModel] Trial %d out of %d. Best "
                  "penalty is %f.\n",
-                 iterations_, max_iterations_, d_best_penalty);
+                 iterations_,
+                 max_iterations_,
+                 d_best_penalty);
   }
 
   if (model_.empty ()) {
@@ -156,7 +158,8 @@ pcl::LeastMedianSquares<PointT>::computeModel (int debug_verbosity_level)
   if (distances.size () != indices.size ()) {
     PCL_ERROR ("[pcl::LeastMedianSquares::computeModel] Estimated distances (%lu) "
                "differs than the normal of indices (%lu).\n",
-               distances.size (), indices.size ());
+               distances.size (),
+               indices.size ());
     return (false);
   }
 
@@ -172,7 +175,8 @@ pcl::LeastMedianSquares<PointT>::computeModel (int debug_verbosity_level)
 
   if (debug_verbosity_level > 0)
     PCL_DEBUG ("[pcl::LeastMedianSquares::computeModel] Model: %lu size, %d inliers.\n",
-               model_.size (), n_inliers_count);
+               model_.size (),
+               n_inliers_count);
 
   return (true);
 }

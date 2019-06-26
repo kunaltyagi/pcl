@@ -19,13 +19,14 @@
 ////////////////////////////////////////////////////////////////////////
 
 bool
-ON_BezierCurve::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_BezierCurve::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                     int bGrowBox,
                                      const ON_Xform *xform) const
 {
   // The result from ON_GetPointListBoundingBox() is good enough
   // for file IO needs in the public souce code version.
-  return ON_GetPointListBoundingBox (m_dim, m_is_rat, m_order, m_cv_stride, m_cv,
-                                     tight_bbox, bGrowBox, xform);
+  return ON_GetPointListBoundingBox (
+      m_dim, m_is_rat, m_order, m_cv_stride, m_cv, tight_bbox, bGrowBox, xform);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -223,7 +224,9 @@ ON_PolynomialSurface::ON_PolynomialSurface () : m_dim (0), m_is_rat (0)
   m_domain[1].m_t[1] = 1.0;
 }
 
-ON_PolynomialSurface::ON_PolynomialSurface (int dim, ON_BOOL32 is_rat, int order0,
+ON_PolynomialSurface::ON_PolynomialSurface (int dim,
+                                            ON_BOOL32 is_rat,
+                                            int order0,
                                             int order1)
 {
   Create (dim, is_rat, order0, order1);
@@ -501,8 +504,12 @@ ON_BezierCurve::Loft (const ON_3dPointArray &pt)
 }
 
 bool
-ON_BezierCurve::Loft (int pt_dim, int pt_count, int pt_stride, const double *pt,
-                      int t_stride, const double *t)
+ON_BezierCurve::Loft (int pt_dim,
+                      int pt_count,
+                      int pt_stride,
+                      const double *pt,
+                      int t_stride,
+                      const double *t)
 {
   bool rc = false;
   if (pt_dim >= 1 && pt_count >= 2 && pt_stride >= pt_dim && pt != NULL &&
@@ -572,10 +579,13 @@ ON_BezierCurve::Dump (ON_TextLog &dump) const
 {
   dump.Print ("ON_BezierCurve dim = %d is_rat = %d\n"
               "        order = %d \n",
-              m_dim, m_is_rat, m_order);
+              m_dim,
+              m_is_rat,
+              m_order);
   dump.Print ("Control Points  %d %s points\n"
               "  index               value\n",
-              m_order, (m_is_rat) ? "rational" : "non-rational");
+              m_order,
+              (m_is_rat) ? "rational" : "non-rational");
   if (!m_cv) {
     dump.Print ("  NULL cv array\n");
   } else {
@@ -633,8 +643,8 @@ ON_BezierCurve::GetBBox ( // returns true if successful
     double *boxmax,       // maximum
     int bGrowBox) const
 {
-  return ON_GetPointListBoundingBox (m_dim, m_is_rat, m_order, m_cv_stride, m_cv,
-                                     boxmin, boxmax, bGrowBox);
+  return ON_GetPointListBoundingBox (
+      m_dim, m_is_rat, m_order, m_cv_stride, m_cv, boxmin, boxmax, bGrowBox);
 }
 
 bool
@@ -678,7 +688,8 @@ ON_BezierCurve::BoundingBox () const
 
 bool
 ON_WorldBBoxIsInTightBBox (const ON_BoundingBox &tight_bbox,
-                           const ON_BoundingBox &world_bbox, const ON_Xform *xform)
+                           const ON_BoundingBox &world_bbox,
+                           const ON_Xform *xform)
 {
   if (xform && !xform->IsIdentity ()) {
     ON_3dPoint P, Q;
@@ -703,7 +714,8 @@ ON_WorldBBoxIsInTightBBox (const ON_BoundingBox &tight_bbox,
 }
 
 bool
-ON_Line::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_Line::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                              int bGrowBox,
                               const ON_Xform *xform) const
 {
   if (bGrowBox && !tight_bbox.IsValid ()) {
@@ -726,7 +738,8 @@ ON_Line::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
 }
 
 bool
-ON_Arc::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_Arc::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                             int bGrowBox,
                              const ON_Xform *xform) const
 {
   if (IsCircle () && (0 == xform || xform->IsIdentity ())) {
@@ -774,7 +787,8 @@ ON_Arc::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
 }
 
 bool
-ON_Circle::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_Circle::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                int bGrowBox,
                                 const ON_Xform *xform) const
 {
   // April 8, 2010 Dale Lear:
@@ -819,35 +833,40 @@ ON_Circle::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
 }
 
 bool
-ON_ArcCurve::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_ArcCurve::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                  int bGrowBox,
                                   const ON_Xform *xform) const
 {
   return m_arc.GetTightBoundingBox (tight_bbox, bGrowBox, xform);
 }
 
 bool
-ON_LineCurve::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_LineCurve::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                   int bGrowBox,
                                    const ON_Xform *xform) const
 {
   return m_line.GetTightBoundingBox (tight_bbox, bGrowBox, xform);
 }
 
 bool
-ON_PolylineCurve::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_PolylineCurve::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                       int bGrowBox,
                                        const ON_Xform *xform) const
 {
   return m_pline.GetTightBoundingBox (tight_bbox, bGrowBox, xform);
 }
 
 bool
-ON_PolyCurve::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_PolyCurve::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                   int bGrowBox,
                                    const ON_Xform *xform) const
 {
   return m_segment.GetTightBoundingBox (tight_bbox, bGrowBox, xform);
 }
 
 bool
-ON_CurveArray::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_CurveArray::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                    int bGrowBox,
                                     const ON_Xform *xform) const
 {
   if (1 == m_count && m_a[0]) {
@@ -888,7 +907,8 @@ ON_CurveArray::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
 }
 
 bool
-ON_3dPointArray::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_3dPointArray::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                      int bGrowBox,
                                       const ON_Xform *xform) const
 {
   if (bGrowBox && !tight_bbox.IsValid ()) {
@@ -929,7 +949,8 @@ ON_3dPointArray::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
 }
 
 bool
-ON_PointCloud::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_PointCloud::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                                    int bGrowBox,
                                     const ON_Xform *xform) const
 {
   if (bGrowBox && !tight_bbox.IsValid ()) {
@@ -960,7 +981,8 @@ ON_PointCloud::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
 }
 
 bool
-ON_Mesh::GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox,
+ON_Mesh::GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                              int bGrowBox,
                               const ON_Xform *xform) const
 {
   if (bGrowBox && !tight_bbox.IsValid ()) {
@@ -1083,9 +1105,17 @@ ON_BezierCurve::Evaluate ( // returns false if unable to evaluate
     double *v              // array of length stride*(ndir+1)
     ) const
 {
-  return ON_EvaluateBezier (m_dim, m_is_rat, m_order, m_cv_stride, m_cv, 0.0,
+  return ON_EvaluateBezier (m_dim,
+                            m_is_rat,
+                            m_order,
+                            m_cv_stride,
+                            m_cv,
+                            0.0,
                             1.0, // m_domain[0], m_domain[1],
-                            der_count, t, v_stride, v)
+                            der_count,
+                            t,
+                            v_stride,
+                            v)
              ? true
              : false;
 }
@@ -1782,10 +1812,14 @@ ON_BezierSurface::Dump (ON_TextLog &dump) const
 {
   dump.Print ("ON_BezierSurface dim = %d is_rat = %d\n"
               "        order = (%d, %d) \n",
-              m_dim, m_is_rat, m_order[0], m_order[1]);
+              m_dim,
+              m_is_rat,
+              m_order[0],
+              m_order[1]);
   dump.Print ("Control Points  %d %s points\n"
               "  index               value\n",
-              m_order[0] * m_order[1], (m_is_rat) ? "rational" : "non-rational");
+              m_order[0] * m_order[1],
+              (m_is_rat) ? "rational" : "non-rational");
   if (!m_cv) {
     dump.Print ("  NULL cv array\n");
   } else {
@@ -1797,8 +1831,8 @@ ON_BezierSurface::Dump (ON_TextLog &dump) const
         dump.Print ("\n");
       sPreamble[0] = 0;
       sprintf (sPreamble, "  CV[%2d]", i);
-      dump.PrintPointList (m_dim, m_is_rat, m_order[1], m_cv_stride[1], CV (i, 0),
-                           sPreamble);
+      dump.PrintPointList (
+          m_dim, m_is_rat, m_order[1], m_cv_stride[1], CV (i, 0), sPreamble);
     }
   }
 }
@@ -1931,8 +1965,12 @@ ON_BezierSurface::Loft (int curve_count, const ON_BezierCurve *const *curve_list
       }
       t[curve_count - 1] = 1.0;
       // use high dimensional curve loft trick
-      rc = bez.Loft (shape_cv_stride * shape_dim, curve_count,
-                     shape_cv_stride * shape_dim, meta_point.Array (), 1, t.Array ())
+      rc = bez.Loft (shape_cv_stride * shape_dim,
+                     curve_count,
+                     shape_cv_stride * shape_dim,
+                     meta_point.Array (),
+                     1,
+                     t.Array ())
                ? true
                : false;
       if (rc) {
@@ -1962,8 +2000,14 @@ ON_BezierSurface::GetBBox ( // returns true if successful
   int i;
   bool rc = (m_order[0] > 0 && m_order[1] > 0) ? true : false;
   for (i = 0; rc && i < m_order[0]; i++) {
-    rc = ON_GetPointListBoundingBox (m_dim, m_is_rat, m_order[1], m_cv_stride[1],
-                                     CV (i, 0), boxmin, boxmax, bGrowBox);
+    rc = ON_GetPointListBoundingBox (m_dim,
+                                     m_is_rat,
+                                     m_order[1],
+                                     m_cv_stride[1],
+                                     CV (i, 0),
+                                     boxmin,
+                                     boxmax,
+                                     bGrowBox);
     bGrowBox = true;
   }
   return rc;
@@ -2023,8 +2067,8 @@ ON_BezierSurface::Transform (const ON_Xform &xform)
     }
 
     for (i = 0; rc && i < m_order[0]; i++) {
-      rc = ON_TransformPointList (m_dim, m_is_rat, m_order[1], m_cv_stride[1],
-                                  CV (i, 0), xform);
+      rc = ON_TransformPointList (
+          m_dim, m_is_rat, m_order[1], m_cv_stride[1], CV (i, 0), xform);
     }
   }
   return rc;
@@ -2111,10 +2155,11 @@ ON_BezierSurface::Transpose ()
 
 bool
 ON_BezierSurface::Evaluate ( // returns false if unable to evaluate
-    double s, double t,      // evaluation parameter
-    int der_count,           // number of derivatives (>=0)
-    int v_stride,            // array stride (>=Dimension())
-    double *v                // array of length stride*(ndir+1)*(ndir+2)/2
+    double s,
+    double t,      // evaluation parameter
+    int der_count, // number of derivatives (>=0)
+    int v_stride,  // array stride (>=Dimension())
+    double *v      // array of length stride*(ndir+1)*(ndir+2)/2
     ) const
 {
   // TODO: When time permits write a faster special case bezier surface evaluator.
@@ -2136,17 +2181,20 @@ ON_BezierSurface::Evaluate ( // returns false if unable to evaluate
   }
 
   return ON_EvaluateNurbsSurfaceSpan (
-      m_dim,                          // dimension
-      m_is_rat,                       // true if NURBS is rational
-      m_order[0], m_order[1],         // order0, order1
-      knot0,                          // knot0[] array of (2*order0-2) doubles
-      knot1,                          // knot1[] array of (2*order1-2) doubles
-      m_cv_stride[0], m_cv_stride[1], // cv_stride0, cv_stride1
-      m_cv,                           // cv at "lower left" of bispan
-      der_count,                      // number of derivatives to compute (>=0)
-      s, t,                           // evaluation parameters ("s" and "t")
-      v_stride,                       // answer_stride (>=dimension)
-      v                               // answer[] array of length (ndir+1)*answer_stride
+      m_dim,    // dimension
+      m_is_rat, // true if NURBS is rational
+      m_order[0],
+      m_order[1], // order0, order1
+      knot0,      // knot0[] array of (2*order0-2) doubles
+      knot1,      // knot1[] array of (2*order1-2) doubles
+      m_cv_stride[0],
+      m_cv_stride[1], // cv_stride0, cv_stride1
+      m_cv,           // cv at "lower left" of bispan
+      der_count,      // number of derivatives to compute (>=0)
+      s,
+      t,        // evaluation parameters ("s" and "t")
+      v_stride, // answer_stride (>=dimension)
+      v         // answer[] array of length (ndir+1)*answer_stride
   );
 }
 
@@ -2193,8 +2241,8 @@ ON_BezierSurface::IsoCurve (int dir, double t, ON_BezierCurve *pCrv) const
     }
   }
 
-  ON_EvaluateBezier (bigdim, 0, m_order[1 - dir], stride, cv, 0.0, 1.0, 0, t, bigdim,
-                     pCrv->m_cv);
+  ON_EvaluateBezier (
+      bigdim, 0, m_order[1 - dir], stride, cv, 0.0, 1.0, 0, t, bigdim, pCrv->m_cv);
 
   if (workspace) {
     // purify FMM trauma - // delete[] workspace;
@@ -2789,8 +2837,8 @@ ON_BezierSurface::IsSingular ( // true if surface side is collapsed to a point
 }
 
 bool
-ON_ReparameterizeRationalBezierCurve (double c, int dim, int order, int cvstride,
-                                      double *cv)
+ON_ReparameterizeRationalBezierCurve (
+    double c, int dim, int order, int cvstride, double *cv)
 {
   double d;
   int j;
@@ -2869,8 +2917,8 @@ ON_BezierCurve::ScaleConrolPoints (int i, double w)
 }
 
 bool
-ON_ChangeRationalBezierCurveWeights (int dim, int order, int cvstride, double *cv,
-                                     int i0, double w0, int i1, double w1)
+ON_ChangeRationalBezierCurveWeights (
+    int dim, int order, int cvstride, double *cv, int i0, double w0, int i1, double w1)
 {
   // Reference - Farauki
   double r, s, v0, v1;
@@ -2971,8 +3019,8 @@ ON_BezierCurve::ChangeWeights (int i0, double w0, int i1, double w1)
     return true;
 
   MakeRational ();
-  return ON_ChangeRationalBezierCurveWeights (m_dim, m_order, m_cv_stride, m_cv, i0, w0,
-                                              i1, w1);
+  return ON_ChangeRationalBezierCurveWeights (
+      m_dim, m_order, m_cv_stride, m_cv, i0, w0, i1, w1);
 
   /*
   if ( 0.0 == v0 || !ON_IsValid(v0) || 0.0 == v1 || !ON_IsValid(v1) )
@@ -3124,7 +3172,9 @@ ON_BezierCurve::EvTangent (double t, ON_3dPoint &point, ON_3dVector &tangent) co
 }
 
 bool
-ON_BezierCurve::EvCurvature (double t, ON_3dPoint &point, ON_3dVector &tangent,
+ON_BezierCurve::EvCurvature (double t,
+                             ON_3dPoint &point,
+                             ON_3dVector &tangent,
                              ON_3dVector &kappa) const
 {
   ON_3dVector d1, d2;
@@ -3168,7 +3218,8 @@ ON_BezierCurve::EvPoint ( // returns false if unable to evaluate
 bool
 ON_BezierCurve::Ev1Der ( // returns false if unable to evaluate
     double t,            // evaluation parameter
-    ON_3dPoint &point, ON_3dVector &derivative) const
+    ON_3dPoint &point,
+    ON_3dVector &derivative) const
 {
   bool rc = false;
   const int dim = Dimension ();
@@ -3205,7 +3256,9 @@ ON_BezierCurve::Ev1Der ( // returns false if unable to evaluate
 bool
 ON_BezierCurve::Ev2Der ( // returns false if unable to evaluate
     double t,            // evaluation parameter
-    ON_3dPoint &point, ON_3dVector &firstDervative, ON_3dVector &secondDervative) const
+    ON_3dPoint &point,
+    ON_3dVector &firstDervative,
+    ON_3dVector &secondDervative) const
 {
   bool rc = false;
   const int dim = Dimension ();

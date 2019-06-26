@@ -232,8 +232,10 @@ pcl::VoxelGridOcclusionEstimation<PointT>::rayBoxIntersection (
 template <typename PointT>
 int
 pcl::VoxelGridOcclusionEstimation<PointT>::rayTraversal (
-    const Eigen::Vector3i &target_voxel, const Eigen::Vector4f &origin,
-    const Eigen::Vector4f &direction, const float t_min)
+    const Eigen::Vector3i &target_voxel,
+    const Eigen::Vector4f &origin,
+    const Eigen::Vector4f &direction,
+    const float t_min)
 {
   // coordinate of the boundary of the voxel grid
   Eigen::Vector4f start = origin + t_min * direction;
@@ -313,8 +315,10 @@ template <typename PointT>
 int
 pcl::VoxelGridOcclusionEstimation<PointT>::rayTraversal (
     std::vector<Eigen::Vector3i, Eigen::aligned_allocator<Eigen::Vector3i>> &out_ray,
-    const Eigen::Vector3i &target_voxel, const Eigen::Vector4f &origin,
-    const Eigen::Vector4f &direction, const float t_min)
+    const Eigen::Vector3i &target_voxel,
+    const Eigen::Vector4f &origin,
+    const Eigen::Vector4f &direction,
+    const float t_min)
 {
   // reserve space for the ray vector
   int reserve_size = div_b_.maxCoeff () * div_b_.maxCoeff ();

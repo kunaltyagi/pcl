@@ -98,7 +98,8 @@ saveMesh (pcl::PolygonMesh &input, std::string output_file, int output_type);
  * @return True on success, false otherwise.
  */
 bool
-savePointCloud (pcl::PCLPointCloud2::Ptr input, std::string output_file,
+savePointCloud (pcl::PCLPointCloud2::Ptr input,
+                std::string output_file,
                 int output_type)
 {
   if (boost::filesystem::path (output_file).extension () == ".pcd") {
@@ -172,7 +173,8 @@ saveMesh (pcl::PolygonMesh &input, std::string output_file, int output_type)
       return (false);
     }
 
-    PCL_INFO ("Saving file %s as %s.\n", output_file.c_str (),
+    PCL_INFO ("Saving file %s as %s.\n",
+              output_file.c_str (),
               (output_type == ASCII) ? "ASCII" : "binary");
     if (!pcl::io::savePolygonFile (output_file, input, output_type != ASCII))
       return (false);
@@ -249,7 +251,8 @@ main (int argc, char **argv)
       pcl::io::loadPolygonFile (argv[file_args[0]], mesh) != 0) {
     PCL_INFO ("Loaded a mesh with %d points (total size is %d) and the following "
               "channels:\n%s\n",
-              mesh.cloud.width * mesh.cloud.height, mesh.cloud.data.size (),
+              mesh.cloud.width * mesh.cloud.height,
+              mesh.cloud.data.size (),
               pcl::getFieldsList (mesh.cloud).c_str ());
 
     if (cloud_output)
@@ -276,7 +279,8 @@ main (int argc, char **argv)
 
     PCL_INFO ("Loaded a point cloud with %d points (total size is %d) and the "
               "following channels:\n%s\n",
-              cloud->width * cloud->height, cloud->data.size (),
+              cloud->width * cloud->height,
+              cloud->data.size (),
               pcl::getFieldsList (*cloud).c_str ());
 
     if (!savePointCloud (cloud, argv[file_args[1]], output_type)) {

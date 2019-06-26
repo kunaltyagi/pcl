@@ -41,22 +41,27 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImageSpherical::calculate3DPoint (float image_x, float image_y, float range,
+  RangeImageSpherical::calculate3DPoint (float image_x,
+                                         float image_y,
+                                         float range,
                                          Eigen::Vector3f &point) const
   {
     float angle_x, angle_y;
     getAnglesFromImagePoint (image_x, image_y, angle_x, angle_y);
 
     float cosY = cosf (angle_y);
-    point = Eigen::Vector3f (range * sinf (angle_x) * cosY, range * sinf (angle_y),
+    point = Eigen::Vector3f (range * sinf (angle_x) * cosY,
+                             range * sinf (angle_y),
                              range * cosf (angle_x) * cosY);
     point = to_world_system_ * point;
   }
 
   /////////////////////////////////////////////////////////////////////////
   inline void
-  RangeImageSpherical::getImagePoint (const Eigen::Vector3f &point, float &image_x,
-                                      float &image_y, float &range) const
+  RangeImageSpherical::getImagePoint (const Eigen::Vector3f &point,
+                                      float &image_x,
+                                      float &image_y,
+                                      float &range) const
   {
     Eigen::Vector3f transformedPoint = to_range_image_system_ * point;
     range = transformedPoint.norm ();
@@ -66,8 +71,10 @@ namespace pcl
   }
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImageSpherical::getAnglesFromImagePoint (float image_x, float image_y,
-                                                float &angle_x, float &angle_y) const
+  RangeImageSpherical::getAnglesFromImagePoint (float image_x,
+                                                float image_y,
+                                                float &angle_x,
+                                                float &angle_y) const
   {
     angle_y = (image_y + static_cast<float> (image_offset_y_)) * angular_resolution_y_ -
               0.5f * static_cast<float> (M_PI);
@@ -77,8 +84,10 @@ namespace pcl
   }
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImageSpherical::getImagePointFromAngles (float angle_x, float angle_y,
-                                                float &image_x, float &image_y) const
+  RangeImageSpherical::getImagePointFromAngles (float angle_x,
+                                                float angle_y,
+                                                float &image_x,
+                                                float &image_y) const
   {
     image_x = (angle_x + static_cast<float> (M_PI)) * angular_resolution_x_reciprocal_ -
               static_cast<float> (image_offset_x_);

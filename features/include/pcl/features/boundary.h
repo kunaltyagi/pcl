@@ -116,9 +116,12 @@ namespace pcl
      * \param[in] angle_threshold the threshold angle (default \f$\pi / 2.0\f$)
      */
     bool
-    isBoundaryPoint (const pcl::PointCloud<PointInT> &cloud, int q_idx,
-                     const std::vector<int> &indices, const Eigen::Vector4f &u,
-                     const Eigen::Vector4f &v, const float angle_threshold);
+    isBoundaryPoint (const pcl::PointCloud<PointInT> &cloud,
+                     int q_idx,
+                     const std::vector<int> &indices,
+                     const Eigen::Vector4f &u,
+                     const Eigen::Vector4f &v,
+                     const float angle_threshold);
 
     /** \brief Check whether a point is a boundary point in a planar patch of projected
      * points given by indices. \note A coordinate system u-v-n must be computed
@@ -129,9 +132,12 @@ namespace pcl
      * angle (default \f$\pi / 2.0\f$)
      */
     bool
-    isBoundaryPoint (const pcl::PointCloud<PointInT> &cloud, const PointInT &q_point,
-                     const std::vector<int> &indices, const Eigen::Vector4f &u,
-                     const Eigen::Vector4f &v, const float angle_threshold);
+    isBoundaryPoint (const pcl::PointCloud<PointInT> &cloud,
+                     const PointInT &q_point,
+                     const std::vector<int> &indices,
+                     const Eigen::Vector4f &u,
+                     const Eigen::Vector4f &v,
+                     const float angle_threshold);
 
     /** \brief Set the decision boundary (angle threshold) that marks points as boundary
      * or regular. (default \f$\pi / 2.0\f$) \param[in] angle the angle threshold
@@ -155,7 +161,8 @@ namespace pcl
      * \param[out] v the resultant v direction
      */
     inline void
-    getCoordinateSystemOnPlane (const PointNT &p_coeff, Eigen::Vector4f &u,
+    getCoordinateSystemOnPlane (const PointNT &p_coeff,
+                                Eigen::Vector4f &u,
                                 Eigen::Vector4f &v)
     {
       pcl::Vector4fMapConst p_coeff_v = p_coeff.getNormalVector4fMap ();

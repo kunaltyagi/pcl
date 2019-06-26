@@ -139,7 +139,8 @@ namespace pcl
      * \param distance vector of size 1 to store the distance to nearest neighbour found
      */
     inline bool
-    searchForNeighbors (const PointXYZLAB &query, std::vector<int> &index,
+    searchForNeighbors (const PointXYZLAB &query,
+                        std::vector<int> &index,
                         std::vector<float> &distance);
 
     protected:

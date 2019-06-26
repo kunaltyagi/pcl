@@ -169,8 +169,8 @@ pcl::ihs::OfflineIntegration::computationThread ()
       if (destructor_called_)
         return;
 
-      Base::addMesh (mesh_model_, "model",
-                     Eigen::Isometry3d (T.inverse ().cast<double> ()));
+      Base::addMesh (
+          mesh_model_, "model", Eigen::Isometry3d (T.inverse ().cast<double> ()));
       Base::calcFPS (computation_fps_);
     }
   }
@@ -181,7 +181,8 @@ pcl::ihs::OfflineIntegration::computationThread ()
 
 bool
 pcl::ihs::OfflineIntegration::getFilesFromDirectory (
-    const std::string path_dir, const std::string extension,
+    const std::string path_dir,
+    const std::string extension,
     std::vector<std::string> &files) const
 {
   if (path_dir.empty () || !boost::filesystem::exists (path_dir)) {
@@ -314,8 +315,12 @@ pcl::ihs::OfflineIntegration::paintEvent (QPaintEvent *event)
 
   const std::string str = std::string (comp_fps).append ("\n").append (vis_fps);
 
-  painter.drawText (0, 0, this->width (), this->height (),
-                    Qt::AlignBottom | Qt::AlignLeft, str.c_str ());
+  painter.drawText (0,
+                    0,
+                    this->width (),
+                    this->height (),
+                    Qt::AlignBottom | Qt::AlignLeft,
+                    str.c_str ());
 }
 
 ////////////////////////////////////////////////////////////////////////////////

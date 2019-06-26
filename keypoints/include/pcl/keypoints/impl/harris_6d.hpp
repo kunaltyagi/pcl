@@ -262,7 +262,8 @@ pcl::HarrisKeypoint6D<PointInT, PointOutT, NormalT>::detectKeypoints (
       tree_->radiusSearch (idx, search_radius_, nn_indices, nn_dists);
       bool is_maxima = true;
       for (std::vector<int>::const_iterator iIt = nn_indices.begin ();
-           iIt != nn_indices.end (); ++iIt) {
+           iIt != nn_indices.end ();
+           ++iIt) {
         if (response->points[idx].intensity < response->points[*iIt].intensity) {
           is_maxima = false;
           break;
@@ -394,7 +395,8 @@ pcl::HarrisKeypoint6D<PointInT, PointOutT, NormalT>::refineCorners (
   float diff;
   const unsigned max_iterations = 10;
   for (typename PointCloudOut::iterator cornerIt = corners.begin ();
-       cornerIt != corners.end (); ++cornerIt) {
+       cornerIt != corners.end ();
+       ++cornerIt) {
     unsigned iterations = 0;
     do {
       NNT.setZero ();
@@ -407,7 +409,8 @@ pcl::HarrisKeypoint6D<PointInT, PointOutT, NormalT>::refineCorners (
       std::vector<float> nn_dists;
       search.radiusSearch (corner, search_radius_, nn_indices, nn_dists);
       for (std::vector<int>::const_iterator iIt = nn_indices.begin ();
-           iIt != nn_indices.end (); ++iIt) {
+           iIt != nn_indices.end ();
+           ++iIt) {
         normal = reinterpret_cast<const Eigen::Vector3f *> (
             &(normals_->points[*iIt].normal_x));
         point = reinterpret_cast<const Eigen::Vector3f *> (&(surface_->points[*iIt].x));

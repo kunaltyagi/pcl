@@ -104,7 +104,8 @@ loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud)
 
 template <typename PointT>
 void
-transformPointCloudHelper (PointCloud<PointT> &input, PointCloud<PointT> &output,
+transformPointCloudHelper (PointCloud<PointT> &input,
+                           PointCloud<PointT> &output,
                            Eigen::Matrix4f &tform)
 {
   transformPointCloud (input, output, tform);
@@ -113,7 +114,8 @@ transformPointCloudHelper (PointCloud<PointT> &input, PointCloud<PointT> &output
 template <>
 void
 transformPointCloudHelper (PointCloud<PointNormal> &input,
-                           PointCloud<PointNormal> &output, Eigen::Matrix4f &tform)
+                           PointCloud<PointNormal> &output,
+                           Eigen::Matrix4f &tform)
 {
   transformPointCloudWithNormals (input, output, tform);
 }
@@ -130,7 +132,8 @@ transformPointCloudHelper<PointXYZRGBNormal> (PointCloud<PointXYZRGBNormal> &inp
 template <typename PointT>
 void
 transformPointCloud2AsType (const pcl::PCLPointCloud2 &input,
-                            pcl::PCLPointCloud2 &output, Eigen::Matrix4f &tform)
+                            pcl::PCLPointCloud2 &output,
+                            Eigen::Matrix4f &tform)
 {
   PointCloud<PointT> cloud;
   fromPCLPointCloud2 (input, cloud);
@@ -139,7 +142,8 @@ transformPointCloud2AsType (const pcl::PCLPointCloud2 &input,
 }
 
 void
-transformPointCloud2 (const pcl::PCLPointCloud2 &input, pcl::PCLPointCloud2 &output,
+transformPointCloud2 (const pcl::PCLPointCloud2 &input,
+                      pcl::PCLPointCloud2 &output,
                       Eigen::Matrix4f &tform)
 {
   // Check for 'rgb' and 'normals' fields
@@ -165,7 +169,8 @@ transformPointCloud2 (const pcl::PCLPointCloud2 &input, pcl::PCLPointCloud2 &out
 }
 
 void
-compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output,
+compute (const pcl::PCLPointCloud2::ConstPtr &input,
+         pcl::PCLPointCloud2 &output,
          Eigen::Matrix4f &tform)
 {
   TicToc tt;
@@ -210,7 +215,8 @@ scaleInPlace (pcl::PCLPointCloud2 &cloud, double *multiplier)
   int x_idx = pcl::getFieldIndex (cloud, "x");
   int y_idx = pcl::getFieldIndex (cloud, "y");
   int z_idx = pcl::getFieldIndex (cloud, "z");
-  Eigen::Array3i xyz_offset (cloud.fields[x_idx].offset, cloud.fields[y_idx].offset,
+  Eigen::Array3i xyz_offset (cloud.fields[x_idx].offset,
+                             cloud.fields[y_idx].offset,
                              cloud.fields[z_idx].offset);
 
   for (uint32_t cp = 0; cp < cloud.width * cloud.height; ++cp) {
@@ -346,7 +352,9 @@ main (int argc, char **argv)
   if (parse_3x_arguments (argc, argv, "-scale", divider[0], divider[1], divider[2]) >
       -1) {
     print_highlight ("Scaling XYZ data with the following values: %f, %f, %f\n",
-                     divider[0], divider[1], divider[2]);
+                     divider[0],
+                     divider[1],
+                     divider[2]);
     scaleInPlace (output, divider);
   }
 

@@ -47,8 +47,10 @@
 using pcl::io::FrameWrapper;
 using pcl::io::IOException;
 
-pcl::io::DepthImage::DepthImage (FrameWrapper::Ptr depth_metadata, float baseline,
-                                 float focal_length, pcl::uint64_t shadow_value,
+pcl::io::DepthImage::DepthImage (FrameWrapper::Ptr depth_metadata,
+                                 float baseline,
+                                 float focal_length,
+                                 pcl::uint64_t shadow_value,
                                  pcl::uint64_t no_sample_value)
     : wrapper_ (depth_metadata), baseline_ (baseline), focal_length_ (focal_length),
       shadow_value_ (shadow_value), no_sample_value_ (no_sample_value),
@@ -56,9 +58,12 @@ pcl::io::DepthImage::DepthImage (FrameWrapper::Ptr depth_metadata, float baselin
 {
 }
 
-pcl::io::DepthImage::DepthImage (FrameWrapper::Ptr depth_metadata, float baseline,
-                                 float focal_length, pcl::uint64_t shadow_value,
-                                 pcl::uint64_t no_sample_value, Timestamp timestamp)
+pcl::io::DepthImage::DepthImage (FrameWrapper::Ptr depth_metadata,
+                                 float baseline,
+                                 float focal_length,
+                                 pcl::uint64_t shadow_value,
+                                 pcl::uint64_t no_sample_value,
+                                 Timestamp timestamp)
     : wrapper_ (depth_metadata), baseline_ (baseline), focal_length_ (focal_length),
       shadow_value_ (shadow_value), no_sample_value_ (no_sample_value),
       timestamp_ (timestamp)
@@ -142,18 +147,25 @@ pcl::io::DepthImage::getSystemTimestamp () const
 // Fill external buffers ////////////////////////////////////////////////////
 
 void
-pcl::io::DepthImage::fillDepthImageRaw (unsigned width, unsigned height,
+pcl::io::DepthImage::fillDepthImageRaw (unsigned width,
+                                        unsigned height,
                                         unsigned short *depth_buffer,
                                         unsigned line_step) const
 {
   if (width > wrapper_->getWidth () || height > wrapper_->getHeight ())
     THROW_IO_EXCEPTION ("upsampling not supported: %d x %d -> %d x %d",
-                        wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+                        wrapper_->getWidth (),
+                        wrapper_->getHeight (),
+                        width,
+                        height);
 
   if (wrapper_->getWidth () % width != 0 || wrapper_->getHeight () % height != 0)
     THROW_IO_EXCEPTION (
         "downsampling only supported for integer scale: %d x %d -> %d x %d",
-        wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+        wrapper_->getWidth (),
+        wrapper_->getHeight (),
+        width,
+        height);
 
   if (line_step == 0)
     line_step = width * static_cast<unsigned> (sizeof (unsigned short));
@@ -199,17 +211,25 @@ pcl::io::DepthImage::fillDepthImageRaw (unsigned width, unsigned height,
 }
 
 void
-pcl::io::DepthImage::fillDepthImage (unsigned width, unsigned height,
-                                     float *depth_buffer, unsigned line_step) const
+pcl::io::DepthImage::fillDepthImage (unsigned width,
+                                     unsigned height,
+                                     float *depth_buffer,
+                                     unsigned line_step) const
 {
   if (width > wrapper_->getWidth () || height > wrapper_->getHeight ())
     THROW_IO_EXCEPTION ("upsampling not supported: %d x %d -> %d x %d",
-                        wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+                        wrapper_->getWidth (),
+                        wrapper_->getHeight (),
+                        width,
+                        height);
 
   if (wrapper_->getWidth () % width != 0 || wrapper_->getHeight () % height != 0)
     THROW_IO_EXCEPTION (
         "downsampling only supported for integer scale: %d x %d -> %d x %d",
-        wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+        wrapper_->getWidth (),
+        wrapper_->getHeight (),
+        width,
+        height);
 
   if (line_step == 0)
     line_step = width * static_cast<unsigned> (sizeof (float));
@@ -248,18 +268,25 @@ pcl::io::DepthImage::fillDepthImage (unsigned width, unsigned height,
 }
 
 void
-pcl::io::DepthImage::fillDisparityImage (unsigned width, unsigned height,
+pcl::io::DepthImage::fillDisparityImage (unsigned width,
+                                         unsigned height,
                                          float *disparity_buffer,
                                          unsigned line_step) const
 {
   if (width > wrapper_->getWidth () || height > wrapper_->getHeight ())
     THROW_IO_EXCEPTION ("upsampling not supported: %d x %d -> %d x %d",
-                        wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+                        wrapper_->getWidth (),
+                        wrapper_->getHeight (),
+                        width,
+                        height);
 
   if (wrapper_->getWidth () % width != 0 || wrapper_->getHeight () % height != 0)
     THROW_IO_EXCEPTION (
         "downsampling only supported for integer scale: %d x %d -> %d x %d",
-        wrapper_->getWidth (), wrapper_->getHeight (), width, height);
+        wrapper_->getWidth (),
+        wrapper_->getHeight (),
+        width,
+        height);
 
   if (line_step == 0)
     line_step = width * static_cast<unsigned> (sizeof (float));

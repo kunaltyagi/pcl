@@ -152,8 +152,8 @@ class ON_CLASS ON_CurveOnSurface : public ON_Curve
       ) const;
 
   ON_BOOL32
-  IsPlanar (ON_Plane * = NULL, // if not NULL and true is returned, then plane
-                               // parameters are filled in
+  IsPlanar (ON_Plane * = NULL,         // if not NULL and true is returned, then plane
+                                       // parameters are filled in
             double = ON_ZERO_TOLERANCE // tolerance to use when checking
             ) const;
 
@@ -201,7 +201,8 @@ class ON_CLASS ON_CurveOnSurface : public ON_Curve
                 //            curve's parameterization and the NURBS
                 //            parameterization may not match to the
                 //            desired accuracy.
-      ON_NurbsCurve &, double = 0.0,
+      ON_NurbsCurve &,
+      double = 0.0,
       const ON_Interval * = NULL // OPTIONAL subdomain of 2d curve
       ) const;
 

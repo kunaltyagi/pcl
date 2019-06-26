@@ -170,7 +170,8 @@ ON_Sphere::ClosestPointTo (ON_3dPoint point) const
 
 // rotate cylinder about its origin
 bool
-ON_Sphere::Rotate (double sin_angle, double cos_angle,
+ON_Sphere::Rotate (double sin_angle,
+                   double cos_angle,
                    const ON_3dVector &axis // axis of rotation
 )
 {
@@ -187,7 +188,8 @@ ON_Sphere::Rotate (double angle,           // angle in radians
 
 // rotate cylinder about a point and axis
 bool
-ON_Sphere::Rotate (double sin_angle, double cos_angle,
+ON_Sphere::Rotate (double sin_angle,
+                   double cos_angle,
                    const ON_3dVector &axis, // axis of rotation
                    const ON_3dPoint &point  // center of rotation
 )
@@ -243,9 +245,15 @@ ON_Sphere::GetNurbForm (ON_NurbsSurface &s) const
     const ON_3dVector y = radius * plane.yaxis;
     const ON_3dVector z = radius * plane.zaxis;
 
-    ON_3dPoint p[9] = {plane.origin + x,     plane.origin + x + y, plane.origin + y,
-                       plane.origin - x + y, plane.origin - x,     plane.origin - x - y,
-                       plane.origin - y,     plane.origin + x - y, plane.origin + x};
+    ON_3dPoint p[9] = {plane.origin + x,
+                       plane.origin + x + y,
+                       plane.origin + y,
+                       plane.origin - x + y,
+                       plane.origin - x,
+                       plane.origin - x - y,
+                       plane.origin - y,
+                       plane.origin + x - y,
+                       plane.origin + x};
 
     const double w = 1.0 / sqrt (2.0);
     double w13;

@@ -56,15 +56,19 @@ namespace openni_wrapper
   ImageYUV422::~ImageYUV422 () throw () {}
 
   bool
-  ImageYUV422::isResizingSupported (unsigned input_width, unsigned input_height,
-                                    unsigned output_width, unsigned output_height) const
+  ImageYUV422::isResizingSupported (unsigned input_width,
+                                    unsigned input_height,
+                                    unsigned output_width,
+                                    unsigned output_height) const
   {
-    return ImageYUV422::resizingSupported (input_width, input_height, output_width,
-                                           output_height);
+    return ImageYUV422::resizingSupported (
+        input_width, input_height, output_width, output_height);
   }
 
   void
-  ImageYUV422::fillRGB (unsigned width, unsigned height, unsigned char *rgb_buffer,
+  ImageYUV422::fillRGB (unsigned width,
+                        unsigned height,
+                        unsigned char *rgb_buffer,
                         unsigned rgb_line_step) const
   {
     // 0  1   2  3
@@ -74,13 +78,19 @@ namespace openni_wrapper
       if (width > image_md_->XRes () || height > image_md_->YRes ())
         THROW_OPENNI_EXCEPTION (
             "Upsampling not supported. Request was: %d x %d -> %d x %d",
-            image_md_->XRes (), image_md_->YRes (), width, height);
+            image_md_->XRes (),
+            image_md_->YRes (),
+            width,
+            height);
 
       if (image_md_->XRes () % width != 0 || image_md_->YRes () % height != 0 ||
           (image_md_->XRes () / width) & 0x01 || (image_md_->YRes () / height & 0x01))
         THROW_OPENNI_EXCEPTION ("Downsampling only possible for power of two scale in "
                                 "both dimensions. Request was %d x %d -> %d x %d.",
-                                image_md_->XRes (), image_md_->YRes (), width, height);
+                                image_md_->XRes (),
+                                image_md_->YRes (),
+                                width,
+                                height);
     }
 
     const XnUInt8 *yuv_buffer = image_md_->Data ();
@@ -129,19 +139,27 @@ namespace openni_wrapper
   }
 
   void
-  ImageYUV422::fillGrayscale (unsigned width, unsigned height,
-                              unsigned char *gray_buffer, unsigned gray_line_step) const
+  ImageYUV422::fillGrayscale (unsigned width,
+                              unsigned height,
+                              unsigned char *gray_buffer,
+                              unsigned gray_line_step) const
   {
     // u y1 v y2
     if (width > image_md_->XRes () || height > image_md_->YRes ())
       THROW_OPENNI_EXCEPTION (
           "Upsampling not supported. Request was: %d x %d -> %d x %d",
-          image_md_->XRes (), image_md_->YRes (), width, height);
+          image_md_->XRes (),
+          image_md_->YRes (),
+          width,
+          height);
 
     if (image_md_->XRes () % width != 0 || image_md_->YRes () % height != 0)
       THROW_OPENNI_EXCEPTION ("Downsampling only possible for integer scales in both "
                               "dimensions. Request was %d x %d -> %d x %d.",
-                              image_md_->XRes (), image_md_->YRes (), width, height);
+                              image_md_->XRes (),
+                              image_md_->YRes (),
+                              width,
+                              height);
 
     unsigned gray_line_skip = 0;
     if (gray_line_step != 0)

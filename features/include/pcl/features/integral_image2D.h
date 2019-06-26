@@ -102,12 +102,12 @@ namespace pcl
     public:
     using Ptr = boost::shared_ptr<IntegralImage2D<DataType, Dimension>>;
     static const unsigned second_order_size = (Dimension * (Dimension + 1)) >> 1;
-    using ElementType =
-        Eigen::Matrix<typename IntegralImageTypeTraits<DataType>::IntegralType,
-                      Dimension, 1>;
+    using ElementType = Eigen::
+        Matrix<typename IntegralImageTypeTraits<DataType>::IntegralType, Dimension, 1>;
     using SecondOrderType =
         Eigen::Matrix<typename IntegralImageTypeTraits<DataType>::IntegralType,
-                      second_order_size, 1>;
+                      second_order_size,
+                      1>;
 
     /** \brief Constructor for an Integral Image
      * \param[in] compute_second_order_integral_images set to true if we want to compute
@@ -137,8 +137,11 @@ namespace pcl
      * \param[in] row_stride the row stride of the data
      */
     void
-    setInput (const DataType *data, unsigned width, unsigned height,
-              unsigned element_stride, unsigned row_stride);
+    setInput (const DataType *data,
+              unsigned width,
+              unsigned height,
+              unsigned element_stride,
+              unsigned row_stride);
 
     /** \brief Compute the first order sum within a given rectangle
      * \param[in] start_x x position of rectangle
@@ -147,7 +150,9 @@ namespace pcl
      * \param[in] height height of rectangle
      */
     inline ElementType
-    getFirstOrderSum (unsigned start_x, unsigned start_y, unsigned width,
+    getFirstOrderSum (unsigned start_x,
+                      unsigned start_y,
+                      unsigned width,
                       unsigned height) const;
 
     /** \brief Compute the first order sum within a given rectangle
@@ -157,7 +162,9 @@ namespace pcl
      * \param[in] end_y x position of the end of the rectangle
      */
     inline ElementType
-    getFirstOrderSumSE (unsigned start_x, unsigned start_y, unsigned end_x,
+    getFirstOrderSumSE (unsigned start_x,
+                        unsigned start_y,
+                        unsigned end_x,
                         unsigned end_y) const;
 
     /** \brief Compute the second order sum within a given rectangle
@@ -167,7 +174,9 @@ namespace pcl
      * \param[in] height height of rectangle
      */
     inline SecondOrderType
-    getSecondOrderSum (unsigned start_x, unsigned start_y, unsigned width,
+    getSecondOrderSum (unsigned start_x,
+                       unsigned start_y,
+                       unsigned width,
                        unsigned height) const;
 
     /** \brief Compute the second order sum within a given rectangle
@@ -177,7 +186,9 @@ namespace pcl
      * \param[in] end_y x position of the end of the rectangle
      */
     inline SecondOrderType
-    getSecondOrderSumSE (unsigned start_x, unsigned start_y, unsigned end_x,
+    getSecondOrderSumSE (unsigned start_x,
+                         unsigned start_y,
+                         unsigned end_x,
                          unsigned end_y) const;
 
     /** \brief Compute the number of finite elements within a given rectangle
@@ -187,7 +198,9 @@ namespace pcl
      * \param[in] height height of rectangle
      */
     inline unsigned
-    getFiniteElementsCount (unsigned start_x, unsigned start_y, unsigned width,
+    getFiniteElementsCount (unsigned start_x,
+                            unsigned start_y,
+                            unsigned width,
                             unsigned height) const;
 
     /** \brief Compute the number of finite elements within a given rectangle
@@ -197,7 +210,9 @@ namespace pcl
      * \param[in] end_y x position of the end of the rectangle
      */
     inline unsigned
-    getFiniteElementsCountSE (unsigned start_x, unsigned start_y, unsigned end_x,
+    getFiniteElementsCountSE (unsigned start_x,
+                              unsigned start_y,
+                              unsigned end_x,
                               unsigned end_y) const;
 
     private:
@@ -210,7 +225,8 @@ namespace pcl
      * \param[in] row_stride the row stride of the data
      */
     void
-    computeIntegralImages (const DataType *data, unsigned row_stride,
+    computeIntegralImages (const DataType *data,
+                           unsigned row_stride,
                            unsigned element_stride);
 
     std::vector<ElementType, Eigen::aligned_allocator<ElementType>>
@@ -264,8 +280,11 @@ namespace pcl
      * \param[in] row_stride the row stride of the data
      */
     void
-    setInput (const DataType *data, unsigned width, unsigned height,
-              unsigned element_stride, unsigned row_stride);
+    setInput (const DataType *data,
+              unsigned width,
+              unsigned height,
+              unsigned element_stride,
+              unsigned row_stride);
 
     /** \brief Compute the first order sum within a given rectangle
      * \param[in] start_x x position of rectangle
@@ -274,7 +293,9 @@ namespace pcl
      * \param[in] height height of rectangle
      */
     inline ElementType
-    getFirstOrderSum (unsigned start_x, unsigned start_y, unsigned width,
+    getFirstOrderSum (unsigned start_x,
+                      unsigned start_y,
+                      unsigned width,
                       unsigned height) const;
 
     /** \brief Compute the first order sum within a given rectangle
@@ -284,7 +305,9 @@ namespace pcl
      * \param[in] end_y x position of the end of the rectangle
      */
     inline ElementType
-    getFirstOrderSumSE (unsigned start_x, unsigned start_y, unsigned end_x,
+    getFirstOrderSumSE (unsigned start_x,
+                        unsigned start_y,
+                        unsigned end_x,
                         unsigned end_y) const;
 
     /** \brief Compute the second order sum within a given rectangle
@@ -294,7 +317,9 @@ namespace pcl
      * \param[in] height height of rectangle
      */
     inline SecondOrderType
-    getSecondOrderSum (unsigned start_x, unsigned start_y, unsigned width,
+    getSecondOrderSum (unsigned start_x,
+                       unsigned start_y,
+                       unsigned width,
                        unsigned height) const;
 
     /** \brief Compute the second order sum within a given rectangle
@@ -304,7 +329,9 @@ namespace pcl
      * \param[in] end_y x position of the end of the rectangle
      */
     inline SecondOrderType
-    getSecondOrderSumSE (unsigned start_x, unsigned start_y, unsigned end_x,
+    getSecondOrderSumSE (unsigned start_x,
+                         unsigned start_y,
+                         unsigned end_x,
                          unsigned end_y) const;
 
     /** \brief Compute the number of finite elements within a given rectangle
@@ -314,7 +341,9 @@ namespace pcl
      * \param[in] height height of rectangle
      */
     inline unsigned
-    getFiniteElementsCount (unsigned start_x, unsigned start_y, unsigned width,
+    getFiniteElementsCount (unsigned start_x,
+                            unsigned start_y,
+                            unsigned width,
                             unsigned height) const;
 
     /** \brief Compute the number of finite elements within a given rectangle
@@ -324,7 +353,9 @@ namespace pcl
      * \param[in] end_y x position of the end of the rectangle
      */
     inline unsigned
-    getFiniteElementsCountSE (unsigned start_x, unsigned start_y, unsigned end_x,
+    getFiniteElementsCountSE (unsigned start_x,
+                              unsigned start_y,
+                              unsigned end_x,
                               unsigned end_y) const;
 
     private:
@@ -336,7 +367,8 @@ namespace pcl
      * \param[in] row_stride the row stride of the data
      */
     void
-    computeIntegralImages (const DataType *data, unsigned row_stride,
+    computeIntegralImages (const DataType *data,
+                           unsigned row_stride,
                            unsigned element_stride);
 
     std::vector<ElementType, Eigen::aligned_allocator<ElementType>>

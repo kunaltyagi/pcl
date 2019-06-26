@@ -65,7 +65,8 @@ namespace pcl
       }
 
       void
-      upload (const std::vector<int> &data, const std::vector<int> &sizes,
+      upload (const std::vector<int> &data,
+              const std::vector<int> &sizes,
               int max_elements)
       {
         this->data.upload (data);

@@ -65,11 +65,14 @@ namespace pcl
         : public TransformationEstimation<PointSource, PointTarget, Scalar>
     {
       public:
-      using Ptr = boost::shared_ptr<TransformationEstimationPointToPlaneLLSWeighted<
-          PointSource, PointTarget, Scalar>>;
-      using ConstPtr =
-          boost::shared_ptr<const TransformationEstimationPointToPlaneLLSWeighted<
-              PointSource, PointTarget, Scalar>>;
+      using Ptr =
+          boost::shared_ptr<TransformationEstimationPointToPlaneLLSWeighted<PointSource,
+                                                                            PointTarget,
+                                                                            Scalar>>;
+      using ConstPtr = boost::shared_ptr<
+          const TransformationEstimationPointToPlaneLLSWeighted<PointSource,
+                                                                PointTarget,
+                                                                Scalar>>;
 
       using Matrix4 =
           typename TransformationEstimation<PointSource, PointTarget, Scalar>::Matrix4;
@@ -159,9 +162,12 @@ namespace pcl
        * \param[out] transformation_matrix the resultant transformation matrix
        */
       inline void
-      constructTransformationMatrix (const double &alpha, const double &beta,
-                                     const double &gamma, const double &tx,
-                                     const double &ty, const double &tz,
+      constructTransformationMatrix (const double &alpha,
+                                     const double &beta,
+                                     const double &gamma,
+                                     const double &tx,
+                                     const double &ty,
+                                     const double &tz,
                                      Matrix4 &transformation_matrix) const;
 
       std::vector<Scalar> weights_;

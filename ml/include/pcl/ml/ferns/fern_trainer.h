@@ -49,7 +49,10 @@ namespace pcl
 {
 
   /** \brief Trainer for a Fern. */
-  template <class FeatureType, class DataSet, class LabelType, class ExampleIndex,
+  template <class FeatureType,
+            class DataSet,
+            class LabelType,
+            class ExampleIndex,
             class NodeType>
   class PCL_EXPORTS FernTrainer
   {
@@ -148,7 +151,8 @@ namespace pcl
      * \param[out] thresholds The resulting thresholds.
      */
     static void
-    createThresholdsUniform (const size_t num_of_thresholds, std::vector<float> &values,
+    createThresholdsUniform (const size_t num_of_thresholds,
+                             std::vector<float> &values,
                              std::vector<float> &thresholds);
 
     private:

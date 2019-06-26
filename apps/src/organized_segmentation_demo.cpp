@@ -28,9 +28,9 @@ displayPlanarRegions (
     Eigen::Vector3f centroid = regions[i].getCentroid ();
     Eigen::Vector4f model = regions[i].getCoefficients ();
     pcl::PointXYZ pt1 = pcl::PointXYZ (centroid[0], centroid[1], centroid[2]);
-    pcl::PointXYZ pt2 =
-        pcl::PointXYZ (centroid[0] + (0.5f * model[0]), centroid[1] + (0.5f * model[1]),
-                       centroid[2] + (0.5f * model[2]));
+    pcl::PointXYZ pt2 = pcl::PointXYZ (centroid[0] + (0.5f * model[0]),
+                                       centroid[1] + (0.5f * model[1]),
+                                       centroid[2] + (0.5f * model[2]));
     sprintf (name, "normal_%d", unsigned(i));
     viewer->addArrow (pt2, pt1, 1.0, 0, 0, false, name);
 
@@ -70,7 +70,8 @@ displayEuclideanClusters (const pcl::PointCloud<PointT>::CloudVectorType &cluste
 }
 
 void
-displayCurvature (pcl::PointCloud<PointT> &cloud, pcl::PointCloud<pcl::Normal> &normals,
+displayCurvature (pcl::PointCloud<PointT> &cloud,
+                  pcl::PointCloud<pcl::Normal> &normals,
                   pcl::visualization::PCLVisualizer::Ptr viewer)
 {
   pcl::PointCloud<pcl::PointXYZRGBA> curvature_cloud = cloud;
@@ -91,7 +92,8 @@ displayCurvature (pcl::PointCloud<PointT> &cloud, pcl::PointCloud<pcl::Normal> &
 }
 
 void
-displayDistanceMap (pcl::PointCloud<PointT> &cloud, float *distance_map,
+displayDistanceMap (pcl::PointCloud<PointT> &cloud,
+                    float *distance_map,
                     pcl::visualization::PCLVisualizer::Ptr viewer)
 {
   pcl::PointCloud<pcl::PointXYZRGBA> distance_map_cloud = cloud;
@@ -112,7 +114,8 @@ displayDistanceMap (pcl::PointCloud<PointT> &cloud, float *distance_map,
 }
 
 void
-removePreviousDataFromScreen (size_t prev_models_size, size_t prev_clusters_size,
+removePreviousDataFromScreen (size_t prev_models_size,
+                              size_t prev_clusters_size,
                               pcl::visualization::PCLVisualizer::Ptr viewer)
 {
   char name[1024];
@@ -149,7 +152,8 @@ compareClusterToRegion (pcl::PlanarRegion<PointT> &region,
 }
 
 bool
-comparePointToRegion (PointT &pt, pcl::ModelCoefficients &model,
+comparePointToRegion (PointT &pt,
+                      pcl::ModelCoefficients &model,
                       pcl::PointCloud<PointT> &poly)
 {
   // bool dist_ok;
@@ -210,33 +214,55 @@ OrganizedSegmentationDemo::OrganizedSegmentationDemo (pcl::Grabber &grabber)
       boost::bind (&OrganizedSegmentationDemo::cloud_cb, this, _1);
   boost::signals2::connection c = grabber_.registerCallback (f);
 
-  connect (ui_->captureButton, SIGNAL (clicked ()), this,
-           SLOT (toggleCapturePressed ()));
+  connect (
+      ui_->captureButton, SIGNAL (clicked ()), this, SLOT (toggleCapturePressed ()));
 
-  connect (ui_->euclideanComparatorButton, SIGNAL (clicked ()), this,
+  connect (ui_->euclideanComparatorButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (useEuclideanComparatorPressed ()));
-  connect (ui_->planeComparatorButton, SIGNAL (clicked ()), this,
+  connect (ui_->planeComparatorButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (usePlaneComparatorPressed ()));
-  connect (ui_->rgbComparatorButton, SIGNAL (clicked ()), this,
+  connect (ui_->rgbComparatorButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (useRGBComparatorPressed ()));
-  connect (ui_->edgeAwareComparatorButton, SIGNAL (clicked ()), this,
+  connect (ui_->edgeAwareComparatorButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (useEdgeAwareComparatorPressed ()));
 
-  connect (ui_->displayCurvatureButton, SIGNAL (clicked ()), this,
+  connect (ui_->displayCurvatureButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (displayCurvaturePressed ()));
-  connect (ui_->displayDistanceMapButton, SIGNAL (clicked ()), this,
+  connect (ui_->displayDistanceMapButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (displayDistanceMapPressed ()));
-  connect (ui_->displayNormalsButton, SIGNAL (clicked ()), this,
+  connect (ui_->displayNormalsButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (displayNormalsPressed ()));
 
-  connect (ui_->disableRefinementButton, SIGNAL (clicked ()), this,
+  connect (ui_->disableRefinementButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (disableRefinementPressed ()));
-  connect (ui_->planarRefinementButton, SIGNAL (clicked ()), this,
+  connect (ui_->planarRefinementButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (usePlanarRefinementPressed ()));
 
-  connect (ui_->disableClusteringButton, SIGNAL (clicked ()), this,
+  connect (ui_->disableClusteringButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (disableClusteringPressed ()));
-  connect (ui_->euclideanClusteringButton, SIGNAL (clicked ()), this,
+  connect (ui_->euclideanClusteringButton,
+           SIGNAL (clicked ()),
+           this,
            SLOT (useEuclideanClusteringPressed ()));
 
   capture_ = false;
@@ -313,11 +339,15 @@ OrganizedSegmentationDemo::cloud_cb (const CloudConstPtr &cloud)
   mps.setInputNormals (normal_cloud);
   mps.setInputCloud (cloud);
   if (use_planar_refinement_) {
-    mps.segmentAndRefine (regions, model_coefficients, inlier_indices, labels,
-                          label_indices, boundary_indices);
+    mps.segmentAndRefine (regions,
+                          model_coefficients,
+                          inlier_indices,
+                          labels,
+                          label_indices,
+                          boundary_indices);
   } else {
     mps.segment (regions); //, model_coefficients, inlier_indices, labels,
-                           //label_indices, boundary_indices);
+                           // label_indices, boundary_indices);
   }
   double mps_end = pcl::getTime ();
   std::cout << "MPS+Refine took: " << double(mps_end - mps_start) << std::endl;
@@ -395,7 +425,9 @@ OrganizedSegmentationDemo::timeoutSlot ()
         vis_->removePointCloud ("normals");
         vis_->addPointCloudNormals<PointT, pcl::Normal> (prev_cloud_.makeShared (),
                                                          prev_normals_.makeShared (),
-                                                         10, 0.05f, "normals");
+                                                         10,
+                                                         0.05f,
+                                                         "normals");
         vis_->setPointCloudRenderingProperties (
             pcl::visualization::PCL_VISUALIZER_OPACITY, 0.5, "normals");
       } else {

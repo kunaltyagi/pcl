@@ -105,7 +105,9 @@ namespace pcl
       void
       findStrongestPeaks (
           std::vector<ISMPeak, Eigen::aligned_allocator<ISMPeak>> &out_peaks,
-          int in_class_id, double in_non_maxima_radius, double in_sigma);
+          int in_class_id,
+          double in_non_maxima_radius,
+          double in_sigma);
 
       /** \brief Returns the density at the specified point.
        * \param[in] point point of interest
@@ -252,8 +254,10 @@ namespace pcl
          * \param[in] origin initial point
          * \param[in] normal normal of the initial point
          */
-        LocationInfo (unsigned int model_num, const PointT &dir_to_center,
-                      const PointT &origin, const NormalT &normal)
+        LocationInfo (unsigned int model_num,
+                      const PointT &dir_to_center,
+                      const PointT &origin,
+                      const NormalT &normal)
             : model_num_ (model_num), dir_to_center_ (dir_to_center), point_ (origin),
               normal_ (normal){};
 
@@ -434,7 +438,8 @@ namespace pcl
        * \param[in] in_class_of_interest class which we are looking for
        */
       typename pcl::features::ISMVoteList<PointT>::Ptr
-      findObjects (ISMModelPtr model, typename pcl::PointCloud<PointT>::Ptr in_cloud,
+      findObjects (ISMModelPtr model,
+                   typename pcl::PointCloud<PointT>::Ptr in_cloud,
                    typename pcl::PointCloud<Normal>::Ptr in_normals,
                    int in_class_of_interest);
 
@@ -456,7 +461,8 @@ namespace pcl
        */
       bool
       clusterDescriptors (std::vector<pcl::Histogram<FeatureSize>> &histograms,
-                          Eigen::MatrixXi &labels, Eigen::MatrixXf &clusters_centers);
+                          Eigen::MatrixXi &labels,
+                          Eigen::MatrixXf &clusters_centers);
 
       /** \brief This method calculates the value of sigma used for calculating the
        * learned weights for every single class. \param[out] sigmas computed sigmas.
@@ -478,7 +484,8 @@ namespace pcl
       calculateWeights (
           const std::vector<LocationInfo, Eigen::aligned_allocator<LocationInfo>>
               &locations,
-          const Eigen::MatrixXi &labels, std::vector<float> &sigmas,
+          const Eigen::MatrixXi &labels,
+          std::vector<float> &sigmas,
           std::vector<std::vector<unsigned int>> &clusters,
           std::vector<std::vector<float>> &statistical_weights,
           std::vector<float> &learned_weights);
@@ -543,8 +550,11 @@ namespace pcl
        */
       double
       computeKMeansClustering (const Eigen::MatrixXf &points_to_cluster,
-                               int number_of_clusters, Eigen::MatrixXi &io_labels,
-                               TermCriteria criteria, int attempts, int flags,
+                               int number_of_clusters,
+                               Eigen::MatrixXi &io_labels,
+                               TermCriteria criteria,
+                               int attempts,
+                               int flags,
                                Eigen::MatrixXf &cluster_centers);
 
       /** \brief Generates centers for clusters as described in
@@ -555,8 +565,10 @@ namespace pcl
        * center
        */
       void
-      generateCentersPP (const Eigen::MatrixXf &data, Eigen::MatrixXf &out_centers,
-                         int number_of_clusters, int trials);
+      generateCentersPP (const Eigen::MatrixXf &data,
+                         Eigen::MatrixXf &out_centers,
+                         int number_of_clusters,
+                         int trials);
 
       /** \brief Generates random center for cluster.
        * \param[in] boxes contains min and max values for each dimension
@@ -624,5 +636,6 @@ namespace pcl
 
 POINT_CLOUD_REGISTER_POINT_STRUCT (pcl::ISMPeak,
                                    (float, x, x) (float, y, y) (float, z, z) (
-                                       float, density, ism_density) (float, class_id,
+                                       float, density, ism_density) (float,
+                                                                     class_id,
                                                                      ism_class_id))

@@ -63,7 +63,10 @@ namespace pcl
      * information in the magnitude channel
      */
     inline void
-    cannyTraceEdge (int rowOffset, int colOffset, int row, int col,
+    cannyTraceEdge (int rowOffset,
+                    int colOffset,
+                    int row,
+                    int col,
                     pcl::PointCloud<pcl::PointXYZI> &maxima);
 
     /** \brief This function discretizes the edge directions in steps of 22.5 degrees.
@@ -80,7 +83,8 @@ namespace pcl
      */
     void
     suppressNonMaxima (const pcl::PointCloud<PointXYZIEdge> &edges,
-                       pcl::PointCloud<pcl::PointXYZI> &maxima, float tLow);
+                       pcl::PointCloud<pcl::PointXYZI> &maxima,
+                       float tLow);
 
     public:
     using Ptr = boost::shared_ptr<Edge<PointInT, PointOutT>>;
@@ -228,7 +232,8 @@ namespace pcl
      * used. \param[out] output Output point cloud passed by reference.
      */
     void
-    detectEdgeLoG (const float kernel_sigma, const float kernel_size,
+    detectEdgeLoG (const float kernel_sigma,
+                   const float kernel_size,
                    pcl::PointCloud<PointOutT> &output);
 
     /** \brief Computes the image derivatives in X direction using the kernel

@@ -188,7 +188,9 @@ class ON_CLASS ON_FileStream
     true if the query was successful.  False if an error occured.
   */
   static bool
-  GetFileInformation (FILE *fp, ON__UINT64 *file_size, ON__UINT64 *file_create_time,
+  GetFileInformation (FILE *fp,
+                      ON__UINT64 *file_size,
+                      ON__UINT64 *file_create_time,
                       ON__UINT64 *file_last_modified_time);
 };
 
@@ -1338,7 +1340,8 @@ class ON_CLASS ON_BinaryArchive // use for generic serialization of binary data
       float);
   bool
   WriteDouble ( // Write a single double
-      size_t, const double *);
+      size_t,
+      const double *);
   bool
   WriteDouble ( // Write a single double
       double);
@@ -2104,8 +2107,10 @@ class ON_CLASS ON_BinaryArchive // use for generic serialization of binary data
     False if user informtion should not be written.
   */
   bool
-  BeginWrite3dmUserTable (const ON_UUID &plugin_id, bool bSavingGoo,
-                          int goo_3dm_version, int goo_opennurbs_version);
+  BeginWrite3dmUserTable (const ON_UUID &plugin_id,
+                          bool bSavingGoo,
+                          int goo_3dm_version,
+                          int goo_opennurbs_version);
 
   bool
   EndWrite3dmUserTable ();
@@ -2132,8 +2137,10 @@ class ON_CLASS ON_BinaryArchive // use for generic serialization of binary data
     saved.  False if a catastrophic IO error occured.
   */
   bool
-  Write3dmAnonymousUserTableRecord (const ON_UUID &plugin_id, int goo_3dm_version,
-                                    int goo_opennurbs_version, const ON_3dmGoo &goo);
+  Write3dmAnonymousUserTableRecord (const ON_UUID &plugin_id,
+                                    int goo_3dm_version,
+                                    int goo_opennurbs_version,
+                                    const ON_3dmGoo &goo);
 
   // OBSOLETE - use BeginWrite3dmUserTable(plugin_id, bSavingGoo, 3dm_version,
   // opennurbs_version )
@@ -2162,8 +2169,10 @@ class ON_CLASS ON_BinaryArchive // use for generic serialization of binary data
     False when there are no more user tables or an IO error occurs.
   */
   bool
-  BeginRead3dmUserTable (ON_UUID &plugin_id, bool *bLastSavedAsGoo,
-                         int *archive_3dm_version, int *archive_opennurbs_version);
+  BeginRead3dmUserTable (ON_UUID &plugin_id,
+                         bool *bLastSavedAsGoo,
+                         int *archive_3dm_version,
+                         int *archive_opennurbs_version);
 
   /*
   Description:
@@ -2174,7 +2183,8 @@ class ON_CLASS ON_BinaryArchive // use for generic serialization of binary data
     to skip over this table.
   */
   bool
-  Read3dmAnonymousUserTable (int archive_3dm_version, int archive_opennurbs_version,
+  Read3dmAnonymousUserTable (int archive_3dm_version,
+                             int archive_opennurbs_version,
                              ON_3dmGoo &goo);
 
   bool
@@ -2300,7 +2310,8 @@ class ON_CLASS ON_BinaryArchive // use for generic serialization of binary data
     False if the chunk did not exist at the current location in the file.
   */
   bool
-  BeginRead3dmChunk (unsigned int expected_tcode, int *major_version,
+  BeginRead3dmChunk (unsigned int expected_tcode,
+                     int *major_version,
                      int *minor_version);
 
   /*
@@ -2343,7 +2354,8 @@ class ON_CLASS ON_BinaryArchive // use for generic serialization of binary data
       EndWriteDictionary();
   */
   bool
-  BeginWriteDictionary (ON_UUID dictionary_id, unsigned int version,
+  BeginWriteDictionary (ON_UUID dictionary_id,
+                        unsigned int version,
                         const wchar_t *dictionary_name);
   /*
   Description:
@@ -2386,7 +2398,8 @@ class ON_CLASS ON_BinaryArchive // use for generic serialization of binary data
   EndWriteDictionaryEntry ();
 
   bool
-  BeginReadDictionary (ON_UUID *dictionary_id, unsigned int *version,
+  BeginReadDictionary (ON_UUID *dictionary_id,
+                       unsigned int *version,
                        ON_wString &dictionary_name);
   bool
   EndReadDictionary ();
@@ -2420,7 +2433,8 @@ class ON_CLASS ON_BinaryArchive // use for generic serialization of binary data
 
   bool
   PeekAt3dmBigChunkType ( // does not change file position
-      ON__UINT32 *typecode, ON__INT64 *big_value);
+      ON__UINT32 *typecode,
+      ON__INT64 *big_value);
 
   bool
   Seek3dmChunkFromStart (
@@ -2593,8 +2607,10 @@ class ON_CLASS ON_BinaryArchive // use for generic serialization of binary data
     False if the table start is not found.
   */
   bool
-  FindTableInDamagedArchive (unsigned int tcode_table, unsigned int tcode_record,
-                             ON_UUID class_uuid, int min_length_data);
+  FindTableInDamagedArchive (unsigned int tcode_table,
+                             unsigned int tcode_record,
+                             ON_UUID class_uuid,
+                             int min_length_data);
 
   /*
   Description:
@@ -2843,8 +2859,10 @@ class ON_CLASS ON_BinaryArchive // use for generic serialization of binary data
   bool
   ReadChunkValue (ON__UINT32 typecode, ON__INT64 *value64);
   bool
-  FindMisplacedTable (ON__UINT64 filelength, const ON__UINT32 table_tocde,
-                      const ON__UINT32 table_record_record, const ON_UUID class_uuid,
+  FindMisplacedTable (ON__UINT64 filelength,
+                      const ON__UINT32 table_tocde,
+                      const ON__UINT32 table_record_record,
+                      const ON_UUID class_uuid,
                       const ON__UINT64 min_length_data);
 
   bool
@@ -3108,8 +3126,11 @@ class ON_CLASS ON_Read3dmBufferArchive : public ON_BinaryArchive
     archive_3dm_version  - [in] (1,2,3,4 or 5)
     archive_opennurbs_version - [in] YYYYMMDDn
   */
-  ON_Read3dmBufferArchive (size_t sizeof_buffer, const void *buffer, bool bCopyBuffer,
-                           int archive_3dm_version, int archive_opennurbs_version);
+  ON_Read3dmBufferArchive (size_t sizeof_buffer,
+                           const void *buffer,
+                           bool bCopyBuffer,
+                           int archive_3dm_version,
+                           int archive_opennurbs_version);
 
   ~ON_Read3dmBufferArchive ();
 
@@ -3183,8 +3204,10 @@ class ON_CLASS ON_Write3dmBufferArchive : public ON_BinaryArchive
       version of opennurbs archives used by lastest version of Rhino.
     archive_opennurbs_version - [in] YYYYMMDDn
   */
-  ON_Write3dmBufferArchive (size_t initial_sizeof_buffer, size_t max_sizeof_buffer,
-                            int archive_3dm_version, int archive_opennurbs_version);
+  ON_Write3dmBufferArchive (size_t initial_sizeof_buffer,
+                            size_t max_sizeof_buffer,
+                            int archive_3dm_version,
+                            int archive_opennurbs_version);
 
   ~ON_Write3dmBufferArchive ();
 
@@ -3294,7 +3317,8 @@ Remarks:
 */
 ON_DECL
 bool
-ON_WriteOneObjectArchive (ON_BinaryArchive &archive, int version,
+ON_WriteOneObjectArchive (ON_BinaryArchive &archive,
+                          int version,
                           const ON_Object &object);
 
 #endif

@@ -57,7 +57,8 @@
 openni_wrapper::OpenNIDevice::OpenNIDevice (xn::Context &context,
                                             const xn::NodeInfo &device_node,
 #ifdef __APPLE__
-                                            const xn::NodeInfo &, const xn::NodeInfo &,
+                                            const xn::NodeInfo &,
+                                            const xn::NodeInfo &,
                                             const xn::NodeInfo &
 #else
                                             const xn::NodeInfo &image_node,
@@ -88,7 +89,8 @@ openni_wrapper::OpenNIDevice::OpenNIDevice (xn::Context &context,
   } else if (rc != XN_STATUS_OK)
     THROW_OPENNI_EXCEPTION (
         "[openni_wrapper::OpenNIDevice::OpenNIDevice] Cannot open %s! (OpenNI: %s)\n",
-        config.c_str (), xnGetStatusString (rc));
+        config.c_str (),
+        xnGetStatusString (rc));
 
   XnStatus status = context_.FindExistingNode (XN_NODE_TYPE_DEPTH, depth_generator_);
   // if (status != XN_STATUS_OK)
@@ -158,15 +160,18 @@ openni_wrapper::OpenNIDevice::OpenNIDevice (xn::Context &context,
                             xnGetStatusString (status));
 #endif // (XN_MINOR_VERSION >= 3)
   ir_generator_.RegisterToNewDataAvailable (
-      static_cast<xn::StateChangedHandler> (NewIRDataAvailable), this,
+      static_cast<xn::StateChangedHandler> (NewIRDataAvailable),
+      this,
       ir_callback_handle_);
 #endif // __APPLE__
 
   depth_generator_.RegisterToNewDataAvailable (
-      static_cast<xn::StateChangedHandler> (NewDepthDataAvailable), this,
+      static_cast<xn::StateChangedHandler> (NewDepthDataAvailable),
+      this,
       depth_callback_handle_);
   image_generator_.RegisterToNewDataAvailable (
-      static_cast<xn::StateChangedHandler> (NewImageDataAvailable), this,
+      static_cast<xn::StateChangedHandler> (NewImageDataAvailable),
+      this,
       image_callback_handle_);
 
   Init ();
@@ -179,7 +184,8 @@ openni_wrapper::OpenNIDevice::OpenNIDevice (xn::Context &context,
 openni_wrapper::OpenNIDevice::OpenNIDevice (xn::Context &context,
                                             const xn::NodeInfo &device_node,
 #ifdef __APPLE__
-                                            const xn::NodeInfo &, const xn::NodeInfo &
+                                            const xn::NodeInfo &,
+                                            const xn::NodeInfo &
 #else
                                             const xn::NodeInfo &depth_node,
                                             const xn::NodeInfo &ir_node
@@ -208,7 +214,8 @@ openni_wrapper::OpenNIDevice::OpenNIDevice (xn::Context &context,
   } else if (rc != XN_STATUS_OK)
     THROW_OPENNI_EXCEPTION (
         "[openni_wrapper::OpenNIDevice::OpenNIDevice] Cannot open %s! (OpenNI: %s)\n",
-        config.c_str (), xnGetStatusString (rc));
+        config.c_str (),
+        xnGetStatusString (rc));
 
   XnStatus status = context_.FindExistingNode (XN_NODE_TYPE_DEPTH, depth_generator_);
   // if (status != XN_STATUS_OK)
@@ -256,12 +263,14 @@ openni_wrapper::OpenNIDevice::OpenNIDevice (xn::Context &context,
                             xnGetStatusString (status));
 #endif // (XN_MINOR_VERSION >= 3)
   ir_generator_.RegisterToNewDataAvailable (
-      static_cast<xn::StateChangedHandler> (NewIRDataAvailable), this,
+      static_cast<xn::StateChangedHandler> (NewIRDataAvailable),
+      this,
       ir_callback_handle_);
 #endif // __APPLE__
 
   depth_generator_.RegisterToNewDataAvailable (
-      static_cast<xn::StateChangedHandler> (NewDepthDataAvailable), this,
+      static_cast<xn::StateChangedHandler> (NewDepthDataAvailable),
+      this,
       depth_callback_handle_);
   // set up rest
   Init ();
@@ -412,7 +421,8 @@ openni_wrapper::OpenNIDevice::InitShiftToDepthConversion ()
     shift_to_depth_table_.resize (shift_conversion_parameters_.device_max_shift_ + 1);
 
     for (pcl::uint32_t nIndex = 1;
-         nIndex < shift_conversion_parameters_.device_max_shift_; nIndex++) {
+         nIndex < shift_conversion_parameters_.device_max_shift_;
+         nIndex++) {
       pcl::int32_t nShiftValue = (pcl::int32_t)nIndex;
 
       double dFixedRefX = (double)(nShiftValue - nConstShift) /
@@ -825,7 +835,9 @@ openni_wrapper::OpenNIDevice::isDepthCropped () const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-openni_wrapper::OpenNIDevice::setDepthCropping (unsigned x, unsigned y, unsigned width,
+openni_wrapper::OpenNIDevice::setDepthCropping (unsigned x,
+                                                unsigned y,
+                                                unsigned width,
                                                 unsigned height)
 {
   if (hasDepthStream ()) {
@@ -893,9 +905,11 @@ openni_wrapper::OpenNIDevice::DepthDataThreadFunction ()
     depth_data->CopyFrom (depth_md);
     depth_lock.unlock ();
 
-    boost::shared_ptr<DepthImage> depth_image (
-        new DepthImage (depth_data, baseline_, getDepthFocalLength (), shadow_value_,
-                        no_sample_value_));
+    boost::shared_ptr<DepthImage> depth_image (new DepthImage (depth_data,
+                                                               baseline_,
+                                                               getDepthFocalLength (),
+                                                               shadow_value_,
+                                                               no_sample_value_));
 
     for (const auto &callback : depth_callback_) {
       callback.second.operator() (depth_image);
@@ -1033,12 +1047,16 @@ openni_wrapper::OpenNIDevice::getVendorID () const throw ()
   unsigned char bus;
   unsigned char address;
 
-  sscanf (device_node_info_.GetCreationInfo (), "%hx/%hx@%hhu/%hhu", &vendor_id,
-          &product_id, &bus, &address);
+  sscanf (device_node_info_.GetCreationInfo (),
+          "%hx/%hx@%hhu/%hhu",
+          &vendor_id,
+          &product_id,
+          &bus,
+          &address);
 
 #else
-  OpenNIDriver::getDeviceType (device_node_info_.GetCreationInfo (), vendor_id,
-                               product_id);
+  OpenNIDriver::getDeviceType (
+      device_node_info_.GetCreationInfo (), vendor_id, product_id);
 #endif
   return (vendor_id);
 }
@@ -1052,12 +1070,16 @@ openni_wrapper::OpenNIDevice::getProductID () const throw ()
 #ifndef _WIN32
   unsigned char bus;
   unsigned char address;
-  sscanf (device_node_info_.GetCreationInfo (), "%hx/%hx@%hhu/%hhu", &vendor_id,
-          &product_id, &bus, &address);
+  sscanf (device_node_info_.GetCreationInfo (),
+          "%hx/%hx@%hhu/%hhu",
+          &vendor_id,
+          &product_id,
+          &bus,
+          &address);
 
 #else
-  OpenNIDriver::getDeviceType (device_node_info_.GetCreationInfo (), vendor_id,
-                               product_id);
+  OpenNIDriver::getDeviceType (
+      device_node_info_.GetCreationInfo (), vendor_id, product_id);
 #endif
   return (product_id);
 }
@@ -1071,8 +1093,12 @@ openni_wrapper::OpenNIDevice::getBus () const throw ()
   unsigned short vendor_id;
   unsigned short product_id;
   unsigned char address;
-  sscanf (device_node_info_.GetCreationInfo (), "%hx/%hx@%hhu/%hhu", &vendor_id,
-          &product_id, &bus, &address);
+  sscanf (device_node_info_.GetCreationInfo (),
+          "%hx/%hx@%hhu/%hhu",
+          &vendor_id,
+          &product_id,
+          &bus,
+          &address);
 #endif
   return (bus);
 }
@@ -1086,8 +1112,12 @@ openni_wrapper::OpenNIDevice::getAddress () const throw ()
   unsigned short vendor_id;
   unsigned short product_id;
   unsigned char bus;
-  sscanf (device_node_info_.GetCreationInfo (), "%hx/%hx@%hhu/%hhu", &vendor_id,
-          &product_id, &bus, &address);
+  sscanf (device_node_info_.GetCreationInfo (),
+          "%hx/%hx@%hhu/%hhu",
+          &vendor_id,
+          &product_id,
+          &bus,
+          &address);
 #endif
   return (address);
 }
@@ -1123,7 +1153,8 @@ openni_wrapper::OpenNIDevice::findCompatibleImageMode (
     for (const auto &available_image_mode : available_image_modes_) {
       if (available_image_mode.nFPS == output_mode.nFPS &&
           isImageResizeSupported (available_image_mode.nXRes,
-                                  available_image_mode.nYRes, output_mode.nXRes,
+                                  available_image_mode.nYRes,
+                                  output_mode.nXRes,
                                   output_mode.nYRes)) {
         if (found) { // check whether the new mode is better -> smaller than the current
                      // one.
@@ -1153,7 +1184,8 @@ openni_wrapper::OpenNIDevice::findCompatibleDepthMode (
     for (const auto &available_depth_mode : available_depth_modes_) {
       if (available_depth_mode.nFPS == output_mode.nFPS &&
           isImageResizeSupported (available_depth_mode.nXRes,
-                                  available_depth_mode.nYRes, output_mode.nXRes,
+                                  available_depth_mode.nYRes,
+                                  output_mode.nXRes,
                                   output_mode.nYRes)) {
         if (found) { // check whether the new mode is better -> smaller than the current
                      // one.
@@ -1230,7 +1262,9 @@ openni_wrapper::OpenNIDevice::setImageOutputMode (const XnMapOutputMode &output_
     if (status != XN_STATUS_OK)
       THROW_OPENNI_EXCEPTION (
           "Could not set image stream output mode to %dx%d@%d. Reason: %s",
-          output_mode.nXRes, output_mode.nYRes, output_mode.nFPS,
+          output_mode.nXRes,
+          output_mode.nYRes,
+          output_mode.nFPS,
           xnGetStatusString (status));
   } else
     THROW_OPENNI_EXCEPTION ("Device does not provide an image stream");
@@ -1246,7 +1280,9 @@ openni_wrapper::OpenNIDevice::setDepthOutputMode (const XnMapOutputMode &output_
     if (status != XN_STATUS_OK)
       THROW_OPENNI_EXCEPTION (
           "Could not set depth stream output mode to %dx%d@%d. Reason: %s",
-          output_mode.nXRes, output_mode.nYRes, output_mode.nFPS,
+          output_mode.nXRes,
+          output_mode.nYRes,
+          output_mode.nFPS,
           xnGetStatusString (status));
   } else
     THROW_OPENNI_EXCEPTION ("Device does not provide a depth stream");
@@ -1292,7 +1328,9 @@ openni_wrapper::OpenNIDevice::setIROutputMode (const XnMapOutputMode &output_mod
     if (status != XN_STATUS_OK)
       THROW_OPENNI_EXCEPTION (
           "Could not set IR stream output mode to %dx%d@%d. Reason: %s",
-          output_mode.nXRes, output_mode.nYRes, output_mode.nFPS,
+          output_mode.nXRes,
+          output_mode.nYRes,
+          output_mode.nFPS,
           xnGetStatusString (status));
   }
 #ifndef __APPLE__

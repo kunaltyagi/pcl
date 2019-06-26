@@ -229,7 +229,8 @@ namespace pcl
         sorted_objects_ = &objects;
 
         // Now sort the objects according to the x-coordinates of their centroids
-        std::sort (objects.begin (), objects.end (),
+        std::sort (objects.begin (),
+                   objects.end (),
                    BoundedObject::compareCentroidsXCoordinates);
 
         // Create the root -> it recursively creates the children nodes until each leaf

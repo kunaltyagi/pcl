@@ -96,9 +96,8 @@ pcl::gpu::NormalEstimation::computeNormals (const PointCloud &cloud,
 }
 
 void
-pcl::gpu::NormalEstimation::flipNormalTowardsViewpoint (const PointCloud &cloud,
-                                                        float vp_x, float vp_y,
-                                                        float vp_z, Normals &normals)
+pcl::gpu::NormalEstimation::flipNormalTowardsViewpoint (
+    const PointCloud &cloud, float vp_x, float vp_y, float vp_z, Normals &normals)
 {
   const device::PointCloud &c = (const device::PointCloud &)cloud;
   device::Normals &n = (device::Normals &)normals;
@@ -109,8 +108,10 @@ pcl::gpu::NormalEstimation::flipNormalTowardsViewpoint (const PointCloud &cloud,
 void
 pcl::gpu::NormalEstimation::flipNormalTowardsViewpoint (const PointCloud &cloud,
                                                         const Indices &indices,
-                                                        float vp_x, float vp_y,
-                                                        float vp_z, Normals &normals)
+                                                        float vp_x,
+                                                        float vp_y,
+                                                        float vp_z,
+                                                        Normals &normals)
 {
   const device::PointCloud &c = (const device::PointCloud &)cloud;
   device::Normals &n = (device::Normals &)normals;
@@ -159,7 +160,8 @@ pcl::gpu::NormalEstimation::compute (Normals &normals)
 /// PFHEstimation
 
 void
-pcl::gpu::PFHEstimation::compute (const PointCloud &cloud, const Normals &normals,
+pcl::gpu::PFHEstimation::compute (const PointCloud &cloud,
+                                  const Normals &normals,
                                   const NeighborIndices &neighbours,
                                   DeviceArray2D<PFHSignature125> &features)
 {
@@ -198,7 +200,8 @@ pcl::gpu::PFHEstimation::compute (DeviceArray2D<PFHSignature125> &features)
 }
 
 void
-pcl::gpu::PFHRGBEstimation::compute (const PointCloud &cloud, const Normals &normals,
+pcl::gpu::PFHRGBEstimation::compute (const PointCloud &cloud,
+                                     const Normals &normals,
                                      const NeighborIndices &neighbours,
                                      DeviceArray2D<PFHRGBSignature250> &features)
 {
@@ -248,7 +251,8 @@ pcl::gpu::FPFHEstimation::FPFHEstimation ()
 pcl::gpu::FPFHEstimation::~FPFHEstimation () {}
 
 void
-pcl::gpu::FPFHEstimation::compute (const PointCloud &cloud, const Normals &normals,
+pcl::gpu::FPFHEstimation::compute (const PointCloud &cloud,
+                                   const Normals &normals,
                                    const NeighborIndices &neighbours,
                                    DeviceArray2D<FPFHSignature33> &features)
 {
@@ -298,8 +302,8 @@ pcl::gpu::FPFHEstimation::compute (DeviceArray2D<FPFHSignature33> &features)
   else
     octree_.radiusSearch (cloud_, radius_, max_results_, nn_indices_);
 
-  int total = computeUniqueIndices (surface.size (), nn_indices_,
-                                    unique_indices_storage, lookup);
+  int total = computeUniqueIndices (
+      surface.size (), nn_indices_, unique_indices_storage, lookup);
 
   DeviceArray<int> unique_indices (unique_indices_storage.ptr (), total);
   octree_.radiusSearch (surface, unique_indices, radius_, max_results_, nn_indices2_);
@@ -421,8 +425,8 @@ pcl::gpu::PrincipalCurvaturesEstimation::compute (
   DeviceArray<device::PrincipalCurvatures> &f =
       (DeviceArray<device::PrincipalCurvatures> &)features;
 
-  device::computePointPrincipalCurvatures (n, indices_, nn_indices_, f,
-                                           proj_normals_buf);
+  device::computePointPrincipalCurvatures (
+      n, indices_, nn_indices_, f, proj_normals_buf);
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -552,8 +556,8 @@ pcl::gpu::SpinImageEstimation::setSupportAngle (float support_angle_cos)
 {
   if (0.f > support_angle_cos ||
       support_angle_cos > 1.f) // may be permit negative cosine?
-    pcl::gpu::error ("Cosine of support angle should be between 0 and 1", __FILE__,
-                     __LINE__);
+    pcl::gpu::error (
+        "Cosine of support angle should be between 0 and 1", __FILE__, __LINE__);
   support_angle_cos_ = support_angle_cos;
 }
 
@@ -634,7 +638,8 @@ pcl::gpu::SpinImageEstimation::compute (DeviceArray2D<SpinImage> &features,
   if (image_width_ != 8)
     pcl::gpu::error ("Currently only image_width = 8 is supported (less is possible "
                      "right now, more - need to allocate more memory)",
-                     __FILE__, __LINE__);
+                     __FILE__,
+                     __LINE__);
 
   Static<sizeof (SpinImageEstimation::PointType) ==
          sizeof (device::PointType)>::check ();
@@ -660,8 +665,8 @@ pcl::gpu::SpinImageEstimation::compute (DeviceArray2D<SpinImage> &features,
     pcl::gpu::error ("No normals for input cloud were given!", __FILE__, __LINE__);
 
   if (use_custom_axes_cloud_ && rotation_axes_cloud_.size () != cloud_.size ())
-    pcl::gpu::error ("Rotation axis cloud have different size from input!", __FILE__,
-                     __LINE__);
+    pcl::gpu::error (
+        "Rotation axis cloud have different size from input!", __FILE__, __LINE__);
 
   ///////////////////////////////////////////////
   octree_.setCloud (surface_);
@@ -683,19 +688,51 @@ pcl::gpu::SpinImageEstimation::compute (DeviceArray2D<SpinImage> &features,
 
   if (use_custom_axis_) {
     float3 axis = make_float3 (rotation_axis_.x, rotation_axis_.y, rotation_axis_.z);
-    computeSpinImagesCustomAxes (is_radial_, is_angular_, support_angle_cos_, indices_,
-                                 c, in, s, n, nn_indices_, min_pts_neighb_,
-                                 image_width_, bin_size, axis, features);
+    computeSpinImagesCustomAxes (is_radial_,
+                                 is_angular_,
+                                 support_angle_cos_,
+                                 indices_,
+                                 c,
+                                 in,
+                                 s,
+                                 n,
+                                 nn_indices_,
+                                 min_pts_neighb_,
+                                 image_width_,
+                                 bin_size,
+                                 axis,
+                                 features);
   } else if (use_custom_axes_cloud_) {
     const device::Normals &axes = (const device::Normals &)rotation_axes_cloud_;
 
-    computeSpinImagesCustomAxesCloud (
-        is_radial_, is_angular_, support_angle_cos_, indices_, c, in, s, n, nn_indices_,
-        min_pts_neighb_, image_width_, bin_size, axes, features);
+    computeSpinImagesCustomAxesCloud (is_radial_,
+                                      is_angular_,
+                                      support_angle_cos_,
+                                      indices_,
+                                      c,
+                                      in,
+                                      s,
+                                      n,
+                                      nn_indices_,
+                                      min_pts_neighb_,
+                                      image_width_,
+                                      bin_size,
+                                      axes,
+                                      features);
   } else {
-    computeSpinImagesOrigigNormal (is_radial_, is_angular_, support_angle_cos_,
-                                   indices_, c, in, s, n, nn_indices_, min_pts_neighb_,
-                                   image_width_, bin_size, features);
+    computeSpinImagesOrigigNormal (is_radial_,
+                                   is_angular_,
+                                   support_angle_cos_,
+                                   indices_,
+                                   c,
+                                   in,
+                                   s,
+                                   n,
+                                   nn_indices_,
+                                   min_pts_neighb_,
+                                   image_width_,
+                                   bin_size,
+                                   features);
   }
 
   computeMask (nn_indices_, min_pts_neighb_, mask);

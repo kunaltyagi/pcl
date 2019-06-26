@@ -71,8 +71,12 @@ struct kiss_fft_state {
 #define CHECK_OVERFLOW_OP(a, op, b)                                                    \
   if ((SAMPPROD) (a)op (SAMPPROD) (b) > SAMP_MAX ||                                    \
       (SAMPPROD) (a)op (SAMPPROD) (b) < SAMP_MIN) {                                    \
-    fprintf (stderr, "WARNING:overflow @ " __FILE__ "(%d): (%d " #op " %d) = %ld\n",   \
-             __LINE__, (a), (b), (SAMPPROD) (a)op (SAMPPROD) (b));                     \
+    fprintf (stderr,                                                                   \
+             "WARNING:overflow @ " __FILE__ "(%d): (%d " #op " %d) = %ld\n",           \
+             __LINE__,                                                                 \
+             (a),                                                                      \
+             (b),                                                                      \
+             (SAMPPROD) (a)op (SAMPPROD) (b));                                         \
   }
 #endif
 

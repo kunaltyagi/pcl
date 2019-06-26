@@ -116,7 +116,8 @@ namespace pcl
      * \param[in] id_product The ID of the product (should be 0x1402)
      */
     void
-    setupDevice (int device_position, const int id_vendor = 0x18d1,
+    setupDevice (int device_position,
+                 const int id_vendor = 0x18d1,
                  const int id_product = 0x1402);
 
     /** \brief Send a RX data packet request

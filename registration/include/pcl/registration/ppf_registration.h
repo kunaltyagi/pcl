@@ -77,9 +77,8 @@ namespace pcl
         return h1 ^ (h2 << 1) ^ (h3 << 2) ^ (h4 << 3);
       }
     };
-    using FeatureHashMapType =
-        std::unordered_multimap<HashKeyStruct, std::pair<size_t, size_t>,
-                                HashKeyStruct>;
+    using FeatureHashMapType = std::
+        unordered_multimap<HashKeyStruct, std::pair<size_t, size_t>, HashKeyStruct>;
     using FeatureHashMapTypePtr = boost::shared_ptr<FeatureHashMapType>;
     using Ptr = boost::shared_ptr<PPFHashMapSearch>;
 
@@ -114,7 +113,10 @@ namespace pcl
      * bin corresponding to the query feature
      */
     void
-    nearestNeighborSearch (float &f1, float &f2, float &f3, float &f4,
+    nearestNeighborSearch (float &f1,
+                           float &f2,
+                           float &f3,
+                           float &f4,
                            std::vector<std::pair<size_t, size_t>> &indices);
 
     /** \brief Convenience method for returning a copy of the class instance as a

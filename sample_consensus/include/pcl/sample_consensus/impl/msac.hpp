@@ -123,7 +123,9 @@ pcl::MEstimatorSampleConsensus<PointT>::computeModel (int debug_verbosity_level)
     if (debug_verbosity_level > 1)
       PCL_DEBUG ("[pcl::MEstimatorSampleConsensus::computeModel] Trial %d out of %d. "
                  "Best penalty is %f.\n",
-                 iterations_, static_cast<int> (ceil (k)), d_best_penalty);
+                 iterations_,
+                 static_cast<int> (ceil (k)),
+                 d_best_penalty);
     if (iterations_ > max_iterations_) {
       if (debug_verbosity_level > 0)
         PCL_DEBUG ("[pcl::MEstimatorSampleConsensus::computeModel] MSAC reached the "
@@ -147,7 +149,8 @@ pcl::MEstimatorSampleConsensus<PointT>::computeModel (int debug_verbosity_level)
   if (distances.size () != indices.size ()) {
     PCL_ERROR ("[pcl::MEstimatorSampleConsensus::computeModel] Estimated distances "
                "(%lu) differs than the normal of indices (%lu).\n",
-               distances.size (), indices.size ());
+               distances.size (),
+               indices.size ());
     return (false);
   }
 
@@ -164,7 +167,8 @@ pcl::MEstimatorSampleConsensus<PointT>::computeModel (int debug_verbosity_level)
   if (debug_verbosity_level > 0)
     PCL_DEBUG (
         "[pcl::MEstimatorSampleConsensus::computeModel] Model: %lu size, %d inliers.\n",
-        model_.size (), n_inliers_count);
+        model_.size (),
+        n_inliers_count);
 
   return (true);
 }

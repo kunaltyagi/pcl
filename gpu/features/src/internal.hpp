@@ -101,69 +101,94 @@ namespace pcl
 
     // normals estimation
     void
-    computeNormals (const PointCloud &cloud, const NeighborIndices &nn_indices,
+    computeNormals (const PointCloud &cloud,
+                    const NeighborIndices &nn_indices,
                     Normals &normals);
     void
-    flipNormalTowardsViewpoint (const PointCloud &cloud, const float3 &vp,
+    flipNormalTowardsViewpoint (const PointCloud &cloud,
+                                const float3 &vp,
                                 Normals &normals);
     void
-    flipNormalTowardsViewpoint (const PointCloud &cloud, const Indices &indices,
-                                const float3 &vp, Normals &normals);
+    flipNormalTowardsViewpoint (const PointCloud &cloud,
+                                const Indices &indices,
+                                const float3 &vp,
+                                Normals &normals);
 
     // pfh estimation
     void
-    repackToAosForPfh (const PointCloud &cloud, const Normals &normals,
+    repackToAosForPfh (const PointCloud &cloud,
+                       const Normals &normals,
                        const NeighborIndices &neighbours,
-                       DeviceArray2D<float> &data_rpk, int &max_elems_rpk);
+                       DeviceArray2D<float> &data_rpk,
+                       int &max_elems_rpk);
     void
-    computePfh125 (const DeviceArray2D<float> &data_rpk, int max_elems_rpk,
+    computePfh125 (const DeviceArray2D<float> &data_rpk,
+                   int max_elems_rpk,
                    const NeighborIndices &neighbours,
                    DeviceArray2D<PFHSignature125> &features);
 
     void
-    repackToAosForPfhRgb (const PointCloud &cloud, const Normals &normals,
+    repackToAosForPfhRgb (const PointCloud &cloud,
+                          const Normals &normals,
                           const NeighborIndices &neighbours,
-                          DeviceArray2D<float> &data_rpk, int &max_elems_rpk);
+                          DeviceArray2D<float> &data_rpk,
+                          int &max_elems_rpk);
     void
-    computePfhRgb250 (const DeviceArray2D<float> &data_rpk, int max_elems_rpk,
+    computePfhRgb250 (const DeviceArray2D<float> &data_rpk,
+                      int max_elems_rpk,
                       const NeighborIndices &neighbours,
                       DeviceArray2D<PFHRGBSignature250> &features);
 
     // fpfh estimation
     void
-    computeSPFH (const PointCloud &surface, const Normals &normals,
-                 const Indices &indices, const NeighborIndices &neighbours,
+    computeSPFH (const PointCloud &surface,
+                 const Normals &normals,
+                 const Indices &indices,
+                 const NeighborIndices &neighbours,
                  DeviceArray2D<FPFHSignature33> &spfh33);
     void
-    computeFPFH (const PointCloud &cloud, const NeighborIndices &neighbours,
+    computeFPFH (const PointCloud &cloud,
+                 const NeighborIndices &neighbours,
                  const DeviceArray2D<FPFHSignature33> &spfh,
                  DeviceArray2D<FPFHSignature33> &features);
 
     void
-    computeFPFH (const PointCloud &cloud, const Indices &indices,
-                 const PointCloud &surface, const NeighborIndices &neighbours,
-                 DeviceArray<int> &lookup, const DeviceArray2D<FPFHSignature33> &spfh,
+    computeFPFH (const PointCloud &cloud,
+                 const Indices &indices,
+                 const PointCloud &surface,
+                 const NeighborIndices &neighbours,
+                 DeviceArray<int> &lookup,
+                 const DeviceArray2D<FPFHSignature33> &spfh,
                  DeviceArray2D<FPFHSignature33> &features);
 
     int
-    computeUniqueIndices (size_t surface_size, const NeighborIndices &neighbours,
-                          DeviceArray<int> &unique_indices, DeviceArray<int> &lookup);
+    computeUniqueIndices (size_t surface_size,
+                          const NeighborIndices &neighbours,
+                          DeviceArray<int> &unique_indices,
+                          DeviceArray<int> &lookup);
 
     // ppf estimation
     void
-    computePPF (const PointCloud &input, const Normals &normals, const Indices &indices,
+    computePPF (const PointCloud &input,
+                const Normals &normals,
+                const Indices &indices,
                 DeviceArray<PPFSignature> &output);
     void
-    computePPFRGB (const PointXYZRGBCloud &input, const Normals &normals,
-                   const Indices &indices, DeviceArray<PPFRGBSignature> &output);
+    computePPFRGB (const PointXYZRGBCloud &input,
+                   const Normals &normals,
+                   const Indices &indices,
+                   DeviceArray<PPFRGBSignature> &output);
     void
-    computePPFRGBRegion (const PointXYZRGBCloud &cloud, const Normals &normals,
-                         const Indices &indices, const NeighborIndices &nn_indices,
+    computePPFRGBRegion (const PointXYZRGBCloud &cloud,
+                         const Normals &normals,
+                         const Indices &indices,
+                         const NeighborIndices &nn_indices,
                          DeviceArray<PPFRGBSignature> &output);
 
     // PrincipalCurvatures estimation
     void
-    computePointPrincipalCurvatures (const Normals &normals, const Indices &indices,
+    computePointPrincipalCurvatures (const Normals &normals,
+                                     const Indices &indices,
                                      const NeighborIndices &neighbours,
                                      DeviceArray<PrincipalCurvatures> &output,
                                      DeviceArray2D<float> &proj_normals_buf);
@@ -174,7 +199,8 @@ namespace pcl
     compute3DCentroid (const DeviceArray<PointT> &cloud, float3 &centroid);
     template <typename PointT>
     void
-    compute3DCentroid (const DeviceArray<PointT> &cloud, const Indices &indices,
+    compute3DCentroid (const DeviceArray<PointT> &cloud,
+                       const Indices &indices,
                        float3 &centroid);
 
     template <typename PointT>
@@ -182,7 +208,8 @@ namespace pcl
     getMaxDistance (const DeviceArray<PointT> &cloud, const float3 &pivot);
     template <typename PointT>
     float3
-    getMaxDistance (const DeviceArray<PointT> &cloud, const Indices &indices,
+    getMaxDistance (const DeviceArray<PointT> &cloud,
+                    const Indices &indices,
                     const float3 &pivot);
 
     struct VFHEstimationImpl {
@@ -204,34 +231,55 @@ namespace pcl
 
     // spinimages estimation
     void
-    computeSpinImagesOrigigNormal (bool radial, bool angular, float support_angle_cos,
+    computeSpinImagesOrigigNormal (bool radial,
+                                   bool angular,
+                                   float support_angle_cos,
                                    const Indices &indices,
                                    const PointCloud &input_cloud,
                                    const Normals &input_normals,
-                                   const PointCloud &surface, const Normals &normals,
-                                   const NeighborIndices &neighbours, int min_neighb,
-                                   int image_width, float bin_size,
+                                   const PointCloud &surface,
+                                   const Normals &normals,
+                                   const NeighborIndices &neighbours,
+                                   int min_neighb,
+                                   int image_width,
+                                   float bin_size,
                                    PtrStep<float> output);
 
     void
-    computeSpinImagesCustomAxes (bool radial, bool angular, float support_angle_cos,
-                                 const Indices &indices, const PointCloud &input_cloud,
+    computeSpinImagesCustomAxes (bool radial,
+                                 bool angular,
+                                 float support_angle_cos,
+                                 const Indices &indices,
+                                 const PointCloud &input_cloud,
                                  const Normals &input_normals,
-                                 const PointCloud &surface, const Normals &normals,
-                                 const NeighborIndices &neighbours, int min_neighb,
-                                 int image_width, float bin_size,
-                                 const float3 &rotation_axis, PtrStep<float> output);
+                                 const PointCloud &surface,
+                                 const Normals &normals,
+                                 const NeighborIndices &neighbours,
+                                 int min_neighb,
+                                 int image_width,
+                                 float bin_size,
+                                 const float3 &rotation_axis,
+                                 PtrStep<float> output);
 
     void
-    computeSpinImagesCustomAxesCloud (
-        bool radial, bool angular, float support_angle_cos, const Indices &indices,
-        const PointCloud &input_cloud, const Normals &input_normals,
-        const PointCloud &surface, const Normals &normals,
-        const NeighborIndices &neighbours, int min_neighb, int image_width,
-        float bin_size, const Normals &rotation_axes_cloud, PtrStep<float> output);
+    computeSpinImagesCustomAxesCloud (bool radial,
+                                      bool angular,
+                                      float support_angle_cos,
+                                      const Indices &indices,
+                                      const PointCloud &input_cloud,
+                                      const Normals &input_normals,
+                                      const PointCloud &surface,
+                                      const Normals &normals,
+                                      const NeighborIndices &neighbours,
+                                      int min_neighb,
+                                      int image_width,
+                                      float bin_size,
+                                      const Normals &rotation_axes_cloud,
+                                      PtrStep<float> output);
 
     void
-    computeMask (const NeighborIndices &neighbours, int min_neighb,
+    computeMask (const NeighborIndices &neighbours,
+                 int min_neighb,
                  DeviceArray<unsigned char> &mask);
   } // namespace device
 } // namespace pcl

@@ -109,8 +109,8 @@ pcl::DigitalElevationMapBuilder::compute (pcl::PointCloud<PointDEM> &out_cloud)
   const float kIntensityMax = 255.0f;
   const size_t kIntensityBins = 256;
   // Histogram for initializing other intensity histograms.
-  FeatureHistogram intensity_histogram_example (kIntensityBins, kIntensityMin,
-                                                kIntensityMax);
+  FeatureHistogram intensity_histogram_example (
+      kIntensityBins, kIntensityMin, kIntensityMax);
 
   std::vector<FeatureHistogram> height_histograms (kNumberOfHistograms,
                                                    height_histogram_example);

@@ -87,12 +87,12 @@ class SacTest : public ::testing::Test
 {
 };
 
-using sacTypes =
-    ::testing::Types<RandomSampleConsensus<PointXYZ>, LeastMedianSquares<PointXYZ>,
-                     MEstimatorSampleConsensus<PointXYZ>,
-                     RandomizedRandomSampleConsensus<PointXYZ>,
-                     RandomizedMEstimatorSampleConsensus<PointXYZ>,
-                     MaximumLikelihoodSampleConsensus<PointXYZ>>;
+using sacTypes = ::testing::Types<RandomSampleConsensus<PointXYZ>,
+                                  LeastMedianSquares<PointXYZ>,
+                                  MEstimatorSampleConsensus<PointXYZ>,
+                                  RandomizedRandomSampleConsensus<PointXYZ>,
+                                  RandomizedMEstimatorSampleConsensus<PointXYZ>,
+                                  MaximumLikelihoodSampleConsensus<PointXYZ>>;
 TYPED_TEST_CASE (SacTest, sacTypes);
 
 TYPED_TEST (SacTest, InfiniteLoop)

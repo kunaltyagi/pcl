@@ -120,7 +120,8 @@ namespace pcl
       boost::signals2::connection
       registerKeyboardCallback (
           void (T::*callback) (const pcl::visualization::KeyboardEvent &, void *),
-          T &instance, void *cookie = nullptr)
+          T &instance,
+          void *cookie = nullptr)
       {
         return registerKeyboardCallback (
             [=, &instance](const pcl::visualization::KeyboardEvent &e) {
@@ -158,7 +159,8 @@ namespace pcl
       boost::signals2::connection
       registerMouseCallback (
           void (T::*callback) (const pcl::visualization::MouseEvent &, void *),
-          T &instance, void *cookie = nullptr)
+          T &instance,
+          void *cookie = nullptr)
       {
         return registerMouseCallback (
             [=, &instance](const pcl::visualization::MouseEvent &e) {
@@ -204,7 +206,9 @@ namespace pcl
       static void
       MouseCallback (vtkObject *, unsigned long eid, void *clientdata, void *calldata);
       static void
-      KeyboardCallback (vtkObject *, unsigned long eid, void *clientdata,
+      KeyboardCallback (vtkObject *,
+                        unsigned long eid,
+                        void *clientdata,
                         void *calldata);
 
       protected: // types

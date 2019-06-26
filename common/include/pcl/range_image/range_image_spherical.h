@@ -58,9 +58,7 @@ namespace pcl
     // =====CONSTRUCTOR & DESTRUCTOR=====
     /** Constructor */
     PCL_EXPORTS
-    RangeImageSpherical ()
-    {
-    }
+    RangeImageSpherical () {}
     /** Destructor */
     PCL_EXPORTS virtual ~RangeImageSpherical () {}
 
@@ -94,7 +92,9 @@ namespace pcl
      * in the original)
      */
     virtual inline void
-    calculate3DPoint (float image_x, float image_y, float range,
+    calculate3DPoint (float image_x,
+                      float image_y,
+                      float range,
                       Eigen::Vector3f &point) const;
 
     /** \brief Calculate the image point and range from the given 3D point
@@ -106,17 +106,23 @@ namespace pcl
      * in the original)
      */
     virtual inline void
-    getImagePoint (const Eigen::Vector3f &point, float &image_x, float &image_y,
+    getImagePoint (const Eigen::Vector3f &point,
+                   float &image_x,
+                   float &image_y,
                    float &range) const;
 
     /** Get the angles corresponding to the given image point */
     inline void
-    getAnglesFromImagePoint (float image_x, float image_y, float &angle_x,
+    getAnglesFromImagePoint (float image_x,
+                             float image_y,
+                             float &angle_x,
                              float &angle_y) const;
 
     /** Get the image point corresponding to the given ranges */
     inline void
-    getImagePointFromAngles (float angle_x, float angle_y, float &image_x,
+    getImagePointFromAngles (float angle_x,
+                             float angle_y,
+                             float &image_x,
                              float &image_y) const;
   };
 } // namespace pcl

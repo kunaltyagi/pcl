@@ -57,7 +57,8 @@ PickSeeds (ON_RTreePartitionVars *a_parVars);
 static void
 InitParVars (ON_RTreePartitionVars *a_parVars, int a_maxRects, int a_minFill);
 static void
-GetBranches (ON_RTreeNode *a_node, ON_RTreeBranch *a_branch,
+GetBranches (ON_RTreeNode *a_node,
+             ON_RTreeBranch *a_branch,
              ON_RTreePartitionVars *a_parVars);
 static int
 PickBranch (ON_RTreeBBox *a_rect, ON_RTreeNode *a_node);
@@ -79,25 +80,32 @@ DistanceToCapsuleAxisHelper (const struct ON_RTreeCapsule *a_capsule,
 static void
 ClassifyHelper (int a_index, int a_group, struct ON_RTreePartitionVars *a_parVars);
 static bool
-SearchHelper (const ON_RTreeNode *a_node, ON_RTreeBBox *a_rect,
+SearchHelper (const ON_RTreeNode *a_node,
+              ON_RTreeBBox *a_rect,
               ON_RTreeSearchResultCallback &a_result);
 static bool
-SearchHelper (const ON_RTreeNode *a_node, const ON_RTreeBBox *a_rect,
+SearchHelper (const ON_RTreeNode *a_node,
+              const ON_RTreeBBox *a_rect,
               ON_RTreeSearchResult &a_result);
 static bool
-SearchHelper (const ON_RTreeNode *a_node, const ON_RTreeBBox *a_rect,
+SearchHelper (const ON_RTreeNode *a_node,
+              const ON_RTreeBBox *a_rect,
               ON_SimpleArray<ON_RTreeLeaf> &a_result);
 static bool
-SearchHelper (const ON_RTreeNode *a_node, const ON_RTreeBBox *a_rect,
+SearchHelper (const ON_RTreeNode *a_node,
+              const ON_RTreeBBox *a_rect,
               ON_SimpleArray<int> &a_result);
 static bool
-SearchHelper (const ON_RTreeNode *a_node, const ON_RTreeBBox *a_rect,
+SearchHelper (const ON_RTreeNode *a_node,
+              const ON_RTreeBBox *a_rect,
               ON_SimpleArray<void *> &a_result);
 static bool
-SearchHelper (const ON_RTreeNode *a_node, struct ON_RTreeSphere *a_sphere,
+SearchHelper (const ON_RTreeNode *a_node,
+              struct ON_RTreeSphere *a_sphere,
               ON_RTreeSearchResultCallback &a_result);
 static bool
-SearchHelper (const ON_RTreeNode *a_node, struct ON_RTreeCapsule *a_capsule,
+SearchHelper (const ON_RTreeNode *a_node,
+              struct ON_RTreeCapsule *a_capsule,
               ON_RTreeSearchResultCallback &a_result);
 
 ////////////////////////////////////////////////////////////////
@@ -760,7 +768,8 @@ ON_RTree::Insert2d (const double a_min[2], const double a_max[2], int a_element_
 
 bool
 ON_RTree::Insert (const double a_min[ON_RTree_NODE_DIM],
-                  const double a_max[ON_RTree_NODE_DIM], int a_element_id)
+                  const double a_max[ON_RTree_NODE_DIM],
+                  int a_element_id)
 {
   bool rc;
   ON_RTreeBBox rect;
@@ -792,7 +801,8 @@ ON_RTree::Insert2d (const double a_min[2], const double a_max[2], void *a_elemen
 
 bool
 ON_RTree::Insert (const double a_min[ON_RTree_NODE_DIM],
-                  const double a_max[ON_RTree_NODE_DIM], void *a_element_id)
+                  const double a_max[ON_RTree_NODE_DIM],
+                  void *a_element_id)
 {
   bool rc;
   ON_RTreeBBox rect;
@@ -836,7 +846,8 @@ ON_RTree::Remove2d (const double a_min[2], const double a_max[2], int a_dataId)
 
 bool
 ON_RTree::Remove (const double a_min[ON_RTree_NODE_DIM],
-                  const double a_max[ON_RTree_NODE_DIM], int a_dataId)
+                  const double a_max[ON_RTree_NODE_DIM],
+                  int a_dataId)
 {
   bool rc = false;
   if (0 != m_root) {
@@ -865,7 +876,8 @@ ON_RTree::Remove2d (const double a_min[2], const double a_max[2], void *a_dataId
 
 bool
 ON_RTree::Remove (const double a_min[ON_RTree_NODE_DIM],
-                  const double a_max[ON_RTree_NODE_DIM], void *a_dataId)
+                  const double a_max[ON_RTree_NODE_DIM],
+                  void *a_dataId)
 {
   bool rc = false;
   if (0 != m_root) {
@@ -896,7 +908,8 @@ ON_RTree::Remove (const double a_min[ON_RTree_NODE_DIM],
 }
 
 bool
-ON_RTree::Search2d (const double a_min[2], const double a_max[2],
+ON_RTree::Search2d (const double a_min[2],
+                    const double a_max[2],
                     bool ON_MSC_CDECL a_resultCallback (void *a_context,
                                                         ON__INT_PTR a_data),
                     void *a_context) const
@@ -981,7 +994,8 @@ ON_RTree::Search (struct ON_RTreeCapsule *a_capsule,
 }
 
 bool
-ON_RTree::Search2d (const double a_min[2], const double a_max[2],
+ON_RTree::Search2d (const double a_min[2],
+                    const double a_max[2],
                     ON_SimpleArray<ON_RTreeLeaf> &a_result) const
 {
   if (0 == m_root)
@@ -1012,7 +1026,8 @@ ON_RTree::Search (const double a_min[ON_RTree_NODE_DIM],
 }
 
 bool
-ON_RTree::Search2d (const double a_min[2], const double a_max[2],
+ON_RTree::Search2d (const double a_min[2],
+                    const double a_max[2],
                     ON_SimpleArray<void *> &a_result) const
 {
   if (0 == m_root)
@@ -1043,7 +1058,8 @@ ON_RTree::Search (const double a_min[ON_RTree_NODE_DIM],
 }
 
 bool
-ON_RTree::Search2d (const double a_min[2], const double a_max[2],
+ON_RTree::Search2d (const double a_min[2],
+                    const double a_max[2],
                     ON_SimpleArray<int> &a_result) const
 {
   if (0 == m_root)
@@ -1074,7 +1090,8 @@ ON_RTree::Search (const double a_min[ON_RTree_NODE_DIM],
 }
 
 bool
-ON_RTree::Search2d (const double a_min[2], const double a_max[2],
+ON_RTree::Search2d (const double a_min[2],
+                    const double a_max[2],
                     ON_RTreeSearchResult &a_result) const
 {
   if (0 == m_root)
@@ -1110,7 +1127,8 @@ struct ON_RTreePairSearchResult {
 };
 
 static bool
-PairSearchOverlapHelper (const ON_RTreeBBox *a_rectA, const ON_RTreeBBox *a_rectB,
+PairSearchOverlapHelper (const ON_RTreeBBox *a_rectA,
+                         const ON_RTreeBBox *a_rectB,
                          double tolerance)
 {
   double dx, dy, dz, d;
@@ -1155,7 +1173,8 @@ PairSearchOverlapHelper (const ON_RTreeBBox *a_rectA, const ON_RTreeBBox *a_rect
 }
 
 static void
-PairSearchHelper (const ON_RTreeBranch *a_branchA, const ON_RTreeNode *a_nodeB,
+PairSearchHelper (const ON_RTreeBranch *a_branchA,
+                  const ON_RTreeNode *a_nodeB,
                   ON_RTreePairSearchResult *a_result)
 {
   // DO NOT ADD ANYTHING TO THIS FUNCTION
@@ -1164,8 +1183,8 @@ PairSearchHelper (const ON_RTreeBranch *a_branchA, const ON_RTreeNode *a_nodeB,
   branchB = a_nodeB->m_branch;
   branchBmax = branchB + a_nodeB->m_count;
   while (branchB < branchBmax) {
-    if (PairSearchOverlapHelper (&a_branchA->m_rect, &branchB->m_rect,
-                                 a_result->m_tolerance)) {
+    if (PairSearchOverlapHelper (
+            &a_branchA->m_rect, &branchB->m_rect, a_result->m_tolerance)) {
       if (a_nodeB->m_level > 0) {
         PairSearchHelper (a_branchA, branchB->m_child, a_result);
       } else {
@@ -1179,7 +1198,8 @@ PairSearchHelper (const ON_RTreeBranch *a_branchA, const ON_RTreeNode *a_nodeB,
 }
 
 static void
-PairSearchHelper (const ON_RTreeNode *a_nodeA, const ON_RTreeBranch *a_branchB,
+PairSearchHelper (const ON_RTreeNode *a_nodeA,
+                  const ON_RTreeBranch *a_branchB,
                   ON_RTreePairSearchResult *a_result)
 {
   // DO NOT ADD ANYTHING TO THIS FUNCTION
@@ -1188,8 +1208,8 @@ PairSearchHelper (const ON_RTreeNode *a_nodeA, const ON_RTreeBranch *a_branchB,
   branchA = a_nodeA->m_branch;
   branchAmax = branchA + a_nodeA->m_count;
   while (branchA < branchAmax) {
-    if (PairSearchOverlapHelper (&branchA->m_rect, &a_branchB->m_rect,
-                                 a_result->m_tolerance)) {
+    if (PairSearchOverlapHelper (
+            &branchA->m_rect, &a_branchB->m_rect, a_result->m_tolerance)) {
       if (a_nodeA->m_level > 0) {
         PairSearchHelper (branchA->m_child, a_branchB, a_result);
       } else {
@@ -1203,7 +1223,8 @@ PairSearchHelper (const ON_RTreeNode *a_nodeA, const ON_RTreeBranch *a_branchB,
 }
 
 static void
-PairSearchHelper (const ON_RTreeNode *a_nodeA, const ON_RTreeNode *a_nodeB,
+PairSearchHelper (const ON_RTreeNode *a_nodeA,
+                  const ON_RTreeNode *a_nodeB,
                   ON_RTreePairSearchResult *a_result)
 {
   // DO NOT ADD ANYTHING TO THIS FUNCTION
@@ -1214,8 +1235,8 @@ PairSearchHelper (const ON_RTreeNode *a_nodeA, const ON_RTreeNode *a_nodeB,
   branchBmax = a_nodeB->m_branch + a_nodeB->m_count;
   while (branchA < branchAmax) {
     for (branchB = a_nodeB->m_branch; branchB < branchBmax; branchB++) {
-      if (PairSearchOverlapHelper (&branchA->m_rect, &branchB->m_rect,
-                                   a_result->m_tolerance)) {
+      if (PairSearchOverlapHelper (
+              &branchA->m_rect, &branchB->m_rect, a_result->m_tolerance)) {
         if (a_nodeA->m_level > 0) {
           if (a_nodeB->m_level > 0)
             PairSearchHelper (branchA->m_child, branchB->m_child, a_result);
@@ -1235,7 +1256,9 @@ PairSearchHelper (const ON_RTreeNode *a_nodeA, const ON_RTreeNode *a_nodeB,
 }
 
 bool
-ON_RTree::Search (const ON_RTree &a_rtreeA, const ON_RTree &a_rtreeB, double tolerance,
+ON_RTree::Search (const ON_RTree &a_rtreeA,
+                  const ON_RTree &a_rtreeB,
+                  double tolerance,
                   ON_SimpleArray<ON_2dex> &a_result)
 {
   if (0 == a_rtreeA.m_root)
@@ -1266,7 +1289,8 @@ struct ON_RTreePairSearchCallbackResultBool {
 };
 
 static void
-PairSearchHelper (const ON_RTreeBranch *a_branchA, const ON_RTreeNode *a_nodeB,
+PairSearchHelper (const ON_RTreeBranch *a_branchA,
+                  const ON_RTreeNode *a_nodeB,
                   ON_RTreePairSearchCallbackResult *a_result)
 {
   // DO NOT ADD ANYTHING TO THIS FUNCTION
@@ -1275,13 +1299,13 @@ PairSearchHelper (const ON_RTreeBranch *a_branchA, const ON_RTreeNode *a_nodeB,
   branchB = a_nodeB->m_branch;
   branchBmax = branchB + a_nodeB->m_count;
   while (branchB < branchBmax) {
-    if (PairSearchOverlapHelper (&a_branchA->m_rect, &branchB->m_rect,
-                                 a_result->m_tolerance)) {
+    if (PairSearchOverlapHelper (
+            &a_branchA->m_rect, &branchB->m_rect, a_result->m_tolerance)) {
       if (a_nodeB->m_level > 0) {
         PairSearchHelper (a_branchA, branchB->m_child, a_result);
       } else {
-        a_result->m_resultCallback (a_result->m_context, a_branchA->m_id,
-                                    branchB->m_id);
+        a_result->m_resultCallback (
+            a_result->m_context, a_branchA->m_id, branchB->m_id);
       }
     }
     branchB++;
@@ -1289,7 +1313,8 @@ PairSearchHelper (const ON_RTreeBranch *a_branchA, const ON_RTreeNode *a_nodeB,
 }
 
 static bool
-PairSearchHelperBool (const ON_RTreeBranch *a_branchA, const ON_RTreeNode *a_nodeB,
+PairSearchHelperBool (const ON_RTreeBranch *a_branchA,
+                      const ON_RTreeNode *a_nodeB,
                       ON_RTreePairSearchCallbackResultBool *a_result)
 {
   // DO NOT ADD ANYTHING TO THIS FUNCTION
@@ -1298,14 +1323,14 @@ PairSearchHelperBool (const ON_RTreeBranch *a_branchA, const ON_RTreeNode *a_nod
   branchB = a_nodeB->m_branch;
   branchBmax = branchB + a_nodeB->m_count;
   while (branchB < branchBmax) {
-    if (PairSearchOverlapHelper (&a_branchA->m_rect, &branchB->m_rect,
-                                 a_result->m_tolerance)) {
+    if (PairSearchOverlapHelper (
+            &a_branchA->m_rect, &branchB->m_rect, a_result->m_tolerance)) {
       if (a_nodeB->m_level > 0) {
         if (!PairSearchHelperBool (a_branchA, branchB->m_child, a_result))
           return false;
       } else {
-        if (!a_result->m_resultCallbackBool (a_result->m_context, a_branchA->m_id,
-                                             branchB->m_id))
+        if (!a_result->m_resultCallbackBool (
+                a_result->m_context, a_branchA->m_id, branchB->m_id))
           return false;
       }
     }
@@ -1315,7 +1340,8 @@ PairSearchHelperBool (const ON_RTreeBranch *a_branchA, const ON_RTreeNode *a_nod
 }
 
 static void
-PairSearchHelper (const ON_RTreeNode *a_nodeA, const ON_RTreeBranch *a_branchB,
+PairSearchHelper (const ON_RTreeNode *a_nodeA,
+                  const ON_RTreeBranch *a_branchB,
                   ON_RTreePairSearchCallbackResult *a_result)
 {
   // DO NOT ADD ANYTHING TO THIS FUNCTION
@@ -1324,13 +1350,13 @@ PairSearchHelper (const ON_RTreeNode *a_nodeA, const ON_RTreeBranch *a_branchB,
   branchA = a_nodeA->m_branch;
   branchAmax = branchA + a_nodeA->m_count;
   while (branchA < branchAmax) {
-    if (PairSearchOverlapHelper (&branchA->m_rect, &a_branchB->m_rect,
-                                 a_result->m_tolerance)) {
+    if (PairSearchOverlapHelper (
+            &branchA->m_rect, &a_branchB->m_rect, a_result->m_tolerance)) {
       if (a_nodeA->m_level > 0) {
         PairSearchHelper (branchA->m_child, a_branchB, a_result);
       } else {
-        a_result->m_resultCallback (a_result->m_context, branchA->m_id,
-                                    a_branchB->m_id);
+        a_result->m_resultCallback (
+            a_result->m_context, branchA->m_id, a_branchB->m_id);
       }
     }
     branchA++;
@@ -1338,7 +1364,8 @@ PairSearchHelper (const ON_RTreeNode *a_nodeA, const ON_RTreeBranch *a_branchB,
 }
 
 static bool
-PairSearchHelperBool (const ON_RTreeNode *a_nodeA, const ON_RTreeBranch *a_branchB,
+PairSearchHelperBool (const ON_RTreeNode *a_nodeA,
+                      const ON_RTreeBranch *a_branchB,
                       ON_RTreePairSearchCallbackResultBool *a_result)
 {
   // DO NOT ADD ANYTHING TO THIS FUNCTION
@@ -1347,14 +1374,14 @@ PairSearchHelperBool (const ON_RTreeNode *a_nodeA, const ON_RTreeBranch *a_branc
   branchA = a_nodeA->m_branch;
   branchAmax = branchA + a_nodeA->m_count;
   while (branchA < branchAmax) {
-    if (PairSearchOverlapHelper (&branchA->m_rect, &a_branchB->m_rect,
-                                 a_result->m_tolerance)) {
+    if (PairSearchOverlapHelper (
+            &branchA->m_rect, &a_branchB->m_rect, a_result->m_tolerance)) {
       if (a_nodeA->m_level > 0) {
         if (!PairSearchHelperBool (branchA->m_child, a_branchB, a_result))
           return false;
       } else {
-        if (!a_result->m_resultCallbackBool (a_result->m_context, branchA->m_id,
-                                             a_branchB->m_id))
+        if (!a_result->m_resultCallbackBool (
+                a_result->m_context, branchA->m_id, a_branchB->m_id))
           return false;
       }
     }
@@ -1364,7 +1391,8 @@ PairSearchHelperBool (const ON_RTreeNode *a_nodeA, const ON_RTreeBranch *a_branc
 }
 
 static void
-PairSearchHelper (const ON_RTreeNode *a_nodeA, const ON_RTreeNode *a_nodeB,
+PairSearchHelper (const ON_RTreeNode *a_nodeA,
+                  const ON_RTreeNode *a_nodeB,
                   ON_RTreePairSearchCallbackResult *a_result)
 {
   // DO NOT ADD ANYTHING TO THIS FUNCTION
@@ -1375,8 +1403,8 @@ PairSearchHelper (const ON_RTreeNode *a_nodeA, const ON_RTreeNode *a_nodeB,
   branchBmax = a_nodeB->m_branch + a_nodeB->m_count;
   while (branchA < branchAmax) {
     for (branchB = a_nodeB->m_branch; branchB < branchBmax; branchB++) {
-      if (PairSearchOverlapHelper (&branchA->m_rect, &branchB->m_rect,
-                                   a_result->m_tolerance)) {
+      if (PairSearchOverlapHelper (
+              &branchA->m_rect, &branchB->m_rect, a_result->m_tolerance)) {
         if (a_nodeA->m_level > 0) {
           if (a_nodeB->m_level > 0)
             PairSearchHelper (branchA->m_child, branchB->m_child, a_result);
@@ -1385,8 +1413,8 @@ PairSearchHelper (const ON_RTreeNode *a_nodeA, const ON_RTreeNode *a_nodeB,
         } else if (a_nodeB->m_level > 0) {
           PairSearchHelper (branchA, branchB->m_child, a_result);
         } else {
-          a_result->m_resultCallback (a_result->m_context, branchA->m_id,
-                                      branchB->m_id);
+          a_result->m_resultCallback (
+              a_result->m_context, branchA->m_id, branchB->m_id);
         }
       }
     }
@@ -1395,7 +1423,8 @@ PairSearchHelper (const ON_RTreeNode *a_nodeA, const ON_RTreeNode *a_nodeB,
 }
 
 static bool
-PairSearchHelperBool (const ON_RTreeNode *a_nodeA, const ON_RTreeNode *a_nodeB,
+PairSearchHelperBool (const ON_RTreeNode *a_nodeA,
+                      const ON_RTreeNode *a_nodeB,
                       ON_RTreePairSearchCallbackResultBool *a_result)
 {
   // DO NOT ADD ANYTHING TO THIS FUNCTION
@@ -1406,8 +1435,8 @@ PairSearchHelperBool (const ON_RTreeNode *a_nodeA, const ON_RTreeNode *a_nodeB,
   branchBmax = a_nodeB->m_branch + a_nodeB->m_count;
   while (branchA < branchAmax) {
     for (branchB = a_nodeB->m_branch; branchB < branchBmax; branchB++) {
-      if (PairSearchOverlapHelper (&branchA->m_rect, &branchB->m_rect,
-                                   a_result->m_tolerance)) {
+      if (PairSearchOverlapHelper (
+              &branchA->m_rect, &branchB->m_rect, a_result->m_tolerance)) {
         if (a_nodeA->m_level > 0) {
           if (a_nodeB->m_level > 0) {
             if (!PairSearchHelperBool (branchA->m_child, branchB->m_child, a_result))
@@ -1420,8 +1449,8 @@ PairSearchHelperBool (const ON_RTreeNode *a_nodeA, const ON_RTreeNode *a_nodeB,
           if (!PairSearchHelperBool (branchA, branchB->m_child, a_result))
             return false;
         } else {
-          if (!a_result->m_resultCallbackBool (a_result->m_context, branchA->m_id,
-                                               branchB->m_id))
+          if (!a_result->m_resultCallbackBool (
+                  a_result->m_context, branchA->m_id, branchB->m_id))
             return false;
         }
       }
@@ -1432,8 +1461,11 @@ PairSearchHelperBool (const ON_RTreeNode *a_nodeA, const ON_RTreeNode *a_nodeB,
 }
 
 bool
-ON_RTree::Search (const ON_RTree &a_rtreeA, const ON_RTree &a_rtreeB, double tolerance,
-                  void ON_MSC_CDECL resultCallback (void *a_context, ON__INT_PTR a_idA,
+ON_RTree::Search (const ON_RTree &a_rtreeA,
+                  const ON_RTree &a_rtreeB,
+                  double tolerance,
+                  void ON_MSC_CDECL resultCallback (void *a_context,
+                                                    ON__INT_PTR a_idA,
                                                     ON__INT_PTR a_idB),
                   void *a_context)
 {
@@ -1450,8 +1482,11 @@ ON_RTree::Search (const ON_RTree &a_rtreeA, const ON_RTree &a_rtreeB, double tol
 }
 
 bool
-ON_RTree::Search (const ON_RTree &a_rtreeA, const ON_RTree &a_rtreeB, double tolerance,
-                  bool ON_MSC_CDECL resultCallback (void *a_context, ON__INT_PTR a_idA,
+ON_RTree::Search (const ON_RTree &a_rtreeA,
+                  const ON_RTree &a_rtreeB,
+                  double tolerance,
+                  bool ON_MSC_CDECL resultCallback (void *a_context,
+                                                    ON__INT_PTR a_idA,
                                                     ON__INT_PTR a_idB),
                   void *a_context)
 {
@@ -1538,8 +1573,10 @@ ON_RTree::SizeOf () const
 }
 
 static void
-NodeCountHelper (const ON_RTreeNode *node, size_t &node_count,
-                 size_t &wasted_branch_count, size_t &leaf_count)
+NodeCountHelper (const ON_RTreeNode *node,
+                 size_t &node_count,
+                 size_t &wasted_branch_count,
+                 size_t &leaf_count)
 {
   if (0 == node)
     return;
@@ -1547,8 +1584,8 @@ NodeCountHelper (const ON_RTreeNode *node, size_t &node_count,
   wasted_branch_count += (ON_RTree_MAX_NODE_COUNT - node->m_count);
   if (node->m_level > 0) {
     for (int i = 0; i < node->m_count; i++) {
-      NodeCountHelper (node->m_branch[i].m_child, node_count, wasted_branch_count,
-                       leaf_count);
+      NodeCountHelper (
+          node->m_branch[i].m_child, node_count, wasted_branch_count, leaf_count);
     }
   } else
     leaf_count += node->m_count;
@@ -1591,8 +1628,11 @@ InitRect (ON_RTreeBBox *a_rect)
 // level to insert; e.g. a data rectangle goes in at level = 0.
 
 bool
-ON_RTree::InsertRectRec (ON_RTreeBBox *a_rect, ON__INT_PTR a_id, ON_RTreeNode *a_node,
-                         ON_RTreeNode **a_newNode, int a_level)
+ON_RTree::InsertRectRec (ON_RTreeBBox *a_rect,
+                         ON__INT_PTR a_id,
+                         ON_RTreeNode *a_node,
+                         ON_RTreeNode **a_newNode,
+                         int a_level)
 {
   int index;
   ON_RTreeBranch branch;
@@ -1604,8 +1644,8 @@ ON_RTree::InsertRectRec (ON_RTreeBBox *a_rect, ON__INT_PTR a_id, ON_RTreeNode *a
     if (index < 0) {
       return false;
     }
-    if (!InsertRectRec (a_rect, a_id, a_node->m_branch[index].m_child, &otherNode,
-                        a_level)) {
+    if (!InsertRectRec (
+            a_rect, a_id, a_node->m_branch[index].m_child, &otherNode, a_level)) {
       // Child was not split
       a_node->m_branch[index].m_rect =
           CombineRectHelper (a_rect, &(a_node->m_branch[index].m_rect));
@@ -1652,7 +1692,9 @@ ON_RTree::InsertRectRec (ON_RTreeBBox *a_rect, ON__INT_PTR a_id, ON_RTreeNode *a
 //
 
 bool
-ON_RTree::InsertRect (ON_RTreeBBox *a_rect, ON__INT_PTR a_id, ON_RTreeNode **a_root,
+ON_RTree::InsertRect (ON_RTreeBBox *a_rect,
+                      ON__INT_PTR a_id,
+                      ON_RTreeNode **a_root,
                       int a_level)
 {
   ON_RTreeNode *newRoot;
@@ -1723,7 +1765,8 @@ NodeCover (ON_RTreeNode *a_node)
 // Old node updated, becomes one of two.
 
 bool
-ON_RTree::AddBranch (ON_RTreeBranch *a_branch, ON_RTreeNode *a_node,
+ON_RTree::AddBranch (ON_RTreeBranch *a_branch,
+                     ON_RTreeNode *a_node,
                      ON_RTreeNode **a_newNode)
 {
   if (a_node->m_count < ON_RTree_MAX_NODE_COUNT) // Split won't be necessary
@@ -1827,7 +1870,8 @@ CombineRectHelper (const ON_RTreeBBox *a_rectA, const ON_RTreeBBox *a_rectB)
 // Tries more than one method for choosing a partition, uses best result.
 
 void
-ON_RTree::SplitNode (ON_RTreeNode *a_node, ON_RTreeBranch *a_branch,
+ON_RTree::SplitNode (ON_RTreeNode *a_node,
+                     ON_RTreeBranch *a_branch,
                      ON_RTreeNode **a_newNode)
 {
   ON_RTreePartitionVars localVars;
@@ -1895,7 +1939,8 @@ CalcRectVolumeHelper (const ON_RTreeBBox *a_rect)
 // Load branch buffer with branches from full node plus the extra branch.
 
 static void
-GetBranches (ON_RTreeNode *a_node, ON_RTreeBranch *a_branch,
+GetBranches (ON_RTreeNode *a_node,
+             ON_RTreeBranch *a_branch,
              ON_RTreePartitionVars *a_parVars)
 {
   // Load the branch buffer
@@ -1991,7 +2036,8 @@ ChoosePartition (ON_RTreePartitionVars *a_parVars, int a_minFill)
 // Copy branches from the buffer into two nodes according to the partition.
 
 void
-ON_RTree::LoadNodes (ON_RTreeNode *a_nodeA, ON_RTreeNode *a_nodeB,
+ON_RTree::LoadNodes (ON_RTreeNode *a_nodeA,
+                     ON_RTreeNode *a_nodeB,
                      ON_RTreePartitionVars *a_parVars)
 {
   for (int index = 0; index < a_parVars->m_total; ++index) {
@@ -2082,8 +2128,10 @@ ON_RTree::RemoveRect (ON_RTreeBBox *a_rect, ON__INT_PTR a_id, ON_RTreeNode **a_r
       tempNode = reInsertList->m_node;
 
       for (int index = 0; index < tempNode->m_count; ++index) {
-        InsertRect (&(tempNode->m_branch[index].m_rect), tempNode->m_branch[index].m_id,
-                    a_root, tempNode->m_level);
+        InsertRect (&(tempNode->m_branch[index].m_rect),
+                    tempNode->m_branch[index].m_id,
+                    a_root,
+                    tempNode->m_level);
       }
 
       ON_RTreeListNode *remLNode = reInsertList;
@@ -2111,15 +2159,17 @@ ON_RTree::RemoveRect (ON_RTreeBBox *a_rect, ON__INT_PTR a_id, ON_RTreeNode **a_r
 // Returns 1 if record not found, 0 if success.
 
 bool
-ON_RTree::RemoveRectRec (ON_RTreeBBox *a_rect, ON__INT_PTR a_id, ON_RTreeNode *a_node,
+ON_RTree::RemoveRectRec (ON_RTreeBBox *a_rect,
+                         ON__INT_PTR a_id,
+                         ON_RTreeNode *a_node,
                          ON_RTreeListNode **a_listNode)
 {
   if (a_node->IsInternalNode ()) // not a leaf node
   {
     for (int index = 0; index < a_node->m_count; ++index) {
       if (OverlapHelper (a_rect, &(a_node->m_branch[index].m_rect))) {
-        if (!RemoveRectRec (a_rect, a_id, a_node->m_branch[index].m_child,
-                            a_listNode)) {
+        if (!RemoveRectRec (
+                a_rect, a_id, a_node->m_branch[index].m_child, a_listNode)) {
           if (a_node->m_branch[index].m_child->m_count >= ON_RTree_MIN_NODE_COUNT) {
             // child removed, just resize parent rect
             a_node->m_branch[index].m_rect =
@@ -2540,7 +2590,8 @@ OverlapBoundedPlaneXYZHelper (const double *a_bounded_plane, const ON_RTreeBBox 
 }
 
 static bool
-SearchBoundedPlaneXYZHelper (const ON_RTreeNode *a_node, const double *a_bounded_plane,
+SearchBoundedPlaneXYZHelper (const ON_RTreeNode *a_node,
+                             const double *a_bounded_plane,
                              ON_RTreeSearchResultCallback &a_result)
 {
   int i, count;
@@ -2551,8 +2602,8 @@ SearchBoundedPlaneXYZHelper (const ON_RTreeNode *a_node, const double *a_bounded
       // a_node is an internal node - search m_branch[].m_child as needed
       for (i = 0; i < count; ++i) {
         if (OverlapBoundedPlaneXYZHelper (a_bounded_plane, &branch[i].m_rect)) {
-          if (!SearchBoundedPlaneXYZHelper (branch[i].m_child, a_bounded_plane,
-                                            a_result)) {
+          if (!SearchBoundedPlaneXYZHelper (
+                  branch[i].m_child, a_bounded_plane, a_result)) {
             return false; // Don't continue searching
           }
         }
@@ -2574,7 +2625,9 @@ SearchBoundedPlaneXYZHelper (const ON_RTreeNode *a_node, const double *a_bounded
 }
 
 bool
-ON_RTree::Search (const double a_plane_eqn[4], double a_min, double a_max,
+ON_RTree::Search (const double a_plane_eqn[4],
+                  double a_min,
+                  double a_max,
                   bool ON_MSC_CDECL a_resultCallback (void *a_context,
                                                       ON__INT_PTR a_id),
                   void *a_context) const
@@ -2602,7 +2655,8 @@ ON_RTree::Search (const double a_plane_eqn[4], double a_min, double a_max,
 // rectangle.
 
 static bool
-SearchHelper (const ON_RTreeNode *a_node, ON_RTreeBBox *a_rect,
+SearchHelper (const ON_RTreeNode *a_node,
+              ON_RTreeBBox *a_rect,
               ON_RTreeSearchResultCallback &a_result)
 {
   // NOTE:
@@ -2637,7 +2691,8 @@ SearchHelper (const ON_RTreeNode *a_node, ON_RTreeBBox *a_rect,
 }
 
 static bool
-SearchHelper (const ON_RTreeNode *a_node, struct ON_RTreeSphere *a_sphere,
+SearchHelper (const ON_RTreeNode *a_node,
+              struct ON_RTreeSphere *a_sphere,
               ON_RTreeSearchResultCallback &a_result)
 {
   // NOTE:
@@ -2717,7 +2772,8 @@ SearchHelper (const ON_RTreeNode *a_node, struct ON_RTreeSphere *a_sphere,
 }
 
 static bool
-SearchHelper (const ON_RTreeNode *a_node, struct ON_RTreeCapsule *a_capsule,
+SearchHelper (const ON_RTreeNode *a_node,
+              struct ON_RTreeCapsule *a_capsule,
               ON_RTreeSearchResultCallback &a_result)
 {
   // NOTE:
@@ -2799,7 +2855,8 @@ SearchHelper (const ON_RTreeNode *a_node, struct ON_RTreeCapsule *a_capsule,
 // rectangle.
 
 static bool
-SearchHelper (const ON_RTreeNode *a_node, const ON_RTreeBBox *a_rect,
+SearchHelper (const ON_RTreeNode *a_node,
+              const ON_RTreeBBox *a_rect,
               ON_SimpleArray<ON_RTreeLeaf> &a_result)
 {
   int i, count;
@@ -2831,7 +2888,8 @@ SearchHelper (const ON_RTreeNode *a_node, const ON_RTreeBBox *a_rect,
 }
 
 static bool
-SearchHelper (const ON_RTreeNode *a_node, const ON_RTreeBBox *a_rect,
+SearchHelper (const ON_RTreeNode *a_node,
+              const ON_RTreeBBox *a_rect,
               ON_SimpleArray<void *> &a_result)
 {
   int i, count;
@@ -2871,7 +2929,8 @@ SearchHelper (const ON_RTreeNode *a_node, const ON_RTreeBBox *a_rect,
 }
 
 static bool
-SearchHelper (const ON_RTreeNode *a_node, const ON_RTreeBBox *a_rect,
+SearchHelper (const ON_RTreeNode *a_node,
+              const ON_RTreeBBox *a_rect,
               ON_SimpleArray<int> &a_result)
 {
   int i, count;
@@ -2901,7 +2960,8 @@ SearchHelper (const ON_RTreeNode *a_node, const ON_RTreeBBox *a_rect,
 }
 
 static bool
-SearchHelper (const ON_RTreeNode *a_node, const ON_RTreeBBox *a_rect,
+SearchHelper (const ON_RTreeNode *a_node,
+              const ON_RTreeBBox *a_rect,
               ON_RTreeSearchResult &a_result)
 {
   int i, count;

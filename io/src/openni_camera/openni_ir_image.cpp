@@ -48,17 +48,25 @@ using namespace std;
 namespace openni_wrapper
 {
   void
-  IRImage::fillRaw (unsigned width, unsigned height, unsigned short *ir_buffer,
+  IRImage::fillRaw (unsigned width,
+                    unsigned height,
+                    unsigned short *ir_buffer,
                     unsigned line_step) const
   {
     if (width > ir_md_->XRes () || height > ir_md_->YRes ())
       THROW_OPENNI_EXCEPTION ("upsampling not supported: %d x %d -> %d x %d",
-                              ir_md_->XRes (), ir_md_->YRes (), width, height);
+                              ir_md_->XRes (),
+                              ir_md_->YRes (),
+                              width,
+                              height);
 
     if (ir_md_->XRes () % width != 0 || ir_md_->YRes () % height != 0)
       THROW_OPENNI_EXCEPTION (
           "downsampling only supported for integer scale: %d x %d -> %d x %d",
-          ir_md_->XRes (), ir_md_->YRes (), width, height);
+          ir_md_->XRes (),
+          ir_md_->YRes (),
+          width,
+          height);
 
     if (line_step == 0)
       line_step = width * static_cast<unsigned> (sizeof (unsigned short));

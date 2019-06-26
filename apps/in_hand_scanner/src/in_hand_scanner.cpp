@@ -81,8 +81,8 @@ pcl::ihs::InHandScanner::InHandScanner (Base *parent)
   const float z_min = input_data_processing_->getZMin ();
   const float z_max = input_data_processing_->getZMax ();
 
-  Base::setPivot (Eigen::Vector3d ((x_min + x_max) / 2., (y_min + y_max) / 2.,
-                                   (z_min + z_max) / 2.));
+  Base::setPivot (Eigen::Vector3d (
+      (x_min + x_max) / 2., (y_min + y_max) / 2., (z_min + z_max) / 2.));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -351,8 +351,8 @@ pcl::ihs::InHandScanner::newDataCallback (const CloudXYZRGBAConstPtr &cloud_in)
       ++iteration_;
     } else {
       Eigen::Matrix4f T_final = Eigen::Matrix4f::Identity ();
-      if (icp_->findTransformation (mesh_model_, cloud_data, transformation_,
-                                    T_final)) {
+      if (icp_->findTransformation (
+              mesh_model_, cloud_data, transformation_, T_final)) {
         transformation_ = T_final;
 
         sw.reset ();
@@ -368,8 +368,8 @@ pcl::ihs::InHandScanner::newDataCallback (const CloudXYZRGBAConstPtr &cloud_in)
 
         sw.reset ();
         std::vector<Mesh::HalfEdgeIndices> boundary_collection;
-        pcl::geometry::getBoundBoundaryHalfEdges (*mesh_model_, boundary_collection,
-                                                  1000);
+        pcl::geometry::getBoundBoundaryHalfEdges (
+            *mesh_model_, boundary_collection, 1000);
         std::cerr << "  - time compute boundary          : " << std::setw (8)
                   << std::right << sw.getTime () << " ms\n";
 
@@ -394,7 +394,8 @@ pcl::ihs::InHandScanner::newDataCallback (const CloudXYZRGBAConstPtr &cloud_in)
     Base::setPivot ("model");
 
   sw.reset ();
-  Base::addMesh (mesh_model_, "model",
+  Base::addMesh (mesh_model_,
+                 "model",
                  Eigen::Isometry3d (transformation_.inverse ().cast<double> ()));
   time_model = sw.getTime ();
 
@@ -432,11 +433,13 @@ pcl::ihs::InHandScanner::paintEvent (QPaintEvent *event)
     return;
 
   Base::calcFPS (visualization_fps_);
-  Base::BoxCoefficients coeffs (
-      input_data_processing_->getXMin (), input_data_processing_->getXMax (),
-      input_data_processing_->getYMin (), input_data_processing_->getYMax (),
-      input_data_processing_->getZMin (), input_data_processing_->getZMax (),
-      Eigen::Isometry3d::Identity ());
+  Base::BoxCoefficients coeffs (input_data_processing_->getXMin (),
+                                input_data_processing_->getXMax (),
+                                input_data_processing_->getYMin (),
+                                input_data_processing_->getYMax (),
+                                input_data_processing_->getZMin (),
+                                input_data_processing_->getZMax (),
+                                Eigen::Isometry3d::Identity ());
   Base::setBoxCoefficients (coeffs);
 
   Base::setVisibilityConfidenceNormalization (
@@ -459,7 +462,10 @@ pcl::ihs::InHandScanner::drawText ()
   if (starting_grabber_) {
     font.setPointSize (this->width () / 20);
     painter.setFont (font);
-    painter.drawText (0, 0, this->width (), this->height (),
+    painter.drawText (0,
+                      0,
+                      this->width (),
+                      this->height (),
                       Qt::AlignHCenter | Qt::AlignVCenter,
                       "Starting the grabber.\n Please wait.");
   } else {
@@ -473,8 +479,12 @@ pcl::ihs::InHandScanner::drawText ()
     font.setPointSize (this->width () / 50);
 
     painter.setFont (font);
-    painter.drawText (0, 0, this->width (), this->height (),
-                      Qt::AlignBottom | Qt::AlignLeft, str.c_str ());
+    painter.drawText (0,
+                      0,
+                      this->width (),
+                      this->height (),
+                      Qt::AlignBottom | Qt::AlignLeft,
+                      str.c_str ());
   }
 }
 

@@ -146,8 +146,11 @@ namespace pcl
      * \param output the resultant point cloud containing the SIFT keypoints
      */
     void
-    detectKeypointsForOctave (const PointCloudIn &input, KdTree &tree, float base_scale,
-                              int nr_scales_per_octave, PointCloudOut &output);
+    detectKeypointsForOctave (const PointCloudIn &input,
+                              KdTree &tree,
+                              float base_scale,
+                              int nr_scales_per_octave,
+                              PointCloudOut &output);
 
     /** \brief Compute the difference-of-Gaussian (DoG) scale space for the given input
      * and scales \param input the point cloud for which the DoG scale space will be
@@ -157,7 +160,8 @@ namespace pcl
      * number-of-scales matrix)
      */
     void
-    computeScaleSpace (const PointCloudIn &input, KdTree &tree,
+    computeScaleSpace (const PointCloudIn &input,
+                       KdTree &tree,
                        const std::vector<float> &scales,
                        Eigen::MatrixXf &diff_of_gauss);
 
@@ -169,7 +173,8 @@ namespace pcl
      * resultant vector containing the scale indices of each keypoint
      */
     void
-    findScaleSpaceExtrema (const PointCloudIn &input, KdTree &tree,
+    findScaleSpaceExtrema (const PointCloudIn &input,
+                           KdTree &tree,
                            const Eigen::MatrixXf &diff_of_gauss,
                            std::vector<int> &extrema_indices,
                            std::vector<int> &extrema_scales);

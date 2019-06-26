@@ -78,12 +78,22 @@ class OctreeViewer
     viz.addText ("Keys:", 0, 170, 0.0, 1.0, 0.0, "keys_t");
     viz.addText ("a -> Increment displayed depth", 10, 155, 0.0, 1.0, 0.0, "key_a_t");
     viz.addText ("z -> Decrement displayed depth", 10, 140, 0.0, 1.0, 0.0, "key_z_t");
-    viz.addText ("v -> Toggle octree cubes representation", 10, 125, 0.0, 1.0, 0.0,
-                 "key_v_t");
-    viz.addText ("b -> Toggle centroid points representation", 10, 110, 0.0, 1.0, 0.0,
+    viz.addText (
+        "v -> Toggle octree cubes representation", 10, 125, 0.0, 1.0, 0.0, "key_v_t");
+    viz.addText ("b -> Toggle centroid points representation",
+                 10,
+                 110,
+                 0.0,
+                 1.0,
+                 0.0,
                  "key_b_t");
-    viz.addText ("n -> Toggle original point cloud representation", 10, 95, 0.0, 1.0,
-                 0.0, "key_n_t");
+    viz.addText ("n -> Toggle original point cloud representation",
+                 10,
+                 95,
+                 0.0,
+                 1.0,
+                 0.0,
+                 "key_n_t");
 
     // set current level to half the maximum one
     displayedDepth = static_cast<int> (floor (octree.getTreeDepth () / 2.0));
@@ -214,29 +224,33 @@ class OctreeViewer
   showLegend ()
   {
     char dataDisplay[256];
-    sprintf (dataDisplay, "Displaying octree cubes: %s",
+    sprintf (dataDisplay,
+             "Displaying octree cubes: %s",
              (show_cubes_) ? ("True") : ("False"));
     viz.removeShape ("disp_octree_cubes");
     viz.addText (dataDisplay, 0, 75, 1.0, 0.0, 0.0, "disp_octree_cubes");
 
-    sprintf (dataDisplay, "Displaying centroids voxel: %s",
+    sprintf (dataDisplay,
+             "Displaying centroids voxel: %s",
              (show_centroids_) ? ("True") : ("False"));
     viz.removeShape ("disp_centroids_voxel");
     viz.addText (dataDisplay, 0, 60, 1.0, 0.0, 0.0, "disp_centroids_voxel");
 
-    sprintf (dataDisplay, "Displaying original point cloud: %s",
+    sprintf (dataDisplay,
+             "Displaying original point cloud: %s",
              (show_original_points_) ? ("True") : ("False"));
     viz.removeShape ("disp_original_points");
     viz.addText (dataDisplay, 0, 45, 1.0, 0.0, 0.0, "disp_original_points");
 
     char level[256];
-    sprintf (level, "Displayed depth is %d on %d", displayedDepth,
-             octree.getTreeDepth ());
+    sprintf (
+        level, "Displayed depth is %d on %d", displayedDepth, octree.getTreeDepth ());
     viz.removeShape ("level_t1");
     viz.addText (level, 0, 30, 1.0, 0.0, 0.0, "level_t1");
 
     viz.removeShape ("level_t2");
-    sprintf (level, "Voxel size: %.4fm [%lu voxels]",
+    sprintf (level,
+             "Voxel size: %.4fm [%lu voxels]",
              std::sqrt (octree.getVoxelSquaredSideLen (displayedDepth)),
              cloudVoxel->points.size ());
     viz.addText (level, 0, 15, 1.0, 0.0, 0.0, "level_t2");
@@ -370,7 +384,8 @@ class OctreeViewer
 
     for (pcl::octree::OctreePointCloudVoxelCentroid<pcl::PointXYZ>::FixedDepthIterator
              tree_it = octree.fixed_depth_begin (depth);
-         tree_it != octree.fixed_depth_end (); ++tree_it) {
+         tree_it != octree.fixed_depth_end ();
+         ++tree_it) {
       // Compute the point at the center of the voxel which represents the current
       // OctreeNode
       Eigen::Vector3f voxel_min, voxel_max;
@@ -399,7 +414,8 @@ class OctreeViewer
         octree.getVoxelCentroidsRecursive (
             static_cast<pcl::octree::OctreePointCloudVoxelCentroid<
                 pcl::PointXYZ>::BranchNode *> (*tree_it),
-            dummy_key, voxelCentroids);
+            dummy_key,
+            voxelCentroids);
 
         // Iterate over the leafs to compute the centroid of all of them
         pcl::CentroidPoint<pcl::PointXYZ> centroid;
@@ -413,7 +429,8 @@ class OctreeViewer
     }
 
     double end = pcl::getTime ();
-    printf ("%lu pts, %.4gs. %.4gs./pt. =====\n", displayCloud->points.size (),
+    printf ("%lu pts, %.4gs. %.4gs./pt. =====\n",
+            displayCloud->points.size (),
             end - start,
             (end - start) / static_cast<double> (displayCloud->points.size ()));
 

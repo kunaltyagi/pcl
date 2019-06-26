@@ -75,8 +75,10 @@ namespace pcl
      */
     size_t
     createAndAddTemplate (const std::vector<DOTModality *> &modalities,
-                          const std::vector<MaskMap *> &masks, size_t template_anker_x,
-                          size_t template_anker_y, const RegionXY &region);
+                          const std::vector<MaskMap *> &masks,
+                          size_t template_anker_x,
+                          size_t template_anker_y,
+                          const RegionXY &region);
 
     void
     detectTemplates (const std::vector<DOTModality *> &modalities,

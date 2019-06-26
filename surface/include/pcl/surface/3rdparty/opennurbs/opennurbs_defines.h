@@ -399,11 +399,13 @@ class PCL_EXPORTS ON_CLASS ON
 
   static FILE *
   OpenFile ( // like fopen() - needed when OpenNURBS is used as a DLL
-      const char *filename, const char *filemode);
+      const char *filename,
+      const char *filemode);
 
   static FILE *
   OpenFile ( // like fopen() - needed when OpenNURBS is used as a DLL
-      const wchar_t *filename, const wchar_t *filemode);
+      const wchar_t *filename,
+      const wchar_t *filemode);
 
   static int
   CloseFile ( // like fclose() - needed when OpenNURBS is used as a DLL
@@ -426,11 +428,15 @@ class PCL_EXPORTS ON_CLASS ON
     True if file exists, can be opened for read, and fstat worked.
   */
   static bool
-  GetFileStats (const wchar_t *filename, size_t *filesize, time_t *create_time,
+  GetFileStats (const wchar_t *filename,
+                size_t *filesize,
+                time_t *create_time,
                 time_t *lastmodify_time);
 
   static bool
-  GetFileStats (FILE *fp, size_t *filesize, time_t *create_time,
+  GetFileStats (FILE *fp,
+                size_t *filesize,
+                time_t *create_time,
                 time_t *lastmodify_time);
 
   /*
@@ -533,17 +539,16 @@ class PCL_EXPORTS ON_CLASS ON
 
     // astronomical distances
     astronomical =
-        23, // 1.4959787e+11 // http://en.wikipedia.org/wiki/Astronomical_unit
-            // 1.495979e+11  // http://units.nist.gov/Pubs/SP811/appenB9.htm
-            //    An astronomical unit (au) is the mean distance from the
-            //    center of the earth to the center of the sun.
-    lightyears =
-        24,       // 9.4607304725808e+15 // http://en.wikipedia.org/wiki/Light_year
-                  // 9.46073e+15 meters  // http://units.nist.gov/Pubs/SP811/appenB9.htm
-                  //    A light year is the distance light travels in one Julian year.
-                  //    The speed of light is exactly 299792458 meters/second.
-                  //    A Julian year is exactly 365.25 * 86400 seconds and is
-                  //    approximately the time it takes for one earth orbit.
+        23,          // 1.4959787e+11 // http://en.wikipedia.org/wiki/Astronomical_unit
+                     // 1.495979e+11  // http://units.nist.gov/Pubs/SP811/appenB9.htm
+                     //    An astronomical unit (au) is the mean distance from the
+                     //    center of the earth to the center of the sun.
+    lightyears = 24, // 9.4607304725808e+15 // http://en.wikipedia.org/wiki/Light_year
+    // 9.46073e+15 meters  // http://units.nist.gov/Pubs/SP811/appenB9.htm
+    //    A light year is the distance light travels in one Julian year.
+    //    The speed of light is exactly 299792458 meters/second.
+    //    A Julian year is exactly 365.25 * 86400 seconds and is
+    //    approximately the time it takes for one earth orbit.
     parsecs = 25, // 3.08567758e+16  // http://en.wikipedia.org/wiki/Parsec
                   // 3.085678e+16    // http://units.nist.gov/Pubs/SP811/appenB9.htm
 
@@ -1649,8 +1654,11 @@ See Also:
   ON_String::SplitPath
 */
 ON_DECL void
-on_splitpath (const char *path, const char **drive, const char **dir,
-              const char **fname, const char **ext);
+on_splitpath (const char *path,
+              const char **drive,
+              const char **dir,
+              const char **fname,
+              const char **ext);
 
 /*
 Description:
@@ -1697,8 +1705,11 @@ See Also:
   ON_wString::SplitPath
 */
 ON_DECL void
-on_wsplitpath (const wchar_t *path, const wchar_t **drive, const wchar_t **dir,
-               const wchar_t **fname, const wchar_t **ext);
+on_wsplitpath (const wchar_t *path,
+               const wchar_t **drive,
+               const wchar_t **dir,
+               const wchar_t **fname,
+               const wchar_t **ext);
 
 ON_END_EXTERNC
 

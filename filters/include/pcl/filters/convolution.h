@@ -172,7 +172,8 @@ namespace pcl
        * output.cols () < input.cols () then output is resized to input sizes.
        */
       inline void
-      convolve (const Eigen::ArrayXf &h_kernel, const Eigen::ArrayXf &v_kernel,
+      convolve (const Eigen::ArrayXf &h_kernel,
+                const Eigen::ArrayXf &v_kernel,
                 PointCloudOut &output);
       /** Convolve point cloud with same kernel along rows and columns separately.
        * \param[out] output the convolved cloud

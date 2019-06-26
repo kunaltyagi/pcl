@@ -48,8 +48,11 @@
 template <typename PointInT, typename PointOutT>
 void
 pcl::MomentInvariantsEstimation<PointInT, PointOutT>::computePointMomentInvariants (
-    const pcl::PointCloud<PointInT> &cloud, const std::vector<int> &indices, float &j1,
-    float &j2, float &j3)
+    const pcl::PointCloud<PointInT> &cloud,
+    const std::vector<int> &indices,
+    float &j1,
+    float &j2,
+    float &j3)
 {
   // Estimate the XYZ centroid
   compute3DCentroid (cloud, indices, xyz_centroid_);
@@ -132,31 +135,37 @@ pcl::MomentInvariantsEstimation<PointInT, PointOutT>::computeFeature (
   if (input_->is_dense) {
     // Iterating over the entire index vector
     for (size_t idx = 0; idx < indices_->size (); ++idx) {
-      if (this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                    nn_dists) == 0) {
+      if (this->searchForNeighbors (
+              (*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0) {
         output.points[idx].j1 = output.points[idx].j2 = output.points[idx].j3 =
             std::numeric_limits<float>::quiet_NaN ();
         output.is_dense = false;
         continue;
       }
 
-      computePointMomentInvariants (*surface_, nn_indices, output.points[idx].j1,
-                                    output.points[idx].j2, output.points[idx].j3);
+      computePointMomentInvariants (*surface_,
+                                    nn_indices,
+                                    output.points[idx].j1,
+                                    output.points[idx].j2,
+                                    output.points[idx].j3);
     }
   } else {
     // Iterating over the entire index vector
     for (size_t idx = 0; idx < indices_->size (); ++idx) {
       if (!isFinite ((*input_)[(*indices_)[idx]]) ||
-          this->searchForNeighbors ((*indices_)[idx], search_parameter_, nn_indices,
-                                    nn_dists) == 0) {
+          this->searchForNeighbors (
+              (*indices_)[idx], search_parameter_, nn_indices, nn_dists) == 0) {
         output.points[idx].j1 = output.points[idx].j2 = output.points[idx].j3 =
             std::numeric_limits<float>::quiet_NaN ();
         output.is_dense = false;
         continue;
       }
 
-      computePointMomentInvariants (*surface_, nn_indices, output.points[idx].j1,
-                                    output.points[idx].j2, output.points[idx].j3);
+      computePointMomentInvariants (*surface_,
+                                    nn_indices,
+                                    output.points[idx].j1,
+                                    output.points[idx].j2,
+                                    output.points[idx].j3);
     }
   }
 }

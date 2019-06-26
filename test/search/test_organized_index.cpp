@@ -219,8 +219,8 @@ TEST (PCL, Organized_Neighbor_Search_Pointcloud_Nearest_K_Neighbour_Search_Kinec
 
     // organized nearest neighbor search
     organizedNeighborSearch->setInputCloud (cloudIn);
-    organizedNeighborSearch->nearestKSearch (searchIdx, (int)K, k_indices,
-                                             k_sqr_distances);
+    organizedNeighborSearch->nearestKSearch (
+        searchIdx, (int)K, k_indices, k_sqr_distances);
 
     k_indices_bruteforce.clear ();
     k_sqr_distances_bruteforce.clear ();
@@ -327,8 +327,8 @@ TEST (PCL, Organized_Neighbor_Search_Pointcloud_Neighbours_Within_Radius_Search)
 
     organizedNeighborSearch->setInputCloud (cloudIn);
 
-    organizedNeighborSearch->radiusSearch (randomIdx, searchRadius, cloudNWRSearch,
-                                           cloudNWRRadius, INT_MAX); //,INT_MAX);
+    organizedNeighborSearch->radiusSearch (
+        randomIdx, searchRadius, cloudNWRSearch, cloudNWRRadius, INT_MAX); //,INT_MAX);
 
     // check if result from organized radius search can be also found in bruteforce
     // search
@@ -371,8 +371,8 @@ TEST (PCL, Organized_Neighbor_Search_Pointcloud_Neighbours_Within_Radius_Search)
     ASSERT_EQ (cloudNWRRadius.size (), cloudSearchBruteforce.size ());
 
     // check if result limitation works
-    organizedNeighborSearch->radiusSearch (searchPoint, searchRadius, cloudNWRSearch,
-                                           cloudNWRRadius, 5);
+    organizedNeighborSearch->radiusSearch (
+        searchPoint, searchRadius, cloudNWRSearch, cloudNWRRadius, 5);
 
     ASSERT_EQ (cloudNWRRadius.size () <= 5, true);
   }
@@ -451,16 +451,16 @@ TEST (
 
     double check_time = getTime ();
     organizedNeighborSearch->setInputCloud (cloudIn);
-    organizedNeighborSearch->radiusSearch (randomIdx, searchRadius, cloudNWRSearch,
-                                           cloudNWRRadius, INT_MAX); //,INT_MAX);
+    organizedNeighborSearch->radiusSearch (
+        randomIdx, searchRadius, cloudNWRSearch, cloudNWRRadius, INT_MAX); //,INT_MAX);
 
     double check_time2 = getTime ();
 
     radiusSearchLPTime += check_time2 - check_time;
 
     organizedNeighborSearch->setInputCloud (cloudIn);
-    organizedNeighborSearch->radiusSearch (randomIdx, searchRadius, cloudNWRSearch,
-                                           cloudNWRRadius, INT_MAX); //,INT_MAX);
+    organizedNeighborSearch->radiusSearch (
+        randomIdx, searchRadius, cloudNWRSearch, cloudNWRRadius, INT_MAX); //,INT_MAX);
 
     radiusSearchTime += getTime () - check_time2;
   }
@@ -529,8 +529,11 @@ TEST (PCL,
 
       double check_time = getTime ();
       organizedNeighborSearch->setInputCloud (cloudIn);
-      organizedNeighborSearch->radiusSearch (randomIdx, searchRadius, cloudNWRSearch2,
-                                             cloudNWRRadius2, INT_MAX); //,INT_MAX);
+      organizedNeighborSearch->radiusSearch (randomIdx,
+                                             searchRadius,
+                                             cloudNWRSearch2,
+                                             cloudNWRRadius2,
+                                             INT_MAX); //,INT_MAX);
 
       double check_time2 = getTime ();
       sum_time += check_time2 - check_time;
@@ -541,8 +544,11 @@ TEST (PCL,
       cloudNWRRadius.clear ();
       double check_time = getTime ();
       organizedNeighborSearch->setInputCloud (cloudIn);
-      organizedNeighborSearch->approxRadiusSearch (cloudIn, randomIdx, searchRadius,
-                                                   cloudNWRSearch, cloudNWRRadius,
+      organizedNeighborSearch->approxRadiusSearch (cloudIn,
+                                                   randomIdx,
+                                                   searchRadius,
+                                                   cloudNWRSearch,
+                                                   cloudNWRRadius,
                                                    INT_MAX); //,INT_MAX);
 
       double check_time2 = getTime ();
@@ -553,7 +559,10 @@ TEST (PCL,
     //  ASSERT_EQ(cloudNWRSearch.size(), cloudNWRSearch2.size());
 
     printf ("| %.3lf  | %0.5lf         | %0.5lf        | %6lu            |\n",
-            searchRadius, sum_time / 100, sum_time2 / 100, cloudNWRSearch.size ());
+            searchRadius,
+            sum_time / 100,
+            sum_time2 / 100,
+            cloudNWRSearch.size ());
     std::cout << "+--------+-----------------+----------------+-------------------+"
               << std::endl;
 
@@ -611,8 +620,8 @@ TEST (PCL,
     ASSERT_EQ (cloudNWRRadius.size (), cloudSearchBruteforce.size ());
 
     // check if result limitation works
-    organizedNeighborSearch->radiusSearch (searchPoint, searchRadius, cloudNWRSearch,
-                                           cloudNWRRadius, 5);
+    organizedNeighborSearch->radiusSearch (
+        searchPoint, searchRadius, cloudNWRSearch, cloudNWRRadius, 5);
 
     ASSERT_EQ (cloudNWRRadius.size () <= 5, true);
   }

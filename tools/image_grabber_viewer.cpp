@@ -151,8 +151,8 @@ main (int argc, char **argv)
   double bcolor[3] = {0, 0, 0};
   pcl::console::parse_3x_arguments (argc, argv, "-bc", bcolor[0], bcolor[1], bcolor[2]);
 
-  fcolorparam = pcl::console::parse_multiple_3x_arguments (argc, argv, "-fc", fcolor_r,
-                                                           fcolor_g, fcolor_b);
+  fcolorparam = pcl::console::parse_multiple_3x_arguments (
+      argc, argv, "-fc", fcolor_r, fcolor_g, fcolor_b);
 
   int psize = 0;
   pcl::console::parse_argument (argc, argv, "-ps", psize);
@@ -202,8 +202,8 @@ main (int argc, char **argv)
   pcl::console::parse_argument (argc, argv, "-dir", path);
   std::cout << "path: " << path << std::endl;
   if (!path.empty () && boost::filesystem::exists (path)) {
-    grabber.reset (new pcl::ImageGrabber<pcl::PointXYZRGBA> (path, frames_per_second,
-                                                             repeat, use_pclzf));
+    grabber.reset (new pcl::ImageGrabber<pcl::PointXYZRGBA> (
+        path, frames_per_second, repeat, use_pclzf));
   } else {
     std::cout << "No directory was given with the -dir flag." << std::endl;
     printHelp (argc, argv);

@@ -221,8 +221,10 @@ namespace mets
     /// Annealing: you can give a termination criteria that termiantes
     /// when temperature reaches 0.
     ///
-    tabu_search (feasible_solution &starting_solution, solution_recorder &best_recorder,
-                 move_manager_type &move_manager_inst, tabu_list_chain &tabus,
+    tabu_search (feasible_solution &starting_solution,
+                 solution_recorder &best_recorder,
+                 move_manager_type &move_manager_inst,
+                 tabu_list_chain &tabus,
                  aspiration_criteria_chain &aspiration,
                  termination_criteria_chain &termination);
 
@@ -333,19 +335,22 @@ namespace mets
     typedef boost::unordered_map<mana_move *, // Key type
                                  int, // insert a move and the number of times it's
                                       // present in the list
-                                 mana_move_hash, dereferenced_equal_to<mana_move *>>
+                                 mana_move_hash,
+                                 dereferenced_equal_to<mana_move *>>
         move_map_type;
 #elif defined(METSLIB_HAVE_UNORDERED_MAP) && !defined(METSLIB_TR1_MIXED_NAMESPACE)
     typedef std::unordered_map<mana_move *, // Key type
                                int, // insert a move and the number of times it's
                                     // present in the list
-                               mana_move_hash, dereferenced_equal_to<mana_move *>>
+                               mana_move_hash,
+                               dereferenced_equal_to<mana_move *>>
         move_map_type;
 #else
     typedef std::tr1::unordered_map<mana_move *, // Key type
                                     int, // insert a move and the number of times it's
                                          // present in the list
-                                    mana_move_hash, dereferenced_equal_to<mana_move *>>
+                                    mana_move_hash,
+                                    dereferenced_equal_to<mana_move *>>
         move_map_type;
 #endif
     move_list_type tabu_moves_m;
@@ -391,8 +396,8 @@ mets::tabu_search<move_manager_t>::tabu_search (feasible_solution &starting_solu
                                                 tabu_list_chain &tabus,
                                                 aspiration_criteria_chain &aspiration,
                                                 termination_criteria_chain &termination)
-    : abstract_search<move_manager_t> (starting_solution, best_recorder,
-                                       move_manager_inst),
+    : abstract_search<move_manager_t> (
+          starting_solution, best_recorder, move_manager_inst),
       tabu_list_m (tabus), aspiration_criteria_m (aspiration),
       termination_criteria_m (termination)
 {
@@ -414,7 +419,8 @@ mets::tabu_search<move_manager_t>::search () throw (no_moves_error)
     gol_type best_move_cost = std::numeric_limits<gol_type>::max ();
 
     for (typename move_manager_t::iterator movit = base_t::moves_m.begin ();
-         movit != base_t::moves_m.end (); ++movit) {
+         movit != base_t::moves_m.end ();
+         ++movit) {
       // evaluate proposed move
       gol_type cost = (*movit)->evaluate (base_t::working_solution_m);
 
@@ -458,8 +464,8 @@ mets::tabu_search<move_manager_t>::search () throw (no_moves_error)
     base_t::step_m = base_t::MOVE_MADE;
     this->notify ();
 
-    aspiration_criteria_m.accept (base_t::working_solution_m, **best_movit,
-                                  best_move_cost);
+    aspiration_criteria_m.accept (
+        base_t::working_solution_m, **best_movit, best_move_cost);
 
     if (base_t::solution_recorder_m.accept (base_t::working_solution_m)) {
       base_t::step_m = base_t::IMPROVEMENT_MADE;
@@ -561,7 +567,8 @@ mets::aspiration_criteria_chain::reset ()
 }
 
 inline void
-mets::aspiration_criteria_chain::accept (feasible_solution &fs, move &mov,
+mets::aspiration_criteria_chain::accept (feasible_solution &fs,
+                                         move &mov,
                                          gol_type eval)
 {
   if (next_m)
@@ -569,8 +576,8 @@ mets::aspiration_criteria_chain::accept (feasible_solution &fs, move &mov,
 }
 
 inline bool
-mets::aspiration_criteria_chain::operator() (feasible_solution &fs, move &mov,
-                                             gol_type eval) const
+mets::aspiration_criteria_chain::
+operator() (feasible_solution &fs, move &mov, gol_type eval) const
 {
   if (next_m)
     return next_m->operator() (fs, mov, eval);
@@ -609,8 +616,8 @@ mets::best_ever_criteria::accept (feasible_solution &fs, move &mov, gol_type eva
 }
 
 inline bool
-mets::best_ever_criteria::operator() (feasible_solution &fs, move &mov,
-                                      gol_type eval) const
+mets::best_ever_criteria::
+operator() (feasible_solution &fs, move &mov, gol_type eval) const
 {
   /// the solution is the solution before applying mov.
   if (eval < best_m - tolerance_m)

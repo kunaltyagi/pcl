@@ -55,12 +55,14 @@ namespace pcl
       : public IterativeClosestPoint<PointSource, PointTarget, Scalar>
   {
     public:
-    using PointCloudSource = typename IterativeClosestPoint<PointSource, PointTarget,
+    using PointCloudSource = typename IterativeClosestPoint<PointSource,
+                                                            PointTarget,
                                                             Scalar>::PointCloudSource;
     using PointCloudSourcePtr = typename PointCloudSource::Ptr;
     using PointCloudSourceConstPtr = typename PointCloudSource::ConstPtr;
 
-    using PointCloudTarget = typename IterativeClosestPoint<PointSource, PointTarget,
+    using PointCloudTarget = typename IterativeClosestPoint<PointSource,
+                                                            PointTarget,
                                                             Scalar>::PointCloudTarget;
     using PointCloudTargetPtr = typename PointCloudTarget::Ptr;
     using PointCloudTargetConstPtr = typename PointCloudTarget::ConstPtr;
@@ -79,9 +81,8 @@ namespace pcl
     using ConstPtr = boost::shared_ptr<
         const JointIterativeClosestPoint<PointSource, PointTarget, Scalar>>;
 
-    using CorrespondenceEstimation =
-        pcl::registration::CorrespondenceEstimationBase<PointSource, PointTarget,
-                                                        Scalar>;
+    using CorrespondenceEstimation = pcl::registration::
+        CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>;
     using CorrespondenceEstimationPtr = typename CorrespondenceEstimation::Ptr;
     using CorrespondenceEstimationConstPtr =
         typename CorrespondenceEstimation::ConstPtr;
@@ -94,34 +95,34 @@ namespace pcl
     using IterativeClosestPoint<PointSource, PointTarget, Scalar>::target_;
     using IterativeClosestPoint<PointSource, PointTarget, Scalar>::nr_iterations_;
     using IterativeClosestPoint<PointSource, PointTarget, Scalar>::max_iterations_;
-    using IterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::previous_transformation_;
-    using IterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::final_transformation_;
+    using IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+        previous_transformation_;
+    using IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+        final_transformation_;
     using IterativeClosestPoint<PointSource, PointTarget, Scalar>::transformation_;
-    using IterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::transformation_epsilon_;
+    using IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+        transformation_epsilon_;
     using IterativeClosestPoint<PointSource, PointTarget, Scalar>::converged_;
     using IterativeClosestPoint<PointSource, PointTarget, Scalar>::corr_dist_threshold_;
     using IterativeClosestPoint<PointSource, PointTarget, Scalar>::inlier_threshold_;
-    using IterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::min_number_correspondences_;
+    using IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+        min_number_correspondences_;
     using IterativeClosestPoint<PointSource, PointTarget, Scalar>::update_visualizer_;
-    using IterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::euclidean_fitness_epsilon_;
+    using IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+        euclidean_fitness_epsilon_;
     using IterativeClosestPoint<PointSource, PointTarget, Scalar>::correspondences_;
-    using IterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::transformation_estimation_;
-    using IterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::correspondence_estimation_;
-    using IterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::correspondence_rejectors_;
+    using IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+        transformation_estimation_;
+    using IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+        correspondence_estimation_;
+    using IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+        correspondence_rejectors_;
 
-    using IterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::use_reciprocal_correspondence_;
+    using IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+        use_reciprocal_correspondence_;
 
-    using IterativeClosestPoint<PointSource, PointTarget,
-                                Scalar>::convergence_criteria_;
+    using IterativeClosestPoint<PointSource, PointTarget, Scalar>::
+        convergence_criteria_;
     using IterativeClosestPoint<PointSource, PointTarget, Scalar>::source_has_normals_;
     using IterativeClosestPoint<PointSource, PointTarget, Scalar>::target_has_normals_;
     using IterativeClosestPoint<PointSource, PointTarget, Scalar>::need_source_blob_;

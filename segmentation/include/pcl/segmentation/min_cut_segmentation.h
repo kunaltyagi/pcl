@@ -71,18 +71,26 @@ namespace pcl
         boost::adjacency_list_traits<boost::vecS, boost::vecS, boost::directedS>;
 
     using mGraph = boost::adjacency_list<
-        boost::vecS, boost::vecS, boost::directedS,
+        boost::vecS,
+        boost::vecS,
+        boost::directedS,
         boost::property<
-            boost::vertex_name_t, std::string,
+            boost::vertex_name_t,
+            std::string,
             boost::property<
-                boost::vertex_index_t, long,
+                boost::vertex_index_t,
+                long,
                 boost::property<
-                    boost::vertex_color_t, boost::default_color_type,
-                    boost::property<boost::vertex_distance_t, long,
+                    boost::vertex_color_t,
+                    boost::default_color_type,
+                    boost::property<boost::vertex_distance_t,
+                                    long,
                                     boost::property<boost::vertex_predecessor_t,
                                                     Traits::edge_descriptor>>>>>,
-        boost::property<boost::edge_capacity_t, double,
-                        boost::property<boost::edge_residual_capacity_t, double,
+        boost::property<boost::edge_capacity_t,
+                        double,
+                        boost::property<boost::edge_residual_capacity_t,
+                                        double,
                                         boost::property<boost::edge_reverse_t,
                                                         Traits::edge_descriptor>>>>;
 
@@ -233,7 +241,8 @@ namespace pcl
      * \param[out] sink_weight calculated weight for the (point, sink) edge
      */
     void
-    calculateUnaryPotential (int point, double &source_weight,
+    calculateUnaryPotential (int point,
+                             double &source_weight,
                              double &sink_weight) const;
 
     /** \brief This method simply adds the edge from the source point to the target

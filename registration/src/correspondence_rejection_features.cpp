@@ -51,7 +51,8 @@ pcl::registration::CorrespondenceRejectorFeatures::getRemainingCorrespondences (
   for (size_t i = 0; i < input_correspondences_->size (); ++i) {
     // Go over the map of features
     for (FeaturesMap::const_iterator it = features_map_.begin ();
-         it != features_map_.end (); ++it) {
+         it != features_map_.end ();
+         ++it) {
       // Check if the score in feature space is above the given threshold
       // (assume that the number of feature correspondenecs is the same as the number of
       // point correspondences)

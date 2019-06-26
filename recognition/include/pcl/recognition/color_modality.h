@@ -91,7 +91,9 @@ namespace pcl
     }
 
     void
-    extractFeatures (const MaskMap &mask, size_t nr_features, size_t modalityIndex,
+    extractFeatures (const MaskMap &mask,
+                     size_t nr_features,
+                     size_t modalityIndex,
                      std::vector<QuantizedMultiModFeature> &features) const;
 
     /** \brief Provide a pointer to the input dataset (overwrites the
@@ -166,7 +168,9 @@ pcl::ColorModality<PointInT>::processInputData ()
 template <typename PointInT>
 void
 pcl::ColorModality<PointInT>::extractFeatures (
-    const MaskMap &mask, const size_t nr_features, const size_t modality_index,
+    const MaskMap &mask,
+    const size_t nr_features,
+    const size_t modality_index,
     std::vector<QuantizedMultiModFeature> &features) const
 {
   const size_t width = mask.getWidth ();
@@ -259,7 +263,8 @@ pcl::ColorModality<PointInT>::extractFeatures (
   }
 
   for (typename std::list<Candidate>::iterator iter = list1.begin ();
-       iter != list1.end (); ++iter)
+       iter != list1.end ();
+       ++iter)
     iter->distance *= 1.0f / weights[iter->bin_index];
 
   list1.sort ();
@@ -267,7 +272,8 @@ pcl::ColorModality<PointInT>::extractFeatures (
   if (list1.size () <= nr_features) {
     features.reserve (list1.size ());
     for (typename std::list<Candidate>::iterator iter = list1.begin ();
-         iter != list1.end (); ++iter) {
+         iter != list1.end ();
+         ++iter) {
       QuantizedMultiModFeature feature;
 
       feature.x = static_cast<int> (iter->x);
@@ -286,11 +292,13 @@ pcl::ColorModality<PointInT>::extractFeatures (
   while (list2.size () != nr_features) {
     const int sqr_distance = distance * distance;
     for (typename std::list<Candidate>::iterator iter1 = list1.begin ();
-         iter1 != list1.end (); ++iter1) {
+         iter1 != list1.end ();
+         ++iter1) {
       bool candidate_accepted = true;
 
       for (typename std::list<Candidate>::iterator iter2 = list2.begin ();
-           iter2 != list2.end (); ++iter2) {
+           iter2 != list2.end ();
+           ++iter2) {
         const int dx = static_cast<int> (iter1->x) - static_cast<int> (iter2->x);
         const int dy = static_cast<int> (iter1->y) - static_cast<int> (iter2->y);
         const int tmp_distance = dx * dx + dy * dy;
@@ -311,7 +319,8 @@ pcl::ColorModality<PointInT>::extractFeatures (
   }
 
   for (typename std::list<Candidate>::iterator iter2 = list2.begin ();
-       iter2 != list2.end (); ++iter2) {
+       iter2 != list2.end ();
+       ++iter2) {
     QuantizedMultiModFeature feature;
 
     feature.x = static_cast<int> (iter2->x);
@@ -443,7 +452,8 @@ pcl::ColorModality<PointInT>::filterQuantizedColors ()
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointInT>
 int
-pcl::ColorModality<PointInT>::quantizeColorOnRGBExtrema (const float r, const float g,
+pcl::ColorModality<PointInT>::quantizeColorOnRGBExtrema (const float r,
+                                                         const float g,
                                                          const float b)
 {
   const float r_inv = 255.0f - r;

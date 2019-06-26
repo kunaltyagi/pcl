@@ -93,8 +93,10 @@ printHelp (int, char **argv)
 }
 
 bool
-loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud,
-           Eigen::Vector4f &translation, Eigen::Quaternionf &orientation)
+loadCloud (const std::string &filename,
+           pcl::PCLPointCloud2 &cloud,
+           Eigen::Vector4f &translation,
+           Eigen::Quaternionf &orientation)
 {
   TicToc tt;
   print_highlight ("Loading ");
@@ -115,9 +117,15 @@ loadCloud (const std::string &filename, pcl::PCLPointCloud2 &cloud,
 }
 
 void
-compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output,
-         std::string method, int min_pts, double radius, int mean_k, double std_dev_mul,
-         bool negative, bool keep_organized)
+compute (const pcl::PCLPointCloud2::ConstPtr &input,
+         pcl::PCLPointCloud2 &output,
+         std::string method,
+         int min_pts,
+         double radius,
+         int mean_k,
+         double std_dev_mul,
+         bool negative,
+         bool keep_organized)
 {
 
   PointCloud<PointXYZ>::Ptr xyz_cloud_pre (new pcl::PointCloud<PointXYZ> ()),
@@ -145,7 +153,9 @@ compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output
     filter.setKeepOrganized (keep_organized);
     PCL_INFO ("Computing filtered cloud from %lu points with mean_k %d, std_dev_mul "
               "%f, inliers %d ...",
-              xyz_cloud->size (), filter.getMeanK (), filter.getStddevMulThresh (),
+              xyz_cloud->size (),
+              filter.getMeanK (),
+              filter.getStddevMulThresh (),
               filter.getNegative ());
     filter.filter (*xyz_cloud_filtered);
     // Get the indices that have been explicitly removed
@@ -158,7 +168,9 @@ compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output
     filter.setNegative (negative);
     filter.setKeepOrganized (keep_organized);
     PCL_INFO ("Computing filtered cloud from %lu points with radius %f, min_pts %d ...",
-              xyz_cloud->size (), radius, min_pts);
+              xyz_cloud->size (),
+              radius,
+              min_pts);
     filter.filter (*xyz_cloud_filtered);
     // Get the indices that have been explicitly removed
     filter.getRemovedIndices (*removed_indices);
@@ -192,8 +204,10 @@ compute (const pcl::PCLPointCloud2::ConstPtr &input, pcl::PCLPointCloud2 &output
 }
 
 void
-saveCloud (const std::string &filename, const pcl::PCLPointCloud2 &output,
-           const Eigen::Vector4f &translation, const Eigen::Quaternionf &rotation)
+saveCloud (const std::string &filename,
+           const pcl::PCLPointCloud2 &output,
+           const Eigen::Vector4f &translation,
+           const Eigen::Quaternionf &rotation)
 {
   TicToc tt;
   tt.tic ();
@@ -258,13 +272,21 @@ main (int argc, char **argv)
   if (keep_organized && cloud->height == 1) {
     print_error ("Point cloud dataset (%s) is not organized (height = %d), but "
                  "-keep_organized requested!\n",
-                 argv[p_file_indices[0]], cloud->height);
+                 argv[p_file_indices[0]],
+                 cloud->height);
     return (-1);
   }
 
   // Do the smoothing
   pcl::PCLPointCloud2 output;
-  compute (cloud, output, method, min_pts, radius, mean_k, std_dev_mul, negative,
+  compute (cloud,
+           output,
+           method,
+           min_pts,
+           radius,
+           mean_k,
+           std_dev_mul,
+           negative,
            keep_organized);
 
   // Save into the second file

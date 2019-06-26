@@ -125,8 +125,10 @@ struct svm_model {
 struct svm_model *
 svm_train (const struct svm_problem *prob, const struct svm_parameter *param);
 void
-svm_cross_validation (const struct svm_problem *prob, const struct svm_parameter *param,
-                      int nr_fold, double *target);
+svm_cross_validation (const struct svm_problem *prob,
+                      const struct svm_parameter *param,
+                      int nr_fold,
+                      double *target);
 
 int
 svm_save_model (const char *model_file_name, const struct svm_model *model);
@@ -144,12 +146,14 @@ double
 svm_get_svr_probability (const struct svm_model *model);
 
 double
-svm_predict_values (const struct svm_model *model, const struct svm_node *x,
+svm_predict_values (const struct svm_model *model,
+                    const struct svm_node *x,
                     double *dec_values);
 double
 svm_predict (const struct svm_model *model, const struct svm_node *x);
 double
-svm_predict_probability (const struct svm_model *model, const struct svm_node *x,
+svm_predict_probability (const struct svm_model *model,
+                         const struct svm_node *x,
                          double *prob_estimates);
 
 void

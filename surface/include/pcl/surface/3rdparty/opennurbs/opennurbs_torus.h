@@ -141,7 +141,8 @@ class ON_CLASS ON_Torus
 
   // returns parameters of point on torus that is closest to test_point.
   ON_BOOL32
-  ClosestPointTo (ON_3dPoint test_point, double *major_angle_radians,
+  ClosestPointTo (ON_3dPoint test_point,
+                  double *major_angle_radians,
                   double *minor_angle_radians) const;
 
   // returns point on torus that is closest to test_point

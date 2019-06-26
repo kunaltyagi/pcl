@@ -228,7 +228,11 @@ class ON_CLASS ON_BezierCurve
   //   The result has order = points.Count() and the loft uses the
   //   parameterizaton curve( t[i] ) = points[i].
   bool
-  Loft (int pt_dim, int pt_count, int pt_stride, const double *pt, int t_stride,
+  Loft (int pt_dim,
+        int pt_count,
+        int pt_stride,
+        const double *pt,
+        int t_stride,
         const double *t);
 
   // Description:
@@ -246,7 +250,9 @@ class ON_CLASS ON_BezierCurve
   //   true if successful.
   bool
   GetBBox ( // returns true if successful
-      double *box_min, double *box_max, int bGrowBox = false) const;
+      double *box_min,
+      double *box_max,
+      int bGrowBox = false) const;
 
   // Description:
   //   Gets bounding box.
@@ -285,7 +291,8 @@ class ON_CLASS ON_BezierCurve
     bounding box.
   */
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   // Description:
@@ -312,7 +319,9 @@ class ON_CLASS ON_BezierCurve
   // Remarks:
   //   Uses ON_BezierCurve::Transform() function to calculate the result.
   bool
-  Rotate (double sin_angle, double cos_angle, const ON_3dVector &rotation_axis,
+  Rotate (double sin_angle,
+          double cos_angle,
+          const ON_3dVector &rotation_axis,
           const ON_3dPoint &rotation_center);
 
   // Description:
@@ -328,7 +337,8 @@ class ON_CLASS ON_BezierCurve
   // Remarks:
   //   Uses ON_BezierCurve::Transform() function to calculate the result.
   bool
-  Rotate (double rotation_angle, const ON_3dVector &rotation_axis,
+  Rotate (double rotation_angle,
+          const ON_3dVector &rotation_axis,
           const ON_3dPoint &rotation_center);
 
   // Description:
@@ -444,7 +454,9 @@ class ON_CLASS ON_BezierCurve
   // Returns:
   //   false if unable to evaluate.
   bool
-  Ev2Der (double t, ON_3dPoint &point, ON_3dVector &first_derivative,
+  Ev2Der (double t,
+          ON_3dPoint &point,
+          ON_3dVector &first_derivative,
           ON_3dVector &second_derivative) const;
 
   /*
@@ -475,7 +487,9 @@ class ON_CLASS ON_BezierCurve
     false if unable to evaluate.
   */
   bool
-  EvCurvature (double t, ON_3dPoint &point, ON_3dVector &tangent,
+  EvCurvature (double t,
+               ON_3dPoint &point,
+               ON_3dVector &tangent,
                ON_3dVector &kappa) const;
 
   // Description:
@@ -1005,7 +1019,9 @@ class ON_CLASS ON_BezierSurface
   // Remarks:
   //   Uses ON_BezierSurface::Transform() function to calculate the result.
   bool
-  Rotate (double sin_angle, double cos_angle, const ON_3dVector &rotation_axis,
+  Rotate (double sin_angle,
+          double cos_angle,
+          const ON_3dVector &rotation_axis,
           const ON_3dPoint &rotation_center);
 
   // Description:
@@ -1021,7 +1037,8 @@ class ON_CLASS ON_BezierSurface
   // Remarks:
   //   Uses ON_BezierSurface::Transform() function to calculate the result.
   bool
-  Rotate (double rotation_angle, const ON_3dVector &rotation_axis,
+  Rotate (double rotation_angle,
+          const ON_3dVector &rotation_axis,
           const ON_3dPoint &rotation_center);
 
   // Description:
@@ -1059,11 +1076,12 @@ class ON_CLASS ON_BezierSurface
   Transpose (); // transpose surface parameterization (swap "s" and "t")
 
   bool
-  Evaluate (          // returns false if unable to evaluate
-      double, double, // evaluation parameter
-      int,            // number of derivatives (>=0)
-      int,            // array stride (>=Dimension())
-      double *        // array of length stride*(ndir+1)*(ndir+2)/2
+  Evaluate ( // returns false if unable to evaluate
+      double,
+      double,  // evaluation parameter
+      int,     // number of derivatives (>=0)
+      int,     // array stride (>=Dimension())
+      double * // array of length stride*(ndir+1)*(ndir+2)/2
       ) const;
 
   ON_3dPoint
@@ -1126,33 +1144,38 @@ class ON_CLASS ON_BezierSurface
   CVStyle () const;
 
   double
-  Weight (     // get value of control vertex weight
-      int, int // CV index ( >= 0 and < CVCount() )
+  Weight ( // get value of control vertex weight
+      int,
+      int // CV index ( >= 0 and < CVCount() )
       ) const;
 
   bool
-  SetWeight (   // set value of control vertex weight
-      int, int, // CV index ( >= 0 and < CVCount() )
+  SetWeight ( // set value of control vertex weight
+      int,
+      int, // CV index ( >= 0 and < CVCount() )
       double);
 
   bool
-  SetCV (              // set a single control vertex
-      int, int,        // CV index ( >= 0 and < CVCount() )
+  SetCV ( // set a single control vertex
+      int,
+      int,             // CV index ( >= 0 and < CVCount() )
       ON::point_style, // style of input point
       const double *   // value of control vertex
   );
 
   bool
-  SetCV (                // set a single control vertex
-      int, int,          // CV index ( >= 0 and < CVCount() )
+  SetCV ( // set a single control vertex
+      int,
+      int,               // CV index ( >= 0 and < CVCount() )
       const ON_3dPoint & // value of control vertex
                          // If NURBS is rational, weight
                          // will be set to 1.
   );
 
   bool
-  SetCV (                // set a single control vertex
-      int, int,          // CV index ( >= 0 and < CVCount() )
+  SetCV ( // set a single control vertex
+      int,
+      int,               // CV index ( >= 0 and < CVCount() )
       const ON_4dPoint & // value of control vertex
                          // If NURBS is not rational, euclidean
                          // location of homogeneous point will
@@ -1160,21 +1183,24 @@ class ON_CLASS ON_BezierSurface
   );
 
   bool
-  GetCV (              // get a single control vertex
-      int, int,        // CV index ( >= 0 and < CVCount() )
+  GetCV ( // get a single control vertex
+      int,
+      int,             // CV index ( >= 0 and < CVCount() )
       ON::point_style, // style to use for output point
       double *         // array of length >= CVSize()
       ) const;
 
   bool
-  GetCV (          // get a single control vertex
-      int, int,    // CV index ( >= 0 and < CVCount() )
+  GetCV ( // get a single control vertex
+      int,
+      int,         // CV index ( >= 0 and < CVCount() )
       ON_3dPoint & // gets euclidean cv when NURBS is rational
       ) const;
 
   bool
-  GetCV (          // get a single control vertex
-      int, int,    // CV index ( >= 0 and < CVCount() )
+  GetCV ( // get a single control vertex
+      int,
+      int,         // CV index ( >= 0 and < CVCount() )
       ON_4dPoint & // gets homogeneous cv
       ) const;
 
@@ -1451,7 +1477,9 @@ class ON_CLASS ON_BezierCage
   // Remarks:
   //   Uses ON_BezierCage::Transform() function to calculate the result.
   bool
-  Rotate (double sin_angle, double cos_angle, const ON_3dVector &rotation_axis,
+  Rotate (double sin_angle,
+          double cos_angle,
+          const ON_3dVector &rotation_axis,
           const ON_3dPoint &rotation_center);
 
   // Description:
@@ -1467,7 +1495,8 @@ class ON_CLASS ON_BezierCage
   // Remarks:
   //   Uses ON_BezierCage::Transform() function to calculate the result.
   bool
-  Rotate (double rotation_angle, const ON_3dVector &rotation_axis,
+  Rotate (double rotation_angle,
+          const ON_3dVector &rotation_axis,
           const ON_3dPoint &rotation_center);
 
   // Description:
@@ -1499,7 +1528,11 @@ class ON_CLASS ON_BezierCage
 
   // returns false if unable to evaluate
   bool
-  Evaluate (double r, double s, double t, int der_count, int v_stride,
+  Evaluate (double r,
+            double s,
+            double t,
+            int der_count,
+            int v_stride,
             double *v // array of length stride*(ndir+1)*(ndir+2)/2
             ) const;
 
@@ -1586,15 +1619,22 @@ class ON_CLASS ON_BezierCage
 
   double
   Weight ( // get value of control vertex weight
-      int i, int j, int k) const;
+      int i,
+      int j,
+      int k) const;
 
   bool
   SetWeight ( // set value of control vertex weight
-      int i, int j, int k, double w);
+      int i,
+      int j,
+      int k,
+      double w);
 
   bool
   SetCV ( // set a single control vertex
-      int i, int j, int k,
+      int i,
+      int j,
+      int k,
       ON::point_style, // style of input point
       const double *   // value of control vertex
   );
@@ -1615,20 +1655,26 @@ class ON_CLASS ON_BezierCage
 
   bool
   GetCV ( // get a single control vertex
-      int i, int j, int k,
+      int i,
+      int j,
+      int k,
       ON::point_style, // style to use for output point
       double *         // array of length >= CVSize()
       ) const;
 
   bool
   GetCV ( // get a single control vertex
-      int i, int j, int k,
+      int i,
+      int j,
+      int k,
       ON_3dPoint & // gets euclidean cv when NURBS is rational
       ) const;
 
   bool
   GetCV ( // get a single control vertex
-      int i, int j, int k,
+      int i,
+      int j,
+      int k,
       ON_4dPoint & // gets homogeneous cv
       ) const;
 
@@ -1717,8 +1763,13 @@ class ON_CLASS ON_BezierCageMorph : public ON_SpaceMorph
     ON_BezierCage::SetXform
   */
   bool
-  Create (ON_3dPoint P0, ON_3dPoint P1, ON_3dPoint P2, ON_3dPoint P3, int point_countX,
-          int point_countY, int point_countZ);
+  Create (ON_3dPoint P0,
+          ON_3dPoint P1,
+          ON_3dPoint P2,
+          ON_3dPoint P3,
+          int point_countX,
+          int point_countY,
+          int point_countZ);
 
   /*
   Description:

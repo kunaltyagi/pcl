@@ -68,7 +68,8 @@ namespace pcl
      */
     template <typename PointT>
     void
-    Camera::cvtWindowCoordinates (const PointT &pt, Eigen::Vector4d &window_cord,
+    Camera::cvtWindowCoordinates (const PointT &pt,
+                                  Eigen::Vector4d &window_cord,
                                   const Eigen::Matrix4d &composite_mat) const
     {
       Eigen::Vector4d pte (pt.x, pt.y, pt.z, 1);

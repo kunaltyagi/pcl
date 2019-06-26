@@ -91,8 +91,10 @@ namespace pcl
        */
       template <typename PointT>
       bool
-      addFeatureHistogram (const pcl::PointCloud<PointT> &cloud, int hsize,
-                           const std::string &id = "cloud", int win_width = 640,
+      addFeatureHistogram (const pcl::PointCloud<PointT> &cloud,
+                           int hsize,
+                           const std::string &id = "cloud",
+                           int win_width = 640,
                            int win_height = 200);
 
       /** \brief Add a histogram feature to screen as a separate window from a cloud
@@ -105,7 +107,8 @@ namespace pcl
       bool
       addFeatureHistogram (const pcl::PCLPointCloud2 &cloud,
                            const std::string &field_name,
-                           const std::string &id = "cloud", int win_width = 640,
+                           const std::string &id = "cloud",
+                           int win_width = 640,
                            int win_height = 200);
 
       /** \brief Add a histogram feature to screen as a separate window.
@@ -119,8 +122,10 @@ namespace pcl
       template <typename PointT>
       bool
       addFeatureHistogram (const pcl::PointCloud<PointT> &cloud,
-                           const std::string &field_name, const int index,
-                           const std::string &id = "cloud", int win_width = 640,
+                           const std::string &field_name,
+                           const int index,
+                           const std::string &id = "cloud",
+                           int win_width = 640,
                            int win_height = 200);
 
       /** \brief Add a histogram feature to screen as a separate window.
@@ -133,8 +138,10 @@ namespace pcl
        */
       bool
       addFeatureHistogram (const pcl::PCLPointCloud2 &cloud,
-                           const std::string &field_name, const int index,
-                           const std::string &id = "cloud", int win_width = 640,
+                           const std::string &field_name,
+                           const int index,
+                           const std::string &id = "cloud",
+                           int win_width = 640,
                            int win_height = 200);
 
       /** \brief Update a histogram feature that is already on screen, with a cloud
@@ -144,7 +151,8 @@ namespace pcl
        */
       template <typename PointT>
       bool
-      updateFeatureHistogram (const pcl::PointCloud<PointT> &cloud, int hsize,
+      updateFeatureHistogram (const pcl::PointCloud<PointT> &cloud,
+                              int hsize,
                               const std::string &id = "cloud");
 
       /** \brief Update a histogram feature that is already on screen, with a cloud
@@ -166,7 +174,8 @@ namespace pcl
       template <typename PointT>
       bool
       updateFeatureHistogram (const pcl::PointCloud<PointT> &cloud,
-                              const std::string &field_name, const int index,
+                              const std::string &field_name,
+                              const int index,
                               const std::string &id = "cloud");
 
       /** \brief Update a histogram feature that is already on screen, with a cloud
@@ -177,7 +186,8 @@ namespace pcl
        */
       bool
       updateFeatureHistogram (const pcl::PCLPointCloud2 &cloud,
-                              const std::string &field_name, const int index,
+                              const std::string &field_name,
+                              const int index,
                               const std::string &id = "cloud");
 
       /** \brief Set the Y range to minp-maxp for all histograms.
@@ -200,8 +210,10 @@ namespace pcl
        */
       void
       createActor (const vtkSmartPointer<vtkDoubleArray> &xy_array,
-                   RenWinInteract &renwinint, const std::string &id,
-                   const int win_width, const int win_height);
+                   RenWinInteract &renwinint,
+                   const std::string &id,
+                   const int win_width,
+                   const int win_height);
 
       /** \brief Remove the current 2d actor and create a new 2D actor from the given
        * vtkDoubleArray histogram and add it to the screen. \param[in] xy_array the
@@ -211,7 +223,8 @@ namespace pcl
        */
       void
       reCreateActor (const vtkSmartPointer<vtkDoubleArray> &xy_array,
-                     RenWinInteract *renwinupd, const int hsize);
+                     RenWinInteract *renwinupd,
+                     const int hsize);
 
       private:
       /** \brief A map of all windows on screen (with their renderers and interactors).

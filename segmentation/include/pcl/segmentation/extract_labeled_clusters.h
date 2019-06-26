@@ -54,8 +54,10 @@ namespace pcl
   template <typename PointT>
   void
   extractLabeledEuclideanClusters (
-      const PointCloud<PointT> &cloud, const typename search::Search<PointT>::Ptr &tree,
-      float tolerance, std::vector<std::vector<PointIndices>> &labeled_clusters,
+      const PointCloud<PointT> &cloud,
+      const typename search::Search<PointT>::Ptr &tree,
+      float tolerance,
+      std::vector<std::vector<PointIndices>> &labeled_clusters,
       unsigned int min_pts_per_cluster = 1,
       unsigned int max_pts_per_cluster = std::numeric_limits<unsigned int>::max (),
       unsigned int max_label = std::numeric_limits<unsigned int>::max ());

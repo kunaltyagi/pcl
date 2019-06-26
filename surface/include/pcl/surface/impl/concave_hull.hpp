@@ -126,8 +126,8 @@ pcl::ConcaveHull<PointInT>::performReconstruction (PointCloud &alpha_shape,
   Eigen::Vector4d xyz_centroid;
   compute3DCentroid (*input_, *indices_, xyz_centroid);
   EIGEN_ALIGN16 Eigen::Matrix3d covariance_matrix = Eigen::Matrix3d::Zero ();
-  computeCovarianceMatrixNormalized (*input_, *indices_, xyz_centroid,
-                                     covariance_matrix);
+  computeCovarianceMatrixNormalized (
+      *input_, *indices_, xyz_centroid, covariance_matrix);
 
   // Check if the covariance matrix is finite or not.
   for (int i = 0; i < 3; ++i)
@@ -200,13 +200,19 @@ pcl::ConcaveHull<PointInT>::performReconstruction (PointCloud &alpha_shape,
   }
 
   // Compute concave hull
-  exitcode = qh_new_qhull (dim_, static_cast<int> (cloud_transformed.points.size ()),
-                           points, ismalloc, flags, outfile, errfile);
+  exitcode = qh_new_qhull (dim_,
+                           static_cast<int> (cloud_transformed.points.size ()),
+                           points,
+                           ismalloc,
+                           flags,
+                           outfile,
+                           errfile);
 
   if (exitcode != 0) {
     PCL_ERROR ("[pcl::%s::performReconstrution] ERROR: qhull was unable to compute a "
                "concave hull for the given point cloud (%lu)!\n",
-               getClassName ().c_str (), cloud_transformed.points.size ());
+               getClassName ().c_str (),
+               cloud_transformed.points.size ());
 
     // check if it fails because of NaN values...
     if (!cloud_transformed.is_dense) {
@@ -527,7 +533,8 @@ pcl::ConcaveHull<PointInT>::performReconstruction (PointCloud &alpha_shape,
                                   pcd_idx_start_polygons[poly_id]);
         // populate points in the corresponding polygon
         for (int j = pcd_idx_start_polygons[poly_id];
-             j < pcd_idx_start_polygons[poly_id + 1]; ++j)
+             j < pcd_idx_start_polygons[poly_id + 1];
+             ++j)
           vertices.vertices[j - pcd_idx_start_polygons[poly_id]] =
               static_cast<uint32_t> (j);
 

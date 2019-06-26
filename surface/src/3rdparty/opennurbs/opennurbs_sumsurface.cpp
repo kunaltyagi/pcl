@@ -197,7 +197,8 @@ ON_SumSurface::IsValid (ON_TextLog *text_log) const
     }
     if (m_curve[i]->Dimension () != 3) {
       if (text_log)
-        text_log->Print ("ON_SumSurface.m_curve[%d]->m_dim = %d (should be 3).\n", i,
+        text_log->Print ("ON_SumSurface.m_curve[%d]->m_dim = %d (should be 3).\n",
+                         i,
                          m_curve[i]->Dimension ());
       return false;
     }
@@ -421,7 +422,8 @@ ON_SumSurface::Transform (const ON_Xform &xform)
 ON_BOOL32
 ON_SumSurface::SetDomain (
     int dir, // 0 sets first parameter's domain, 1 gets second parameter's domain
-    double t0, double t1)
+    double t0,
+    double t1)
 {
   bool rc = false;
   if (t0 < t1 && dir >= 0 && dir <= 1) {
@@ -601,14 +603,16 @@ ON_SumSurface::IsPeriodic (int dir) const
 }
 
 ON_BOOL32
-ON_SumSurface::IsSingular (int side) const
-{
-  return false;
-}
+ON_SumSurface::IsSingular (int side) const { return false; }
 
 bool
-ON_SumSurface::GetNextDiscontinuity (int dir, ON::continuity c, double t0, double t1,
-                                     double *t, int *hint, int *dtype,
+ON_SumSurface::GetNextDiscontinuity (int dir,
+                                     ON::continuity c,
+                                     double t0,
+                                     double t1,
+                                     double *t,
+                                     int *hint,
+                                     int *dtype,
                                      double cos_angle_tolerance,
                                      double curvature_tolerance) const
 {
@@ -616,8 +620,13 @@ ON_SumSurface::GetNextDiscontinuity (int dir, ON::continuity c, double t0, doubl
   bool rc = false;
   if (0 == dir || 1 == dir) {
     if (0 != m_curve[dir]) {
-      rc = m_curve[dir]->GetNextDiscontinuity (c, t0, t1, t, (hint ? &hint[dir] : 0),
-                                               dtype, cos_angle_tolerance,
+      rc = m_curve[dir]->GetNextDiscontinuity (c,
+                                               t0,
+                                               t1,
+                                               t,
+                                               (hint ? &hint[dir] : 0),
+                                               dtype,
+                                               cos_angle_tolerance,
                                                curvature_tolerance);
     }
   }
@@ -626,7 +635,9 @@ ON_SumSurface::GetNextDiscontinuity (int dir, ON::continuity c, double t0, doubl
 
 bool
 ON_SumSurface::IsContinuous (
-    ON::continuity desired_continuity, double s, double t,
+    ON::continuity desired_continuity,
+    double s,
+    double t,
     int *hint,                  // default = NULL,
     double point_tolerance,     // default=ON_ZERO_TOLERANCE
     double d1_tolerance,        // default==ON_ZERO_TOLERANCE
@@ -642,13 +653,23 @@ ON_SumSurface::IsContinuous (
       crv_hint[0] = (*hint) & 0xFFFF;
       crv_hint[1] = ((*hint) & 0xFFFF0000) >> 16;
     }
-    rc = m_curve[0]->IsContinuous (desired_continuity, s, &crv_hint[0], point_tolerance,
-                                   d1_tolerance, d2_tolerance, cos_angle_tolerance,
+    rc = m_curve[0]->IsContinuous (desired_continuity,
+                                   s,
+                                   &crv_hint[0],
+                                   point_tolerance,
+                                   d1_tolerance,
+                                   d2_tolerance,
+                                   cos_angle_tolerance,
                                    curvature_tolerance);
     if (rc)
-      rc = m_curve[1]->IsContinuous (desired_continuity, t, &crv_hint[1],
-                                     point_tolerance, d1_tolerance, d2_tolerance,
-                                     cos_angle_tolerance, curvature_tolerance);
+      rc = m_curve[1]->IsContinuous (desired_continuity,
+                                     t,
+                                     &crv_hint[1],
+                                     point_tolerance,
+                                     d1_tolerance,
+                                     d2_tolerance,
+                                     cos_angle_tolerance,
+                                     curvature_tolerance);
     if (hint) {
       *hint = ((crv_hint[0] & 0xFFFF) | (crv_hint[1] << 16));
     }
@@ -680,18 +701,19 @@ ON_SumSurface::Transpose ()
 
 ON_BOOL32
 ON_SumSurface::Evaluate ( // returns false if unable to evaluate
-    double s, double t,   // evaluation parameters
-    int nder,             // number of derivatives (>=0)
-    int v_stride,         // array stride (>=Dimension())
-    double *v,            // array of length stride*(ndir+1)*(ndir+2)/2
-    int side,             // optional - determines which quadrant to evaluate from
-                          //         0 = default
-                          //         1 from NE quadrant
-                          //         2 from NW quadrant
-                          //         3 from SW quadrant
-                          //         4 from SE quadrant
-    int *hint             // optional - evaluation hint (int[2]) used to speed
-                          //            repeated evaluations
+    double s,
+    double t,     // evaluation parameters
+    int nder,     // number of derivatives (>=0)
+    int v_stride, // array stride (>=Dimension())
+    double *v,    // array of length stride*(ndir+1)*(ndir+2)/2
+    int side,     // optional - determines which quadrant to evaluate from
+                  //         0 = default
+                  //         1 from NE quadrant
+                  //         2 from NW quadrant
+                  //         3 from SW quadrant
+                  //         4 from SE quadrant
+    int *hint     // optional - evaluation hint (int[2]) used to speed
+                  //            repeated evaluations
     ) const
 {
   ON_BOOL32 rc = false;
@@ -822,8 +844,8 @@ ON_SumTensor::DimensionC () const
 }
 
 bool
-ON_SumTensor::Evaluate (double a, const double *CurveA, double b, const double *CurveB,
-                        double *SrfPoint)
+ON_SumTensor::Evaluate (
+    double a, const double *CurveA, double b, const double *CurveB, double *SrfPoint)
 {
   SrfPoint[0] = a * CurveA[0] + b * CurveB[0] + basepoint.x;
   SrfPoint[1] = a * CurveA[1] + b * CurveB[1] + basepoint.y;
@@ -892,7 +914,8 @@ ON_SumSurface::HasNurbForm () const
 }
 
 bool
-ON_SumSurface::GetSurfaceParameterFromNurbFormParameter (double nurbs_s, double nurbs_t,
+ON_SumSurface::GetSurfaceParameterFromNurbFormParameter (double nurbs_s,
+                                                         double nurbs_t,
                                                          double *surface_s,
                                                          double *surface_t) const
 {
@@ -974,7 +997,9 @@ ON_SumSurface::Extend (int dir, const ON_Interval &domain)
 }
 
 ON_BOOL32
-ON_SumSurface::Split (int dir, double c, ON_Surface *&west_or_south_side,
+ON_SumSurface::Split (int dir,
+                      double c,
+                      ON_Surface *&west_or_south_side,
                       ON_Surface *&east_or_north_side) const
 
 {

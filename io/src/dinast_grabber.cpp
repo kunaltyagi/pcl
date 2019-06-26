@@ -106,7 +106,8 @@ pcl::DinastGrabber::onInit (const int device_position)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void
-pcl::DinastGrabber::setupDevice (int device_position, const int id_vendor,
+pcl::DinastGrabber::setupDevice (int device_position,
+                                 const int id_vendor,
                                  const int id_product)
 {
   int device_position_counter = 0;
@@ -250,9 +251,12 @@ pcl::DinastGrabber::readImage ()
   while (!second_image_) {
     // Read at least two images in synchronous mode
     int actual_length;
-    int res = libusb_bulk_transfer (device_handle_, bulk_ep_, raw_buffer_,
+    int res = libusb_bulk_transfer (device_handle_,
+                                    bulk_ep_,
+                                    raw_buffer_,
                                     RGB16 * (image_size_) + sync_packet_size_,
-                                    &actual_length, 1000);
+                                    &actual_length,
+                                    1000);
     if (res != 0 || actual_length == 0) {
       memset (&image_[0], 0x00, image_size_);
       PCL_THROW_EXCEPTION (pcl::IOException,
@@ -261,7 +265,8 @@ pcl::DinastGrabber::readImage ()
 
     // Copy data from the USB port if we actually read anything
     PCL_DEBUG ("[pcl::DinastGrabber::readImage] Read: %d, size of the buffer: %d\n",
-               actual_length, g_buffer_.size ());
+               actual_length,
+               g_buffer_.size ());
 
     // Copy data into the buffer
     int back = int(g_buffer_.size ());
@@ -367,7 +372,8 @@ pcl::DinastGrabber::getXYZIPointCloud ()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool
 pcl::DinastGrabber::USBRxControlData (const unsigned char req_code,
-                                      unsigned char *buffer, int length)
+                                      unsigned char *buffer,
+                                      int length)
 {
   // The direction of the transfer is inferred from the requesttype field of the setup
   // packet.
@@ -381,9 +387,14 @@ pcl::DinastGrabber::USBRxControlData (const unsigned char req_code,
   // being received For an unlimited timeout, use value 0.
   uint16_t timeout = 1000;
 
-  int nr_read =
-      libusb_control_transfer (device_handle_, requesttype, req_code, value, index,
-                               buffer, static_cast<uint16_t> (length), timeout);
+  int nr_read = libusb_control_transfer (device_handle_,
+                                         requesttype,
+                                         req_code,
+                                         value,
+                                         index,
+                                         buffer,
+                                         static_cast<uint16_t> (length),
+                                         timeout);
   if (nr_read != int(length))
     PCL_THROW_EXCEPTION (pcl::IOException,
                          "[pcl::DinastGrabber::USBRxControlData] Control data error");
@@ -394,7 +405,8 @@ pcl::DinastGrabber::USBRxControlData (const unsigned char req_code,
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool
 pcl::DinastGrabber::USBTxControlData (const unsigned char req_code,
-                                      unsigned char *buffer, int length)
+                                      unsigned char *buffer,
+                                      int length)
 {
   // The direction of the transfer is inferred from the requesttype field of the setup
   // packet.
@@ -408,9 +420,14 @@ pcl::DinastGrabber::USBTxControlData (const unsigned char req_code,
   // being received For an unlimited timeout, use value 0.
   uint16_t timeout = 1000;
 
-  int nr_read =
-      libusb_control_transfer (device_handle_, requesttype, req_code, value, index,
-                               buffer, static_cast<uint16_t> (length), timeout);
+  int nr_read = libusb_control_transfer (device_handle_,
+                                         requesttype,
+                                         req_code,
+                                         value,
+                                         index,
+                                         buffer,
+                                         static_cast<uint16_t> (length),
+                                         timeout);
   if (nr_read != int(length)) {
     std::stringstream sstream;
     sstream << "[pcl::DinastGrabber::USBTxControlData] USB control data error, "

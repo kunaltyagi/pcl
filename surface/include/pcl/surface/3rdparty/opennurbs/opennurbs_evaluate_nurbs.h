@@ -70,11 +70,12 @@ ON_EvaluateBezier (int,            // dimension
                    int,            // order (>=2)
                    int,            // cv_stride >= (is_rat)?dim+1:dim
                    const double *, // cv[order*cv_stride] array
-                   double, double, // t0,t1 = domain of bezier
-                   int,            // number of derivatives to compute (>=0)
-                   double,         // evaluation parameter
-                   int,            // v_stride (>=dimension)
-                   double *        // v[(der_count+1)*v_stride] array
+                   double,
+                   double,  // t0,t1 = domain of bezier
+                   int,     // number of derivatives to compute (>=0)
+                   double,  // evaluation parameter
+                   int,     // v_stride (>=dimension)
+                   double * // v[(der_count+1)*v_stride] array
 );
 
 ON_DECL
@@ -165,8 +166,15 @@ See Also:
   ON_EvaluateNurbsCageSpan
 */
 bool
-ON_EvaluateNurbsSpan (int dim, int is_rat, int order, const double *knot, int cv_stride,
-                      const double *cv, int der_count, double t, int v_stride,
+ON_EvaluateNurbsSpan (int dim,
+                      int is_rat,
+                      int order,
+                      const double *knot,
+                      int cv_stride,
+                      const double *cv,
+                      int der_count,
+                      double t,
+                      int v_stride,
                       double *v);
 
 /*
@@ -218,10 +226,20 @@ See Also:
 */
 ON_DECL
 bool
-ON_EvaluateNurbsSurfaceSpan (int dim, int is_rat, int order0, int order1,
-                             const double *knot0, const double *knot1, int cv_stride0,
-                             int cv_stride1, const double *cv, int der_count, double s,
-                             double t, int v_stride, double *v);
+ON_EvaluateNurbsSurfaceSpan (int dim,
+                             int is_rat,
+                             int order0,
+                             int order1,
+                             const double *knot0,
+                             const double *knot1,
+                             int cv_stride0,
+                             int cv_stride1,
+                             const double *cv,
+                             int der_count,
+                             double s,
+                             double t,
+                             int v_stride,
+                             double *v);
 
 /*
 Description:
@@ -283,11 +301,24 @@ See Also:
 */
 ON_DECL
 bool
-ON_EvaluateNurbsCageSpan (int dim, int is_rat, int order0, int order1, int order2,
-                          const double *knot0, const double *knot1, const double *knot2,
-                          int cv_stride0, int cv_stride1, int cv_stride2,
-                          const double *cv, int der_count, double t0, double t1,
-                          double t2, int v_stride, double *v);
+ON_EvaluateNurbsCageSpan (int dim,
+                          int is_rat,
+                          int order0,
+                          int order1,
+                          int order2,
+                          const double *knot0,
+                          const double *knot1,
+                          const double *knot2,
+                          int cv_stride0,
+                          int cv_stride1,
+                          int cv_stride2,
+                          const double *cv,
+                          int der_count,
+                          double t0,
+                          double t1,
+                          double t2,
+                          int v_stride,
+                          double *v);
 
 ON_DECL
 bool
@@ -311,15 +342,15 @@ ON_EvaluateNurbsDeBoor ( // for expert users only - no support available
     double,         // mult_k - used when side is +2 or -2.  See above for usage.
     double          // t
                     //    If side < 0, then the cv's for the portion of the NURB span to
-           //    the LEFT of t are computed.  If side > 0, then the cv's for the
-           //    portion the span to the RIGHT of t are computed.  The following
-           //    table summarizes the restrictions on t:
-           //
-           //     value of side         condition t must satisfy
-           //        -2                    mult_k < t and mult_k < knots[order-1]
-           //        -1                    knots[order-2] < t
-           //        +1                    t < knots[order-1]
-           //        +2                    t < mult_k and knots[order-2] < mult_k
+    //    the LEFT of t are computed.  If side > 0, then the cv's for the
+    //    portion the span to the RIGHT of t are computed.  The following
+    //    table summarizes the restrictions on t:
+    //
+    //     value of side         condition t must satisfy
+    //        -2                    mult_k < t and mult_k < knots[order-1]
+    //        -1                    knots[order-2] < t
+    //        +1                    t < knots[order-1]
+    //        +2                    t < mult_k and knots[order-2] < mult_k
 );
 
 ON_DECL

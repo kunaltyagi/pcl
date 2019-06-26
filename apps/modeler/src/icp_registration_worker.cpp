@@ -44,7 +44,8 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 pcl::modeler::ICPRegistrationWorker::ICPRegistrationWorker (
-    CloudMesh::PointCloudPtr cloud, const QList<CloudMeshItem *> &cloud_mesh_items,
+    CloudMesh::PointCloudPtr cloud,
+    const QList<CloudMeshItem *> &cloud_mesh_items,
     QWidget *parent)
     : AbstractWorker (cloud_mesh_items, parent), cloud_ (cloud),
       x_min_ (std::numeric_limits<double>::max ()),
@@ -98,24 +99,35 @@ pcl::modeler::ICPRegistrationWorker::setupParameters ()
       new DoubleParameter ("Max Correspondence Distance",
                            "If the distance is larger than this threshold, the points "
                            "will be ignored in the alignment process.",
-                           max_correspondence_distance, 0, x_max_ - x_min_, step);
+                           max_correspondence_distance,
+                           0,
+                           x_max_ - x_min_,
+                           step);
 
   max_iterations_ = new IntParameter (
       "Max Iterations",
       "Set the maximum number of iterations the internal optimization should run for.",
-      10, 0, 256);
+      10,
+      0,
+      256);
 
   double transformation_epsilon = range_max / 2;
   transformation_epsilon_ = new DoubleParameter (
       "Transformation Epsilon",
-      "Maximum allowable difference between two consecutive transformations.", 0.0, 0,
-      transformation_epsilon, step);
+      "Maximum allowable difference between two consecutive transformations.",
+      0.0,
+      0,
+      transformation_epsilon,
+      step);
 
   double euclidean_fitness_epsilon = range_max / 2;
   euclidean_fitness_epsilon_ = new DoubleParameter (
       "Euclidean Fitness Epsilon",
       "Maximum allowed Euclidean error between two consecutive steps in the ICP loop.",
-      0.0, 0, euclidean_fitness_epsilon, step);
+      0.0,
+      0,
+      euclidean_fitness_epsilon,
+      step);
 
   parameter_dialog_->addParameter (max_correspondence_distance_);
   parameter_dialog_->addParameter (max_iterations_);

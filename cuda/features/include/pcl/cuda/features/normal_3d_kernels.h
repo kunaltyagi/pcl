@@ -51,7 +51,9 @@ namespace pcl
       using CloudConstPtr = boost::shared_ptr<const PointCloudAOS<Storage>>;
       NormalEstimationKernel (
           const boost::shared_ptr<const PointCloudAOS<Storage>> &input,
-          float focallength, float sqr_radius, float sqrt_desired_nr_neighbors)
+          float focallength,
+          float sqr_radius,
+          float sqrt_desired_nr_neighbors)
           : points_ (thrust::raw_pointer_cast (&input->points[0])),
             focallength_ (focallength), search_ (input, focallength, sqr_radius),
             sqr_radius_ (sqr_radius),
@@ -65,8 +67,8 @@ namespace pcl
         CovarianceMatrix cov;
         int nnn = 0;
         if (!isnan (query_pt.x))
-          nnn = search_.computeCovarianceOnline (query_pt, cov,
-                                                 sqrt_desired_nr_neighbors_);
+          nnn = search_.computeCovarianceOnline (
+              query_pt, cov, sqrt_desired_nr_neighbors_);
         else
           return make_float4 (query_pt.x);
 
@@ -99,7 +101,8 @@ namespace pcl
     template <template <typename> class Storage>
     struct FastNormalEstimationKernel {
       FastNormalEstimationKernel (
-          const boost::shared_ptr<const PointCloudAOS<Storage>> &input, int width,
+          const boost::shared_ptr<const PointCloudAOS<Storage>> &input,
+          int width,
           int height)
           : points_ (thrust::raw_pointer_cast (&input->points[0])), width_ (width),
             height_ (height)
@@ -167,7 +170,9 @@ namespace pcl
       using CloudConstPtr = boost::shared_ptr<const PointCloudAOS<Storage>>;
       NormalDeviationKernel (
           const boost::shared_ptr<const PointCloudAOS<Storage>> &input,
-          float focallength, float sqr_radius, float sqrt_desired_nr_neighbors)
+          float focallength,
+          float sqr_radius,
+          float sqrt_desired_nr_neighbors)
           : points_ (thrust::raw_pointer_cast (&input->points[0])),
             focallength_ (focallength), search_ (input, focallength, sqr_radius),
             sqr_radius_ (sqr_radius),
@@ -197,7 +202,8 @@ namespace pcl
         // (proj), 0.0f, 1.0f));
         return make_float4 ((centroid.x - query_pt.x) / sqrt (sqr_radius_),
                             (centroid.y - query_pt.y) / sqrt (sqr_radius_),
-                            (centroid.z - query_pt.z) / sqrt (sqr_radius_), 0);
+                            (centroid.z - query_pt.z) / sqrt (sqr_radius_),
+                            0);
       }
 
       const PointXYZRGB *points_;

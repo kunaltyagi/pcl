@@ -46,7 +46,8 @@ FittingSurfaceTDM::FittingSurfaceTDM (NurbsDataSurface *data, const ON_NurbsSurf
     : FittingSurface (data, ns)
 {
 }
-FittingSurfaceTDM::FittingSurfaceTDM (int order, NurbsDataSurface *data,
+FittingSurfaceTDM::FittingSurfaceTDM (int order,
+                                      NurbsDataSurface *data,
                                       Eigen::Vector3d z)
     : FittingSurface (order, data, z)
 {
@@ -148,13 +149,20 @@ FittingSurfaceTDM::assembleInterior (double wInt, double wTangent, unsigned &row
     Vector3d pt, tu, tv, n;
     double error;
     if (p < m_data->interior_param.size ()) {
-      params = inverseMapping (m_nurbs, pcp, m_data->interior_param[p], error, pt, tu,
-                               tv, in_max_steps, in_accuracy);
+      params = inverseMapping (m_nurbs,
+                               pcp,
+                               m_data->interior_param[p],
+                               error,
+                               pt,
+                               tu,
+                               tv,
+                               in_max_steps,
+                               in_accuracy);
       m_data->interior_param[p] = params;
     } else {
       params = FittingSurface::findClosestElementMidPoint (m_nurbs, pcp);
-      params = inverseMapping (m_nurbs, pcp, params, error, pt, tu, tv, in_max_steps,
-                               in_accuracy);
+      params = inverseMapping (
+          m_nurbs, pcp, params, error, pt, tu, tv, in_max_steps, in_accuracy);
       m_data->interior_param.push_back (params);
     }
     m_data->interior_error.push_back (error);
@@ -171,8 +179,8 @@ FittingSurfaceTDM::assembleInterior (double wInt, double wTangent, unsigned &row
     if (p < m_data->interior_weight.size ())
       w = m_data->interior_weight[p];
 
-    addPointConstraint (m_data->interior_param[p], m_data->interior[p], n, tu, tv,
-                        wTangent, w, row);
+    addPointConstraint (
+        m_data->interior_param[p], m_data->interior[p], n, tu, tv, wTangent, w, row);
   }
 }
 
@@ -189,8 +197,8 @@ FittingSurfaceTDM::assembleBoundary (double wBnd, double wTangent, unsigned &row
 
     double error;
     Vector3d pt, tu, tv, n;
-    Vector2d params = inverseMappingBoundary (m_nurbs, pcp, error, pt, tu, tv,
-                                              in_max_steps, in_accuracy);
+    Vector2d params = inverseMappingBoundary (
+        m_nurbs, pcp, error, pt, tu, tv, in_max_steps, in_accuracy);
     m_data->boundary_error.push_back (error);
 
     if (p < m_data->boundary_param.size ()) {
@@ -211,8 +219,8 @@ FittingSurfaceTDM::assembleBoundary (double wBnd, double wTangent, unsigned &row
     if (p < m_data->boundary_weight.size ())
       w = m_data->boundary_weight[p];
 
-    addPointConstraint (m_data->boundary_param[p], m_data->boundary[p], n, tu, tv,
-                        wTangent, w, row);
+    addPointConstraint (
+        m_data->boundary_param[p], m_data->boundary[p], n, tu, tv, wTangent, w, row);
   }
 }
 
@@ -221,16 +229,18 @@ FittingSurfaceTDM::addPointConstraint (const Eigen::Vector2d &params,
                                        const Eigen::Vector3d &p,
                                        const Eigen::Vector3d &n,
                                        const Eigen::Vector3d &tu,
-                                       const Eigen::Vector3d &tv, double tangent_weight,
-                                       double weight, unsigned &row)
+                                       const Eigen::Vector3d &tv,
+                                       double tangent_weight,
+                                       double weight,
+                                       unsigned &row)
 {
   double *N0 = new double[m_nurbs.Order (0) * m_nurbs.Order (0)];
   double *N1 = new double[m_nurbs.Order (1) * m_nurbs.Order (1)];
 
-  int E = ON_NurbsSpanIndex (m_nurbs.Order (0), m_nurbs.CVCount (0), m_nurbs.m_knot[0],
-                             params (0), 0, 0);
-  int F = ON_NurbsSpanIndex (m_nurbs.Order (1), m_nurbs.CVCount (1), m_nurbs.m_knot[1],
-                             params (1), 0, 0);
+  int E = ON_NurbsSpanIndex (
+      m_nurbs.Order (0), m_nurbs.CVCount (0), m_nurbs.m_knot[0], params (0), 0, 0);
+  int F = ON_NurbsSpanIndex (
+      m_nurbs.Order (1), m_nurbs.CVCount (1), m_nurbs.m_knot[1], params (1), 0, 0);
 
   ON_EvaluateNurbsBasis (m_nurbs.Order (0), m_nurbs.m_knot[0] + E, params (0), N0);
   ON_EvaluateNurbsBasis (m_nurbs.Order (1), m_nurbs.m_knot[1] + F, params (1), N1);
@@ -294,7 +304,8 @@ FittingSurfaceTDM::addCageInteriorRegularisation (double weight, unsigned &row)
 }
 
 void
-FittingSurfaceTDM::addCageBoundaryRegularisation (double weight, int side,
+FittingSurfaceTDM::addCageBoundaryRegularisation (double weight,
+                                                  int side,
                                                   unsigned &row)
 {
   int i = 0;

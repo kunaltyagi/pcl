@@ -2214,7 +2214,9 @@ class ON_CLASS ON_Brep : public ON_Geometry
     not be created.
   */
   ON_BrepFace *
-  NewRuledFace (const ON_BrepEdge &edgeA, bool bRevEdgeA, const ON_BrepEdge &edgeB,
+  NewRuledFace (const ON_BrepEdge &edgeA,
+                bool bRevEdgeA,
+                const ON_BrepEdge &edgeB,
                 bool bRevEdgeB);
 
   /*
@@ -2326,7 +2328,8 @@ class ON_CLASS ON_Brep : public ON_Geometry
       true if successful.  The new loop will be brep.m_L.Last().
   */
   bool
-  NewPlanarFaceLoop (int face_index, ON_BrepLoop::TYPE loop_type,
+  NewPlanarFaceLoop (int face_index,
+                     ON_BrepLoop::TYPE loop_type,
                      ON_SimpleArray<ON_Curve *> &boundary,
                      ON_BOOL32 bDuplicateCurves = true);
 
@@ -2491,7 +2494,9 @@ class ON_CLASS ON_Brep : public ON_Geometry
     ON_Brep::NewTrim
   */
   ON_BrepTrim &
-  NewSingularTrim (const ON_BrepVertex &vertex, ON_BrepLoop &loop, ON_Surface::ISO iso,
+  NewSingularTrim (const ON_BrepVertex &vertex,
+                   ON_BrepLoop &loop,
+                   ON_Surface::ISO iso,
                    int c2i = -1);
 
   /*
@@ -2527,7 +2532,9 @@ class ON_CLASS ON_Brep : public ON_Geometry
     ON_BrepTrim::m_iso values.
   */
   ON_BrepTrim &
-  NewCurveOnFace (ON_BrepFace &face, ON_BrepEdge &edge, ON_BOOL32 bRev3d = false,
+  NewCurveOnFace (ON_BrepFace &face,
+                  ON_BrepEdge &edge,
+                  ON_BOOL32 bRev3d = false,
                   int c2i = -1);
 
   // appends a copy of brep to this and updates
@@ -2773,11 +2780,14 @@ class ON_CLASS ON_Brep : public ON_Geometry
     ON_Brep::SetTrimBoundingBoxes
   */
   void
-  SetTolerancesBoxesAndFlags (
-      ON_BOOL32 bLazy = false, ON_BOOL32 bSetVertexTolerances = true,
-      ON_BOOL32 bSetEdgeTolerances = true, ON_BOOL32 bSetTrimTolerances = true,
-      ON_BOOL32 bSetTrimIsoFlags = true, ON_BOOL32 bSetTrimTypeFlags = true,
-      ON_BOOL32 bSetLoopTypeFlags = true, ON_BOOL32 bSetTrimBoxes = true);
+  SetTolerancesBoxesAndFlags (ON_BOOL32 bLazy = false,
+                              ON_BOOL32 bSetVertexTolerances = true,
+                              ON_BOOL32 bSetEdgeTolerances = true,
+                              ON_BOOL32 bSetTrimTolerances = true,
+                              ON_BOOL32 bSetTrimIsoFlags = true,
+                              ON_BOOL32 bSetTrimTypeFlags = true,
+                              ON_BOOL32 bSetLoopTypeFlags = true,
+                              ON_BOOL32 bSetTrimBoxes = true);
 
   /////////////////////////////////////////////////////////////////
   // Query Interface
@@ -2854,7 +2864,8 @@ class ON_CLASS ON_Brep : public ON_Geometry
     Number of curves appended to curve_list.
   */
   int
-  Loop3dCurve (const ON_BrepLoop &loop, ON_SimpleArray<ON_Curve *> &curve_list,
+  Loop3dCurve (const ON_BrepLoop &loop,
+               ON_SimpleArray<ON_Curve *> &curve_list,
                ON_BOOL32 bRevCurveIfFaceRevIsTrue = false) const;
 
   /*
@@ -2921,7 +2932,8 @@ class ON_CLASS ON_Brep : public ON_Geometry
   */
   bool
   IsManifold ( // returns true if b-rep is an oriented manifold
-      ON_BOOL32 *pbIsOriented = NULL, ON_BOOL32 *pbHasBoundary = NULL) const;
+      ON_BOOL32 *pbIsOriented = NULL,
+      ON_BOOL32 *pbHasBoundary = NULL) const;
 
   /*
   Description:
@@ -3092,7 +3104,8 @@ class ON_CLASS ON_Brep : public ON_Geometry
     the unused edges.
   */
   ON_BrepEdge *
-  CombineContiguousEdges (int edge_index0, int edge_iindex1,
+  CombineContiguousEdges (int edge_index0,
+                          int edge_iindex1,
                           double angle_tolerance_radians = ON_PI / 180.0);
 
   // These remove a topology piece from a b-rep but do not
@@ -3254,7 +3267,8 @@ class ON_CLASS ON_Brep : public ON_Geometry
   // See Also:
   //   ON_Brep::DuplicateFace
   ON_Brep *
-  DuplicateFaces (int face_count, const int *face_index,
+  DuplicateFaces (int face_count,
+                  const int *face_index,
                   ON_BOOL32 bDuplicateMeshes) const;
 
   // Description:
@@ -3700,7 +3714,8 @@ class ON_CLASS ON_Brep : public ON_Geometry
     was removed.
   */
   bool
-  RemoveNesting (bool bExtractSingleSegments, bool bEdges = true,
+  RemoveNesting (bool bExtractSingleSegments,
+                 bool bEdges = true,
                  bool bTrimCurves = true);
 
   /*
@@ -4011,7 +4026,8 @@ See Also
 ON_DECL
 ON_Brep *
 ON_BrepFromMesh (const ON_MeshTopology &mesh_topology,
-                 ON_BOOL32 bTrimmedTriangles = true, ON_Brep *pBrep = NULL);
+                 ON_BOOL32 bTrimmedTriangles = true,
+                 ON_Brep *pBrep = NULL);
 
 /*
 Description:
@@ -4164,7 +4180,9 @@ Returns:
 */
 ON_DECL
 ON_Brep *
-ON_BrepCylinder (const ON_Cylinder &cylinder, ON_BOOL32 bCapBottom, ON_BOOL32 bCapTop,
+ON_BrepCylinder (const ON_Cylinder &cylinder,
+                 ON_BOOL32 bCapBottom,
+                 ON_BOOL32 bCapTop,
                  ON_Brep *pBrep = NULL);
 
 /*
@@ -4213,7 +4231,9 @@ Remarks:
 */
 ON_DECL
 ON_Brep *
-ON_BrepRevSurface (ON_RevSurface *&pRevSurface, ON_BOOL32 bCapStart, ON_BOOL32 bCapEnd,
+ON_BrepRevSurface (ON_RevSurface *&pRevSurface,
+                   ON_BOOL32 bCapStart,
+                   ON_BOOL32 bCapEnd,
                    ON_Brep *pBrep = NULL);
 
 /*
@@ -4232,7 +4252,8 @@ See Also:
 */
 ON_DECL
 ON_Brep *
-ON_BrepTrimmedPlane (const ON_Plane &plane, const ON_Curve &boundary,
+ON_BrepTrimmedPlane (const ON_Plane &plane,
+                     const ON_Curve &boundary,
                      ON_Brep *pBrep = NULL);
 
 /*
@@ -4256,8 +4277,10 @@ See Also:
 */
 ON_DECL
 ON_Brep *
-ON_BrepTrimmedPlane (const ON_Plane &plane, ON_SimpleArray<ON_Curve *> &boundary,
-                     ON_BOOL32 bDuplicateCurves = true, ON_Brep *pBrep = NULL);
+ON_BrepTrimmedPlane (const ON_Plane &plane,
+                     ON_SimpleArray<ON_Curve *> &boundary,
+                     ON_BOOL32 bDuplicateCurves = true,
+                     ON_Brep *pBrep = NULL);
 
 /*
 Description:
@@ -4322,7 +4345,9 @@ Remarks:
 */
 ON_DECL
 int
-ON_BrepExtrudeFace (ON_Brep &brep, int face_index, const ON_Curve &path_curve,
+ON_BrepExtrudeFace (ON_Brep &brep,
+                    int face_index,
+                    const ON_Curve &path_curve,
                     bool bCap = true);
 
 /*
@@ -4353,7 +4378,9 @@ Remarks:
 */
 ON_DECL
 int
-ON_BrepExtrudeLoop (ON_Brep &brep, int loop_index, const ON_Curve &path_curve,
+ON_BrepExtrudeLoop (ON_Brep &brep,
+                    int loop_index,
+                    const ON_Curve &path_curve,
                     bool bCap = true);
 
 /*

@@ -94,7 +94,8 @@ class Select2DTool : public ToolInterface
   /// @param project the projection matrix obtained from GL.
   /// @param viewport the current viewport obtained from GL.
   bool
-  isInSelectBox (const Point3D &pt, const GLfloat *project,
+  isInSelectBox (const Point3D &pt,
+                 const GLfloat *project,
                  const GLint *viewport) const;
 
   /// @brief Draws the rubber band as well as any highlighted points during

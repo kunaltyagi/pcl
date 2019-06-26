@@ -33,8 +33,8 @@ bool
 ON_SimpleFixedSizePool<T>::Create (size_t element_count_estimate,
                                    size_t block_element_count)
 {
-  return ON_FixedSizePool::Create (sizeof (T), element_count_estimate,
-                                   block_element_count);
+  return ON_FixedSizePool::Create (
+      sizeof (T), element_count_estimate, block_element_count);
 }
 
 template <class T>

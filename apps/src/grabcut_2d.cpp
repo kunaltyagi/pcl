@@ -49,8 +49,8 @@ class GrabCutHelper : public pcl::GrabCut<pcl::PointXYZRGB>
   void
   setBackgroundPointsIndices (int x1, int y1, int x2, int y2);
   void
-  setTrimap (int x1, int y1, int x2, int y2,
-             const pcl::segmentation::grabcut::TrimapValue &t);
+  setTrimap (
+      int x1, int y1, int x2, int y2, const pcl::segmentation::grabcut::TrimapValue &t);
   void
   refine () override;
   int
@@ -112,17 +112,19 @@ GrabCutHelper::setBackgroundPointsIndices (int x1, int y1, int x2, int y2)
   if (y1 > y2)
     std::swap (y1, y2);
   for (int y = std::max (y1, 0);
-       y <= std::min (static_cast<int> (input_->height - 1), y2); ++y)
+       y <= std::min (static_cast<int> (input_->height - 1), y2);
+       ++y)
     for (int x = std::max (x1, 0);
-         x <= std::min (static_cast<int> (input_->width - 1), x2); ++x)
+         x <= std::min (static_cast<int> (input_->width - 1), x2);
+         ++x)
       point_indices->indices.push_back (y * input_->width + x);
   setBackgroundPointsIndices (point_indices);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 void
-GrabCutHelper::setTrimap (int x1, int y1, int x2, int y2,
-                          const pcl::segmentation::grabcut::TrimapValue &t)
+GrabCutHelper::setTrimap (
+    int x1, int y1, int x2, int y2, const pcl::segmentation::grabcut::TrimapValue &t)
 {
   using namespace pcl::segmentation::grabcut;
   if (x1 > x2)
@@ -132,7 +134,8 @@ GrabCutHelper::setTrimap (int x1, int y1, int x2, int y2,
   for (int y = std::max (y1, 0); y <= std::min (static_cast<int> (image_height_1_), y2);
        ++y)
     for (int x = std::max (x1, 0);
-         x <= std::min (static_cast<int> (image_width_1_), x2); ++x) {
+         x <= std::min (static_cast<int> (image_width_1_), x2);
+         ++x) {
       std::size_t idx = y * input_->width + x;
       trimap_[idx] = TrimapUnknown;
       // Immediately set the segmentation as well so that the display will update.
@@ -232,22 +235,31 @@ GrabCutHelper::display (int display_type)
 {
   switch (display_type) {
   case 0:
-    glDrawPixels (image_->width, image_->height, GL_RGB, GL_FLOAT,
-                  &(image_->points[0]));
+    glDrawPixels (
+        image_->width, image_->height, GL_RGB, GL_FLOAT, &(image_->points[0]));
     break;
 
   case 1:
-    glDrawPixels (gmm_image_->width, gmm_image_->height, GL_RGB, GL_FLOAT,
+    glDrawPixels (gmm_image_->width,
+                  gmm_image_->height,
+                  GL_RGB,
+                  GL_FLOAT,
                   &(gmm_image_->points[0]));
     break;
 
   case 2:
-    glDrawPixels (n_links_image_->width, n_links_image_->height, GL_LUMINANCE, GL_FLOAT,
+    glDrawPixels (n_links_image_->width,
+                  n_links_image_->height,
+                  GL_LUMINANCE,
+                  GL_FLOAT,
                   &(n_links_image_->points[0]));
     break;
 
   case 3:
-    glDrawPixels (t_links_image_->width, t_links_image_->height, GL_RGB, GL_FLOAT,
+    glDrawPixels (t_links_image_->width,
+                  t_links_image_->height,
+                  GL_RGB,
+                  GL_FLOAT,
                   &(t_links_image_->points[0]));
     break;
 
@@ -261,7 +273,10 @@ GrabCutHelper::display (int display_type)
 void
 GrabCutHelper::overlayAlpha ()
 {
-  glDrawPixels (alpha_image_->width, alpha_image_->height, GL_ALPHA, GL_FLOAT,
+  glDrawPixels (alpha_image_->width,
+                alpha_image_->height,
+                GL_ALPHA,
+                GL_FLOAT,
                 &(alpha_image_->points[0]));
 }
 
@@ -285,7 +300,10 @@ display ()
   glClear (GL_COLOR_BUFFER_BIT);
 
   if (display_type == -1)
-    glDrawPixels (display_image->width, display_image->height, GL_RGB, GL_FLOAT,
+    glDrawPixels (display_image->width,
+                  display_image->height,
+                  GL_RGB,
+                  GL_FLOAT,
                   &(display_image->points[0]));
   else
     grabcut.display (display_type);
@@ -339,12 +357,12 @@ motion_callback (int x, int y)
 
   if (initialized) {
     if (left)
-      grabcut.setTrimap (x - 2, y - 2, x + 2, y + 2,
-                         pcl::segmentation::grabcut::TrimapForeground);
+      grabcut.setTrimap (
+          x - 2, y - 2, x + 2, y + 2, pcl::segmentation::grabcut::TrimapForeground);
 
     if (right)
-      grabcut.setTrimap (x - 2, y - 2, x + 2, y + 2,
-                         pcl::segmentation::grabcut::TrimapForeground);
+      grabcut.setTrimap (
+          x - 2, y - 2, x + 2, y + 2, pcl::segmentation::grabcut::TrimapForeground);
 
     glutPostRedisplay ();
   }

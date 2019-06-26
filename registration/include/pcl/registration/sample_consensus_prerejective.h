@@ -262,7 +262,8 @@ namespace pcl
      * number of samples to select \param sample_indices the resulting sample indices
      */
     void
-    selectSamples (const PointCloudSource &cloud, int nr_samples,
+    selectSamples (const PointCloudSource &cloud,
+                   int nr_samples,
                    std::vector<int> &sample_indices);
 
     /** \brief For each of the sample points, find a list of points in the target cloud

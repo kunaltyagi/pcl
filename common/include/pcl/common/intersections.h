@@ -59,7 +59,8 @@ namespace pcl
    */
   PCL_EXPORTS inline bool
   lineWithLineIntersection (const Eigen::VectorXf &line_a,
-                            const Eigen::VectorXf &line_b, Eigen::Vector4f &point,
+                            const Eigen::VectorXf &line_b,
+                            Eigen::Vector4f &point,
                             double sqr_eps = 1e-4);
 
   /** \brief Get the intersection of a two 3D lines in space as a 3D point
@@ -73,7 +74,8 @@ namespace pcl
   PCL_EXPORTS inline bool
   lineWithLineIntersection (const pcl::ModelCoefficients &line_a,
                             const pcl::ModelCoefficients &line_b,
-                            Eigen::Vector4f &point, double sqr_eps = 1e-4);
+                            Eigen::Vector4f &point,
+                            double sqr_eps = 1e-4);
 
   /** \brief Determine the line of intersection of two non-parallel planes using
    * lagrange multipliers \note Described in: "Intersection of Two Planes, John Krumm,
@@ -93,7 +95,8 @@ namespace pcl
 
   PCL_EXPORTS inline bool
   planeWithPlaneIntersection (const Eigen::Vector4f &plane_a,
-                              const Eigen::Vector4f &plane_b, Eigen::VectorXf &line,
+                              const Eigen::Vector4f &plane_b,
+                              Eigen::VectorXf &line,
                               double angular_tolerance = 0.1)
   {
     return (
@@ -102,7 +105,8 @@ namespace pcl
 
   PCL_EXPORTS inline bool
   planeWithPlaneIntersection (const Eigen::Vector4d &plane_a,
-                              const Eigen::Vector4d &plane_b, Eigen::VectorXd &line,
+                              const Eigen::Vector4d &plane_b,
+                              Eigen::VectorXd &line,
                               double angular_tolerance = 0.1)
   {
     return (
@@ -135,8 +139,8 @@ namespace pcl
                            Eigen::Vector3f &intersection_point,
                            double determinant_tolerance = 1e-6)
   {
-    return (threePlanesIntersection<float> (plane_a, plane_b, plane_c,
-                                            intersection_point, determinant_tolerance));
+    return (threePlanesIntersection<float> (
+        plane_a, plane_b, plane_c, intersection_point, determinant_tolerance));
   }
 
   PCL_EXPORTS inline bool

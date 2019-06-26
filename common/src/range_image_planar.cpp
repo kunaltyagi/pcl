@@ -55,8 +55,10 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImagePlanar::setDisparityImage (const float *disparity_image, int di_width,
-                                       int di_height, float focal_length,
+  RangeImagePlanar::setDisparityImage (const float *disparity_image,
+                                       int di_width,
+                                       int di_height,
+                                       float focal_length,
                                        float base_line,
                                        float desired_angular_resolution)
   {
@@ -117,9 +119,13 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImagePlanar::setDepthImage (const float *depth_image, int di_width,
-                                   int di_height, float di_center_x, float di_center_y,
-                                   float di_focal_length_x, float di_focal_length_y,
+  RangeImagePlanar::setDepthImage (const float *depth_image,
+                                   int di_width,
+                                   int di_height,
+                                   float di_center_x,
+                                   float di_center_y,
+                                   float di_focal_length_x,
+                                   float di_focal_length_y,
                                    float desired_angular_resolution)
   {
     // MEASURE_FUNCTION_TIME;
@@ -164,9 +170,13 @@ namespace pcl
 
   /////////////////////////////////////////////////////////////////////////
   void
-  RangeImagePlanar::setDepthImage (const unsigned short *depth_image, int di_width,
-                                   int di_height, float di_center_x, float di_center_y,
-                                   float di_focal_length_x, float di_focal_length_y,
+  RangeImagePlanar::setDepthImage (const unsigned short *depth_image,
+                                   int di_width,
+                                   int di_height,
+                                   float di_center_x,
+                                   float di_center_y,
+                                   float di_focal_length_x,
+                                   float di_focal_length_y,
                                    float desired_angular_resolution)
   {
     // MEASURE_FUNCTION_TIME;
@@ -233,8 +243,10 @@ namespace pcl
   /////////////////////////////////////////////////////////////////////////
   void
   RangeImagePlanar::getSubImage (int sub_image_image_offset_x,
-                                 int sub_image_image_offset_y, int sub_image_width,
-                                 int sub_image_height, int combine_pixels,
+                                 int sub_image_image_offset_y,
+                                 int sub_image_width,
+                                 int sub_image_height,
+                                 int combine_pixels,
                                  RangeImage &sub_image) const
   {
     std::cerr << __PRETTY_FUNCTION__ << ": Warning, not tested properly!\n";
@@ -252,8 +264,12 @@ namespace pcl
     ret.focal_length_y_reciprocal_ = 1.0f / ret.focal_length_y_;
     ret.center_x_ = center_x_ / 2 - static_cast<float> (sub_image_image_offset_x);
     ret.center_y_ = center_y_ / 2 - static_cast<float> (sub_image_image_offset_y);
-    BaseClass::getSubImage (sub_image_image_offset_x, sub_image_image_offset_y,
-                            sub_image_width, sub_image_height, combine_pixels, ret);
+    BaseClass::getSubImage (sub_image_image_offset_x,
+                            sub_image_image_offset_y,
+                            sub_image_width,
+                            sub_image_height,
+                            combine_pixels,
+                            ret);
     ret.image_offset_x_ = ret.image_offset_y_ = 0;
   }
 

@@ -97,8 +97,8 @@ pcl::GFPFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (
     for (size_t j = i + 1; j < occupied_cells.size (); ++j) {
       typename pcl::PointCloud<PointInT>::VectorType intersected_cells;
       Eigen::Vector3f end = occupied_cells[j].getVector3fMap ();
-      octree.getApproxIntersectedVoxelCentersBySegment (origin, end, intersected_cells,
-                                                        0.5f);
+      octree.getApproxIntersectedVoxelCentersBySegment (
+          origin, end, intersected_cells, 0.5f);
 
       // Intersected cells are ordered from closest to furthest w.r.t. the origin.
       std::vector<int> histogram;
@@ -129,8 +129,8 @@ pcl::GFPFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (
   output.width = 1;
   output.height = 1;
   output.points.resize (1);
-  std::copy (gfpfh_histogram.begin (), gfpfh_histogram.end (),
-             output.points[0].histogram);
+  std::copy (
+      gfpfh_histogram.begin (), gfpfh_histogram.end (), output.points[0].histogram);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////

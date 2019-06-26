@@ -92,13 +92,18 @@ pcl::gpu::kinfuLS::CyclicalBuffer::performShift (const TsdfVolume::Ptr volume,
   int size;
   if (!last_shift) {
     size = volume->fetchSliceAsCloud (cloud_buffer_device_xyz_,
-                                      cloud_buffer_device_intensities_, &buffer_,
-                                      offset_x, offset_y, offset_z);
+                                      cloud_buffer_device_intensities_,
+                                      &buffer_,
+                                      offset_x,
+                                      offset_y,
+                                      offset_z);
   } else {
-    size = volume->fetchSliceAsCloud (
-        cloud_buffer_device_xyz_, cloud_buffer_device_intensities_, &buffer_,
-        buffer_.voxels_size.x - 1, buffer_.voxels_size.y - 1,
-        buffer_.voxels_size.z - 1);
+    size = volume->fetchSliceAsCloud (cloud_buffer_device_xyz_,
+                                      cloud_buffer_device_intensities_,
+                                      &buffer_,
+                                      buffer_.voxels_size.x - 1,
+                                      buffer_.voxels_size.y - 1,
+                                      buffer_.voxels_size.z - 1);
   }
   points = DeviceArray<PointXYZ> (cloud_buffer_device_xyz_.ptr (), size);
   intensities = DeviceArray<float> (cloud_buffer_device_intensities_.ptr (), size);
@@ -127,8 +132,8 @@ pcl::gpu::kinfuLS::CyclicalBuffer::performShift (const TsdfVolume::Ptr volume,
   current_slice_intensities->height = 1;
 
   // Concatenating XYZ and Intensities
-  pcl::concatenateFields (*current_slice_xyz, *current_slice_intensities,
-                          *current_slice);
+  pcl::concatenateFields (
+      *current_slice_xyz, *current_slice_intensities, *current_slice);
   current_slice->width = (int)current_slice->points.size ();
   current_slice->height = 1;
 
@@ -142,25 +147,35 @@ pcl::gpu::kinfuLS::CyclicalBuffer::performShift (const TsdfVolume::Ptr volume,
 
   // retrieve existing data from the world model
   PointCloud<PointXYZI>::Ptr previously_existing_slice (new PointCloud<PointXYZI>);
-  world_model_.getExistingData (
-      buffer_.origin_GRID_global.x, buffer_.origin_GRID_global.y,
-      buffer_.origin_GRID_global.z, offset_x, offset_y, offset_z,
-      buffer_.voxels_size.x - 1, buffer_.voxels_size.y - 1, buffer_.voxels_size.z - 1,
-      *previously_existing_slice);
+  world_model_.getExistingData (buffer_.origin_GRID_global.x,
+                                buffer_.origin_GRID_global.y,
+                                buffer_.origin_GRID_global.z,
+                                offset_x,
+                                offset_y,
+                                offset_z,
+                                buffer_.voxels_size.x - 1,
+                                buffer_.voxels_size.y - 1,
+                                buffer_.voxels_size.z - 1,
+                                *previously_existing_slice);
 
   // replace world model data with values extracted from the TSDF buffer slice
-  world_model_.setSliceAsNans (
-      buffer_.origin_GRID_global.x, buffer_.origin_GRID_global.y,
-      buffer_.origin_GRID_global.z, offset_x, offset_y, offset_z, buffer_.voxels_size.x,
-      buffer_.voxels_size.y, buffer_.voxels_size.z);
+  world_model_.setSliceAsNans (buffer_.origin_GRID_global.x,
+                               buffer_.origin_GRID_global.y,
+                               buffer_.origin_GRID_global.z,
+                               offset_x,
+                               offset_y,
+                               offset_z,
+                               buffer_.voxels_size.x,
+                               buffer_.voxels_size.y,
+                               buffer_.voxels_size.z);
 
   PCL_INFO ("world contains %d points after update\n", world_model_.getWorldSize ());
   world_model_.cleanWorldFromNans ();
   PCL_INFO ("world contains %d points after cleaning\n", world_model_.getWorldSize ());
 
   // clear buffer slice and update the world model
-  pcl::device::kinfuLS::clearTSDFSlice (volume->data (), &buffer_, offset_x, offset_y,
-                                        offset_z);
+  pcl::device::kinfuLS::clearTSDFSlice (
+      volume->data (), &buffer_, offset_x, offset_y, offset_z);
 
   // insert current slice in the world if it contains any points
   if (!current_slice->points.empty ()) {
@@ -186,9 +201,12 @@ pcl::gpu::kinfuLS::CyclicalBuffer::computeAndSetNewCubeMetricOrigin (
   new_cube_origin_meters.y = target_point.y - buffer_.volume_size.y / 2.0f;
   new_cube_origin_meters.z = target_point.z - buffer_.volume_size.z / 2.0f;
   PCL_INFO ("The old cube's metric origin was    (%f, %f, %f).\n",
-            buffer_.origin_metric.x, buffer_.origin_metric.y, buffer_.origin_metric.z);
+            buffer_.origin_metric.x,
+            buffer_.origin_metric.y,
+            buffer_.origin_metric.z);
   PCL_INFO ("The new cube's metric origin is now (%f, %f, %f).\n",
-            new_cube_origin_meters.x, new_cube_origin_meters.y,
+            new_cube_origin_meters.x,
+            new_cube_origin_meters.y,
             new_cube_origin_meters.z);
 
   // deduce each shift in indices

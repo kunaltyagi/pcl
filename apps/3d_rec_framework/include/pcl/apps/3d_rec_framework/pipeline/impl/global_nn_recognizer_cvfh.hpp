@@ -21,7 +21,9 @@ pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT, FeatureT>::get
     using mv_pair = std::pair<std::string, int>;
     mv_pair pair_model_view = std::make_pair (model.id_, view_id);
 
-    std::map<mv_pair, Eigen::Matrix4f, std::less<mv_pair>,
+    std::map<mv_pair,
+             Eigen::Matrix4f,
+             std::less<mv_pair>,
              Eigen::aligned_allocator<std::pair<const mv_pair, Eigen::Matrix4f>>>::
         iterator it = poses_cache_.find (pair_model_view);
 
@@ -40,9 +42,8 @@ pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT, FeatureT>::get
 
 template <template <class> class Distance, typename PointInT, typename FeatureT>
 bool
-pcl::rec_3d_framework::GlobalNNCVFHRecognizer<
-    Distance, PointInT, FeatureT>::getRollPose (ModelT &model, int view_id, int d_id,
-                                                Eigen::Matrix4f &pose_matrix)
+pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT, FeatureT>::
+    getRollPose (ModelT &model, int view_id, int d_id, Eigen::Matrix4f &pose_matrix)
 {
 
   std::stringstream dir;
@@ -61,9 +62,8 @@ pcl::rec_3d_framework::GlobalNNCVFHRecognizer<
 
 template <template <class> class Distance, typename PointInT, typename FeatureT>
 void
-pcl::rec_3d_framework::GlobalNNCVFHRecognizer<
-    Distance, PointInT, FeatureT>::getCentroid (ModelT &model, int view_id, int d_id,
-                                                Eigen::Vector3f &centroid)
+pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT, FeatureT>::
+    getCentroid (ModelT &model, int view_id, int d_id, Eigen::Vector3f &centroid)
 {
   std::stringstream dir;
   std::string path = source_->getModelDescriptorDir (model, training_dir_, descr_name_);
@@ -86,8 +86,8 @@ pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT, FeatureT>::get
 
 template <template <class> class Distance, typename PointInT, typename FeatureT>
 void
-pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT,
-                                              FeatureT>::loadFeaturesAndCreateFLANN ()
+pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT, FeatureT>::
+    loadFeaturesAndCreateFLANN ()
 {
 
   boost::shared_ptr<std::vector<ModelT>> models = source_->getModels ();
@@ -136,7 +136,8 @@ pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT,
 
         int size_feat = sizeof (signature->points[0].histogram) / sizeof (float);
         descr_model.descr.resize (size_feat);
-        memcpy (&descr_model.descr[0], &signature->points[0].histogram[0],
+        memcpy (&descr_model.descr[0],
+                &signature->points[0].histogram[0],
                 size_feat * sizeof (float));
 
         if (use_single_categories_) {
@@ -182,8 +183,8 @@ pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT,
     int kk = 0;
     for (const auto &single_category : single_categories) {
       // create index and flann data
-      convertToFLANN (flann_models_, single_category.second,
-                      single_categories_data_[kk]);
+      convertToFLANN (
+          flann_models_, single_category.second, single_categories_data_[kk]);
       single_categories_index_[kk] = new flann::Index<DistT> (
           single_categories_data_[kk], flann::LinearIndexParams ());
       single_categories_pointers_to_models_[kk] = single_category.second;
@@ -196,11 +197,12 @@ pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT,
 
 template <template <class> class Distance, typename PointInT, typename FeatureT>
 void
-pcl::rec_3d_framework::GlobalNNCVFHRecognizer<
-    Distance, PointInT, FeatureT>::nearestKSearch (flann::Index<DistT> *index,
-                                                   const flann_model &model, int k,
-                                                   flann::Matrix<int> &indices,
-                                                   flann::Matrix<float> &distances)
+pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT, FeatureT>::
+    nearestKSearch (flann::Index<DistT> *index,
+                    const flann_model &model,
+                    int k,
+                    flann::Matrix<int> &indices,
+                    flann::Matrix<float> &distances)
 {
   flann::Matrix<float> p =
       flann::Matrix<float> (new float[model.descr.size ()], 1, model.descr.size ());
@@ -214,8 +216,8 @@ pcl::rec_3d_framework::GlobalNNCVFHRecognizer<
 
 template <template <class> class Distance, typename PointInT, typename FeatureT>
 void
-pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT,
-                                              FeatureT>::recognize ()
+pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT, FeatureT>::
+    recognize ()
 {
 
   models_.reset (new std::vector<ModelT>);
@@ -282,8 +284,11 @@ pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT,
             it = category_to_vectors_indices_.find (categories_to_be_searched_[c]);
             assert (it != category_to_vectors_indices_.end ());
 
-            nearestKSearch (single_categories_index_[it->second], histogram, NN_,
-                            indices, distances);
+            nearestKSearch (single_categories_index_[it->second],
+                            histogram,
+                            NN_,
+                            indices,
+                            distances);
             // gather NN-search results
             double score = 0;
             for (size_t i = 0; i < (size_t)NN_; ++i) {
@@ -428,10 +433,10 @@ pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT,
             Eigen::Vector3f view_centroid;
             getCentroid (m, view_id, desc_id, view_centroid);
 
-            Eigen::Vector4f cmatch4f (view_centroid[0], view_centroid[1],
-                                      view_centroid[2], 0);
-            Eigen::Vector4f cinput4f (input_centroid[0], input_centroid[1],
-                                      input_centroid[2], 0);
+            Eigen::Vector4f cmatch4f (
+                view_centroid[0], view_centroid[1], view_centroid[2], 0);
+            Eigen::Vector4f cinput4f (
+                input_centroid[0], input_centroid[1], input_centroid[2], 0);
 
             Eigen::Vector4f max_pt_input;
             pcl::getMaxDistance (*processed, cinput4f, max_pt_input);
@@ -513,12 +518,12 @@ pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT,
         if (compute_scale_) {
           model_cloud = models_->at (i).getAssembled (-1);
           PointInTPtr model_aligned_m (new pcl::PointCloud<PointInT>);
-          pcl::transformPointCloud (*model_cloud, *model_aligned_m,
-                                    transforms_->at (i));
+          pcl::transformPointCloud (
+              *model_cloud, *model_aligned_m, transforms_->at (i));
           pcl::VoxelGrid<PointInT> voxel_grid_icp;
           voxel_grid_icp.setInputCloud (model_aligned_m);
-          voxel_grid_icp.setLeafSize (VOXEL_SIZE_ICP_, VOXEL_SIZE_ICP_,
-                                      VOXEL_SIZE_ICP_);
+          voxel_grid_icp.setLeafSize (
+              VOXEL_SIZE_ICP_, VOXEL_SIZE_ICP_, VOXEL_SIZE_ICP_);
           voxel_grid_icp.filter (*model_aligned);
         } else {
           model_cloud = models_->at (i).getAssembled (VOXEL_SIZE_ICP_);
@@ -559,8 +564,8 @@ pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT,
         if (compute_scale_) {
           model_cloud = models_->at (i).getAssembled (-1);
           PointInTPtr model_aligned_m (new pcl::PointCloud<PointInT>);
-          pcl::transformPointCloud (*model_cloud, *model_aligned_m,
-                                    transforms_->at (i));
+          pcl::transformPointCloud (
+              *model_cloud, *model_aligned_m, transforms_->at (i));
           pcl::VoxelGrid<PointInT> voxel_grid_icp;
           voxel_grid_icp.setInputCloud (model_aligned_m);
           voxel_grid_icp.setLeafSize (0.005f, 0.005f, 0.005f);
@@ -607,8 +612,8 @@ pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT,
 
 template <template <class> class Distance, typename PointInT, typename FeatureT>
 void
-pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT,
-                                              FeatureT>::initialize (bool force_retrain)
+pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT, FeatureT>::
+    initialize (bool force_retrain)
 {
 
   // use the source to know what has to be trained and what not, checking if the
@@ -681,8 +686,8 @@ pcl::rec_3d_framework::GlobalNNCVFHRecognizer<Distance, PointInT,
           if (valid_trans[j]) {
             std::stringstream path_centroid;
             path_centroid << path << "/centroid_" << v << "_" << j << ".txt";
-            Eigen::Vector3f centroid (centroids[j][0], centroids[j][1],
-                                      centroids[j][2]);
+            Eigen::Vector3f centroid (
+                centroids[j][0], centroids[j][1], centroids[j][2]);
             PersistenceUtils::writeCentroidToFile (path_centroid.str (), centroid);
 
             std::stringstream path_descriptor;

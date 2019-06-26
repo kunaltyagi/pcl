@@ -94,7 +94,9 @@ namespace pcl
        * \param[in] SVM_offset SVM offset.
        */
       void
-      setSVM (int window_height, int window_width, std::vector<float> SVM_weights,
+      setSVM (int window_height,
+              int window_width,
+              std::vector<float> SVM_weights,
               float SVM_offset);
 
       /**
@@ -106,7 +108,9 @@ namespace pcl
        * \param[out] SVM_offset SVM offset.
        */
       void
-      getSVM (int &window_height, int &window_width, std::vector<float> &SVM_weights,
+      getSVM (int &window_height,
+              int &window_width,
+              std::vector<float> &SVM_weights,
               float &SVM_offset);
 
       /**
@@ -118,7 +122,9 @@ namespace pcl
        * \param[in] height Output height.
        */
       void
-      resize (PointCloudPtr &input_image, PointCloudPtr &output_image, int width,
+      resize (PointCloudPtr &input_image,
+              PointCloudPtr &output_image,
+              int width,
               int height);
 
       /**
@@ -133,8 +139,12 @@ namespace pcl
        * Output height.
        */
       void
-      copyMakeBorder (PointCloudPtr &input_image, PointCloudPtr &output_image, int xmin,
-                      int ymin, int width, int height);
+      copyMakeBorder (PointCloudPtr &input_image,
+                      PointCloudPtr &output_image,
+                      int xmin,
+                      int ymin,
+                      int width,
+                      int height);
 
       /**
        * \brief Classify the given portion of image.
@@ -161,8 +171,11 @@ namespace pcl
        * confidence.
        */
       double
-      evaluate (PointCloudPtr &image, Eigen::Vector3f &bottom, Eigen::Vector3f &top,
-                Eigen::Vector3f &centroid, bool vertical);
+      evaluate (PointCloudPtr &image,
+                Eigen::Vector3f &bottom,
+                Eigen::Vector3f &top,
+                Eigen::Vector3f &centroid,
+                bool vertical);
     };
   } /* namespace people */
 } /* namespace pcl */

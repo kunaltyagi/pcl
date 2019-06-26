@@ -559,9 +559,9 @@ TEST (PCL, HasField)
   EXPECT_TRUE ((pcl::traits::has_all_fields<
                 pcl::PointXYZRGB,
                 boost::mpl::vector<pcl::fields::x, pcl::fields::rgb>>::value));
-  EXPECT_FALSE (
-      (pcl::traits::has_all_fields<
-          pcl::PointXYZ, boost::mpl::vector<pcl::fields::x, pcl::fields::rgb>>::value));
+  EXPECT_FALSE ((pcl::traits::has_all_fields<
+                 pcl::PointXYZ,
+                 boost::mpl::vector<pcl::fields::x, pcl::fields::rgb>>::value));
   // has_any_field
   EXPECT_TRUE ((pcl::traits::has_any_field<
                 pcl::PointXYZ,
@@ -569,9 +569,9 @@ TEST (PCL, HasField)
   EXPECT_TRUE ((pcl::traits::has_any_field<
                 pcl::Normal,
                 boost::mpl::vector<pcl::fields::x, pcl::fields::normal_x>>::value));
-  EXPECT_FALSE (
-      (pcl::traits::has_any_field<
-          pcl::RGB, boost::mpl::vector<pcl::fields::x, pcl::fields::normal_x>>::value));
+  EXPECT_FALSE ((pcl::traits::has_any_field<
+                 pcl::RGB,
+                 boost::mpl::vector<pcl::fields::x, pcl::fields::normal_x>>::value));
   // has_xyz
   EXPECT_TRUE ((pcl::traits::has_xyz<pcl::PointXYZ>::value));
   EXPECT_FALSE ((pcl::traits::has_xyz<pcl::Normal>::value));

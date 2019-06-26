@@ -61,7 +61,8 @@ pcl::LINEMOD::~LINEMOD () {}
 int
 pcl::LINEMOD::createAndAddTemplate (
     const std::vector<pcl::QuantizableModality *> &modalities,
-    const std::vector<pcl::MaskMap *> &masks, const pcl::RegionXY &region)
+    const std::vector<pcl::MaskMap *> &masks,
+    const pcl::RegionXY &region)
 {
   // assuming width and height is same for all modalities; should we check this??
   // const int width = modalities[0]->getQuantizedMap().getWidth ();
@@ -325,7 +326,8 @@ pcl::LINEMOD::matchTemplates (const std::vector<QuantizableModality *> &modaliti
 
     size_t max_score = 0;
     for (size_t feature_index = 0;
-         feature_index < templates_[template_index].features.size (); ++feature_index) {
+         feature_index < templates_[template_index].features.size ();
+         ++feature_index) {
       const QuantizedMultiModFeature &feature =
           templates_[template_index].features[feature_index];
 
@@ -675,7 +677,8 @@ pcl::LINEMOD::detectTemplates (const std::vector<QuantizableModality *> &modalit
 
     int max_score = 0;
     for (size_t feature_index = 0;
-         feature_index < templates_[template_index].features.size (); ++feature_index) {
+         feature_index < templates_[template_index].features.size ();
+         ++feature_index) {
       const QuantizedMultiModFeature &feature =
           templates_[template_index].features[feature_index];
 
@@ -758,12 +761,14 @@ pcl::LINEMOD::detectTemplates (const std::vector<QuantizableModality *> &modalit
         if (use_non_max_suppression_) {
           bool is_local_max = true;
           for (size_t sup_row_index = mem_row_index - 1;
-               sup_row_index <= mem_row_index + 1 && is_local_max; ++sup_row_index) {
+               sup_row_index <= mem_row_index + 1 && is_local_max;
+               ++sup_row_index) {
             if (sup_row_index >= mem_height)
               continue;
 
             for (size_t sup_col_index = mem_col_index - 1;
-                 sup_col_index <= mem_col_index + 1; ++sup_col_index) {
+                 sup_col_index <= mem_col_index + 1;
+                 ++sup_col_index) {
               if (sup_col_index >= mem_width)
                 continue;
 
@@ -787,12 +792,14 @@ pcl::LINEMOD::detectTemplates (const std::vector<QuantizableModality *> &modalit
           size_t sum = 0;
 
           for (size_t sup_row_index = mem_row_index - 1;
-               sup_row_index <= mem_row_index + 1; ++sup_row_index) {
+               sup_row_index <= mem_row_index + 1;
+               ++sup_row_index) {
             if (sup_row_index >= mem_height)
               continue;
 
             for (size_t sup_col_index = mem_col_index - 1;
-                 sup_col_index <= mem_col_index + 1; ++sup_col_index) {
+                 sup_col_index <= mem_col_index + 1;
+                 ++sup_col_index) {
               if (sup_col_index >= mem_width)
                 continue;
 
@@ -907,8 +914,10 @@ pcl::LINEMOD::detectTemplates (const std::vector<QuantizableModality *> &modalit
 void
 pcl::LINEMOD::detectTemplatesSemiScaleInvariant (
     const std::vector<QuantizableModality *> &modalities,
-    std::vector<LINEMODDetection> &detections, const float min_scale,
-    const float max_scale, const float scale_multiplier) const
+    std::vector<LINEMODDetection> &detections,
+    const float min_scale,
+    const float max_scale,
+    const float scale_multiplier) const
 {
   // create energy maps
   std::vector<EnergyMaps> modality_energy_maps;
@@ -1285,12 +1294,14 @@ pcl::LINEMOD::detectTemplatesSemiScaleInvariant (
           if (use_non_max_suppression_) {
             bool is_local_max = true;
             for (size_t sup_row_index = mem_row_index - 1;
-                 sup_row_index <= mem_row_index + 1 && is_local_max; ++sup_row_index) {
+                 sup_row_index <= mem_row_index + 1 && is_local_max;
+                 ++sup_row_index) {
               if (sup_row_index >= mem_height)
                 continue;
 
               for (size_t sup_col_index = mem_col_index - 1;
-                   sup_col_index <= mem_col_index + 1; ++sup_col_index) {
+                   sup_col_index <= mem_col_index + 1;
+                   ++sup_col_index) {
                 if (sup_col_index >= mem_width)
                   continue;
 
@@ -1314,12 +1325,14 @@ pcl::LINEMOD::detectTemplatesSemiScaleInvariant (
             size_t sum = 0;
 
             for (size_t sup_row_index = mem_row_index - 1;
-                 sup_row_index <= mem_row_index + 1; ++sup_row_index) {
+                 sup_row_index <= mem_row_index + 1;
+                 ++sup_row_index) {
               if (sup_row_index >= mem_height)
                 continue;
 
               for (size_t sup_col_index = mem_col_index - 1;
-                   sup_col_index <= mem_col_index + 1; ++sup_col_index) {
+                   sup_col_index <= mem_col_index + 1;
+                   ++sup_col_index) {
                 if (sup_col_index >= mem_width)
                   continue;
 

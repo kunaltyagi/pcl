@@ -129,8 +129,11 @@ display_score_image (const float *score_buffer)
   }
 
   glRasterPos2i (-1, -1);
-  glDrawPixels (range_likelihood_->getWidth (), range_likelihood_->getHeight (), GL_RGB,
-                GL_UNSIGNED_BYTE, score_img);
+  glDrawPixels (range_likelihood_->getWidth (),
+                range_likelihood_->getHeight (),
+                GL_RGB,
+                GL_UNSIGNED_BYTE,
+                score_img);
 
   delete[] score_img;
 }
@@ -343,7 +346,9 @@ display ()
   glReadBuffer (GL_BACK);
 
   // Draw the resulting images from the range_likelihood
-  glViewport (range_likelihood_->getWidth (), 0, range_likelihood_->getWidth (),
+  glViewport (range_likelihood_->getWidth (),
+              0,
+              range_likelihood_->getWidth (),
               range_likelihood_->getHeight ());
   glMatrixMode (GL_PROJECTION);
   glLoadIdentity ();
@@ -356,8 +361,11 @@ display ()
   glDisable (GL_DEPTH_TEST);
 
   glRasterPos2i (-1, -1);
-  glDrawPixels (range_likelihood_->getWidth (), range_likelihood_->getHeight (), GL_RGB,
-                GL_UNSIGNED_BYTE, range_likelihood_->getColorBuffer ());
+  glDrawPixels (range_likelihood_->getWidth (),
+                range_likelihood_->getHeight (),
+                GL_RGB,
+                GL_UNSIGNED_BYTE,
+                range_likelihood_->getColorBuffer ());
 
   // Draw the depth image
   glViewport (0, 0, range_likelihood_->getWidth (), range_likelihood_->getHeight ());
@@ -368,10 +376,13 @@ display ()
   glLoadIdentity ();
   //  display_depth_image (range_likelihood_->getDepthBuffer ());
   display_depth_image (range_likelihood_->getDepthBuffer (),
-                       range_likelihood_->getWidth (), range_likelihood_->getHeight ());
+                       range_likelihood_->getWidth (),
+                       range_likelihood_->getHeight ());
 
   // Draw the score image
-  glViewport (0, range_likelihood_->getHeight (), range_likelihood_->getWidth (),
+  glViewport (0,
+              range_likelihood_->getHeight (),
+              range_likelihood_->getWidth (),
               range_likelihood_->getHeight ());
   glMatrixMode (GL_PROJECTION);
   glLoadIdentity ();

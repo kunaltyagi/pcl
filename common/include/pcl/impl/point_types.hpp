@@ -1113,8 +1113,11 @@ namespace pcl
       vp_z = p.vp_z;
     }
 
-    inline PointWithViewpoint (float _x = 0.0f, float _y = 0.0f, float _z = 0.0f,
-                               float _vp_x = 0.0f, float _vp_y = 0.0f,
+    inline PointWithViewpoint (float _x = 0.0f,
+                               float _y = 0.0f,
+                               float _z = 0.0f,
+                               float _vp_x = 0.0f,
+                               float _vp_y = 0.0f,
                                float _vp_z = 0.0f)
     {
       x = _x;
@@ -1706,8 +1709,13 @@ namespace pcl
       data[3] = 1.0f;
     }
 
-    inline PointWithScale (float _x, float _y, float _z, float _scale, float _angle,
-                           float _response, int _octave)
+    inline PointWithScale (float _x,
+                           float _y,
+                           float _z,
+                           float _scale,
+                           float _angle,
+                           float _response,
+                           int _octave)
     {
       x = _x;
       y = _y;

@@ -149,7 +149,9 @@ class ON_CLASS ON_HatchLine
   ON_HatchLine ();
   // C++ default copy construction and operator= work fine.
 
-  ON_HatchLine (double angle, const ON_2dPoint &base, const ON_2dVector &offset,
+  ON_HatchLine (double angle,
+                const ON_2dPoint &base,
+                const ON_2dVector &offset,
                 const ON_SimpleArray<double> dashes);
 
   bool
@@ -285,7 +287,9 @@ class ON_CLASS ON_HatchLine
   Return:
   */
   void
-  GetLineData (double &angle, ON_2dPoint &base, ON_2dVector &offset,
+  GetLineData (double &angle,
+               ON_2dPoint &base,
+               ON_2dVector &offset,
                ON_SimpleArray<double> &dashes) const;
 
   /*
@@ -629,7 +633,8 @@ class ON_CLASS ON_Hatch : public ON_Geometry
     bounding box.
   */
   bool
-  GetTightBoundingBox (ON_BoundingBox &tight_bbox, int bGrowBox = false,
+  GetTightBoundingBox (ON_BoundingBox &tight_bbox,
+                       int bGrowBox = false,
                        const ON_Xform *xform = 0) const;
 
   /*
@@ -663,8 +668,11 @@ class ON_CLASS ON_Hatch : public ON_Geometry
     true = success, false = failure
   */
   bool
-  Create (const ON_Plane &plane, const ON_SimpleArray<const ON_Curve *> loops,
-          int pattern_index, double pattern_rotation, double pattern_scale);
+  Create (const ON_Plane &plane,
+          const ON_SimpleArray<const ON_Curve *> loops,
+          int pattern_index,
+          double pattern_rotation,
+          double pattern_scale);
 
   /*
   Description:

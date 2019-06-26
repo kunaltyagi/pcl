@@ -112,11 +112,14 @@ TEST (PCL, ComplexPCDFileASCII)
   int x_idx = pcl::getFieldIndex (blob, "x");
   EXPECT_EQ (x_idx, 2);
   float x, y, z;
-  memcpy (&x, &blob.data[0 * blob.point_step + blob.fields[x_idx + 0].offset],
+  memcpy (&x,
+          &blob.data[0 * blob.point_step + blob.fields[x_idx + 0].offset],
           sizeof (float));
-  memcpy (&y, &blob.data[0 * blob.point_step + blob.fields[x_idx + 1].offset],
+  memcpy (&y,
+          &blob.data[0 * blob.point_step + blob.fields[x_idx + 1].offset],
           sizeof (float));
-  memcpy (&z, &blob.data[0 * blob.point_step + blob.fields[x_idx + 2].offset],
+  memcpy (&z,
+          &blob.data[0 * blob.point_step + blob.fields[x_idx + 2].offset],
           sizeof (float));
   EXPECT_FLOAT_EQ (x, -69.234001f);
   EXPECT_FLOAT_EQ (y, -65.460999f);
@@ -252,15 +255,15 @@ TEST (PCL, AllTypesPCDFile)
   EXPECT_FLOAT_EQ (b3, -250);
   memcpy (&b4, &blob.data[blob.fields[3].offset], sizeof (uint16_t));
   EXPECT_FLOAT_EQ (b4, 2500);
-  memcpy (&b4, &blob.data[blob.fields[3].offset + sizeof (uint16_t)],
-          sizeof (uint16_t));
+  memcpy (
+      &b4, &blob.data[blob.fields[3].offset + sizeof (uint16_t)], sizeof (uint16_t));
   EXPECT_FLOAT_EQ (b4, 2501);
   memcpy (&b5, &blob.data[blob.fields[4].offset], sizeof (int32_t));
   EXPECT_FLOAT_EQ (float(b5), float(-250000));
   memcpy (&b6, &blob.data[blob.fields[5].offset], sizeof (uint32_t));
   EXPECT_FLOAT_EQ (float(b6), float(250000));
-  memcpy (&b6, &blob.data[blob.fields[5].offset + sizeof (uint32_t)],
-          sizeof (uint32_t));
+  memcpy (
+      &b6, &blob.data[blob.fields[5].offset + sizeof (uint32_t)], sizeof (uint32_t));
   EXPECT_FLOAT_EQ (float(b6), float(250001));
   memcpy (&b7, &blob.data[blob.fields[6].offset], sizeof (float));
   EXPECT_FLOAT_EQ (b7, 250.05f);
@@ -482,8 +485,11 @@ TEST (PCL, IO)
 
   // Make sure we have permissions to write there
   PCDWriter w;
-  int res = w.writeASCII ("test_pcl_io.pcd", cloud_blob, Eigen::Vector4f::Zero (),
-                          Eigen::Quaternionf::Identity (), 10);
+  int res = w.writeASCII ("test_pcl_io.pcd",
+                          cloud_blob,
+                          Eigen::Vector4f::Zero (),
+                          Eigen::Quaternionf::Identity (),
+                          10);
   EXPECT_EQ (int(res), 0); // test for savePCDFileASCII ()
 
   // Please make sure that this file exists, otherwise the test will fail.
@@ -521,8 +527,11 @@ TEST (PCL, IO)
                    last.intensity); // test for fromPCLPointCloud2 ()
 
   // Make sure we have permissions to write there
-  res = savePCDFile ("test_pcl_io.pcd", cloud_blob, Eigen::Vector4f::Zero (),
-                     Eigen::Quaternionf::Identity (), true);
+  res = savePCDFile ("test_pcl_io.pcd",
+                     cloud_blob,
+                     Eigen::Vector4f::Zero (),
+                     Eigen::Quaternionf::Identity (),
+                     true);
   EXPECT_EQ (int(res), 0); // test for savePCDFileBinary ()
 
   // Please make sure that this file exists, otherwise the test will fail.
@@ -762,8 +771,11 @@ TEST (PCL, PCDReaderWriter)
                  sizeof (PointXYZI)); // test for toPCLPointCloud2 ()
 
   PCDWriter writer;
-  writer.write ("test_pcl_io.pcd", cloud_blob, Eigen::Vector4f::Zero (),
-                Eigen::Quaternionf::Identity (), true);
+  writer.write ("test_pcl_io.pcd",
+                cloud_blob,
+                Eigen::Vector4f::Zero (),
+                Eigen::Quaternionf::Identity (),
+                true);
 
   PCDReader reader;
   reader.read ("test_pcl_io.pcd", cloud_blob);
@@ -1271,8 +1283,8 @@ TEST (PCL, LZFInMem)
   std::istringstream iss (pcd_str, std::ios::binary);
   PCDReader reader;
   pcl::PCLPointCloud2 blob2;
-  res = reader.readHeader (iss, blob2, origin, orientation, pcd_version, data_type,
-                           data_idx);
+  res = reader.readHeader (
+      iss, blob2, origin, orientation, pcd_version, data_type, data_idx);
   EXPECT_EQ (res, 0);
   EXPECT_EQ (blob2.width, blob.width);
   EXPECT_EQ (blob2.height, blob.height);

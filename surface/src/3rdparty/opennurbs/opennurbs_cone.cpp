@@ -130,7 +130,8 @@ ON_Cone::Transform (const ON_Xform &xform)
 }
 
 bool
-ON_Cone::ClosestPointTo (ON_3dPoint point, double *radial_parameter,
+ON_Cone::ClosestPointTo (ON_3dPoint point,
+                         double *radial_parameter,
                          double *height_parameter) const
 {
   // untested code
@@ -203,7 +204,8 @@ ON_Cone::ClosestPointTo (ON_3dPoint point) const
 }
 
 ON_BOOL32
-ON_Cone::Rotate (double sin_angle, double cos_angle,
+ON_Cone::Rotate (double sin_angle,
+                 double cos_angle,
                  const ON_3dVector &axis_of_rotation)
 {
   return Rotate (sin_angle, cos_angle, axis_of_rotation, plane.origin);
@@ -217,7 +219,8 @@ ON_Cone::Rotate (double angle, const ON_3dVector &axis_of_rotation)
 
 // rotate plane about a point and axis
 ON_BOOL32
-ON_Cone::Rotate (double sin_angle, double cos_angle,
+ON_Cone::Rotate (double sin_angle,
+                 double cos_angle,
                  const ON_3dVector &axis_of_rotation,
                  const ON_3dPoint &center_of_rotation)
 {
@@ -234,10 +237,7 @@ ON_Cone::Rotate (double angle,            // angle in radians
 }
 
 ON_BOOL32
-ON_Cone::Translate (const ON_3dVector &delta)
-{
-  return plane.Translate (delta);
-}
+ON_Cone::Translate (const ON_3dVector &delta) { return plane.Translate (delta); }
 
 int
 ON_Cone::GetNurbForm (ON_NurbsSurface &s) const

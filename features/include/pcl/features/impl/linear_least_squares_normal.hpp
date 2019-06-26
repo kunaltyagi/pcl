@@ -44,8 +44,8 @@
 #include <pcl/features/linear_least_squares_normal.h>
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointInT, typename PointOutT>
-pcl::LinearLeastSquaresNormalEstimation<
-    PointInT, PointOutT>::~LinearLeastSquaresNormalEstimation ()
+pcl::LinearLeastSquaresNormalEstimation<PointInT, PointOutT>::
+    ~LinearLeastSquaresNormalEstimation ()
 {
 }
 
@@ -269,6 +269,6 @@ pcl::LinearLeastSquaresNormalEstimation<PointInT, PointOutT>::computeFeature (
 #define PCL_INSTANTIATE_LinearLeastSquaresNormalEstimation(T, NT)                      \
   template class PCL_EXPORTS pcl::LinearLeastSquaresNormalEstimation<T, NT>;
 //#define LinearLeastSquaresNormalEstimation(T,NT) template class PCL_EXPORTS
-//pcl::LinearLeastSquaresNormalEstimation<T,NT>;
+// pcl::LinearLeastSquaresNormalEstimation<T,NT>;
 
 #endif

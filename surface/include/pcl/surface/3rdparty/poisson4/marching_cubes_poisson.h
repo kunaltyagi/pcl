@@ -175,10 +175,12 @@ namespace pcl
       static int
       HasRoots (const double v[Cube::CORNERS], double isoValue, int faceIndex);
       static int
-      AddTriangles (const double v[Cube::CORNERS], double isoValue,
+      AddTriangles (const double v[Cube::CORNERS],
+                    double isoValue,
                     Triangle *triangles);
       static int
-      AddTriangleIndices (const double v[Cube::CORNERS], double isoValue,
+      AddTriangleIndices (const double v[Cube::CORNERS],
+                          double isoValue,
                           int *triangles);
 
       static int

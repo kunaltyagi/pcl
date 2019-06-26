@@ -180,8 +180,14 @@ pcl::people::HOG::gradMag (float *I, int h, int w, int d, float *M, float *O) co
 }
 
 void
-pcl::people::HOG::gradHist (float *M, float *O, int h, int w, int bin_size,
-                            int n_orients, bool soft_bin, float *H) const
+pcl::people::HOG::gradHist (float *M,
+                            float *O,
+                            int h,
+                            int w,
+                            int bin_size,
+                            int n_orients,
+                            bool soft_bin,
+                            float *H) const
 {
   const int hb = h / bin_size, wb = w / bin_size, h0 = hb * bin_size,
             w0 = wb * bin_size, nb = wb * hb;
@@ -404,8 +410,8 @@ pcl::people::HOG::gradHist (float *M, float *O, int h, int w, int bin_size,
 }
 
 void
-pcl::people::HOG::normalization (float *H, int h, int w, int bin_size, int n_orients,
-                                 float clip, float *G) const
+pcl::people::HOG::normalization (
+    float *H, int h, int w, int bin_size, int n_orients, float clip, float *G) const
 {
   float *N, *N1, *H1;
   int o, x, y, hb = h / bin_size, wb = w / bin_size, nb = wb * hb;
@@ -471,8 +477,14 @@ pcl::people::HOG::normalization (float *H, int h, int w, int bin_size, int n_ori
 }
 
 void
-pcl::people::HOG::compute (float *I, int h, int w, int n_channels, int bin_size,
-                           int n_orients, bool soft_bin, float *descriptor)
+pcl::people::HOG::compute (float *I,
+                           int h,
+                           int w,
+                           int n_channels,
+                           int bin_size,
+                           int n_orients,
+                           bool soft_bin,
+                           float *descriptor)
 {
   h_ = h;
   w_ = w;
@@ -637,8 +649,15 @@ pcl::people::HOG::acosTable () const
 }
 
 void
-pcl::people::HOG::gradQuantize (float *O, float *M, int *O0, int *O1, float *M0,
-                                float *M1, int n_orients, int nb, int n,
+pcl::people::HOG::gradQuantize (float *O,
+                                float *M,
+                                int *O0,
+                                int *O1,
+                                float *M0,
+                                float *M1,
+                                int n_orients,
+                                int nb,
+                                int n,
                                 float norm) const
 {
   // define useful constants

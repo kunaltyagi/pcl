@@ -65,7 +65,8 @@ namespace pcl
       using ConstPtr = boost::shared_ptr<
           const TransformationEstimationSVDScale<PointSource, PointTarget, Scalar>>;
 
-      using Matrix4 = typename TransformationEstimationSVD<PointSource, PointTarget,
+      using Matrix4 = typename TransformationEstimationSVD<PointSource,
+                                                           PointTarget,
                                                            Scalar>::Matrix4;
 
       /** \brief Inherits from TransformationEstimationSVD, but forces it to not use the

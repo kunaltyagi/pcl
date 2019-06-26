@@ -73,7 +73,8 @@ pcl::cloud_composer::ToolBoxModel::activeProjectChanged (ProjectModel *new_model
   // Disconnect old project model signal for selection change
   if (project_model_) {
     disconnect (project_model_->getSelectionModel (),
-                SIGNAL (selectionChanged (QItemSelection, QItemSelection)), this,
+                SIGNAL (selectionChanged (QItemSelection, QItemSelection)),
+                this,
                 SLOT (selectedItemChanged (QItemSelection, QItemSelection)));
     disconnect (project_model_, SIGNAL (modelChanged ()), this, SLOT (modelChanged ()));
   }
@@ -84,7 +85,8 @@ pcl::cloud_composer::ToolBoxModel::activeProjectChanged (ProjectModel *new_model
   if (project_model_) {
     updateEnabledTools (project_model_->getSelectionModel ()->selection ());
     connect (project_model_->getSelectionModel (),
-             SIGNAL (selectionChanged (QItemSelection, QItemSelection)), this,
+             SIGNAL (selectionChanged (QItemSelection, QItemSelection)),
+             this,
              SLOT (selectedItemChanged (QItemSelection, QItemSelection)));
     connect (project_model_, SIGNAL (modelChanged ()), this, SLOT (modelChanged ()));
   }
@@ -109,7 +111,8 @@ pcl::cloud_composer::ToolBoxModel::toolAction ()
 {
   QModelIndex current_index = selection_model_->currentIndex ();
   if (!current_index.isValid ()) {
-    QMessageBox::warning (qobject_cast<QWidget *> (this->parent ()), "No Tool Selected",
+    QMessageBox::warning (qobject_cast<QWidget *> (this->parent ()),
+                          "No Tool Selected",
                           "Cannot execute action, no tool selected!");
     return;
   }
@@ -169,16 +172,18 @@ pcl::cloud_composer::ToolBoxModel::updateEnabledTools (
     // Check if enough items for tool are selected
     if (tool_factory->getNumInputItems () > current_indices.size ()) {
       enabled_itr.remove ();
-      disabled_tools.insert (tool_item, tr ("Tool Requires %1 Items (%2 Selected)")
-                                            .arg (tool_factory->getNumInputItems ())
-                                            .arg (current_indices.size ()));
+      disabled_tools.insert (tool_item,
+                             tr ("Tool Requires %1 Items (%2 Selected)")
+                                 .arg (tool_factory->getNumInputItems ())
+                                 .arg (current_indices.size ()));
     }
     // Check if selection includes at least one item with correct input type
     else if (!type_items_map.keys ().contains (input_type)) {
       enabled_itr.remove ();
-      disabled_tools.insert (tool_item, tr ("Tool Requires item type %1 selected")
-                                            .arg (ITEM_TYPES_STRINGS.value (
-                                                input_type - QStandardItem::UserType)));
+      disabled_tools.insert (
+          tool_item,
+          tr ("Tool Requires item type %1 selected")
+              .arg (ITEM_TYPES_STRINGS.value (input_type - QStandardItem::UserType)));
     }
     // Check if any of selected items have required children
     else if (!required_children_types.empty ()) {
@@ -215,8 +220,9 @@ pcl::cloud_composer::ToolBoxModel::updateEnabledTools (
         foreach (CloudComposerItem::ItemType type, missing_children)
           missing_children_string.append (
               " " + ITEM_TYPES_STRINGS.value (type - QStandardItem::UserType));
-        disabled_tools.insert (tool_item, tr ("Tool Requires child item of type(s) %1")
-                                              .arg (missing_children_string));
+        disabled_tools.insert (tool_item,
+                               tr ("Tool Requires child item of type(s) %1")
+                                   .arg (missing_children_string));
       }
     }
   }

@@ -57,8 +57,8 @@ pcl::registration::TransformationEstimationSVDScale<PointSource, PointTarget, Sc
       (cloud_src_demean * cloud_tgt_demean.transpose ()).topLeftCorner (3, 3);
 
   // Compute the Singular Value Decomposition
-  Eigen::JacobiSVD<Eigen::Matrix<Scalar, 3, 3>> svd (H, Eigen::ComputeFullU |
-                                                            Eigen::ComputeFullV);
+  Eigen::JacobiSVD<Eigen::Matrix<Scalar, 3, 3>> svd (
+      H, Eigen::ComputeFullU | Eigen::ComputeFullV);
   Eigen::Matrix<Scalar, 3, 3> u = svd.matrixU ();
   Eigen::Matrix<Scalar, 3, 3> v = svd.matrixV ();
 
@@ -105,6 +105,6 @@ pcl::registration::TransformationEstimationSVDScale<PointSource, PointTarget, Sc
 }
 
 //#define PCL_INSTANTIATE_TransformationEstimationSVD(T,U) template class PCL_EXPORTS
-//pcl::registration::TransformationEstimationSVD<T,U>;
+// pcl::registration::TransformationEstimationSVD<T,U>;
 
 #endif /* PCL_REGISTRATION_TRANSFORMATION_ESTIMATION_SVD_SCALE_HPP_ */

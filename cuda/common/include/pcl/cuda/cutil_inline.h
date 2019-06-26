@@ -20,10 +20,12 @@
 #include <pcl/cuda/cutil_inline_runtime.h>
 
 inline void
-print_NVCC_min_spec (const char *sSDKsample, const char *sNVCCReq,
+print_NVCC_min_spec (const char *sSDKsample,
+                     const char *sNVCCReq,
                      const char *sDriverReq)
 {
-  printf ("CUDA %d.%02d Toolkit built this project.\n", CUDART_VERSION / 1000,
+  printf ("CUDA %d.%02d Toolkit built this project.\n",
+          CUDART_VERSION / 1000,
           (CUDART_VERSION % 100));
   printf ("  [ %s ] requirements:\n", sSDKsample);
   printf (" -> CUDA %s Toolkit\n", sNVCCReq);

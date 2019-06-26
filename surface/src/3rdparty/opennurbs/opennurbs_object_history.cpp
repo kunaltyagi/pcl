@@ -1597,7 +1597,8 @@ ON_Value::CreateValue (int value_type)
 // ON_HistoryRecord implementation
 //
 
-ON_OBJECT_IMPLEMENT (ON_HistoryRecord, ON_Object,
+ON_OBJECT_IMPLEMENT (ON_HistoryRecord,
+                     ON_Object,
                      "ECD0FD2F-2088-49dc-9641-9CF7A28FFA6B");
 
 ON_HistoryRecord::ON_HistoryRecord () : m_antecedents (2), m_descendants (1)
@@ -1666,10 +1667,7 @@ ON_HistoryRecord::operator= (const ON_HistoryRecord &src)
 }
 
 ON_BOOL32
-ON_HistoryRecord::IsValid (ON_TextLog *text_log) const
-{
-  return true;
-}
+ON_HistoryRecord::IsValid (ON_TextLog *text_log) const { return true; }
 
 void
 ON_HistoryRecord::Destroy ()
@@ -1748,7 +1746,8 @@ ON_HistoryRecord::SetObjRefValue (int value_id, const ON_ObjRef &oref)
 }
 
 bool
-ON_HistoryRecord::SetPointOnObjectValue (int value_id, const ON_ObjRef &oref,
+ON_HistoryRecord::SetPointOnObjectValue (int value_id,
+                                         const ON_ObjRef &oref,
                                          ON_3dPoint point)
 {
   ON_ObjRef poo = oref;
@@ -2051,7 +2050,8 @@ ON_HistoryRecord::SetGeometryValues (int value_id,
 }
 
 bool
-ON_HistoryRecord::SetPolyEdgeValues (int value_id, int count,
+ON_HistoryRecord::SetPolyEdgeValues (int value_id,
+                                     int count,
                                      const ON_PolyEdgeHistory *a)
 {
   ON_PolyEdgeHistoryValue *v = static_cast<ON_PolyEdgeHistoryValue *> (
@@ -2730,10 +2730,7 @@ ON_HistoryRecord::Write (ON_BinaryArchive &archive) const
 }
 
 ON_UUID
-ON_HistoryRecord::ModelObjectId () const
-{
-  return m_record_id;
-}
+ON_HistoryRecord::ModelObjectId () const { return m_record_id; }
 
 void
 ON_HistoryRecord::RemapObjectIds (const ON_SimpleArray<ON_UuidPair> &id_remap)

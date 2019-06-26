@@ -97,7 +97,9 @@ pcl::PCLBase<PointT>::setIndices (const PointIndicesConstPtr &indices)
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointT>
 void
-pcl::PCLBase<PointT>::setIndices (size_t row_start, size_t col_start, size_t nb_rows,
+pcl::PCLBase<PointT>::setIndices (size_t row_start,
+                                  size_t col_start,
+                                  size_t nb_rows,
                                   size_t nb_cols)
 {
   if ((nb_rows > input_->height) || (row_start > input_->height)) {
@@ -112,15 +114,15 @@ pcl::PCLBase<PointT>::setIndices (size_t row_start, size_t col_start, size_t nb_
 
   size_t row_end = row_start + nb_rows;
   if (row_end > input_->height) {
-    PCL_ERROR ("[PCLBase::setIndices] %d is out of rows range %d", row_end,
-               input_->height);
+    PCL_ERROR (
+        "[PCLBase::setIndices] %d is out of rows range %d", row_end, input_->height);
     return;
   }
 
   size_t col_end = col_start + nb_cols;
   if (col_end > input_->width) {
-    PCL_ERROR ("[PCLBase::setIndices] %d is out of columns range %d", col_end,
-               input_->width);
+    PCL_ERROR (
+        "[PCLBase::setIndices] %d is out of columns range %d", col_end, input_->width);
     return;
   }
 
