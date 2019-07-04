@@ -4,7 +4,8 @@ if(ClangFormat_FOUND)
   message(STATUS "Adding target 'format'")
   add_custom_target(
   format
-  COMMAND ${PCL_SOURCE_DIR}/dev/format.sh
+  COMMAND PCL_DIR=${PCL_SOURCE_DIR} sh 
+    ${PCL_SOURCE_DIR}/dev/format.sh
     ${ClangFormat_EXECUTABLE}
   )
 endif()
