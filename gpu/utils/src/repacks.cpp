@@ -36,6 +36,5 @@
 
 #include <cassert>
 
-#include <pcl/gpu/utils/repacks.hpp>
 #include "internal.hpp"
-
+#include <pcl/gpu/utils/repacks.hpp>

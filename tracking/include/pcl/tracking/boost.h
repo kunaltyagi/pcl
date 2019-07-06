@@ -41,6 +41,7 @@
 
 #include <pcl/pcl_macros.h>
 
-PCL_PRAGMA_WARNING("This header is deprecated and will be removed in an upcoming release.")
+PCL_PRAGMA_WARNING(
+    "This header is deprecated and will be removed in an upcoming release.")
 
 #include <boost/random.hpp>

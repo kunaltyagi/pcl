@@ -39,81 +39,90 @@
 #include <pcl/cuda/cutil_math.h>
 
 #ifdef RGB
-# undef RGB
+#undef RGB
 #endif
 
-namespace pcl
-{
-namespace cuda
-{
+namespace pcl {
+namespace cuda {
 
-  /** \brief Default RGB structure, defined as a union over 4 chars. */
-  union RGB
-  {
-    int rgb;
-    struct
-    {
-      char r;
-      char g;
-      char b;
-      char alpha;
-    };
-
-    inline __host__ __device__ RGB () {}
-    inline __host__ __device__ RGB (int _rgb) : rgb(_rgb) {}
-    inline __host__ __device__ RGB (char _r, char _g, char _b, char _alpha) :
-                                       r(_r), g(_g), b(_b), alpha(_alpha) {}
-
-    inline __host__ __device__ bool operator == (const RGB &rhs)
-    {
-      return (r == rhs.r && g == rhs.g && b == rhs.b && alpha == rhs.alpha);
-    }
-
-    inline __host__ __device__ RGB& operator - (RGB &rhs)
-    {
-      r = -r;
-      g = -g;
-      b = -b;
-      alpha = -alpha;
-      return (*this);
-    }
-
-    inline __host__ __device__ RGB& operator += (const RGB &rhs)
-    {
-      r += rhs.r;
-      g += rhs.g;
-      b += rhs.b;
-      alpha += rhs.alpha;
-      return (*this);
-    }
-
-    inline __host__ __device__ RGB& operator -= (const RGB &rhs)
-    {
-      r -= rhs.r;
-      g -= rhs.g;
-      b -= rhs.b;
-      alpha -= rhs.alpha;
-      return (*this);
-    }
-
-    inline __host__ __device__ RGB& operator *= (const RGB &rhs)
-    {
-      r *= rhs.r;
-      g *= rhs.g;
-      b *= rhs.b;
-      alpha *= rhs.alpha;
-      return (*this);
-    }
-
-    inline __host__ __device__ RGB& operator /= (const RGB &rhs)
-    {
-      r /= rhs.r;
-      g /= rhs.g;
-      b /= rhs.b;
-      alpha /= rhs.alpha;
-      return (*this);
-    }
+/** \brief Default RGB structure, defined as a union over 4 chars. */
+union RGB {
+  int rgb;
+  struct {
+    char r;
+    char g;
+    char b;
+    char alpha;
   };
 
-} // namespace
-} // namespace
+  inline __host__ __device__
+  RGB()
+  {}
+  inline __host__ __device__
+  RGB(int _rgb)
+  : rgb(_rgb)
+  {}
+  inline __host__ __device__
+  RGB(char _r, char _g, char _b, char _alpha)
+  : r(_r), g(_g), b(_b), alpha(_alpha)
+  {}
+
+  inline __host__ __device__ bool
+  operator==(const RGB& rhs)
+  {
+    return (r == rhs.r && g == rhs.g && b == rhs.b && alpha == rhs.alpha);
+  }
+
+  inline __host__ __device__ RGB&
+  operator-(RGB& rhs)
+  {
+    r = -r;
+    g = -g;
+    b = -b;
+    alpha = -alpha;
+    return (*this);
+  }
+
+  inline __host__ __device__ RGB&
+  operator+=(const RGB& rhs)
+  {
+    r += rhs.r;
+    g += rhs.g;
+    b += rhs.b;
+    alpha += rhs.alpha;
+    return (*this);
+  }
+
+  inline __host__ __device__ RGB&
+  operator-=(const RGB& rhs)
+  {
+    r -= rhs.r;
+    g -= rhs.g;
+    b -= rhs.b;
+    alpha -= rhs.alpha;
+    return (*this);
+  }
+
+  inline __host__ __device__ RGB&
+  operator*=(const RGB& rhs)
+  {
+    r *= rhs.r;
+    g *= rhs.g;
+    b *= rhs.b;
+    alpha *= rhs.alpha;
+    return (*this);
+  }
+
+  inline __host__ __device__ RGB&
+  operator/=(const RGB& rhs)
+  {
+    r /= rhs.r;
+    g /= rhs.g;
+    b /= rhs.b;
+    alpha /= rhs.alpha;
+    return (*this);
+  }
+};
+
+} // namespace cuda
+} // namespace pcl

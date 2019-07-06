@@ -44,45 +44,47 @@
 
 #include <pcl/gpu/kinfu/kinfu.h>
 
-namespace pcl
-{
-  namespace gpu
-  {
-    class CaptureOpenNI
-    {
+namespace pcl {
+namespace gpu {
+class CaptureOpenNI {
 public:
-    using RGB = KinfuTracker::PixelRGB;
+  using RGB = KinfuTracker::PixelRGB;
 
-    enum { PROP_OPENNI_REGISTRATION_ON  = 104 };
+  enum { PROP_OPENNI_REGISTRATION_ON = 104 };
 
+  CaptureOpenNI();
+  CaptureOpenNI(int device);
+  CaptureOpenNI(const std::string& oni_filename);
 
-    CaptureOpenNI();
-    CaptureOpenNI(int device);
-    CaptureOpenNI(const std::string& oni_filename);
+  void
+  open(int device);
+  void
+  open(const std::string& oni_filename);
+  void
+  release();
 
-    void open(int device);
-    void open(const std::string& oni_filename);
-    void release();
+  ~CaptureOpenNI();
 
-    ~CaptureOpenNI();
+  bool
+  grab(PtrStepSz<const unsigned short>& depth, PtrStepSz<const RGB>& rgb24);
 
-    bool grab (PtrStepSz<const unsigned short>& depth, PtrStepSz<const RGB>& rgb24);
+  // parameters taken from camera/oni
+  float depth_focal_length_VGA;
+  float baseline; // mm
+  int shadow_value;
+  int no_sample_value;
+  double pixelSize; // mm
 
-    //parameters taken from camera/oni
-    float depth_focal_length_VGA;
-    float baseline;         // mm
-    int shadow_value;
-    int no_sample_value;
-    double pixelSize;         //mm
+  unsigned short max_depth; // mm
 
-    unsigned short max_depth;         //mm
+  bool
+  setRegistration(bool value = false);
 
-    bool setRegistration (bool value = false);
 private:
-    struct Impl;
-    boost::shared_ptr<Impl> impl_;
-    void getParams ();
-
-    };
-  }
+  struct Impl;
+  boost::shared_ptr<Impl> impl_;
+  void
+  getParams();
 };
+} // namespace gpu
+}; // namespace pcl

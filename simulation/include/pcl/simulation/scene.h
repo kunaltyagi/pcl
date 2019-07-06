@@ -15,31 +15,28 @@
 #include <pcl/simulation/camera.h>
 #include <pcl/simulation/model.h>
 
-namespace pcl
-{
-  namespace simulation
-  {
-    class PCL_EXPORTS Scene
-    {
-    public:
-      using Ptr = boost::shared_ptr<Scene>;
-      using ConstPtr = boost::shared_ptr<Scene>;
+namespace pcl {
+namespace simulation {
+class PCL_EXPORTS Scene {
+public:
+  using Ptr = boost::shared_ptr<Scene>;
+  using ConstPtr = boost::shared_ptr<Scene>;
 
-      void
-      draw ();
+  void
+  draw();
 
-      void
-      add (Model::Ptr model);
+  void
+  add(Model::Ptr model);
 
-      void
-      addCompleteModel (std::vector<Model::Ptr> model);
+  void
+  addCompleteModel(std::vector<Model::Ptr> model);
 
-      void
-      clear ();
+  void
+  clear();
 
-    private:
-      std::vector<Model::Ptr> models_;
-    };
-  
-  } // namespace - simulation
-} // namespace - pcl
+private:
+  std::vector<Model::Ptr> models_;
+};
+
+} // namespace simulation
+} // namespace pcl

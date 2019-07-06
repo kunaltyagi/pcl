@@ -39,4 +39,4 @@
 #include <pcl/impl/instantiate.hpp>
 #include <pcl/point_types.h>
 PCL_INSTANTIATE(DisparityMapConverter, PCL_XYZ_POINT_TYPES);
-#endif    // PCL_NO_PRECOMPILE
+#endif // PCL_NO_PRECOMPILE

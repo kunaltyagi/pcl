@@ -34,7 +34,7 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *
  */
-  
+
 #pragma once
 
 #include <pcl/common/common.h>
@@ -42,61 +42,55 @@
 #include <istream>
 #include <ostream>
 
-namespace pcl
-{
+namespace pcl {
 
-  /** \brief Class representing a decision tree. */
-  template <class NodeType>
-  class PCL_EXPORTS DecisionTree
+/** \brief Class representing a decision tree. */
+template <class NodeType>
+class PCL_EXPORTS DecisionTree {
+
+public:
+  /** \brief Constructor. */
+  DecisionTree() : root_() {}
+  /** \brief Destructor. */
+  virtual ~DecisionTree() {}
+
+  /** \brief Sets the root node of the tree.
+   * \param[in] root The root node.
+   */
+  void
+  setRoot(const NodeType& root)
   {
-  
-    public:
+    root_ = root;
+  }
 
-      /** \brief Constructor. */
-      DecisionTree () : root_ () {}
-      /** \brief Destructor. */
-      virtual 
-      ~DecisionTree () {}
+  /** \brief Returns the root node of the tree. */
+  NodeType&
+  getRoot()
+  {
+    return root_;
+  }
 
-      /** \brief Sets the root node of the tree.
-        * \param[in] root The root node.
-        */
-      void
-      setRoot (const NodeType & root)
-      {
-        root_ = root;
-      }
+  /** \brief Serializes the decision tree.
+   * \param[out] stream The destination for the serialization.
+   */
+  void
+  serialize(::std::ostream& stream) const
+  {
+    root_.serialize(stream);
+  }
 
-      /** \brief Returns the root node of the tree. */
-      NodeType &
-      getRoot ()
-      {
-        return root_;
-      }
+  /** \brief Deserializes the decision tree.
+   * \param[in] stream The source for the deserialization.
+   */
+  void
+  deserialize(::std::istream& stream)
+  {
+    root_.deserialize(stream);
+  }
 
-      /** \brief Serializes the decision tree. 
-        * \param[out] stream The destination for the serialization.
-        */
-      void 
-      serialize (::std::ostream & stream) const
-      {
-        root_.serialize (stream);
-      }
+private:
+  /** \brief The root node of the decision tree. */
+  NodeType root_;
+};
 
-      /** \brief Deserializes the decision tree. 
-        * \param[in] stream The source for the deserialization.
-        */
-      void deserialize (::std::istream & stream)
-      {
-        root_.deserialize (stream);
-      }
-
-    private:
-
-      /** \brief The root node of the decision tree. */
-      NodeType root_;
-
-  };
-
-
-}
+} // namespace pcl
