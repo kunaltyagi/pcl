@@ -1,11 +1,23 @@
 ---
-AccessModifierOffset: '0'
-AlwaysBreakAfterReturnType : All
+AlwaysBreakAfterReturnType: All
 AlwaysBreakTemplateDeclarations: 'true'
-BreakBeforeBraces: Linux
+BinPackArguments: 'false'
+BinPackParameters: 'false'
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterFunction: true
+  AfterClass: false
+  AfterStruct: false
+  BeforeElse: true
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+BreakConstructorInitializers: BeforeComma
+ColumnLimit: '88'
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
+ConstructorInitializerIndentWidth: '0'
 Language: Cpp
-NamespaceIndentation: All
-SpaceBeforeParens: Always
+PointerAlignment: Left
 Standard: Cpp11
-TabWidth: 2
+TabWidth: '2'
 UseTab: Never
