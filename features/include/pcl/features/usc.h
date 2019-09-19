@@ -142,7 +142,7 @@ namespace pcl
         * \param[out] desc descriptor to compute
         */
       void
-      computePointDescriptor (size_t index, std::vector<float> &desc);
+      computePointDescriptor (std::size_t index, std::vector<float> &desc);
 
       /** \brief Initialize computation by allocating all the intervals and the volume lookup table. */
       bool
@@ -167,13 +167,13 @@ namespace pcl
       std::vector<float> volume_lut_;
 
       /** \brief Bins along the azimuth dimension. */
-      size_t azimuth_bins_;
+      std::size_t azimuth_bins_;
 
       /** \brief Bins along the elevation dimension. */
-      size_t elevation_bins_;
+      std::size_t elevation_bins_;
 
       /** \brief Bins along the radius dimension. */
-      size_t radius_bins_;
+      std::size_t radius_bins_;
 
       /** \brief Minimal radius value. */
       double min_radius_;
@@ -182,7 +182,7 @@ namespace pcl
       double point_density_radius_;
 
       /** \brief Descriptor length. */
-      size_t descriptor_length_;
+      std::size_t descriptor_length_;
 
       /** \brief Radius to compute local RF. */
       double local_radius_;

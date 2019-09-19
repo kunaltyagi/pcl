@@ -200,7 +200,7 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
   {
     if (normals_->is_dense)
     {
-      for (size_t i = 0; i < indices_->size (); ++i)
+      for (std::size_t i = 0; i < indices_->size (); ++i)
       {
         normal_centroid += normals_->points[(*indices_)[i]].getNormalVector4fMap ();
         cp++;
@@ -209,7 +209,7 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
     // NaN or Inf values could exist => check for them
     else
     {
-      for (size_t i = 0; i < indices_->size (); ++i)
+      for (std::size_t i = 0; i < indices_->size (); ++i)
       {
         if (!std::isfinite (normals_->points[(*indices_)[i]].normal[0])
             ||
@@ -241,7 +241,7 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
   for (Eigen::Index d = 0; d < hist_f1_.size (); ++d)
     output.points[0].histogram[d + 0] = hist_f1_[d];
 
-  size_t data_size = hist_f1_.size ();
+  std::size_t data_size = hist_f1_.size ();
   for (Eigen::Index d = 0; d < hist_f2_.size (); ++d)
     output.points[0].histogram[d + data_size] = hist_f2_[d];
 
@@ -262,18 +262,18 @@ pcl::VFHEstimation<PointInT, PointNT, PointOutT>::computeFeature (PointCloudOut 
   else
     hist_incr = 1.0;
 
-  for (size_t i = 0; i < indices_->size (); ++i)
+  for (std::size_t i = 0; i < indices_->size (); ++i)
   {
     Eigen::Vector4f normal (normals_->points[(*indices_)[i]].normal[0],
                             normals_->points[(*indices_)[i]].normal[1],
                             normals_->points[(*indices_)[i]].normal[2], 0);
     // Normalize
     double alpha = (normal.dot (d_vp_p) + 1.0) * 0.5;
-    int fi = static_cast<int> (std::floor (alpha * static_cast<double> (hist_vp_.size ())));
-    if (fi < 0)
+    auto fi = static_cast<std::size_t> (std::floor (alpha * hist_vp_.size ()));
+    if (alpha < 0)
       fi = 0;
-    if (fi > (static_cast<int> (hist_vp_.size ()) - 1))
-      fi = static_cast<int> (hist_vp_.size ()) - 1;
+    if (fi > (hist_vp_.size ()) - 1)
+      fi = (hist_vp_.size ()) - 1;
     // Bin into the histogram
     hist_vp_ [fi] += static_cast<float> (hist_incr);
   }

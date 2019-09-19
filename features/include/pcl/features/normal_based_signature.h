@@ -88,7 +88,7 @@ namespace pcl
         * \param[in] n the length of the columns used for the Discrete Fourier Transform. 
         */
       inline void
-      setN (size_t n) { N_ = n; }
+      setN (std::size_t n) { N_ = n; }
 
       /** \brief Returns the N parameter - the length of the columns used for the Discrete Fourier Transform. */
       inline size_t
@@ -98,7 +98,7 @@ namespace pcl
         * \param[in] m the length of the rows used for the Discrete Cosine Transform.
         */
       inline void
-      setM (size_t m) { M_ = m; }
+      setM (std::size_t m) { M_ = m; }
 
       /** \brief Returns the M parameter - the length of the rows used for the Discrete Cosine Transform */
       inline size_t
@@ -110,7 +110,7 @@ namespace pcl
         * \param[in] n_prime the number of columns from the matrix of DFT and DCT that will be contained in the output
         */
       inline void
-      setNPrime (size_t n_prime) { N_prime_ = n_prime; }
+      setNPrime (std::size_t n_prime) { N_prime_ = n_prime; }
 
       /** \brief Returns the N' parameter - the number of rows to be taken from the matrix of DFT and DCT
         * values that will be contained in the output feature vector
@@ -125,7 +125,7 @@ namespace pcl
         * \param[in] m_prime the number of rows from the matrix of DFT and DCT that will be contained in the output
         */
       inline void
-      setMPrime (size_t m_prime) { M_prime_ = m_prime; }
+      setMPrime (std::size_t m_prime) { M_prime_ = m_prime; }
 
       /** \brief Returns the M' parameter - the number of rows to be taken from the matrix of DFT and DCT
         * values that will be contained in the output feature vector
@@ -153,7 +153,7 @@ namespace pcl
 
     private:
       float scale_h_;
-      size_t N_, M_, N_prime_, M_prime_;
+      std::size_t N_, M_, N_prime_, M_prime_;
   };
 }
 

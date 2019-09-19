@@ -40,6 +40,8 @@
 #ifndef PCL_FEATURES_IMPL_BRISK_2D_HPP_
 #define PCL_FEATURES_IMPL_BRISK_2D_HPP_
 
+#include <numeric>
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointInT, typename PointOutT, typename KeypointT, typename IntensityT>
 pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::BRISK2DEstimation ()
@@ -129,7 +131,7 @@ pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::generateKern
 
     // generate the pattern points look-up
     double alpha, theta;
-    for (size_t rot = 0; rot < n_rot_; ++rot)
+    for (std::size_t rot = 0; rot < n_rot_; ++rot)
     {
       // this is the rotation of the feature
       theta = double (rot) * 2 * M_PI / double (n_rot_); 
@@ -150,7 +152,7 @@ pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::generateKern
             pattern_iterator->sigma = static_cast<float> (sigma_scale * scale_list_[scale] * (double (radius_list[ring])) * sin (M_PI / double (number_list[ring])));
 
           // adapt the sizeList if necessary
-          const unsigned int size = static_cast<const unsigned int> (std::ceil (((scale_list_[scale] * radius_list[ring]) + pattern_iterator->sigma)) + 1);
+          const unsigned int size = static_cast<unsigned int> (std::ceil (((scale_list_[scale] * radius_list[ring]) + pattern_iterator->sigma)) + 1);
 
           if (size_list_[scale] < size)
             size_list_[scale] = size;
@@ -169,14 +171,12 @@ pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::generateKern
   no_long_pairs_  = 0;
 
   // fill index_change with 0..n if empty
-  unsigned int ind_size = static_cast<unsigned int> (index_change.size ());
-  if (ind_size == 0) 
+  if (index_change.size () == 0) 
   {
     index_change.resize (points_ * (points_ - 1) / 2);
-    ind_size = static_cast<unsigned int> (index_change.size ());
   }
-  for (unsigned int i = 0; i < ind_size; i++)
-    index_change[i] = i;
+  std::iota(index_change.begin (), index_change.end (),
+            static_cast<decltype(index_change)::value_type>(0));
 
   const float d_min_sq = d_min_ * d_min_;
   const float d_max_sq  = d_max_ * d_max_;
@@ -460,11 +460,11 @@ pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::compute (
   // destination for intensity data; will be forwarded to BRISK
   std::vector<unsigned char> image_data (width*height);
 
-  for (size_t i = 0; i < image_data.size (); ++i)
+  for (std::size_t i = 0; i < image_data.size (); ++i)
     image_data[i] = static_cast<unsigned char> (intensity_ ((*input_cloud_)[i]));
 
   // Remove keypoints very close to the border
-  size_t ksize = keypoints_->points.size ();
+  std::size_t ksize = keypoints_->points.size ();
   std::vector<int> kscales; // remember the scale per keypoint
   kscales.resize (ksize);
  
@@ -480,7 +480,7 @@ pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::compute (
   if (!scale_invariance_enabled_)
     basicscale = std::max (static_cast<int> (float (scales_) / lb_scalerange * (std::log2 (1.45f * basic_size_ / (basic_size_06))) + 0.5f), 0);
 
-  for (size_t k = 0; k < ksize; k++)
+  for (std::size_t k = 0; k < ksize; k++)
   {
     unsigned int scale;
     if (scale_invariance_enabled_)
@@ -522,12 +522,12 @@ pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::compute (
   // current integral image
   std::vector<int> integral ((width+1)*(height+1), 0);    // the integral image
 
-  for (size_t row_index = 1; row_index < height; ++row_index)
+  for (std::size_t row_index = 1; row_index < height; ++row_index)
   {
-    for (size_t col_index = 1; col_index < width; ++col_index)
+    for (std::size_t col_index = 1; col_index < width; ++col_index)
     {
-      const size_t index = row_index*width+col_index;
-      const size_t index2 = (row_index)*(width+1)+(col_index);
+      const std::size_t index = row_index*width+col_index;
+      const std::size_t index2 = (row_index)*(width+1)+(col_index);
 
       integral[index2] = static_cast<int> (image_data[index])
         - integral[index2-1-(width+1)]
@@ -554,7 +554,7 @@ pcl::BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::compute (
   output.resize (ksize);
   //output.width = ksize;
   //output.height = 1;
-  for (size_t k = 0; k < ksize; k++)
+  for (std::size_t k = 0; k < ksize; k++)
   {
     unsigned char* ptr = &output.points[k].descriptor[0];
 

@@ -146,14 +146,14 @@ pcl::SHOTEstimationOMP<PointInT, PointNT, PointOutT, PointRFT>::computeFeature (
 
   assert(descLength_ == 352);
 
-  int data_size = static_cast<int> (indices_->size ());
+  std::size_t data_size = indices_->size ();
 
   output.is_dense = true;
   // Iterating over the entire index vector
 #ifdef _OPENMP
 #pragma omp parallel for num_threads(threads_)
 #endif
-  for (int idx = 0; idx < data_size; ++idx)
+  for (std::size_t idx = 0; idx < data_size; ++idx)
   {
 
     Eigen::VectorXf shot;
@@ -234,14 +234,14 @@ pcl::SHOTColorEstimationOMP<PointInT, PointNT, PointOutT, PointRFT>::computeFeat
   radius1_4_ = search_radius_ / 4;
   radius1_2_ = search_radius_ / 2;
 
-  int data_size = static_cast<int> (indices_->size ());
+  std::size_t data_size = indices_->size ();
 
   output.is_dense = true;
   // Iterating over the entire index vector
 #ifdef _OPENMP
 #pragma omp parallel for num_threads(threads_)
 #endif
-  for (int idx = 0; idx < data_size; ++idx)
+  for (std::size_t idx = 0; idx < data_size; ++idx)
   {
     Eigen::VectorXf shot;
     shot.setZero (descLength_);

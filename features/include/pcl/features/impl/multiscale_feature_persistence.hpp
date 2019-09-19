@@ -89,7 +89,7 @@ pcl::MultiscaleFeaturePersistence<PointSource, PointFeature>::computeFeaturesAtA
 {
   features_at_scale_.resize (scale_values_.size ());
   features_at_scale_vectorized_.resize (scale_values_.size ());
-  for (size_t scale_i = 0; scale_i < scale_values_.size (); ++scale_i)
+  for (std::size_t scale_i = 0; scale_i < scale_values_.size (); ++scale_i)
   {
     FeatureCloudPtr feature_cloud (new FeatureCloud ());
     computeFeatureAtScale (scale_values_[scale_i], feature_cloud);
@@ -97,7 +97,7 @@ pcl::MultiscaleFeaturePersistence<PointSource, PointFeature>::computeFeaturesAtA
 
     // Vectorize each feature and insert it into the vectorized feature storage
     std::vector<std::vector<float> > feature_cloud_vectorized (feature_cloud->points.size ());
-    for (size_t feature_i = 0; feature_i < feature_cloud->points.size (); ++feature_i)
+    for (std::size_t feature_i = 0; feature_i < feature_cloud->points.size (); ++feature_i)
     {
       std::vector<float> feature_vectorized (feature_representation_->getNumberOfDimensions ());
       feature_representation_->vectorize (feature_cloud->points[feature_i], feature_vectorized);
@@ -123,7 +123,7 @@ template <typename PointSource, typename PointFeature> float
 pcl::MultiscaleFeaturePersistence<PointSource, PointFeature>::distanceBetweenFeatures (const std::vector<float> &a,
                                                                                        const std::vector<float> &b)
 {
-  return (pcl::selectNorm<std::vector<float> > (a, b, static_cast<int> (a.size ()), distance_metric_));
+  return (pcl::selectNorm<std::vector<float> > (a, b, a.size (), distance_metric_));
 }
 
 
@@ -154,12 +154,12 @@ pcl::MultiscaleFeaturePersistence<PointSource, PointFeature>::extractUniqueFeatu
 {
   unique_features_indices_.resize (scale_values_.size ());
   unique_features_table_.resize (scale_values_.size ());
-  for (size_t scale_i = 0; scale_i < features_at_scale_vectorized_.size (); ++scale_i)
+  for (std::size_t scale_i = 0; scale_i < features_at_scale_vectorized_.size (); ++scale_i)
   {
     // Calculate standard deviation within the scale
     float standard_dev = 0.0;
     std::vector<float> diff_vector (features_at_scale_vectorized_[scale_i].size ());
-    for (size_t point_i = 0; point_i < features_at_scale_vectorized_[scale_i].size (); ++point_i)
+    for (std::size_t point_i = 0; point_i < features_at_scale_vectorized_[scale_i].size (); ++point_i)
     {
       float diff = distanceBetweenFeatures (features_at_scale_vectorized_[scale_i][point_i], mean_feature_);
       standard_dev += diff * diff;
@@ -171,7 +171,7 @@ pcl::MultiscaleFeaturePersistence<PointSource, PointFeature>::extractUniqueFeatu
     // Select only points outside (mean +/- alpha * standard_dev)
     std::list<size_t> indices_per_scale;
     std::vector<bool> indices_table_per_scale (features_at_scale_[scale_i]->points.size (), false);
-    for (size_t point_i = 0; point_i < features_at_scale_[scale_i]->points.size (); ++point_i)
+    for (std::size_t point_i = 0; point_i < features_at_scale_[scale_i]->points.size (); ++point_i)
     {
       if (diff_vector[point_i] > alpha_ * standard_dev)
       {
@@ -210,7 +210,7 @@ pcl::MultiscaleFeaturePersistence<PointSource, PointFeature>::determinePersisten
 
 /*
   // Method 1: a feature is considered persistent if it is 'unique' in at least 2 different scales
-  for (size_t scale_i = 0; scale_i < features_at_scale_vectorized_.size () - 1; ++scale_i)
+  for (std::size_t scale_i = 0; scale_i < features_at_scale_vectorized_.size () - 1; ++scale_i)
     for (std::list<size_t>::iterator feature_it = unique_features_indices_[scale_i].begin (); feature_it != unique_features_indices_[scale_i].end (); ++feature_it)
     {
       if (unique_features_table_[scale_i][*feature_it] == true)
@@ -224,7 +224,7 @@ pcl::MultiscaleFeaturePersistence<PointSource, PointFeature>::determinePersisten
   for (std::list<size_t>::iterator feature_it = unique_features_indices_.front ().begin (); feature_it != unique_features_indices_.front ().end (); ++feature_it)
   {
     bool present_in_all = true;
-    for (size_t scale_i = 0; scale_i < features_at_scale_.size (); ++scale_i)
+    for (std::size_t scale_i = 0; scale_i < features_at_scale_.size (); ++scale_i)
       present_in_all = present_in_all && unique_features_table_[scale_i][*feature_it];
 
     if (present_in_all)

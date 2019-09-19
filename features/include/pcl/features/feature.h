@@ -123,7 +123,7 @@ namespace pcl
       using PointCloudOut = pcl::PointCloud<PointOutT>;
 
       using SearchMethod = std::function<int (size_t, double, std::vector<int> &, std::vector<float> &)>;
-      using SearchMethodSurface = std::function<int (const PointCloudIn &cloud, size_t index, double, std::vector<int> &, std::vector<float> &)>;
+      using SearchMethodSurface = std::function<int (const PointCloudIn &cloud, std::size_t index, double, std::vector<int> &, std::vector<float> &)>;
 
     public:
       /** \brief Empty constructor. */
@@ -267,7 +267,7 @@ namespace pcl
         * \return the number of neighbors found. If no neighbors are found or an error occurred, return 0.
         */
       inline int
-      searchForNeighbors (size_t index, double parameter,
+      searchForNeighbors (std::size_t index, double parameter,
                           std::vector<int> &indices, std::vector<float> &distances) const
       {
         return (search_method_surface_ (*input_, index, parameter, indices, distances));
@@ -285,7 +285,7 @@ namespace pcl
         * \return the number of neighbors found. If no neighbors are found or an error occurred, return 0.
         */
       inline int
-      searchForNeighbors (const PointCloudIn &cloud, size_t index, double parameter,
+      searchForNeighbors (const PointCloudIn &cloud, std::size_t index, double parameter,
                           std::vector<int> &indices, std::vector<float> &distances) const
       {
         return (search_method_surface_ (cloud, index, parameter, indices, distances));
