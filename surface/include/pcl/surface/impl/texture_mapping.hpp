@@ -384,8 +384,8 @@ pcl::TextureMapping<PointInT>::isPointOccluded (const PointInT &pt, OctreePtr oc
   // raytrace
   octree->getIntersectedVoxelIndices(direction, -direction, indices);
 
-  int nbocc = static_cast<int> (indices.size ());
-  for (const int &index : indices)
+  auto nbocc = indices.size ();
+  for (const auto &index : indices)
   {
    // if intersected point is on the over side of the camera
    if (pt.z * cloud->points[index].z < 0)
@@ -437,8 +437,8 @@ pcl::TextureMapping<PointInT>::removeOccludedPoints (const PointCloudPtr &input_
     // if point is not occluded
     octree->getIntersectedVoxelIndices (direction, -direction, indices);
 
-    int nbocc = static_cast<int> (indices.size ());
-    for (const int &index : indices)
+    auto nbocc = indices.size ();
+    for (const auto &index : indices)
     {
       // if intersected point is on the over side of the camera
       if (input_cloud->points[i].z * input_cloud->points[index].z < 0)
@@ -677,12 +677,12 @@ pcl::TextureMapping<PointInT>::showOcclusions (const PointCloudPtr &input_cloud,
 
     // get number of occlusions for that point
     indices.clear ();
-    int nbocc = octree->getIntersectedVoxelIndices (direction, -direction, indices);
+    octree->getIntersectedVoxelIndices (direction, -direction, indices);
 
-    nbocc = static_cast<int> (indices.size ());
+    auto nbocc = indices.size ();
 
     // TODO need to clean this up and find tricks to get remove aliasaing effect on planes
-    for (const int &index : indices)
+    for (const auto &index : indices)
     {
       // if intersected point is on the over side of the camera
       if (pt.z * input_cloud->points[index].z < 0)
@@ -742,7 +742,7 @@ pcl::TextureMapping<PointInT>::textureMeshwithMultipleCameras (pcl::TextureMesh 
 
   std::vector<pcl::Vertices> faces;
 
-  for (int current_cam = 0; current_cam < static_cast<int> (cameras.size ()); ++current_cam)
+  for (std::size_t current_cam = 0; current_cam < cameras.size (); ++current_cam)
   {
     PCL_INFO ("Processing camera %d of %d.\n", current_cam+1, cameras.size ());
     
@@ -766,7 +766,7 @@ pcl::TextureMapping<PointInT>::textureMeshwithMultipleCameras (pcl::TextureMesh 
     u_null.idx_face = -1;
 
     int cpt_invisible=0;
-    for (int idx_face = 0; idx_face <  static_cast<int> (mesh.tex_polygons[current_cam].size ()); ++idx_face)
+    for (std::size_t idx_face = 0; idx_face <  mesh.tex_polygons[current_cam].size (); ++idx_face)
     {
       //project each vertice, if one is out of view, stop
       pcl::PointXY uv_coord1;
@@ -831,10 +831,10 @@ pcl::TextureMapping<PointInT>::textureMeshwithMultipleCameras (pcl::TextureMesh 
         // af first (idx_pcan < current_cam), check if some of the faces attached to previous cameras occlude the current faces
         // then (idx_pcam == current_cam), check for self occlusions. At this stage, we skip faces that were already marked as occluded
         cpt_invisible = 0;
-        for (int idx_pcam = 0 ; idx_pcam <= current_cam ; ++idx_pcam)
+        for (std::size_t idx_pcam = 0 ; idx_pcam <= current_cam ; ++idx_pcam)
         {
           // project all faces
-          for (int idx_face = 0; idx_face <  static_cast<int> (mesh.tex_polygons[idx_pcam].size ()); ++idx_face)
+          for (std::size_t idx_face = 0; idx_face <  mesh.tex_polygons[idx_pcam].size (); ++idx_face)
           {
 
             if (idx_pcam == current_cam && !visibility[idx_face])
@@ -869,7 +869,7 @@ pcl::TextureMapping<PointInT>::textureMeshwithMultipleCameras (pcl::TextureMesh 
               if (kdtree.radiusSearch (center, radius, idxNeighbors, neighborsSquaredDistance) > 0 )
               {
                 // for each neighbor
-                for (const int &idxNeighbor : idxNeighbors)
+                for (const auto &idxNeighbor : idxNeighbors)
                 {
                   if (std::max (camera_cloud->points[mesh.tex_polygons[idx_pcam][idx_face].vertices[0]].z,
                                 std::max (camera_cloud->points[mesh.tex_polygons[idx_pcam][idx_face].vertices[1]].z, 
@@ -895,7 +895,7 @@ pcl::TextureMapping<PointInT>::textureMeshwithMultipleCameras (pcl::TextureMesh 
     // now, visibility is true for each face that belongs to the current camera
     // if a face is not visible, we push it into the next one.
 
-    if (static_cast<int> (mesh.tex_coordinates.size ()) <= current_cam)
+    if (mesh.tex_coordinates.size () <= current_cam)
     {
       std::vector<Eigen::Vector2f, Eigen::aligned_allocator<Eigen::Vector2f> > dummy_container;
       mesh.tex_coordinates.push_back (dummy_container);
@@ -910,7 +910,7 @@ pcl::TextureMapping<PointInT>::textureMeshwithMultipleCameras (pcl::TextureMesh 
     int cpt_occluded_faces = 0;
     int cpt_visible_faces = 0;
 
-    for (size_t idx_face = 0 ; idx_face < visibility.size () ; ++idx_face)
+    for (std::size_t idx_face = 0 ; idx_face < visibility.size () ; ++idx_face)
     {
       if (visibility[idx_face])
       {
@@ -951,12 +951,12 @@ pcl::TextureMapping<PointInT>::textureMeshwithMultipleCameras (pcl::TextureMesh 
 
   if (mesh.tex_coordinates.size() <= cameras.size ())
   {
-   std::vector<Eigen::Vector2f, Eigen::aligned_allocator<Eigen::Vector2f> > dummy_container;
-   mesh.tex_coordinates.push_back(dummy_container);
-   }
+    std::vector<Eigen::Vector2f, Eigen::aligned_allocator<Eigen::Vector2f> > dummy_container;
+    mesh.tex_coordinates.push_back(dummy_container);
+  }
 
 
-  for(size_t idx_face = 0 ; idx_face < mesh.tex_polygons[cameras.size()].size() ; ++idx_face)
+  for(std::size_t idx_face = 0 ; idx_face < mesh.tex_polygons[cameras.size()].size() ; ++idx_face)
   {
     Eigen::Vector2f UV1, UV2, UV3;
     UV1(0) = -1.0; UV1(1) = -1.0;

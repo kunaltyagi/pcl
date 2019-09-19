@@ -66,7 +66,7 @@ pcl::EarClipping::performProcessing (PolygonMesh& output)
 void
 pcl::EarClipping::triangulate (const Vertices& vertices, PolygonMesh& output)
 {
-  const int n_vertices = static_cast<const int> (vertices.vertices.size ());
+  const auto n_vertices = vertices.vertices.size ();
 
   if (n_vertices < 3)
     return;
@@ -80,20 +80,23 @@ pcl::EarClipping::triangulate (const Vertices& vertices, PolygonMesh& output)
   if (area (vertices.vertices) > 0) // clockwise?
     remaining_vertices = vertices.vertices;
   else
-    for (int v = 0; v < n_vertices; v++)
+    for (std::size_t v = 0; v < n_vertices; v++)
       remaining_vertices[v] = vertices.vertices[n_vertices - 1 - v];
 
   // Avoid closed loops.
   if (remaining_vertices.front () == remaining_vertices.back ())
     remaining_vertices.erase (remaining_vertices.end () - 1);
 
-  // null_iterations avoids infinite loops if the polygon is not simple.
-  for (int u = static_cast<int> (remaining_vertices.size ()) - 1, null_iterations = 0;
-      remaining_vertices.size () > 2 && null_iterations < static_cast<int >(remaining_vertices.size () * 2);
-      ++null_iterations, u = (u+1) % static_cast<int> (remaining_vertices.size ()))
+  // null_iterations avoids infinite loops if the polygon is not simple
+  // @TODO: modulo every loop is a slow op, refactoring might make it faster
+  // @see pcl::EarClipping::area()
+  // Why start from last vertex and modulo around it?
+  for (std::size_t u = remaining_vertices.size () - 1, null_iterations = 0;
+      remaining_vertices.size () > 2 && null_iterations < remaining_vertices.size () * 2;
+      ++null_iterations, u = (u+1) % remaining_vertices.size ())
   {
-    int v = (u + 1) % static_cast<int> (remaining_vertices.size ());
-    int w = (u + 2) % static_cast<int> (remaining_vertices.size ());
+    std::size_t v = (u + 1) % remaining_vertices.size ();
+    std::size_t w = (u + 2) % remaining_vertices.size ();
 
     if (isEar (u, v, w, remaining_vertices))
     {
@@ -119,7 +122,7 @@ pcl::EarClipping::area (const std::vector<uint32_t>& vertices)
     //Therefore the following implementation determines the area of the flat polygon in 3D-space
     //using Stoke's law: http://code.activestate.com/recipes/578276-3d-polygon-area/
 
-    int n = static_cast<int> (vertices.size ());
+    const auto n = vertices.size ();
     float area = 0.0f;
     Eigen::Vector3f prev_p, cur_p;
     Eigen::Vector3f total (0,0,0);
@@ -127,7 +130,7 @@ pcl::EarClipping::area (const std::vector<uint32_t>& vertices)
 
     if (n > 3)
     {
-        for (int prev = n - 1, cur = 0; cur < n; prev = cur++)
+        for (std::size_t prev = n - 1, cur = 0; cur < n; prev = cur++)
         {
             prev_p = points_->points[vertices[prev]].getVector3fMap();
             cur_p = points_->points[vertices[cur]].getVector3fMap();
@@ -149,7 +152,7 @@ pcl::EarClipping::area (const std::vector<uint32_t>& vertices)
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 bool
-pcl::EarClipping::isEar (int u, int v, int w, const std::vector<uint32_t>& vertices)
+pcl::EarClipping::isEar (std::size_t u, std::size_t v, std::size_t w, const std::vector<uint32_t>& vertices)
 {
   Eigen::Vector3f p_u, p_v, p_w;
   p_u = points_->points[vertices[u]].getVector3fMap();
@@ -167,7 +170,7 @@ pcl::EarClipping::isEar (int u, int v, int w, const std::vector<uint32_t>& verti
 
   Eigen::Vector3f p;
   // Check if any other vertex is inside the triangle.
-  for (int k = 0; k < static_cast<int> (vertices.size ()); k++)
+  for (std::size_t k = 0; k < vertices.size (); k++)
   {
     if ((k == u) || (k == v) || (k == w))
       continue;

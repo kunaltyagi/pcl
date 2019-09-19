@@ -100,7 +100,7 @@ pcl::LocalMaximum<PointT>::applyFilterIndices (std::vector<int> &indices)
   // The arrays to be used
   indices.resize (indices_->size ());
   removed_indices_->resize (indices_->size ());
-  int oii = 0, rii = 0;  // oii = output indices iterator, rii = removed indices iterator
+  std::size_t oii = 0, rii = 0;  // oii = output indices iterator, rii = removed indices iterator
 
   std::vector<bool> point_is_max (indices_->size (), false);
   std::vector<bool> point_is_visited (indices_->size (), false);
@@ -108,28 +108,28 @@ pcl::LocalMaximum<PointT>::applyFilterIndices (std::vector<int> &indices)
   // Find all points within xy radius (i.e., a vertical cylinder) of the query
   // point, removing those that are locally maximal (i.e., highest z within the
   // cylinder)
-  for (int iii = 0; iii < static_cast<int> (indices_->size ()); ++iii)
+  for (const auto& idx: *indices_)
   {
-    if (!isFinite (input_->points[(*indices_)[iii]]))
+    if (!isFinite (input_->points[idx]))
     {
       continue;
     }
 
     // Points in the neighborhood of a previously identified local max, will
     // not be maximal in their own neighborhood
-    if (point_is_visited[(*indices_)[iii]] && !point_is_max[(*indices_)[iii]])
+    if (point_is_visited[idx] && !point_is_max[idx])
     {
       continue;
     }
 
     // Assume the current query point is the maximum, mark as visited
-    point_is_max[(*indices_)[iii]] = true;
-    point_is_visited[(*indices_)[iii]] = true;
+    point_is_max[idx] = true;
+    point_is_visited[idx] = true;
 
     // Perform the radius search in the projected cloud
     std::vector<int> radius_indices;
     std::vector<float> radius_dists;
-    PointT p = cloud_projected->points[(*indices_)[iii]];
+    PointT p = cloud_projected->points[idx];
     if (searcher_->radiusSearch (p, radius_, radius_indices, radius_dists) == 0)
     {
       PCL_WARN ("[pcl::%s::applyFilter] Searching for neighbors within radius %f failed.\n", getClassName ().c_str (), radius_);
@@ -139,26 +139,26 @@ pcl::LocalMaximum<PointT>::applyFilterIndices (std::vector<int> &indices)
     // If query point is alone, we retain it regardless
     if (radius_indices.size () == 1)
     {
-        point_is_max[(*indices_)[iii]] = false;
+        point_is_max[idx] = false;
     }
 
     // Check to see if a neighbor is higher than the query point
-    float query_z = input_->points[(*indices_)[iii]].z;
-    for (size_t k = 1; k < radius_indices.size (); ++k)  // k = 1 is the first neighbor
+    float query_z = input_->points[idx].z;
+    for (std::size_t k = 1; k < radius_indices.size (); ++k)  // k = 1 is the first neighbor
     {
       if (input_->points[radius_indices[k]].z > query_z)
       {
         // Query point is not the local max, no need to check others
-        point_is_max[(*indices_)[iii]] = false;
+        point_is_max[idx] = false;
         break;
       }
     }
 
     // If the query point was a local max, all neighbors can be marked as
     // visited, excluding them from future consideration as local maxima
-    if (point_is_max[(*indices_)[iii]])
+    if (point_is_max[idx])
     {
-      for (size_t k = 1; k < radius_indices.size (); ++k)  // k = 1 is the first neighbor
+      for (std::size_t k = 1; k < radius_indices.size (); ++k)  // k = 1 is the first neighbor
       {
         point_is_visited[radius_indices[k]] = true;
       }
@@ -166,18 +166,18 @@ pcl::LocalMaximum<PointT>::applyFilterIndices (std::vector<int> &indices)
 
     // Points that are local maxima are passed to removed indices
     // Unless negative was set, then it's the opposite condition
-    if ((!negative_ && point_is_max[(*indices_)[iii]]) || (negative_ && !point_is_max[(*indices_)[iii]]))
+    if ((!negative_ && point_is_max[idx]) || (negative_ && !point_is_max[idx]))
     {
       if (extract_removed_indices_)
       {
-        (*removed_indices_)[rii++] = (*indices_)[iii];
+        (*removed_indices_)[rii++] = idx;
       }
 
       continue;
     }
 
     // Otherwise it was a normal point for output (inlier)
-    indices[oii++] = (*indices_)[iii];
+    indices[oii++] = idx;
   }
 
   // Resize the output arrays

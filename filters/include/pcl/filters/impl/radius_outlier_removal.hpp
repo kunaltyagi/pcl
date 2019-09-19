@@ -56,8 +56,8 @@ pcl::RadiusOutlierRemoval<PointT>::applyFilter (PointCloud &output)
     extract_removed_indices_ = temp;
 
     output = *input_;
-    for (int rii = 0; rii < static_cast<int> (removed_indices_->size ()); ++rii)  // rii = removed indices iterator
-      output.points[(*removed_indices_)[rii]].x = output.points[(*removed_indices_)[rii]].y = output.points[(*removed_indices_)[rii]].z = user_filter_value_;
+    for (const auto& idx: *removed_indices_)
+      output.points[idx].x = output.points[idx].y = output.points[idx].z = user_filter_value_;
     if (!std::isfinite (user_filter_value_))
       output.is_dense = false;
   }

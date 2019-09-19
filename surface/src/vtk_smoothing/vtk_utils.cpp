@@ -174,8 +174,8 @@ pcl::VTKUtils::vtk2mesh (const vtkSmartPointer<vtkPolyData>& poly_data, pcl::Pol
 int
 pcl::VTKUtils::mesh2vtk (const pcl::PolygonMesh& mesh, vtkSmartPointer<vtkPolyData> &poly_data)
 {
-  int nr_points = mesh.cloud.width * mesh.cloud.height;
-  int nr_polygons = static_cast<int> (mesh.polygons.size ());
+  std::size_t nr_points = mesh.cloud.width * mesh.cloud.height;
+  const auto nr_polygons = mesh.polygons.size ();
 
   // reset vtkPolyData object
   poly_data = vtkSmartPointer<vtkPolyData>::New (); // OR poly_data->Reset();
@@ -185,7 +185,7 @@ pcl::VTKUtils::mesh2vtk (const pcl::PolygonMesh& mesh, vtkSmartPointer<vtkPolyDa
 
   // get field indices for x, y, z (as well as rgb and/or rgba)
   int idx_x = -1, idx_y = -1, idx_z = -1, idx_rgb = -1, idx_rgba = -1, idx_normal_x = -1, idx_normal_y = -1, idx_normal_z = -1;
-  for (int d = 0; d < static_cast<int> (mesh.cloud.fields.size ()); ++d)
+  for (std::size_t d = 0; d < mesh.cloud.fields.size (); ++d)
   {
     if (mesh.cloud.fields[d].name == "x") idx_x = d;
     else if (mesh.cloud.fields[d].name == "y") idx_y = d;
@@ -201,7 +201,7 @@ pcl::VTKUtils::mesh2vtk (const pcl::PolygonMesh& mesh, vtkSmartPointer<vtkPolyDa
 
   // copy point data
   vtk_mesh_points->SetNumberOfPoints (nr_points);
-  if (nr_points > 0)
+  if (nr_points)
   {
     Eigen::Vector4f pt = Eigen::Vector4f::Zero ();
     Eigen::Array4i xyz_offset (mesh.cloud.fields[idx_x].offset, mesh.cloud.fields[idx_y].offset, mesh.cloud.fields[idx_z].offset, 0);
@@ -215,13 +215,13 @@ pcl::VTKUtils::mesh2vtk (const pcl::PolygonMesh& mesh, vtkSmartPointer<vtkPolyDa
   }
 
   // copy polygon data
-  if (nr_polygons > 0)
+  if (nr_polygons)
   {
-    for (int i = 0; i < nr_polygons; i++)
+    for (std::size_t i = 0; i < nr_polygons; i++)
     {
-      unsigned int nr_points_in_polygon = static_cast<unsigned int> (mesh.polygons[i].vertices.size ());
+      auto nr_points_in_polygon = mesh.polygons[i].vertices.size ();
       vtk_mesh_polygons->InsertNextCell (nr_points_in_polygon);
-      for (unsigned int j = 0; j < nr_points_in_polygon; j++)
+      for (std::size_t j = 0; j < nr_points_in_polygon; j++)
         vtk_mesh_polygons->InsertCellPoint(mesh.polygons[i].vertices[j]);
     }
     poly_data->SetPolys (vtk_mesh_polygons);

@@ -40,6 +40,8 @@
 #ifndef PCL_FILTERS_IMPL_EXTRACT_INDICES_HPP_
 #define PCL_FILTERS_IMPL_EXTRACT_INDICES_HPP_
 
+#include <numeric>
+
 #include <pcl/filters/extract_indices.h>
 #include <pcl/common/io.h>
 
@@ -56,9 +58,8 @@ pcl::ExtractIndices<PointT>::filterDirectly (PointCloudPtr &cloud)
 
   std::vector<pcl::PCLPointField> fields;
   pcl::for_each_type<FieldList> (pcl::detail::FieldAdder<PointT> (fields));
-  for (int rii = 0; rii < static_cast<int> (removed_indices_->size ()); ++rii)  // rii = removed indices iterator
+  for (const auto& pt_index: *removed_indices_)
   {
-    size_t pt_index = (size_t) (*removed_indices_)[rii];
     if (pt_index >= input_->points.size ())
     {
       PCL_ERROR ("[pcl::%s::filterDirectly] The index exceeds the size of the input. Do nothing.\n",
@@ -89,9 +90,8 @@ pcl::ExtractIndices<PointT>::applyFilter (PointCloud &output)
     output = *input_;
     std::vector<pcl::PCLPointField> fields;
     pcl::for_each_type<FieldList> (pcl::detail::FieldAdder<PointT> (fields));
-    for (int rii = 0; rii < static_cast<int> (removed_indices_->size ()); ++rii)  // rii = removed indices iterator
+    for (const auto& pt_index: *removed_indices_)
     {
-      size_t pt_index = (size_t)(*removed_indices_)[rii];
       if (pt_index >= input_->points.size ())
       {
         PCL_ERROR ("[pcl::%s::applyFilter] The index exceeds the size of the input. Do nothing.\n",
@@ -133,8 +133,8 @@ pcl::ExtractIndices<PointT>::applyFilterIndices (std::vector<int> &indices)
     {
       // Set up the full indices set
       std::vector<int> full_indices (input_->points.size ());
-      for (int fii = 0; fii < static_cast<int> (full_indices.size ()); ++fii)  // fii = full indices iterator
-        full_indices[fii] = fii;
+      std::iota(full_indices.begin (), full_indices.end(),
+                static_cast<decltype(full_indices)::value_type>(0));
 
       // Set up the sorted input indices
       std::vector<int> sorted_input_indices = *indices_;
@@ -149,8 +149,8 @@ pcl::ExtractIndices<PointT>::applyFilterIndices (std::vector<int> &indices)
   {
     // Set up the full indices set
     std::vector<int> full_indices (input_->points.size ());
-    for (int fii = 0; fii < static_cast<int> (full_indices.size ()); ++fii)  // fii = full indices iterator
-      full_indices[fii] = fii;
+    std::iota(full_indices.begin (), full_indices.end (),
+              static_cast<decltype(full_indices)::value_type>(0));
 
     // Set up the sorted input indices
     std::vector<int> sorted_input_indices = *indices_;

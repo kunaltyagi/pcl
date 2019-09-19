@@ -454,7 +454,6 @@ protected:
  * \author Federico Tombari (federico.tombari@unibo.it)
  * \ingroup stereo
  */
-
 class PCL_EXPORTS BlockBasedStereoMatching : public GrayStereoMatching {
 public:
   BlockBasedStereoMatching();

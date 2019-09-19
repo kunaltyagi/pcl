@@ -38,6 +38,8 @@
  *
  */
 
+#include <numeric>
+
 #include <pcl/filters/impl/extract_indices.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -50,17 +52,17 @@ pcl::ExtractIndices<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
     if (negative_)
     {
       // Prepare the output and copy the data
-      for (size_t i = 0; i < indices_->size (); ++i)
-        for (size_t j = 0; j < output.fields.size(); ++j)
-          memcpy (&output.data[(*indices_)[i] * output.point_step + output.fields[j].offset],
+      for (const auto& idx: *indices_)
+        for (const auto& field: output.fields)
+          memcpy (&output.data[idx * output.point_step + field.offset],
                   &user_filter_value_, sizeof(float));
     }
     else
     {
       // Prepare a vector holding all indices
       std::vector<int> all_indices (input_->width * input_->height);
-      for (int i = 0; i < static_cast<int>(all_indices.size ()); ++i)
-        all_indices[i] = i;
+      std::iota(all_indices.begin (), all_indices.end (),
+                static_cast<decltype(all_indices)::value_type>(0));
 
       std::vector<int> indices = *indices_;
       std::sort (indices.begin (), indices.end ());
@@ -71,9 +73,9 @@ pcl::ExtractIndices<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
                       inserter (remaining_indices, remaining_indices.begin ()));
 
       // Prepare the output and copy the data
-      for (const int &remaining_index : remaining_indices)
-        for (size_t j = 0; j < output.fields.size(); ++j)
-          memcpy (&output.data[remaining_index * output.point_step + output.fields[j].offset],
+      for (const int &idx : remaining_indices)
+        for (const auto& field: output.fields)
+          memcpy (&output.data[idx * output.point_step + field.offset],
                   &user_filter_value_, sizeof(float));
     }
     if (!std::isfinite (user_filter_value_))
@@ -114,8 +116,8 @@ pcl::ExtractIndices<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
   {
     // Prepare a vector holding all indices
     std::vector<int> all_indices (input_->width * input_->height);
-    for (int i = 0; i < static_cast<int>(all_indices.size ()); ++i)
-      all_indices[i] = i;
+    std::iota(all_indices.begin (), all_indices.end (),
+              static_cast<decltype(all_indices)::value_type>(0));
 
     std::vector<int> indices = *indices_;
     std::sort (indices.begin (), indices.end ());
@@ -128,7 +130,7 @@ pcl::ExtractIndices<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
     // Prepare the output and copy the data
     output.width = static_cast<uint32_t> (remaining_indices.size ());
     output.data.resize (remaining_indices.size () * output.point_step);
-    for (size_t i = 0; i < remaining_indices.size (); ++i)
+    for (std::size_t i = 0; i < remaining_indices.size (); ++i)
       memcpy (&output.data[i * output.point_step], &input_->data[remaining_indices[i] * output.point_step], output.point_step);
   }
   else
@@ -136,7 +138,7 @@ pcl::ExtractIndices<pcl::PCLPointCloud2>::applyFilter (PCLPointCloud2 &output)
     // Prepare the output and copy the data
     output.width = static_cast<uint32_t> (indices_->size ());
     output.data.resize (indices_->size () * output.point_step);
-    for (size_t i = 0; i < indices_->size (); ++i)
+    for (std::size_t i = 0; i < indices_->size (); ++i)
       memcpy (&output.data[i * output.point_step], &input_->data[(*indices_)[i] * output.point_step], output.point_step);
   }
   output.row_step = output.point_step * output.width;
@@ -158,8 +160,8 @@ pcl::ExtractIndices<pcl::PCLPointCloud2>::applyFilter (std::vector<int> &indices
 
     // Set up the full indices set
     std::vector<int> indices_fullset (input_->width * input_->height);
-    for (int p_it = 0; p_it < static_cast<int> (indices_fullset.size ()); ++p_it)
-      indices_fullset[p_it] = p_it;
+    std::iota(indices_fullset.begin (), indices_fullset.end (),
+              static_cast<decltype(indices_fullset)::value_type>(0));
 
     // If the subset is the empty set
     if (indices_->empty () || (input_->width * input_->height == 0))

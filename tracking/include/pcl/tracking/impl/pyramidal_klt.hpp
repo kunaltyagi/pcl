@@ -343,7 +343,7 @@ pcl::tracking::PyramidalKLTTracker<PointInT, IntensityT>::computePyramids (const
 #ifdef _OPENMP
 #pragma omp parallel for num_threads (threads_)
 #endif
-  for (int i = 0; i < static_cast<int> (input->size ()); ++i)
+  for (std::size_t i = 0; i < input->size (); ++i)
     tmp->points[i] = intensity_ (input->points[i]);
   previous = tmp;
 

@@ -38,6 +38,9 @@
 #ifndef PCL_FILTERS_IMPL_FILTER_INDICES_H_
 #define PCL_FILTERS_IMPL_FILTER_INDICES_H_
 
+#include <numeric>
+#include <type_traits>
+
 #include <pcl/pcl_macros.h>
 #include <pcl/filters/filter_indices.h>
 
@@ -51,13 +54,13 @@ pcl::removeNaNFromPointCloud (const pcl::PointCloud<PointT> &cloud_in,
   // If the data is dense, we don't need to check for NaN
   if (cloud_in.is_dense)
   {
-    for (int j = 0; j < static_cast<int> (cloud_in.points.size ()); ++j)
-      index[j] = j;
+    std::iota(index.begin (), index.end (),
+              static_cast<std::remove_reference_t<decltype(index)>::value_type>(0));
   }
   else
   {
-    int j = 0;
-    for (int i = 0; i < static_cast<int> (cloud_in.points.size ()); ++i)
+    std::size_t j = 0;
+    for (std::size_t i = 0; i < cloud_in.points.size (); ++i)
     {
       if (!std::isfinite (cloud_in.points[i].x) || 
           !std::isfinite (cloud_in.points[i].y) || 
@@ -66,11 +69,8 @@ pcl::removeNaNFromPointCloud (const pcl::PointCloud<PointT> &cloud_in,
       index[j] = i;
       j++;
     }
-    if (j != static_cast<int> (cloud_in.points.size ()))
-    {
-      // Resize to the correct size
-      index.resize (j);
-    }
+    // Resize to the correct size
+    index.resize (j);
   }
 }
 

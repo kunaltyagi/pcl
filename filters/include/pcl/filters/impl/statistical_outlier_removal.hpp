@@ -56,8 +56,8 @@ pcl::StatisticalOutlierRemoval<PointT>::applyFilter (PointCloud &output)
     extract_removed_indices_ = temp;
 
     output = *input_;
-    for (int rii = 0; rii < static_cast<int> (removed_indices_->size ()); ++rii)  // rii = removed indices iterator
-      output.points[(*removed_indices_)[rii]].x = output.points[(*removed_indices_)[rii]].y = output.points[(*removed_indices_)[rii]].z = user_filter_value_;
+    for (const auto& idx: *removed_indices_)
+      output.points[idx].x = output.points[idx].y = output.points[idx].z = user_filter_value_;
     if (!std::isfinite (user_filter_value_))
       output.is_dense = false;
   }
@@ -88,11 +88,11 @@ pcl::StatisticalOutlierRemoval<PointT>::applyFilterIndices (std::vector<int> &in
   std::vector<float> distances (indices_->size ());
   indices.resize (indices_->size ());
   removed_indices_->resize (indices_->size ());
-  int oii = 0, rii = 0;  // oii = output indices iterator, rii = removed indices iterator
+  std::size_t oii = 0, rii = 0;  // oii = output indices iterator, rii = removed indices iterator
 
   // First pass: Compute the mean distances for all points with respect to their k nearest neighbors
   int valid_distances = 0;
-  for (int iii = 0; iii < static_cast<int> (indices_->size ()); ++iii)  // iii = input indices iterator
+  for (std::size_t iii = 0; iii < indices_->size (); ++iii)  // iii = input indices iterator
   {
     if (!std::isfinite (input_->points[(*indices_)[iii]].x) ||
         !std::isfinite (input_->points[(*indices_)[iii]].y) ||
@@ -133,7 +133,7 @@ pcl::StatisticalOutlierRemoval<PointT>::applyFilterIndices (std::vector<int> &in
   double distance_threshold = mean + std_mul_ * stddev;
 
   // Second pass: Classify the points on the computed distance threshold
-  for (int iii = 0; iii < static_cast<int> (indices_->size ()); ++iii)  // iii = input indices iterator
+  for (std::size_t iii = 0; iii < indices_->size (); ++iii)  // iii = input indices iterator
   {
     // Points having a too high average distance are outliers and are passed to removed indices
     // Unless negative was set, then it's the opposite condition

@@ -38,6 +38,8 @@
 #ifndef PCL_FILTER_IMPL_FIELD_VAL_CONDITION_H_
 #define PCL_FILTER_IMPL_FIELD_VAL_CONDITION_H_
 
+#include <algorithm>
+
 #include <pcl/common/io.h>
 #include <pcl/common/copy_point.h>
 #include <pcl/filters/conditional_removal.h>
@@ -69,19 +71,15 @@ pcl::FieldComparison<PointT>::FieldComparison (
   }
 
   // Get the field index
-  size_t d;
-  for (d = 0; d < point_fields.size (); ++d)
-  {
-    if (point_fields[d].name == field_name) 
-      break;
-  }
-  
-  if (d == point_fields.size ())
+  const auto predicate = [&field_name](const auto field) { return field.name == field_name; };
+  const auto result = std::find_if(point_fields.begin (), point_fields.end (), predicate);
+  if (result == point_fields.end ())
   {
     PCL_WARN ("[pcl::FieldComparison::FieldComparison] field not found!\n");
     capable_ = false;
     return;
   }
+  const auto d = std::distance(point_fields.begin (), result);
   uint8_t datatype = point_fields[d].datatype;
   uint32_t offset = point_fields[d].offset;
 
@@ -148,13 +146,9 @@ pcl::PackedRGBComparison<PointT>::PackedRGBComparison (
   pcl::getFields (dummyCloud, point_fields);
 
   // Locate the "rgb" field
-  size_t d;
-  for (d = 0; d < point_fields.size (); ++d)
-  {
-    if (point_fields[d].name == "rgb" || point_fields[d].name == "rgba")
-      break;
-  }
-  if (d == point_fields.size ())
+  const auto predicate = [](const auto field) { return field.name == "rgb" || field.name == "rgba"; };
+  const auto result = std::find_if(point_fields.begin (), point_fields.end (), predicate);
+  if (result == point_fields.end ())
   {
     PCL_WARN ("[pcl::PackedRGBComparison::PackedRGBComparison] rgb field not found!\n");
     capable_ = false;
@@ -162,6 +156,7 @@ pcl::PackedRGBComparison<PointT>::PackedRGBComparison (
   }
 
   // Verify the datatype
+  const auto d = std::distance(point_fields.begin (), result);
   uint8_t datatype = point_fields[d].datatype;
   if (datatype != pcl::PCLPointField::FLOAT32 &&
       datatype != pcl::PCLPointField::UINT32 &&
@@ -240,11 +235,9 @@ pcl::PackedHSIComparison<PointT>::PackedHSIComparison (
   pcl::getFields (dummyCloud, point_fields);
 
   // Locate the "rgb" field
-  size_t d;
-  for (d = 0; d < point_fields.size (); ++d)
-    if (point_fields[d].name == "rgb" || point_fields[d].name == "rgba") 
-      break;
-  if (d == point_fields.size ())
+  const auto predicate = [](const auto field) { return field.name == "rgb" || field.name == "rgba"; };
+  const auto result = std::find_if(point_fields.begin (), point_fields.end (), predicate);
+  if (result == point_fields.end ())
   {
     PCL_WARN ("[pcl::PackedHSIComparison::PackedHSIComparison] rgb field not found!\n");
     capable_ = false;
@@ -252,6 +245,7 @@ pcl::PackedHSIComparison<PointT>::PackedHSIComparison (
   }
 
   // Verify the datatype
+  const auto d = std::distance(point_fields.begin (), result);
   uint8_t datatype = point_fields[d].datatype;
   if (datatype != pcl::PCLPointField::FLOAT32 &&
       datatype != pcl::PCLPointField::UINT32 &&
@@ -388,14 +382,11 @@ pcl::TfQuadraticXYZComparison<PointT>::TfQuadraticXYZComparison () :
   PointCloud<PointT> dummyCloud;
   pcl::getFields (dummyCloud, point_fields);
 
+  std::string field_name;
+  const auto predicate = [&field_name](const auto field) { return field.name == "rgb" || field.name == "rgba"; };
   // Locate the "x" field
-  size_t dX;
-  for (dX = 0; dX < point_fields.size (); ++dX)
-  {
-    if (point_fields[dX].name == "x")
-      break;
-  }
-  if (dX == point_fields.size ())
+  field_name = "x";
+  if (std::find_if(point_fields.begin (), point_fields.end (), predicate) == point_fields.end ())
   {
     PCL_WARN ("[pcl::TfQuadraticXYZComparison::TfQuadraticXYZComparison] x field not found!\n");
     capable_ = false;
@@ -403,13 +394,8 @@ pcl::TfQuadraticXYZComparison<PointT>::TfQuadraticXYZComparison () :
   }
 
   // Locate the "y" field
-  size_t dY;
-  for (dY = 0; dY < point_fields.size (); ++dY)
-  {
-    if (point_fields[dY].name == "y")
-      break;
-  }
-  if (dY == point_fields.size ())
+  field_name = "y";
+  if (std::find_if(point_fields.begin (), point_fields.end (), predicate) == point_fields.end ())
   {
     PCL_WARN ("[pcl::TfQuadraticXYZComparison::TfQuadraticXYZComparison] y field not found!\n");
     capable_ = false;
@@ -417,13 +403,8 @@ pcl::TfQuadraticXYZComparison<PointT>::TfQuadraticXYZComparison () :
   }
 
   // Locate the "z" field
-  size_t dZ;
-  for (dZ = 0; dZ < point_fields.size (); ++dZ)
-  {
-    if (point_fields[dZ].name == "z")
-      break;
-  }
-  if (dZ == point_fields.size ())
+  field_name = "z";
+  if (std::find_if(point_fields.begin (), point_fields.end (), predicate) == point_fields.end ())
   {
     PCL_WARN ("[pcl::TfQuadraticXYZComparison::TfQuadraticXYZComparison] z field not found!\n");
     capable_ = false;
@@ -453,14 +434,11 @@ pcl::TfQuadraticXYZComparison<PointT>::TfQuadraticXYZComparison (const pcl::Comp
   PointCloud<PointT> dummyCloud;
   pcl::getFields (dummyCloud, point_fields);
 
+  std::string field_name;
+  const auto predicate = [&field_name](const auto field) { return field.name == "rgb" || field.name == "rgba"; };
   // Locate the "x" field
-  size_t dX;
-  for (dX = 0; dX < point_fields.size (); ++dX)
-  {
-    if (point_fields[dX].name == "x")
-      break;
-  }
-  if (dX == point_fields.size ())
+  field_name = "x";
+  if (std::find_if(point_fields.begin (), point_fields.end (), predicate) == point_fields.end ())
   {
     PCL_WARN ("[pcl::TfQuadraticXYZComparison::TfQuadraticXYZComparison] x field not found!\n");
     capable_ = false;
@@ -468,13 +446,8 @@ pcl::TfQuadraticXYZComparison<PointT>::TfQuadraticXYZComparison (const pcl::Comp
   }
 
   // Locate the "y" field
-  size_t dY;
-  for (dY = 0; dY < point_fields.size (); ++dY)
-  {
-    if (point_fields[dY].name == "y")
-      break;
-  }
-  if (dY == point_fields.size ())
+  field_name = "y";
+  if (std::find_if(point_fields.begin (), point_fields.end (), predicate) == point_fields.end ())
   {
     PCL_WARN ("[pcl::TfQuadraticXYZComparison::TfQuadraticXYZComparison] y field not found!\n");
     capable_ = false;
@@ -482,13 +455,8 @@ pcl::TfQuadraticXYZComparison<PointT>::TfQuadraticXYZComparison (const pcl::Comp
   }
 
   // Locate the "z" field
-  size_t dZ;
-  for (dZ = 0; dZ < point_fields.size (); ++dZ)
-  {
-    if (point_fields[dZ].name == "z")
-      break;
-  }
-  if (dZ == point_fields.size ())
+  field_name = "z";
+  if (std::find_if(point_fields.begin (), point_fields.end (), predicate) == point_fields.end ())
   {
     PCL_WARN ("[pcl::TfQuadraticXYZComparison::TfQuadraticXYZComparison] z field not found!\n");
     capable_ = false;
@@ -626,11 +594,11 @@ pcl::ConditionBase<PointT>::addCondition (Ptr condition)
 template <typename PointT> bool
 pcl::ConditionAnd<PointT>::evaluate (const PointT &point) const
 {
-  for (size_t i = 0; i < comparisons_.size (); ++i)
+  for (std::size_t i = 0; i < comparisons_.size (); ++i)
     if (!comparisons_[i]->evaluate (point))
       return (false);
 
-  for (size_t i = 0; i < conditions_.size (); ++i)
+  for (std::size_t i = 0; i < conditions_.size (); ++i)
     if (!conditions_[i]->evaluate (point))
       return (false);
 
@@ -645,11 +613,11 @@ pcl::ConditionOr<PointT>::evaluate (const PointT &point) const
 {
   if (comparisons_.empty () && conditions_.empty ()) 
     return (true);
-  for (size_t i = 0; i < comparisons_.size (); ++i)
+  for (std::size_t i = 0; i < comparisons_.size (); ++i)
     if (comparisons_[i]->evaluate(point))
       return (true);
 
-  for (size_t i = 0; i < conditions_.size (); ++i)
+  for (std::size_t i = 0; i < conditions_.size (); ++i)
     if (conditions_[i]->evaluate (point))
       return (true);
 
@@ -709,7 +677,7 @@ pcl::ConditionalRemoval<PointT>::applyFilter (PointCloud &output)
 
   if (!keep_organized_)
   {
-    for (size_t cp = 0; cp < Filter<PointT>::indices_->size (); ++cp)
+    for (std::size_t cp = 0; cp < Filter<PointT>::indices_->size (); ++cp)
     {
       // Check if the point is invalid
       if (!std::isfinite (input_->points[(*Filter < PointT > ::indices_)[cp]].x)
@@ -747,8 +715,8 @@ pcl::ConditionalRemoval<PointT>::applyFilter (PointCloud &output)
     std::vector<int> indices = *Filter<PointT>::indices_;
     std::sort (indices.begin (), indices.end ());   //TODO: is this necessary or can we assume the indices to be sorted?
     bool removed_p = false;
-    size_t ci = 0;
-    for (size_t cp = 0; cp < input_->points.size (); ++cp)
+    std::size_t ci = 0;
+    for (std::size_t cp = 0; cp < input_->points.size (); ++cp)
     {
       if (cp == static_cast<size_t> (indices[ci]))
       {

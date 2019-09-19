@@ -96,7 +96,7 @@ namespace pcl
         * \param[in] vertices a set of input vertices
         */
       bool
-      isEar (int u, int v, int w, const std::vector<uint32_t>& vertices);
+      isEar (std::size_t u, std::size_t v, std::size_t w, const std::vector<uint32_t>& vertices);
 
       /** \brief Check if p is inside the triangle (u,v,w). 
         * \param[in] u the first triangle vertex 

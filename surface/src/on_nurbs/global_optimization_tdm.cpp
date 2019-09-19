@@ -274,7 +274,7 @@ GlobalOptimizationTDM::assembleCommonBoundaries (unsigned id1, double weight, un
   if (nurbs1->m_order[0] != nurbs1->m_order[1])
     printf ("[GlobalOptimizationTDM::assembleCommonBoundaries] Warning, order in u and v direction differ (nurbs1).\n");
 
-  for (size_t i = 0; i < data1->common_boundary_point.size (); i++)
+  for (std::size_t i = 0; i < data1->common_boundary_point.size (); i++)
   {
     Eigen::Vector3d p0 = data1->common_boundary_point[i];
     Eigen::Vector2i id (id1, data1->common_boundary_idx[i]);
