@@ -55,7 +55,7 @@ namespace pcl
         * \param[in] min lower threshold.
         * \param[in] max upper threshold.
         */
-      FeatureHistogram (const size_t number_of_bins, const float min,
+      FeatureHistogram (const std::size_t number_of_bins, const float min,
           const float max);
 
       /** \brief Public destructor. */
@@ -115,9 +115,9 @@ namespace pcl
       float step_;
 
       /** \brief Number of values was added to the histogram. */
-      size_t number_of_elements_;
+      std::size_t number_of_elements_;
 
       /** \brief Number of bins. */
-      size_t number_of_bins_;
+      std::size_t number_of_bins_;
   };
 }

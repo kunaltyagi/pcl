@@ -1055,7 +1055,7 @@ namespace pcl
 
     private:
 
-      size_t num_points_ = 0;
+      std::size_t num_points_ = 0;
       typename pcl::detail::Accumulators<PointT>::type accumulators_;
 
   };

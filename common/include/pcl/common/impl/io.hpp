@@ -54,7 +54,7 @@ pcl::getFieldIndex (const pcl::PointCloud<PointT> &,
   fields.clear ();
   // Get the fields list
   pcl::for_each_type<typename pcl::traits::fieldList<PointT>::type>(pcl::detail::FieldAdder<PointT>(fields));
-  for (size_t d = 0; d < fields.size (); ++d)
+  for (std::size_t d = 0; d < fields.size (); ++d)
     if (fields[d].name == field_name)
       return (static_cast<int>(d));
   return (-1);
@@ -68,7 +68,7 @@ pcl::getFieldIndex (const std::string &field_name,
   fields.clear ();
   // Get the fields list
   pcl::for_each_type<typename pcl::traits::fieldList<PointT>::type>(pcl::detail::FieldAdder<PointT>(fields));
-  for (size_t d = 0; d < fields.size (); ++d)
+  for (std::size_t d = 0; d < fields.size (); ++d)
     if (fields[d].name == field_name)
       return (static_cast<int>(d));
   return (-1);
@@ -100,7 +100,7 @@ pcl::getFieldsList (const pcl::PointCloud<PointT> &)
   std::vector<pcl::PCLPointField> fields;
   pcl::for_each_type<typename pcl::traits::fieldList<PointT>::type>(pcl::detail::FieldAdder<PointT>(fields));
   std::string result;
-  for (size_t i = 0; i < fields.size () - 1; ++i)
+  for (std::size_t i = 0; i < fields.size () - 1; ++i)
     result += fields[i].name + " ";
   result += fields[fields.size () - 1].name;
   return (result);
@@ -128,7 +128,7 @@ pcl::copyPointCloud (const pcl::PointCloud<PointInT> &cloud_in,
     memcpy (&cloud_out.points[0], &cloud_in.points[0], cloud_in.points.size () * sizeof (PointInT));
   else
     // Iterate over each point
-    for (size_t i = 0; i < cloud_in.points.size (); ++i)
+    for (std::size_t i = 0; i < cloud_in.points.size (); ++i)
       copyPoint (cloud_in.points[i], cloud_out.points[i]);
 }
 
@@ -155,7 +155,7 @@ pcl::copyPointCloud (const pcl::PointCloud<PointT> &cloud_in,
   cloud_out.sensor_origin_ = cloud_in.sensor_origin_;
 
   // Iterate over each point
-  for (size_t i = 0; i < indices.size (); ++i)
+  for (std::size_t i = 0; i < indices.size (); ++i)
     cloud_out.points[i] = cloud_in.points[indices[i]];
 }
 
@@ -182,7 +182,7 @@ pcl::copyPointCloud (const pcl::PointCloud<PointT> &cloud_in,
   cloud_out.sensor_origin_ = cloud_in.sensor_origin_;
 
   // Iterate over each point
-  for (size_t i = 0; i < indices.size (); ++i)
+  for (std::size_t i = 0; i < indices.size (); ++i)
     cloud_out.points[i] = cloud_in.points[indices[i]];
 }
 
@@ -202,7 +202,7 @@ pcl::copyPointCloud (const pcl::PointCloud<PointInT> &cloud_in,
   cloud_out.sensor_origin_ = cloud_in.sensor_origin_;
 
   // Iterate over each point
-  for (size_t i = 0; i < indices.size (); ++i)
+  for (std::size_t i = 0; i < indices.size (); ++i)
     copyPoint (cloud_in.points[indices[i]], cloud_out.points[i]);
 }
 
@@ -222,7 +222,7 @@ pcl::copyPointCloud (const pcl::PointCloud<PointInT> &cloud_in,
   cloud_out.sensor_origin_ = cloud_in.sensor_origin_;
 
   // Iterate over each point
-  for (size_t i = 0; i < indices.size (); ++i)
+  for (std::size_t i = 0; i < indices.size (); ++i)
     copyPoint (cloud_in.points[indices[i]], cloud_out.points[i]);
 }
 
@@ -249,7 +249,7 @@ pcl::copyPointCloud (const pcl::PointCloud<PointT> &cloud_in,
   cloud_out.sensor_origin_ = cloud_in.sensor_origin_;
 
   // Iterate over each point
-  for (size_t i = 0; i < indices.indices.size (); ++i)
+  for (std::size_t i = 0; i < indices.indices.size (); ++i)
     cloud_out.points[i] = cloud_in.points[indices.indices[i]];
 }
 
@@ -367,7 +367,7 @@ pcl::concatenateFields (const pcl::PointCloud<PointIn1T> &cloud1_in,
     cloud_out.is_dense = true;
 
   // Iterate over each point
-  for (size_t i = 0; i < cloud_out.points.size (); ++i)
+  for (std::size_t i = 0; i < cloud_out.points.size (); ++i)
   {
     // Iterate over each dimension
     pcl::for_each_type <FieldList1> (pcl::NdConcatenateFunctor <PointIn1T, PointOutT> (cloud1_in.points[i], cloud_out.points[i]));

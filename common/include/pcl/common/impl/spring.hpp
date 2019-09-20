@@ -107,14 +107,14 @@ pcl::common::duplicateColumns (const PointCloud<PointT>& input, PointCloud<Point
                          "[pcl::common::duplicateColumns] error: " 
                          << "columns expansion requires organised point cloud");
 
-  size_t old_height = input.height;
-  size_t old_width = input.width;
-  size_t new_width = old_width + 2*amount;
+  std::size_t old_height = input.height;
+  std::size_t old_width = input.width;
+  std::size_t new_width = old_width + 2*amount;
   if (&input != &output)
     output = input;
   output.reserve (new_width * old_height);
-  for (size_t j = 0; j < old_height; ++j)
-    for(size_t i = 0; i < amount; ++i)
+  for (std::size_t j = 0; j < old_height; ++j)
+    for(std::size_t i = 0; i < amount; ++i)
     {
       typename PointCloud<PointT>::iterator start = output.begin () + (j * new_width);
       output.insert (start, *start);
@@ -141,7 +141,7 @@ pcl::common::duplicateRows (const PointCloud<PointT>& input, PointCloud<PointT>&
   if (&input != &output)
     output = input;
   output.reserve (new_height * old_width);
-  for(size_t i = 0; i < amount; ++i)
+  for(std::size_t i = 0; i < amount; ++i)
   {
     output.insert (output.begin (), output.begin (), output.begin () + old_width);
     output.insert (output.end (), output.end () - old_width, output.end ());
@@ -165,14 +165,14 @@ pcl::common::mirrorColumns (const PointCloud<PointT>& input, PointCloud<PointT>&
                          "[pcl::common::mirrorColumns] error: " 
                          << "columns expansion requires organised point cloud");
 
-  size_t old_height = input.height;
-  size_t old_width = input.width;
-  size_t new_width = old_width + 2*amount;
+  std::size_t old_height = input.height;
+  std::size_t old_width = input.width;
+  std::size_t new_width = old_width + 2*amount;
   if (&input != &output)
     output = input;
   output.reserve (new_width * old_height);
-  for (size_t j = 0; j < old_height; ++j)
-    for(size_t i = 0; i < amount; ++i)
+  for (std::size_t j = 0; j < old_height; ++j)
+    for(std::size_t i = 0; i < amount; ++i)
     {
       typename PointCloud<PointT>::iterator start = output.begin () + (j * new_width);
       output.insert (start, *(start + 2*i));
@@ -198,7 +198,7 @@ pcl::common::mirrorRows (const PointCloud<PointT>& input, PointCloud<PointT>& ou
   if (&input != &output)
     output = input;
   output.reserve (new_height * old_width);
-  for(size_t i = 0; i < amount; i++)
+  for(std::size_t i = 0; i < amount; i++)
   {
     typename PointCloud<PointT>::iterator up;
     if (output.height % 2 ==  0)
@@ -247,7 +247,7 @@ pcl::common::deleteCols (const PointCloud<PointT>& input, PointCloud<PointT>& ou
   uint32_t old_height = input.height;
   uint32_t old_width = input.width;
   uint32_t new_width = old_width - 2 * amount;
-  for(size_t j = 0; j < old_height; j++)
+  for(std::size_t j = 0; j < old_height; j++)
   {
     typename PointCloud<PointT>::iterator start = output.begin () + j * new_width;
     output.erase (start, start + amount);
