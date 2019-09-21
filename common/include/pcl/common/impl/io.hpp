@@ -51,8 +51,7 @@ pcl::getFieldIndex (const pcl::PointCloud<PointT> &,
                     const std::string &field_name, 
                     std::vector<pcl::PCLPointField> &fields)
 {
-  return getFieldIndex<PointT>(std::forward<decltype(field_name)>(field_name),
-                               std::forward<decltype(fields)>(fields));
+  return getFieldIndex<PointT>(field_name, fields);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
