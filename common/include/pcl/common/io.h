@@ -59,10 +59,11 @@ namespace pcl
   getFieldIndex (const pcl::PCLPointCloud2 &cloud, const std::string &field_name)
   {
     // Get the index we need
-    for (std::size_t d = 0; d < cloud.fields.size (); ++d)
-      if (cloud.fields[d].name == field_name)
-        return (static_cast<int>(d));
-    return (-1);
+    const auto result = std::find_if(cloud.fields.begin (), cloud.fields.end (),
+        [&field_name](const auto field) { return field.name == field_name; });
+    if (result == cloud.fields.end ())
+      return -1;
+    return std::distance(cloud.fields.begin (), result);
   }
 
   /** \brief Get the index of a specified field (i.e., dimension/channel)
@@ -356,21 +357,9 @@ namespace pcl
     * \note Assumes unique indices.
     * \ingroup common
     */
-  template <typename PointT> void 
+  template <typename PointT, typename Allocator = std::allocator<int>> void
   copyPointCloud (const pcl::PointCloud<PointT> &cloud_in, 
-                  const std::vector<int> &indices, 
-                  pcl::PointCloud<PointT> &cloud_out);
- 
-  /** \brief Extract the indices of a given point cloud as a new point cloud
-    * \param[in] cloud_in the input point cloud dataset
-    * \param[in] indices the vector of indices representing the points to be copied from \a cloud_in
-    * \param[out] cloud_out the resultant output point cloud dataset
-    * \note Assumes unique indices.
-    * \ingroup common
-    */
-  template <typename PointT> void 
-  copyPointCloud (const pcl::PointCloud<PointT> &cloud_in, 
-                  const std::vector<int, Eigen::aligned_allocator<int> > &indices, 
+                  const std::vector<int, Allocator> &indices,
                   pcl::PointCloud<PointT> &cloud_out);
 
   /** \brief Extract the indices of a given point cloud as a new point cloud
@@ -413,21 +402,9 @@ namespace pcl
     * \note Assumes unique indices.
     * \ingroup common
     */
-  template <typename PointInT, typename PointOutT> void 
+  template <typename PointInT, typename PointOutT, typename Allocator = std::allocator<int>> void
   copyPointCloud (const pcl::PointCloud<PointInT> &cloud_in, 
-                  const std::vector<int> &indices, 
-                  pcl::PointCloud<PointOutT> &cloud_out);
-
-  /** \brief Extract the indices of a given point cloud as a new point cloud
-    * \param[in] cloud_in the input point cloud dataset
-    * \param[in] indices the vector of indices representing the points to be copied from \a cloud_in
-    * \param[out] cloud_out the resultant output point cloud dataset
-    * \note Assumes unique indices.
-    * \ingroup common
-    */
-  template <typename PointInT, typename PointOutT> void 
-  copyPointCloud (const pcl::PointCloud<PointInT> &cloud_in, 
-                  const std::vector<int, Eigen::aligned_allocator<int> > &indices, 
+                  const std::vector<int, Allocator> &indices,
                   pcl::PointCloud<PointOutT> &cloud_out);
 
   /** \brief Extract the indices of a given point cloud as a new point cloud
