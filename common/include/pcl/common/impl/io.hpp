@@ -264,7 +264,7 @@ pcl::copyPointCloud (const pcl::PointCloud<PointInT> &cloud_in,
   // Do we want to copy everything? Remember we assume UNIQUE indices
   if (nr_p == cloud_in.points.size ())
   {
-    copyPointCloud<PointInT, PointOutT> (cloud_in, cloud_out);
+    copyPointCloud (cloud_in, cloud_out);
     return;
   }
 
