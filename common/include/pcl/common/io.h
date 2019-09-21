@@ -357,9 +357,9 @@ namespace pcl
     * \note Assumes unique indices.
     * \ingroup common
     */
-  template <typename PointT, typename Allocator = std::allocator<int>> void
+  template <typename PointT, typename IndicesVectorAllocator = std::allocator<int>> void
   copyPointCloud (const pcl::PointCloud<PointT> &cloud_in, 
-                  const std::vector<int, Allocator> &indices,
+                  const std::vector<int, IndicesVectorAllocator> &indices,
                   pcl::PointCloud<PointT> &cloud_out);
 
   /** \brief Extract the indices of a given point cloud as a new point cloud
@@ -402,9 +402,9 @@ namespace pcl
     * \note Assumes unique indices.
     * \ingroup common
     */
-  template <typename PointInT, typename PointOutT, typename Allocator = std::allocator<int>> void
+  template <typename PointInT, typename PointOutT, typename IndicesVectorAllocator = std::allocator<int>> void
   copyPointCloud (const pcl::PointCloud<PointInT> &cloud_in, 
-                  const std::vector<int, Allocator> &indices,
+                  const std::vector<int, IndicesVectorAllocator> &indices,
                   pcl::PointCloud<PointOutT> &cloud_out);
 
   /** \brief Extract the indices of a given point cloud as a new point cloud
