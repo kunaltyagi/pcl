@@ -181,6 +181,28 @@ TEST (PCL, parse_int)
   EXPECT_EQ(-1, index);
 }
 
+TEST(PCL, parse_x_arguments1value)
+{
+  const char* argv[] = { "input.pcd","output.pcd", "-leaf", "0.1" };
+  const int argc = 4;
+
+  std::vector<double> values;
+  pcl::console::parse_x_arguments(argc, argv, "-leaf", values);
+
+  EXPECT_EQ(values.size(), 1);
+}
+
+TEST(PCL, parse_x_arguments3values)
+{
+  const char* argv[] = { "input.pcd","output.pcd", "-leaf", "0.1,0.2,0.3" };
+  const int argc = 4;
+
+  std::vector<double> values;
+  pcl::console::parse_x_arguments(argc, argv, "-leaf", values);
+
+  EXPECT_EQ(values.size(), 3);
+}
+
 /* ---[ */
 int
 main (int argc, char** argv)

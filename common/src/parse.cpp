@@ -45,7 +45,24 @@
 #include <pcl/console/parse.h>
 #include <pcl/console/print.h>
 
-#include <boost/algorithm/string.hpp>
+////////////////////////////////////////////////////////////////////////////////
+
+std::vector<std::string>
+pcl::console::split(const std::string& text, const std::string& delims)
+{
+  std::vector<std::string> tokens;
+  std::size_t start = text.find_first_not_of(delims), end = 0;
+
+  while ((end = text.find_first_of(delims, start)) != std::string::npos)
+  {
+    tokens.push_back(text.substr(start, end - start));
+    start = text.find_first_not_of(delims, end);
+  }
+  if (start != std::string::npos)
+    tokens.push_back(text.substr(start));
+
+  return tokens;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 int
@@ -287,8 +304,7 @@ pcl::console::parse_2x_arguments (int argc, const char * const * argv, const cha
     if ((strcmp (argv[i], str) == 0) && (++i < argc))
     {
       // look for ',' as a separator
-      std::vector<std::string> values;
-      boost::split (values, argv[i], boost::is_any_of (","), boost::token_compress_on);
+      std::vector<std::string> values = split(argv[i], ",");
       if (values.size () != 2 && debug)
       {
         print_error ("[parse_2x_arguments] Number of values for %s (%lu) different than 2!\n", str, values.size ());
@@ -312,8 +328,8 @@ pcl::console::parse_2x_arguments (int argc, const char * const * argv, const cha
     if ((strcmp (argv[i], str) == 0) && (++i < argc))
     {
       // look for ',' as a separator
-      std::vector<std::string> values;
-      boost::split (values, argv[i], boost::is_any_of (","), boost::token_compress_on);
+      std::vector<std::string> values = split(argv[i], ",");
+
       if (values.size () != 2 && debug)
       {
         print_error ("[parse_2x_arguments] Number of values for %s (%lu) different than 2!\n", str, values.size ());
@@ -337,8 +353,8 @@ pcl::console::parse_2x_arguments (int argc, const char * const * argv, const cha
     if ((strcmp (argv[i], str) == 0) && (++i < argc))
     {
       // look for ',' as a separator
-      std::vector<std::string> values;
-      boost::split (values, argv[i], boost::is_any_of (","), boost::token_compress_on);
+      std::vector<std::string> values = split(argv[i], ",");
+
       if (values.size () != 2 && debug)
       {
         print_error ("[parse_2x_arguments] Number of values for %s (%lu) different than 2!\n", str, values.size ());
@@ -362,8 +378,8 @@ pcl::console::parse_3x_arguments (int argc, const char * const * argv, const cha
     if ((strcmp (argv[i], str) == 0) && (++i < argc))
     {
       // look for ',' as a separator
-      std::vector<std::string> values;
-      boost::split (values, argv[i], boost::is_any_of (","), boost::token_compress_on);
+      std::vector<std::string> values = split(argv[i], ",");
+
       if (values.size () != 3 && debug)
       {
         print_error ("[parse_3x_arguments] Number of values for %s (%lu) different than 3!\n", str, values.size ());
@@ -388,8 +404,8 @@ pcl::console::parse_3x_arguments (int argc, const char * const * argv, const cha
     if ((strcmp (argv[i], str) == 0) && (++i < argc))
     {
       // look for ',' as a separator
-      std::vector<std::string> values;
-      boost::split (values, argv[i], boost::is_any_of (","), boost::token_compress_on);
+      std::vector<std::string> values = split(argv[i], ",");
+
       if (values.size () != 3 && debug)
       {
         print_error ("[parse_3x_arguments] Number of values for %s (%lu) different than 3!\n", str, values.size ());
@@ -414,8 +430,8 @@ pcl::console::parse_3x_arguments (int argc, const char * const * argv, const cha
     if ((strcmp (argv[i], str) == 0) && (++i < argc))
     {
       // look for ',' as a separator
-      std::vector<std::string> values;
-      boost::split (values, argv[i], boost::is_any_of (","), boost::token_compress_on);
+      std::vector<std::string> values = split(argv[i], ",");
+
       if (values.size () != 3 && debug)
       {
         print_error ("[parse_3x_arguments] Number of values for %s (%lu) different than 3!\n", str, values.size ());
@@ -440,8 +456,7 @@ pcl::console::parse_x_arguments (int argc, const char * const * argv, const char
     if ((strcmp (argv[i], str) == 0) && (++i < argc))
     {
       // look for ',' as a separator
-      std::vector<std::string> values;
-      boost::split (values, argv[i], boost::is_any_of (","), boost::token_compress_on);
+      std::vector<std::string> values = split(argv[i], ",");
 
       v.resize (values.size ());
       for (std::size_t j = 0; j < v.size (); ++j)
@@ -463,8 +478,7 @@ pcl::console::parse_x_arguments (int argc, const char * const * argv, const char
     if ((strcmp (argv[i], str) == 0) && (++i < argc))
     {
       // look for ',' as a separator
-      std::vector<std::string> values;
-      boost::split (values, argv[i], boost::is_any_of (","), boost::token_compress_on);
+      std::vector<std::string> values = split(argv[i], ",");
 
       v.resize (values.size ());
       for (std::size_t j = 0; j < v.size (); ++j)
@@ -486,8 +500,7 @@ pcl::console::parse_x_arguments (int argc, const char * const * argv, const char
     if ((strcmp (argv[i], str) == 0) && (++i < argc))
     {
       // look for ',' as a separator
-      std::vector<std::string> values;
-      boost::split (values, argv[i], boost::is_any_of (","), boost::token_compress_on);
+      std::vector<std::string> values = split(argv[i], ",");
 
       v.resize (values.size ());
       for (std::size_t j = 0; j < v.size (); ++j)
@@ -573,8 +586,8 @@ pcl::console::parse_multiple_2x_arguments (int argc, const char * const * argv, 
     if ((strcmp (argv[i], str) == 0) && (++i < argc))
     {
       // look for ',' as a separator
-      std::vector<std::string> values;
-      boost::split (values, argv[i], boost::is_any_of (","), boost::token_compress_on);
+      std::vector<std::string> values = split(argv[i], ",");
+
       if (values.size () != 2)
       {
         print_error ("[parse_multiple_2x_arguments] Number of values for %s (%lu) different than 2!\n", str, values.size ());
@@ -603,8 +616,8 @@ pcl::console::parse_multiple_3x_arguments (int argc, const char * const * argv, 
     if ((strcmp (argv[i], str) == 0) && (++i < argc))
     {
       // look for ',' as a separator
-      std::vector<std::string> values;
-      boost::split (values, argv[i], boost::is_any_of (","), boost::token_compress_on);
+      std::vector<std::string> values = split(argv[i], ",");
+
       if (values.size () != 3)
       {
         print_error ("[parse_multiple_3x_arguments] Number of values for %s (%lu) different than 3!\n", str, values.size ());

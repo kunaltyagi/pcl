@@ -46,6 +46,12 @@ namespace pcl
 {
   namespace console
   {
+    /**
+    * Splits a string with supplied delimiter.
+    */
+    std::vector<std::string>
+    split(const std::string& text, const std::string& delims);
+
     /** \brief Finds whether the argument with name "argument_name" is in the argument list "argv".
       * An example for a widely used switch argument is the "-r" flag for unix commands that indicates whether
       * the command should run recursively or not.
