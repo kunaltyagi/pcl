@@ -58,8 +58,10 @@ pcl::console::split(const std::string& text, const std::string& delims)
     tokens.push_back(text.substr(start, end - start));
     start = text.find_first_not_of(delims, end);
   }
-  if (start != std::string::npos)
+
+  if (start != std::string::npos) {
     tokens.push_back(text.substr(start));
+  }
 
   return tokens;
 }
