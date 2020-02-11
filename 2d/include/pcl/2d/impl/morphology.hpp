@@ -85,7 +85,7 @@ pcl::Morphology<PointT>::erosionBinary(pcl::PointCloud<PointT>& output)
         }
       }
       // Assign value according to mismatch flag
-      output(j, i).intensity = (mismatch_flag) ? 0 : 1;
+      output(j, i).intensity = !mismatch_flag;
     }
   }
 }
@@ -131,7 +131,7 @@ pcl::Morphology<PointT>::dilationBinary(pcl::PointCloud<PointT>& output)
         }
       }
       // Assign value according to match flag
-      output(j, i).intensity = (match_flag) ? 1 : 0;
+      output(j, i).intensity = match_flag;
     }
   }
 }
@@ -276,8 +276,8 @@ pcl::Morphology<PointT>::subtractionBinary(pcl::PointCloud<PointT>& output,
                                            const pcl::PointCloud<PointT>& input1,
                                            const pcl::PointCloud<PointT>& input2)
 {
-  const int height = (input1.height < input2.height) ? input1.height : input2.height;
-  const int width = (input1.width < input2.width) ? input1.width : input2.width;
+  const int height = std::min(input1.height, input2.height);
+  const int width = std::min(input1.width < input2.width);
   output.width = width;
   output.height = height;
   output.resize(height * width);
@@ -297,8 +297,8 @@ pcl::Morphology<PointT>::unionBinary(pcl::PointCloud<PointT>& output,
                                      const pcl::PointCloud<PointT>& input1,
                                      const pcl::PointCloud<PointT>& input2)
 {
-  const int height = (input1.height < input2.height) ? input1.height : input2.height;
-  const int width = (input1.width < input2.width) ? input1.width : input2.width;
+  const int height = std::min(input1.height, input2.height);
+  const int width = std::min(input1.width < input2.width);
   output.width = width;
   output.height = height;
   output.resize(height * width);
@@ -318,8 +318,8 @@ pcl::Morphology<PointT>::intersectionBinary(pcl::PointCloud<PointT>& output,
                                             const pcl::PointCloud<PointT>& input1,
                                             const pcl::PointCloud<PointT>& input2)
 {
-  const int height = (input1.height < input2.height) ? input1.height : input2.height;
-  const int width = (input1.width < input2.width) ? input1.width : input2.width;
+  const int height = std::min(input1.height, input2.height);
+  const int width = std::min(input1.width < input2.width);
   output.width = width;
   output.height = height;
   output.resize(height * width);
