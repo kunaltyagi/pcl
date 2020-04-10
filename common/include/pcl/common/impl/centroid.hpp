@@ -53,7 +53,7 @@ compute3DCentroid (ConstCloudIterator<PointT> &cloud_iterator,
                    Eigen::Matrix<Scalar, 4, 1> &centroid)
 {
   // Initialize to 0
-  centroid.setZero ();
+  centroid = Eigen::Matrix<Scalar, 4, 1>::Zero ();
 
   unsigned cp = 0;
 
