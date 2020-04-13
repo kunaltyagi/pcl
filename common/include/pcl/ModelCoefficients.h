@@ -15,9 +15,9 @@ namespace pcl
     {
     }
 
-    ::pcl::PCLHeader header;
-
     std::vector<float> values;
+    PCLHeader header;
+
 
   public:
     using Ptr = shared_ptr< ::pcl::ModelCoefficients>;

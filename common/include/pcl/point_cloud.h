@@ -191,7 +191,8 @@ namespace pcl
         */
       PointCloud (const PointCloud<PointT> &pc,
                   const std::vector<int> &indices) :
-        header (pc.header), points (indices.size ()), width (indices.size ()), height (1), is_dense (pc.is_dense),
+        points (indices.size ()), width (indices.size ()), height (1), is_dense (pc.is_dense),
+        header (pc.header),
         sensor_origin_ (pc.sensor_origin_), sensor_orientation_ (pc.sensor_orientation_)
       {
         // Copy the obvious
@@ -389,9 +390,6 @@ namespace pcl
         return (getMatrixXfMap (sizeof (PointT) / sizeof (float),  sizeof (PointT) / sizeof (float), 0));
       }
 
-      /** \brief The point cloud header. It contains information about the acquisition time. */
-      pcl::PCLHeader header;
-
       /** \brief The point data. */
       std::vector<PointT, Eigen::aligned_allocator<PointT> > points;
 
@@ -402,6 +400,9 @@ namespace pcl
 
       /** \brief True if no points are invalid (e.g., have NaN or Inf values in any of their floating point fields). */
       bool is_dense = true;
+
+      /** \brief The point cloud header. It contains information about the acquisition time. */
+      PCLHeader header;
 
       /** \brief Sensor acquisition pose (origin/translation). */
       Eigen::Vector4f    sensor_origin_ = Eigen::Vector4f::Zero ();
@@ -577,11 +578,11 @@ namespace pcl
       inline void
       swap (PointCloud<PointT> &rhs)
       {
-        std::swap (header, rhs.header);
         this->points.swap (rhs.points);
         std::swap (width, rhs.width);
         std::swap (height, rhs.height);
         std::swap (is_dense, rhs.is_dense);
+        std::swap (header, rhs.header);
         std::swap (sensor_origin_, rhs.sensor_origin_);
         std::swap (sensor_orientation_, rhs.sensor_orientation_);
       }

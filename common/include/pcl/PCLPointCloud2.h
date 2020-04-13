@@ -14,8 +14,7 @@ namespace pcl
 
   struct PCL_EXPORTS PCLPointCloud2
   {
-    ::pcl::PCLHeader header;
-
+    std::vector<std::uint8_t> data;
     std::uint32_t height = 0;
     std::uint32_t width = 0;
 
@@ -26,9 +25,9 @@ namespace pcl
     std::uint32_t point_step = 0;
     std::uint32_t row_step = 0;
 
-    std::vector<std::uint8_t> data;
-
     std::uint8_t is_dense = 0;
+
+    PCLHeader header;
 
   public:
     using Ptr = shared_ptr< ::pcl::PCLPointCloud2>;

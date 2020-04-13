@@ -10,8 +10,7 @@ namespace pcl
 {
   struct PCLImage
   {
-     ::pcl::PCLHeader  header;
-
+    std::vector<std::uint8_t> data;
     std::uint32_t height = 0;
     std::uint32_t width = 0;
     std::string encoding;
@@ -19,7 +18,7 @@ namespace pcl
     std::uint8_t is_bigendian = 0;
     std::uint32_t step = 0;
 
-    std::vector<std::uint8_t> data;
+    PCLHeader  header;
 
     using Ptr = shared_ptr< ::pcl::PCLImage>;
     using ConstPtr = shared_ptr<const ::pcl::PCLImage>;
