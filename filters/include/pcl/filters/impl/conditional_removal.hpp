@@ -66,23 +66,17 @@ pcl::FieldComparison<PointT>::FieldComparison (
   }
 
   // Get the field index
-  std::size_t d;
-  for (d = 0; d < point_fields.size (); ++d)
-  {
-    if (point_fields[d].name == field_name) 
-      break;
-  }
-  
-  if (d == point_fields.size ())
+  const auto d = std::find_if(point_fields.cbegin(), point_fields.cend(),
+          [&](const auto& field) { return field.name == field_name; });
+
+  if (d == point_fields.cend())
   {
     PCL_WARN ("[pcl::FieldComparison::FieldComparison] field not found!\n");
     capable_ = false;
     return;
   }
-  std::uint8_t datatype = point_fields[d].datatype;
-  std::uint32_t offset = point_fields[d].offset;
 
-  point_data_ = new PointDataAtOffset<PointT>(datatype, offset);
+  point_data_ = new PointDataAtOffset<PointT>(d->datatype, d->offset);
   capable_ = true;
 }
 
@@ -90,11 +84,8 @@ pcl::FieldComparison<PointT>::FieldComparison (
 template <typename PointT>
 pcl::FieldComparison<PointT>::~FieldComparison () 
 {
-  if (point_data_ != nullptr)
-  {
-    delete point_data_;
-    point_data_ = nullptr;
-  }
+  delete point_data_;
+  point_data_ = nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -142,13 +133,12 @@ pcl::PackedRGBComparison<PointT>::PackedRGBComparison (
   const auto point_fields = pcl::getFields<PointT> ();
 
   // Locate the "rgb" field
-  std::size_t d;
-  for (d = 0; d < point_fields.size (); ++d)
-  {
-    if (point_fields[d].name == "rgb" || point_fields[d].name == "rgba")
-      break;
-  }
-  if (d == point_fields.size ())
+  const auto d = std::find_if(point_fields.cbegin(), point_fields.cend(),
+    [](const auto& field) {
+      return (field.name == "rgb" || field.name == "rgba");
+    });
+
+  if (d == point_fields.cend())
   {
     PCL_WARN ("[pcl::PackedRGBComparison::PackedRGBComparison] rgb field not found!\n");
     capable_ = false;
@@ -156,7 +146,7 @@ pcl::PackedRGBComparison<PointT>::PackedRGBComparison (
   }
 
   // Verify the datatype
-  std::uint8_t datatype = point_fields[d].datatype;
+  std::uint8_t datatype = d->datatype;
   if (datatype != pcl::PCLPointField::FLOAT32 &&
       datatype != pcl::PCLPointField::UINT32 &&
       datatype != pcl::PCLPointField::INT32)
@@ -169,15 +159,15 @@ pcl::PackedRGBComparison<PointT>::PackedRGBComparison (
   // Verify the component name
   if (component_name == "r")
   {
-    component_offset_ = point_fields[d].offset + 2;
+    component_offset_ = d->offset + 2;
   }
   else if (component_name == "g")
   {
-    component_offset_ = point_fields[d].offset + 1;
+    component_offset_ = d->offset + 1;
   }
   else if (component_name == "b")
   {
-    component_offset_ = point_fields[d].offset;
+    component_offset_ = d->offset;
   }
   else
   {

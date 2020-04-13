@@ -146,11 +146,11 @@ template <typename PointT> void
 pcl::ModelOutlierRemoval<PointT>::applyFilterIndices (std::vector<int> &indices)
 {
   //The arrays to be used
-  indices.resize (indices_->size ());
-  removed_indices_->resize (indices_->size ());
-  int oii = 0, rii = 0;  // oii = output indices iterator, rii = removed indices iterator
-  //is the filtersetup correct?
-  bool valid_setup = true;
+  indices.reserve(indices_->size ());
+  removed_indices_->reserve(indices_->size ());
+  removed_indices_->clear();
+
+  bool valid_setup = true;  //is the filtersetup correct?
 
   valid_setup &= initSACModel (model_type_);
 
@@ -175,16 +175,16 @@ pcl::ModelOutlierRemoval<PointT>::applyFilterIndices (std::vector<int> &indices)
   //if the filter setup is invalid filter for nan and return;
   if (!valid_setup)
   {
-    for (int iii = 0; iii < static_cast<int> (indices_->size ()); ++iii)  // iii = input indices iterator
+    for (const auto& idx: *indices_)
     {
       // Non-finite entries are always passed to removed indices
-      if (!isFinite (input_->points[ (*indices_)[iii]]))
+      if (!isFinite (input_->points[idx]))
       {
         if (extract_removed_indices_)
-          (*removed_indices_)[rii++] = (*indices_)[iii];
+          removed_indices_->push_back(idx);
         continue;
       }
-      indices[oii++] = (*indices_)[iii];
+      indices.push_back(idx);
     }
     return;
   }
@@ -194,47 +194,33 @@ pcl::ModelOutlierRemoval<PointT>::applyFilterIndices (std::vector<int> &indices)
   model_->setIndices(indices_); // added to reduce computation and arrange distances with indices
   model_->getDistancesToModel (model_coefficients_, distances);
 
-  bool thresh_result;
-
   // Filter for non-finite entries and the specified field limits
   for (int iii = 0; iii < static_cast<int> (indices_->size ()); ++iii)  // iii = input indices iterator
   {
+    const auto& idx = (*indices_)[iii];
     // Non-finite entries are always passed to removed indices
-    if (!isFinite (input_->points[ (*indices_)[iii]]))
+    if (!isFinite (input_->points[idx]))
     {
       if (extract_removed_indices_)
-        (*removed_indices_)[rii++] = (*indices_)[iii];
+        removed_indices_->push_back(idx);
       continue;
     }
 
     // use threshold function to separate outliers from inliers:
-    thresh_result = threshold_function_ (distances[iii]);
+    const bool thresh_result = threshold_function_ (distances[iii]);
 
     // in normal mode: define outliers as false thresh_result
-    if (!negative_ && !thresh_result)
-    {
-      if (extract_removed_indices_)
-        (*removed_indices_)[rii++] = (*indices_)[iii];
-      continue;
-    }
-
     // in negative_ mode: define outliers as true thresh_result
-    if (negative_ && thresh_result)
+    if (negative_ == thresh_result)
     {
       if (extract_removed_indices_)
-        (*removed_indices_)[rii++] = (*indices_)[iii];
+        removed_indices_->push_back(idx);
       continue;
     }
 
     // Otherwise it was a normal point for output (inlier)
-    indices[oii++] = (*indices_)[iii];
-
+    indices.push_back(idx);
   }
-
-  // Resize the output arrays
-  indices.resize (oii);
-  removed_indices_->resize (rii);
-
 }
 
 #define PCL_INSTANTIATE_ModelOutlierRemoval(T) template class PCL_EXPORTS pcl::ModelOutlierRemoval<T>;

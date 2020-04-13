@@ -133,14 +133,26 @@ namespace pcl
       inline IndicesConstPtr const
       getIndices () const { return (indices_); }
 
-      /** \brief Override PointCloud operator[] to shorten code
+      /** \brief Helper function
+        * \detail `this->pt_at_idx(pos)` reduces chances or error compared to
+        * `(*input_)[(*indices_)[pos]]` or `input_->points[(*indices_)[pos]]`
+        * \param[in] pos position in indices_ vector
+        * \return point in the input pointcloud referred to by the pos index in the indices
+        */
+      inline const PointT& pt_at_idx (std::size_t pos) const
+      {
+        return ((*input_)[(*indices_)[pos]]);
+      }
+
+      /** \brief Helper function to shorten code
         * \note this method can be called instead of (*input_)[(*indices_)[pos]]
         * or input_->points[(*indices_)[pos]]
         * \param[in] pos position in indices_ vector
+        * \return point in the input pointcloud referred to by the pos index in the indices
         */
       inline const PointT& operator[] (std::size_t pos) const
       {
-        return ((*input_)[(*indices_)[pos]]);
+        return this->pt_at_idx(pos);
       }
 
     protected:

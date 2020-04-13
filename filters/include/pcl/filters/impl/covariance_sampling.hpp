@@ -63,14 +63,14 @@ pcl::CovarianceSampling<PointT, PointNT>::initCompute ()
   // the origin is 1.0 => rotations and translations will have the same magnitude
   Eigen::Vector3f centroid (0.f, 0.f, 0.f);
   for (std::size_t p_i = 0; p_i < indices_->size (); ++p_i)
-    centroid += (*input_)[(*indices_)[p_i]].getVector3fMap ();
+    centroid += this->pt_at_idx(p_i).getVector3fMap ();
   centroid /= float (indices_->size ());
 
   scaled_points_.resize (indices_->size ());
   double average_norm = 0.0;
   for (std::size_t p_i = 0; p_i < indices_->size (); ++p_i)
   {
-    scaled_points_[p_i] = (*input_)[(*indices_)[p_i]].getVector3fMap () - centroid;
+    scaled_points_[p_i] = this->pt_at_idx(p_i).getVector3fMap () - centroid;
     average_norm += scaled_points_[p_i].norm ();
   }
   average_norm /= double (scaled_points_.size ());
