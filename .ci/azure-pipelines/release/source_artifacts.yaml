@@ -1,0 +1,76 @@
+jobs:
+- job: src_code
+  displayName: "Package Source Code"
+  timeoutInMinutes: 360
+  pool:
+    vmImage: 'ubuntu-latest'
+  variables:
+    PUBLISH_LOCATION: '$(Build.ArtifactStagingDirectory)'
+  steps:
+  - checkout: self
+    # find the commit hash on a quick non-forced update too
+    fetchDepth: 10
+  - task: Bash@3
+    displayName: "Remove git files"
+    inputs:
+      targetType: 'inline'
+      script: 'rm -fr ./.git'
+      workingDirectory: '$(Build.SourcesDirectory)'
+      failOnStderr: true
+  - task: ArchiveFiles@2
+    displayName: "Create release archive (.tar.gz)"
+    inputs:
+      rootFolderOrFile: '$(Build.SourcesDirectory)'
+      includeRootFolder: true
+      archiveType: 'tar'
+      archiveFile: '$(PUBLISH_LOCATION)/source.tar.gz'
+      replaceExistingArchive: true
+      verbose: true
+  - task: ArchiveFiles@2
+    displayName: "Create release archive (.zip)"
+    inputs:
+      rootFolderOrFile: '$(Build.SourcesDirectory)'
+      includeRootFolder: true
+      archiveType: 'zip'
+      archiveFile: '$(PUBLISH_LOCATION)/source.zip'
+      replaceExistingArchive: true
+      verbose: true
+  - script: |
+      for file in $(ls "$(PUBLISH_LOCATION)/"); do
+        sha256sum "$(PUBLISH_LOCATION)"/"${file}" >> $(PUBLISH_LOCATION)/sha256_checksums.txt
+        sha512sum "$(PUBLISH_LOCATION)"/"${file}" >> $(PUBLISH_LOCATION)/sha512_checksums.txt
+      done
+      echo "SHA 256 Checksums:"
+      cat $(PUBLISH_LOCATION)/sha256_checksums.txt
+      echo "SHA 512 Checksums:"
+      cat $(PUBLISH_LOCATION)/sha512_checksums.txt
+    displayName: "Generate checksum"
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish archive"
+    inputs:
+      PathtoPublish: '$(PUBLISH_LOCATION)/'
+      ArtifactName: 'source'
+      publishLocation: 'Container'
+- job: documentation
+  displayName: Generate Documentation
+  container:
+    image: pointcloudlibrary/doc
+  pool:
+    vmImage: 'ubuntu-latest'
+  variables:
+    BUILD_DIR: '$(Agent.BuildDirectory)/build'
+    CHANGELOG: '$(Build.ArtifactStagingDirectory)/changelog.md'
+  steps:
+  - checkout: self
+    # find the commit hash on a quick non-forced update too
+    fetchDepth: 10
+  - script: |
+      $(Build.SourcesDirectory)/.dev/scripts/generate_changelog.py > $(CHANGELOG)
+      pandoc -f markdown -t plain --wrap=none $(CHANGELOG)
+    displayName: 'Generate Changelog'
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Changelog"
+    inputs:
+      PathtoPublish: '$(CHANGELOG)'
+      ArtifactName: 'changelog'
+      publishLocation: 'Container'

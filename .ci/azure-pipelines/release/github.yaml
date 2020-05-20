@@ -1,0 +1,33 @@
+jobs:
+- job: release
+  displayName: "Release the kraken"
+  timeoutInMinutes: 360
+  variables:
+    DOWNLOAD_LOCATION: '$(Build.ArtifactStagingDirectory)'
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - checkout: self
+    # find the commit hash on a quick non-forced update too
+    fetchDepth: 10
+  - task: DownloadBuildArtifacts@0
+    inputs:
+      downloadType: 'all'  # can be anything except single
+      downloadPath: '$(DOWNLOAD_LOCATION)'
+  - task: GitHubRelease@1
+    inputs:
+      action: 'create'
+      addChangeLog: false
+      # assets, one pattern per line
+      assets: |
+        $(DOWNLOAD_LOCATION)/source/*
+      isDraft: true
+      isPreRelease: $(isPreRelease)
+      gitHubConnection: 'Release to GitHub'
+      releaseNotesFilePath: '$(DOWNLOAD_LOCATION)/changelog/changelog.md'
+      repositoryName: $(Build.Repository.Name)
+      tagSource: 'userSpecifiedTag'
+      tag: "pcl-${{variables.version}}-rc${{variables.isPreRelease}}"
+      tagPattern: 'pcl-*'
+      target: '$(Build.SourceVersion)'
+      title: 'PCL $(version)'

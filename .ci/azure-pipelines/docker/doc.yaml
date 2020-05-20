@@ -1,0 +1,34 @@
+jobs:
+- job: BuildAndPush
+  timeoutInMinutes: 360
+  displayName: "Doc"
+  steps:
+  - task: Docker@2
+    displayName: "Build docker image"
+    inputs:
+      command: build
+      arguments: |
+        --no-cache
+        -t $(dockerHubID)/doc
+      dockerfile: '$(Build.SourcesDirectory)/.dev/docker/doc/Dockerfile'
+      tags: "doc"
+  - script: |
+      set -x
+      docker run --rm -v "$(Build.SourcesDirectory)":/pcl $(dockerHubID)/doc bash -c ' \
+      mkdir /pcl/build && cd /pcl/build && \
+      cmake /pcl \
+        -DCMAKE_BUILD_TYPE="Release" \
+        -DPCL_ONLY_CORE_POINT_TYPES=ON \
+        -DBUILD_io:BOOL=OFF \
+        -DBUILD_kdtree:BOOL=OFF && \
+      cmake --build . -- -j2'
+    displayName: 'Verify Dockerimage'
+  - task: Docker@2
+    displayName: "Push docker image"
+    inputs:
+      command: push
+      containerRegistry: $(dockerHub)
+      repository: $(dockerHubID)/doc
+      tags: "doc"
+      condition: and(eq(variables['Build.Repository.Name'], 'PointCloudLibrary/pcl'),
+                     eq(variables['Build.SourceBranch'], 'refs/heads/master'))
