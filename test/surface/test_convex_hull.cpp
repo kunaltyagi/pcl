@@ -126,8 +126,8 @@ TEST (PCL, ConvexHull_bunny)
   pcl::fromPCLPointCloud2 (mesh.cloud, hull2);
 
   // compare the PointCloud (hull2) to the output from the original test --- they should be identical
-  ASSERT_EQ (hull.points.size (), hull2.points.size ());
-  for (std::size_t i = 0; i < hull.points.size (); ++i)
+  ASSERT_EQ (hull.size (), hull2.size ());
+  for (std::size_t i = 0; i < hull.size (); ++i)
   {
     const PointXYZ & p1 = hull.points[i];
     const PointXYZ & p2 = hull2.points[i];
@@ -250,7 +250,7 @@ TEST (PCL, ConvexHull_LTable)
   chull.reconstruct (hull, polygons);
 
   EXPECT_EQ (polygons.size (), 1);
-  EXPECT_EQ (hull.points.size (), 5);
+  EXPECT_EQ (hull.size (), 5);
 
 
   //
@@ -288,8 +288,8 @@ TEST (PCL, ConvexHull_LTable)
   pcl::fromPCLPointCloud2 (mesh.cloud, hull2);
 
   // compare the PointCloud (hull2) to the output from the original test --- they should be identical
-  ASSERT_EQ (hull.points.size (), hull2.points.size ());
-  for (std::size_t i = 0; i < hull.points.size (); ++i)
+  ASSERT_EQ (hull.size (), hull2.size ());
+  for (std::size_t i = 0; i < hull.size (); ++i)
   {
     const PointXYZ & p1 = hull.points[i];
     const PointXYZ & p2 = hull2.points[i];

@@ -117,7 +117,7 @@ TEST (PCL, BoundaryEstimation)
 
   // estimate
   b.compute (*bps);
-  EXPECT_EQ (bps->points.size (), indices.size ());
+  EXPECT_EQ (bps->size (), indices.size ());
 
   pt = bps->points[0].boundary_point;
   EXPECT_EQ (pt, false);
@@ -145,7 +145,7 @@ main (int argc, char** argv)
     return (-1);
   }
 
-  indices.resize (cloud.points.size ());
+  indices.resize (cloud.size ());
   for (std::size_t i = 0; i < indices.size (); ++i)
     indices[i] = static_cast<int> (i);
 

@@ -148,7 +148,7 @@ main (int argc, char *argv[])
   doncloud = doncloud_filtered;
 
   // Save filtered output
-  std::cout << "Filtered Pointcloud: " << doncloud->points.size () << " data points." << std::endl;
+  std::cout << "Filtered Pointcloud: " << doncloud->size () << " data points." << std::endl;
 
   writer.write<pcl::PointNormal> ("don_filtered.pcd", *doncloud, false); 
 
@@ -177,12 +177,12 @@ main (int argc, char *argv[])
       cloud_cluster_don->points.push_back (doncloud->points[*pit]);
     }
 
-    cloud_cluster_don->width = int (cloud_cluster_don->points.size ());
+    cloud_cluster_don->width = int (cloud_cluster_don->size ());
     cloud_cluster_don->height = 1;
     cloud_cluster_don->is_dense = true;
 
     //Save cluster
-    std::cout << "PointCloud representing the Cluster: " << cloud_cluster_don->points.size () << " data points." << std::endl;
+    std::cout << "PointCloud representing the Cluster: " << cloud_cluster_don->size () << " data points." << std::endl;
     stringstream ss;
     ss << "don_cluster_" << j << ".pcd";
     writer.write<pcl::PointNormal> (ss.str (), *cloud_cluster_don, false);
