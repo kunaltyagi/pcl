@@ -456,7 +456,7 @@ namespace pcl
       inline const_reverse_iterator crend () const noexcept { return (points.crend ()); }
 
       //capacity
-      inline std::size_t size () const { return (size ()); }
+      inline std::size_t size () const { return points.size (); }
       inline void reserve (std::size_t n) { points.reserve (n); }
       inline bool empty () const { return points.empty (); }
       PointT* data() noexcept { return points.data(); }
