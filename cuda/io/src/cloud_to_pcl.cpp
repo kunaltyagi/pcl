@@ -50,8 +50,8 @@ toPCL (const PointCloudAOS<Host> &input,
                  const thrust::host_vector<float4> &normals,
                  pcl::PointCloud<pcl::PointXYZRGBNormal> &output)
 {
-  output.points.resize (input.size ());
-  for (std::size_t i = 0; i < input.size (); ++i)
+  output.points.resize (input.points.size ());
+  for (std::size_t i = 0; i < input.points.size (); ++i)
   {
     output.points[i].x = input.points[i].x;
     output.points[i].y = input.points[i].y;
@@ -80,8 +80,8 @@ toPCL (const PointCloudAOS<Device> &d_input,
   input << d_input;
   thrust::host_vector<float4> normals = d_normals;
 
-  output.points.resize (input.size ());
-  for (std::size_t i = 0; i < input.size (); ++i)
+  output.points.resize (input.points.size ());
+  for (std::size_t i = 0; i < input.points.size (); ++i)
   {
     output.points[i].x = input.points[i].x;
     output.points[i].y = input.points[i].y;
@@ -104,8 +104,8 @@ void
 toPCL (const PointCloudAOS<Host> &input, 
                  pcl::PointCloud<pcl::PointXYZRGB> &output)
 {
-  output.points.resize (input.size ());
-  for (std::size_t i = 0; i < input.size (); ++i)
+  output.points.resize (input.points.size ());
+  for (std::size_t i = 0; i < input.points.size (); ++i)
   {
     output.points[i].x = input.points[i].x;
     output.points[i].y = input.points[i].y;
@@ -118,7 +118,7 @@ toPCL (const PointCloudAOS<Host> &input,
   output.height   = input.height;
   output.is_dense = input.is_dense;
 
-/*  for (std::size_t i = 0; i < output.size (); ++i)
+/*  for (std::size_t i = 0; i < output.points.size (); ++i)
   std::cerr << 
     output.points[i].x << " " <<
     output.points[i].y << " " <<
@@ -133,8 +133,8 @@ toPCL (const PointCloudAOS<Device> &input,
   PointCloudAOS<Host> cloud;
   cloud << input;
 
-  output.points.resize (cloud.size ());
-  for (std::size_t i = 0; i < cloud.size (); ++i)
+  output.points.resize (cloud.points.size ());
+  for (std::size_t i = 0; i < cloud.points.size (); ++i)
   {
     output.points[i].x = cloud.points[i].x;
     output.points[i].y = cloud.points[i].y;
@@ -147,7 +147,7 @@ toPCL (const PointCloudAOS<Device> &input,
   output.height   = cloud.height;
   output.is_dense = cloud.is_dense;
 
-/*  for (std::size_t i = 0; i < output.size (); ++i)
+/*  for (std::size_t i = 0; i < output.points.size (); ++i)
   std::cerr << 
     output.points[i].x << " " <<
     output.points[i].y << " " <<
