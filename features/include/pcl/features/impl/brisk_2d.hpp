@@ -41,6 +41,7 @@
 #ifndef PCL_FEATURES_IMPL_BRISK_2D_HPP_
 #define PCL_FEATURES_IMPL_BRISK_2D_HPP_
 
+#include <numeric>
 
 namespace pcl
 {
@@ -109,9 +110,7 @@ BRISK2DEstimation<PointInT, PointOutT, KeypointT, IntensityT>::generateKernel (
   // get the total number of points
   const auto rings = radius_list.size ();
   assert (radius_list.size () != 0 && radius_list.size () == number_list.size ());
-  points_ = 0; // remember the total number of points
-  for (const auto number: number_list)
-    points_ += number;
+  points_ = std::accumulate (number_list.cbegin (), number_list.cend (), 0.f);
 
   // set up the patterns
   pattern_points_ = new BriskPatternPoint[points_*scales_*n_rot_];
