@@ -47,6 +47,8 @@
 #include <vtkSmartPointer.h>
 #include <vtkLookupTable.h>
 
+#include <limits>
+
 class vtkCamera;
 class vtkRenderWindow;
 
@@ -82,6 +84,16 @@ namespace pcl
 
     PCL_EXPORTS void
     getViewFrustum (const Eigen::Matrix4d &view_projection_matrix, double planes[24]);
+    
+    /**
+     * \brief Check if there's a chance visualizations will not work due to bad indexing
+     * \todo Could be a variable instead of a function
+     */
+    PCL_EXPORTS constexpr inline void
+    isVtkIndexSafe() noexcept
+    {
+      return (std::numeric_limits<vtkIdType>::max() >= std::numeric_limits<index_t>::max());
+    }
 
     enum FrustumCull
     {
