@@ -89,7 +89,7 @@ namespace pcl
      * \brief Check if there's a chance visualizations will not work due to bad indexing
      * \todo Could be a variable instead of a function
      */
-    PCL_EXPORTS constexpr inline void
+    PCL_EXPORTS constexpr inline bool
     isVtkIndexSafe() noexcept
     {
       return (std::numeric_limits<vtkIdType>::max() >= std::numeric_limits<index_t>::max());
