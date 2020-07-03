@@ -472,9 +472,8 @@ TEST(PCL_FeaturesGPU, pfhrgb)
 
     PointCloud<PointXYZRGB>::Ptr cloud_XYZRGB(new PointCloud<PointXYZRGB>());
     cloud_XYZRGB->points.clear();
-    for(std::size_t i = 0; i < source.cloud->size(); ++i)               
+    for (const auto& p: *source.cloud)
     {
-        const PointXYZ& p = source.cloud->points[i];
         PointXYZRGB o;
 
         int color = *(int*)&p.data[3];
