@@ -358,11 +358,11 @@ TEST (PCL, NormalEstimation)
   EXPECT_EQ (output.width, cloud.width);
   EXPECT_EQ (output.height, cloud.height);
 
-  for (std::size_t i = 0; i < cloud.size (); ++i)
+  for (const auto& point: output)
   {
-    EXPECT_NEAR (std::abs (output.points[i].normal_x),   0, 1e-2);
-    EXPECT_NEAR (std::abs (output.points[i].normal_y),   0, 1e-2);
-    EXPECT_NEAR (std::abs (output.points[i].normal_z), 1.0, 1e-2);
+    EXPECT_NEAR (std::abs (point.normal_x),   0, 1e-2);
+    EXPECT_NEAR (std::abs (point.normal_y),   0, 1e-2);
+    EXPECT_NEAR (std::abs (point.normal_z), 1.0, 1e-2);
   }
 }
 

@@ -340,12 +340,12 @@ void pcl::GlobalHypothesesVerification<ModelT, SceneT>::initialize()
     std::map<int, bool> banned;
     std::map<int, bool>::iterator banned_it;
 
-    for (std::size_t j = 0; j < complete_models_[indices_[i]]->size (); j++)
+    for (const auto& point: *complete_models_[indices_[i]])
     {
       int pos_x, pos_y, pos_z;
-      pos_x = static_cast<int> (std::floor ((complete_models_[indices_[i]]->points[j].x - min_pt_all.x) / res_occupancy_grid_));
-      pos_y = static_cast<int> (std::floor ((complete_models_[indices_[i]]->points[j].y - min_pt_all.y) / res_occupancy_grid_));
-      pos_z = static_cast<int> (std::floor ((complete_models_[indices_[i]]->points[j].z - min_pt_all.z) / res_occupancy_grid_));
+      pos_x = static_cast<int> (std::floor ((point.x - min_pt_all.x) / res_occupancy_grid_));
+      pos_y = static_cast<int> (std::floor ((point.y - min_pt_all.y) / res_occupancy_grid_));
+      pos_z = static_cast<int> (std::floor ((point.z - min_pt_all.z) / res_occupancy_grid_));
 
       int idx = pos_z * size_x * size_y + pos_y * size_x + pos_x;
       banned_it = banned.find (idx);
@@ -512,13 +512,12 @@ bool pcl::GlobalHypothesesVerification<ModelT, SceneT>::addModel(typename pcl::P
   {
     //check nans...
     int j = 0;
-    for (std::size_t i = 0; i < recog_model->cloud_->size (); ++i)
+    for (auto& point: *(recog_model->cloud_))
     {
-      if (!std::isfinite (recog_model->cloud_->points[i].x) || !std::isfinite (recog_model->cloud_->points[i].y)
-          || !std::isfinite (recog_model->cloud_->points[i].z))
+      if (!isXYZFinite (point))
         continue;
 
-      recog_model->cloud_->points[j] = recog_model->cloud_->points[i];
+      recog_model->cloud_->points[j] = point;
       j++;
     }
 
