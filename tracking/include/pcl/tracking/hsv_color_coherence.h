@@ -98,7 +98,7 @@ protected:
    * \param[in] target instance of target point.
    */
   double
-  computeCoherence(PointInT& source, PointInT& target) override;
+  computeCoherence(const PointInT& source, PointInT& target) override;
 
   /** \brief the weight of coherence (w) */
   double weight_;

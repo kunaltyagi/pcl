@@ -9,7 +9,7 @@ namespace tracking {
 
 template <typename PointInT>
 double
-PointCoherence<PointInT>::compute(PointInT& source, PointInT& target)
+PointCoherence<PointInT>::compute(const PointInT& source, PointInT& target)
 {
   return computeCoherence(source, target);
 }

@@ -9,7 +9,7 @@ namespace pcl {
 namespace tracking {
 template <typename PointInT>
 double
-NormalCoherence<PointInT>::computeCoherence(PointInT& source, PointInT& target)
+NormalCoherence<PointInT>::computeCoherence(const PointInT& source, PointInT& target)
 {
   Eigen::Vector4f n = source.getNormalVector4fMap();
   Eigen::Vector4f n_dash = target.getNormalVector4fMap();

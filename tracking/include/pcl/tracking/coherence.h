@@ -29,7 +29,7 @@ public:
    * \param target instance of target point.
    */
   inline double
-  compute(PointInT& source, PointInT& target);
+  compute(const PointInT& source, PointInT& target);
 
 protected:
   /** \brief The coherence name. */
@@ -40,7 +40,7 @@ protected:
    * \param[in] target instance of target point.
    */
   virtual double
-  computeCoherence(PointInT& source, PointInT& target) = 0;
+  computeCoherence(const PointInT& source, PointInT& target) = 0;
 
   /** \brief Get a string representation of the name of this class. */
   inline const std::string&

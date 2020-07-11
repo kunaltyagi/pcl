@@ -9,7 +9,7 @@ namespace pcl {
 namespace tracking {
 template <typename PointInT>
 double
-DistanceCoherence<PointInT>::computeCoherence(PointInT& source, PointInT& target)
+DistanceCoherence<PointInT>::computeCoherence(const PointInT& source, PointInT& target)
 {
   Eigen::Vector4f p = source.getVector4fMap();
   Eigen::Vector4f p_dash = target.getVector4fMap();
