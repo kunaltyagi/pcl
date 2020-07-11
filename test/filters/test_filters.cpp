@@ -296,7 +296,7 @@ TEST (PassThrough, Filters)
   EXPECT_EQ (output.size (), 42);
   EXPECT_EQ (output.width, 42);
   EXPECT_EQ (output.height, 1);
-  EXPECT_EQ (output.is_dense, true);
+  EXPECT_TRUE (output.is_dense);
 
   EXPECT_NEAR (output.points[0].x, -0.074556, 1e-5);
   EXPECT_NEAR (output.points[0].y, 0.13415, 1e-5);
